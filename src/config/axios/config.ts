@@ -1,7 +1,7 @@
 const config: {
   base_url: {
     dev: string
-    pro: string
+    prod: string
     test: string
   }
   result_code: number | string
@@ -16,7 +16,7 @@ const config: {
     dev: '/api',
 
     // 打包生产环境接口前缀
-    pro: '/api',
+    prod: '/api',
 
     // 打包测试环境接口前缀
     test: '/api'
