@@ -6,8 +6,7 @@ module.exports = {
     {
       type: 'input',
       name: 'path',
-      message: '请输入路径（Please enter a path）',
-      default: 'views'
+      message: '请输入路径（Please enter a path）'
     },
     {
       type: 'input',
@@ -23,7 +22,7 @@ module.exports = {
     if (name) {
       actions.push({
         type: 'add',
-        path: `./src/${path}/${upperFirstName}.vue`,
+        path: `./src/views/${path}/${upperFirstName}.vue`,
         templateFile: './plop/view/view.hbs',
         data: {
           name,

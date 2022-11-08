@@ -1,7 +1,19 @@
+<template>
+  <div :class="prefixCls" class="h-[100%] relative px-10px">{{ upperFirstName }}</div>
+</template>
+
 <script setup lang="ts">
-import { ContentWrap } from '@/components/ContentWrap'
+import { reactive, ref, onMounted } from 'vue'
+import { useDesign } from '@/hooks/web/useDesign'
+
+const { getPrefixCls } = useDesign()
+const prefixCls = getPrefixCls('{{ name }}')
+
+onMounted(() => {
+  // mounted
+})
 </script>
 
-<template>
-  <ContentWrap title="{{ upperFirstName }}"> {{ name }} </ContentWrap>
-</template>
+<style lang="less" scoped>
+@prefix-cls: ~'@{namespace}-{{ name }}';
+</style>
