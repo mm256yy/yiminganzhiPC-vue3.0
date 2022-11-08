@@ -180,10 +180,9 @@ const signIn = async () => {
           appStore.setUserInfo(user)
           appStore.setToken(res.data.token)
           getMenus(user)
-        } else {
-          loadCaptcha()
         }
       } finally {
+        loadCaptcha()
         loading.value = false
       }
     }
@@ -214,9 +213,7 @@ const getMenus = async (user: JwtUserType) => {
     addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
   })
   permissionStore.setIsAddRouters(true)
-  const firstMenu = permissionStore.addRouters[0]
-  const path = firstMenu.redirect?.toString() || firstMenu.path
-  push({ path: redirect.value || path })
+  push({ path: redirect.value || '/dashboard/home' })
 }
 </script>
 

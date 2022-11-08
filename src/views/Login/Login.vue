@@ -12,7 +12,7 @@
           </div>
 
           <div class="flex justify-end items-center space-x-10px">
-            <ThemeSwitch />
+            <!-- <ThemeSwitch /> -->
           </div>
         </div>
         <Transition appear enter-active-class="animate__animated animate__bounceInRight">
@@ -29,14 +29,12 @@
 
 <script setup lang="ts">
 import { LoginForm } from './components'
-import { ThemeSwitch } from '@/components/ThemeSwitch'
+// import { ThemeSwitch } from '@/components/ThemeSwitch'
 import { useAppStore } from '@/store/modules/app'
 import { useDesign } from '@/hooks/web/useDesign'
 
 const { getPrefixCls } = useDesign()
-
 const prefixCls = getPrefixCls('login')
-
 const appStore = useAppStore()
 </script>
 

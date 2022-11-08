@@ -30,6 +30,7 @@ const loginOut = () => {
         tagsViewStore.delAllViews()
         resetRouter() // 重置静态路由表
         replace('/login')
+        setTimeout(() => window.location.reload(), 800)
       }
     })
     .catch(() => {})

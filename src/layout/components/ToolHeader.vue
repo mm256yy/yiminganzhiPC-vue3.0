@@ -6,7 +6,7 @@ import { Screenfull } from '@/components/Screenfull'
 import { Breadcrumb } from '@/components/Breadcrumb'
 import { useAppStore } from '@/store/modules/app'
 import { useDesign } from '@/hooks/web/useDesign'
-import { ThemeSwitch } from '@/components/ThemeSwitch'
+// import { ThemeSwitch } from '@/components/ThemeSwitch'
 
 const { getPrefixCls, variables } = useDesign()
 const prefixCls = getPrefixCls('tool-header')
@@ -45,7 +45,7 @@ export default defineComponent({
           {screenfull.value ? (
             <Screenfull class="hover-trigger" color="var(--top-header-text-color)"></Screenfull>
           ) : undefined}
-          <ThemeSwitch />
+          {/* <ThemeSwitch /> */}
           <UserInfo class="hover-trigger"></UserInfo>
         </div>
       </div>
