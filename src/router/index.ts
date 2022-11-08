@@ -2,19 +2,36 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
 import { Layout } from '@/utils/routerHelper'
-import { useI18n } from '@/hooks/web/useI18n'
-
-const { t } = useI18n()
 
 export const constantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard/analysis',
+    redirect: '/dashboard/home',
     name: 'Root',
     meta: {
       hidden: true
     }
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
+    redirect: '',
+    name: 'Dashboard',
+    meta: {
+      title: '首页'
+    },
+    children: [
+      {
+        path: 'home',
+        name: 'DashboardHome',
+        component: () => import('@/views/Dashboard/Home.vue'),
+        meta: {
+          title: '平台首页',
+          icon: 'ant-design:home-outlined'
+        }
+      }
+    ]
   },
   {
     path: '/redirect',
@@ -39,7 +56,7 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
     name: 'Login',
     meta: {
       hidden: true,
-      title: t('router.login'),
+      title: '登录',
       noTagsView: true
     }
   },
