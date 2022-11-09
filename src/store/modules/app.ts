@@ -7,9 +7,13 @@ import { useCache } from '@/hooks/web/useCache'
 import { LayoutType } from '@/types/layout'
 import { ThemeTypes } from '@/types/theme'
 import { JwtUserType } from '@/api/login/types'
+import { UserInfoType } from '@/api/sys/types'
 
 const { wsCache } = useCache()
 const TOKEN_NAME = 'YM-TOKEN'
+const JWT_INFO_NAME = 'ymUserJwtInfo'
+const USER_INFO_NAME = 'ymUserInfo'
+const CURRENT_PROJECT_KEY = 'ymCurrentProjectId'
 
 interface AppState {
   breadcrumb: boolean
@@ -29,8 +33,9 @@ interface AppState {
   pageLoading: boolean
   layout: LayoutType
   title: string
-  userInfo: JwtUserType | null
-  userInfoKey: string
+  userInfo: UserInfoType | null
+  userJwtInfo: JwtUserType | null
+  currentProjectId: number
   token: string
   isDark: boolean
   currentSize: ElementPlusSize
@@ -44,9 +49,10 @@ interface AppState {
 export const useAppStore = defineStore('app', {
   state: (): AppState => {
     return {
-      userInfo: wsCache.get('ymUserInfo'),
-      userInfoKey: 'ymUserInfo',
+      userInfo: wsCache.get(USER_INFO_NAME) || null,
+      userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
+      currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
       sizeMap: ['default', 'large', 'small'],
       mobile: false, // 是否是移动端
       title: import.meta.env.VITE_APP_TITLE, // 标题
@@ -159,14 +165,20 @@ export const useAppStore = defineStore('app', {
     getTitle(): string {
       return this.title
     },
-    getUserInfo(): JwtUserType | null {
-      return this.userInfo
+    getUserJwtInfo(): JwtUserType | null {
+      return this.userJwtInfo
     },
-    getUserInfoKey(): string {
-      return this.userInfoKey
+    getUserInfo(): UserInfoType | null {
+      return this.userInfo
     },
     getToken(): string {
       return this.token
+    },
+    /**
+     * 当前用户工作的项目，如果是系统管理员都是0，否则都会设置
+     */
+    getCurrentProjectId(): number {
+      return this.currentProjectId
     },
     getIsDark(): boolean {
       return this.isDark
@@ -246,13 +258,21 @@ export const useAppStore = defineStore('app', {
       this.layout = layout
       wsCache.set('layout', this.layout)
     },
-    setUserInfo(user: JwtUserType) {
-      wsCache.set(this.userInfoKey, user)
+    setUserJwtInfo(user: JwtUserType) {
+      wsCache.set(JWT_INFO_NAME, user)
+      this.userJwtInfo = user
+    },
+    setUserInfo(user: UserInfoType) {
+      wsCache.set(USER_INFO_NAME, user)
       this.userInfo = user
     },
     setToken(token: string) {
       wsCache.set(TOKEN_NAME, token)
       this.token = token
+    },
+    setCurrentProjectId(projectId: number) {
+      wsCache.set(CURRENT_PROJECT_KEY, projectId)
+      this.currentProjectId = projectId
     },
     setTitle(title: string) {
       this.title = title

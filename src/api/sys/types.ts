@@ -27,7 +27,7 @@ export enum SystemRoleEnum {
 export type ProjectUserType = {
   projectId: number
   projectName: string
-  prolectRole: ProjectRoleEnum
+  projectRole: ProjectRoleEnum
   position: string
   dingId: string
   defaultProject: boolean

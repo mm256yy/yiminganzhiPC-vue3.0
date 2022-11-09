@@ -177,7 +177,7 @@ const signIn = async () => {
 
         if (res) {
           const user = res.data.user
-          appStore.setUserInfo(user)
+          appStore.setUserJwtInfo(user)
           appStore.setToken(res.data.token)
           getMenus(user)
         }
@@ -195,6 +195,7 @@ const getMenus = async (user: JwtUserType) => {
     menus = await userMenuApi(0)
   } else {
     const userInfo = await currentUserApi()
+    appStore.setUserInfo(userInfo.data)
     const projectUsers = userInfo.data.projectUsers
     if (!projectUsers || projectUsers.length === 0) {
       ElMessage.error('当前用户没有分配任务项目，无法登录，请联系管理员。')
@@ -202,6 +203,8 @@ const getMenus = async (user: JwtUserType) => {
     }
     const defaultProject = projectUsers.find((x) => x.defaultProject) || projectUsers[0]
     const projectId = defaultProject.projectId
+    // 设置当前项目，顶部可以支持项目切换
+    appStore.setCurrentProjectId(projectId)
     menus = await userMenuApi(projectId)
   }
   const { wsCache } = useCache()
