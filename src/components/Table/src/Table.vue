@@ -14,7 +14,7 @@ export default defineComponent({
     pageSize: propTypes.number.def(10),
     currentPage: propTypes.number.def(1),
     // 是否多选
-    selection: propTypes.bool.def(true),
+    selection: propTypes.bool.def(false),
     // 是否所有的超出隐藏，优先级低于schema中的showOverflowTooltip,
     showOverflowTooltip: propTypes.bool.def(true),
     // 表头
@@ -182,7 +182,7 @@ export default defineComponent({
       ) : undefined
     }
 
-    const rnderTreeTableColumn = (columnsChildren: TableColumn[]) => {
+    const renderTreeTableColumn = (columnsChildren: TableColumn[]) => {
       const { align, headerAlign, showOverflowTooltip } = unref(getProps)
       return columnsChildren.map((v) => {
         const props = { ...v }
@@ -198,7 +198,7 @@ export default defineComponent({
             {{
               default: (data: TableSlotDefault) =>
                 v.children && v.children.length
-                  ? rnderTableColumn(v.children)
+                  ? renderTableColumn(v.children)
                   : // @ts-ignore
                     getSlot(slots, v.field, data) ||
                     v?.formatter?.(data.row, data.column, data.row[v.field], data.$index) ||
@@ -211,7 +211,7 @@ export default defineComponent({
       })
     }
 
-    const rnderTableColumn = (columnsChildren?: TableColumn[]) => {
+    const renderTableColumn = (columnsChildren?: TableColumn[]) => {
       const {
         columns,
         reserveIndex,
@@ -253,7 +253,7 @@ export default defineComponent({
                 {{
                   default: (data: TableSlotDefault) =>
                     v.children && v.children.length
-                      ? rnderTreeTableColumn(v.children)
+                      ? renderTreeTableColumn(v.children)
                       : // @ts-ignore
                         getSlot(slots, v.field, data) ||
                         v?.formatter?.(data.row, data.column, data.row[v.field], data.$index) ||
@@ -278,7 +278,7 @@ export default defineComponent({
           {...unref(getBindValue)}
         >
           {{
-            default: () => rnderTableColumn(),
+            default: () => renderTableColumn(),
             // @ts-ignore
             append: () => getSlot(slots, 'append')
           }}

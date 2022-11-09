@@ -1,3 +1,5 @@
+import { ButtonType } from 'element-plus'
+
 export type TableColumn = {
   field: string
   label?: string
@@ -34,3 +36,12 @@ export interface TableSetPropsType {
   path: string
   value: any
 }
+
+/**
+ * 表格操作列的图标定义
+ */
+export type TableColumnActionIcon = {
+  icon: string
+  type?: ButtonType
+  action?: Function
+} & Recordable

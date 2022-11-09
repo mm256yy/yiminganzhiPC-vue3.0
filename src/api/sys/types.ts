@@ -1,3 +1,5 @@
+import { PagedQueryType } from '../common'
+
 export type RoleSmallType = {
   id: number
   name: string
@@ -20,6 +22,17 @@ export enum SystemRoleEnum {
   PROJECT_ADMIN = 'PROJECT_ADMIN',
   NORMAL_USER = 'NORMAL_USER'
 }
+
+/**
+ * 用户搜索类型
+ */
+export type UserQueryType = {
+  projectId: number
+  blurry: string
+  enabled: boolean
+  orgId: number
+  roleId: number
+} & PagedQueryType
 
 /**
  * 项目用户信息

@@ -8,18 +8,11 @@ import { TableSetPropsType } from '@/types/table'
 
 const { t } = useI18n()
 
-interface TableResponse<T = any> {
-  total: number
-  list: T[]
-  pageNumber: number
-  pageSize: number
-}
-
 interface UseTableConfig<T = any> {
-  getListApi: (option: any) => Promise<IResponse<TableResponse<T>>>
-  delListApi?: (option: any) => Promise<IResponse>
+  getListApi: (option: any) => Promise<TableResponse<T>>
+  delListApi?: (option: any) => Promise<void>
   // 返回数据格式配置
-  response: {
+  response?: {
     list: string
     total?: string
   }
@@ -27,7 +20,7 @@ interface UseTableConfig<T = any> {
 }
 
 interface TableObject<T = any> {
-  pageSize: number
+  size: number
   currentPage: number
   total: number
   tableList: T[]
@@ -39,11 +32,11 @@ interface TableObject<T = any> {
 export const useTable = <T = any>(config?: UseTableConfig<T>) => {
   const tableObject = reactive<TableObject<T>>({
     // 页数
-    pageSize: 10,
+    size: 10,
     // 当前页
-    currentPage: 1,
+    currentPage: 0,
     // 总条数
-    total: 10,
+    total: 20,
     // 表格数据
     tableList: [],
     // AxiosConfig 配置
@@ -57,8 +50,8 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
   const paramsObj = computed(() => {
     return {
       ...tableObject.params,
-      pageSize: tableObject.pageSize,
-      pageIndex: tableObject.currentPage
+      size: tableObject.size,
+      page: tableObject.currentPage
     }
   })
 
@@ -70,13 +63,13 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
   )
 
   watch(
-    () => tableObject.pageSize,
+    () => tableObject.size,
     () => {
       // 当前页不为1时，修改页数后会导致多次调用getList方法
-      if (tableObject.currentPage === 1) {
+      if (tableObject.currentPage === 0) {
         methods.getList()
       } else {
-        tableObject.currentPage = 1
+        tableObject.currentPage = 0
         methods.getList()
       }
     }
@@ -109,8 +102,8 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
 
       // 计算出临界点
       const currentPage =
-        tableObject.total % tableObject.pageSize === ids.length || tableObject.pageSize === 1
-          ? tableObject.currentPage > 1
+        tableObject.total % tableObject.size === ids.length || tableObject.size === 1
+          ? tableObject.currentPage > 0
             ? tableObject.currentPage - 1
             : tableObject.currentPage
           : tableObject.currentPage
@@ -123,12 +116,13 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
   const methods = {
     getList: async () => {
       tableObject.loading = true
-      const res = await config?.getListApi(unref(paramsObj)).finally(() => {
+      const data = await config?.getListApi(unref(paramsObj)).finally(() => {
         tableObject.loading = false
       })
-      if (res) {
-        tableObject.tableList = get(res.data || {}, config?.response.list as string)
-        tableObject.total = get(res.data || {}, config?.response?.total as string) || 0
+      if (data) {
+        tableObject.tableList =
+          get(data || {}, (config?.response?.list as string) || 'content') || []
+        tableObject.total = get(data || {}, config?.response?.total as string) || 0
       }
     },
     setProps: async (props: TableProps = {}) => {
@@ -145,10 +139,10 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     },
     // 与Search组件结合
     setSearchParams: (data: Recordable) => {
-      tableObject.currentPage = 1
+      tableObject.currentPage = 0
       tableObject.params = Object.assign(tableObject.params, {
-        pageSize: tableObject.pageSize,
-        pageIndex: tableObject.currentPage,
+        size: tableObject.size,
+        page: tableObject.currentPage,
         ...data
       })
       methods.getList()

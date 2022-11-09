@@ -65,7 +65,7 @@ service.interceptors.response.use(
       // 如果是文件流，直接过
       return response
     } else if (response.data && response.data.code === result_code) {
-      return response.data
+      return response.data.data || response.data
     } else {
       ElMessage.error(response.data.message)
     }

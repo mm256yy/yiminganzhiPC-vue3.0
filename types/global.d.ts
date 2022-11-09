@@ -35,5 +35,17 @@ declare global {
   declare interface IResponse<T = any> {
     code: number
     data: T extends any ? T : T & any
+    message: string
+  }
+
+  /**
+   * 表格分页接口
+   */
+  declare interface TableResponse<T = any> {
+    total: number
+    content: T[]
+    page: number
+    size: number
+    other: any
   }
 }

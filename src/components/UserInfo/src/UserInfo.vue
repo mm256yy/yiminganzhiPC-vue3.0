@@ -24,14 +24,12 @@ const loginOut = () => {
     type: 'warning'
   })
     .then(async () => {
-      const res = await logoutApi().catch(() => {})
-      if (res) {
-        wsCache.clear()
-        tagsViewStore.delAllViews()
-        resetRouter() // 重置静态路由表
-        replace('/login')
-        setTimeout(() => window.location.reload(), 800)
-      }
+      await logoutApi().catch(() => {})
+      wsCache.clear()
+      tagsViewStore.delAllViews()
+      resetRouter() // 重置静态路由表
+      replace('/login')
+      setTimeout(() => window.location.reload(), 800)
     })
     .catch(() => {})
 }

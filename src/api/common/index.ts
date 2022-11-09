@@ -1,5 +1,14 @@
 import request from '@/config/axios'
 
+/**
+ * 分页基类型
+ */
+export type PagedQueryType = {
+  page: number
+  size: number
+  sort: string
+}
+
 // 获取所有字典
 export const getDictApi = (): Promise<IResponse> => {
   return request.get({ url: '/dict/list' })

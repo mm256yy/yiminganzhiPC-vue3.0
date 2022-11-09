@@ -156,7 +156,7 @@ onMounted(() => {
 })
 
 const loadCaptcha = () => {
-  loginCaptchaApi().then(({ data }) => {
+  loginCaptchaApi().then((data) => {
     authKey.value = data.key
     authImage.value = data.image
   })
@@ -176,9 +176,9 @@ const signIn = async () => {
         const res = await loginApi(formData)
 
         if (res) {
-          const user = res.data.user
+          const user = res.user
           appStore.setUserJwtInfo(user)
-          appStore.setToken(res.data.token)
+          appStore.setToken(res.token)
           getMenus(user)
         }
       } finally {
@@ -195,8 +195,8 @@ const getMenus = async (user: JwtUserType) => {
     menus = await userMenuApi(0)
   } else {
     const userInfo = await currentUserApi()
-    appStore.setUserInfo(userInfo.data)
-    const projectUsers = userInfo.data.projectUsers
+    appStore.setUserInfo(userInfo)
+    const projectUsers = userInfo.projectUsers
     if (!projectUsers || projectUsers.length === 0) {
       ElMessage.error('当前用户没有分配任务项目，无法登录，请联系管理员。')
       return
@@ -208,7 +208,7 @@ const getMenus = async (user: JwtUserType) => {
     menus = await userMenuApi(projectId)
   }
   const { wsCache } = useCache()
-  const routers = menus.data || []
+  const routers = menus || []
   wsCache.set('roleRouters', routers)
   await permissionStore.generateRoutes(routers)
 

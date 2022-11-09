@@ -66,10 +66,24 @@ export const trim = (str: string) => {
 }
 
 /**
+ * 格式化时间为标准 yyyy-MM-dd 日期格式
+ */
+export function formatDate(time: Date | number | string) {
+  return formatTime(time, 'yyyy-MM-dd')
+}
+
+/**
+ * 格式化时间为标准 yyyy-MM-dd HH:mm:ss 日期时间格式
+ */
+export function formatDateTime(time: Date | number | string) {
+  return formatTime(time, 'yyyy-MM-dd HH:mm:ss')
+}
+
+/**
  * @param {Date | number | string} time 需要转换的时间
  * @param {String} fmt 需要转换的格式 如 yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
  */
-export function formatTime(time: Date | number | string, fmt: string) {
+export function formatTime(time: Date | number | string, fmt?: string) {
   if (!time) return ''
   else {
     const date = new Date(time)
@@ -82,6 +96,7 @@ export function formatTime(time: Date | number | string, fmt: string) {
       'q+': Math.floor((date.getMonth() + 3) / 3),
       S: date.getMilliseconds()
     }
+    fmt = fmt || 'yyyy-MM-dd'
     if (/(y+)/.test(fmt)) {
       fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
     }
