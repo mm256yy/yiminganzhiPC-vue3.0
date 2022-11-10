@@ -7,7 +7,7 @@ import { useCache } from '@/hooks/web/useCache'
 import { LayoutType } from '@/types/layout'
 import { ThemeTypes } from '@/types/theme'
 import { JwtUserType } from '@/api/login/types'
-import { UserInfoType } from '@/api/sys/types'
+import { ProjectRoleEnum, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
 
 const { wsCache } = useCache()
 const TOKEN_NAME = 'YM-TOKEN'
@@ -36,6 +36,7 @@ interface AppState {
   userInfo: UserInfoType | null
   userJwtInfo: JwtUserType | null
   currentProjectId: number
+  isSysAdmin: boolean
   token: string
   isDark: boolean
   currentSize: ElementPlusSize
@@ -53,6 +54,9 @@ export const useAppStore = defineStore('app', {
       userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
       currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
+      isSysAdmin:
+        wsCache.get(JWT_INFO_NAME) &&
+        wsCache.get(JWT_INFO_NAME)['systemRole'] === SystemRoleEnum.SYS_ADMIN,
       sizeMap: ['default', 'large', 'small'],
       mobile: false, // 是否是移动端
       title: import.meta.env.VITE_APP_TITLE, // 标题
@@ -70,7 +74,7 @@ export const useAppStore = defineStore('app', {
       tagsViewIcon: true, // 是否显示标签图标
       logo: true, // logo
       fixedHeader: true, // 固定toolheader
-      footer: true, // 显示页脚
+      footer: false, // 显示页脚
       greyMode: false, // 是否开始灰色模式，用于特殊悼念日
       dynamicRouter: wsCache.get('dynamicRouter') || false, // 是否动态路由
       fixedMenu: wsCache.get('fixedMenu') || false, // 是否固定菜单
@@ -180,6 +184,19 @@ export const useAppStore = defineStore('app', {
     getCurrentProjectId(): number {
       return this.currentProjectId
     },
+    getIsSysAdmin(): boolean {
+      return this.isSysAdmin
+    },
+    getIsProjectAdmin(): boolean {
+      if (this.userInfo && this.userInfo.projectUsers) {
+        const admin = this.userInfo.projectUsers.find(
+          (x) =>
+            x.projectId === this.currentProjectId && x.projectRole === ProjectRoleEnum.PROJECT_ADMIN
+        )
+        return admin != null
+      }
+      return false
+    },
     getIsDark(): boolean {
       return this.isDark
     },
@@ -272,7 +289,14 @@ export const useAppStore = defineStore('app', {
     },
     setCurrentProjectId(projectId: number) {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
+      // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目
       this.currentProjectId = projectId
+    },
+    setUserDefaultProject(projectId: number) {
+      this.getUserInfo?.projectUsers.forEach((p) => {
+        p.defaultProject = p.projectId === projectId
+      })
+      this.setUserInfo(this.getUserInfo)
     },
     setTitle(title: string) {
       this.title = title

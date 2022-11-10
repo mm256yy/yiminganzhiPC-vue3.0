@@ -6,7 +6,19 @@ import request from '@/config/axios'
 export type PagedQueryType = {
   page: number
   size: number
-  sort: string
+  sort?: string
+}
+
+/**
+ * 树结构类型
+ */
+export type TreeNodeType = {
+  id: string
+  label: string
+  children?: TreeNodeType[]
+  disabled?: string | Function
+  isLeaf?: string | Function
+  class?: string | Function
 }
 
 // 获取所有字典

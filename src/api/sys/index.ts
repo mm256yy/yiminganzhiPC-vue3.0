@@ -1,5 +1,13 @@
 import request from '@/config/axios'
-import { UserInfoType, MenuDtoType, UserQueryType, SystemRoleEnum, ProjectRoleEnum } from './types'
+import { TreeNodeType } from '../common'
+import {
+  UserInfoType,
+  MenuDtoType,
+  UserQueryType,
+  SystemRoleEnum,
+  ProjectRoleEnum,
+  RoleType
+} from './types'
 
 export const getSystemRoleName = (role: SystemRoleEnum) => {
   return role === SystemRoleEnum.SYS_ADMIN
@@ -40,4 +48,18 @@ export const userMenuApi = (projectId: number): Promise<MenuDtoType[]> => {
  */
 export const listUserApi = (query: UserQueryType): Promise<TableResponse<UserInfoType>> => {
   return request.get({ url: '/user/list', params: query })
+}
+
+/**
+ * 取某项目的组织树结构
+ */
+export const getOrgTreeApi = (projectId: number): Promise<TreeNodeType> => {
+  return request.get({ url: '/org/tree', params: { projectId } })
+}
+
+/**
+ * 得到某项目的所有角色
+ */
+export const getAllRoleApi = (projectId: number): Promise<RoleType[]> => {
+  return request.get({ url: '/role/all', params: { projectId } })
 }

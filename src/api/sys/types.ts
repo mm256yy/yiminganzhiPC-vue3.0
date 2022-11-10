@@ -1,3 +1,4 @@
+import { number } from 'vue-types'
 import { PagedQueryType } from '../common'
 
 export type RoleSmallType = {
@@ -85,4 +86,16 @@ export type MenuDtoType = {
   hidden: boolean
   icon: string
   children: MenuDtoType[]
+}
+
+/**
+ * 角色类型
+ */
+export type RoleType = {
+  id: number
+  projectId: number
+  name: string
+  reserve: boolean
+  code: string
+  remark?: string
 }
