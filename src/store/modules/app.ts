@@ -36,7 +36,6 @@ interface AppState {
   userInfo: UserInfoType | null
   userJwtInfo: JwtUserType | null
   currentProjectId: number
-  isSysAdmin: boolean
   token: string
   isDark: boolean
   currentSize: ElementPlusSize
@@ -54,9 +53,6 @@ export const useAppStore = defineStore('app', {
       userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
       currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
-      isSysAdmin:
-        wsCache.get(JWT_INFO_NAME) &&
-        wsCache.get(JWT_INFO_NAME)['systemRole'] === SystemRoleEnum.SYS_ADMIN,
       sizeMap: ['default', 'large', 'small'],
       mobile: false, // 是否是移动端
       title: import.meta.env.VITE_APP_TITLE, // 标题
@@ -185,7 +181,10 @@ export const useAppStore = defineStore('app', {
       return this.currentProjectId
     },
     getIsSysAdmin(): boolean {
-      return this.isSysAdmin
+      return (
+        wsCache.get(JWT_INFO_NAME) &&
+        wsCache.get(JWT_INFO_NAME)['systemRole'] === SystemRoleEnum.SYS_ADMIN
+      )
     },
     getIsProjectAdmin(): boolean {
       if (this.userInfo && this.userInfo.projectUsers) {
@@ -296,7 +295,9 @@ export const useAppStore = defineStore('app', {
       this.getUserInfo?.projectUsers.forEach((p) => {
         p.defaultProject = p.projectId === projectId
       })
-      this.setUserInfo(this.getUserInfo)
+      if (this.getUserInfo) {
+        this.setUserInfo(this.getUserInfo)
+      }
     },
     setTitle(title: string) {
       this.title = title

@@ -7,7 +7,7 @@
       <div class="flex flex-col flex-grow">
         <div class="flex">
           <Search :schema="searchSchema" @search="searchUser" />
-          <ElButton type="primary">新增</ElButton>
+          <ElButton type="primary" @click="onAddUser">新增</ElButton>
         </div>
         <div>
           <ContentWrap>
@@ -35,18 +35,19 @@
                 {{ formatDateTime(row.lastLoginTime) }}
               </template>
               <template #action="{ row }">
-                <TableEditColumn :row="row" @edit="editRow" @delete="deleteRow" />
+                <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
               </template>
             </Table>
           </ContentWrap>
         </div>
       </div>
     </div>
+    <EditForm v-if="showEdit" :show="showEdit" @close="onClose" />
   </ContentWrap>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElTag, ElButton, ElMessageBox } from 'element-plus'
 import { useTable } from '@/hooks/web/useTable'
@@ -58,9 +59,11 @@ import { TableColumn } from '@/types/table'
 import { FormSchema } from '@/types/form'
 import { ProjectRoleEnum, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
 import { listUserApi, getSystemRoleName, getProjectRoleName } from '@/api/sys'
-import { LeftPanel } from './components'
+import { LeftPanel, EditForm } from './components'
 
 const appStore = useAppStore()
+const showEdit = ref(false)
+const currentRow = ref<UserInfoType | null>(null)
 
 const searchSchema = reactive<FormSchema[]>([
   { field: 'blurry', label: '用户名', component: 'Input' },
@@ -79,14 +82,6 @@ const searchSchema = reactive<FormSchema[]>([
     }
   }
 ])
-
-const editRow = (row: UserInfoType) => {
-  console.log(row)
-}
-
-const deleteRow = (row: UserInfoType) => {
-  console.log(row)
-}
 
 const columns = reactive<TableColumn[]>([
   { field: 'index', label: '序号', type: 'index', width: '80px' },
@@ -142,6 +137,9 @@ const getRoleType = (row: UserInfoType) => {
   if (row.systemRole === SystemRoleEnum.SYS_ADMIN) {
     return ''
   }
+  if (appStore.getIsSysAdmin && row.systemRole === SystemRoleEnum.PROJECT_ADMIN) {
+    return 'success'
+  }
   if (row.projectUsers) {
     const item = row.projectUsers.find((x) => x.projectId === appStore.getCurrentProjectId)
     return item?.projectRole === ProjectRoleEnum.PROJECT_ADMIN ? 'success' : 'info'
@@ -150,7 +148,8 @@ const getRoleType = (row: UserInfoType) => {
 }
 
 const getRoleName = (row: UserInfoType) => {
-  if (row.systemRole === SystemRoleEnum.SYS_ADMIN) {
+  // 如果当前用户是系统管理员，则直接显示用户本身的系统角色，如果用户属于多个项目，只要有一个是项目管理员，那用户的系统角色就是项目管理员
+  if (appStore.getIsSysAdmin || row.systemRole === SystemRoleEnum.SYS_ADMIN) {
     return getSystemRoleName(row.systemRole)
   }
   if (row.projectUsers) {
@@ -166,6 +165,25 @@ const onSearch = (query: any) => {
   tableObject.params.projectId = query.projectId || appStore.getCurrentProjectId
   tableObject.params.orgId = query.orgId
   tableObject.params.roleId = query.roleId
+  getList()
+}
+
+const onEdit = (row: UserInfoType) => {
+  currentRow.value = row
+  showEdit.value = true
+}
+
+const onDelete = (row: UserInfoType) => {
+  console.log(row)
+}
+
+const onAddUser = () => {
+  currentRow.value = null
+  showEdit.value = true
+}
+
+const onClose = () => {
+  showEdit.value = false
   getList()
 }
 </script>

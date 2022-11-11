@@ -15,7 +15,7 @@ const { wsCache } = useCache()
 const { replace } = useRouter()
 const appStore = useAppStore()
 
-const nickName = (appStore.getUserInfo && appStore.getUserInfo.nickName) || '用户'
+const nickName = (appStore.getUserJwtInfo && appStore.getUserJwtInfo.nickName) || '用户'
 
 const loginOut = () => {
   ElMessageBox.confirm('是否退出本系统?', '提示', {
