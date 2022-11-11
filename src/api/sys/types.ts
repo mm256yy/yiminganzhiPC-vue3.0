@@ -1,10 +1,9 @@
-import { number } from 'vue-types'
 import { PagedQueryType } from '../common'
 
 export type RoleSmallType = {
   id: number
-  name: string
-  code: string
+  name?: string
+  code?: string
 }
 
 /**
@@ -39,13 +38,15 @@ export type UserQueryType = {
  * 项目用户信息
  */
 export type ProjectUserType = {
-  projectId: number
-  projectName: string
+  projectId?: number
+  projectName?: string
   projectRole: ProjectRoleEnum
   position: string
-  dingId: string
-  defaultProject: boolean
-  roles: RoleSmallType[]
+  dingId?: string
+  orgId?: number
+  orgName?: string
+  defaultProject?: boolean
+  roles?: RoleSmallType[]
 }
 
 /**
@@ -98,4 +99,12 @@ export type RoleType = {
   reserve: boolean
   code: string
   remark?: string
+}
+
+/**
+ * 组织类型
+ */
+export type OrgType = {
+  id: number
+  name: string
 }

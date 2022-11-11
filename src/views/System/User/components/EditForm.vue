@@ -1,22 +1,62 @@
 <template>
-  <Dialog
-    :model-value="props.show"
-    :title="title"
-    :max-height="300"
-    style="width: 700px"
-    @close="onClose"
-  >
+  <Dialog :model-value="props.show" :title="title" style="width: 780px" @close="onClose">
     <Form :schema="schema" @register="register" :rules="rules" :model="row">
       <template #project>
         <ContentWrap title="关联项目">
-          <div class="flex relative w-600px">
-            <div class="absolute right-0 top-[-65px]">
-              <ElButton circle :icon="addIcon" small type="primary" />
+          <div class="flex relative w-700px">
+            <div class="absolute right-10px top-[-65px]">
+              <el-button circle :icon="addIcon" small type="success" @click="onAddProjectUser" />
             </div>
           </div>
+          <el-table :data="projectUsers" size="small">
+            <el-table-column prop="projectName" label="项目名称" />
+            <el-table-column prop="projectRole" label="项目权限">
+              <template #default="scope">
+                <el-tag
+                  :type="
+                    scope.row.projectRole === ProjectRoleEnum.PROJECT_ADMIN ? 'primary' : 'info'
+                  "
+                >
+                  {{ getProjectRoleName(scope.row.projectRole) }}
+                </el-tag>
+              </template>
+            </el-table-column>
+            <el-table-column prop="orgName" label="所属组织" />
+            <el-table-column prop="roles" label="角色" header-align="center" align="center">
+              <template #default="scope">
+                <el-space :wrap="true">
+                  <el-tag v-for="r in scope.row.roles" :key="r.id">{{ r.name }}</el-tag>
+                </el-space>
+              </template>
+            </el-table-column>
+            <el-table-column prop="position" label="岗位" />
+            <el-table-column label="操作">
+              <template #default="scope">
+                <el-button
+                  size="small"
+                  circle
+                  type="primary"
+                  :icon="editIcon"
+                  @click="onEditProjectUser(scope.row)"
+                />
+                <el-button
+                  size="small"
+                  type="danger"
+                  circle
+                  :icon="deleteIcon"
+                  @click="onDeleteProjectUser(scope.row)"
+                />
+              </template>
+            </el-table-column>
+          </el-table>
         </ContentWrap>
       </template>
     </Form>
+    <ProjectUserForm
+      :show="showProjectUserForm"
+      @close="onCloseProjectUser"
+      @save="onSaveProjectUser"
+    />
     <template #footer>
       <ElButton type="primary" :loading="loading" @click="onSave">确认</ElButton>
       <ElButton @click="onClose">取消</ElButton>
@@ -26,16 +66,18 @@
 
 <script setup lang="ts">
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton } from 'element-plus'
+import { ElButton, ElTable, ElTableColumn, ElTag, ElSpace, ElMessageBox } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { ContentWrap } from '@/components/ContentWrap'
 import { useValidator } from '@/hooks/web/useValidator'
-import { SystemRoleEnum, UserInfoType } from '@/api/sys/types'
+import { SystemRoleEnum, UserInfoType, ProjectUserType, ProjectRoleEnum } from '@/api/sys/types'
+import { getProjectRoleName } from '@/api/sys'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
 import { useAppStore } from '@/store/modules/app'
 import { useIcon } from '@/hooks/web/useIcon'
+import ProjectUserForm from './ProjectUserForm.vue'
 
 interface Props {
   show: boolean
@@ -49,6 +91,10 @@ const appStroe = useAppStore()
 const { required } = useValidator()
 const loading = ref(false)
 const addIcon = useIcon({ icon: 'ant-design:plus-circle-outlined' })
+const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
+const deleteIcon = useIcon({ icon: 'ant-design:delete-outlined' })
+const showProjectUserForm = ref(false)
+const projectUsers = ref<ProjectUserType[]>([])
 
 const title = computed(() => {
   return props.row ? '编辑用户' : '新增用户'
@@ -116,6 +162,37 @@ onMounted(() => {
     // methods.addSchema({ field: 'project', colProps: { span: 24 } })
   }
 })
+
+const onAddProjectUser = () => {
+  showProjectUserForm.value = true
+}
+
+const onEditProjectUser = (row: ProjectUserType) => {
+  console.log(row)
+}
+
+const onDeleteProjectUser = (row: ProjectUserType) => {
+  ElMessageBox.confirm('确定要移除吗?')
+    .then(() => {
+      const idx = projectUsers.value.findIndex((x) => x.projectId === row.projectId)
+      projectUsers.value.splice(idx, 1)
+    })
+    .catch(() => {})
+}
+
+const onCloseProjectUser = () => {
+  showProjectUserForm.value = false
+}
+
+const onSaveProjectUser = (data: ProjectUserType) => {
+  let item = projectUsers.value.find((x) => x.projectId === data.projectId)
+  if (item) {
+    item = Object.assign(item, data)
+  } else {
+    projectUsers.value.push(data)
+  }
+  showProjectUserForm.value = false
+}
 
 const onSave = async () => {
   const formRef = unref(elFormRef)
