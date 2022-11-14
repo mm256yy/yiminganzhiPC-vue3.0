@@ -1,6 +1,6 @@
 <template>
   <Dialog :model-value="props.show" :title="title" style="width: 780px" @close="onClose">
-    <Form :schema="schema" @register="register" :rules="rules" :model="row">
+    <Form :schema="schema" @register="register" :rules="rules">
       <template #project>
         <ContentWrap title="关联项目">
           <div class="flex relative w-700px">
@@ -68,13 +68,21 @@
 
 <script setup lang="ts">
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElTable, ElTableColumn, ElTag, ElSpace, ElMessageBox } from 'element-plus'
+import {
+  ElButton,
+  ElTable,
+  ElTableColumn,
+  ElTag,
+  ElSpace,
+  ElMessageBox,
+  ElMessage
+} from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { ContentWrap } from '@/components/ContentWrap'
 import { useValidator } from '@/hooks/web/useValidator'
 import { SystemRoleEnum, UserInfoType, ProjectUserType, ProjectRoleEnum } from '@/api/sys/types'
-import { getProjectRoleName } from '@/api/sys'
+import { getProjectRoleName, saveUserApi } from '@/api/sys'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
 import { useAppStore } from '@/store/modules/app'
@@ -97,7 +105,8 @@ const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
 const deleteIcon = useIcon({ icon: 'ant-design:delete-outlined' })
 const showProjectUserForm = ref(false)
 const currentProjectUser = ref<ProjectUserType>()
-const projectUsers = ref<ProjectUserType[]>([])
+const projectUsers = ref<ProjectUserType[] | undefined>(props.row?.projectUsers)
+const currentRow = ref(props.row)
 
 const title = computed(() => {
   return props.row ? '编辑用户' : '新增用户'
@@ -107,11 +116,10 @@ const rules = {
   userName: [required()],
   nickName: [required()],
   sex: [required()],
-  enabled: [required]
+  enabled: [{ type: 'boolean', required: true }]
 }
 
 const schema = reactive<FormSchema[]>([
-  { field: 'id', hidden: true },
   { field: 'userName', label: '用户名', component: 'Input' },
   { field: 'nickName', label: '姓名', component: 'Input' },
   {
@@ -129,14 +137,14 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'enabled',
     label: '是否启用',
-    value: '1',
-    component: 'Radio',
-    componentProps: {
-      options: [
-        { label: '是', value: '1' },
-        { label: '否', value: '0' }
-      ]
-    }
+    value: true,
+    component: 'Switch'
+    // componentProps: {
+    //   options: [
+    //     { label: '是', value: true },
+    //     { label: '否', value: false }
+    //   ]
+    // }
   },
   { field: 'phone', label: '电话', component: 'Input' }
 ])
@@ -164,6 +172,7 @@ onMounted(() => {
   } else if (appStroe.getIsProjectAdmin) {
     // methods.addSchema({ field: 'project', colProps: { span: 24 } })
   }
+  methods.setValues(currentRow.value as UserInfoType)
 })
 
 const onAddProjectUser = () => {
@@ -179,8 +188,10 @@ const onEditProjectUser = (row: ProjectUserType) => {
 const onDeleteProjectUser = (row: ProjectUserType) => {
   ElMessageBox.confirm('确定要移除吗?')
     .then(() => {
-      const idx = projectUsers.value.findIndex((x) => x.projectId === row.projectId)
-      projectUsers.value.splice(idx, 1)
+      if (projectUsers.value) {
+        const idx = projectUsers.value.findIndex((x) => x.projectId === row.projectId)
+        projectUsers.value.splice(idx, 1)
+      }
     })
     .catch(() => {})
 }
@@ -190,11 +201,11 @@ const onCloseProjectUser = () => {
 }
 
 const onSaveProjectUser = (data: ProjectUserType) => {
-  let item = projectUsers.value.find((x) => x.projectId === data.projectId)
+  let item = projectUsers.value?.find((x) => x.projectId === data.projectId)
   if (item) {
     item = Object.assign(item, data)
   } else {
-    projectUsers.value.push(data)
+    projectUsers.value?.push(data)
   }
   showProjectUserForm.value = false
 }
@@ -204,8 +215,19 @@ const onSave = async () => {
   await formRef?.validate(async (isValid) => {
     if (isValid) {
       loading.value = true
-      const data = methods.getFormData()
-      console.log(data)
+      const user = (await methods.getFormData()) || {}
+      user.projectUsers = unref(projectUsers)
+      if (currentRow.value && currentRow.value.id) {
+        user.id = currentRow.value.id
+      }
+      saveUserApi(user as UserInfoType)
+        .then(() => {
+          ElMessage.success('保存用户成功')
+          onClose()
+        })
+        .catch(() => {
+          loading.value = false
+        })
     }
   })
 }

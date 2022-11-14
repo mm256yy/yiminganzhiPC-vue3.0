@@ -53,16 +53,16 @@ export type ProjectUserType = {
  * 包含用户详情信息
  */
 export type UserInfoType = {
-  id: number
+  id?: number
   userName: string
   nickName: string
   systemRole: SystemRoleEnum
   sex: string
   avatar: string
-  phone: string
+  phone?: string
   enabled: boolean
-  lastPasswordResetTime: string
-  createdDate: string
+  lastLoginTime?: string
+  createdDate?: string
   projectUsers: ProjectUserType[]
 }
 

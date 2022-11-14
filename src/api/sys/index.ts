@@ -6,7 +6,8 @@ import {
   UserQueryType,
   SystemRoleEnum,
   ProjectRoleEnum,
-  RoleType
+  RoleType,
+  UserSaveDtoType
 } from './types'
 
 export const getSystemRoleName = (role: SystemRoleEnum) => {
@@ -48,6 +49,14 @@ export const userMenuApi = (projectId: number): Promise<MenuDtoType[]> => {
  */
 export const listUserApi = (query: UserQueryType): Promise<TableResponse<UserInfoType>> => {
   return request.get({ url: '/user/list', params: query })
+}
+
+/**
+ * 新增或编辑用户
+ */
+export const saveUserApi = (user: UserSaveDtoType): Promise<UserInfoType> => {
+  const url = user.id ? '/user/update' : '/user/create'
+  return request.post({ url, data: user })
 }
 
 /**

@@ -28,6 +28,11 @@
                   {{ getRoleName(row) }}
                 </el-tag>
               </template>
+              <template #enabled="{ row }">
+                <el-tag :type="row.enabled ? '' : 'warning'">{{
+                  row.enabled ? '启用' : '禁用'
+                }}</el-tag>
+              </template>
               <template #createdDate="{ row }">
                 {{ formatDate(row.createdDate) }}
               </template>
@@ -42,7 +47,7 @@
         </div>
       </div>
     </div>
-    <EditForm v-if="showEdit" :show="showEdit" @close="onClose" />
+    <EditForm v-if="showEdit" :row="currentRow" :show="showEdit" @close="onClose" />
   </ContentWrap>
 </template>
 
@@ -63,7 +68,7 @@ import { LeftPanel, EditForm } from './components'
 
 const appStore = useAppStore()
 const showEdit = ref(false)
-const currentRow = ref<UserInfoType | null>(null)
+const currentRow = ref<UserInfoType>()
 
 const searchSchema = reactive<FormSchema[]>([
   { field: 'blurry', label: '用户名', component: 'Input' },
@@ -84,14 +89,15 @@ const searchSchema = reactive<FormSchema[]>([
 ])
 
 const columns = reactive<TableColumn[]>([
-  { field: 'index', label: '序号', type: 'index', width: '80px' },
+  { field: 'index', label: '序号', type: 'index', width: '60px' },
   { field: 'userName', label: '用户名' },
-  { field: 'nickName', label: '姓名', width: '120px' },
-  { field: 'systemRole', label: '用户角色', width: '120px' },
-  { field: 'phone', label: '手机号', width: '120px' },
-  { field: 'sex', label: '性别', width: '80px' },
-  { field: 'createdDate', label: '创建日期', width: '120px' },
-  { field: 'lastLoginTime', label: '最近登录', width: '180px' },
+  { field: 'nickName', label: '姓名' },
+  { field: 'systemRole', label: '用户角色' },
+  { field: 'phone', label: '手机号' },
+  { field: 'sex', label: '性别', width: '60px' },
+  { field: 'enabled', label: '状态', width: '70px' },
+  { field: 'createdDate', label: '创建日期' },
+  { field: 'lastLoginTime', label: '最近登录' },
   { field: 'action', label: '操作', width: '120px', align: 'right' }
 ])
 
@@ -178,7 +184,7 @@ const onDelete = (row: UserInfoType) => {
 }
 
 const onAddUser = () => {
-  currentRow.value = null
+  currentRow.value = undefined
   showEdit.value = true
 }
 
