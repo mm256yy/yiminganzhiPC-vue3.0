@@ -202,7 +202,7 @@ const getMenus = async (user: JwtUserType) => {
       return
     }
     const defaultProject = projectUsers.find((x) => x.defaultProject) || projectUsers[0]
-    const projectId = defaultProject.projectId
+    const projectId = defaultProject.projectId || 0
     // 设置当前项目，顶部可以支持项目切换
     appStore.setCurrentProjectId(projectId)
     menus = await userMenuApi(projectId)

@@ -74,6 +74,10 @@ service.interceptors.response.use(
     console.log('err' + error) // for debug
     const res = error.response
     const data = res?.data as any
+    if (data && data.code === 401) {
+      // token 无效，跳转到登录
+      window.location.href = '/#/login'
+    }
     let message = data.message || error.message || '发生错误'
     if (data && data.code === 400 && data.data && data.data.length > 0) {
       message = `<h3>${data.message}</h3>`
