@@ -30,6 +30,8 @@ service.interceptors.request.use(
     ) {
       config.data = qs.stringify(config.data)
     }
+    // 添加统一的项目id请求头
+    ;(config.headers as AxiosRequestConfig)['Project-Id'] = appStore.getCurrentProjectId
     // 添加 token
     const token = appStore.getToken
     if (token) {
