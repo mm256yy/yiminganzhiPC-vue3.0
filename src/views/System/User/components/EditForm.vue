@@ -53,7 +53,9 @@
       </template>
     </Form>
     <ProjectUserForm
+      v-if="showProjectUserForm"
       :show="showProjectUserForm"
+      :project-user="currentProjectUser"
       @close="onCloseProjectUser"
       @save="onSaveProjectUser"
     />
@@ -94,6 +96,7 @@ const addIcon = useIcon({ icon: 'ant-design:plus-circle-outlined' })
 const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
 const deleteIcon = useIcon({ icon: 'ant-design:delete-outlined' })
 const showProjectUserForm = ref(false)
+const currentProjectUser = ref<ProjectUserType>()
 const projectUsers = ref<ProjectUserType[]>([])
 
 const title = computed(() => {
@@ -164,11 +167,13 @@ onMounted(() => {
 })
 
 const onAddProjectUser = () => {
+  currentProjectUser.value = undefined
   showProjectUserForm.value = true
 }
 
 const onEditProjectUser = (row: ProjectUserType) => {
-  console.log(row)
+  currentProjectUser.value = row
+  showProjectUserForm.value = true
 }
 
 const onDeleteProjectUser = (row: ProjectUserType) => {
