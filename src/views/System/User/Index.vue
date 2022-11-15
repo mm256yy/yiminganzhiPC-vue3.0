@@ -54,7 +54,7 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElTag, ElButton, ElMessageBox } from 'element-plus'
+import { ElTag, ElButton, ElMessageBox, ElMessage } from 'element-plus'
 import { useTable } from '@/hooks/web/useTable'
 import { Table, TableEditColumn } from '@/components/Table'
 import { ContentWrap } from '@/components/ContentWrap'
@@ -63,7 +63,7 @@ import { Search } from '@/components/Search'
 import { TableColumn } from '@/types/table'
 import { FormSchema } from '@/types/form'
 import { ProjectRoleEnum, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
-import { listUserApi, getSystemRoleName, getProjectRoleName } from '@/api/sys'
+import { listUserApi, getSystemRoleName, getProjectRoleName, deleteUserApi } from '@/api/sys'
 import { LeftPanel, EditForm } from './components'
 
 const appStore = useAppStore()
@@ -180,7 +180,14 @@ const onEdit = (row: UserInfoType) => {
 }
 
 const onDelete = (row: UserInfoType) => {
-  console.log(row)
+  ElMessageBox.confirm(`确定要删除该用户 ${row.nickName} 吗？`)
+    .then(async () => {
+      const projectId = appStore.getIsSysAdmin ? undefined : appStore.getCurrentProjectId
+      await deleteUserApi(row.id ?? 0, projectId)
+      ElMessage.success('删除用户成功')
+      getList()
+    })
+    .catch(() => {})
 }
 
 const onAddUser = () => {

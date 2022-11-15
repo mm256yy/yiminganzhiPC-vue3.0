@@ -60,6 +60,15 @@ export const saveUserApi = (user: UserSaveDtoType): Promise<UserInfoType> => {
 }
 
 /**
+ * 删除用户
+ * @param id 用户id
+ * @param projectId 项目id，如果只是删除用户在单个项目中的关联
+ */
+export const deleteUserApi = (id: number, projectId?: number): Promise<void> => {
+  return request.post({ url: `/user/delete/${id}`, params: { projectId } })
+}
+
+/**
  * 取某项目的组织树结构
  */
 export const getOrgTreeApi = (projectId: number): Promise<TreeNodeType> => {

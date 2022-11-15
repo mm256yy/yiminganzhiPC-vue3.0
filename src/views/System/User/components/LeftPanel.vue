@@ -51,6 +51,7 @@ const prefixCls = getPrefixCls('left-panel')
 const appStore = useAppStore()
 
 const activeTab = ref('')
+const rootNodeId = -1
 const defaultProps = {
   children: 'children',
   label: 'label'
@@ -75,7 +76,7 @@ const loadOrgs = async () => {
 }
 
 const loadRoles = async () => {
-  const root: TreeNodeType = { id: '-1', label: '项目角色', children: [] }
+  const root: TreeNodeType = { id: rootNodeId, label: '项目角色', children: [] }
   const roles = await getAllRoleApi(appStore.getCurrentProjectId)
   roles.forEach((r) => {
     root.children?.push({
@@ -88,7 +89,7 @@ const loadRoles = async () => {
 }
 
 const loadProject = async () => {
-  const root: TreeNodeType = { id: '-1', label: '项目列表', children: [] }
+  const root: TreeNodeType = { id: rootNodeId, label: '项目列表', children: [] }
   const projects = await listProjectApi({ page: 0, size: 100 })
   projects.content.forEach((p) => {
     root.children?.push({
@@ -101,14 +102,14 @@ const loadProject = async () => {
 }
 
 const orgNodeClick = (node: TreeNodeType) => {
-  emit('search', { orgId: node.id === '-1' ? null : node.id })
+  emit('search', { orgId: node.id === rootNodeId ? null : node.id })
 }
 
 const roleNodeClick = (node: TreeNodeType) => {
-  emit('search', { roleId: node.id === '-1' ? null : node.id })
+  emit('search', { roleId: node.id === rootNodeId ? null : node.id })
 }
 
 const projectNodeClick = (node: TreeNodeType) => {
-  emit('search', { projectId: node.id === '-1' ? null : node.id })
+  emit('search', { projectId: node.id === rootNodeId ? null : node.id })
 }
 </script>

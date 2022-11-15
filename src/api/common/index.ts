@@ -13,7 +13,7 @@ export type PagedQueryType = {
  * 树结构类型
  */
 export type TreeNodeType = {
-  id: string
+  id: string | number
   label: string
   children?: TreeNodeType[]
   disabled?: string | Function
