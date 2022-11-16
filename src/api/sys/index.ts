@@ -4,6 +4,11 @@ import {
   UserInfoType,
   MenuDtoType,
   UserQueryType,
+  DictInfoType,
+  DictQueryType,
+  DictDetailType,
+  DictDetailQueryType,
+  DictAndDetailType,
   SystemRoleEnum,
   ProjectRoleEnum,
   RoleType
@@ -79,4 +84,53 @@ export const getOrgTreeApi = (projectId: number): Promise<TreeNodeType> => {
  */
 export const getAllRoleApi = (projectId: number): Promise<RoleType[]> => {
   return request.get({ url: '/role/all', params: { projectId } })
+}
+
+/**
+ * 分页读取字典列表
+ */
+export const listDictApi = (query: DictQueryType): Promise<TableResponse<DictInfoType>> => {
+  return request.get({ url: 'dict', params: query })
+}
+
+/**
+/**
+ * 新增或编辑字典
+ */
+export const saveDictApi = (dict: DictInfoType): Promise<DictInfoType> => {
+  const url = dict.id ? '/dict/update' : '/dict/create'
+  return request.post({ url, data: dict })
+}
+
+/**
+ * 删除字典
+ * @param id 用户id
+ */
+export const deleteDictApi = (id: number): Promise<void> => {
+  return request.post({ url: `/dict/${id}` })
+}
+
+/**
+ * 查询字典详情列表
+ */
+export const listDictDetailApi = (query: DictDetailQueryType): Promise<DictAndDetailType> => {
+  console.log('123', query.name)
+  return request.get({ url: `dict/${query.name}`, params: query })
+}
+
+/**
+/**
+ * 新增或编辑字典详情
+ */
+export const saveDictDetailApi = (dict: DictDetailType): Promise<DictDetailType> => {
+  const url = dict.id ? '/dict/val/update' : '/dict/val/create'
+  return request.post({ url, data: dict })
+}
+
+/**
+ * 删除字典详情
+ * @param id 用户id
+ */
+export const deleteDictDetailApi = (id: number, projectId: number): Promise<void> => {
+  return request.post({ url: `/dict/val/${id}`, data: { projectId } })
 }
