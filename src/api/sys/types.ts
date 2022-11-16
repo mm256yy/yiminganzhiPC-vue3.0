@@ -64,6 +64,8 @@ export type UserInfoType = {
   lastLoginTime?: string
   createdDate?: string
   projectUsers: ProjectUserType[]
+  // 权限
+  permissions?: string[]
 }
 
 /**

@@ -77,7 +77,7 @@ export default defineComponent({
               {{
                 default: () => {
                   return projects.value?.map((x) => (
-                    <ElOption label={x.projectName} value={x.projectId} />
+                    <ElOption label={x.projectName} value={x.projectId || 0} />
                   ))
                 }
               }}

@@ -6,8 +6,7 @@ import {
   UserQueryType,
   SystemRoleEnum,
   ProjectRoleEnum,
-  RoleType,
-  UserSaveDtoType
+  RoleType
 } from './types'
 
 export const getSystemRoleName = (role: SystemRoleEnum) => {
@@ -54,7 +53,7 @@ export const listUserApi = (query: UserQueryType): Promise<TableResponse<UserInf
 /**
  * 新增或编辑用户
  */
-export const saveUserApi = (user: UserSaveDtoType): Promise<UserInfoType> => {
+export const saveUserApi = (user: UserInfoType): Promise<UserInfoType> => {
   const url = user.id ? '/user/update' : '/user/create'
   return request.post({ url, data: user })
 }

@@ -43,7 +43,7 @@ export default defineComponent({
       return icons.map((x) => {
         return (
           <ElButton
-            size={props.size}
+            size="small"
             circle={props.buttonType === 'circle'}
             round={props.buttonType === 'round'}
             plain={props.buttonType === 'plain'}
