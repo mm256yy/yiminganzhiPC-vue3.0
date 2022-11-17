@@ -122,9 +122,12 @@ export const listDictDetailApi = (query: DictDetailQueryType): Promise<DictAndDe
 /**
  * 新增或编辑字典详情
  */
-export const saveDictDetailApi = (dict: DictDetailType): Promise<DictDetailType> => {
+export const saveDictDetailApi = (
+  dict: DictDetailType,
+  projectId: number
+): Promise<DictDetailType> => {
   const url = dict.id ? '/dict/val/update' : '/dict/val/create'
-  return request.post({ url, data: dict })
+  return request.post({ url, data: dict, params: { projectId } })
 }
 
 /**
@@ -132,5 +135,5 @@ export const saveDictDetailApi = (dict: DictDetailType): Promise<DictDetailType>
  * @param id 用户id
  */
 export const deleteDictDetailApi = (id: number, projectId: number): Promise<void> => {
-  return request.post({ url: `/dict/val/${id}`, data: { projectId } })
+  return request.post({ url: `/dict/val/${id}`, params: { projectId, id } })
 }

@@ -1,7 +1,7 @@
 <template>
   <ContentWrap>
     <div class="flex">
-      <div class="min-w-200px pr-5px mr-8px">
+      <div class="min-w-500px pr-5px mr-8px">
         <ContentWrap title="字典管理">
           <div class="flex">
             <Search :schema="searchSchema" @search="searchDict" />
@@ -16,9 +16,11 @@
                 :pagination="{
                   total: tableObject.total
                 }"
+                highlight-current-row
                 header-align="center"
                 align="center"
                 :data="tableObject.tableList"
+                hig
                 @register="register"
                 @row-click="handleRowClick"
               >
@@ -32,7 +34,7 @@
       </div>
       <div class="flex flex-col flex-grow">
         <ContentWrap title="字典管理">
-          <DictDetail :name="currentName" />
+          <DictDetail :name="currentName" :dict-id="currentId" />
         </ContentWrap>
       </div>
     </div>
@@ -61,8 +63,9 @@ import { EditForm, DictDetail } from './components'
 const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<DictInfoType>()
-let currentName = ref<String>('')
-const projectId = ref<Number>(0)
+let currentId = ref<number>(0)
+let currentName = ref<string>('')
+const projectId = ref<number>(0)
 
 const searchSchema = reactive<FormSchema[]>([
   { field: 'blurry', label: '名称或描述', component: 'Input' }
@@ -94,7 +97,6 @@ const searchDict = (data: any) => {
 
 onMounted(() => {
   projectId.value = appStore.getCurrentProjectId
-  console.log('projectId.value', projectId.value)
   if (!appStore.getIsSysAdmin && !appStore.getIsProjectAdmin) {
     ElMessageBox.confirm('你在当前项目中无权限')
       .then(() => {
@@ -134,6 +136,6 @@ const onClose = () => {
 const handleRowClick = (row: DictInfoType) => {
   currentRow.value = row
   currentName.value = row.name
-  console.log('currentRow', currentRow.value)
+  currentId.value = row.id ?? 0
 }
 </script>

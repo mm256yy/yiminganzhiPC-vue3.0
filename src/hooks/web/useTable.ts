@@ -122,7 +122,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       if (data) {
         tableObject.tableList =
           get(data || {}, (config?.response?.list as string) || 'content') || []
-        tableObject.total = get(data || {}, config?.response?.total as string) || 0
+        tableObject.total = get(data || {}, (config?.response?.total as string) || 'total') || 0
       }
     },
     setProps: async (props: TableProps = {}) => {

@@ -25,11 +25,14 @@ import { DictDetailType } from '@/api/sys/types'
 import { saveDictDetailApi } from '@/api/sys'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
+import { useAppStore } from '@/store/modules/app'
 // import { useIcon } from '@/hooks/web/useIcon'
 
 interface Props {
   show: boolean
   row?: DictDetailType
+  projectId?: number
+  dictId: number
 }
 
 const props = defineProps<Props>()
@@ -52,7 +55,7 @@ const rules = {
 const schema = reactive<FormSchema[]>([
   { field: 'label', label: '字典标签', component: 'Input' },
   { field: 'value', label: '描述', component: 'Input' },
-  { field: 'sort', label: '描述', component: 'Input' }
+  { field: 'sort', label: '排序', component: 'Input' }
 ])
 
 const { register, elFormRef, methods } = useForm()
@@ -73,10 +76,18 @@ const onSave = async () => {
 const doSave = async () => {
   loading.value = true
   const dict = (await methods.getFormData()) || {}
+  let projectId = 0
+  // 修改时projectId不变
   if (currentRow.value && currentRow.value.id) {
     dict.id = currentRow.value.id
+    projectId = dict.projectId
+  } else {
+    // 新增时给项目id赋值
+    projectId = props.projectId ?? useAppStore().getCurrentProjectId
+    dict.projectId = projectId
+    dict.dictId = props.dictId
   }
-  saveDictDetailApi(dict as DictDetailType)
+  saveDictDetailApi(dict as DictDetailType, projectId)
     .then(() => {
       ElMessage.success('保存字典成功')
       onClose()
