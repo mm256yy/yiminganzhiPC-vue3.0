@@ -1,9 +1,9 @@
 <template>
   <ContentWrap>
     <div class="flex">
-      <div class="min-w-500px pr-5px mr-8px">
+      <div class="min-w-560px w-36% pr-5px mr-8px">
         <ContentWrap title="字典管理">
-          <div class="flex">
+          <div class="flex flex-wrap mb-5px">
             <Search :schema="searchSchema" @search="searchDict" />
             <ElButton type="primary" @click="onAddDict">新增</ElButton>
           </div>
@@ -32,11 +32,9 @@
           </div>
         </ContentWrap>
       </div>
-      <div class="flex flex-col flex-grow">
-        <ContentWrap title="字典管理">
-          <DictDetail :name="currentName" :dict-id="currentId" />
-        </ContentWrap>
-      </div>
+      <ContentWrap class="flex flex-col flex-grow" title="字典管理">
+        <DictDetail :name="currentName" :dict-id="currentId" />
+      </ContentWrap>
     </div>
     <EditForm v-if="showEdit" :row="currentRow" :show="showEdit" @close="onClose" />
   </ContentWrap>
