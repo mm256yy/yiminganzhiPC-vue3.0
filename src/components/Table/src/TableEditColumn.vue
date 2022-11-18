@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { ElSpace, ElButton } from 'element-plus'
+import { ElSpace, ElButton, ElTooltip } from 'element-plus'
 import { defineComponent, PropType } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { TableColumnActionIcon } from '@/types/table'
@@ -29,21 +29,35 @@ export default defineComponent({
         icons.push({
           icon: 'ant-design:edit-outlined',
           type: 'primary',
+          tooltip: '编辑',
           action: () => emit('edit', props.row)
         })
       }
       if (props.delete) {
         icons.push({
           icon: 'ant-design:delete-outlined',
+          tooltip: '删除',
           type: 'danger',
           action: () => emit('delete', props.row)
         })
       }
 
       return icons.map((x) => {
-        return (
+        return x.tooltip ? (
+          <ElTooltip content={x.tooltip} placement="top">
+            <ElButton
+              size="small"
+              circle={props.buttonType === 'circle'}
+              round={props.buttonType === 'round'}
+              plain={props.buttonType === 'plain'}
+              {...x}
+              icon={useIcon({ icon: x.icon })}
+              onClick={() => x.action?.call(null, props.row)}
+            />
+          </ElTooltip>
+        ) : (
           <ElButton
-            size={props.size}
+            size="small"
             circle={props.buttonType === 'circle'}
             round={props.buttonType === 'round'}
             plain={props.buttonType === 'plain'}

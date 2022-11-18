@@ -40,7 +40,7 @@
                 {{ formatDateTime(row.lastLoginTime) }}
               </template>
               <template #action="{ row }">
-                <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
+                <TableEditColumn :row="row" :icons="otherIcons" @edit="onEdit" @delete="onDelete" />
               </template>
             </Table>
           </ContentWrap>
@@ -60,10 +60,16 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { ContentWrap } from '@/components/ContentWrap'
 import { formatDate, formatDateTime } from '@/utils'
 import { Search } from '@/components/Search'
-import { TableColumn } from '@/types/table'
+import { TableColumn, TableColumnActionIcon } from '@/types/table'
 import { FormSchema } from '@/types/form'
 import { ProjectRoleEnum, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
-import { listUserApi, getSystemRoleName, getProjectRoleName, deleteUserApi } from '@/api/sys'
+import {
+  listUserApi,
+  getSystemRoleName,
+  getProjectRoleName,
+  deleteUserApi,
+  resetPwdApi
+} from '@/api/sys'
 import { LeftPanel, EditForm } from './components'
 
 const appStore = useAppStore()
@@ -98,8 +104,21 @@ const columns = reactive<TableColumn[]>([
   { field: 'enabled', label: '状态', width: '70px' },
   { field: 'createdDate', label: '创建日期' },
   { field: 'lastLoginTime', label: '最近登录' },
-  { field: 'action', label: '操作', width: '120px', align: 'right' }
+  { field: 'action', label: '操作', width: '140px', align: 'right' }
 ])
+
+const onResetPwd = (row: UserInfoType) => {
+  ElMessageBox.confirm(`确认要重置用户 ${row.nickName} 的密码？`)
+    .then(async () => {
+      await resetPwdApi(row.id as number)
+      ElMessage.success('密码重置成功')
+    })
+    .catch(() => {})
+}
+
+const otherIcons: TableColumnActionIcon[] = [
+  { icon: 'material-symbols:lock-reset-rounded', type: '', tooltip: '重置密码', action: onResetPwd }
+]
 
 const { register, tableObject, methods } = useTable({
   getListApi: listUserApi,

@@ -4,11 +4,15 @@ import {
   UserInfoType,
   MenuDtoType,
   UserQueryType,
+  DictInfoType,
+  DictQueryType,
+  DictDetailType,
+  DictDetailQueryType,
+  DictAndDetailType,
   SystemRoleEnum,
   ProjectRoleEnum,
-  RoleType,
-  IMenuSearchParams
-  // UserSaveDtoType
+  IMenuSearchParams,
+  RoleType
 } from './types'
 
 export const getSystemRoleName = (role: SystemRoleEnum) => {
@@ -58,6 +62,14 @@ export const listUserApi = (query: UserQueryType): Promise<TableResponse<UserInf
 export const saveUserApi = (user: UserInfoType): Promise<UserInfoType> => {
   const url = user.id ? '/user/update' : '/user/create'
   return request.post({ url, data: user })
+}
+
+/**
+ * 重置用户密码
+ * @param userId 要重置的用户id
+ */
+export const resetPwdApi = (userId: number): Promise<void> => {
+  return request.post({ url: '/user/reset_pass', params: { userId } })
 }
 
 /**
@@ -128,4 +140,56 @@ export const deleteMenuApi = (ids: number[]): Promise<void> => {
   return request.post({
     url: `/menu/delete/${ids[0]}`
   })
+}
+
+/*
+ * 分页读取字典列表
+ */
+export const listDictApi = (query: DictQueryType): Promise<TableResponse<DictInfoType>> => {
+  return request.get({ url: 'dict', params: query })
+}
+
+/**
+/**
+ * 新增或编辑字典
+ */
+export const saveDictApi = (dict: DictInfoType): Promise<DictInfoType> => {
+  const url = dict.id ? '/dict/update' : '/dict/create'
+  return request.post({ url, data: dict })
+}
+
+/**
+ * 删除字典
+ * @param id 用户id
+ */
+export const deleteDictApi = (id: number): Promise<void> => {
+  return request.post({ url: `/dict/${id}` })
+}
+
+/**
+ * 查询字典详情列表
+ */
+export const listDictDetailApi = (query: DictDetailQueryType): Promise<DictAndDetailType> => {
+  console.log('123', query.name)
+  return request.get({ url: `dict/${query.name}`, params: query })
+}
+
+/**
+/**
+ * 新增或编辑字典详情
+ */
+export const saveDictDetailApi = (
+  dict: DictDetailType,
+  projectId: number
+): Promise<DictDetailType> => {
+  const url = dict.id ? '/dict/val/update' : '/dict/val/create'
+  return request.post({ url, data: dict, params: { projectId } })
+}
+
+/**
+ * 删除字典详情
+ * @param id 用户id
+ */
+export const deleteDictDetailApi = (id: number, projectId: number): Promise<void> => {
+  return request.post({ url: `/dict/val/${id}`, params: { projectId, id } })
 }

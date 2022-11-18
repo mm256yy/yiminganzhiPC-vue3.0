@@ -1,4 +1,5 @@
 import { PagedQueryType } from '../common'
+import { ProjectDtoType } from '../project/types'
 
 export type RoleSmallType = {
   id: number
@@ -64,6 +65,8 @@ export type UserInfoType = {
   lastLoginTime?: string
   createdDate?: string
   projectUsers: ProjectUserType[]
+  // 权限
+  permissions?: string[]
 }
 
 /**
@@ -117,4 +120,50 @@ export type OrgType = {
 export interface IMenuSearchParams {
   blurry: string
   projectId: number
+}
+/*
+ * 字典查询类型
+ */
+export type DictQueryType = {
+  blurry: string
+} & PagedQueryType
+
+/**
+ * 字典信息类型
+ */
+export type DictInfoType = {
+  id?: number
+  name: string
+  remark: string
+}
+
+/**
+ * 字典详情查询类型
+ */
+export type DictDetailQueryType = {
+  name: string
+  projectId: number
+}
+
+/**
+ * 字典详情信息
+ */
+export type DictDetailType = {
+  id?: number
+  dictId: number
+  projectId: number
+  label: string
+  value: string
+  sort: string
+}
+
+/**
+ * 包含详情的字典信息
+ */
+export type DictAndDetailType = {
+  id?: number
+  name: string
+  remark: string
+  dictValList: DictDetailType[]
+  projects: ProjectDtoType[]
 }
