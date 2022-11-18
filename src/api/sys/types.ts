@@ -76,6 +76,7 @@ export type MenuDtoType = {
    */
   type: number
   name: string
+  showName: string
   permission: string
   path: string
   sort: number
@@ -87,6 +88,7 @@ export type MenuDtoType = {
   hidden: boolean
   icon: string
   children: MenuDtoType[]
+  projectId: number
 }
 
 /**
@@ -107,4 +109,12 @@ export type RoleType = {
 export type OrgType = {
   id: number
   name: string
+}
+
+/**
+ * 菜单列表查询条件参数
+ */
+export interface IMenuSearchParams {
+  blurry: string
+  projectId: number
 }

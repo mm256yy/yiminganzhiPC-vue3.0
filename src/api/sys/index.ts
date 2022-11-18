@@ -7,7 +7,8 @@ import {
   SystemRoleEnum,
   ProjectRoleEnum,
   RoleType,
-  UserSaveDtoType
+  IMenuSearchParams
+  // UserSaveDtoType
 } from './types'
 
 export const getSystemRoleName = (role: SystemRoleEnum) => {
@@ -54,7 +55,7 @@ export const listUserApi = (query: UserQueryType): Promise<TableResponse<UserInf
 /**
  * 新增或编辑用户
  */
-export const saveUserApi = (user: UserSaveDtoType): Promise<UserInfoType> => {
+export const saveUserApi = (user: UserInfoType): Promise<UserInfoType> => {
   const url = user.id ? '/user/update' : '/user/create'
   return request.post({ url, data: user })
 }
@@ -80,4 +81,51 @@ export const getOrgTreeApi = (projectId: number): Promise<TreeNodeType> => {
  */
 export const getAllRoleApi = (projectId: number): Promise<RoleType[]> => {
   return request.get({ url: '/role/all', params: { projectId } })
+}
+
+/**
+ * 获取所有的菜单列表
+ */
+
+export const getSearchMenuApi = (
+  params: IMenuSearchParams
+): Promise<TableResponse<MenuDtoType>> => {
+  return request.get({ url: '/menu', params: { ...params, size: 100 } })
+}
+
+/**
+ * 查询单个菜单信息
+ */
+
+export const getMenuItemInfoApi = (id: number): Promise<MenuDtoType> => {
+  return request.get({ url: `/menu/${id}` })
+}
+
+/**
+ * 新增菜单
+ */
+export const createMenuApi = (data: MenuDtoType): Promise<MenuDtoType> => {
+  return request.post({
+    url: '/menu/create',
+    data
+  })
+}
+
+/**
+ * 修改菜单
+ */
+export const updateMenuApi = (data: MenuDtoType): Promise<MenuDtoType> => {
+  return request.post({
+    url: '/menu/update',
+    data
+  })
+}
+
+/**
+ * 删除菜单
+ */
+export const deleteMenuApi = (ids: number[]): Promise<void> => {
+  return request.post({
+    url: `/menu/delete/${ids[0]}`
+  })
 }
