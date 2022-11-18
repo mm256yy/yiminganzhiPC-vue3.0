@@ -1,6 +1,6 @@
 <template>
-  <ContentWrap>
-    <div class="flex">
+  <ContentWrap title="菜单管理">
+    <div class="flex justify-between">
       <Search
         :schema="allSchemas.searchSchema"
         @search="setSearchParams"
