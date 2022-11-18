@@ -92,7 +92,12 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem required label="指定项目" prop="projectId">
+          <ElFormItem
+            required
+            label="指定项目"
+            prop="projectId"
+            v-if="form.type === IMenuTypes.menu"
+          >
             <ElSelect v-model="form.projectId">
               <ElOption
                 v-for="item in projectStore.getProjects"
@@ -202,6 +207,8 @@ const menuTypes = ref([
 ])
 const form = ref<MenuDtoType>({
   type: 0,
+  parentId: 0,
+  projectId: 0,
   cache: false,
   hidden: false,
   iframe: false,

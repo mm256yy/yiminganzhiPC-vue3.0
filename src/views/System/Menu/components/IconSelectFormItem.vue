@@ -9,7 +9,7 @@
     >
       <IconSelect ref="iconSelectRef" @selected="selectedIcon" />
       <template #reference>
-        <el-input :model-value="iconName" placeholder="请输入内容" readonly style="cursor: pointer">
+        <el-input :model-value="iconName" placeholder="请输入内容" style="cursor: pointer">
           <template #prepend>
             <Icon :icon="iconName" />
           </template>
@@ -41,7 +41,6 @@ const selectedIcon = (name) => {
 }
 const showPop = () => {
   nextTick(() => {
-    console.log(iconSelectRef.value, 'iconSelectRef.value')
     iconSelectRef.value?.reset()
   })
 }
