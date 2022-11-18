@@ -17,7 +17,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, defineExpose } from 'vue'
 import { throttle } from 'lodash-es'
 import { ElInput, ElEmpty } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -37,13 +37,6 @@ const onChange = (val) => {
   name.value = val
   updateIconList(val)
 }
-// const iconList = computed(() => {
-//   if (name.value) {
-//     return defaultIconList.filter((item) => item.includes(name.value))
-//   } else {
-//     return defaultIconList
-//   }
-// })
 
 const selectedIcon = (name) => {
   emit('selected', name)
@@ -51,7 +44,12 @@ const selectedIcon = (name) => {
 
 const reset = () => {
   name.value = ''
+  updateIconList('')
 }
+
+defineExpose({
+  reset
+})
 </script>
 
 <style lang="less">

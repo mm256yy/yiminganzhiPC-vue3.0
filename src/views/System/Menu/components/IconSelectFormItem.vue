@@ -41,6 +41,7 @@ const selectedIcon = (name) => {
 }
 const showPop = () => {
   nextTick(() => {
+    console.log(iconSelectRef.value, 'iconSelectRef.value')
     iconSelectRef.value?.reset()
   })
 }
