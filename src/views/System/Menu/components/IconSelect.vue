@@ -65,6 +65,10 @@ defineExpose({
     align-items: center;
     justify-content: center;
     cursor: pointer;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c449cf2 (feat: merge master)
     :hover {
       background-color: var(--el-color-primary);
     }
