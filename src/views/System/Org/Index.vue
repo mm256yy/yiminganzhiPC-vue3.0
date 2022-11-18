@@ -23,13 +23,11 @@
               <el-tag v-else class="ml-2" type="warn">停用</el-tag>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="data.createdDate"
-            label="创建时间"
-            width=""
-            align="center"
-            :formatter="getFormateDate"
-          />
+          <el-table-column prop="data.createdDate" label="创建时间" width="" align="center">
+            <template #default="{ row }">
+              {{ formatDate(row.data.createdDate) }}
+            </template>
+          </el-table-column>
           <el-table-column prop="data.remark" label="备注" width="300" align="center" />
           <el-table-column label="操作" align="center">
             <template #default="scope">
@@ -65,6 +63,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
+import { formatDate } from '@/utils'
 // 公共组件
 import { ElButton, ElMessageBox, ElMessage, ElTable, ElTag, ElTableColumn } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
@@ -126,9 +125,5 @@ const onAddOrg = () => {
 const onClose = () => {
   showEdit.value = false
   getList()
-}
-
-const getFormateDate = (row) => {
-  return row.data.createdDate.slice(0, 10)
 }
 </script>
