@@ -16,6 +16,7 @@
       :columns="allSchemas.tableColumns"
       :loading="tableObject.loading"
       :showOverflowTooltip="false"
+      tableLayout="auto"
       row-key="id"
       headerAlign="center"
       align="center"
@@ -162,8 +163,11 @@ const schema = reactive<CrudSchema[]>([
     detail: {
       show: false
     },
-    align: 'left',
-    width: '225px'
+    align: 'left'
+  },
+  {
+    field: 'showName',
+    label: '显示名称'
   },
   {
     field: 'icon',
@@ -289,6 +293,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'action',
     label: '操作',
+    fixed: 'right',
     search: {
       show: false
     },

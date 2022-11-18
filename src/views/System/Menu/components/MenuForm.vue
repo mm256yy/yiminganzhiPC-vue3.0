@@ -248,7 +248,6 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
       emit('submit', form.value)
-      formEl?.resetFields()
     } else {
       return false
     }
