@@ -167,3 +167,37 @@ export type DictAndDetailType = {
   dictValList: DictDetailType[]
   projects: ProjectDtoType[]
 }
+
+// ******** 组织管理 **********
+/**
+ * 组织查询类型
+ */
+export type orgQueryType = {
+  name?: string | null
+  enable?: boolean | null
+}
+
+/**
+ * 单个组织类型
+ */
+export type orgInfoType = {
+  projectId: number
+  id: number
+  name: string
+  parentId: number
+  enabled: boolean
+  remark: string
+  sortNum: number
+  serialNumber?: string
+  children?: orgInfoType[]
+}
+
+/**
+ * 组织树类型
+ */
+export type orgTreeType = {
+  id: number
+  label: string
+  data?: any
+  children?: orgTreeType[]
+}

@@ -9,6 +9,8 @@ import {
   DictDetailType,
   DictDetailQueryType,
   DictAndDetailType,
+  orgInfoType,
+  orgTreeType,
   SystemRoleEnum,
   ProjectRoleEnum,
   IMenuSearchParams,
@@ -169,7 +171,6 @@ export const deleteDictApi = (id: number): Promise<void> => {
  * 查询字典详情列表
  */
 export const listDictDetailApi = (query: DictDetailQueryType): Promise<DictAndDetailType> => {
-  console.log('123', query.name)
   return request.get({ url: `dict/${query.name}`, params: query })
 }
 
@@ -190,4 +191,28 @@ export const saveDictDetailApi = (
  */
 export const deleteDictDetailApi = (id: number, projectId: number): Promise<void> => {
   return request.post({ url: `/dict/val/${id}`, params: { projectId, id } })
+}
+
+/**
+ * 查询组织树
+ */
+export const orgTreeApi = (projectId): Promise<orgTreeType> => {
+  return request.get({ url: `org/tree`, params: { projectId } })
+}
+
+/**
+/**
+ * 新增或编辑单个组织信息
+ */
+export const saveOrgApi = (org: orgInfoType): Promise<orgInfoType> => {
+  const url = org.id ? '/org/update' : '/org/create'
+  return request.post({ url, data: org })
+}
+
+/**
+ * 删除字典详情
+ * @param id 用户id
+ */
+export const deleteOrgApi = (id: number): Promise<void> => {
+  return request.post({ url: `/org/delete/${id}` })
 }

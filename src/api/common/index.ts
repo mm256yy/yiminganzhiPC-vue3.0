@@ -19,6 +19,7 @@ export type TreeNodeType = {
   disabled?: string | Function
   isLeaf?: string | Function
   class?: string | Function
+  data?: any
 }
 
 // 获取所有字典
