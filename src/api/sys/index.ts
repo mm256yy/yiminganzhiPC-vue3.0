@@ -11,6 +11,7 @@ import {
   DictAndDetailType,
   SystemRoleEnum,
   ProjectRoleEnum,
+  IMenuSearchParams,
   RoleType
 } from './types'
 
@@ -95,13 +96,59 @@ export const getAllRoleApi = (projectId: number): Promise<RoleType[]> => {
 }
 
 /**
+ * 获取所有的菜单列表
+ */
+
+export const getSearchMenuApi = (
+  params: IMenuSearchParams
+): Promise<TableResponse<MenuDtoType>> => {
+  return request.get({ url: '/menu', params: { ...params, size: 100 } })
+}
+
+/**
+ * 查询单个菜单信息
+ */
+
+export const getMenuItemInfoApi = (id: number): Promise<MenuDtoType> => {
+  return request.get({ url: `/menu/${id}` })
+}
+
+/**
+ * 新增菜单
+ */
+export const createMenuApi = (data: MenuDtoType): Promise<MenuDtoType> => {
+  return request.post({
+    url: '/menu/create',
+    data
+  })
+}
+
+/**
+ * 修改菜单
+ */
+export const updateMenuApi = (data: MenuDtoType): Promise<MenuDtoType> => {
+  return request.post({
+    url: '/menu/update',
+    data
+  })
+}
+
+/**
+ * 删除菜单
+ */
+export const deleteMenuApi = (ids: number[]): Promise<void> => {
+  return request.post({
+    url: `/menu/delete/${ids[0]}`
+  })
+}
+
+/**
  * 分页读取字典列表
  */
 export const listDictApi = (query: DictQueryType): Promise<TableResponse<DictInfoType>> => {
   return request.get({ url: 'dict', params: query })
 }
 
-/**
 /**
  * 新增或编辑字典
  */
@@ -126,7 +173,6 @@ export const listDictDetailApi = (query: DictDetailQueryType): Promise<DictAndDe
   return request.get({ url: `dict/${query.name}`, params: query })
 }
 
-/**
 /**
  * 新增或编辑字典详情
  */

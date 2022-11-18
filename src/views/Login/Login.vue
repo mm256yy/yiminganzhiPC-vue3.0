@@ -19,7 +19,7 @@
           <div
             class="h-full flex items-center m-auto w-[100%] @2xl:max-w-500px @xl:max-w-500px @md:max-w-500px @lg:max-w-500px"
           >
-            <LoginForm class="p-20px mt-[40%] m-auto <xl:(rounded-3xl light:bg-white)" />
+            <LoginForm class="p-20px m-auto <xl:(rounded-3xl light:bg-white)" />
           </div>
         </Transition>
       </div>
