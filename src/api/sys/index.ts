@@ -64,6 +64,14 @@ export const saveUserApi = (user: UserInfoType): Promise<UserInfoType> => {
 }
 
 /**
+ * 重置用户密码
+ * @param userId 要重置的用户id
+ */
+export const resetPwdApi = (userId: number): Promise<void> => {
+  return request.post({ url: '/user/reset_pass', params: { userId } })
+}
+
+/**
  * 删除用户
  * @param id 用户id
  * @param projectId 项目id，如果只是删除用户在单个项目中的关联

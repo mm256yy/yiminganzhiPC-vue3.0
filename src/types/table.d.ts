@@ -42,6 +42,10 @@ export interface TableSetPropsType {
  */
 export type TableColumnActionIcon = {
   icon: string
+  /**
+   * 按钮提示
+   */
+  tooltip?: string
   type?: ButtonType
   action?: Function
 } & Recordable
