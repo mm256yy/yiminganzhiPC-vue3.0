@@ -32,7 +32,7 @@
           </div>
         </ContentWrap>
       </div>
-      <ContentWrap class="flex flex-col flex-grow" title="字典管理">
+      <ContentWrap class="flex flex-col flex-grow" title="字典详情">
         <DictDetail :name="currentName" :dict-id="currentId" />
       </ContentWrap>
     </div>

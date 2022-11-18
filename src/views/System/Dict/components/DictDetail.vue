@@ -14,8 +14,6 @@
   <div>
     <ContentWrap>
       <Table
-        v-model:current-page="tableObject.currentPage"
-        v-model:page-size="tableObject.size"
         :loading="tableObject.loading"
         header-align="center"
         align="center"
@@ -43,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, watch, onMounted } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 // 公共组件
@@ -55,10 +53,8 @@ import { TableColumn } from '@/types/table'
 // 接口及自定义数据类型
 import { DictDetailType } from '@/api/sys/types'
 import { listDictDetailApi, deleteDictDetailApi } from '@/api/sys'
-import { listProjectApi } from '@/api/project'
 // 页面组件
 import EditFormDetail from './EditFormDetail.vue'
-import { ProjectQueryType } from '@/api/project/types'
 
 const appStore = useAppStore()
 const showEdit = ref(false)
@@ -82,6 +78,7 @@ const columns = reactive<TableColumn[]>([
 
 const getTableList = async (): Promise<TableResponse> => {
   const data = await listDictDetailApi(tableObject.params)
+  console.log('data', data)
   const tableList = {
     total: 0,
     content: data.dictValList,
@@ -89,6 +86,8 @@ const getTableList = async (): Promise<TableResponse> => {
     size: 1000,
     other: ''
   }
+  projectList.value = [{ id: appStore.getCurrentProjectId, name: '默认项目' }]
+  projectList.value.push(...data.projects)
   return Promise.resolve(tableList)
 }
 
@@ -105,14 +104,11 @@ tableObject.params = {
 }
 tableObject.loading = false
 
-onMounted(() => {
-  getProjectList({ page: 0, size: 100 })
-})
-
 watch(
   () => props.name,
   (val) => {
     if (val) {
+      projectId.value = appStore.getCurrentProjectId
       tableObject.params.name = val
       tableObject.params.projectId = projectId.value
         ? projectId.value
@@ -150,14 +146,6 @@ const onDelete = (row: DictDetailType) => {
 const onAddDictDetail = () => {
   currentRow.value = undefined
   showEdit.value = true
-}
-
-const getProjectList = (row: ProjectQueryType) => {
-  projectList.value = []
-  listProjectApi(row).then((res) => {
-    // res.content.push({ id: 0, name: '系统' })
-    projectList.value = res.content
-  })
 }
 
 const onClose = () => {
