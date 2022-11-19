@@ -45,7 +45,7 @@ import { reactive, ref, unref, watch, onMounted } from 'vue'
 import { Form } from '@/components/Form'
 import { ElButton, ElCheckbox, ElMessage } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
-import { loginApi, loginCaptchaApi } from '@/api/login'
+import { loginApi, loginCaptchaApi, getPermissionApi } from '@/api/login'
 import { currentUserApi, userMenuApi } from '@/api/sys'
 import { useCache } from '@/hooks/web/useCache'
 import { useAppStore } from '@/store/modules/app'
@@ -206,6 +206,8 @@ const getMenus = async (user: JwtUserType) => {
     // 设置当前项目，顶部可以支持项目切换
     appStore.setCurrentProjectId(projectId)
     menus = await userMenuApi(projectId)
+    const permissions = await getPermissionApi()
+    appStore.setPermissions(permissions)
   }
   const { wsCache } = useCache()
   const routers = menus || []

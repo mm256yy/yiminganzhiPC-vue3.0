@@ -14,6 +14,7 @@ const TOKEN_NAME = 'YM-TOKEN'
 const JWT_INFO_NAME = 'ymUserJwtInfo'
 const USER_INFO_NAME = 'ymUserInfo'
 const CURRENT_PROJECT_KEY = 'ymCurrentProjectId'
+const PERMISSION_KEY = 'ymPermission'
 
 interface AppState {
   breadcrumb: boolean
@@ -36,6 +37,7 @@ interface AppState {
   userInfo: UserInfoType | null
   userJwtInfo: JwtUserType | null
   currentProjectId: number
+  permissions: string[]
   token: string
   isDark: boolean
   currentSize: ElementPlusSize
@@ -53,6 +55,7 @@ export const useAppStore = defineStore('app', {
       userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
       currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
+      permissions: wsCache.get(PERMISSION_KEY) || [],
       sizeMap: ['default', 'large', 'small'],
       mobile: false, // 是否是移动端
       title: import.meta.env.VITE_APP_TITLE, // 标题
@@ -180,6 +183,9 @@ export const useAppStore = defineStore('app', {
     getCurrentProjectId(): number {
       return this.currentProjectId
     },
+    getPermissions(): string[] {
+      return this.permissions || wsCache.get(PERMISSION_KEY)
+    },
     getIsSysAdmin(): boolean {
       return (
         wsCache.get(JWT_INFO_NAME) &&
@@ -290,6 +296,10 @@ export const useAppStore = defineStore('app', {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
       // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目
       this.currentProjectId = projectId
+    },
+    setPermissions(permissions: string[]) {
+      wsCache.set(PERMISSION_KEY, permissions)
+      this.permissions = permissions
     },
     setUserDefaultProject(projectId: number) {
       this.getUserInfo?.projectUsers.forEach((p) => {

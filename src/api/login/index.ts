@@ -12,3 +12,11 @@ export const logoutApi = (): Promise<void> => {
 export const loginCaptchaApi = (): Promise<CaptchaType> => {
   return request.post({ url: '/auth/captcha' })
 }
+
+/**
+ * 当前登录用户在当前项目中的权限列表
+ * 项目信息通过请求头传递
+ */
+export const getPermissionApi = (): Promise<string[]> => {
+  return request.get({ url: '/auth/permission' })
+}
