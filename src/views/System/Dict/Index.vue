@@ -5,7 +5,9 @@
         <ContentWrap title="字典管理">
           <div class="flex flex-wrap mb-5px">
             <Search :schema="searchSchema" @search="searchDict" />
-            <ElButton type="primary" @click="onAddDict">新增</ElButton>
+            <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddDict"
+              >新增</ElButton
+            >
           </div>
           <div>
             <ContentWrap>
@@ -24,7 +26,7 @@
                 @register="register"
                 @row-click="handleRowClick"
               >
-                <template #action="{ row }">
+                <template v-if="appStore.getIsSysAdmin" #action="{ row }">
                   <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
                 </template>
               </Table>
