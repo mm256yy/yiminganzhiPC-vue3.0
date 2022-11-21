@@ -97,13 +97,20 @@ export const getAllRoleApi = (projectId: number): Promise<RoleType[]> => {
 }
 
 /**
- * 获取所有的菜单列表
+ * 查询菜单列表
  */
 
 export const getSearchMenuApi = (
   params: IMenuSearchParams
 ): Promise<TableResponse<MenuDtoType>> => {
   return request.get({ url: '/menu', params: { ...params, size: 100 } })
+}
+
+/**
+ * 菜单列表
+ */
+export const getAllMenuApi = () => {
+  return request.get({ url: '/menu/tree' })
 }
 
 /**
