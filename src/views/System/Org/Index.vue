@@ -68,14 +68,15 @@ import { formatDate } from '@/utils'
 import { ElButton, ElMessageBox, ElMessage, ElTable, ElTag, ElTableColumn } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 // 接口及自定义数据类型
-import { orgInfoType, orgTreeType } from '@/api/sys/types'
+import { orgInfoType } from '@/api/sys/types'
+import { TreeNodeType } from '@/api/common'
 import { orgTreeApi, deleteOrgApi } from '@/api/sys'
 import { useAppStore } from '@/store/modules/app'
 import EditForm from './EditForm.vue'
 
 const showEdit = ref(false)
-let treeData = ref<orgTreeType[]>([])
-let tableData = ref<orgTreeType[]>([])
+let treeData = ref<TreeNodeType[]>([])
+let tableData = ref<TreeNodeType[]>([])
 let loading = ref<boolean>(false)
 const currentRow = ref<orgInfoType>()
 const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
@@ -102,7 +103,7 @@ const onEdit = (row: orgInfoType) => {
   showEdit.value = true
 }
 
-const onDelete = (row: orgTreeType) => {
+const onDelete = (row: TreeNodeType) => {
   console.log(row)
   if (row.children && row.children.length > 0) {
     ElMessageBox.alert(`该部门下有子部门，不可以删除`)
