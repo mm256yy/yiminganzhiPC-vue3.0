@@ -9,27 +9,27 @@
           :data="tableData"
           :loading="loading"
           :tree-props="{ children: 'children' }"
-          :header-cell-style="{ textAlign: 'center' }"
+          :header-cell-style="{ textAlign: 'left' }"
           header-align="center"
           style="width: 100%; margin-bottom: 20px"
           row-key="id"
           default-expand-all
         >
-          <el-table-column prop="data.name" label="部门名称" width="" align="center" />
-          <el-table-column prop="data.sortNum" label="排序" width="" align="center" />
-          <el-table-column label="状态" width="" align="center">
+          <el-table-column prop="data.name" label="部门名称" width="" align="left" />
+          <el-table-column prop="data.sortNum" label="排序" width="" align="left" />
+          <el-table-column label="状态" width="" align="left">
             <template #default="scope">
               <el-tag v-if="scope.row.data.enabled" class="ml-2" type="success">启用</el-tag>
               <el-tag v-else class="ml-2" type="warn">停用</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="data.createdDate" label="创建时间" width="" align="center">
+          <el-table-column prop="data.createdDate" label="创建时间" width="" align="left">
             <template #default="{ row }">
               {{ formatDate(row.data.createdDate) }}
             </template>
           </el-table-column>
-          <el-table-column prop="data.remark" label="备注" width="300" align="center" />
-          <el-table-column label="操作" align="center">
+          <el-table-column prop="data.remark" label="备注" width="300" align="left" />
+          <el-table-column label="操作" align="left">
             <template #default="scope">
               <el-button
                 size="small"

@@ -6,6 +6,8 @@ import { PagedQueryType } from '../common'
 export type ProjectDtoType = {
   id: number
   name: string
+  description?: string
+  dingCorpId?: number
 }
 
 /**
@@ -14,3 +16,15 @@ export type ProjectDtoType = {
 export type ProjectQueryType = {
   name?: string
 } & PagedQueryType
+
+/**
+ * 项目配置信息
+ */
+export type ProjectConfigType = {
+  projectId: number
+  id?: number
+  dingCorpId: string
+  dingAgentId: string
+  dingAppKey: string
+  dingAppSecret: string
+}
