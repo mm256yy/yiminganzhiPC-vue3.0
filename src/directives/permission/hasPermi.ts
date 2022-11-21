@@ -5,21 +5,21 @@ import { useAppStoreWithOut } from '@/store/modules/app'
 
 const appStore = useAppStoreWithOut()
 
-// 全部权限
-const all_permission = ['*.*.*']
 const hasPermission = (value: string | string[]): boolean => {
-  const permissions = appStore.getUserInfo?.permissions as string[]
+  if (appStore.getIsSysAdmin) {
+    // 系统管理员有所有权限
+    return true
+  }
+  const permissions = appStore.getPermissions
   if (!value) {
     throw new Error('请设置操作权限')
   }
   if (!isArray(value)) {
-    return permissions?.includes(value as string)
-  }
-  if (all_permission[0] === permissions[0]) {
-    return true
+    return permissions.includes(value as string)
   }
   return (intersection(value, permissions) as string[]).length > 0
 }
+
 function hasPermi(el: Element, binding: DirectiveBinding) {
   const value = binding.value
 

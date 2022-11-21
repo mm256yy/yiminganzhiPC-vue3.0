@@ -195,9 +195,9 @@ export type orgInfoType = {
 /**
  * 组织树类型
  */
-export type orgTreeType = {
-  id: number
-  label: string
-  data?: any
-  children?: orgTreeType[]
-}
+// export type orgTreeType = {
+//   id: number
+//   label: string
+//   data?: any
+//   children?: orgTreeType[]
+// }

@@ -10,7 +10,6 @@ import {
   DictDetailQueryType,
   DictAndDetailType,
   orgInfoType,
-  orgTreeType,
   SystemRoleEnum,
   ProjectRoleEnum,
   IMenuSearchParams,
@@ -203,7 +202,7 @@ export const deleteDictDetailApi = (id: number, projectId: number): Promise<void
 /**
  * 查询组织树
  */
-export const orgTreeApi = (projectId): Promise<orgTreeType> => {
+export const orgTreeApi = (projectId): Promise<TreeNodeType> => {
   return request.get({ url: `org/tree`, params: { projectId } })
 }
 

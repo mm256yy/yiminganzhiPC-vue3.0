@@ -33,16 +33,17 @@ import { ElButton, ElMessage, ElTreeSelect } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { useValidator } from '@/hooks/web/useValidator'
-import { orgInfoType, orgTreeType } from '@/api/sys/types'
+import { orgInfoType } from '@/api/sys/types'
 import { saveOrgApi } from '@/api/sys'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
 import { useAppStore } from '@/store/modules/app'
+import { TreeNodeType } from '@/api/common'
 // import { useIcon } from '@/hooks/web/useIcon'
 
 interface Props {
   show: boolean
-  orgTree: orgTreeType[]
+  orgTree: TreeNodeType[]
   row?: orgInfoType
 }
 
@@ -71,7 +72,7 @@ const rules = {
 }
 
 const schema = reactive<FormSchema[]>([
-  { field: 'name', label: '字典名称', component: 'Input' },
+  { field: 'name', label: '部门名称', component: 'Input' },
   { field: 'parentId', label: '上级部门', colProps: { span: 24 } },
   { field: 'sortNum', label: '排序', component: 'Input', value: 0 },
   { field: 'enabled', label: '是否启用', component: 'Switch', value: true },
