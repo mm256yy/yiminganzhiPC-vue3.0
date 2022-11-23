@@ -3,7 +3,7 @@
     <div class="flex">
       <div class="min-w-560px w-36% pr-5px mr-8px">
         <ContentWrap title="字典管理">
-          <div class="flex flex-wrap mb-5px">
+          <div class="flex justify-between flex-wrap mb-5px">
             <Search :schema="searchSchema" @search="searchDict" />
             <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddDict"
               >新增</ElButton
