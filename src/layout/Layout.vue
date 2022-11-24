@@ -1,15 +1,17 @@
 <script lang="tsx">
-import { computed, defineComponent, unref } from 'vue'
+import { computed, defineComponent, onMounted, unref, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { Backtop } from '@/components/Backtop'
 import { useRenderLayout } from './components/useRenderLayout'
 import { useDesign } from '@/hooks/web/useDesign'
+import { useTheme } from '@/hooks/web/useTheme'
 
 const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('layout')
 
 const appStore = useAppStore()
+const { setSystemTheme, setMenuTheme } = useTheme()
 
 // 是否是移动端
 const mobile = computed(() => appStore.getMobile)
@@ -45,6 +47,12 @@ const renderLayout = () => {
 export default defineComponent({
   name: 'Layout',
   setup() {
+    onMounted(() => {
+      appStore.setLayout('topLeft')
+      setMenuTheme('#001529')
+      setSystemTheme('#409eff')
+    })
+
     return () => (
       <section class={[prefixCls, `${prefixCls}__${layout.value}`, 'w-[100%] h-[100%] relative']}>
         {mobile.value && !collapse.value ? (

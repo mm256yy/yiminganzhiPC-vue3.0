@@ -12,7 +12,6 @@ const tagsViewStore = useTagsViewStore()
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('user-info')
 const { wsCache } = useCache()
-const { replace } = useRouter()
 const appStore = useAppStore()
 
 const nickName = (appStore.getUserJwtInfo && appStore.getUserJwtInfo.nickName) || '用户'
@@ -28,8 +27,8 @@ const loginOut = () => {
       wsCache.clear()
       tagsViewStore.delAllViews()
       resetRouter() // 重置静态路由表
-      replace('/login')
-      setTimeout(() => window.location.reload(), 800)
+      window.location.href = '/#/login'
+      setTimeout(() => window.location.reload(), 500)
     })
     .catch(() => {})
 }

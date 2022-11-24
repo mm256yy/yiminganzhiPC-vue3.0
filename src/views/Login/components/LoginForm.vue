@@ -41,26 +41,25 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, unref, watch, onMounted } from 'vue'
+import { reactive, ref, unref, watch, onMounted, nextTick } from 'vue'
 import { Form } from '@/components/Form'
-import { ElButton, ElCheckbox, ElMessage } from 'element-plus'
+import { ElButton, ElCheckbox } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
-import { loginApi, loginCaptchaApi, getPermissionApi } from '@/api/login'
-import { currentUserApi, userMenuApi } from '@/api/sys'
-import { useCache } from '@/hooks/web/useCache'
+import { loginApi, loginCaptchaApi } from '@/api/login'
 import { useAppStore } from '@/store/modules/app'
-import { usePermissionStore } from '@/store/modules/permission'
 import { useRouter } from 'vue-router'
-import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router'
-import { UserLoginType, JwtUserType } from '@/api/login/types'
-import { SystemRoleEnum } from '@/api/sys/types'
+import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import { UserLoginType } from '@/api/login/types'
 import { useValidator } from '@/hooks/web/useValidator'
 import { FormSchema } from '@/types/form'
+import { usePlatform } from '@/hooks/web/usePlatform'
+import { currentUserApi } from '@/api/sys'
+import { ProjectRoleEnum } from '@/api/sys/types'
 
 const { required } = useValidator()
 const appStore = useAppStore()
-const permissionStore = usePermissionStore()
-const { currentRoute, addRoute, push } = useRouter()
+const { setPlatform } = usePlatform()
+const { currentRoute, addRoute } = useRouter()
 
 const rules = {
   userName: [required('用户名必填')],
@@ -179,46 +178,36 @@ const signIn = async () => {
           const user = res.user
           appStore.setUserJwtInfo(user)
           appStore.setToken(res.token)
-          getMenus(user)
+          const userInfo = await currentUserApi()
+          appStore.setUserInfo(userInfo)
+          await doRoute()
         }
-      } finally {
+      } catch {
         loadCaptcha()
+      } finally {
         loading.value = false
       }
     }
   })
 }
 
-const getMenus = async (user: JwtUserType) => {
-  let menus
-  if (user.systemRole == SystemRoleEnum.SYS_ADMIN) {
-    menus = await userMenuApi(0)
-  } else {
-    const userInfo = await currentUserApi()
-    appStore.setUserInfo(userInfo)
-    const projectUsers = userInfo.projectUsers
-    if (!projectUsers || projectUsers.length === 0) {
-      ElMessage.error('当前用户没有分配任务项目，无法登录，请联系管理员。')
-      return
+const doRoute = async () => {
+  let path = '/#/workshop/home'
+  if (appStore.getIsSysAdmin || appStore.getIsProjectAdmin) {
+    path = '/admin.html#/dashboard/home'
+    if (appStore.getIsProjectAdmin) {
+      const project = appStore.getUserInfo?.projectUsers.find(
+        (x) => x.projectRole === ProjectRoleEnum.PROJECT_ADMIN
+      )
+      if (project) {
+        appStore.setCurrentProjectId(project.projectId!)
+      }
     }
-    const defaultProject = projectUsers.find((x) => x.defaultProject) || projectUsers[0]
-    const projectId = defaultProject.projectId || 0
-    // 设置当前项目，顶部可以支持项目切换
-    appStore.setCurrentProjectId(projectId)
-    menus = await userMenuApi(projectId)
-    const permissions = await getPermissionApi()
-    appStore.setPermissions(permissions)
+    await setPlatform('admin', addRoute)
+  } else {
+    await setPlatform('workshop', addRoute)
   }
-  const { wsCache } = useCache()
-  const routers = menus || []
-  wsCache.set('roleRouters', routers)
-  await permissionStore.generateRoutes(routers)
-
-  permissionStore.getAddRouters.forEach((route) => {
-    addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
-  })
-  permissionStore.setIsAddRouters(true)
-  push({ path: redirect.value || '/dashboard/home' })
+  window.location.href = path
 }
 </script>
 

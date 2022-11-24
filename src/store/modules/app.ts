@@ -7,7 +7,8 @@ import { useCache } from '@/hooks/web/useCache'
 import { LayoutType } from '@/types/layout'
 import { ThemeTypes } from '@/types/theme'
 import { JwtUserType } from '@/api/login/types'
-import { ProjectRoleEnum, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
+import { ProjectRoleEnum, ProjectUserType, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
+import { PlatformType } from '@/types/platform'
 
 const { wsCache } = useCache()
 const TOKEN_NAME = 'YM-TOKEN'
@@ -37,6 +38,7 @@ interface AppState {
   userInfo: UserInfoType | null
   userJwtInfo: JwtUserType | null
   currentProjectId: number
+  currentPlatform: PlatformType
   permissions: string[]
   token: string
   isDark: boolean
@@ -55,6 +57,7 @@ export const useAppStore = defineStore('app', {
       userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
       currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
+      currentPlatform: 'workshop',
       permissions: wsCache.get(PERMISSION_KEY) || [],
       sizeMap: ['default', 'large', 'small'],
       mobile: false, // 是否是移动端
@@ -78,7 +81,7 @@ export const useAppStore = defineStore('app', {
       dynamicRouter: wsCache.get('dynamicRouter') || false, // 是否动态路由
       fixedMenu: wsCache.get('fixedMenu') || false, // 是否固定菜单
 
-      layout: wsCache.get('layout') || 'classic', // layout布局
+      layout: wsCache.get('layout') || 'top', // layout布局
       isDark: wsCache.get('isDark') || false, // 是否是暗黑模式
       currentSize: wsCache.get('default') || 'default', // 组件尺寸
       theme: wsCache.get('theme') || {
@@ -183,24 +186,31 @@ export const useAppStore = defineStore('app', {
     getCurrentProjectId(): number {
       return this.currentProjectId
     },
+    /**
+     * 当前项目id所在的项目信息
+     */
+    getCurrentProject(): ProjectUserType | undefined {
+      return this.userInfo?.projectUsers.find((x) => x.projectId === this.currentProjectId)
+    },
+    getCurrentPlatform(): PlatformType {
+      return this.currentPlatform
+    },
     getPermissions(): string[] {
       return this.permissions || wsCache.get(PERMISSION_KEY)
     },
     getIsSysAdmin(): boolean {
-      return (
-        wsCache.get(JWT_INFO_NAME) &&
-        wsCache.get(JWT_INFO_NAME)['systemRole'] === SystemRoleEnum.SYS_ADMIN
-      )
+      const jwtInfo = this.userJwtInfo || wsCache.get(JWT_INFO_NAME)
+      if (!jwtInfo) {
+        return false
+      }
+      return jwtInfo['systemRole'] === SystemRoleEnum.SYS_ADMIN
     },
     getIsProjectAdmin(): boolean {
-      if (this.userInfo && this.userInfo.projectUsers) {
-        const admin = this.userInfo.projectUsers.find(
-          (x) =>
-            x.projectId === this.currentProjectId && x.projectRole === ProjectRoleEnum.PROJECT_ADMIN
-        )
-        return admin != null
+      const jwtInfo = this.userJwtInfo || wsCache.get(JWT_INFO_NAME)
+      if (!jwtInfo) {
+        return false
       }
-      return false
+      return jwtInfo['systemRole'] === SystemRoleEnum.PROJECT_ADMIN
     },
     getIsDark(): boolean {
       return this.isDark
@@ -296,6 +306,9 @@ export const useAppStore = defineStore('app', {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
       // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目
       this.currentProjectId = projectId
+    },
+    setCurrentPlatform(platform: PlatformType) {
+      this.currentPlatform = platform
     },
     setPermissions(permissions: string[]) {
       wsCache.set(PERMISSION_KEY, permissions)

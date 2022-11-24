@@ -1,9 +1,15 @@
 import { defineStore } from 'pinia'
-import { constantRouterMap } from '@/router'
+import { baseConstantRouterMap, adminConstantRouterMap, workshopConstantRouterMap } from '@/router'
 import { generateRoutesFn2, flatMultiLevelRoutes } from '@/utils/routerHelper'
 import { store } from '../index'
 import { cloneDeep } from 'lodash-es'
+import { useCache } from '@/hooks/web/useCache'
+import { RouteRecordRaw } from 'vue-router'
+import { useAppStoreWithOut } from './app'
+import { ProjectRoleEnum } from '@/api/sys/types'
 
+const { wsCache } = useCache()
+const appStore = useAppStoreWithOut()
 export interface PermissionState {
   routers: AppRouteRecordRaw[]
   addRouters: AppRouteRecordRaw[]
@@ -35,8 +41,12 @@ export const usePermissionStore = defineStore('permission', {
   actions: {
     generateRoutes(routers?: AppCustomRouteRecordRaw[] | string[]): Promise<unknown> {
       return new Promise<void>((resolve) => {
-        let routerMap: AppRouteRecordRaw[] = []
-        routerMap = generateRoutesFn2(routers as AppCustomRouteRecordRaw[])
+        let routerMap =
+          appStore.getIsSysAdmin ||
+          appStore.getCurrentProject?.projectRole === ProjectRoleEnum.PROJECT_ADMIN
+            ? adminConstantRouterMap
+            : workshopConstantRouterMap
+        routerMap = routerMap.concat(generateRoutesFn2(routers as AppCustomRouteRecordRaw[]))
         // 动态路由，404一定要放到最后面
         this.addRouters = routerMap.concat([
           {
@@ -50,7 +60,8 @@ export const usePermissionStore = defineStore('permission', {
           }
         ])
         // 渲染菜单的所有路由
-        this.routers = cloneDeep(constantRouterMap).concat(routerMap)
+
+        this.routers = cloneDeep(baseConstantRouterMap).concat(routerMap)
         resolve()
       })
     },
@@ -59,6 +70,20 @@ export const usePermissionStore = defineStore('permission', {
     },
     setMenuTabRouters(routers: AppRouteRecordRaw[]): void {
       this.menuTabRouters = routers
+    },
+    async initRoutes(addRoute: (route: RouteRecordRaw) => void, menus?: any) {
+      const cacheName =
+        appStore.getIsSysAdmin ||
+        appStore.getCurrentProject?.projectRole === ProjectRoleEnum.PROJECT_ADMIN
+          ? 'adminRouters'
+          : 'workshopRouters'
+      const routers = menus || wsCache.get(cacheName)
+      wsCache.set(cacheName, routers)
+      await this.generateRoutes(routers)
+      this.getAddRouters.forEach((route) => {
+        addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
+      })
+      this.setIsAddRouters(true)
     }
   }
 })

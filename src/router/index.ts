@@ -1,38 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import type { App } from 'vue'
-import { Layout } from '@/utils/routerHelper'
+import { Layout, UserLayout } from '@/utils/routerHelper'
 
-export const constantRouterMap: AppRouteRecordRaw[] = [
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard/home',
-    name: 'Root',
-    meta: {
-      hidden: true
-    }
-  },
-  {
-    path: '/dashboard',
-    component: Layout,
-    redirect: '/dashboard/home',
-    name: 'Dashboard',
-    meta: {
-      title: '首页'
-    },
-    children: [
-      {
-        path: 'home',
-        name: 'DashboardHome',
-        component: () => import('@/views/Dashboard/Home.vue'),
-        meta: {
-          title: '平台首页',
-          icon: 'ant-design:home-outlined'
-        }
-      }
-    ]
-  },
+export const baseConstantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/redirect',
     component: Layout,
@@ -72,10 +43,73 @@ export const constantRouterMap: AppRouteRecordRaw[] = [
   }
 ]
 
+// 后台管理固定路由
+export const adminConstantRouterMap: AppRouteRecordRaw[] = [
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/dashboard/home',
+    name: 'Root',
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    path: '/dashboard',
+    component: Layout,
+    redirect: '/dashboard/home',
+    name: 'Dashboard',
+    meta: { title: '管理首页' },
+    children: [
+      {
+        path: 'home',
+        name: 'DashboardHome',
+        component: () => import('@/views/Dashboard/Home.vue'),
+        meta: {
+          title: '管理首页',
+          icon: 'ant-design:home-outlined'
+        }
+      }
+    ]
+  }
+]
+
+// 工作平台固定路由
+export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/workshop/home',
+    name: 'Root',
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    path: '/workshop',
+    component: UserLayout,
+    name: 'Workshop',
+    meta: {
+      title: '用户首页'
+    },
+    children: [
+      {
+        path: 'home',
+        name: 'WorkshopHome',
+        component: () => import('@/views/Workshop/Home.vue'),
+        meta: {
+          title: '用户首页',
+          icon: 'ant-design:home-outlined'
+        }
+      }
+    ]
+  }
+]
+
 const router = createRouter({
   history: createWebHashHistory(),
   strict: true,
-  routes: constantRouterMap as RouteRecordRaw[],
+  routes: baseConstantRouterMap as RouteRecordRaw[],
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 

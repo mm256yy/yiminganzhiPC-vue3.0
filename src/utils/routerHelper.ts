@@ -13,6 +13,7 @@ const modules = import.meta.glob('../views/**/*.{vue,tsx}')
 
 /* Layout */
 export const Layout = () => import('@/layout/Layout.vue')
+export const UserLayout = () => import('@/layout/UserLayout.vue')
 
 export const getParentLayout = () => {
   return () =>

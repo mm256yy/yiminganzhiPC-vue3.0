@@ -9,7 +9,6 @@ import { usePageLoading } from '@/hooks/web/usePageLoading'
 
 const permissionStore = usePermissionStoreWithOut()
 const appStore = useAppStoreWithOut()
-const { wsCache } = useCache()
 
 const { start, done } = useNProgress()
 const { loadStart, loadDone } = usePageLoading()
@@ -27,15 +26,11 @@ router.beforeEach(async (to, from, next) => {
         return
       }
 
-      const roleRouters = wsCache.get('roleRouters') || []
-      await permissionStore.generateRoutes(roleRouters as AppCustomRouteRecordRaw[])
-      permissionStore.getAddRouters.forEach((route) => {
-        router.addRoute(route as unknown as RouteRecordRaw) // 动态添加可访问路由表
-      })
+      console.log('reload router')
+      await permissionStore.initRoutes(router.addRoute)
       const redirectPath = from.query.redirect || to.path
       const redirect = decodeURIComponent(redirectPath as string)
       const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
-      permissionStore.setIsAddRouters(true)
       next(nextData)
     }
   } else {

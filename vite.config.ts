@@ -72,12 +72,30 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       VueMarcos(),
       createHtmlPlugin({
-        inject: {
-          data: {
-            title: env.VITE_APP_TITLE,
-            injectScript: `<script src="./inject.js"></script>`,
+        pages: [
+          {
+            entry: 'src/main.ts',
+            filename: 'index.html',
+            template: 'index.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
+          },
+          {
+            entry: 'src/admin/main.ts',
+            filename: 'admin.html',
+            template: 'admin.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
           }
-        }
+        ]
       })
     ],
 
@@ -112,6 +130,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           drop_debugger: env.VITE_DROP_DEBUGGER === 'true',
           drop_console: env.VITE_DROP_CONSOLE === 'true'
         }
+      },
+      rollupOptions: {
+        input: {
+          main: resolve(__dirname, "index.html"),
+          admin: resolve(__dirname, "admin.html")
+        }
       }
     },
     server: {
@@ -121,11 +145,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
-          // target: 'http://127.0.0.1:8880',
+          target: 'http://127.0.0.1:8880',
           // 线上测试环境
-          target: 'https://r7r-ai.zdwp.net',
+          // target: 'https://r7r-ai.zdwp.net',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: true
+          changeOrigin: false
         }
       },
       hmr: {
