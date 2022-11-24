@@ -17,7 +17,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineEmits, defineExpose } from 'vue'
+import { ref } from 'vue'
 import { throttle } from 'lodash-es'
 import { ElInput, ElEmpty } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'

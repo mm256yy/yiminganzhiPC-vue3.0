@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import { ElPopover, ElInput, ElFormItem } from 'element-plus'
 import IconSelect from './IconSelect.vue'
 

@@ -166,7 +166,7 @@ import {
   FormRules
 } from 'element-plus'
 import IconSelectFormItem from './IconSelectFormItem.vue'
-import { ref, reactive, watch, defineEmits, defineProps } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useMenuStoreWithOut } from '@/store/modules/menu'
