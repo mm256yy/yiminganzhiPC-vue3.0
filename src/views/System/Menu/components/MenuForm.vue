@@ -18,7 +18,7 @@
 
       <!-- 图标选择 -->
       <IconSelectFormItem
-        v-if="form.type !== IMenuTypes.button"
+        v-if="form.type !== MenuTypes.button"
         :icon="form.icon"
         prop="icon"
         @change="onUpdateIcon"
@@ -27,14 +27,14 @@
       <ElRow :gutter="10">
         <ElCol :span="12">
           <ElFormItem
-            :label="form.type === IMenuTypes.button ? '按钮名称' : '菜单标题'"
+            :label="form.type === MenuTypes.button ? '按钮名称' : '菜单标题'"
             prop="name"
             required
           >
             <ElInput v-model.trim="form.name" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="12" v-if="form.type !== IMenuTypes.button">
+        <ElCol :span="12" v-if="form.type !== MenuTypes.button">
           <ElFormItem label="展示标题" prop="showName" required>
             <ElInput v-model.trim="form.showName" />
           </ElFormItem>
@@ -45,13 +45,13 @@
         required
         label="权限标识"
         prop="permission"
-        v-if="form.type !== IMenuTypes.directory"
+        v-if="form.type !== MenuTypes.directory"
       >
         <ElInput v-model.trim="form.permission" />
       </ElFormItem>
 
       <ElRow :gutter="10">
-        <ElCol :span="12" v-if="form.type !== IMenuTypes.button">
+        <ElCol :span="12" v-if="form.type !== MenuTypes.button">
           <ElFormItem required label="路由地址" prop="componentCode">
             <ElInput v-model.trim="form.componentCode" />
           </ElFormItem>
@@ -63,7 +63,7 @@
         </ElCol>
       </ElRow>
 
-      <ElRow :gutter="10" v-if="form.type === IMenuTypes.menu">
+      <ElRow :gutter="10" v-if="form.type === MenuTypes.menu">
         <ElCol :span="12">
           <ElFormItem required label="组件名称" prop="componentName">
             <ElInput v-model.trim="form.componentName" />
@@ -96,11 +96,11 @@
             required
             label="指定项目"
             prop="projectId"
-            v-if="form.type === IMenuTypes.menu"
+            v-if="form.type === MenuTypes.menu"
           >
             <ElSelect v-model="form.projectId">
               <ElOption
-                v-for="item in projectStore.getProjects"
+                v-for="item in props.projects"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -110,7 +110,7 @@
         </ElCol>
       </ElRow>
 
-      <ElRow :gutter="40" v-if="form.type !== IMenuTypes.button">
+      <ElRow :gutter="40" v-if="form.type !== MenuTypes.button">
         <ElCol :span="8">
           <ElFormItem label="是否外链" prop="iframe">
             <ElRadioGroup v-model="form.iframe">
@@ -130,7 +130,7 @@
         </ElCol>
 
         <ElCol :span="8">
-          <ElFormItem label="菜单缓存" prop="cache" v-if="form.type === IMenuTypes.menu">
+          <ElFormItem label="菜单缓存" prop="cache" v-if="form.type === MenuTypes.menu">
             <ElRadioGroup v-model="form.cache">
               <ElRadioButton :label="true">是</ElRadioButton>
               <ElRadioButton :label="false">否</ElRadioButton>
@@ -166,29 +166,28 @@ import {
   FormRules
 } from 'element-plus'
 import IconSelectFormItem from './IconSelectFormItem.vue'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, defineEmits, defineProps } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useMenuStoreWithOut } from '@/store/modules/menu'
-import { useProjectStoreWithOut } from '@/store/modules/project'
 import type { MenuDtoType } from '@/api/sys/types'
 
-interface Props {
+interface PropsType {
   show: boolean
   actionType: 'add' | 'edit'
+  projects: any[]
   row?: MenuDtoType | null
 }
 
-enum IMenuTypes {
+enum MenuTypes {
   directory = 0,
   menu = 1,
   button = 2
 }
 
-const props = defineProps<Props>()
+const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const menuStore = useMenuStoreWithOut()
-const projectStore = useProjectStoreWithOut()
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const menuTypes = ref([

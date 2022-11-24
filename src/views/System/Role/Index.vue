@@ -85,8 +85,7 @@
 <script setup lang="ts">
 import { watch, reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { useProjectStoreWithOut } from '@/store/modules/project'
-import { ElButton, ElMessage, ElCard, ElTree } from 'element-plus'
+import { ElButton, ElMessage, ElCard, ElTree, ElMessageBox } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -94,7 +93,6 @@ import RoleEditForm from './components/RoleEditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { listProjectApi } from '@/api/project'
 import { getAllMenuApi } from '@/api/sys/index'
 import {
   searchRoleListApi,
@@ -104,15 +102,14 @@ import {
   getRoleRelationMenu,
   setRoleRelationMenu
 } from '@/api/sys/role/service'
-import type { IRole, IRoleMenu } from '@/api/sys/role/types'
+import type { RoleType, RoleMenuType } from '@/api/sys/role/types'
 
-type ILabelValue = { label: string; id: number; children?: ILabelValue[] }
+type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
 
 const appStore = useAppStore()
-const projectStore = useProjectStoreWithOut()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
-const menuTree = ref<ILabelValue[]>([]) // 菜单树
+const menuTree = ref<LabelValueType[]>([]) // 菜单树
 const treeLoading = ref(false)
 const menuTreeRef = ref()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -124,25 +121,16 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 
-getList()
-
-const loadProject = async () => {
-  return await listProjectApi({ page: 0, size: 100 }).then((res) => {
-    const projects = res.content.map((p) => {
-      return {
-        value: p.id,
-        label: p.name
-      }
-    })
-    projectStore.setProjects(projects)
-    return projects
-  })
+tableObject.params = {
+  projectId: appStore.currentProjectId
 }
+
+getList()
 
 const loadMenuTree = () => {
   treeLoading.value = true
   getAllMenuApi()
-    .then((res: ILabelValue[]) => {
+    .then((res: LabelValueType[]) => {
       menuTree.value = res
     })
     .finally(() => {
@@ -152,13 +140,15 @@ const loadMenuTree = () => {
 
 onMounted(() => {
   // 权限限制
-  if (!appStore.getIsSysAdmin || !appStore.getIsProjectAdmin) {
-    // ElMessageBox.confirm('你在当前项目中无权限')
-    //   .then(() => {
-    //     window.location.href = '/#/dashboard/home'
-    //   })
-    //   .catch(() => {})
-    // return
+  if (!appStore.getIsProjectAdmin) {
+    ElMessageBox.confirm('你在当前项目中无权限')
+      .then(() => {
+        window.location.href = '/#/dashboard/home'
+      })
+      .catch(() => {
+        window.location.href = '/#/dashboard/home'
+      })
+    return
   }
 
   loadMenuTree()
@@ -189,26 +179,6 @@ const schema = reactive<CrudSchema[]>([
     field: 'name',
     label: '角色名称',
     search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'projectId',
-    label: '项目',
-    search: {
-      show: true,
-      component: 'Select',
-      api: async (): Promise<any> => {
-        return loadProject()
-      }
-    },
-    table: {
       show: false
     },
     form: {
@@ -273,7 +243,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelMenu = async (row: IRole | null, multiple: boolean) => {
+const onDelMenu = async (row: RoleType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -290,7 +260,7 @@ const onAddRole = () => {
   dialog.value = true
 }
 
-const onEditRole = (row: IRole) => {
+const onEditRole = (row: RoleType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -300,7 +270,7 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: IRole) => {
+const onSubmit = async (data: RoleType) => {
   if (actionType.value === 'add') {
     await createRoleApi(data)
   } else {
@@ -314,7 +284,7 @@ const onSubmit = async (data: IRole) => {
   getList()
 }
 
-const onRowClick = (row: IRole) => {
+const onRowClick = (row: RoleType) => {
   tableObject.currentRow = row
   treeLoading.value = true
   getRoleRelationMenu(row.id)
@@ -343,9 +313,9 @@ const onResetChecked = () => {
   menuTreeRef.value?.setCheckedKeys([], false)
 }
 
-const saveRoleMenuRelation = (data: IRoleMenu[]) => {
+const saveRoleMenuRelation = (data: RoleMenuType[]) => {
   setRoleRelationMenu(data).then(() => {
-    ElMessage.success('关联成功!')
+    ElMessage.success('菜单配置成功!')
   })
 }
 
@@ -354,7 +324,7 @@ const onSaveMenu = () => {
     return
   }
   const menuIds = getCheckedKeys()
-  let roleMenuArray: IRoleMenu[] = []
+  let roleMenuArray: RoleMenuType[] = []
   if (menuIds && menuIds.length) {
     roleMenuArray = menuIds.map((id) => {
       return {

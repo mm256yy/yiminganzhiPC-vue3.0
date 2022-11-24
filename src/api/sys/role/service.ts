@@ -1,11 +1,13 @@
 import request from '@/config/axios'
-import type { IRole, ISearchRoleParams, IRoleMenu } from './types'
+import type { RoleType, SearchRoleParamsType, RoleMenuType } from './types'
 
 /**
  * 角色列表查询
  */
 
-export const searchRoleListApi = (params: ISearchRoleParams): Promise<TableResponse<IRole>> => {
+export const searchRoleListApi = (
+  params: SearchRoleParamsType
+): Promise<TableResponse<RoleType>> => {
   return request.get({
     url: '/role',
     params
@@ -16,7 +18,7 @@ export const searchRoleListApi = (params: ISearchRoleParams): Promise<TableRespo
  * 查询单个菜单信息
  */
 
-export const getRoleItemInfoApi = (id: number): Promise<IRole> => {
+export const getRoleItemInfoApi = (id: number): Promise<RoleType> => {
   return request.get({ url: `/role/${id}` })
 }
 
@@ -24,7 +26,7 @@ export const getRoleItemInfoApi = (id: number): Promise<IRole> => {
  * 新增角色
  */
 
-export const createRoleApi = (data: IRole): Promise<IRole> => {
+export const createRoleApi = (data: RoleType): Promise<RoleType> => {
   return request.post({
     url: '/role/create',
     data
@@ -34,7 +36,7 @@ export const createRoleApi = (data: IRole): Promise<IRole> => {
 /**
  * 修改角色
  */
-export const updateRoleApi = (data: IRole): Promise<IRole> => {
+export const updateRoleApi = (data: RoleType): Promise<RoleType> => {
   return request.post({
     url: '/role/update',
     data
@@ -53,7 +55,7 @@ export const deleteRoleApi = (ids: number[]): Promise<void> => {
 /**
  * 查询角色关联的菜单
  */
-export const getRoleRelationMenu = (id: number): Promise<IRoleMenu[]> => {
+export const getRoleRelationMenu = (id: number): Promise<RoleMenuType[]> => {
   return request.get({
     url: `/role/relation/${id}`
   })
@@ -62,7 +64,7 @@ export const getRoleRelationMenu = (id: number): Promise<IRoleMenu[]> => {
 /**
  * 关联角色菜单
  */
-export const setRoleRelationMenu = (data: IRoleMenu[]): Promise<void> => {
+export const setRoleRelationMenu = (data: RoleMenuType[]): Promise<void> => {
   return request.post({
     url: `/role/relation/menu`,
     data

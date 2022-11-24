@@ -24,12 +24,12 @@ import { ref, defineProps, nextTick } from 'vue'
 import { ElPopover, ElInput, ElFormItem } from 'element-plus'
 import IconSelect from './IconSelect.vue'
 
-interface IProps {
+interface PropsType {
   icon?: string
   prop?: string
 }
 
-const props = defineProps<IProps>()
+const props = defineProps<PropsType>()
 const emit = defineEmits(['change'])
 
 const iconSelectRef = ref()

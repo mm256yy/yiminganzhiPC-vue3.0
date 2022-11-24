@@ -23,25 +23,10 @@
 
       <ElRow :gutter="10">
         <ElCol :span="12">
-          <ElFormItem required label="指定项目" prop="projectId">
-            <ElSelect v-model="form.projectId">
-              <ElOption
-                v-for="item in projectStore.getProjects"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
           <ElFormItem label="角色描述" prop="remark">
             <ElInput :maxLength="100" type="textarea" :rows="2" v-model.trim="form.remark" />
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow :gutter="10">
         <ElCol :span="12">
           <ElFormItem label-width="100px" label="是否保留角色" prop="reserve">
             <ElRadioGroup v-model="form.reserve">
@@ -68,40 +53,38 @@ import {
   ElInput,
   ElRow,
   ElCol,
-  ElSelect,
-  ElOption,
   ElButton,
   ElRadioGroup,
   ElRadioButton,
   FormInstance,
   FormRules
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, defineEmits } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
-import { useProjectStoreWithOut } from '@/store/modules/project'
-import type { IRole } from '@/api/sys/role/types'
+import { useAppStore } from '@/store/modules/app'
+import type { RoleType } from '@/api/sys/role/types'
 
-interface Props {
+interface PropsType {
   show: boolean
   actionType: 'add' | 'edit'
-  row?: IRole | null
+  row?: RoleType | null
 }
 
-const props = defineProps<Props>()
+const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
-const projectStore = useProjectStoreWithOut()
+const appStore = useAppStore()
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
 
-const defaultValue: Omit<IRole, 'id'> = {
+const defaultValue: Omit<RoleType, 'id'> = {
   name: '',
   reserve: false,
-  projectId: projectStore.getProjects[0].value,
+  projectId: appStore.currentProjectId,
   remark: '',
   code: ''
 }
-const form = ref<Omit<IRole, 'id'>>(defaultValue)
+const form = ref<Omit<RoleType, 'id'>>(defaultValue)
 
 watch(
   () => props.row,

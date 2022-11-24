@@ -30,6 +30,7 @@
       :show="menuPup"
       :row="tableObject.currentRow"
       :actionType="actionType"
+      :projects="projects"
       @close="onFormPupClose"
       @submit="onSubmit"
     />
@@ -39,7 +40,6 @@
 <script setup lang="ts">
 import { h, watch, reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { useProjectStoreWithOut } from '@/store/modules/project'
 import { ElButton, ElMessageBox, ElMessage } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -55,8 +55,8 @@ import type { MenuDtoType } from '@/api/sys/types'
 import { MenuForm } from './components'
 
 const appStore = useAppStore()
-const projectStore = useProjectStoreWithOut()
 const menuStore = useMenuStoreWithOut()
+const projects = ref<Array<{ label: string; value: number }>>([])
 const menuPup = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -83,21 +83,20 @@ watch(
   }
 )
 
-const loadProject = async () => {
-  return await listProjectApi({ page: 0, size: 100 }).then((res) => {
-    const projects = res.content.map((p) => {
+const loadProject = () => {
+  return listProjectApi({ page: 0, size: 100 }).then((res) => {
+    const pjs = res.content.map((p) => {
       return {
         value: p.id,
         label: p.name
       }
     })
-    projects.unshift({
+    pjs.unshift({
       label: '默认项目',
       value: 0
     })
-    // 存入项目列表信息
-    projectStore.setProjects(projects)
-    return projects
+    projects.value = pjs
+    return pjs
   })
 }
 
@@ -108,7 +107,9 @@ onMounted(() => {
       .then(() => {
         window.location.href = '/#/dashboard/home'
       })
-      .catch(() => {})
+      .catch(() => {
+        window.location.href = '/#/dashboard/home'
+      })
   }
 })
 

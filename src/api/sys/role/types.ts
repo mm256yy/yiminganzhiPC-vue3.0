@@ -1,4 +1,4 @@
-export interface IRole {
+export interface RoleType {
   projectId: number
   id: number
   name: string
@@ -8,7 +8,7 @@ export interface IRole {
   [key: string]: any
 }
 
-export interface ISearchRoleParams {
+export interface SearchRoleParamsType {
   page: number
   size: number
   sort: string[]
@@ -16,7 +16,7 @@ export interface ISearchRoleParams {
   blurry: string
 }
 
-export interface IRoleMenu {
+export interface RoleMenuType {
   id?: number
   roleId: number
   menuId: number
