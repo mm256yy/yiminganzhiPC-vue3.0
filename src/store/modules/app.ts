@@ -7,7 +7,7 @@ import { useCache } from '@/hooks/web/useCache'
 import { LayoutType } from '@/types/layout'
 import { ThemeTypes } from '@/types/theme'
 import { JwtUserType } from '@/api/login/types'
-import { ProjectRoleEnum, ProjectUserType, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
+import { ProjectUserType, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
 import { PlatformType } from '@/types/platform'
 
 const { wsCache } = useCache()
