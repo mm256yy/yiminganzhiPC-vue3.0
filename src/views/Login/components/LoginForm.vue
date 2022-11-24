@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, unref, watch, onMounted, nextTick } from 'vue'
+import { reactive, ref, unref, watch, onMounted } from 'vue'
 import { Form } from '@/components/Form'
 import { ElButton, ElCheckbox } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'

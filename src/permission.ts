@@ -1,7 +1,5 @@
 import router from './router'
 import { useAppStoreWithOut } from '@/store/modules/app'
-import { useCache } from '@/hooks/web/useCache'
-import type { RouteRecordRaw } from 'vue-router'
 import { useTitle } from '@/hooks/web/useTitle'
 import { useNProgress } from '@/hooks/web/useNProgress'
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
@@ -26,7 +24,6 @@ router.beforeEach(async (to, from, next) => {
         return
       }
 
-      console.log('reload router')
       await permissionStore.initRoutes(router.addRoute)
       const redirectPath = from.query.redirect || to.path
       const redirect = decodeURIComponent(redirectPath as string)

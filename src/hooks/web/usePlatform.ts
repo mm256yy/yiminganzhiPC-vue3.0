@@ -1,6 +1,6 @@
 import { useAppStoreWithOut } from '@/store/modules/app'
 import { PlatformType } from '@/types/platform'
-import { userMenuApi, currentUserApi } from '@/api/sys'
+import { userMenuApi } from '@/api/sys'
 import { getPermissionApi } from '@/api/login'
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
 import { RouteRecordRaw } from 'vue-router'
