@@ -5,7 +5,7 @@
         <LeftPanel @search="onSearch" />
       </div>
       <div class="flex flex-col flex-grow">
-        <div class="flex">
+        <div class="flex justify-between">
           <Search :schema="searchSchema" @search="searchUser" />
           <ElButton type="primary" @click="onAddUser">新增</ElButton>
         </div>
