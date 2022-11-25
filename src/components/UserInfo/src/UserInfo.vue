@@ -2,7 +2,6 @@
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessageBox } from 'element-plus'
 import { useCache } from '@/hooks/web/useCache'
 import { resetRouter } from '@/router'
-import { useRouter } from 'vue-router'
 import { logoutApi } from '@/api/login'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useTagsViewStore } from '@/store/modules/tagsView'

@@ -37,7 +37,7 @@ export const deleteProjectApi = (id: number): Promise<void> => {
  * 查询项目配置信息
  */
 export const projectConfigApi = (projectId: number): Promise<ProjectConfigType> => {
-  return request.get({ url: '/project/getProjectConfigByProjectId', params: { projectId } })
+  return request.get({ url: `/project/config/${projectId}` })
 }
 
 /**
@@ -46,6 +46,6 @@ export const projectConfigApi = (projectId: number): Promise<ProjectConfigType> 
 export const saveProjectConfigApi = (
   projectConfig: ProjectConfigType
 ): Promise<ProjectConfigType> => {
-  const url = projectConfig.id ? '/project/updateProjectConfig' : '/project/createProjectConfig'
+  const url = projectConfig.id ? '/project/config/update' : '/project/config/create'
   return request.post({ url, data: projectConfig })
 }

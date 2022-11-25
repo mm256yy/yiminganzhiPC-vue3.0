@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { computed, defineComponent, onMounted, unref, ref } from 'vue'
+import { computed, defineComponent, onMounted, unref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { Backtop } from '@/components/Backtop'
 import { useRenderLayout } from './components/useRenderLayout'
