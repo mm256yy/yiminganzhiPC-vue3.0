@@ -40,16 +40,6 @@ export const baseConstantRouterMap: AppRouteRecordRaw[] = [
       title: '404',
       noTagsView: true
     }
-  },
-  {
-    path: '/Policy',
-    component: () => import('@/views/Project/Policy/Index.vue'),
-    name: '政策法规',
-    meta: {
-      hidden: true,
-      title: '404',
-      noTagsView: true
-    }
   }
 ]
 
