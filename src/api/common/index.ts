@@ -31,3 +31,13 @@ export const getDictApi = (): Promise<IResponse> => {
 export const getDictOneApi = async (): Promise<IResponse> => {
   return request.get({ url: '/dict/one' })
 }
+
+// 上传文件
+export const uploadFileApi = (file) => {
+  return request.post({ url: '/file', data: { file } })
+}
+
+// 下载文件
+export const downloadFileApi = (fileName: string) => {
+  return request.get({ url: `/file/download/${fileName}` })
+}

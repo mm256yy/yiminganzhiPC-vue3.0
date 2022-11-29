@@ -1,3 +1,9 @@
+export interface PolicyUploadFileType {
+  name: string
+  url: string
+}
+
+// Array<PolicyUploadFileType>
 export interface PolicyDtoType {
   id: number
   title: string
@@ -10,4 +16,6 @@ export interface PolicyDtoType {
   issuingAgency: string
   keyWord: string
   status: '1' | '0'
+  statusText: string
+  [key: string]: any
 }

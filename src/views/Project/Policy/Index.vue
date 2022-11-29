@@ -1,6 +1,11 @@
 <template>
   <ContentWrap title="政策法规管理">
-    <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
+    <Search
+      :label-width="70"
+      :schema="allSchemas.searchSchema"
+      @search="setSearchParams"
+      @reset="setSearchParams"
+    />
 
     <div class="flex items-center justify-between pb-18px">
       <div class="text-size-14px"> 政策法规列表 </div>
@@ -8,8 +13,13 @@
     </div>
     <Table
       border
+      v-model:pageSize="tableObject.size"
+      v-model:currentPage="tableObject.currentPage"
+      :pagination="{
+        total: tableObject.total
+      }"
       @register="register"
-      :data="tableObject.tableList"
+      :data="changeList(tableObject.tableList)"
       :columns="allSchemas.tableColumns"
       :loading="tableObject.loading"
       :showOverflowTooltip="false"
@@ -19,18 +29,38 @@
       align="center"
     >
       <template #title="{ row }">
-        <ElPopper v-if="row.title && Array.isArray(row.title)" trigger="hover">
-          <div v-for="item in row.title" :key="item.name">
-            <div>{{ item.name }}</div>
-          </div>
-        </ElPopper>
-        <div v-else>{{ row.title }}</div>
+        <ElPopover
+          v-if="Array.isArray(row.fileList) && row.fileList.length > 1"
+          :width="400"
+          placement="right"
+          trigger="hover"
+        >
+          <template #default>
+            <div class="py-10px" v-for="item in row.fileList" :key="item.name">
+              <div
+                class="text-[var(--el-color-primary)] cursor-pointer"
+                @click="onSingleJump(item)"
+                >{{ item.name }}</div
+              >
+            </div>
+          </template>
+
+          <template #reference>
+            <div>{{ row.title }}</div>
+          </template>
+        </ElPopover>
+        <div v-else class="text-[var(--el-color-primary)] cursor-pointer" @click="onJump(row)">{{
+          row.title
+        }}</div>
       </template>
-      <template #time="{ row }">
-        {{ formatDateTime(row.time) }}
+      <template #projectId="{ row }">
+        {{ getProjectName(row.projectId) }}
       </template>
-      <template #valid="{ row }">
-        {{ row.valid ? '有效' : '无效' }}
+      <template #type="{ row }">
+        {{ getTypeName(row.type) }}
+      </template>
+      <template #status="{ row }">
+        {{ row.statusText }}
       </template>
       <template #action="{ row }">
         <TableEditColumn :row="row" @edit="onEditMenu(row)" @delete="onDelMenu" />
@@ -41,6 +71,7 @@
       :show="menuPup"
       :row="tableObject.currentRow"
       :actionType="actionType"
+      :projects="projects"
       @close="onFormPupClose"
       @submit="onSubmit"
     />
@@ -50,15 +81,14 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessageBox, ElMessage, ElPopper } from 'element-plus'
+import { ElButton, ElMessageBox, ElMessage, ElPopover } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { formatDateTime } from '@/utils'
-// import { listProjectApi } from '@/api/project'
+import { listProjectApi } from '@/api/project'
 import {
   getPolicyListApi,
   addPolicyApi,
@@ -66,11 +96,12 @@ import {
   delPolicyByIdApi
 } from '@/api/project/policy/service'
 import EditForm from './components/EditForm.vue'
+import { validOptions, policyTypes } from './config'
 
-import type { PolicyDtoType } from '@/api/project/policy/types'
+import type { PolicyDtoType, PolicyUploadFileType } from '@/api/project/policy/types'
 
 const appStore = useAppStore()
-// const projects = ref<Array<{ label: string; value: number }>>([])
+const projects = ref<Array<{ label: string; value: number }>>([])
 const menuPup = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -80,29 +111,48 @@ const { register, tableObject, methods } = useTable({
   delListApi: delPolicyByIdApi
 })
 const { getList, setSearchParams } = methods
-tableObject.params = {
-  size: 100,
-  projectId: appStore.getCurrentProjectId
-}
 
 getList()
 
-// const loadProject = () => {
-//   return listProjectApi({ page: 0, size: 100 }).then((res) => {
-//     const pjs = res.content.map((p) => {
-//       return {
-//         value: p.id,
-//         label: p.name
-//       }
-//     })
-//     pjs.unshift({
-//       label: '默认项目',
-//       value: 0
-//     })
-//     projects.value = pjs
-//     return pjs
-//   })
-// }
+const changeList = (list: PolicyDtoType[]) => {
+  return list.map((item) => {
+    try {
+      if (item.enclosure) {
+        item.fileList = JSON.parse(item.enclosure) || []
+      } else {
+        item.fileList = []
+      }
+    } catch (error) {
+      // console.log(error)
+    }
+    return item
+  })
+}
+
+const getProjectName = (projectId: number) => {
+  return projects.value.find((item) => item.value === projectId)?.label || '-'
+}
+
+const getTypeName = (id: string) => {
+  return policyTypes.find((item) => item.value === id)?.label || '-'
+}
+
+const loadProject = () => {
+  return listProjectApi({ page: 0, size: 100 }).then((res) => {
+    const pjs = res.content.map((p) => {
+      return {
+        value: p.id,
+        label: p.name
+      }
+    })
+    pjs.unshift({
+      label: '默认项目',
+      value: 0
+    })
+    projects.value = pjs
+    return pjs
+  })
+}
 
 onMounted(() => {
   // 权限限制
@@ -114,12 +164,14 @@ onMounted(() => {
       .catch(() => {
         window.location.href = '/#/dashboard/home'
       })
+    return
   }
 })
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'id',
+    field: 'index',
+    type: 'index',
     label: '序号',
     search: {
       show: false
@@ -129,7 +181,8 @@ const schema = reactive<CrudSchema[]>([
     },
     detail: {
       show: false
-    }
+    },
+    width: '60px'
   },
   {
     field: 'title',
@@ -165,7 +218,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'projectId',
-    label: '所属项目'
+    label: '所属项目',
+    search: {
+      show: true,
+      component: 'Select',
+      api: (): Promise<any> => {
+        return loadProject()
+      }
+    }
   },
   {
     field: 'issuingAgency',
@@ -182,22 +242,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'valid',
+    field: 'status',
     label: '有效性',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '有效',
-            value: 1
-          },
-          {
-            label: '无效',
-            value: 0
-          }
-        ]
+        options: validOptions
       }
     },
     form: {
@@ -214,7 +265,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     form: {
@@ -224,7 +276,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   {
     field: 'action',
     label: '操作',
@@ -256,6 +307,7 @@ const onDelMenu = async (row: PolicyDtoType | null, multiple: boolean) => {
 
 const onAddMenu = () => {
   actionType.value = 'add'
+  tableObject.currentRow = null
   menuPup.value = true
 }
 
@@ -281,5 +333,14 @@ const onSubmit = async (data: PolicyDtoType) => {
   ElMessage.success('操作成功！')
   menuPup.value = false
   getList()
+}
+
+const onSingleJump = (item: PolicyUploadFileType) => {
+  window.open(item.url)
+}
+
+const onJump = (row: PolicyDtoType) => {
+  const { fileList } = row
+  window.open(fileList[0].url)
 }
 </script>

@@ -28,7 +28,7 @@ export const updatePolicyApi = (data: PolicyDtoType): Promise<PolicyDtoType> => 
  * 删除政策法规
  */
 export const delPolicyByIdApi = (id: number): Promise<void> => {
-  return request.get({ url: `/policyLaw/delete/${id}` })
+  return request.post({ url: `/policyLaw/delete/${id}` })
 }
 
 /**
