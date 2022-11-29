@@ -8,13 +8,20 @@ export type ProjectDtoType = {
   name: string
   description?: string
   dingCorpId?: number
+  showName: string
+  reservoirCode: string
+  projectType: string
+  townCode: string
+  reservoirName: string
+  districtTree: string[]
 }
 
 /**
  * 项目查询类型
  */
 export type ProjectQueryType = {
-  name?: string
+  name?: string | null
+  townCode?: string | null
 } & PagedQueryType
 
 /**

@@ -1,7 +1,26 @@
 <template>
   <ContentWrap title="项目管理">
-    <div class="flex justify-between">
-      <Search :schema="searchSchema" @search="searchProject" />
+    <div class="flex justify-between mb-10px">
+      <div class="flex">
+        <ElInput v-model="query.name" placeholder="请输入项目名称" class="mr-10px w-200px" />
+        <!-- default-expanded-keys="[]"
+          default-checked-keys="[]" -->
+        <ElTreeSelect
+          ref="districtTree"
+          v-model="townCode"
+          lazy
+          multiple
+          node-key="code"
+          :load="loadDistrictNode"
+          :props="defaultProps"
+          :style="{ width: '250px', 'margin-right': '10px' }"
+        />
+        <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchProject">
+          查询
+        </ElButton>
+        <ElButton v-if="appStore.getIsSysAdmin" @click="reset">重置</ElButton>
+      </div>
+      <!-- <Search :schema="searchSchema" @search="searchProject" /> -->
       <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddProject">新增</ElButton>
     </div>
     <div>
@@ -18,6 +37,12 @@
           :data="tableObject.tableList"
           @register="register"
         >
+          <template #projectType="{ row }">
+            {{ getProjectTypeName(row.projectType) }}
+          </template>
+          <template #townCode="{ row }">
+            {{ row.townName }}
+          </template>
           <template #action="{ row }">
             <TableEditColumn :row="row" :icons="otherIcons" @edit="onEdit" @delete="onDelete" />
           </template>
@@ -38,17 +63,17 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessageBox, ElMessage } from 'element-plus'
+import { ElButton, ElMessageBox, ElMessage, ElTreeSelect, ElInput } from 'element-plus'
 import { useTable } from '@/hooks/web/useTable'
 import { Table, TableEditColumn } from '@/components/Table'
 import { ContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
 import { TableColumn, TableColumnActionIcon } from '@/types/table'
-import { FormSchema } from '@/types/form'
-import { ProjectDtoType, ProjectConfigType } from '@/api/project/types'
+import { ProjectDtoType, ProjectConfigType, ProjectQueryType } from '@/api/project/types'
 import { listProjectApi, deleteProjectApi, projectConfigApi } from '@/api/project'
+// import { DistrictNodeType } from '@/api/district/types'
+// import { TreeNodeType } from '@/api/common'
+import { getDistrictChildrenApi } from '@/api/district'
 import { EditForm, ProjectConfig } from './components'
-
 const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<ProjectDtoType>()
@@ -56,13 +81,25 @@ const showConfig = ref(false)
 let currProjectId = ref<number | undefined>()
 const currentConfigInfo = ref<ProjectConfigType>()
 
-const searchSchema = reactive<FormSchema[]>([
-  { field: 'name', label: '项目名称', component: 'Input' }
-])
+const townCode = ref()
+const defaultProps = {
+  value: 'code',
+  label: 'name',
+  disabled: (node) => {
+    return node && node.data && node.data.hasChild && node.level !== 3
+  },
+  isLeaf: (node) => {
+    return node.level === 3
+  }
+}
 
 const columns = reactive<TableColumn[]>([
   { field: 'index', label: '序号', type: 'index', width: '60px' },
   { field: 'name', label: '项目名称' },
+  { field: 'showName', label: '项目简称' },
+  { field: 'reservoirName', label: '水库名称' },
+  { field: 'projectType', label: '工程类型' },
+  { field: 'townName', label: '所在市县' },
   { field: 'description', label: '项目简介' },
   { field: 'action', label: '操作', width: '140px', align: 'right' }
 ])
@@ -93,15 +130,30 @@ const { register, tableObject, methods } = useTable({
   }
 })
 
+const query: ProjectQueryType = reactive({
+  name: null,
+  page: tableObject.currentPage,
+  size: tableObject.size
+})
+
 tableObject.params = {
-  name: null
+  name: null,
+  townCode: null
 }
 
 const { getList } = methods
 
-const searchProject = (data: any) => {
-  tableObject.params.name = data.name
+const searchProject = () => {
+  tableObject.params.name = query.name
+  tableObject.params.townCode = townCode
   getList()
+}
+
+const reset = () => {
+  query.name = ''
+  query.townCode = ''
+  tableObject.currentPage = 0
+  tableObject.size = 10
 }
 
 onMounted(() => {
@@ -115,6 +167,21 @@ onMounted(() => {
     getList()
   }
 })
+
+const loadDistrictNode = async (node: any, resolve: any) => {
+  if (node.level === 3) {
+    resolve([])
+    return
+  }
+  let parentId
+  if (node && node.level == 0) {
+    parentId = 0
+  } else {
+    parentId = node.data.id
+  }
+  const childrenList = await getDistrictChildrenApi(parentId)
+  resolve(childrenList)
+}
 
 const onEdit = (row: ProjectDtoType) => {
   currentRow.value = row
@@ -144,5 +211,16 @@ const onCloseEdit = () => {
 const onCloseConfig = () => {
   showConfig.value = false
   getList()
+}
+
+const getProjectTypeName = (value: string) => {
+  const projectTypes = [
+    { name: '水电工程', value: 'Hydropowerproject' },
+    { name: '水利枢纽', value: 'HydroJunction' }
+  ]
+  const projectType = projectTypes.find((o) => o.value === value)
+  if (projectType) {
+    return projectType.name
+  }
 }
 </script>
