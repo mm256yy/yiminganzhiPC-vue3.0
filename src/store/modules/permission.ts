@@ -81,7 +81,6 @@ export const usePermissionStore = defineStore('permission', {
         appStore.getCurrentProject?.projectRole === ProjectRoleEnum.PROJECT_ADMIN
           ? 'adminRouters'
           : 'workshopRouters'
-      console.log(cacheName, menus, wsCache.get(cacheName), '---')
       const routers = menus || wsCache.get(cacheName)
       wsCache.set(cacheName, routers)
       await this.generateRoutes(routers)
