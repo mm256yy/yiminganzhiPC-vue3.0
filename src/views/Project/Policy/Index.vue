@@ -111,7 +111,9 @@ const { register, tableObject, methods } = useTable({
   delListApi: delPolicyByIdApi
 })
 const { getList, setSearchParams } = methods
-
+tableObject.params = {
+  sort: ['sortNum']
+}
 getList()
 
 const changeList = (list: PolicyDtoType[]) => {
