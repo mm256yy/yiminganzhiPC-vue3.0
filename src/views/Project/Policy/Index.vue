@@ -9,7 +9,7 @@
 
     <div class="flex items-center justify-between pb-18px">
       <div class="text-size-14px"> 政策法规列表 </div>
-      <ElButton :icon="addIcon" type="primary" @click="onAddMenu">新增</ElButton>
+      <ElButton :icon="addIcon" type="primary" @click="onAddPolicy">新增</ElButton>
     </div>
     <Table
       border
@@ -63,12 +63,12 @@
         {{ row.statusText }}
       </template>
       <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditMenu(row)" @delete="onDelMenu" />
+        <TableEditColumn :row="row" @edit="onEditPolicy(row)" @delete="onDelPolicy" />
       </template>
     </Table>
 
     <EditForm
-      :show="menuPup"
+      :show="formPup"
       :row="tableObject.currentRow"
       :actionType="actionType"
       :projects="projects"
@@ -102,7 +102,7 @@ import type { PolicyDtoType, PolicyUploadFileType } from '@/api/project/policy/t
 
 const appStore = useAppStore()
 const projects = ref<Array<{ label: string; value: number }>>([])
-const menuPup = ref(false) // 弹窗标识
+const formPup = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
@@ -295,7 +295,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelMenu = async (row: PolicyDtoType | null, multiple: boolean) => {
+const onDelPolicy = async (row: PolicyDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -305,20 +305,20 @@ const onDelMenu = async (row: PolicyDtoType | null, multiple: boolean) => {
   )
 }
 
-const onAddMenu = () => {
+const onAddPolicy = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
-  menuPup.value = true
+  formPup.value = true
 }
 
-const onEditMenu = (row: PolicyDtoType) => {
+const onEditPolicy = (row: PolicyDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
-  menuPup.value = true
+  formPup.value = true
 }
 
 const onFormPupClose = () => {
-  menuPup.value = false
+  formPup.value = false
 }
 
 const onSubmit = async (data: PolicyDtoType) => {
@@ -331,7 +331,7 @@ const onSubmit = async (data: PolicyDtoType) => {
     })
   }
   ElMessage.success('操作成功！')
-  menuPup.value = false
+  formPup.value = false
   getList()
 }
 
