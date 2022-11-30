@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia'
-import { baseConstantRouterMap, adminConstantRouterMap, workshopConstantRouterMap } from '@/router'
+import router, {
+  baseConstantRouterMap,
+  adminConstantRouterMap,
+  workshopConstantRouterMap
+} from '@/router'
 import { generateRoutesFn2, flatMultiLevelRoutes } from '@/utils/routerHelper'
 import { store } from '../index'
 import { cloneDeep } from 'lodash-es'
