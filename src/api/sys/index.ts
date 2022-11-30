@@ -158,6 +158,13 @@ export const listDictApi = (query: DictQueryType): Promise<TableResponse<DictInf
 }
 
 /**
+ * 查询字典分组
+ */
+export const getDictGroupListApi = (name?: string): Promise<any[]> => {
+  return request.get({ url: '/dict/groups', params: { name } })
+}
+
+/**
  * 新增或编辑字典
  */
 export const saveDictApi = (dict: DictInfoType): Promise<DictInfoType> => {

@@ -121,11 +121,13 @@ export interface IMenuSearchParams {
   blurry: string
   projectId: number
 }
+
 /*
  * 字典查询类型
  */
 export type DictQueryType = {
   blurry: string
+  dictGroup: string
 } & PagedQueryType
 
 /**
@@ -134,6 +136,7 @@ export type DictQueryType = {
 export type DictInfoType = {
   id?: number
   name: string
+  dictGroup: string
   remark: string
 }
 
