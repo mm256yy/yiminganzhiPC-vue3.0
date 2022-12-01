@@ -81,7 +81,7 @@ const mapClick = (e) => {
   //将像素坐标转换成经纬度坐标
   const lng = e.lnglat.getLng()
   const lat = e.lnglat.getLat()
-  console.log(lng, lat, '经纬度')
+  // console.log(lng, lat, '经纬度')
   clearOverlay()
   // 添加标记
   addOverlay(lng, lat)
@@ -93,7 +93,7 @@ const mapClick = (e) => {
   // 拿到地址
   getAddress(point, (address: string) => {
     point.address = address
-    console.log(address, 'address')
+    // console.log(address, 'address')
     emit('chose', point)
   })
 }
