@@ -28,6 +28,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   } else {
     env = loadEnv(mode, root)
   }
+  console.log(env, 'env')
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
@@ -80,6 +81,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             injectOptions: {
               data: {
                 title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
@@ -91,6 +93,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
             injectOptions: {
               data: {
                 title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
