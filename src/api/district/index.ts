@@ -46,3 +46,15 @@ export const saveDistrictApi = (district: DistrictNodeType): Promise<DistrictNod
 export const deleteDistrictApi = (id: number): Promise<void> => {
   return request.post({ url: `/district/delete/${id}` })
 }
+
+/**
+ * 查询行政区划树
+ */
+export const getDistrictTreeApi = (projectId: number) => {
+  return request.get({
+    url: `/district/tree`,
+    params: {
+      projectId
+    }
+  })
+}

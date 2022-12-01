@@ -20,6 +20,7 @@ export type ComponentName =
   | 'SelectV2'
   | 'InputPassword'
   | 'Editor'
+  | 'TreeSelect'
 
 export type ColProps = {
   span?: number

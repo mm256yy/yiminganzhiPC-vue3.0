@@ -48,4 +48,10 @@ declare global {
     size: number
     other: any
   }
+
+  /**
+   * 地图类
+   */
+  declare const BMapGL: any
+  declare const BMAP_ANCHOR_TOP_LEFT: any
 }
