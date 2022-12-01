@@ -52,11 +52,5 @@ declare global {
   /**
    * 地图类
    */
-  declare const TMap: any
-  declare const TLngLat: any
-  declare const TMarker: any
-  declare const TScaleControl: any
-  declare const TNavigationControl: any
-  declare const TGeocoder: any
-  declare const TEvent: any
+  declare const T: any
 }
