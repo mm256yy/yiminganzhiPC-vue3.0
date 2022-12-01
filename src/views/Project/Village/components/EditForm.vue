@@ -65,24 +65,6 @@
           <div>{{ position.address }}</div>
         </ElFormItem>
       </ElRow>
-
-      <!-- <ElRow :gutter="10">
-        <ElCol :span="12">
-          <ElFormItem label="纬度" prop="latitude" required>
-            <ElInput clearable v-model="form.latitude" type="text" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="经度" prop="longitude" required>
-            <ElInput clearable v-model="form.longitude" type="text" />
-          </ElFormItem>
-        </ElCol>
-        <div
-          class="pb-18px pl-80px text-[var(--el-color-primary)] cursor-pointer"
-          @click="onGoToMap"
-          >去百度地图获取经纬度</div
-        >
-      </ElRow> -->
     </ElForm>
 
     <template #footer>
@@ -152,9 +134,7 @@ watch(
   () => props.row,
   (val) => {
     if (val) {
-      console.log(val, 'edit val')
       form.value = {
-        ...form.value,
         ...val
       }
     } else {

@@ -1,11 +1,30 @@
 <template>
-  <div class="w-540px h-400px">
+  <div class="w-540px h-400px relative">
+    <div class="absolute top-6px left-60px z-500">
+      <ElInput v-model="keyword" class="!w-300px mr-6px" :prefix-icon="searchIcon" />
+      <ElButton @click="search">搜索</ElButton>
+      <div v-if="searchList && searchList.length" class="bg-white p-10px mt-6px">
+        <div
+          v-for="item in searchList"
+          :key="item.hotPointID"
+          class="search-item"
+          @click="selectSearchItem(item)"
+        >
+          <Icon icon="material-symbols:location-on-outline" />
+          {{ item.name }}
+        </div>
+      </div>
+    </div>
     <div id="map"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { ElInput, ElButton } from 'element-plus'
+import { debounce, throttle } from 'lodash-es'
+import { useIcon } from '@/hooks/web/useIcon'
+import { nextTick } from 'process'
 
 interface PointType {
   longitude: number
@@ -13,13 +32,24 @@ interface PointType {
   address?: string
 }
 
+type SearchItemType = {
+  name: string
+  lonlat: string
+  hotPointID: string
+} & PointType
+
 interface Props {
   point: PointType
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['chose'])
 
+const searchIcon = useIcon({ icon: 'ic:outline-search' })
+const keyword = ref('')
+const searchList = ref<Array<SearchItemType>>([])
+
 let map: any = null
+let localsearch: any = null
 // 默认杭州市区
 const longitude = 120.17418
 const latitude = 30.26961
@@ -32,17 +62,31 @@ const init = () => {
   map.enableScrollWheelZoom()
   // 添加控件
   addControl()
-  // 添加标记
-  if (props.point.longitude && props.point.latitude) {
-    addOverlay(lng, lat)
-  }
   // 监听事件
   addMapClick()
   // 解决地图渲染不全的问题
   setTimeout(() => {
     map.checkResize()
   }, 300)
+  initSearch()
 }
+
+watch(
+  () => props.point,
+  (val) => {
+    // 添加标记
+    nextTick(() => {
+      if (val.longitude && val.latitude) {
+        clearOverlay()
+        addOverlay(val.longitude, val.latitude)
+      }
+    })
+  },
+  {
+    deep: true,
+    immediate: true
+  }
+)
 
 onMounted(() => {
   init()
@@ -81,11 +125,10 @@ const addListener = () => {
   map.addEventListener('click', mapClick)
 }
 
-const mapClick = (e) => {
+const mapClick = throttle((e) => {
   //将像素坐标转换成经纬度坐标
   const lng = e.lnglat.getLng()
   const lat = e.lnglat.getLat()
-  // console.log(lng, lat, '经纬度')
   clearOverlay()
   // 添加标记
   addOverlay(lng, lat)
@@ -93,14 +136,13 @@ const mapClick = (e) => {
     longitude: lng,
     latitude: lat
   }
-  // console.log(point, 'point')
   // 拿到地址
   getAddress(point, (address: string) => {
     point.address = address
-    // console.log(address, 'address')
     emit('chose', point)
   })
-}
+}, 200)
+
 const addMapClick = () => {
   //移除地图的点击事件
   removeMapClick()
@@ -112,10 +154,80 @@ const removeMapClick = () => {
   //移除地图的点击事件
   map.removeEventListener('click', mapClick)
 }
-</script>
 
+const localSearchResult = (res) => {
+  if (res) {
+    const { pois } = res
+    searchList.value = pois.map((item: SearchItemType) => {
+      const [longitude, latitude] = item.lonlat.split(' ')
+      return {
+        name: item.name,
+        longitude,
+        latitude,
+        address: item.address,
+        hotPointID: item.hotPointID
+      }
+    })
+  } else {
+    searchList.value = []
+  }
+}
+
+const initSearch = () => {
+  const config = {
+    pageCapacity: 10, //每页显示的数量
+    onSearchComplete: localSearchResult //接收数据的回调函数
+  }
+  localsearch = new T.LocalSearch(map, config)
+}
+
+const search = debounce(() => {
+  //创建搜索对象
+  if (!keyword.value) return
+  localsearch.search(keyword.value, 1)
+}, 200)
+
+const selectSearchItem = (item: SearchItemType) => {
+  // 清除搜索结果
+  searchList.value = []
+  keyword.value = ''
+  // 添加标记
+  clearOverlay()
+  // 添加标记
+  addOverlay(item.longitude, item.latitude)
+  // 定位到位置
+  map.centerAndZoom(new T.LngLat(item.longitude, item.latitude), 15)
+  map.checkResize()
+
+  // 拿到地址
+  const point: PointType = {
+    longitude: item.longitude,
+    latitude: item.latitude
+  }
+  getAddress(point, (address: string) => {
+    point.address = address
+    emit('chose', point)
+  })
+}
+</script>
+<style scoped lang="less">
+.search-item {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 30px;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--el-color-primary);
+  }
+}
+</style>
 <style>
 #map {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
 }
