@@ -32,6 +32,14 @@ export const baseConstantRouterMap: AppRouteRecordRaw[] = [
     }
   },
   {
+    path: '/Village',
+    component: () => import('@/views/Project/Village/Index.vue'),
+    name: 'Village',
+    meta: {
+      title: '自然村管理'
+    }
+  },
+  {
     path: '/404',
     component: () => import('@/views/Error/404.vue'),
     name: 'NoFind',
