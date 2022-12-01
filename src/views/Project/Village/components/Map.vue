@@ -26,15 +26,18 @@ const latitude = 30.228932
 const init = () => {
   const lng = props.point.longitude || longitude
   const lat = props.point.latitude || latitude
-  map.value = new BMapGL.Map('map')
-  map.value?.centerAndZoom(new BMapGL.Point(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
-  map.value?.enableScrollWheelZoom(true) // 开启鼠标滚轮缩放
+  map.value = new TMap('map')
+  map.value?.centerAndZoom(new TLngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
+  map.value?.enableHandleMouseScroll() // 开启鼠标滚轮缩放
+
   // 添加控件
   addControl()
   // 添加标记
-  addOverlay(lng, lat)
+  if (props.point.longitude && props.point.latitude) {
+    addOverlay(lng, lat)
+  }
   // 监听事件
-  addListener()
+  addMapClick()
 }
 
 onMounted(() => {
@@ -42,46 +45,41 @@ onMounted(() => {
 })
 
 const addControl = () => {
-  // 城市选择控件
-  const cityControl = new BMapGL.CityListControl({
-    // 控件的停靠位置（可选，默认左上角）
-    anchor: BMAP_ANCHOR_TOP_LEFT,
-    // 控件基于停靠位置的偏移量（可选）
-    offset: new BMapGL.Size(10, 5)
-  })
   // 缩放
-  const zoomCtrl = new BMapGL.ZoomControl() // 添加缩放控件
-  // 比例尺
-  const scaleCtrl = new BMapGL.ScaleControl()
+  const zoomCtrl = new TScaleControl() // 添加缩放控件
+  const navigationCtrl = new TNavigationControl()
 
-  map.value?.addControl(cityControl)
   map.value?.addControl(zoomCtrl)
-  map.value?.addControl(scaleCtrl)
+  map.value?.addControl(navigationCtrl)
 }
 
 const addOverlay = (longitude, latitude) => {
-  const marker = new BMapGL.Marker(new BMapGL.Point(longitude, latitude))
-  map.value.addOverlay(marker)
+  const marker = new TMarker(new TLngLat(longitude, latitude))
+  map.value.addOverLay(marker)
 }
 
 const clearOverlay = () => {
-  map.value.clearOverlays()
+  map.value.clearOverLays()
 }
 
 const getAddress = (point: PointType, callback: (d: string) => void) => {
   // 创建地理编码实例
-  const myGeo = new BMapGL.Geocoder()
+  const myGeo = new TGeocoder()
   // 根据坐标得到地址描述
-  myGeo.getLocation(new BMapGL.Point(point.longitude, point.latitude), function (result) {
-    if (result && callback) {
-      callback(result.address)
+  myGeo.getLocation(new TLngLat(point.longitude, point.latitude), function (result) {
+    if (result && result.getStatus() == 0) {
+      callback && callback(result.getAddress())
     }
   })
 }
 
-const addListener = () => {
-  map.value.addEventListener('click', function (e) {
-    const { lng, lat } = e.latlng
+const mapClick = () => {
+  TEvent.addListener(map.value, 'click', function (p) {
+    //将像素坐标转换成经纬度坐标
+    const lnglat = map.value.fromContainerPixelToLngLat(p)
+    const lng = lnglat.getLng()
+    const lat = lnglat.getLat()
+    console.log(lng, lat, '经纬度')
     clearOverlay()
     // 添加标记
     addOverlay(lng, lat)
@@ -93,9 +91,21 @@ const addListener = () => {
     // 拿到地址
     getAddress(point, (address: string) => {
       point.address = address
+      console.log(address, 'address')
       emit('chose', point)
     })
   })
+}
+const addMapClick = () => {
+  //移除地图的点击事件
+  removeMapClick()
+  //注册地图的点击事件
+  mapClick()
+}
+
+const removeMapClick = () => {
+  //移除地图的点击事件
+  TEvent.removeListener(mapClick)
 }
 </script>
 

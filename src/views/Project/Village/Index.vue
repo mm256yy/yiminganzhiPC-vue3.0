@@ -65,7 +65,7 @@ import type { VillageDtoType } from '@/api/project/village/types'
 // type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
 
 const appStore = useAppStore()
-const projectId = 6 || appStore.currentProjectId
+const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
