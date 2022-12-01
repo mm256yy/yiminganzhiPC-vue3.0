@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 interface PointType {
   longitude: number
@@ -19,7 +19,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['chose'])
 
-const map = ref<any>(null)
+let map: any = null
 // 默认杭州市区
 const longitude = 120.17418
 const latitude = 30.26961
@@ -27,9 +27,9 @@ const latitude = 30.26961
 const init = () => {
   const lng = props.point.longitude || longitude
   const lat = props.point.latitude || latitude
-  map.value = new T.Map('map')
-  map.value?.centerAndZoom(new T.LngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
-  map.value?.checkResize()
+  map = new T.Map('map')
+  map.centerAndZoom(new T.LngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
+  map.enableScrollWheelZoom()
   // 添加控件
   addControl()
   // 添加标记
@@ -38,6 +38,10 @@ const init = () => {
   }
   // 监听事件
   addMapClick()
+  // 解决地图渲染不全的问题
+  setTimeout(() => {
+    map.checkResize()
+  }, 300)
 }
 
 onMounted(() => {
@@ -49,17 +53,17 @@ const addControl = () => {
   const zoomCtrl = new T.Control.Zoom() // 添加缩放控件
   const scaleCtrl = new T.Control.Scale()
 
-  map.value?.addControl(zoomCtrl)
-  map.value?.addControl(scaleCtrl)
+  map.addControl(zoomCtrl)
+  map.addControl(scaleCtrl)
 }
 
 const addOverlay = (longitude, latitude) => {
   const marker = new T.Marker(new T.LngLat(longitude, latitude))
-  map.value.addOverLay(marker)
+  map.addOverLay(marker)
 }
 
 const clearOverlay = () => {
-  map.value.clearOverLays()
+  map.clearOverLays()
 }
 
 const getAddress = (point: PointType, callback: (d: string) => void) => {
@@ -74,7 +78,7 @@ const getAddress = (point: PointType, callback: (d: string) => void) => {
 }
 
 const addListener = () => {
-  map.value.addEventListener('click', mapClick)
+  map.addEventListener('click', mapClick)
 }
 
 const mapClick = (e) => {
@@ -106,14 +110,16 @@ const addMapClick = () => {
 
 const removeMapClick = () => {
   //移除地图的点击事件
-  map.value.removeEventListener('click', mapClick)
+  map.removeEventListener('click', mapClick)
 }
 </script>
 
-<style scoped>
+<style>
 #map {
   width: 100%;
   height: 100%;
-  font-family: '微软雅黑';
+}
+.tdt-control-copyright {
+  display: none !important;
 }
 </style>
