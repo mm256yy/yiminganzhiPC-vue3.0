@@ -28,7 +28,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   } else {
     env = loadEnv(mode, root)
   }
-  console.log(env, 'env')
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
