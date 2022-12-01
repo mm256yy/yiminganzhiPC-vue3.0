@@ -1,12 +1,6 @@
 <template>
   <div v-if="name" class="flex mb-5">
-    <el-select
-      v-if="isAdmin"
-      v-model="projectId"
-      class="mr-30px"
-      placeholder="请选择项目"
-      clearable
-    >
+    <el-select v-if="isAdmin" v-model="projectId" class="mr-30px" placeholder="请选择项目">
       <el-option v-for="item in projectList" :key="item.id" :label="item.name" :value="item.id" />
     </el-select>
     <ElButton type="primary" @click="onAddDictDetail">新增</ElButton>
@@ -60,10 +54,10 @@ const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<DictDetailType>()
 const isAdmin = ref<boolean>(appStore.getIsSysAdmin)
-let projectId = ref<number>()
+let projectId = ref<number>(appStore.getCurrentProjectId)
 let projectList = ref<any>([])
 interface Props {
-  name: string
+  name: string // 当前字典名称
   dictId: number
 }
 const props = defineProps<Props>()
@@ -108,11 +102,8 @@ watch(
   () => props.name,
   (val) => {
     if (val) {
-      projectId.value = appStore.getCurrentProjectId
       tableObject.params.name = val
       tableObject.params.projectId = projectId.value
-        ? projectId.value
-        : appStore.getCurrentProjectId
       getList()
     }
   }
@@ -121,7 +112,7 @@ watch(
 watch(
   () => projectId.value,
   (val) => {
-    tableObject.params.projectId = val ? val : appStore.getCurrentProjectId
+    tableObject.params.projectId = val
     getList()
   }
 )

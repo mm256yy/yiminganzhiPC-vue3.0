@@ -52,7 +52,7 @@ const loading = ref(false)
 const currentRow = ref(props.row)
 
 const title = computed(() => {
-  return props.row ? '新增项目' : '维护项目'
+  return props.row ? '维护项目' : '新增项目'
 })
 
 const rules = {
