@@ -13,7 +13,8 @@
           node-key="code"
           :load="loadDistrictNode"
           :props="defaultProps"
-          :style="{ width: '250px', 'margin-right': '10px' }"
+          :style="{ width: '320px', 'margin-right': '10px' }"
+          placeholder="请选择行政区域"
         />
         <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchProject">
           查询
