@@ -56,14 +56,6 @@
         </ElCol>
         <ElCol :span="12">
           <ElFormItem label="有效性" prop="status" required>
-            <!-- <ElSelect class="w-full" v-model="form.status">
-              <ElOption
-                v-for="item in validOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect> -->
             <ElRadioGroup class="w-full" v-model="form.status">
               <ElRadioButton v-for="item in validOptions" :key="item.value" :label="item.value">{{
                 item.label
