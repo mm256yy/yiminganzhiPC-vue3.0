@@ -20,11 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, nextTick } from 'vue'
 import { ElInput, ElButton } from 'element-plus'
 import { debounce, throttle } from 'lodash-es'
 import { useIcon } from '@/hooks/web/useIcon'
-import { nextTick } from 'process'
 
 interface PointType {
   longitude: number
