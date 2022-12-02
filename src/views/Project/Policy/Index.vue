@@ -168,6 +168,9 @@ onMounted(() => {
       })
     return
   }
+  if (appStore.getIsProjectAdmin) {
+    loadProject()
+  }
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -222,7 +225,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'projectId',
     label: '所属项目',
     search: {
-      show: true,
+      show: appStore.getIsSysAdmin ? true : false,
       component: 'Select',
       api: (): Promise<any> => {
         return loadProject()
