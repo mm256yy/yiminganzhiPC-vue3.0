@@ -2,7 +2,7 @@ import request from '@/config/axios'
 import { VillageDtoType } from './types'
 
 /**
- * 查询自然村列表
+ * 查询人口信息列表
  */
 export const getVillageListApi = (
   query: Partial<VillageDtoType>
@@ -11,41 +11,29 @@ export const getVillageListApi = (
 }
 
 /**
- * 新增自然村
+ * 新增人口信息
  */
 export const addVillageApi = (data: VillageDtoType): Promise<VillageDtoType> => {
   return request.post({ url: '/village/create', data })
 }
 
 /**
- * 更新自然村
+ * 更新人口信息
  */
 export const updateVillageApi = (data: VillageDtoType): Promise<VillageDtoType> => {
   return request.post({ url: '/village/update', data })
 }
 
 /**
- * 删除自然村
+ * 删除人口信息
  */
 export const delVillageByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/village/delete/${id}` })
 }
 
 /**
- * 查询单个自然村
+ * 查询单个人口信息
  */
 export const getVillageByIdApi = (id: number): Promise<VillageDtoType> => {
   return request.get({ url: `/village/${id}` })
-}
-
-/**
- * 查询自然村树
- */
-export const getVillageTreeApi = (projectId: number): Promise<any[]> => {
-  return request.get({
-    url: `/village/tree`,
-    params: {
-      projectId
-    }
-  })
 }

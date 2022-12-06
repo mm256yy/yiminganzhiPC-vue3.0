@@ -59,6 +59,7 @@ const init = () => {
   map = new T.Map('map')
   map.centerAndZoom(new T.LngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
   map.enableScrollWheelZoom()
+  clearOverlay()
   // 添加控件
   addControl()
   // 监听事件
@@ -75,6 +76,7 @@ watch(
   (val) => {
     // 添加标记
     nextTick(() => {
+      console.log('----', val)
       clearOverlay()
       if (val.longitude && val.latitude) {
         addOverlay(val.longitude, val.latitude)

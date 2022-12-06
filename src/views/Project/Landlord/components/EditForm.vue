@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    :title="actionType === 'edit' ? '编辑自然村' : '新增自然村'"
+    :title="actionType === 'edit' ? '编辑农户' : '新增农户'"
     :model-value="props.show"
     :width="660"
     @close="onClose"
@@ -9,7 +9,7 @@
     :closeOnClickModal="false"
   >
     <ElForm
-      class="policy-form"
+      class="form"
       ref="formRef"
       label-position="left"
       :model="form"
@@ -18,12 +18,12 @@
     >
       <ElRow :gutter="10">
         <ElCol :span="12">
-          <ElFormItem label="村名" prop="name" required>
+          <ElFormItem label="户主" prop="name" required>
             <ElInput clearable :maxlength="20" v-model="form.name" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="编码" prop="code" required>
+          <ElFormItem label="户号" prop="code" required>
             <ElInput clearable :maxlength="20" v-model="form.code" />
           </ElFormItem>
         </ElCol>
@@ -31,38 +31,38 @@
 
       <ElRow :gutter="10">
         <ElCol :span="12">
-          <ElFormItem label="行政区划" prop="parentCode" required>
-            <ElTreeSelect
-              class="!w-full"
-              v-model="form.parentCode"
-              :data="props.districtTree"
-              node-key="code"
-              :props="treeSelectDefaultProps"
-              :default-expanded-keys="[form.parentCode]"
-            />
+          <ElFormItem label="联系方式" prop="phone">
+            <ElInput clearable type="text" class="!w-full" v-model="form.phone" />
           </ElFormItem>
         </ElCol>
-        <!-- <ElCol :span="12">
-          <ElFormItem label="地址" prop="address">
-            <ElInput clearable type="text" class="!w-full" v-model="form.address" />
-          </ElFormItem>
-        </ElCol> -->
         <ElCol :span="12">
-          <ElFormItem label="简介" prop="introduction">
-            <ElInput type="textarea" clearable :maxlength="5000" v-model="form.introduction" />
+          <ElFormItem label="区域类型" prop="locationType">
+            <ElSelect class="w-full" v-model="form.locationType">
+              <ElOption
+                v-for="item in locationTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
       </ElRow>
 
       <ElRow>
-        <ElFormItem label="具体位置">
-          <Map
-            :point="{
-              longitude: form.longitude,
-              latitude: form.latitude
-            }"
-            @chose="onChosePosition"
+        <ElFormItem class="w-full" label="自然村" prop="parentCode" required>
+          <ElCascader
+            class="!w-full"
+            v-model="form.parentCode"
+            :options="props.districtTree"
+            :props="treeSelectDefaultProps"
+            expandTrigger="hover"
           />
+        </ElFormItem>
+      </ElRow>
+      <ElRow>
+        <ElFormItem label="具体位置">
+          <Map :point="position" @chose="onChosePosition" />
           <div>{{ position.address }}</div>
         </ElFormItem>
       </ElRow>
@@ -84,15 +84,18 @@ import {
   ElRow,
   ElCol,
   ElButton,
-  ElTreeSelect,
+  ElCascader,
   FormInstance,
-  FormRules
+  FormRules,
+  ElOption,
+  ElSelect,
+  ElMessage
 } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
-import { Map } from '@/components/Map'
 import { debounce } from 'lodash-es'
+import { Map } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
-import type { VillageDtoType } from '@/api/project/village/types'
+import type { LandlordDtoType } from '@/api/project/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {
@@ -102,7 +105,7 @@ interface PropsType {
     label: string
     value: number
   }>
-  row?: VillageDtoType | null | undefined
+  row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
 const props = defineProps<PropsType>()
@@ -115,28 +118,53 @@ const treeSelectDefaultProps = {
   label: 'name'
 }
 
-const defaultValue: Omit<VillageDtoType, 'id'> = {
+// 淹没区，建设区，影响区，重叠区
+const locationTypes = [
+  {
+    label: '淹没区',
+    value: 1
+  },
+  {
+    label: '建设区',
+    value: 2
+  },
+  {
+    label: '影响区',
+    value: 3
+  },
+  {
+    label: '重叠区',
+    value: 4
+  }
+]
+
+const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
   code: '',
-  introduction: '',
-  latitude: undefined,
-  longitude: undefined,
+  latitude: 0,
+  longitude: 0,
   name: '',
-  parentCode: ''
+  parentCode: [],
+  locationType: 1
 }
-const form = ref<Omit<VillageDtoType, 'id'>>(defaultValue)
-const position = reactive({
-  latitude: '',
-  longitude: '',
-  address: ''
+const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
+const position: {
+  latitude: number
+  longitude: number
+  address?: string
+} = reactive({
+  latitude: 0,
+  longitude: 0
 })
 
 watch(
   () => props.row,
   (val) => {
     if (val) {
+      // 处理行政区划
       form.value = {
-        ...val
+        ...val,
+        parentCode: [val.areaCode, val.townCode, val.neighborhoodCommittee, val.villageId]
       }
     } else {
       formRef.value?.resetFields()
@@ -156,11 +184,15 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
   code: [required()],
+  phone: [required()],
   parentCode: [required()]
 })
 
 // 关闭弹窗
 const onClose = () => {
+  position.latitude = 0
+  position.longitude = 0
+  position.address = ''
   emit('close')
 }
 
@@ -175,11 +207,23 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      const data = {
-        ...form.value,
-        ...position
+      if (!position.latitude || !position.longitude) {
+        ElMessage.error('请选择位置')
+        return
       }
+      const data: any = {
+        ...form.value,
+        ...position,
+        areaCode: form.value.parentCode[0],
+        townCode: form.value.parentCode[1],
+        neighborhoodCommittee: form.value.parentCode[2],
+        villageId: form.value.parentCode[3]
+      }
+      delete data.parentCode
       emit('submit', data)
+      position.latitude = 0
+      position.longitude = 0
+      position.address = ''
     } else {
       return false
     }
@@ -193,7 +237,7 @@ const onSubmit = debounce((formEl) => {
 </script>
 
 <style lang="less">
-.policy-form {
+.form {
   .el-upload-dragger {
     padding-top: 20px;
     padding-bottom: 20px;

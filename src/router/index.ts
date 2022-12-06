@@ -32,6 +32,24 @@ export const baseConstantRouterMap: AppRouteRecordRaw[] = [
     }
   },
   {
+    path: '/Population',
+    component: () => import('@/views/Project/Population/Index.vue'),
+    name: 'Population',
+    meta: {
+      title: 'Population',
+      noTagsView: false
+    }
+  },
+  {
+    path: '/Landlord',
+    component: () => import('@/views/Project/Landlord/Index.vue'),
+    name: 'Landlord',
+    meta: {
+      title: 'Landlord',
+      noTagsView: false
+    }
+  },
+  {
     path: '/404',
     component: () => import('@/views/Error/404.vue'),
     name: 'NoFind',

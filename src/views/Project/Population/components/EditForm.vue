@@ -9,7 +9,7 @@
     :closeOnClickModal="false"
   >
     <ElForm
-      class="policy-form"
+      class="form"
       ref="formRef"
       label-position="left"
       :model="form"
@@ -193,7 +193,7 @@ const onSubmit = debounce((formEl) => {
 </script>
 
 <style lang="less">
-.policy-form {
+.form {
   .el-upload-dragger {
     padding-top: 20px;
     padding-bottom: 20px;
