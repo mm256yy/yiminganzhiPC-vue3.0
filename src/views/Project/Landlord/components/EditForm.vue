@@ -122,19 +122,19 @@ const treeSelectDefaultProps = {
 const locationTypes = [
   {
     label: '淹没区',
-    value: 1
+    value: 'SubmergedArea'
   },
   {
     label: '建设区',
-    value: 2
+    value: 'ConstructionArea'
   },
   {
     label: '影响区',
-    value: 3
+    value: 'InfluenceArea'
   },
   {
     label: '重叠区',
-    value: 4
+    value: 'OverlappingArea'
   }
 ]
 
@@ -145,7 +145,7 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   longitude: 0,
   name: '',
   parentCode: [],
-  locationType: 1
+  locationType: 'SubmergedArea'
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -164,7 +164,7 @@ watch(
       // 处理行政区划
       form.value = {
         ...val,
-        parentCode: [val.areaCode, val.townCode, val.neighborhoodCommittee, val.villageId]
+        parentCode: [val.areaCode, val.townCode, val.neighborhoodCommittee, val.villageCode]
       }
     } else {
       formRef.value?.resetFields()
@@ -217,7 +217,7 @@ const onSubmit = debounce((formEl) => {
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         neighborhoodCommittee: form.value.parentCode[2],
-        villageId: form.value.parentCode[3]
+        villageCode: form.value.parentCode[3]
       }
       delete data.parentCode
       emit('submit', data)

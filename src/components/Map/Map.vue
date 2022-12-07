@@ -76,7 +76,6 @@ watch(
   (val) => {
     // 添加标记
     nextTick(() => {
-      console.log('----', val)
       clearOverlay()
       if (val.longitude && val.latitude) {
         addOverlay(val.longitude, val.latitude)

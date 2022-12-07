@@ -37,3 +37,10 @@ export const delLandlordByIdApi = (id: number): Promise<void> => {
 export const getLandlordByIdApi = (id: number): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
 }
+
+/**
+ * 追加导入农户信息
+ */
+export const importLandlordApi = (data): Promise<void> => {
+  return request.post({ url: `/peasantHousehold/delete/import`, data })
+}

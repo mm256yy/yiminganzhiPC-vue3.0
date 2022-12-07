@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    :title="actionType === 'edit' ? '编辑自然村' : '新增自然村'"
+    :title="actionType === 'edit' ? '编辑人口信息' : '新增人口信息'"
     :model-value="props.show"
     :width="660"
     @close="onClose"
@@ -92,7 +92,7 @@ import { ref, reactive, watch } from 'vue'
 import { Map } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
-import type { VillageDtoType } from '@/api/project/village/types'
+import type { DemographicDtoType } from '@/api/project/population/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {
@@ -102,7 +102,7 @@ interface PropsType {
     label: string
     value: number
   }>
-  row?: VillageDtoType | null | undefined
+  row?: DemographicDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
 const props = defineProps<PropsType>()
@@ -115,7 +115,7 @@ const treeSelectDefaultProps = {
   label: 'name'
 }
 
-const defaultValue: Omit<VillageDtoType, 'id'> = {
+const defaultValue: Omit<DemographicDtoType, 'id'> = {
   address: '',
   code: '',
   introduction: '',
@@ -124,7 +124,7 @@ const defaultValue: Omit<VillageDtoType, 'id'> = {
   name: '',
   parentCode: ''
 }
-const form = ref<Omit<VillageDtoType, 'id'>>(defaultValue)
+const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const position = reactive({
   latitude: '',
   longitude: '',

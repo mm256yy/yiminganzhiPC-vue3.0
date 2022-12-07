@@ -9,8 +9,28 @@
         <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate"
           >模版下载</ElButton
         >
-        <ElButton :icon="importIcon" type="primary" @click="onBatchImport">批量导入</ElButton>
-        <ElButton :icon="importIcon" type="primary" @click="onAppendImport">追加导入</ElButton>
+        <ElUpload
+          action="/api/peasantHousehold/import"
+          :headers="headers"
+          :data="{ projectId }"
+          :show-file-list="false"
+          accept=".xls,.xlsx"
+        >
+          <template #trigger>
+            <ElButton :icon="importIcon" type="primary">批量导入</ElButton>
+          </template>
+        </ElUpload>
+        <ElUpload
+          action="/api/peasantHousehold/import"
+          :headers="headers"
+          :data="{ projectId }"
+          :show-file-list="false"
+          accept=".xls,.xlsx"
+        >
+          <template #trigger>
+            <ElButton :icon="importIcon" type="primary">追加导入</ElButton>
+          </template>
+        </ElUpload>
       </ElSpace>
     </div>
     <Table
@@ -52,7 +72,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElMessageBox, ElSpace } from 'element-plus'
+import { ElButton, ElMessage, ElMessageBox, ElSpace, ElUpload } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -66,7 +86,6 @@ import {
   updateLandlordApi,
   delLandlordByIdApi
 } from '@/api/project/landlord/service'
-import { getDistrictTreeApi } from '@/api/district'
 import { getVillageTreeApi } from '@/api/project/village/service'
 import type { LandlordDtoType } from '@/api/project/landlord/types'
 
@@ -79,7 +98,6 @@ const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
-const districtTree = ref([])
 const villageTree = ref<any[]>([])
 
 const { register, tableObject, methods } = useTable({
@@ -88,17 +106,16 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 
+const headers = ref({
+  'Project-Id': projectId,
+  Authorization: appStore.getToken
+})
+
 tableObject.params = {
   projectId
 }
 
 getList()
-
-const getDistrictTree = async () => {
-  const list = await getDistrictTreeApi(projectId)
-  districtTree.value = list || []
-  return list || []
-}
 
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
@@ -119,13 +136,12 @@ onMounted(() => {
       })
     return
   }
-  getDistrictTree()
   getVillageTree()
 })
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageId',
+    field: 'villageCode',
     label: '行政区划',
     search: {
       show: true,
@@ -179,14 +195,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'neighborhoodCommittee',
+    field: 'villageText',
     label: '行政村',
     search: {
       show: false
     }
   },
   {
-    field: 'villageId',
+    field: 'virutalVillageText',
     label: '自然村',
     search: {
       show: false
@@ -300,7 +316,7 @@ const getParamsKey = (key: string) => {
     Country: 'areaCode',
     Township: 'townCode',
     Village: 'neighborhoodCommittee',
-    naturalVillage: 'villageId'
+    naturalVillage: 'villageCode'
   }
   return map[key]
 }
@@ -311,22 +327,20 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (params.villageId) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageId, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.villageId
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
-      delete params.villageId
+      delete params.villageCode
       setSearchParams(params)
     })
   } else {
-    delete params.villageId
+    delete params.villageCode
     setSearchParams(params)
   }
 }
 
 const onDownloadTemplate = () => {}
-const onBatchImport = () => {}
-const onAppendImport = () => {}
 </script>

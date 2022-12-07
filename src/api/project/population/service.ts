@@ -1,39 +1,46 @@
 import request from '@/config/axios'
-import { VillageDtoType } from './types'
+import { DemographicDtoType } from './types'
 
 /**
  * 查询人口信息列表
  */
-export const getVillageListApi = (
-  query: Partial<VillageDtoType>
-): Promise<TableResponse<VillageDtoType>> => {
-  return request.get({ url: '/village', params: query })
+export const getDemographicListApi = (
+  query: Partial<DemographicDtoType>
+): Promise<TableResponse<DemographicDtoType>> => {
+  return request.get({ url: '/demographic', params: query })
 }
 
 /**
  * 新增人口信息
  */
-export const addVillageApi = (data: VillageDtoType): Promise<VillageDtoType> => {
-  return request.post({ url: '/village/create', data })
+export const addDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
+  return request.post({ url: '/demographic/create', data })
 }
 
 /**
  * 更新人口信息
  */
-export const updateVillageApi = (data: VillageDtoType): Promise<VillageDtoType> => {
-  return request.post({ url: '/village/update', data })
+export const updateDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
+  return request.post({ url: '/demographic/update', data })
 }
 
 /**
  * 删除人口信息
  */
-export const delVillageByIdApi = (id: number): Promise<void> => {
-  return request.post({ url: `/village/delete/${id}` })
+export const delDemographicByIdApi = (id: number): Promise<void> => {
+  return request.post({ url: `/demographic/delete/${id}` })
 }
 
 /**
  * 查询单个人口信息
  */
-export const getVillageByIdApi = (id: number): Promise<VillageDtoType> => {
-  return request.get({ url: `/village/${id}` })
+export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> => {
+  return request.get({ url: `/demographic/${id}` })
+}
+
+/**
+ * 追加导入人口信息
+ */
+export const importDemographicApi = (data): Promise<void> => {
+  return request.post({ url: `/demographic/import`, data })
 }
