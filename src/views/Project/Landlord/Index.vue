@@ -14,21 +14,14 @@
           :headers="headers"
           :data="{ projectId }"
           :show-file-list="false"
+          :disabled="uploadLoading"
           accept=".xls,.xlsx"
+          :before-upload="beforeUpload"
+          :on-success="uploadDone"
+          :on-error="uploadError"
         >
           <template #trigger>
-            <ElButton :icon="importIcon" type="primary">批量导入</ElButton>
-          </template>
-        </ElUpload>
-        <ElUpload
-          action="/api/peasantHousehold/import"
-          :headers="headers"
-          :data="{ projectId }"
-          :show-file-list="false"
-          accept=".xls,.xlsx"
-        >
-          <template #trigger>
-            <ElButton :icon="importIcon" type="primary">追加导入</ElButton>
+            <ElButton :icon="importIcon" :loading="uploadLoading" type="primary">批量导入</ElButton>
           </template>
         </ElUpload>
       </ElSpace>
@@ -50,6 +43,9 @@
       highlightCurrentRow
       @register="register"
     >
+      <template #locationType="{ row }">
+        <div>{{ getLocationText(row.locationType) }}</div>
+      </template>
       <template #longitude="{ row }">
         <div>{{ row.longitude || '-' }}</div>
         <div>{{ row.latitude || '-' }}</div>
@@ -84,12 +80,12 @@ import {
   getLandlordListApi,
   addLandlordApi,
   updateLandlordApi,
-  delLandlordByIdApi
+  delLandlordByIdApi,
+  downLandlordTemplateApi
 } from '@/api/project/landlord/service'
 import { getVillageTreeApi } from '@/api/project/village/service'
+import { locationTypes } from './config'
 import type { LandlordDtoType } from '@/api/project/landlord/types'
-
-// type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -99,6 +95,7 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const villageTree = ref<any[]>([])
+const uploadLoading = ref(false)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -315,17 +312,24 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'neighborhoodCommittee',
-    naturalVillage: 'villageCode'
+    Village: 'villageCode',
+    naturalVillage: 'virutalVillageCode'
   }
   return map[key]
 }
 
+const getLocationText = (key: string) => {
+  return locationTypes.find((item) => item.value === key)?.label
+}
+
 const onSearch = (data) => {
-  console.log(data, '------')
   // 处理参数
   let params = {
     ...data
+  }
+  // 需要重置一次params
+  tableObject.params = {
+    projectId
   }
   if (params.villageCode) {
     // 拿到对应的参数key
@@ -342,5 +346,24 @@ const onSearch = (data) => {
   }
 }
 
-const onDownloadTemplate = () => {}
+const onDownloadTemplate = () => {
+  downLandlordTemplateApi().then((res) => {
+    if (res && res.templateUrl) {
+      window.open(res.templateUrl)
+    }
+  })
+}
+
+const beforeUpload = () => {
+  uploadLoading.value = true
+}
+
+const uploadDone = () => {
+  uploadLoading.value = false
+}
+
+const uploadError = (error) => {
+  ElMessage.error(`上传失败-${error.toString()}`)
+  uploadLoading.value = false
+}
 </script>

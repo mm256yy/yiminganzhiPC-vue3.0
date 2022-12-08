@@ -39,8 +39,8 @@ export const getLandlordByIdApi = (id: number): Promise<LandlordDtoType> => {
 }
 
 /**
- * 追加导入农户信息
+ * 模版下载
  */
-export const importLandlordApi = (data): Promise<void> => {
-  return request.post({ url: `/peasantHousehold/delete/import`, data })
+export const downLandlordTemplateApi = (): Promise<LandlordDtoType> => {
+  return request.get({ url: `/import_template/demographic` })
 }

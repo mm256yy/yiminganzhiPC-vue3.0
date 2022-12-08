@@ -177,7 +177,6 @@ const schema = reactive<CrudSchema[]>([
     type: 'index',
     label: '序号'
   },
-
   {
     field: 'name',
     label: '姓名',

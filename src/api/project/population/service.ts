@@ -37,10 +37,3 @@ export const delDemographicByIdApi = (id: number): Promise<void> => {
 export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> => {
   return request.get({ url: `/demographic/${id}` })
 }
-
-/**
- * 追加导入人口信息
- */
-export const importDemographicApi = (data): Promise<void> => {
-  return request.post({ url: `/demographic/import`, data })
-}

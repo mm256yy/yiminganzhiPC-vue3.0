@@ -23,8 +23,8 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="户号" prop="code" required>
-            <ElInput clearable :maxlength="20" v-model="form.code" />
+          <ElFormItem label="户号" prop="doorNo" required>
+            <ElInput clearable :maxlength="20" v-model="form.doorNo" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -95,6 +95,7 @@ import { ref, reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { Map } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
+import { locationTypes } from '../config'
 import type { LandlordDtoType } from '@/api/project/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
@@ -118,29 +119,9 @@ const treeSelectDefaultProps = {
   label: 'name'
 }
 
-// 淹没区，建设区，影响区，重叠区
-const locationTypes = [
-  {
-    label: '淹没区',
-    value: 'SubmergedArea'
-  },
-  {
-    label: '建设区',
-    value: 'ConstructionArea'
-  },
-  {
-    label: '影响区',
-    value: 'InfluenceArea'
-  },
-  {
-    label: '重叠区',
-    value: 'OverlappingArea'
-  }
-]
-
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  code: '',
+  doorNo: '',
   latitude: 0,
   longitude: 0,
   name: '',
@@ -160,14 +141,14 @@ const position: {
 watch(
   () => props.row,
   (val) => {
+    formRef.value?.resetFields()
     if (val) {
       // 处理行政区划
       form.value = {
         ...val,
-        parentCode: [val.areaCode, val.townCode, val.neighborhoodCommittee, val.villageCode]
+        parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
       }
     } else {
-      formRef.value?.resetFields()
       form.value = defaultValue
     }
     position.longitude = form.value.longitude
@@ -183,7 +164,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  code: [required()],
+  doorNo: [required()],
   phone: [required()],
   parentCode: [required()]
 })
@@ -216,8 +197,8 @@ const onSubmit = debounce((formEl) => {
         ...position,
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
-        neighborhoodCommittee: form.value.parentCode[2],
-        villageCode: form.value.parentCode[3]
+        villageCode: form.value.parentCode[2],
+        virutalVillageCode: form.value.parentCode[3] || ''
       }
       delete data.parentCode
       emit('submit', data)
@@ -229,11 +210,6 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
-
-// const onGoToMap = () => {
-//   // 备选 'http://jingweidu.757dy.com/'
-//   window.open('https://api.map.baidu.com/lbsapi/getpoint/index.html')
-// }
 </script>
 
 <style lang="less">
