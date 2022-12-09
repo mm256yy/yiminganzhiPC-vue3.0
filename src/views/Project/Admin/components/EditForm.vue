@@ -7,20 +7,7 @@
     :max-height="470"
     @close="onClose"
   >
-    <Form :schema="schema" @register="register" :rules="rules" :is-col="true">
-      <template #townCode>
-        <ElTreeSelect
-          v-model="townCode"
-          lazy
-          multiple
-          node-key="code"
-          :load="loadDistrictNode"
-          :props="defaultProps"
-          :default-expanded-keys="districtTree"
-          :style="{ width: '100%', 'margin-right': '10px' }"
-        />
-      </template>
-    </Form>
+    <Form :schema="schema" @register="register" :rules="rules" :is-col="true" />
     <template #footer>
       <ElButton type="primary" :loading="loading" @click="onSave">确认</ElButton>
       <ElButton @click="onClose">取消</ElButton>
@@ -30,7 +17,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElMessage, ElTreeSelect } from 'element-plus'
+import { ElButton, ElMessage } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -58,10 +45,13 @@ const title = computed(() => {
 const rules = {
   name: [required()],
   description: [required()],
-  reservoirName: [required()]
+  reservoirName: [required()],
+  reservoirCode: [required()],
+  projectType: [required()],
+  townCode: [required()]
 }
 
-const townCode = ref()
+// const townCode = ref()
 const districtTree = ref<string[] | null>()
 const defaultProps = {
   value: 'code',
@@ -72,6 +62,21 @@ const defaultProps = {
   // isLeaf: (node) => {
   //   return node.level === 3
   // }
+}
+
+const loadDistrictNode = async (node: any, resolve: any) => {
+  if (node.level === 3) {
+    resolve([])
+    return
+  }
+  let parentId
+  if (node && node.level == 0) {
+    parentId = 0
+  } else {
+    parentId = node.data.id
+  }
+  const childrenList = await getDistrictChildrenApi(parentId)
+  resolve(childrenList)
 }
 
 const schema = reactive<FormSchema[]>([
@@ -112,7 +117,17 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'townCode',
     label: '行政区划',
-    colProps: { span: 12 }
+    colProps: { span: 12 },
+    component: 'TreeSelect',
+    componentProps: {
+      lazy: true,
+      multiple: true,
+      nodeKey: 'code',
+      load: loadDistrictNode,
+      props: defaultProps,
+      defaultExpandedKeys: districtTree,
+      style: { width: '100%', 'margin-right': '10px' }
+    }
   },
   {
     field: 'description',
@@ -132,25 +147,13 @@ const schema = reactive<FormSchema[]>([
 const { register, elFormRef, methods } = useForm()
 
 onMounted(async () => {
-  methods.setValues(currentRow.value as ProjectDtoType)
-  townCode.value = currentRow.value?.townCode.split(',')
-  districtTree.value = currentRow.value?.districtTree.join(',').split(',')
+  const townCode = currentRow.value?.townCode ? currentRow.value.townCode.split(',') : []
+  districtTree.value = currentRow.value?.districtTree?.join(',').split(',') || []
+  methods.setValues({
+    ...currentRow.value,
+    townCode
+  })
 })
-
-const loadDistrictNode = async (node: any, resolve: any) => {
-  if (node.level === 3) {
-    resolve([])
-    return
-  }
-  let parentId
-  if (node && node.level == 0) {
-    parentId = 0
-  } else {
-    parentId = node.data.id
-  }
-  const childrenList = await getDistrictChildrenApi(parentId)
-  resolve(childrenList)
-}
 
 const onSave = async () => {
   const formRef = unref(elFormRef)
@@ -164,7 +167,7 @@ const onSave = async () => {
 const doSave = async () => {
   loading.value = true
   const project = (await methods.getFormData()) || {}
-  project.townCode = townCode.value.join(',')
+  project.townCode = project.townCode.join(',')
   if (currentRow.value && currentRow.value.id) {
     project.id = currentRow.value.id
   }
@@ -173,7 +176,7 @@ const doSave = async () => {
       ElMessage.success('保存项目成功')
       onClose()
     })
-    .catch(() => {
+    .finally(() => {
       loading.value = false
     })
 }
