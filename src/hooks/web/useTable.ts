@@ -34,9 +34,9 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     // 页数
     size: 10,
     // 当前页
-    currentPage: 0,
+    currentPage: 1,
     // 总条数
-    total: 20,
+    total: 10,
     // 表格数据
     tableList: [],
     // AxiosConfig 配置
@@ -66,10 +66,10 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     () => tableObject.size,
     () => {
       // 当前页不为1时，修改页数后会导致多次调用getList方法
-      if (tableObject.currentPage === 0) {
+      if (tableObject.currentPage === 1) {
         methods.getList()
       } else {
-        tableObject.currentPage = 0
+        tableObject.currentPage = 1
         methods.getList()
       }
     }
@@ -103,7 +103,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       // 计算出临界点
       const currentPage =
         tableObject.total % tableObject.size === ids.length || tableObject.size === 1
-          ? tableObject.currentPage > 0
+          ? tableObject.currentPage > 1
             ? tableObject.currentPage - 1
             : tableObject.currentPage
           : tableObject.currentPage
@@ -116,7 +116,9 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
   const methods = {
     getList: async () => {
       tableObject.loading = true
-      const data = await config?.getListApi(unref(paramsObj)).finally(() => {
+      const params = unref(paramsObj)
+      const realParams = { ...params, page: params.page - 1 }
+      const data = await config?.getListApi(realParams).finally(() => {
         tableObject.loading = false
       })
       if (data) {
@@ -139,7 +141,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     },
     // 与Search组件结合
     setSearchParams: (data: Recordable) => {
-      tableObject.currentPage = 0
+      tableObject.currentPage = 1
       tableObject.params = Object.assign(tableObject.params, {
         size: tableObject.size,
         page: tableObject.currentPage,

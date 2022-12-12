@@ -118,7 +118,7 @@ const searchDict = () => {
 const reset = () => {
   dictGroup.value = ''
   blurry.value = ''
-  tableObject.currentPage = 0
+  tableObject.currentPage = 1
   tableObject.size = 10
 }
 

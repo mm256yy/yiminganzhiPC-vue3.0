@@ -153,7 +153,7 @@ const searchProject = () => {
 const reset = () => {
   query.name = ''
   query.townCode = ''
-  tableObject.currentPage = 0
+  tableObject.currentPage = 1
   tableObject.size = 10
 }
 
