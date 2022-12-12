@@ -35,6 +35,9 @@ const appStore = useAppStore()
 
 const tagsViewIcon = computed(() => appStore.getTagsViewIcon)
 
+// elscroll 实例
+const scrollbarRef = ref<ComponentRef<typeof ElScrollbar>>()
+
 // 初始化tag
 const initTags = () => {
   affixTagArr.value = filterAffixTags(unref(routers))
@@ -124,9 +127,7 @@ const moveToCurrentTag = async () => {
   await nextTick()
   for (const v of unref(visitedViews)) {
     if (v.fullPath === unref(currentRoute).path) {
-      setTimeout(() => {
-        moveToTarget(v)
-      }, 200)
+      moveToTarget(v)
       if (v.fullPath !== unref(currentRoute).fullPath) {
         tagsViewStore.updateVisitedView(unref(currentRoute))
       }
@@ -139,6 +140,7 @@ const tagLinksRefs = useTemplateRefsList<RouterLinkProps>()
 
 const moveToTarget = (currentTag: RouteLocationNormalizedLoaded) => {
   const wrap$ = unref(scrollbarRef)?.wrap$
+  if (!wrap$) return
   let firstTag: Nullable<RouterLinkProps> = null
   let lastTag: Nullable<RouterLinkProps> = null
 
@@ -159,7 +161,6 @@ const moveToTarget = (currentTag: RouteLocationNormalizedLoaded) => {
     start()
   } else if ((lastTag?.to as RouteLocationNormalizedLoaded).fullPath === currentTag.fullPath) {
     // 滚动到最后的位置
-    console.log(wrap$, 'wrap$')
     const { start } = useScrollTo({
       el: wrap$!,
       position: 'scrollLeft',
@@ -222,9 +223,6 @@ const visibleChange = (visible: boolean, tagItem: RouteLocationNormalizedLoaded)
     }
   }
 }
-
-// elscroll 实例
-const scrollbarRef = ref<ComponentRef<typeof ElScrollbar>>()
 
 // 保存滚动位置
 const scrollLeftNumber = ref(0)
