@@ -363,7 +363,12 @@ const uploadDone = () => {
 }
 
 const uploadError = (error) => {
-  ElMessage.error(`上传失败-${error.toString()}`)
-  uploadLoading.value = false
+  try {
+    const response = JSON.parse(error.message)
+    ElMessage.error(response.message)
+    uploadLoading.value = false
+  } catch (err) {
+    // err
+  }
 }
 </script>

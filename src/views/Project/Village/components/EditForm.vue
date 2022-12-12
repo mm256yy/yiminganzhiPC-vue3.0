@@ -23,14 +23,6 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="编码" prop="code" required>
-            <ElInput clearable :maxlength="20" v-model="form.code" />
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow :gutter="10">
-        <ElCol :span="12">
           <ElFormItem label="行政区划" prop="parentCode" required>
             <ElTreeSelect
               class="!w-full"
@@ -42,17 +34,11 @@
             />
           </ElFormItem>
         </ElCol>
-        <!-- <ElCol :span="12">
-          <ElFormItem label="地址" prop="address">
-            <ElInput clearable type="text" class="!w-full" v-model="form.address" />
-          </ElFormItem>
-        </ElCol> -->
-        <ElCol :span="12">
-          <ElFormItem label="简介" prop="introduction">
-            <ElInput type="textarea" clearable :maxlength="5000" v-model="form.introduction" />
-          </ElFormItem>
-        </ElCol>
       </ElRow>
+
+      <ElFormItem label="简介" prop="introduction">
+        <ElInput type="textarea" clearable :maxlength="5000" v-model="form.introduction" />
+      </ElFormItem>
 
       <ElRow>
         <ElFormItem label="具体位置">
@@ -117,7 +103,6 @@ const treeSelectDefaultProps = {
 
 const defaultValue: Omit<VillageDtoType, 'id'> = {
   address: '',
-  code: '',
   introduction: '',
   latitude: undefined,
   longitude: undefined,
@@ -155,7 +140,6 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  code: [required()],
   parentCode: [required()]
 })
 
