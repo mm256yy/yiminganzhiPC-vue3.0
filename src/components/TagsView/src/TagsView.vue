@@ -124,11 +124,12 @@ const moveToCurrentTag = async () => {
   await nextTick()
   for (const v of unref(visitedViews)) {
     if (v.fullPath === unref(currentRoute).path) {
-      moveToTarget(v)
+      setTimeout(() => {
+        moveToTarget(v)
+      }, 200)
       if (v.fullPath !== unref(currentRoute).fullPath) {
         tagsViewStore.updateVisitedView(unref(currentRoute))
       }
-
       break
     }
   }
@@ -158,6 +159,7 @@ const moveToTarget = (currentTag: RouteLocationNormalizedLoaded) => {
     start()
   } else if ((lastTag?.to as RouteLocationNormalizedLoaded).fullPath === currentTag.fullPath) {
     // 滚动到最后的位置
+    console.log(wrap$, 'wrap$')
     const { start } = useScrollTo({
       el: wrap$!,
       position: 'scrollLeft',
