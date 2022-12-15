@@ -92,7 +92,7 @@ export const generateRoutesFn1 = (
 // 后端控制路由生成
 export const generateRoutesFn2 = (routes: AppCustomRouteRecordRaw[]): AppRouteRecordRaw[] => {
   const res: AppRouteRecordRaw[] = []
-
+  console.log(routes, 'api routes')
   for (const route of routes) {
     const data: AppRouteRecordRaw = {
       path: route.path,
@@ -104,12 +104,18 @@ export const generateRoutesFn2 = (routes: AppCustomRouteRecordRaw[]): AppRouteRe
       const comModule =
         modules[`../views/${route.component}.vue`] || modules[`../views/${route.component}.tsx`]
       const component = route.component as string
-      if (!comModule && !component.includes('#')) {
+      if (!comModule && !component.includes('#') && !component.includes('$')) {
         console.error(`未找到${route.component}.vue文件或${route.component}.tsx文件，请创建`)
       } else {
         // 动态加载路由文件，可根据实际情况进行自定义逻辑
         data.component =
-          component === '#' ? Layout : component.includes('##') ? getParentLayout() : comModule
+          component === '#'
+            ? Layout
+            : component === '$'
+            ? UserLayout
+            : component.includes('##')
+            ? getParentLayout()
+            : comModule
       }
     }
     // recursive child routes
@@ -118,6 +124,7 @@ export const generateRoutesFn2 = (routes: AppCustomRouteRecordRaw[]): AppRouteRe
     }
     res.push(data as AppRouteRecordRaw)
   }
+  console.log(res, 'last routers')
   return res
 }
 

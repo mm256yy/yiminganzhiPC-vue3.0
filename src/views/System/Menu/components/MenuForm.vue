@@ -52,7 +52,7 @@
 
       <ElRow :gutter="10">
         <ElCol :span="12" v-if="form.type !== MenuTypes.button">
-          <ElFormItem required label="路由地址" prop="componentCode">
+          <ElFormItem required label="访问路径" prop="componentCode">
             <ElInput v-model.trim="form.componentCode" />
           </ElFormItem>
         </ElCol>
@@ -63,14 +63,14 @@
         </ElCol>
       </ElRow>
 
-      <ElRow :gutter="10" v-if="form.type === MenuTypes.menu">
+      <ElRow :gutter="10" v-if="form.type !== MenuTypes.button">
         <ElCol :span="12">
-          <ElFormItem required label="组件名称" prop="componentName">
+          <ElFormItem required label="路由名称" prop="componentName">
             <ElInput v-model.trim="form.componentName" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem required label="组件路径" prop="path">
+          <ElFormItem required label="路由地址" prop="path">
             <ElInput v-model.trim="form.path" />
           </ElFormItem>
         </ElCol>
@@ -204,7 +204,8 @@ const menuTypes = ref([
     value: 2
   }
 ])
-const form = ref<MenuDtoType>({
+
+const defaultValue = {
   type: 0,
   parentId: 0,
   projectId: 0,
@@ -212,14 +213,19 @@ const form = ref<MenuDtoType>({
   hidden: false,
   iframe: false,
   sort: 999
-} as MenuDtoType)
+} as MenuDtoType
+const form = ref<MenuDtoType>(defaultValue)
 
 watch(
   () => props.row,
   (val) => {
-    form.value = {
-      ...form.value,
-      ...val
+    if (val) {
+      form.value = {
+        ...val
+      }
+    } else {
+      formRef.value?.resetFields()
+      form.value = defaultValue
     }
   },
   {

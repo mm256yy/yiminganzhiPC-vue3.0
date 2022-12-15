@@ -47,8 +47,8 @@
         <div>{{ getLocationText(row.locationType) }}</div>
       </template>
       <template #longitude="{ row }">
-        <div>{{ row.longitude || '-' }}</div>
-        <div>{{ row.latitude || '-' }}</div>
+        <div>{{ row.longitude }}</div>
+        <div>{{ row.latitude }}</div>
       </template>
       <template #action="{ row }">
         <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />

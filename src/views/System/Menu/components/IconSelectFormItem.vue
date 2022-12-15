@@ -9,7 +9,7 @@
     >
       <IconSelect ref="iconSelectRef" @selected="selectedIcon" />
       <template #reference>
-        <el-input :model-value="iconName" placeholder="请输入内容" style="cursor: pointer">
+        <el-input v-model="iconName" placeholder="请输入内容" style="cursor: pointer">
           <template #prepend>
             <Icon :icon="iconName" />
           </template>

@@ -25,7 +25,8 @@
       @register="register"
     >
       <template #latitude="{ row }">
-        <div>{{ row.latitude }},{{ row.longitude }}</div>
+        <div>{{ row.longitude }}</div>
+        <div>{{ row.latitude }}</div>
       </template>
       <template #action="{ row }">
         <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />

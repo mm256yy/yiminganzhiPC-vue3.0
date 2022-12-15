@@ -67,8 +67,7 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 tableObject.params = {
-  size: 100,
-  projectId: appStore.getCurrentProjectId
+  size: 100
 }
 
 getList()
@@ -120,7 +119,6 @@ const schema = reactive<CrudSchema[]>([
     search: {
       show: true,
       component: 'Select',
-      value: appStore.getCurrentProjectId,
       api: async (): Promise<any> => {
         return loadProject()
       }
@@ -205,7 +203,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'componentName',
-    label: '组件名',
+    label: '路由名称',
     search: {
       show: false
     },
@@ -322,6 +320,7 @@ const onDelMenu = async (row: MenuDtoType | null, multiple: boolean) => {
 
 const onAddMenu = () => {
   actionType.value = 'add'
+  tableObject.currentRow = null
   menuPup.value = true
 }
 

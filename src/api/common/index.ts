@@ -34,7 +34,11 @@ export const getDictOneApi = async (): Promise<IResponse> => {
 
 // 上传文件
 export const uploadFileApi = (file) => {
-  return request.post({ url: '/file', data: { file } })
+  return request.post({
+    url: '/file',
+    data: { file },
+    headersType: 'multipart/form-data'
+  })
 }
 
 // 下载文件
