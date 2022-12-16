@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 import { ElPopover, ElInput, ElFormItem } from 'element-plus'
 import IconSelect from './IconSelect.vue'
 
@@ -35,6 +35,15 @@ const emit = defineEmits(['change'])
 const iconSelectRef = ref()
 const iconName = ref(props.icon || '')
 
+watch(
+  () => props.icon,
+  (val) => {
+    iconName.value = val || ''
+  },
+  {
+    immediate: true
+  }
+)
 const selectedIcon = (name) => {
   iconName.value = name
   emit('change', name)

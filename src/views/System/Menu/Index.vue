@@ -241,6 +241,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'componentCode',
+    label: '组件',
+    labelMessage: 'fdsa',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
     field: 'iframe',
     label: '外链',
     search: {

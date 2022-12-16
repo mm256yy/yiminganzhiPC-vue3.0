@@ -260,6 +260,8 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
       emit('submit', form.value)
+      formRef.value?.resetFields()
+      form.value = defaultValue
     } else {
       return false
     }
