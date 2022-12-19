@@ -62,7 +62,7 @@ export default defineComponent({
           <Menu class="flex-1 px-10px mr-5px h-[var(--top-tool-height)]"></Menu>
           <ToolHeader></ToolHeader>
         </div>
-        <div class={[`${prefixCls}-content`, 'h-full w-full']}>
+        <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-51px)] pb-40px']}>
           <ElScrollbar
             v-loading={pageLoading.value}
             class={[
