@@ -1,0 +1,20 @@
+/* 重置色系 */
+
+:root {
+  /* 主题色 */
+  --el-color-primary: #3E73EC !important;
+  /* 字体颜色 */
+  --text-color-1: #131313;
+  /* 固定间距 */
+  --distance-base: 16px;
+}
+
+/* 表格 table */
+.el-table {
+  /* 表头字体颜色 */
+  --el-table-header-text-color: #131313 !important;
+  /* body字体颜色 */
+  --el-table-text-color: #17212C !important;
+  /* 表头背景色 */
+  --el-table-header-bg-color: #EBEBEB !important;
+}

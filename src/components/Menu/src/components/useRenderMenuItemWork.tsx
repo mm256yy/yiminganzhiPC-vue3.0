@@ -6,16 +6,8 @@ import { useRenderMenuTitle } from './useRenderMenuTitle'
 import { useRenderDropMenuTitle } from './useRenderDropMenuTitle'
 import { useDesign } from '@/hooks/web/useDesign'
 import { pathResolve } from '@/utils/routerHelper'
-import { useAppStore } from '@/store/modules/app'
-import { computed } from 'vue'
 
-export const useRenderMenuItem = (
-  // allRouters: AppRouteRecordRaw[] = [],
-  menuMode: 'vertical' | 'horizontal'
-) => {
-  const appStore = useAppStore()
-  const layout = computed(() => appStore.getLayout)
-
+export const useRenderMenuItem = (menuMode: 'vertical' | 'horizontal') => {
   const renderMenuItem = (routers: AppRouteRecordRaw[], parentPath = '/', sub?: boolean) => {
     return routers.map((v) => {
       const meta = (v.meta ?? {}) as RouteMeta
@@ -31,32 +23,43 @@ export const useRenderMenuItem = (
           (!onlyOneChild?.children || onlyOneChild?.noShowingChildren) &&
           !meta?.alwaysShow
         ) {
-          return (
+          return sub ? (
             <ElMenuItem index={onlyOneChild ? pathResolve(fullPath, onlyOneChild.path) : fullPath}>
               {{
-                default: () =>
-                  sub && layout.value === 'top'
-                    ? renderDropMenuTitle(onlyOneChild ? onlyOneChild?.meta : meta)
-                    : renderMenuTitle(onlyOneChild ? onlyOneChild?.meta : meta)
+                default: () => renderDropMenuTitle(onlyOneChild ? onlyOneChild?.meta : meta)
               }}
             </ElMenuItem>
+          ) : (
+            <div class="flex w-104px items-center justify-center">
+              <ElMenuItem
+                index={onlyOneChild ? pathResolve(fullPath, onlyOneChild.path) : fullPath}
+              >
+                {{
+                  default: () => renderMenuTitle(onlyOneChild ? onlyOneChild?.meta : meta)
+                }}
+              </ElMenuItem>
+            </div>
           )
         } else {
           const { getPrefixCls } = useDesign()
 
           const preFixCls = getPrefixCls('menu-popper')
           return (
-            <ElSubMenu
-              index={fullPath}
-              popperClass={
-                menuMode === 'vertical' ? `${preFixCls}--vertical` : `${preFixCls}--horizontal`
-              }
-            >
-              {{
-                title: () => renderMenuTitle(meta),
-                default: () => renderMenuItem(v.children!, fullPath, true)
-              }}
-            </ElSubMenu>
+            <div class="flex w-104px items-center justify-center">
+              <ElSubMenu
+                index={fullPath}
+                popperClass={
+                  menuMode === 'vertical'
+                    ? `${preFixCls}--vertical drop-menu`
+                    : `${preFixCls}--horizontal drop-menu`
+                }
+              >
+                {{
+                  title: () => renderMenuTitle(meta),
+                  default: () => renderMenuItem(v.children!, fullPath, true)
+                }}
+              </ElSubMenu>
+            </div>
           )
         }
       }

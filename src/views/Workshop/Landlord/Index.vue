@@ -1,35 +1,29 @@
 <template>
-  <ContentWrap title="人口信息登记">
+  <WorkContentWrap>
     <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
 
     <div class="flex items-center justify-between pb-18px">
-      <div class="text-size-14px"> 人口信息列表 </div>
+      <div class="text-size-14px"> 户主信息列表 </div>
       <ElSpace>
-        <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增人口</ElButton> -->
-        <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">按钮区</ElButton>
-        <!-- todo 未确定 -->
-        <!-- <ElUpload
-          action="/api/peasantHousehold/import"
-          :headers="headers"
-          :data="{ projectId }"
-          :show-file-list="false"
-          accept=".xls,.xlsx"
+        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增人口</ElButton>
+        <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate"
+          >模版下载</ElButton
         >
-          <template #trigger>
-            <ElButton :icon="importIcon" type="primary">批量导入</ElButton>
-          </template>
-        </ElUpload>
         <ElUpload
           action="/api/peasantHousehold/import"
           :headers="headers"
           :data="{ projectId }"
           :show-file-list="false"
+          :disabled="uploadLoading"
           accept=".xls,.xlsx"
+          :before-upload="beforeUpload"
+          :on-success="uploadDone"
+          :on-error="uploadError"
         >
           <template #trigger>
-            <ElButton :icon="importIcon" type="primary">追加导入</ElButton>
+            <ElButton :icon="importIcon" :loading="uploadLoading" type="primary">批量导入</ElButton>
           </template>
-        </ElUpload> -->
+        </ElUpload>
       </ElSpace>
     </div>
     <Table
@@ -49,9 +43,12 @@
       highlightCurrentRow
       @register="register"
     >
+      <template #locationType="{ row }">
+        <div>{{ getLocationText(row.locationType) }}</div>
+      </template>
       <template #longitude="{ row }">
-        <div>{{ row.longitude || '-' }}</div>
-        <div>{{ row.latitude || '-' }}</div>
+        <div>{{ row.longitude }}</div>
+        <div>{{ row.latitude }}</div>
       </template>
       <template #action="{ row }">
         <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
@@ -65,14 +62,14 @@
       @close="onFormPupClose"
       @submit="onSubmit"
     />
-  </ContentWrap>
+  </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElMessage, ElMessageBox, ElSpace, ElUpload } from 'element-plus'
-import { ContentWrap } from '@/components/ContentWrap'
+import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
@@ -80,35 +77,36 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
-  getDemographicListApi,
-  addDemographicApi,
-  updateDemographicApi,
-  delDemographicByIdApi
-} from '@/api/project/population/service'
+  getLandlordListApi,
+  addLandlordApi,
+  updateLandlordApi,
+  delLandlordByIdApi,
+  downLandlordTemplateApi
+} from '@/api/project/landlord/service'
 import { getVillageTreeApi } from '@/api/project/village/service'
-import type { DemographicDtoType } from '@/api/project/population/types'
-
-// type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
+import { locationTypes } from './config'
+import type { LandlordDtoType } from '@/api/project/landlord/types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
-// const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
+const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const villageTree = ref<any[]>([])
+const uploadLoading = ref(false)
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getLandlordListApi,
+  delListApi: delLandlordByIdApi
 })
 const { getList, setSearchParams } = methods
 
-// const headers = ref({
-//   'Project-Id': projectId,
-//   Authorization: appStore.getToken
-// })
+const headers = ref({
+  'Project-Id': projectId,
+  Authorization: appStore.getToken
+})
 
 tableObject.params = {
   projectId
@@ -177,6 +175,7 @@ const schema = reactive<CrudSchema[]>([
     type: 'index',
     label: '序号'
   },
+
   {
     field: 'name',
     label: '姓名',
@@ -185,134 +184,9 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relation',
-    label: '与户主关系',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'sex',
-    label: '性别',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'birthday',
-    label: '出生年月日',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'nation',
-    label: '民族',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'card',
-    label: '身份证号',
-    search: {
-      show: false
-    }
-  },
-  {
     field: 'doorNo',
-    label: '户籍册编码',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'censusRegister',
-    label: '户籍所在地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'education',
-    label: '文化程度',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'marital',
-    label: '婚姻状况',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'censusType',
-    label: '户籍类别',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'populationType',
-    label: '人口类型',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'occupation',
-    label: '职业',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'company',
-    label: '工作单位',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'comeTime',
-    label: '何时迁来',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'comeCause',
-    label: '何因来本市',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'comeAddressTime',
-    label: '何时来本址',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'comeAddressCause',
-    label: '何因来本址',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'fromTown',
-    label: '何省县来本址',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'fromAddress',
-    label: '何详址来本址',
+    label: '户号',
+    showOverflowTooltip: false,
     search: {
       show: false
     }
@@ -327,6 +201,34 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'virutalVillageText',
     label: '自然村',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'phone',
+    label: '联系方式',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'locationType',
+    label: '区域类型',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'address',
+    label: '具体位置',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'longitude',
+    label: '经纬度',
     search: {
       show: false
     }
@@ -350,7 +252,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: LandlordDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -366,7 +268,7 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: DemographicDtoType) => {
+const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -376,14 +278,14 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: DemographicDtoType) => {
+const onSubmit = async (data: LandlordDtoType) => {
   if (actionType.value === 'add') {
-    await addDemographicApi({
+    await addLandlordApi({
       ...data,
       projectId
     })
   } else {
-    await updateDemographicApi({
+    await updateLandlordApi({
       ...data,
       id: tableObject.currentRow?.id as number,
       projectId
@@ -410,17 +312,24 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'neighborhoodCommittee',
-    naturalVillage: 'villageCode'
+    Village: 'villageCode',
+    naturalVillage: 'virutalVillageCode'
   }
   return map[key]
 }
 
+const getLocationText = (key: string) => {
+  return locationTypes.find((item) => item.value === key)?.label
+}
+
 const onSearch = (data) => {
-  console.log(data, '------')
   // 处理参数
   let params = {
     ...data
+  }
+  // 需要重置一次params
+  tableObject.params = {
+    projectId
   }
   if (params.villageCode) {
     // 拿到对应的参数key
@@ -437,5 +346,29 @@ const onSearch = (data) => {
   }
 }
 
-const onDownloadTemplate = () => {}
+const onDownloadTemplate = () => {
+  downLandlordTemplateApi().then((res) => {
+    if (res && res.templateUrl) {
+      window.open(res.templateUrl)
+    }
+  })
+}
+
+const beforeUpload = () => {
+  uploadLoading.value = true
+}
+
+const uploadDone = () => {
+  uploadLoading.value = false
+}
+
+const uploadError = (error) => {
+  try {
+    const response = JSON.parse(error.message)
+    ElMessage.error(response.message)
+    uploadLoading.value = false
+  } catch (err) {
+    // err
+  }
+}
 </script>

@@ -1,37 +1,49 @@
 <template>
-  <ContentWrap title="自然村登记">
-    <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
-
-    <div class="flex items-center justify-between pb-18px">
-      <div class="text-size-14px"> 自然村列表 </div>
-      <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增</ElButton>
+  <WorkContentWrap>
+    <div class="search-form-wrap">
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
-    <Table
-      border
-      v-model:pageSize="tableObject.size"
-      v-model:currentPage="tableObject.currentPage"
-      :pagination="{
-        total: tableObject.total
-      }"
-      :loading="tableObject.loading"
-      :data="tableObject.tableList"
-      :columns="allSchemas.tableColumns"
-      :showOverflowTooltip="false"
-      tableLayout="auto"
-      row-key="id"
-      headerAlign="center"
-      align="center"
-      highlightCurrentRow
-      @register="register"
-    >
-      <template #latitude="{ row }">
-        <div>{{ row.longitude }}</div>
-        <div>{{ row.latitude }}</div>
-      </template>
-      <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
-      </template>
-    </Table>
+
+    <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 自然村列表 </div>
+        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增</ElButton>
+      </div>
+      <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
+        :pagination="{
+          total: tableObject.total
+        }"
+        :loading="tableObject.loading"
+        :data="tableObject.tableList"
+        :columns="allSchemas.tableColumns"
+        :showOverflowTooltip="false"
+        tableLayout="auto"
+        row-key="id"
+        headerAlign="center"
+        align="center"
+        highlightCurrentRow
+        @register="register"
+      >
+        <template #latitude="{ row }">
+          <div>{{ row.longitude }}</div>
+          <div>{{ row.latitude }}</div>
+        </template>
+        <template #action="{ row }">
+          <TableEditColumn
+            :row="row"
+            :view-type="'link'"
+            @edit="onEditRow(row)"
+            @delete="onDelRow"
+          />
+        </template>
+      </Table>
+    </div>
     <EditForm
       :show="dialog"
       :actionType="actionType"
@@ -40,14 +52,14 @@
       @close="onFormPupClose"
       @submit="onSubmit"
     />
-  </ContentWrap>
+  </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElMessage, ElMessageBox } from 'element-plus'
-import { ContentWrap } from '@/components/ContentWrap'
+import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
@@ -91,17 +103,6 @@ const getDistrictTree = async () => {
 }
 
 onMounted(() => {
-  // 权限限制
-  if (!appStore.getIsProjectAdmin && !appStore.getIsSysAdmin) {
-    ElMessageBox.confirm('你在当前项目中无权限')
-      .then(() => {
-        window.location.href = '/#/dashboard/home'
-      })
-      .catch(() => {
-        window.location.href = '/#/dashboard/home'
-      })
-    return
-  }
   getDistrictTree()
 })
 

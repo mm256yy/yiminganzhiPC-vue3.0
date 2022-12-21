@@ -19,7 +19,8 @@ export default defineComponent({
       type: Array as PropType<TableColumnActionIcon[]>,
       default: () => []
     },
-    buttonType: propTypes.oneOf(['plain', 'round', 'circle', 'default']).def('circle')
+    buttonType: propTypes.oneOf(['plain', 'round', 'circle', 'default']).def('circle'),
+    viewType: propTypes.oneOf(['link', 'default']).def('work')
   },
   emits: ['edit', 'delete'],
   setup(props, { emit }) {
@@ -45,15 +46,30 @@ export default defineComponent({
       return icons.map((x) => {
         return x.tooltip ? (
           <ElTooltip content={x.tooltip} placement="top">
-            <ElButton
-              size="small"
-              circle={props.buttonType === 'circle'}
-              round={props.buttonType === 'round'}
-              plain={props.buttonType === 'plain'}
-              {...x}
-              icon={useIcon({ icon: x.icon })}
-              onClick={() => x.action?.call(null, props.row)}
-            />
+            {props.viewType === 'default' ? (
+              <ElButton
+                size="small"
+                circle={props.buttonType === 'circle'}
+                round={props.buttonType === 'round'}
+                plain={props.buttonType === 'plain'}
+                {...x}
+                onClick={() => x.action?.call(null, props.row)}
+                icon={useIcon({ icon: x.icon })}
+              />
+            ) : (
+              <ElButton
+                size="small"
+                circle={props.buttonType === 'circle'}
+                round={props.buttonType === 'round'}
+                plain={props.buttonType === 'plain'}
+                {...x}
+                onClick={() => x.action?.call(null, props.row)}
+                icon={''}
+                link
+              >
+                {x.tooltip}
+              </ElButton>
+            )}
           </ElTooltip>
         ) : (
           <ElButton
@@ -62,8 +78,8 @@ export default defineComponent({
             round={props.buttonType === 'round'}
             plain={props.buttonType === 'plain'}
             {...x}
-            icon={useIcon({ icon: x.icon })}
             onClick={() => x.action?.call(null, props.row)}
+            icon={useIcon({ icon: x.icon })}
           />
         )
       })

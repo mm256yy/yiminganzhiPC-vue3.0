@@ -4,86 +4,39 @@ import { computed, defineComponent, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { Backtop } from '@/components/Backtop'
 import { useDesign } from '@/hooks/web/useDesign'
-import { Menu } from '@/components/Menu'
-import { TagsView } from '@/components/TagsView'
-import { Logo } from '@/components/Logo'
+import { WorkMenu } from '@/components/Menu'
+import { WorkUserInfo } from '@/components/UserInfo'
+import { WorkLogo } from '@/components/Logo'
 import UserAppView from './components/UserAppView.vue'
 import { ElScrollbar } from 'element-plus'
-import ToolHeader from './components/ToolHeader.vue'
-import { useTheme } from '@/hooks/web/useTheme'
 
 const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('layout')
 
 const appStore = useAppStore()
-const { setHeaderTheme } = useTheme()
-
-// 是否是移动端
-const mobile = computed(() => appStore.getMobile)
-
-// 菜单折叠
-const collapse = computed(() => appStore.getCollapse)
 
 const pageLoading = computed(() => appStore.getPageLoading)
-
-// 标签页
-const tagsView = computed(() => appStore.getTagsView)
-
-// 固定头部
-const fixedHeader = computed(() => appStore.getFixedHeader)
-
-// logo
-const logo = computed(() => appStore.logo)
-
-const handleClickOutside = () => {
-  appStore.setCollapse(true)
-}
 
 export default defineComponent({
   name: 'UserLayout',
   setup() {
     onMounted(() => {
       appStore.setLayout('top')
-      setHeaderTheme('#fff')
     })
 
     return () => (
       <section class={[prefixCls, `${prefixCls}__top`, 'w-[100%] h-[100%] relative']}>
-        {mobile.value && !collapse.value ? (
-          <div
-            class="absolute top-0 left-0 w-full h-full opacity-30 z-99 bg-[var(--el-color-black)]"
-            onClick={handleClickOutside}
-          ></div>
-        ) : undefined}
+        {/* 顶部背景 */}
+        <div class="absolute z-0 bg-gradient-to-b from-[#295EE6] to-[#DFE8FF] w-full h-517px"></div>
 
-        <div class="flex items-center justify-between bg-[var(--top-header-bg-color)] border-bottom-1 border-solid border-[var(--top-tool-border-color)] dark:border-[var(--el-border-color)]">
-          {logo.value ? <Logo class="hover-trigger"></Logo> : undefined}
-          <Menu class="flex-1 px-10px mr-5px h-[var(--top-tool-height)]"></Menu>
-          <ToolHeader></ToolHeader>
+        <div class="flex items-center justify-between px-16px h-64px">
+          <WorkLogo></WorkLogo>
+          <WorkMenu class="flex-1 pl-24px"></WorkMenu>
+          <WorkUserInfo></WorkUserInfo>
         </div>
-        <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-51px)] pb-40px']}>
-          <ElScrollbar
-            v-loading={pageLoading.value}
-            class={[
-              `${prefixCls}-content-scrollbar`,
-              {
-                'mt-[var(--tags-view-height)]': fixedHeader.value
-              }
-            ]}
-          >
-            {tagsView.value ? (
-              <TagsView
-                class={[
-                  'border-bottom-1 border-top-1 border-solid border-[var(--tags-view-border-color)] dark:border-[var(--el-border-color)]',
-                  {
-                    '!fixed w-full top-[var(--top-tool-height)] left-0': fixedHeader.value
-                  }
-                ]}
-                style="transition: width var(--transition-time-02), left var(--transition-time-02);"
-              ></TagsView>
-            ) : undefined}
-
+        <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-64px)] relative z-1']}>
+          <ElScrollbar v-loading={pageLoading.value} class={[`${prefixCls}-content-scrollbar`]}>
             <UserAppView></UserAppView>
           </ElScrollbar>
         </div>
@@ -104,6 +57,34 @@ export default defineComponent({
   background-color: var(--app-content-bg-color);
   :deep(.@{elNamespace}-scrollbar__view) {
     height: 100% !important;
+  }
+}
+</style>
+
+<style lang="less">
+.drop-menu {
+  border-radius: 4px;
+  .el-menu {
+    .el-menu-item {
+      padding: 0 36px;
+      height: 48px;
+      font-size: 16px;
+      color: #131313;
+      &:hover {
+        color: var(--el-color-primary) !important;
+        background-color: transparent !important;
+      }
+
+      &.is-active {
+        color: var(--el-color-primary) !important;
+        border: 0 none;
+        background-color: transparent !important;
+
+        &:after {
+          display: none;
+        }
+      }
+    }
   }
 }
 </style>

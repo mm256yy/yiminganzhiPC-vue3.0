@@ -96,10 +96,34 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
       {
         path: 'home',
         name: 'WorkshopHome',
-        component: () => import('@/views/Workshop/Home.vue'),
+        component: () => import('@/views/Workshop/Home/Index.vue'),
         meta: {
           title: '用户首页',
           icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'landlord',
+        name: 'Landlord',
+        component: () => import('@/views/Workshop/Landlord/Index.vue'),
+        meta: {
+          title: '农户信息'
+        }
+      },
+      {
+        path: 'population',
+        name: 'Population',
+        component: () => import('@/views/Workshop/Population/Index.vue'),
+        meta: {
+          title: '人口信息'
+        }
+      },
+      {
+        path: 'village',
+        name: 'Village',
+        component: () => import('@/views/Workshop/Village/Index.vue'),
+        meta: {
+          title: '自然村'
         }
       }
     ]
