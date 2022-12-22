@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { DemographicDtoType } from './types'
+import { DemographicDtoType, DemographicHeadType } from './types'
 
 /**
  * 查询人口信息列表
@@ -36,4 +36,11 @@ export const delDemographicByIdApi = (id: number): Promise<void> => {
  */
 export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> => {
   return request.get({ url: `/demographic/${id}` })
+}
+
+/**
+ * 查询人口头部信息
+ */
+export const getDemographicHeadApi = (): Promise<DemographicHeadType> => {
+  return request.get({ url: `/demographic/head` })
 }

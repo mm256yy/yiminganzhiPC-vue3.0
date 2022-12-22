@@ -2,7 +2,7 @@
   <ElDialog
     :title="actionType === 'edit' ? '编辑自然村' : '新增自然村'"
     :model-value="props.show"
-    :width="660"
+    :width="575"
     @close="onClose"
     alignCenter
     appendToBody
@@ -11,52 +11,31 @@
     <ElForm
       class="policy-form"
       ref="formRef"
-      label-position="left"
+      label-position="right"
       :model="form"
-      label-width="80px"
+      label-width="100px"
       :rules="rules"
     >
-      <ElRow :gutter="10">
-        <ElCol :span="12">
-          <ElFormItem label="村名" prop="name" required>
-            <ElInput clearable :maxlength="20" v-model="form.name" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="行政区划" prop="parentCode" required>
-            <ElTreeSelect
-              class="!w-full"
-              v-model="form.parentCode"
-              :data="props.districtTree"
-              node-key="code"
-              :props="treeSelectDefaultProps"
-              :default-expanded-keys="[form.parentCode]"
-            />
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElFormItem label="简介" prop="introduction">
-        <ElInput type="textarea" clearable :maxlength="5000" v-model="form.introduction" />
+      <ElFormItem label="行政区划" prop="parentCode" required>
+        <ElTreeSelect
+          class="!w-full"
+          v-model="form.parentCode"
+          :data="props.districtTree"
+          node-key="code"
+          :props="treeSelectDefaultProps"
+          :default-expanded-keys="[form.parentCode]"
+        />
+      </ElFormItem>
+      <ElFormItem label="村名" prop="name" required>
+        <ElInput clearable :maxlength="20" v-model="form.name" />
       </ElFormItem>
 
-      <ElRow>
-        <ElFormItem label="具体位置">
-          <Map
-            :point="{
-              longitude: form.longitude,
-              latitude: form.latitude
-            }"
-            @chose="onChosePosition"
-          />
-          <div>{{ position.address }}</div>
-        </ElFormItem>
-      </ElRow>
+      <MapFormItem :positon="position" @change="onChosePosition" />
     </ElForm>
 
     <template #footer>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
       <ElButton @click="onClose">取消</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
   </ElDialog>
 </template>
@@ -67,15 +46,14 @@ import {
   ElForm,
   ElFormItem,
   ElInput,
-  ElRow,
-  ElCol,
   ElButton,
   ElTreeSelect,
   FormInstance,
-  FormRules
+  FormRules,
+  ElMessage
 } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
-import { Map } from '@/components/Map'
+import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import type { VillageDtoType } from '@/api/project/village/types'
@@ -103,16 +81,15 @@ const treeSelectDefaultProps = {
 
 const defaultValue: Omit<VillageDtoType, 'id'> = {
   address: '',
-  introduction: '',
-  latitude: undefined,
-  longitude: undefined,
+  latitude: 0,
+  longitude: 0,
   name: '',
   parentCode: ''
 }
 const form = ref<Omit<VillageDtoType, 'id'>>(defaultValue)
 const position = reactive({
-  latitude: '',
-  longitude: '',
+  latitude: 0,
+  longitude: 0,
   address: ''
 })
 
@@ -127,8 +104,8 @@ watch(
       formRef.value?.resetFields()
       form.value = defaultValue
     }
-    position.longitude = form.value.longitude
     position.latitude = form.value.latitude
+    position.longitude = form.value.longitude
     position.address = form.value.address
   },
   {
@@ -159,6 +136,9 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
+      if (!position || !position.longitude) {
+        return ElMessage.error('请点击地图选择经纬度')
+      }
       const data = {
         ...form.value,
         ...position
@@ -169,11 +149,6 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
-
-// const onGoToMap = () => {
-//   // 备选 'http://jingweidu.757dy.com/'
-//   window.open('https://api.map.baidu.com/lbsapi/getpoint/index.html')
-// }
 </script>
 
 <style lang="less">

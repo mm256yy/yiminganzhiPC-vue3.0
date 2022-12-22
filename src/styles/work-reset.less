@@ -5,6 +5,7 @@
   display: block;
   padding: var(--distance-base);
   padding-bottom: 0;
+  margin-top: 10px;
   border-radius: 4px;
   background-color: #fff;
 }
@@ -20,6 +21,36 @@
     font-size: 14px;
     font-weight: 500;
   }
+
+  .table-header-left {
+    display: flex;
+    align-items: center;
+    width: 700px;
+    height: 32px;
+    background: linear-gradient(90deg, rgba(106,191,255,0.19) 0%, rgba(67,174,255,0) 100%);
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background-color: var(--el-color-primary);
+    }
+    .text {
+      padding-left: 20px;
+      font-size: 14px;
+      color: #000;
+      .num {
+        margin: 0 6px;
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--el-color-primary);
+      }
+      .distance {
+        padding-left: 14px;
+      }
+    }
+  }
 }
 
 
@@ -34,5 +65,48 @@
 .el-table {
   thead {
     background-color: #EBEBEB;
+  }
+}
+
+// 弹窗
+.el-dialog {
+  .el-dialog__header {
+    padding: 10px 24px 20px;
+    font-size: 16px;
+    color: var(--text-color-1);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+    .el-dialog__headerbtn {
+      top: 0;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  .el-dialog__body {
+    color: var(--text-color-1);
+  }
+
+  .el-dialog__footer {
+    padding: 10px 16px 14px;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+// 二次确认弹窗
+.el-message-box {
+  padding: 0 !important;
+  .el-message-box__header {
+    padding: 13px 24px;
+    color: var(--text-color-1);
+    font-size: 16px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+
+  .el-message-box__btns {
+    padding: 15px 10px;
+    border-top: 1px solid var(--border-color);
   }
 }

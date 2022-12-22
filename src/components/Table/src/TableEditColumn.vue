@@ -20,7 +20,7 @@ export default defineComponent({
       default: () => []
     },
     buttonType: propTypes.oneOf(['plain', 'round', 'circle', 'default']).def('circle'),
-    viewType: propTypes.oneOf(['link', 'default']).def('work')
+    viewType: propTypes.oneOf(['link', 'default']).def('default')
   },
   emits: ['edit', 'delete'],
   setup(props, { emit }) {

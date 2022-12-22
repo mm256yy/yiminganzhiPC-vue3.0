@@ -1,59 +1,72 @@
 <template>
   <WorkContentWrap>
-    <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
-
-    <div class="flex items-center justify-between pb-18px">
-      <div class="text-size-14px"> 户主信息列表 </div>
-      <ElSpace>
-        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增人口</ElButton>
-        <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate"
-          >模版下载</ElButton
-        >
-        <ElUpload
-          action="/api/peasantHousehold/import"
-          :headers="headers"
-          :data="{ projectId }"
-          :show-file-list="false"
-          :disabled="uploadLoading"
-          accept=".xls,.xlsx"
-          :before-upload="beforeUpload"
-          :on-success="uploadDone"
-          :on-error="uploadError"
-        >
-          <template #trigger>
-            <ElButton :icon="importIcon" :loading="uploadLoading" type="primary">批量导入</ElButton>
-          </template>
-        </ElUpload>
-      </ElSpace>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">农户信息采集</ElBreadcrumbItem>
+    </ElBreadcrumb>
+    <div class="search-form-wrap">
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
     </div>
-    <Table
-      border
-      v-model:pageSize="tableObject.size"
-      v-model:currentPage="tableObject.currentPage"
-      :pagination="{
-        total: tableObject.total
-      }"
-      :loading="tableObject.loading"
-      :data="tableObject.tableList"
-      :columns="allSchemas.tableColumns"
-      tableLayout="auto"
-      row-key="id"
-      headerAlign="center"
-      align="center"
-      highlightCurrentRow
-      @register="register"
-    >
-      <template #locationType="{ row }">
-        <div>{{ getLocationText(row.locationType) }}</div>
-      </template>
-      <template #longitude="{ row }">
-        <div>{{ row.longitude }}</div>
-        <div>{{ row.latitude }}</div>
-      </template>
-      <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
-      </template>
-    </Table>
+
+    <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-header-left">
+          <div class="icon">
+            <Icon icon="heroicons-outline:light-bulb" color="#fff" size="18" />
+          </div>
+          <div class="text"
+            >共<span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span
+            >户<span class="distance"></span
+            ><span class="num">{{ headInfo.demographicNum || 20 }}</span
+            >人<span class="distance"></span>已上报<span class="num !text-[#30A952]">32</span
+            ><span class="distance"></span>未上报<span class="num !text-[#F68418]">32</span>
+          </div>
+        </div>
+        <ElSpace>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加农户</ElButton>
+          <ElButton :icon="printIcon" type="default">打印表格</ElButton>
+        </ElSpace>
+      </div>
+      <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
+        :pagination="{
+          total: tableObject.total
+        }"
+        :loading="tableObject.loading"
+        :data="tableObject.tableList"
+        :columns="allSchemas.tableColumns"
+        tableLayout="auto"
+        row-key="id"
+        headerAlign="center"
+        align="center"
+        highlightCurrentRow
+        @register="register"
+      >
+        <template #locationType="{ row }">
+          <div>{{ getLocationText(row.locationType) }}</div>
+        </template>
+        <template #filling="{ row }">
+          <div class="filling-btn" @click="fillData(row)">数据填报</div>
+        </template>
+        <template #action="{ row }">
+          <TableEditColumn
+            :icons="[
+              {
+                icon: '',
+                tooltip: '详情',
+                type: 'primary',
+                action: () => onViewRow(row)
+              }
+            ]"
+            :row="row"
+            @edit="onEditRow(row)"
+            @delete="onDelRow"
+          />
+        </template>
+      </Table>
+    </div>
+
     <EditForm
       :show="dialog"
       :actionType="actionType"
@@ -68,7 +81,14 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElMessageBox, ElSpace, ElUpload } from 'element-plus'
+import {
+  ElButton,
+  ElMessage,
+  ElSpace,
+  ElUpload,
+  ElBreadcrumb,
+  ElBreadcrumbItem
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -81,7 +101,8 @@ import {
   addLandlordApi,
   updateLandlordApi,
   delLandlordByIdApi,
-  downLandlordTemplateApi
+  downLandlordTemplateApi,
+  getLandlordHeadApi
 } from '@/api/project/landlord/service'
 import { getVillageTreeApi } from '@/api/project/village/service'
 import { locationTypes } from './config'
@@ -92,10 +113,10 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
-const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
+const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const uploadLoading = ref(false)
+const headInfo = ref<any>({})
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -121,19 +142,14 @@ const getVillageTree = async () => {
   return list || []
 }
 
+const getLandlordHeadInfo = async () => {
+  const info = await getLandlordHeadApi()
+  headInfo.value = info
+}
+
 onMounted(() => {
-  // 权限限制
-  if (!appStore.getIsProjectAdmin && !appStore.getIsSysAdmin) {
-    ElMessageBox.confirm('你在当前项目中无权限')
-      .then(() => {
-        window.location.href = '/#/dashboard/home'
-      })
-      .catch(() => {
-        window.location.href = '/#/dashboard/home'
-      })
-    return
-  }
   getVillageTree()
+  // getLandlordHeadInfo()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -171,26 +187,62 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'card',
+    label: '身份证号',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入身份证号'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'status',
+    label: '上报状态',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '已上报',
+            value: 1
+          },
+          {
+            label: '未上报',
+            value: 0
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
     field: 'index',
     type: 'index',
     label: '序号'
   },
+  {
+    field: 'cityCodeText',
+    label: '区域名称(市县)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'townCodeText',
+    label: '街道/乡镇',
+    search: {
+      show: false
+    }
+  },
 
-  {
-    field: 'name',
-    label: '姓名',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    showOverflowTooltip: false,
-    search: {
-      show: false
-    }
-  },
   {
     field: 'villageText',
     label: '行政村',
@@ -206,6 +258,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'name',
+    label: '户主姓名',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'card',
+    label: '身份证号',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'phone',
     label: '联系方式',
     search: {
@@ -213,23 +279,63 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'locationType',
-    label: '区域类型',
+    field: 'doorNo',
+    label: '户籍册编号',
+    showOverflowTooltip: false,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '户号',
+    showOverflowTooltip: false,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '所属阶段',
+    showOverflowTooltip: false,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '填报状态',
+    showOverflowTooltip: false,
+    search: {
+      show: false
+    }
+  },
+
+  {
+    field: 'address',
+    label: '户籍所在地',
     search: {
       show: false
     }
   },
   {
     field: 'address',
-    label: '具体位置',
+    label: '所在位置',
     search: {
       show: false
     }
   },
   {
-    field: 'longitude',
-    label: '经纬度',
+    field: 'filling',
+    label: '填报',
+    fixed: 'right',
     search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
       show: false
     }
   },
@@ -347,7 +453,7 @@ const onSearch = (data) => {
 }
 
 const onDownloadTemplate = () => {
-  downLandlordTemplateApi().then((res) => {
+  downLandlordTemplateApi('demographic').then((res) => {
     if (res && res.templateUrl) {
       window.open(res.templateUrl)
     }
@@ -371,4 +477,27 @@ const uploadError = (error) => {
     // err
   }
 }
+
+// 数据填报
+const fillData = (row) => {
+  console.log(row, 'row')
+}
+
+const onViewRow = (row) => {
+  console.log(row, 'view row')
+}
 </script>
+
+<style lang="less" scoped>
+.filling-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 28px;
+  font-size: 14px;
+  color: var(--el-color-primary);
+  background: #e9f3ff;
+  border-radius: 4px;
+}
+</style>

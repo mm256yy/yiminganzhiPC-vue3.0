@@ -34,3 +34,8 @@ export interface DemographicDtoType {
   virutalVillageText: string
   [key: string]: any
 }
+
+export interface DemographicHeadType {
+  demographicNum: number
+  peasantHouseholdNum: number
+}

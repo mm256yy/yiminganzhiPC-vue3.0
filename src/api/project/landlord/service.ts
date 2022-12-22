@@ -41,6 +41,13 @@ export const getLandlordByIdApi = (id: number): Promise<LandlordDtoType> => {
 /**
  * 模版下载
  */
-export const downLandlordTemplateApi = (): Promise<LandlordDtoType> => {
-  return request.get({ url: `/import_template/demographic` })
+export const downLandlordTemplateApi = (name: string): Promise<any> => {
+  return request.get({ url: `/import_template/${name}` })
+}
+
+/**
+ * 查询农户头部信息
+ */
+export const getLandlordHeadApi = (): Promise<any> => {
+  return request.get({ url: `/peasantHousehold/head` })
 }

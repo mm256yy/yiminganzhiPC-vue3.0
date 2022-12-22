@@ -1,7 +1,10 @@
 <template>
-  <div class="w-540px h-400px relative">
+  <div
+    class="w-full h-400px relative"
+    :style="{ width: props.w ? `${props.w}px` : '100%', height: `${props.h}px` }"
+  >
     <div class="absolute top-6px left-60px z-500">
-      <ElInput v-model="keyword" class="!w-300px mr-6px" :prefix-icon="searchIcon" />
+      <ElInput v-model="keyword" class="!w-[70%] mr-6px" :prefix-icon="searchIcon" />
       <ElButton @click="search">搜索</ElButton>
       <div v-if="searchList && searchList.length" class="bg-white p-10px mt-6px">
         <div
@@ -39,6 +42,8 @@ type SearchItemType = {
 
 interface Props {
   point: PointType
+  w?: number
+  h: number
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['chose'])
@@ -66,9 +71,14 @@ const init = () => {
   addMapClick()
   // 解决地图渲染不全的问题
   setTimeout(() => {
-    map.checkResize()
+    resize()
   }, 300)
   initSearch()
+}
+
+const resize = () => {
+  map.setZoom(12)
+  map.checkResize()
 }
 
 watch(
@@ -197,7 +207,7 @@ const selectSearchItem = (item: SearchItemType) => {
   addOverlay(item.longitude, item.latitude)
   // 定位到位置
   map.centerAndZoom(new T.LngLat(item.longitude, item.latitude), 15)
-  map.checkResize()
+  resize()
 
   // 拿到地址
   const point: PointType = {
@@ -209,6 +219,11 @@ const selectSearchItem = (item: SearchItemType) => {
     emit('chose', point)
   })
 }
+
+defineExpose({
+  init,
+  resize
+})
 </script>
 <style scoped lang="less">
 .search-item {

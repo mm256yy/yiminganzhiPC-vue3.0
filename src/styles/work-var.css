@@ -7,6 +7,10 @@
   --text-color-1: #131313;
   /* 固定间距 */
   --distance-base: 16px;
+  /* 边框色 */
+  --border-color: #E1E4EA;
+  /* warning */
+  --el-color-warning: #ED5454 !important;
 }
 
 /* 表格 table */

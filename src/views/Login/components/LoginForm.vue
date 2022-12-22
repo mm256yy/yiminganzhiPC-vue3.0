@@ -207,7 +207,10 @@ const doRoute = async () => {
   } else {
     await setPlatform('workshop', addRoute)
   }
-  window.location.href = path
+
+  setTimeout(() => {
+    window.location.href = path
+  }, 500)
 }
 </script>
 

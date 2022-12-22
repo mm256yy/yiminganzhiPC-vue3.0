@@ -1,5 +1,9 @@
 <template>
   <WorkContentWrap>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">自然村预登记</ElBreadcrumbItem>
+    </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -11,7 +15,7 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 自然村列表 </div>
-        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增</ElButton>
+        <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -58,7 +62,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElMessageBox } from 'element-plus'
+import { ElButton, ElMessage, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -74,8 +78,6 @@ import {
 } from '@/api/project/village/service'
 import { getDistrictTreeApi } from '@/api/district'
 import type { VillageDtoType } from '@/api/project/village/types'
-
-// type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -200,16 +202,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'latitude',
     label: '经纬度',
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'introduction',
-    label: '简介',
     form: {
       show: false
     },
