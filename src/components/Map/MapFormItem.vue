@@ -11,7 +11,7 @@
       <template #reference>
         <div class="flex items-center w-full">
           <el-input
-            class="!w-[90%]"
+            class="!w-[calc(100%-25px)]"
             :suffix-icon="locationIcon"
             :model-value="position.longitude ? `${position.longitude},${position.latitude}` : ''"
             placeholder="请选择位置"

@@ -17,3 +17,27 @@ export const locationTypes = [
     value: 'OverlappingArea'
   }
 ]
+
+// 性别
+export const sexEnmus = [
+  {
+    label: '男',
+    value: 1
+  },
+  {
+    label: '女',
+    value: 2
+  }
+]
+
+// yes or no
+export const yesAndNoEnums = [
+  {
+    label: '是',
+    value: 1
+  },
+  {
+    label: '否',
+    value: 0
+  }
+]

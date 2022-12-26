@@ -125,6 +125,14 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         meta: {
           title: '自然村'
         }
+      },
+      {
+        path: 'datafill',
+        name: 'DataFill',
+        component: () => import('@/views/Workshop/DataFill/Index.vue'),
+        meta: {
+          title: '数据填报'
+        }
       }
     ]
   }

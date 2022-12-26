@@ -24,7 +24,7 @@
         </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加农户</ElButton>
-          <ElButton :icon="printIcon" type="default">打印表格</ElButton>
+          <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -75,24 +75,20 @@
       @close="onFormPupClose"
       @submit="onSubmit"
     />
+
+    <Print :show="printDialog" @close="onPrintDialogClose" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import {
-  ElButton,
-  ElMessage,
-  ElSpace,
-  ElUpload,
-  ElBreadcrumb,
-  ElBreadcrumbItem
-} from 'element-plus'
+import { ElButton, ElMessage, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
+import Print from './components/Print.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -101,7 +97,6 @@ import {
   addLandlordApi,
   updateLandlordApi,
   delLandlordByIdApi,
-  downLandlordTemplateApi,
   getLandlordHeadApi
 } from '@/api/project/landlord/service'
 import { getVillageTreeApi } from '@/api/project/village/service'
@@ -111,12 +106,12 @@ import type { LandlordDtoType } from '@/api/project/landlord/types'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
-const actionType = ref<'add' | 'edit'>('add') // 操作类型
+const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
-const uploadLoading = ref(false)
 const headInfo = ref<any>({})
+const printDialog = ref(false)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -452,30 +447,12 @@ const onSearch = (data) => {
   }
 }
 
-const onDownloadTemplate = () => {
-  downLandlordTemplateApi('demographic').then((res) => {
-    if (res && res.templateUrl) {
-      window.open(res.templateUrl)
-    }
-  })
+const onPrint = () => {
+  printDialog.value = true
 }
 
-const beforeUpload = () => {
-  uploadLoading.value = true
-}
-
-const uploadDone = () => {
-  uploadLoading.value = false
-}
-
-const uploadError = (error) => {
-  try {
-    const response = JSON.parse(error.message)
-    ElMessage.error(response.message)
-    uploadLoading.value = false
-  } catch (err) {
-    // err
-  }
+const onPrintDialogClose = () => {
+  printDialog.value = false
 }
 
 // 数据填报
@@ -484,7 +461,9 @@ const fillData = (row) => {
 }
 
 const onViewRow = (row) => {
-  console.log(row, 'view row')
+  actionType.value = 'view'
+  tableObject.currentRow = row
+  dialog.value = true
 }
 </script>
 

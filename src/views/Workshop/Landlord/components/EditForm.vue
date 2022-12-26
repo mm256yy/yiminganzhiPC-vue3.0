@@ -1,76 +1,111 @@
 <template>
   <ElDialog
-    :title="actionType === 'edit' ? '编辑农户' : '新增农户'"
+    :title="actionType === 'edit' ? '编辑农户' : actionType === 'add' ? '新增农户' : '查看详情'"
     :model-value="props.show"
-    :width="660"
+    :width="609"
     @close="onClose"
     alignCenter
     appendToBody
     :closeOnClickModal="false"
   >
     <ElForm
+      :disabled="actionType === 'view'"
       class="form"
       ref="formRef"
-      label-position="left"
       :model="form"
-      label-width="80px"
+      label-width="100px"
+      :label-position="'right'"
       :rules="rules"
     >
-      <ElRow :gutter="10">
-        <ElCol :span="12">
-          <ElFormItem label="户主" prop="name" required>
-            <ElInput clearable :maxlength="20" v-model="form.name" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="户号" prop="doorNo" required>
-            <ElInput clearable :maxlength="20" v-model="form.doorNo" />
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow :gutter="10">
-        <ElCol :span="12">
-          <ElFormItem label="联系方式" prop="phone">
-            <ElInput clearable type="text" class="!w-full" v-model="form.phone" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="区域类型" prop="locationType">
-            <ElSelect class="w-full" v-model="form.locationType">
-              <ElOption
-                v-for="item in locationTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElFormItem class="w-full" label="自然村" prop="parentCode" required>
-          <ElCascader
-            class="!w-full"
-            v-model="form.parentCode"
-            :options="props.districtTree"
-            :props="treeSelectDefaultProps"
-            expandTrigger="hover"
+      <ElFormItem class="w-full" label="自然村" prop="parentCode">
+        <ElTreeSelect
+          class="!w-full"
+          v-model="form.parentCode"
+          :data="props.districtTree"
+          node-key="code"
+          :props="treeSelectDefaultProps"
+          :default-expanded-keys="[form.parentCode]"
+        />
+        <!-- <ElCascader
+          class="!w-full"
+          v-model="form.parentCode"
+          :options="props.districtTree"
+          :props="treeSelectDefaultProps"
+          expandTrigger="hover"
+        /> -->
+      </ElFormItem>
+      <ElFormItem label="户主姓名" prop="name">
+        <ElInput v-model="form.name" placeholder="请输入户主姓名" />
+      </ElFormItem>
+      <ElFormItem label="性别" prop="sex">
+        <ElSelect clearable v-model="form.sex">
+          <ElOption
+            v-for="item in sexEnmus"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           />
-        </ElFormItem>
-      </ElRow>
-      <ElRow>
-        <ElFormItem label="具体位置">
-          <Map :point="position" @chose="onChosePosition" />
-          <div>{{ position.address }}</div>
-        </ElFormItem>
-      </ElRow>
+        </ElSelect>
+      </ElFormItem>
+
+      <ElFormItem label="身份证号" prop="card">
+        <ElInput
+          clearable
+          placeholder="请输入身份证号"
+          type="text"
+          class="!w-full"
+          v-model="form.card"
+        />
+      </ElFormItem>
+
+      <ElFormItem label="联系方式" prop="phone">
+        <ElInput
+          clearable
+          placeholder="请输入联系方式"
+          type="text"
+          class="!w-full"
+          v-model="form.phone"
+        />
+      </ElFormItem>
+
+      <ElDivider border-style="dashed" />
+
+      <ElFormItem label="财产户" prop="sex">
+        <ElSelect clearable v-model="form.sex">
+          <ElOption
+            v-for="item in yesAndNoEnums"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
+
+      <ElFormItem label="户籍册编号" prop="doorNo">
+        <ElInput v-model="form.doorNo" placeholder="请输入户籍册编号" />
+      </ElFormItem>
+
+      <ElFormItem label="户籍所在地" prop="address">
+        <ElInput v-model="form.address" placeholder="请输入户籍所在地" />
+      </ElFormItem>
+
+      <ElFormItem label="所在位置" prop="locationType">
+        <ElSelect class="w-full" v-model="form.locationType">
+          <ElOption
+            v-for="item in locationTypes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
+
+      <MapFormItem :positon="position" @change="onChosePosition" />
     </ElForm>
 
     <template #footer>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
       <ElButton @click="onClose">取消</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
   </ElDialog>
 </template>
@@ -81,27 +116,27 @@ import {
   ElForm,
   ElFormItem,
   ElInput,
-  ElRow,
-  ElCol,
   ElButton,
   ElCascader,
   FormInstance,
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElTreeSelect,
+  ElDivider
 } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
-import { Map } from '@/components/Map'
+import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
-import { locationTypes } from '../config'
+import { locationTypes, sexEnmus, yesAndNoEnums } from '../config'
 import type { LandlordDtoType } from '@/api/project/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {
   show: boolean
-  actionType: 'add' | 'edit'
+  actionType: 'add' | 'edit' | 'view'
   projects?: Array<{
     label: string
     value: number
