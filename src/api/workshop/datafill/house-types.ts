@@ -27,4 +27,5 @@ export interface HouseDtoType {
   latitude: string
   housePic: string
   remark: string
+  [key: string]: any
 }

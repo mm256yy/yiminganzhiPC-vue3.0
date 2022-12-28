@@ -59,12 +59,12 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
-  getLandlordListApi,
-  addLandlordApi,
-  updateLandlordApi,
-  delLandlordByIdApi
-} from '@/api/project/landlord/service'
-import type { LandlordDtoType } from '@/api/project/landlord/types'
+  getHouseListApi,
+  addHouseApi,
+  updateHouseApi,
+  delHouseByIdApi
+} from '@/api/workshop/datafill/house-service'
+import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -74,8 +74,8 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi,
-  delListApi: delLandlordByIdApi
+  getListApi: getHouseListApi,
+  delListApi: delHouseByIdApi
 })
 const { getList } = methods
 
@@ -190,7 +190,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: LandlordDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: HouseDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -206,7 +206,7 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: LandlordDtoType) => {
+const onEditRow = (row: HouseDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -216,17 +216,15 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: LandlordDtoType) => {
+const onSubmit = async (data: HouseDtoType) => {
   if (actionType.value === 'add') {
-    await addLandlordApi({
-      ...data,
-      projectId
+    await addHouseApi({
+      ...data
     })
   } else {
-    await updateLandlordApi({
+    await updateHouseApi({
       ...data,
-      id: tableObject.currentRow?.id as number,
-      projectId
+      id: tableObject.currentRow?.id as number
     })
   }
   ElMessage.success('操作成功！')

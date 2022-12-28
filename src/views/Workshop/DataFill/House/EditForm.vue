@@ -316,6 +316,9 @@
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
+    <el-dialog v-model="dialogVisible">
+      <img class="w-full" :src="imgUrl" alt="Preview Image" />
+    </el-dialog>
   </ElDialog>
 </template>
 
@@ -343,8 +346,7 @@ import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
-import type { LandlordDtoType } from '@/api/project/landlord/types'
-import type { DistrictNodeType } from '@/api/district/types'
+import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
 
 interface PropsType {
@@ -354,8 +356,7 @@ interface PropsType {
     label: string
     value: number
   }>
-  row?: LandlordDtoType | null | undefined
-  districtTree: DistrictNodeType[]
+  row?: HouseDtoType | null | undefined
 }
 
 interface FileItemType {
@@ -374,7 +375,7 @@ const treeSelectDefaultProps = {
   label: 'name'
 }
 
-const defaultValue: Omit<LandlordDtoType, 'id'> = {
+const defaultValue: Omit<HouseDtoType, 'id'> = {
   address: '',
   doorNo: '',
   latitude: 0,
@@ -383,7 +384,7 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   parentCode: [],
   locationType: 'SubmergedArea'
 }
-const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
+const form = ref<Omit<HouseDtoType, 'id'>>(defaultValue)
 const position: {
   latitude: number
   longitude: number

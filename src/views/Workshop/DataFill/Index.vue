@@ -58,8 +58,13 @@
       </div>
     </div>
     <div class="data-fill-body">
-      <Demographic />
-      <House />
+      <!-- <Demographic /> -->
+      <!-- <House /> -->
+      <!-- <Accessory /> -->
+      <!-- <Fruitwood /> -->
+      <!-- <Grave /> -->
+      <!-- <Enclosure /> -->
+      <FamilyIncome />
     </div>
   </WorkContentWrap>
 </template>
@@ -71,6 +76,11 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs } from './config'
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
+import Accessory from './Accessory/Index.vue'
+import Fruitwood from './Fruitwood/Index.vue'
+import Grave from './Grave/Index.vue'
+import Enclosure from './Enclosure/Index.vue'
+import FamilyIncome from './FamilyIncome/Index.vue'
 
 const EscalationIcon = useIcon({
   icon: 'carbon:send-alt'

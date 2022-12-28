@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { HouseDtoType } from './types'
+import { HouseDtoType } from './house-types'
 
 /**
  * 查询房屋信息列表
