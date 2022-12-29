@@ -20,8 +20,8 @@
         <div class="base">
           <div class="user">
             <Icon icon="mdi:user-circle" color="#3E73EC" />
-            <span class="pl-12px text-size-16px text-[#000]">张三</span>
-            <span class="pl-8px text-size-14px text-[#000]">2455555</span>
+            <span class="pl-12px text-size-16px text-[#000]">{{ baseInfo.name }}</span>
+            <span class="pl-8px text-size-14px text-[#000]">{{ baseInfo.doorNo }}</span>
           </div>
           <div class="status"><span class="point"></span>未填报</div>
         </div>
@@ -29,23 +29,23 @@
         <div class="other">
           <div class="info-item">
             <div class="tit">行政村名称：</div>
-            <div class="txt">chess</div>
+            <div class="txt">{{ baseInfo.villageText }}</div>
           </div>
           <div class="info-item">
             <div class="tit">自然村名称：</div>
-            <div class="txt">chess</div>
+            <div class="txt">{{ baseInfo.virutalVillageText }}</div>
           </div>
           <div class="info-item">
             <div class="tit">所在位置：</div>
-            <div class="txt">chess</div>
+            <div class="txt">{{ baseInfo.address }}</div>
           </div>
           <div class="info-item">
             <div class="tit">联系电话：</div>
-            <div class="txt">chess</div>
+            <div class="txt">{{ baseInfo.phone }}</div>
           </div>
           <div class="info-item">
             <div class="tit">家庭人数：</div>
-            <div class="txt">chess</div>
+            <div class="txt">{{ baseInfo.count }}</div>
           </div>
         </div>
       </div>
@@ -70,10 +70,12 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs } from './config'
+import { getDemographicByIdApi } from '@/api/project/population/service'
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
 import Accessory from './Accessory/Index.vue'
@@ -82,6 +84,7 @@ import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
 
+const baseInfo = ref({})
 const EscalationIcon = useIcon({
   icon: 'carbon:send-alt'
 })
@@ -90,6 +93,17 @@ const UserIcon = useIcon({
   icon: '',
   color: ''
 })
+
+// doorNo
+// 006009359
+// id 13148
+const getDemographicInfo = () => {
+  getDemographicByIdApi(13148).then((res) => {
+    baseInfo.value = res
+  })
+}
+
+getDemographicInfo()
 </script>
 
 <style lang="less" scoped>
@@ -199,6 +213,7 @@ const UserIcon = useIcon({
     height: 32px;
     padding: 0 16px;
     margin: 14px 8px 0 0;
+    font-size: 14px;
     background: #ffffff;
     border-radius: 4px;
     border: 1px solid #dcdfe6;
