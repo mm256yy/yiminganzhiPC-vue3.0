@@ -2,7 +2,7 @@ import request from '@/config/axios'
 import { AccessoryDtoType } from './accessory-types'
 
 /**
- * 查询房屋信息列表
+ * 查询附属物信息列表
  */
 
 export const getAccessoryListApi = (
@@ -14,6 +14,6 @@ export const getAccessoryListApi = (
 /**
  * 保存
  */
-export const postAccessoryListApi = (data: any): Promise<TableResponse<AccessoryDtoType>> => {
+export const saveAccessoryListApi = (data: any): Promise<TableResponse<AccessoryDtoType>> => {
   return request.post({ url: '/immigrant_appendant/createAll', data })
 }

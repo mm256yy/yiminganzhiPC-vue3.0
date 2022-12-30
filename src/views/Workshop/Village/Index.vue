@@ -75,9 +75,9 @@ import {
   addVillageApi,
   updateVillageApi,
   delVillageByIdApi
-} from '@/api/project/village/service'
+} from '@/api/workshop/village/service'
 import { getDistrictTreeApi } from '@/api/district'
-import type { VillageDtoType } from '@/api/project/village/types'
+import type { VillageDtoType } from '@/api/workshop/village/types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId

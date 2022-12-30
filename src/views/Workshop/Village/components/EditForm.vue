@@ -56,7 +56,7 @@ import { ref, reactive, watch } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
-import type { VillageDtoType } from '@/api/project/village/types'
+import type { VillageDtoType } from '@/api/workshop/village/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {

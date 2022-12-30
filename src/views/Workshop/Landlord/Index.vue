@@ -98,10 +98,10 @@ import {
   updateLandlordApi,
   delLandlordByIdApi,
   getLandlordHeadApi
-} from '@/api/project/landlord/service'
-import { getVillageTreeApi } from '@/api/project/village/service'
+} from '@/api/workshop/landlord/service'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes } from './config'
-import type { LandlordDtoType } from '@/api/project/landlord/types'
+import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId

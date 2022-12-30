@@ -1,3 +1,4 @@
+<!-- 附属物 -->
 <template>
   <WorkContentWrap>
     <div class="table-wrap">
@@ -59,18 +60,35 @@
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref } from 'vue'
-import { ElButton, ElInputNumber, ElInput, ElSpace, ElTable, ElTableColumn } from 'element-plus'
+import {
+  ElButton,
+  ElInputNumber,
+  ElInput,
+  ElSpace,
+  ElTable,
+  ElTableColumn,
+  ElMessage
+} from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getAccessoryListApi } from '@/api/workshop/datafill/accessory-service'
+import {
+  getAccessoryListApi,
+  saveAccessoryListApi
+} from '@/api/workshop/datafill/accessory-service'
 
+interface PropsType {
+  householdId: number
+  doorNo: string
+}
+
+const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
 const defaultRow = {
-  doorNo: '',
-  householdId: 0,
+  doorNo: props.doorNo,
+  householdId: props.householdId,
   name: '',
   size: '',
   unit: '',
@@ -81,11 +99,13 @@ const defaultRow = {
 
 const getList = () => {
   const params: any = {
-    doorNo: '3333',
-    householdId: ''
+    doorNo: props.doorNo,
+    householdId: props.householdId
   }
   getAccessoryListApi(params).then((res) => {
     console.log(res, 'res')
+    tableData.value = res.content
+    // todo
     tableData.value = [
       {
         id: 0,
@@ -110,5 +130,9 @@ const onAddRow = () => {
 
 const onSave = () => {
   console.log(tableData.value, 'tabledata')
+  saveAccessoryListApi(tableData.value).then((res) => {
+    console.log(res, 'res')
+    ElMessage.success('操作成功！')
+  })
 }
 </script>

@@ -49,9 +49,12 @@
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref } from 'vue'
-import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getFamilyIncomeListApi } from '@/api/workshop/datafill/family-service'
+import {
+  getFamilyIncomeListApi,
+  saveFamilyIncomeListApi
+} from '@/api/workshop/datafill/family-service'
 import { FamilyIncomeDtoType } from '@/api/workshop/datafill/family-types'
 
 interface SpanMethodProps {
@@ -60,15 +63,20 @@ interface SpanMethodProps {
   rowIndex: number
   columnIndex: number
 }
+interface PropsType {
+  householdId: number
+  doorNo: string
+}
 
+const props = defineProps<PropsType>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
 const getList = () => {
   const params: any = {
-    doorNo: '3333',
-    householdId: ''
+    doorNo: props.doorNo,
+    householdId: props.householdId
   }
   getFamilyIncomeListApi(params).then((res) => {
     console.log(res.content, 'res')
@@ -147,5 +155,9 @@ const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
 
 const onSave = () => {
   console.log(tableData.value, 'tabledata')
+  saveFamilyIncomeListApi(tableData.value).then((res) => {
+    console.log(res, 'res')
+    ElMessage.success('操作成功！')
+  })
 }
 </script>

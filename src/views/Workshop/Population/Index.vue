@@ -83,10 +83,10 @@ import {
   getDemographicListApi,
   delDemographicByIdApi,
   getDemographicHeadApi
-} from '@/api/project/population/service'
-import { downLandlordTemplateApi } from '@/api/project/landlord/service'
-import { getVillageTreeApi } from '@/api/project/village/service'
-import type { DemographicDtoType, DemographicHeadType } from '@/api/project/population/types'
+} from '@/api/workshop/population/service'
+import { downLandlordTemplateApi } from '@/api/workshop/landlord/service'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
+import type { DemographicDtoType, DemographicHeadType } from '@/api/workshop/population/types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId

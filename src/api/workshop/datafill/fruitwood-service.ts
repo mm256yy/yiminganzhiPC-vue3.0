@@ -14,6 +14,6 @@ export const getFruitwoodListApi = (
 /**
  * 保存
  */
-export const postFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
+export const saveFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
   return request.post({ url: '/immigrant_tree/createAll', data })
 }

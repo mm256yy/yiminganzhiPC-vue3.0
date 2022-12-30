@@ -96,7 +96,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          />
+          />@/api/workshop/landlord/types
         </ElSelect>
       </ElFormItem>
 
@@ -117,7 +117,6 @@ import {
   ElFormItem,
   ElInput,
   ElButton,
-  ElCascader,
   FormInstance,
   FormRules,
   ElOption,
@@ -131,7 +130,7 @@ import { debounce } from 'lodash-es'
 import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { locationTypes, sexEnmus, yesAndNoEnums } from '../config'
-import type { LandlordDtoType } from '@/api/project/landlord/types'
+import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {

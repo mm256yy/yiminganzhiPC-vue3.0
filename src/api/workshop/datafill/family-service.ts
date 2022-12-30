@@ -14,6 +14,6 @@ export const getFamilyIncomeListApi = (
 /**
  * 保存
  */
-export const postFamilyIncomeListApi = (data: any): Promise<TableResponse<FamilyIncomeDtoType>> => {
+export const saveFamilyIncomeListApi = (data: any): Promise<TableResponse<FamilyIncomeDtoType>> => {
   return request.post({ url: '/immigrant_income/createAll', data })
 }

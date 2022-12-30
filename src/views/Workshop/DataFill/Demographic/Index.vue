@@ -17,10 +17,12 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
+        :show-overflow-tooltip="false"
         @register="register"
       >
         <template #action="{ row }">
           <TableEditColumn
+            :view-type="'link'"
             :icons="[
               {
                 icon: '',
@@ -51,7 +53,6 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElMessage, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -59,42 +60,43 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
-  getLandlordListApi,
-  addLandlordApi,
-  updateLandlordApi,
-  delLandlordByIdApi
-} from '@/api/project/landlord/service'
-import type { LandlordDtoType } from '@/api/project/landlord/types'
+  getDemographicListApi,
+  addDemographicApi,
+  updateDemographicApi,
+  delDemographicByIdApi
+} from '@/api/workshop/population/service'
+import { DemographicDtoType } from '@/api/workshop/population/types'
 
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
-const dialog = ref(true) // 弹窗标识
+const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi,
-  delListApi: delLandlordByIdApi
+  getListApi: getDemographicListApi,
+  delListApi: delDemographicByIdApi
 })
 const { getList } = methods
 
+// 根据户号来做筛选
 tableObject.params = {
-  projectId,
-  doorNo: '3333'
+  doorNo: '006009359'
 }
 
 getList()
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'index',
     type: 'index',
-    label: '序号'
+    field: 'index',
+    label: '序号',
+    fixed: 'true',
+    width: '60px'
   },
   {
     field: 'name',
     label: '姓名',
+    width: '80px',
     search: {
       show: false
     }
@@ -106,7 +108,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   {
     field: 'birthday',
     label: '出生年月',
@@ -135,7 +136,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   {
     field: 'education',
     label: '文化程度',
@@ -165,7 +165,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'insured',
     label: '参保情况',
     search: {
       show: false
@@ -175,7 +175,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: '100px',
+    width: '150px',
     search: {
       show: false
     },
@@ -190,7 +190,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: LandlordDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -206,7 +206,7 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: LandlordDtoType) => {
+const onEditRow = (row: DemographicDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -216,17 +216,15 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: LandlordDtoType) => {
+const onSubmit = async (data: DemographicDtoType) => {
   if (actionType.value === 'add') {
-    await addLandlordApi({
-      ...data,
-      projectId
+    await addDemographicApi({
+      ...data
     })
   } else {
-    await updateLandlordApi({
+    await updateDemographicApi({
       ...data,
-      id: tableObject.currentRow?.id as number,
-      projectId
+      id: tableObject.currentRow?.id as number
     })
   }
   ElMessage.success('操作成功！')

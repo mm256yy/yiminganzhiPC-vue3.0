@@ -51,20 +51,30 @@
       </div>
 
       <div class="report-tabs">
-        <div class="report-tab-item" v-for="item in ReportTabs" :key="item.id">
+        <div
+          :class="['report-tab-item', reportTabCurrentId === item.id ? 'active' : '']"
+          v-for="item in ReportTabs"
+          :key="item.id"
+          @click="onReportTabClick(item)"
+        >
           <Icon :icon="item.icon" color="#3E73EC" />
           <div class="tit">{{ item.name }}</div>
         </div>
       </div>
     </div>
     <div class="data-fill-body">
-      <!-- <Demographic /> -->
-      <!-- <House /> -->
-      <!-- <Accessory /> -->
-      <!-- <Fruitwood /> -->
-      <!-- <Grave /> -->
-      <!-- <Enclosure /> -->
-      <FamilyIncome />
+      <Demographic v-if="reportTabCurrentId === 1" />
+      <House :doorNo="doorNo" v-else-if="reportTabCurrentId === 2" />
+      <Accessory :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 3" />
+      <Fruitwood :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 4" />
+      <FamilyIncome
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === 5"
+      />
+      <div v-else-if="reportTabCurrentId === 6">安置意愿</div>
+      <Grave :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 7" />
+      <Enclosure :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 8" />
     </div>
   </WorkContentWrap>
 </template>
@@ -75,7 +85,8 @@ import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs } from './config'
-import { getDemographicByIdApi } from '@/api/project/population/service'
+import { getDemographicByIdApi } from '@/api/workshop/population/service'
+
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
 import Accessory from './Accessory/Index.vue'
@@ -84,26 +95,26 @@ import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
 
-const baseInfo = ref({})
+const baseInfo = ref<any>({})
+const reportTabCurrentId = ref<number>(1)
+const doorNo = '006009359'
+const householdId = 13148
+
 const EscalationIcon = useIcon({
   icon: 'carbon:send-alt'
 })
 
-const UserIcon = useIcon({
-  icon: '',
-  color: ''
-})
-
-// doorNo
-// 006009359
-// id 13148
 const getDemographicInfo = () => {
-  getDemographicByIdApi(13148).then((res) => {
+  getDemographicByIdApi(householdId).then((res) => {
     baseInfo.value = res
   })
 }
 
 getDemographicInfo()
+
+const onReportTabClick = (tabItem) => {
+  reportTabCurrentId.value = tabItem.id
+}
 </script>
 
 <style lang="less" scoped>
@@ -220,6 +231,13 @@ getDemographicInfo()
     cursor: pointer;
     .tit {
       margin-left: 6px;
+      user-select: none;
+    }
+
+    &.active {
+      color: var(--el-color-primary);
+      background: #e9f0ff;
+      border: 1px solid var(--el-color-primary);
     }
   }
 }
@@ -228,5 +246,11 @@ getDemographicInfo()
   margin-top: -10px;
   padding-top: 10px;
   background-color: #fff;
+}
+</style>
+
+<style lang="less">
+.el-divider--horizontal {
+  margin: 8px 0 24px;
 }
 </style>

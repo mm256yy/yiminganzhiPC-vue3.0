@@ -51,7 +51,6 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElMessage, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -66,9 +65,13 @@ import {
 } from '@/api/workshop/datafill/house-service'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
-const dialog = ref(true) // 弹窗标识
+interface PropsType {
+  doorNo: string
+}
+
+const props = defineProps<PropsType>()
+
+const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
@@ -80,8 +83,7 @@ const { register, tableObject, methods } = useTable({
 const { getList } = methods
 
 tableObject.params = {
-  projectId,
-  doorNo: '3333'
+  doorNo: props.doorNo
 }
 
 getList()

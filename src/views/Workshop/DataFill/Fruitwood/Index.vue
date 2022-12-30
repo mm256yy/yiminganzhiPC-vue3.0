@@ -1,3 +1,4 @@
+<!-- 果木 -->
 <template>
   <WorkContentWrap>
     <div class="table-wrap">
@@ -67,18 +68,35 @@
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref } from 'vue'
-import { ElButton, ElInputNumber, ElInput, ElSpace, ElTable, ElTableColumn } from 'element-plus'
+import {
+  ElButton,
+  ElInputNumber,
+  ElInput,
+  ElSpace,
+  ElTable,
+  ElTableColumn,
+  ElMessage
+} from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getFruitwoodListApi } from '@/api/workshop/datafill/fruitwood-service'
+import {
+  getFruitwoodListApi,
+  saveFruitwoodListApi
+} from '@/api/workshop/datafill/fruitwood-service'
 
+interface PropsType {
+  householdId: number
+  doorNo: string
+}
+
+const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
 const defaultRow = {
-  doorNo: '',
-  householdId: 0,
+  doorNo: props.doorNo,
+  householdId: props.householdId,
   name: '',
   usageType: '',
   size: '',
@@ -90,11 +108,12 @@ const defaultRow = {
 
 const getList = () => {
   const params: any = {
-    doorNo: '3333',
-    householdId: ''
+    doorNo: props.doorNo,
+    householdId: props.householdId
   }
   getFruitwoodListApi(params).then((res) => {
     console.log(res.content, 'res')
+    tableData.value = res.content
     tableData.value = [
       {
         id: 0,
@@ -120,5 +139,9 @@ const onAddRow = () => {
 
 const onSave = () => {
   console.log(tableData.value, 'tabledata')
+  saveFruitwoodListApi(tableData.value).then((res) => {
+    console.log(res, 'res')
+    ElMessage.success('操作成功！')
+  })
 }
 </script>

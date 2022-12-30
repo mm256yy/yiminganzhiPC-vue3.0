@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { GraveDtoType } from './fruitwood-types'
+import { GraveDtoType } from './grave-types'
 
 /**
  * 查询坟墓信息列表
@@ -14,6 +14,6 @@ export const getGraveListApi = (
 /**
  * 保存
  */
-export const postGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>> => {
+export const saveGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>> => {
   return request.post({ url: '/immigrant_grave/createAll', data })
 }
