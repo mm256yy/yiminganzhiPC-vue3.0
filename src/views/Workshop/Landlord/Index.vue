@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <div class="icon">
-            <Icon icon="heroicons-outline:light-bulb" color="#fff" size="18" />
+            <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text"
             >共<span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span

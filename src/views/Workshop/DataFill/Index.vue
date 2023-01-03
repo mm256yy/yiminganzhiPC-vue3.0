@@ -13,7 +13,7 @@
           <div class="tab-item">实物采集</div>
           <div class="tab-item">实物采集</div>
         </div>
-        <ElButton type="primary" :icon="EscalationIcon">数据上报</ElButton>
+        <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
       </div>
 
       <div class="user-info">
@@ -23,29 +23,31 @@
             <span class="pl-12px text-size-16px text-[#000]">{{ baseInfo.name }}</span>
             <span class="pl-8px text-size-14px text-[#000]">{{ baseInfo.doorNo }}</span>
           </div>
-          <div class="status"><span class="point"></span>未填报</div>
+          <div :class="{ status: true, success: baseInfo.status === '1' }"
+            ><span class="point"></span>{{ baseInfo.status === '1' ? '已填报' : '未填报' }}</div
+          >
         </div>
 
         <div class="other">
           <div class="info-item">
             <div class="tit">行政村名称：</div>
-            <div class="txt">{{ baseInfo.villageText }}</div>
+            <div class="txt">{{ baseInfo.villageText || '-' }}</div>
           </div>
           <div class="info-item">
             <div class="tit">自然村名称：</div>
-            <div class="txt">{{ baseInfo.virutalVillageText }}</div>
+            <div class="txt">{{ baseInfo.virutalVillageText || '-' }}</div>
           </div>
           <div class="info-item">
             <div class="tit">所在位置：</div>
-            <div class="txt">{{ baseInfo.address }}</div>
+            <div class="txt">{{ baseInfo.address || '-' }}</div>
           </div>
           <div class="info-item">
             <div class="tit">联系电话：</div>
-            <div class="txt">{{ baseInfo.phone }}</div>
+            <div class="txt">{{ baseInfo.phone || '-' }}</div>
           </div>
           <div class="info-item">
             <div class="tit">家庭人数：</div>
-            <div class="txt">{{ baseInfo.count }}</div>
+            <div class="txt">{{ baseInfo.familyNum || '-' }}</div>
           </div>
         </div>
       </div>
@@ -63,7 +65,7 @@
       </div>
     </div>
     <div class="data-fill-body">
-      <Demographic v-if="reportTabCurrentId === 1" />
+      <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === 1" />
       <House :doorNo="doorNo" v-else-if="reportTabCurrentId === 2" />
       <Accessory :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 3" />
       <Fruitwood :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 4" />
@@ -76,16 +78,49 @@
       <Grave :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 7" />
       <Enclosure :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 8" />
     </div>
+
+    <ElDialog
+      class="report-dialog"
+      title="数据上报"
+      :model-value="reportDialog"
+      :width="500"
+      @close="onClose"
+      alignCenter
+      appendToBody
+      :closeOnClickModal="false"
+      destroy-on-close
+    >
+      <div class="report-cont">
+        <div class="report-item">
+          <div class="report-tit">人口信息采集:</div>
+          <div class="report-txt">未添加户主外人员</div>
+        </div>
+        <div class="report-item">
+          <div class="report-tit">人口信息采集:</div>
+          <div class="report-txt">未添加户主外人员</div>
+        </div>
+      </div>
+
+      <div class="tips">
+        <Icon icon="ph:info-fill" color="#ED5454" :size="20" />
+        <div class="ml-6px">以上信息还未填写，是否继续上传数据？</div>
+      </div>
+
+      <template #footer>
+        <ElButton @click="onClose">取消</ElButton>
+        <ElButton type="primary">确认</ElButton>
+      </template>
+    </ElDialog>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs } from './config'
-import { getDemographicByIdApi } from '@/api/workshop/population/service'
+import { getLandlordByIdApi } from '@/api/workshop/landlord/service'
 
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
@@ -97,23 +132,34 @@ import FamilyIncome from './FamilyIncome/Index.vue'
 
 const baseInfo = ref<any>({})
 const reportTabCurrentId = ref<number>(1)
-const doorNo = '006009359'
-const householdId = 13148
+const doorNo = '006014084' // 农户号
+const householdId = 6607 // 农户ID
+const reportDialog = ref<boolean>(false)
 
 const EscalationIcon = useIcon({
   icon: 'carbon:send-alt'
 })
 
-const getDemographicInfo = () => {
-  getDemographicByIdApi(householdId).then((res) => {
+// 农户详情
+const getLandlordInfo = () => {
+  getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = res
   })
 }
 
-getDemographicInfo()
+getLandlordInfo()
 
 const onReportTabClick = (tabItem) => {
   reportTabCurrentId.value = tabItem.id
+}
+
+const onClose = () => {
+  reportDialog.value = false
+}
+
+// 数据上报
+const onReportData = () => {
+  console.log(9999)
 }
 </script>
 
@@ -191,6 +237,15 @@ const onReportTabClick = (tabItem) => {
         border-radius: 50%;
         background: #ff6767;
       }
+
+      &.success {
+        color: #30a952;
+        border: 1px solid #30a952;
+
+        .point {
+          background: #30a952;
+        }
+      }
     }
   }
 
@@ -247,10 +302,50 @@ const onReportTabClick = (tabItem) => {
   padding-top: 10px;
   background-color: #fff;
 }
+
+.report-dialog {
+  .report-cont {
+    width: 420px;
+    padding: 22px 55px;
+    margin: 0 auto;
+    background: #f5f7fa;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    .report-item {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+      .report-tit {
+        margin-right: 16px;
+        text-align: right;
+        color: rgba(19, 19, 19, 0.6);
+      }
+      .report-txt {
+        color: var(--text-color-1);
+        font-weight: 500;
+      }
+    }
+  }
+
+  .tips {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-color-1);
+  }
+}
 </style>
 
 <style lang="less">
 .el-divider--horizontal {
   margin: 8px 0 24px;
+}
+.report-dialog {
+  .el-dialog__body {
+    padding: 16px 40px !important;
+  }
 }
 </style>

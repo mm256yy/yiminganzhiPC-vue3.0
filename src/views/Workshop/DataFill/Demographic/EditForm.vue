@@ -20,7 +20,7 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="与户主关系" prop="relation">
-            <ElSelect clearable v-model="form.relation">
+            <ElSelect clearable v-model="form.relation" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -32,7 +32,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="姓名" prop="name">
-            <ElInput v-model="form.name" placeholder="请输入姓名" />
+            <ElInput v-model="form.name" placeholder="请输入姓名" class="!w-full" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
@@ -51,7 +51,7 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="性别" prop="sex">
-            <ElSelect clearable v-model="form.sex">
+            <ElSelect clearable v-model="form.sex" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -63,12 +63,17 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="出生年月" prop="birthday">
-            <ElDatePicker v-model="form.birthday" type="date" placeholder="请选择日期" />
+            <ElDatePicker
+              v-model="form.birthday"
+              type="date"
+              placeholder="请选择日期"
+              class="!w-full"
+            />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="民族" prop="nation">
-            <ElInput v-model="form.nation" placeholder="请输入民族" />
+            <ElInput v-model="form.nation" placeholder="请输入民族" class="!w-full" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -78,7 +83,7 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="人口类型" prop="populationType">
-            <ElSelect clearable v-model="form.populationType">
+            <ElSelect clearable v-model="form.populationType" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -101,7 +106,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="文化程度" prop="education">
-            <ElSelect clearable v-model="form.education">
+            <ElSelect clearable v-model="form.education" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -116,7 +121,7 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="婚姻状况" prop="marital">
-            <ElSelect clearable v-model="form.marital">
+            <ElSelect clearable v-model="form.marital" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -128,7 +133,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="户籍类别" prop="censusType">
-            <ElSelect clearable v-model="form.censusType">
+            <ElSelect clearable v-model="form.censusType" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -139,7 +144,7 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="职业" prop="occupation">
-            <ElSelect clearable v-model="form.occupation">
+            <ElSelect clearable v-model="form.occupation" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -164,8 +169,8 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="参保情况" prop="insured">
-            <ElSelect clearable v-model="form.insured">
+          <ElFormItem label="参保情况" prop="insuranceType">
+            <ElSelect clearable v-model="form.insuranceType" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -176,7 +181,7 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="人口类别" prop="category">
-            <ElSelect clearable v-model="form.category">
+            <ElSelect clearable v-model="form.category" class="!w-full">
               <ElOption
                 v-for="item in [treeSelectDefaultProps]"
                 :key="item.value"
@@ -252,16 +257,16 @@
         <ElCol :span="15">
           <ElFormItem label="户口本照片" prop="sex">
             <ElUpload
-              :class="[inhabitant.length > 9 ? 'upload' : '']"
+              :class="[householdPic.length > 0 ? 'upload' : '']"
               action="/api/file/type"
               :data="{
                 type: 'image'
               }"
-              :limit="10"
+              :limit="1"
               :list-type="'picture-card'"
               accept=".jpg,.jpeg,.png"
               :multiple="false"
-              :file-list="inhabitant"
+              :file-list="householdPic"
               :headers="headers"
               :on-success="uploadFileChange3"
               :before-remove="beforeRemove"
@@ -270,7 +275,7 @@
             >
               <template #trigger>
                 <div class="relative w-148px h-148px">
-                  <img class="block w-148px h-148px" src="@/assets/imgs/inhabitant.png" alt="" />
+                  <img class="block w-148px h-148px" src="@/assets/imgs/household.png" alt="" />
                   <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
                     >点击上传</div
                   >
@@ -281,8 +286,8 @@
         </ElCol>
       </ElRow>
 
-      <ElFormItem label="备注" prop="info">
-        <ElInput type="textarea" />
+      <ElFormItem label="备注" prop="remark">
+        <ElInput type="textarea" v-model="form.remark" />
       </ElFormItem>
     </ElForm>
 
@@ -359,7 +364,7 @@ const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
-const inhabitant = ref<FileItemType[]>([])
+const householdPic = ref<FileItemType[]>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 
@@ -381,14 +386,14 @@ watch(
       form.value = defaultValue
     }
     try {
-      if (form.value.cardFront) {
-        cardFront.value = JSON.parse(form.value.cardFront)
+      if (form.value.cardPic) {
+        const pics = JSON.parse(form.value.cardPic)
+        cardFront.value = pics.slice(0, 1)
+        cardEnd.value = pics.slice(1)
       }
-      if (form.value.cardEnd) {
-        cardEnd.value = JSON.parse(form.value.cardEnd)
-      }
-      if (form.value.inhabitant) {
-        inhabitant.value = JSON.parse(form.value.inhabitant)
+
+      if (form.value.householdPic) {
+        householdPic.value = JSON.parse(form.value.householdPic)
       }
     } catch (error) {
       console.log(error)
@@ -414,9 +419,8 @@ const onSubmit = debounce((formEl) => {
     if (valid) {
       const data: any = {
         ...form.value,
-        cardFront: JSON.stringify(cardFront.value),
-        cardEnd: JSON.stringify(cardEnd.value),
-        inhabitant: JSON.stringify(inhabitant.value)
+        cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
+        householdPic: JSON.stringify(householdPic.value)
       }
       emit('submit', data)
     } else {
@@ -442,8 +446,8 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     cardFront.value = list
   } else if (type === 'card-end') {
     cardEnd.value = list
-  } else if (type === 'inhabitant') {
-    inhabitant.value = list
+  } else if (type === 'householdPic') {
+    householdPic.value = list
   }
 }
 
@@ -455,7 +459,7 @@ const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFi
   handleFileList(fileList, 'card-end')
 }
 const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'inhabitant')
+  handleFileList(fileList, 'householdPic')
 }
 
 // 文件移除
@@ -466,7 +470,7 @@ const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'card-end')
 }
 const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'inhabitant')
+  handleFileList(fileList, 'householdPic')
 }
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {

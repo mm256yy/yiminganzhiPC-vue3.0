@@ -52,7 +52,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber v-model="scope.row.number" />
+            <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -109,7 +109,8 @@ const defaultRow = {
 const getList = () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: props.householdId
+    householdId: props.householdId,
+    size: 1000
   }
   getFruitwoodListApi(params).then((res) => {
     console.log(res.content, 'res')

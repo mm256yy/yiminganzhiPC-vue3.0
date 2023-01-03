@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { DemographicDtoType, DemographicHeadType } from './types'
+import { DemographicDtoType, DemographicHeadType, ExcelListType } from './types'
 
 /**
  * 查询人口信息列表
@@ -43,4 +43,16 @@ export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> =
  */
 export const getDemographicHeadApi = (): Promise<DemographicHeadType> => {
   return request.get({ url: `/demographic/head` })
+}
+
+/**
+ * excel文件列表
+ */
+export const getExcelList = (): Promise<TableResponse<ExcelListType>> => {
+  return request.get({
+    url: '/import_file',
+    params: {
+      sort: ['id', 'desc']
+    }
+  })
 }

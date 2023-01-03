@@ -44,7 +44,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber v-model="scope.row.number" />
+            <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -72,7 +72,8 @@ import {
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getAccessoryListApi,
-  saveAccessoryListApi
+  saveAccessoryListApi,
+  getAppendantOptionApi
 } from '@/api/workshop/datafill/accessory-service'
 
 interface PropsType {
@@ -97,29 +98,37 @@ const defaultRow = {
   isAdd: true
 }
 
-const getList = () => {
+const getAppendantOption = async () => {
+  const info = await getAppendantOptionApi()
+  console.log(info, '附属物配置信息')
+  return info.content || []
+}
+
+const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: props.householdId
+    householdId: props.householdId,
+    size: 1000
   }
-  getAccessoryListApi(params).then((res) => {
-    console.log(res, 'res')
+  const res = await getAccessoryListApi(params)
+  if (res && res.content && res.content.length) {
     tableData.value = res.content
-    // todo
-    tableData.value = [
-      {
-        id: 0,
-        doorNo: 'string',
-        householdId: 0,
-        surveyId: 'string',
-        name: 'string',
-        size: 'string',
-        unit: 'string',
-        number: 0,
-        remark: 'string'
+  } else {
+    // 使用默认的配置
+    const defaultList = await getAppendantOption()
+    tableData.value = defaultList.map((item) => {
+      const { id, ...ret } = item
+      const newItem = {
+        ...ret
       }
-    ]
-  })
+      newItem.doorNo = props.doorNo
+      newItem.householdId = props.householdId
+      newItem.surveyId = id + ''
+      newItem.number = 0
+      newItem.remark = ''
+      return newItem
+    })
+  }
 }
 
 getList()

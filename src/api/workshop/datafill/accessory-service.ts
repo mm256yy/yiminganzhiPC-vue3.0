@@ -17,3 +17,11 @@ export const getAccessoryListApi = (
 export const saveAccessoryListApi = (data: any): Promise<TableResponse<AccessoryDtoType>> => {
   return request.post({ url: '/immigrant_appendant/createAll', data })
 }
+
+/**
+ * 配置信息
+ */
+
+export const getAppendantOptionApi = (name?: string): Promise<TableResponse<AccessoryDtoType>> => {
+  return request.get({ url: '/immigrant_appendant_option', params: { size: 1000, name } })
+}

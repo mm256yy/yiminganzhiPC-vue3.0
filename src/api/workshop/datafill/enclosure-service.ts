@@ -1,8 +1,8 @@
 import request from '@/config/axios'
-import { EnclosureDtoType } from './accessory-types'
+import { EnclosureDtoType } from './enclosure-types'
 
 /**
- * 查询附属物信息列表
+ * 查询附件信息列表
  */
 
 export const getEnclosureListApi = (

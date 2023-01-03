@@ -67,6 +67,11 @@ import {
 } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 
+interface PropsType {
+  doorNo: string
+}
+
+const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -80,7 +85,7 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: '006009359'
+  doorNo: props.doorNo
 }
 
 getList()
@@ -165,7 +170,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'insured',
+    field: 'insuranceType',
     label: '参保情况',
     search: {
       show: false

@@ -2,7 +2,7 @@ import request from '@/config/axios'
 import { FamilyIncomeDtoType } from './family-types'
 
 /**
- * 查询果木信息列表
+ * 查询家庭收入信息列表
  */
 
 export const getFamilyIncomeListApi = (

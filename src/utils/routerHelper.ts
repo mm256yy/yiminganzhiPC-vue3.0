@@ -92,7 +92,6 @@ export const generateRoutesFn1 = (
 // 后端控制路由生成
 export const generateRoutesFn2 = (routes: AppCustomRouteRecordRaw[]): AppRouteRecordRaw[] => {
   const res: AppRouteRecordRaw[] = []
-  console.log(routes, 'api routes')
   for (const route of routes) {
     const data: AppRouteRecordRaw = {
       path: route.path,
@@ -124,7 +123,6 @@ export const generateRoutesFn2 = (routes: AppCustomRouteRecordRaw[]): AppRouteRe
     }
     res.push(data as AppRouteRecordRaw)
   }
-  console.log(res, 'last routers')
   return res
 }
 

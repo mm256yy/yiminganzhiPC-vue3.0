@@ -12,7 +12,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <div class="icon">
-            <Icon icon="heroicons-outline:light-bulb" color="#fff" size="18" />
+            <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text"
             >共<span class="num">{{ headInfo.peasantHouseholdNum }}</span
@@ -21,6 +21,42 @@
           </div>
         </div>
         <ElSpace>
+          <ElPopover
+            v-if="excelList && excelList.length"
+            placement="bottom"
+            :width="460"
+            trigger="hover"
+          >
+            <template #reference>
+              <div class="view-upload">
+                <span class="pr-10px">批量导入</span>
+                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
+              </div>
+            </template>
+            <div class="file-list">
+              <div class="file-item">
+                <div class="flex items-center">
+                  <Icon icon="ant-design:file-sync-outlined" />
+                  <div class="ml-5px">范德萨地方.excl</div>
+                </div>
+                <div class="status">
+                  <div class="flex items-center">
+                    <span class="pr-10px"
+                      >( 共导入 <span class="number">20</span> 人，<span class="number">20</span> 户
+                      )</span
+                    >
+                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
+                  </div>
+
+                  <!-- <div class="flex items-center text-[#F93F3F]">
+                    <span class="pr-10px">上传失败</span>
+                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </ElPopover>
+
           <ElUpload
             action="/api/peasantHousehold/import"
             :headers="headers"
@@ -72,7 +108,15 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSpace, ElUpload, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import {
+  ElButton,
+  ElSpace,
+  ElUpload,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElPopover,
+  ElMessage
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -82,11 +126,16 @@ import { useIcon } from '@/hooks/web/useIcon'
 import {
   getDemographicListApi,
   delDemographicByIdApi,
-  getDemographicHeadApi
+  getDemographicHeadApi,
+  getExcelList
 } from '@/api/workshop/population/service'
 import { downLandlordTemplateApi } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import type { DemographicDtoType, DemographicHeadType } from '@/api/workshop/population/types'
+import type {
+  DemographicDtoType,
+  DemographicHeadType,
+  ExcelListType
+} from '@/api/workshop/population/types'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -98,6 +147,7 @@ const headInfo = ref<DemographicHeadType>({
   peasantHouseholdNum: 0
 })
 const uploadLoading = ref(false)
+const excelList = ref<ExcelListType[]>([])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -128,9 +178,18 @@ const getDemographicHeadInfo = async () => {
   headInfo.value = info
 }
 
+const getExcelUploadList = async () => {
+  const res = await getExcelList()
+  if (res && res.content) {
+    excelList.value = res.content
+  }
+  console.log(res, 'list')
+}
+
 onMounted(() => {
   getVillageTree()
   getDemographicHeadInfo()
+  getExcelUploadList()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -396,3 +455,38 @@ const uploadError = (error) => {
   }
 }
 </script>
+
+<style lang="less" scoped>
+.view-upload {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  color: var(--text-color-1);
+  font-weight: 500;
+  background: #ffffff;
+  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
+  border-radius: 4px;
+  border: 1px solid #ebebeb;
+  cursor: default;
+}
+
+.file-list {
+  .file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 0 16px;
+    height: 40px;
+    font-size: 14px;
+    color: var(--text-color-1);
+
+    .number {
+      font-weight: 500;
+      color: var(--el-color-primary);
+    }
+  }
+}
+</style>

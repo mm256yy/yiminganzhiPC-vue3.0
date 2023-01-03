@@ -26,7 +26,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInputNumber placeholder="请输入数量" v-model="row.number" />
+            <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="材料" prop="size" align="center" header-align="center">

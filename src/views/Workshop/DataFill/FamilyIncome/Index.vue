@@ -63,6 +63,7 @@ interface SpanMethodProps {
   rowIndex: number
   columnIndex: number
 }
+
 interface PropsType {
   householdId: number
   doorNo: string
@@ -76,10 +77,12 @@ const tableData = ref<any[]>([])
 const getList = () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: props.householdId
+    householdId: props.householdId,
+    size: 100
   }
   getFamilyIncomeListApi(params).then((res) => {
     console.log(res.content, 'res')
+    // tableData.value = res.content
     tableData.value = [
       {
         id: 0,

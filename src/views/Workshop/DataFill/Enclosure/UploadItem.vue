@@ -32,8 +32,8 @@
       </ElUpload>
     </div>
 
-    <el-dialog v-model="dialogVisible">
-      <img class="w-full" :src="imgUrl" alt="Preview Image" />
+    <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
+      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
     </el-dialog>
   </div>
 </template>
