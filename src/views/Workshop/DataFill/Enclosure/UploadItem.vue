@@ -18,16 +18,30 @@
         :limit="1"
         accept=".jpg,.jpeg,.png,.svg"
         :multiple="false"
-        :file-list="fileList"
+        :file-list="fileListData"
         :list-type="'picture-card'"
         :headers="headers"
         :on-success="uploadFileChange"
         :before-remove="beforeRemove"
-        :on-remove="removeFile"
-        :on-preview="imgPreview"
       >
         <template #trigger>
           <Icon icon="ant-design:plus-outlined" size="22" />
+        </template>
+
+        <template #file="{ file }">
+          <div>
+            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+            <ElInput />
+            <span class="el-upload-list__item-actions">
+              <span class="el-upload-list__item-preview" @click="imgPreview(file)">
+                <Icon icon="bi:zoom-in" />
+              </span>
+
+              <span class="el-upload-list__item-delete">
+                <Icon icon="material-symbols:delete-outline" />
+              </span>
+            </span>
+          </div>
         </template>
       </ElUpload>
     </div>
@@ -40,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElUpload, ElMessageBox, ElDialog } from 'element-plus'
+import { ElUpload, ElMessageBox, ElDialog, ElInput } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
 
@@ -54,7 +68,7 @@ interface FileItemType {
 }
 
 const appStore = useAppStore()
-const fileList = ref<Array<FileItemType>>([])
+const fileListData = ref<Array<FileItemType>>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 

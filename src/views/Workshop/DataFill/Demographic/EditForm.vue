@@ -203,6 +203,7 @@
                 :data="{
                   type: 'image'
                 }"
+                :disabled="actionType === 'view'"
                 :limit="1"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
@@ -231,6 +232,7 @@
                 :data="{
                   type: 'image'
                 }"
+                :disabled="actionType === 'view'"
                 :limit="1"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
@@ -255,13 +257,14 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="15">
-          <ElFormItem label="户口本照片" prop="sex">
+          <ElFormItem label="户口本照片">
             <ElUpload
               :class="[householdPic.length > 0 ? 'upload' : '']"
               action="/api/file/type"
               :data="{
                 type: 'image'
               }"
+              :disabled="actionType === 'view'"
               :limit="1"
               :list-type="'picture-card'"
               accept=".jpg,.jpeg,.png"
@@ -286,12 +289,35 @@
         </ElCol>
       </ElRow>
 
+      <ElFormItem label="其他附件">
+        <ElUpload
+          action="/api/file/type"
+          :data="{
+            type: 'image'
+          }"
+          :disabled="actionType === 'view'"
+          :list-type="'picture-card'"
+          accept=".jpg,.jpeg,.png"
+          :multiple="true"
+          :file-list="otherPic"
+          :headers="headers"
+          :on-success="uploadFileChange4"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile4"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <Icon icon="ant-design:plus-outlined" :size="22" />
+          </template>
+        </ElUpload>
+      </ElFormItem>
+
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" />
       </ElFormItem>
     </ElForm>
 
-    <template #footer>
+    <template #footer v-if="actionType !== 'view'">
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
@@ -365,6 +391,7 @@ const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
 const householdPic = ref<FileItemType[]>([])
+const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 
@@ -395,6 +422,10 @@ watch(
       if (form.value.householdPic) {
         householdPic.value = JSON.parse(form.value.householdPic)
       }
+
+      if (form.value.otherPic) {
+        otherPic.value = JSON.parse(form.value.otherPic)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -420,7 +451,8 @@ const onSubmit = debounce((formEl) => {
       const data: any = {
         ...form.value,
         cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
-        householdPic: JSON.stringify(householdPic.value)
+        householdPic: JSON.stringify(householdPic.value),
+        otherPic: JSON.stringify(otherPic.value)
       }
       emit('submit', data)
     } else {
@@ -448,6 +480,8 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     cardEnd.value = list
   } else if (type === 'householdPic') {
     householdPic.value = list
+  } else if (type === 'other') {
+    otherPic.value = list
   }
 }
 
@@ -461,6 +495,9 @@ const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFi
 const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'householdPic')
 }
+const uploadFileChange4 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'other')
+}
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
@@ -472,6 +509,10 @@ const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
 const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'householdPic')
 }
+const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'other')
+}
+
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {
   return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(

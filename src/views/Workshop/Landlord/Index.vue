@@ -41,6 +41,7 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
+        :show-overflow-tooltip="false"
         @register="register"
       >
         <template #locationType="{ row }">
@@ -51,6 +52,7 @@
         </template>
         <template #action="{ row }">
           <TableEditColumn
+            :view-type="'link'"
             :icons="[
               {
                 icon: '',
@@ -144,7 +146,7 @@ const getLandlordHeadInfo = async () => {
 
 onMounted(() => {
   getVillageTree()
-  // getLandlordHeadInfo()
+  getLandlordHeadInfo()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -172,10 +174,13 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'blurry',
-    label: '户主/户号/联系方式',
+    label: '关键字',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Input',
+      componentProps: {
+        placeholder: '户主姓名/户号/联系方式'
+      }
     },
     table: {
       show: false
@@ -226,6 +231,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'cityCodeText',
     label: '区域名称(市县)',
+    width: 192,
     search: {
       show: false
     }
@@ -233,6 +239,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'townCodeText',
     label: '街道/乡镇',
+    width: 92,
     search: {
       show: false
     }
@@ -241,6 +248,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'villageText',
     label: '行政村',
+    width: 100,
     search: {
       show: false
     }
@@ -248,6 +256,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'virutalVillageText',
     label: '自然村',
+    width: 120,
     search: {
       show: false
     }
@@ -255,6 +264,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'name',
     label: '户主姓名',
+    width: 100,
     search: {
       show: false
     }
@@ -262,6 +272,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'card',
     label: '身份证号',
+    width: 180,
     search: {
       show: false
     }
@@ -269,6 +280,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'phone',
     label: '联系方式',
+    width: 174,
     search: {
       show: false
     }
@@ -276,7 +288,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '户籍册编号',
-    showOverflowTooltip: false,
+    width: 194,
     search: {
       show: false
     }
@@ -284,7 +296,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '户号',
-    showOverflowTooltip: false,
+    width: 120,
     search: {
       show: false
     }
@@ -292,15 +304,15 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '所属阶段',
-    showOverflowTooltip: false,
+    width: 134,
     search: {
       show: false
     }
   },
   {
-    field: 'doorNo',
+    field: 'status',
     label: '填报状态',
-    showOverflowTooltip: false,
+    width: 100,
     search: {
       show: false
     }
@@ -309,6 +321,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'address',
     label: '户籍所在地',
+    width: 195,
     search: {
       show: false
     }
@@ -316,6 +329,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'address',
     label: '所在位置',
+    width: 300,
     search: {
       show: false
     }
@@ -324,6 +338,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'filling',
     label: '填报',
     fixed: 'right',
+    width: 115,
     search: {
       show: false
     },
@@ -338,7 +353,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: '100px',
+    width: 150,
     search: {
       show: false
     },

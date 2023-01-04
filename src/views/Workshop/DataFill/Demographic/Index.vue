@@ -95,13 +95,13 @@ const schema = reactive<CrudSchema[]>([
     type: 'index',
     field: 'index',
     label: '序号',
-    fixed: 'true',
-    width: '60px'
+    fixed: true
   },
   {
     field: 'name',
     label: '姓名',
-    width: '80px',
+    fixed: true,
+    width: 100,
     search: {
       show: false
     }
@@ -109,6 +109,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'sex',
     label: '性别',
+    width: 60,
     search: {
       show: false
     }
@@ -116,6 +117,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'birthday',
     label: '出生年月',
+    width: 120,
     search: {
       show: false
     }
@@ -123,6 +125,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'card',
     label: '身份证号',
+    width: 200,
     search: {
       show: false
     }
@@ -130,6 +133,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'nation',
     label: '民族',
+    width: 80,
     search: {
       show: false
     }
@@ -137,6 +141,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'censusRegister',
     label: '户籍所在地',
+    width: 300,
     search: {
       show: false
     }
@@ -144,6 +149,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'education',
     label: '文化程度',
+    width: 100,
     search: {
       show: false
     }
@@ -151,6 +157,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'marital',
     label: '婚姻状况',
+    width: 100,
     search: {
       show: false
     }
@@ -158,6 +165,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'occupation',
     label: '职业',
+    width: 170,
     search: {
       show: false
     }
@@ -165,6 +173,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'company',
     label: '工作单位',
+    width: 160,
     search: {
       show: false
     }
@@ -172,6 +181,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'insuranceType',
     label: '参保情况',
+    width: 80,
     search: {
       show: false
     }
@@ -180,7 +190,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: '150px',
+    width: 150,
     search: {
       show: false
     },

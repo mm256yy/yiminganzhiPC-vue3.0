@@ -19,8 +19,9 @@
         <ElTableColumn label="穴位" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect v-model="row.name">
-              <ElOption value="1" label="单穴" />
-              <ElOption value="2" label="双穴" />
+              <ElOption :value="1" label="单穴" />
+              <ElOption :value="2" label="双穴" />
+              <ElOption :value="3" label="多穴" />
             </ElSelect>
           </template>
         </ElTableColumn>
@@ -36,12 +37,14 @@
         </ElTableColumn>
         <ElTableColumn label="立坟年份" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElDatePicker v-model="row.unit" type="year" placeholder="Pick a year" />
+            <ElInput v-model="row.unit" placeholder="请输入年份">
+              <template #append>年</template>
+            </ElInput>
           </template>
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="address" align="center" header-align="center">
           <template #default="scope">
-            <ElInput v-model="scope.row.address" />
+            <ElInput v-model="scope.row.address" placeholder="请输入所处位置" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
