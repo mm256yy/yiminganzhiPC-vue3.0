@@ -131,7 +131,8 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         name: 'DataFill',
         component: () => import('@/views/Workshop/DataFill/Index.vue'),
         meta: {
-          title: '数据填报'
+          title: '数据填报',
+          hidden: true
         }
       }
     ]
