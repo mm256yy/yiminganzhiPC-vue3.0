@@ -31,12 +31,12 @@
             prop="name"
             required
           >
-            <ElInput v-model.trim="form.name" />
+            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.name" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="12" v-if="form.type !== MenuTypes.button">
           <ElFormItem label="展示标题" prop="showName" required>
-            <ElInput v-model.trim="form.showName" />
+            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.showName" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -233,12 +233,22 @@ watch(
   }
 )
 
+const validateName = (_rule: any, value: any, callback: any) => {
+  if (!value) {
+    callback(new Error('此项必填'))
+  } else if (value.length < 2 || value.length > 20) {
+    callback(new Error('推荐字数2-20个'))
+  } else {
+    callback()
+  }
+}
+
 // 规则校验
 const rules = reactive<FormRules>({
-  name: [required()],
-  showName: [required()],
+  name: [{ validator: validateName, trigger: 'blur' }],
+  showName: [{ validator: validateName, trigger: 'blur' }],
   path: [required()],
-  componentName: [required()],
+  componentName: [{ required: true, pattern: /^[a-zA-Z_]+$/, message: '支持字母和下划线' }],
   componentCode: [required()],
   permission: [required()],
   icon: [required()],
@@ -250,7 +260,6 @@ const onClose = () => {
   emit('close')
   nextTick(() => {
     formRef.value?.resetFields()
-    form.value = defaultValue
   })
 }
 
@@ -265,7 +274,6 @@ const onSubmit = debounce((formEl) => {
       emit('submit', form.value)
       nextTick(() => {
         formRef.value?.resetFields()
-        form.value = defaultValue
       })
     } else {
       return false
