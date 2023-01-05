@@ -8,12 +8,12 @@ import { GraveDtoType } from './grave-types'
 export const getGraveListApi = (
   query: Partial<GraveDtoType>
 ): Promise<TableResponse<GraveDtoType>> => {
-  return request.get({ url: '/immigrant_grave', params: query })
+  return request.get({ url: '/immigrantGrave', params: query })
 }
 
 /**
  * 保存
  */
 export const saveGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>> => {
-  return request.post({ url: '/immigrant_grave/createAll', data })
+  return request.post({ url: '/immigrantGrave/createAll', data })
 }

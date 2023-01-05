@@ -48,3 +48,15 @@ export const ReportTabs = [
     active: false
   }
 ]
+
+export const FlowTabs = [
+  {
+    id: 1,
+    name: '实物采集'
+  }
+]
+
+export const ReportStatus = {
+  ReportSucceed: 'ReportSucceed',
+  UnReport: 'UnReport'
+}

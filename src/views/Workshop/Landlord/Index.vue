@@ -47,6 +47,17 @@
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template>
+        <template #status="{ row }">
+          <div class="flex items-center">
+            <span
+              :class="[
+                'status',
+                row.status === ReportStatus.UnReport ? 'status-err' : 'status-suc'
+              ]"
+            ></span>
+            {{ row.status === ReportStatus.UnReport ? '未填报' : '已填报' }}</div
+          >
+        </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
@@ -102,10 +113,13 @@ import {
   getLandlordHeadApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import { locationTypes } from './config'
+import { locationTypes, ReportStatusEnums } from './config'
+import { ReportStatus } from '@/views/Workshop/DataFill/config'
+import { useRouter } from 'vue-router'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 
 const appStore = useAppStore()
+const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
@@ -120,11 +134,6 @@ const { register, tableObject, methods } = useTable({
   delListApi: delLandlordByIdApi
 })
 const { getList, setSearchParams } = methods
-
-const headers = ref({
-  'Project-Id': projectId,
-  Authorization: appStore.getToken
-})
 
 tableObject.params = {
   projectId
@@ -207,13 +216,27 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
+        options: ReportStatusEnums
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: '',
+    label: '财产户',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
         options: [
           {
-            label: '已上报',
+            label: '是',
             value: 1
           },
           {
-            label: '未上报',
+            label: '否',
             value: 0
           }
         ]
@@ -238,7 +261,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'townCodeText',
-    label: '街道/乡镇',
+    label: '街道',
     width: 92,
     search: {
       show: false
@@ -294,7 +317,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'id',
     label: '户号',
     width: 120,
     search: {
@@ -322,6 +345,14 @@ const schema = reactive<CrudSchema[]>([
     field: 'address',
     label: '户籍所在地',
     width: 195,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'address',
+    label: '财产户',
+    width: 100,
     search: {
       show: false
     }
@@ -473,6 +504,13 @@ const onPrintDialogClose = () => {
 // 数据填报
 const fillData = (row) => {
   console.log(row, 'row')
+  push({
+    name: 'DataFill',
+    query: {
+      householdId: row.id,
+      doorNo: row.doorNo
+    }
+  })
 }
 
 const onViewRow = (row) => {
@@ -493,5 +531,20 @@ const onViewRow = (row) => {
   color: var(--el-color-primary);
   background: #e9f3ff;
   border-radius: 4px;
+  cursor: pointer;
+}
+
+.status {
+  width: 6px;
+  height: 6px;
+  margin-right: 6px;
+  border-radius: 50%;
+
+  &.status-err {
+    background-color: #ff3939;
+  }
+  &.status-suc {
+    background-color: #0cc029;
+  }
 }
 </style>

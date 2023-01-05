@@ -34,7 +34,7 @@ export const delLandlordByIdApi = (id: number): Promise<void> => {
 /**
  * 查询单个农户信息
  */
-export const getLandlordByIdApi = (id: number): Promise<LandlordDtoType> => {
+export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
 }
 
@@ -50,4 +50,13 @@ export const downLandlordTemplateApi = (name: string): Promise<any> => {
  */
 export const getLandlordHeadApi = (): Promise<any> => {
   return request.get({ url: `/peasantHousehold/head` })
+}
+
+/**
+ * 上报农户信息
+ */
+export const reportLandlordApi = (id) => {
+  return request.post({
+    url: `/peasantHousehold/report/${id}`
+  })
 }

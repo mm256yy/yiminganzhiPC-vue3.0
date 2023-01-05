@@ -52,7 +52,7 @@ import {
   FormRules,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -101,7 +101,6 @@ watch(
         ...val
       }
     } else {
-      formRef.value?.resetFields()
       form.value = defaultValue
     }
     position.latitude = form.value.latitude
@@ -123,6 +122,9 @@ const rules = reactive<FormRules>({
 // 关闭弹窗
 const onClose = () => {
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 定位
@@ -144,6 +146,9 @@ const onSubmit = debounce((formEl) => {
         ...position
       }
       emit('submit', data)
+      nextTick(() => {
+        formRef.value?.resetFields()
+      })
     } else {
       return false
     }

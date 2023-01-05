@@ -166,7 +166,7 @@ import {
   FormRules
 } from 'element-plus'
 import IconSelectFormItem from './IconSelectFormItem.vue'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useMenuStoreWithOut } from '@/store/modules/menu'
@@ -224,7 +224,6 @@ watch(
         ...val
       }
     } else {
-      formRef.value?.resetFields()
       form.value = defaultValue
     }
   },
@@ -249,6 +248,10 @@ const rules = reactive<FormRules>({
 // 关闭弹窗
 const onClose = () => {
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+    form.value = defaultValue
+  })
 }
 
 const onUpdateIcon = (name) => {
@@ -260,8 +263,10 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
       emit('submit', form.value)
-      formRef.value?.resetFields()
-      form.value = defaultValue
+      nextTick(() => {
+        formRef.value?.resetFields()
+        form.value = defaultValue
+      })
     } else {
       return false
     }

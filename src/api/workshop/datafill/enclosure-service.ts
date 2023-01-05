@@ -8,12 +8,21 @@ import { EnclosureDtoType } from './enclosure-types'
 export const getEnclosureListApi = (
   query: Partial<EnclosureDtoType>
 ): Promise<TableResponse<EnclosureDtoType>> => {
-  return request.get({ url: '/immigrant_enclosure', params: query })
+  return request.get({ url: '/immigrant_file', params: query })
 }
 
 /**
- * 保存
+ * 新增
  */
-export const saveEnclosureListApi = (data: any): Promise<TableResponse<EnclosureDtoType>> => {
-  return request.post({ url: '/immigrant_enclosure/createAll', data })
+export const addEnclosureListApi = (data: EnclosureDtoType): Promise<any> => {
+  return request.post({ url: '/immigrant_file/create', data })
+}
+
+/**
+ * 更新
+ */
+export const updateEnclosureListApi = (
+  data: EnclosureDtoType
+): Promise<TableResponse<EnclosureDtoType>> => {
+  return request.post({ url: '/immigrant_file/update', data })
 }

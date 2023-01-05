@@ -9,9 +9,13 @@
     <div class="data-fill-head">
       <div class="head-top">
         <div class="tabs">
-          <div class="tab-item active">实物采集</div>
-          <div class="tab-item">实物采集</div>
-          <div class="tab-item">实物采集</div>
+          <div
+            :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+            v-for="item in FlowTabs"
+            :key="item.id"
+            @click="onTabClick(item)"
+            >{{ item.name }}</div
+          >
         </div>
         <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
       </div>
@@ -23,8 +27,9 @@
             <span class="pl-12px text-size-16px text-[#000]">{{ baseInfo.name }}</span>
             <span class="pl-8px text-size-14px text-[#000]">{{ baseInfo.doorNo }}</span>
           </div>
-          <div :class="{ status: true, success: baseInfo.status === '1' }"
-            ><span class="point"></span>{{ baseInfo.status === '1' ? '已填报' : '未填报' }}</div
+          <div :class="{ status: true, success: baseInfo.status === ReportStatus.ReportSucceed }"
+            ><span class="point"></span
+            >{{ baseInfo.status === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
           >
         </div>
 
@@ -119,8 +124,9 @@ import { ref } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
-import { ReportTabs } from './config'
-import { getLandlordByIdApi } from '@/api/workshop/landlord/service'
+import { ReportTabs, FlowTabs, ReportStatus } from './config'
+import { useRouter } from 'vue-router'
+import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
@@ -130,10 +136,11 @@ import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
 
+const { currentRoute } = useRouter()
 const baseInfo = ref<any>({})
+const tabCurrentId = ref<number>(1)
 const reportTabCurrentId = ref<number>(1)
-const doorNo = '006014084' // 农户号
-const householdId = 6607 // 农户ID
+const { doorNo, householdId } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)
 
 const EscalationIcon = useIcon({
@@ -142,6 +149,7 @@ const EscalationIcon = useIcon({
 
 // 农户详情
 const getLandlordInfo = () => {
+  if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = res
   })
@@ -149,7 +157,17 @@ const getLandlordInfo = () => {
 
 getLandlordInfo()
 
+const onTabClick = (tabItem) => {
+  if (tabCurrentId.value === tabItem.id) {
+    return
+  }
+  tabCurrentId.value = tabItem.id
+}
+
 const onReportTabClick = (tabItem) => {
+  if (reportTabCurrentId.value === tabItem.id) {
+    return
+  }
   reportTabCurrentId.value = tabItem.id
 }
 
@@ -158,8 +176,9 @@ const onClose = () => {
 }
 
 // 数据上报
-const onReportData = () => {
-  console.log(9999)
+const onReportData = async () => {
+  const result = await reportLandlordApi(householdId)
+  console.log(result, 'report res')
 }
 </script>
 

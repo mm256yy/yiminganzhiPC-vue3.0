@@ -12,7 +12,7 @@
         >
       </ElSpace>
     </div>
-    <UploadItem title="其他附件上传" @change="fileChange" />
+    <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
   </div>
 </template>
 
@@ -23,7 +23,8 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { ElMessage, ElSpace, ElButton } from 'element-plus'
 import {
   getEnclosureListApi,
-  saveEnclosureListApi
+  updateEnclosureListApi,
+  addEnclosureListApi
 } from '@/api/workshop/datafill/enclosure-service'
 // import { EnclosureDtoType } from '@/api/workshop/datafill/enclosure-types'
 
@@ -38,6 +39,7 @@ interface PropsType {
 
 const props = defineProps<PropsType>()
 const otherPic = ref<FileItemType[]>([])
+const id = ref<number>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 const getList = () => {
@@ -47,6 +49,10 @@ const getList = () => {
   }
   getEnclosureListApi(params).then((res) => {
     console.log(res, 'res')
+    if (res && res.content && res.content.length) {
+      id.value = res.content[0].id
+      otherPic.value = JSON.parse(res.content[0].otherPic)
+    }
   })
 }
 
@@ -57,11 +63,23 @@ const fileChange = (list: FileItemType[]) => {
 }
 
 const onSave = () => {
-  saveEnclosureListApi({
-    otherPic: JSON.stringify(otherPic.value)
-  }).then((res) => {
-    console.log(res, 'res')
-    ElMessage.success('操作成功！')
-  })
+  if (id.value) {
+    updateEnclosureListApi({
+      id: id.value,
+      doorNo: props.doorNo,
+      householdId: props.householdId,
+      otherPic: JSON.stringify(otherPic.value)
+    }).then(() => {
+      ElMessage.success('操作成功！')
+    })
+  } else {
+    addEnclosureListApi({
+      doorNo: props.doorNo,
+      householdId: props.householdId,
+      otherPic: JSON.stringify(otherPic.value)
+    }).then(() => {
+      ElMessage.success('操作成功！')
+    })
+  }
 }
 </script>

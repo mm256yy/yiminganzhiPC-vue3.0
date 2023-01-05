@@ -125,7 +125,7 @@ import {
   ElTreeSelect,
   ElDivider
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -175,7 +175,6 @@ const position: {
 watch(
   () => props.row,
   (val) => {
-    formRef.value?.resetFields()
     if (val) {
       // 处理行政区划
       form.value = {
@@ -209,6 +208,9 @@ const onClose = () => {
   position.longitude = 0
   position.address = ''
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 定位
@@ -236,9 +238,13 @@ const onSubmit = debounce((formEl) => {
       }
       delete data.parentCode
       emit('submit', data)
-      position.latitude = 0
-      position.longitude = 0
-      position.address = ''
+
+      nextTick(() => {
+        formRef.value?.resetFields()
+        position.latitude = 0
+        position.longitude = 0
+        position.address = ''
+      })
     } else {
       return false
     }

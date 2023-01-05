@@ -16,12 +16,12 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="穴位" prop="name" align="center" header-align="center">
+        <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect v-model="row.name">
-              <ElOption :value="1" label="单穴" />
-              <ElOption :value="2" label="双穴" />
-              <ElOption :value="3" label="多穴" />
+            <ElSelect v-model="row.graveType">
+              <ElOption value="1" label="单穴" />
+              <ElOption value="2" label="双穴" />
+              <ElOption value="3" label="多穴" />
             </ElSelect>
           </template>
         </ElTableColumn>
@@ -30,26 +30,26 @@
             <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="材料" prop="size" align="center" header-align="center">
+        <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入材料" v-model="row.size" />
+            <ElInput placeholder="请输入材料" v-model="row.materials" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="立坟年份" prop="unit" align="center" header-align="center">
+        <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput v-model="row.unit" placeholder="请输入年份">
+            <ElInput v-model="row.graveYear" placeholder="请输入年份">
               <template #append>年</template>
             </ElInput>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所处位置" prop="address" align="center" header-align="center">
-          <template #default="scope">
-            <ElInput v-model="scope.row.address" placeholder="请输入所处位置" />
+        <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInput v-model="row.gravePosition" placeholder="请输入所处位置" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
-          <template #default="scope">
-            <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+          <template #default="{ row }">
+            <ElInput placeholder="请输入内容" v-model="row.remark" />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -62,7 +62,6 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref } from 'vue'
 import {
   ElButton,
-  ElDatePicker,
   ElInputNumber,
   ElInput,
   ElSpace,
@@ -87,10 +86,10 @@ const tableData = ref<any[]>([])
 const defaultRow = {
   doorNo: props.doorNo,
   householdId: props.householdId,
-  name: '',
-  usageType: '',
-  size: '',
-  unit: '',
+  graveType: '',
+  materials: '',
+  graveYear: '',
+  gravePosition: '',
   number: 0,
   remark: '',
   isAdd: true
@@ -104,20 +103,6 @@ const getList = () => {
   getGraveListApi(params).then((res) => {
     console.log(res.content, 'res')
     tableData.value = res.content
-    tableData.value = [
-      {
-        id: 0,
-        doorNo: 'string',
-        householdId: 0,
-        surveyId: 'string',
-        name: '',
-        usageType: '',
-        size: '',
-        unit: '',
-        number: 0,
-        remark: ''
-      }
-    ]
   })
 }
 

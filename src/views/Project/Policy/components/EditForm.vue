@@ -141,7 +141,7 @@ import {
 } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { validOptions, policyTypes } from '../config'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -186,7 +186,6 @@ watch(
   (val) => {
     if (val) {
       form.value = {
-        ...form.value,
         ...val
       }
     } else {
@@ -244,8 +243,10 @@ const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
 
 // 关闭弹窗
 const onClose = () => {
-  formRef.value?.resetFields()
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 提交表单
@@ -254,6 +255,9 @@ const onSubmit = debounce((formEl) => {
     if (valid) {
       const { fileList, ...data } = form.value
       emit('submit', data)
+      nextTick(() => {
+        formRef.value?.resetFields()
+      })
     } else {
       return false
     }

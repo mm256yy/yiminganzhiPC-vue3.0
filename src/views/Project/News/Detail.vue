@@ -273,7 +273,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       .map((fileItem) => {
         return {
           name: fileItem.name,
-          url: fileItem.url || (fileItem.response as any).data
+          url: (fileItem.response as any)?.data || fileItem.url
         }
       })
   }

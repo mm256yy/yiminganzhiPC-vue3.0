@@ -59,7 +59,7 @@ import {
   FormInstance,
   FormRules
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
@@ -91,7 +91,6 @@ watch(
   (val) => {
     if (val) {
       form.value = {
-        ...form.value,
         ...val
       }
     } else {
@@ -118,8 +117,10 @@ const rules = reactive<FormRules>({
 
 // 关闭弹窗
 const onClose = () => {
-  formRef.value?.resetFields()
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 提交表单
@@ -127,6 +128,9 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
       emit('submit', form.value)
+      nextTick(() => {
+        formRef.value?.resetFields()
+      })
     } else {
       return false
     }

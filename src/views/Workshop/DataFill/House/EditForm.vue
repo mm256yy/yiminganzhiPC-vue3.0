@@ -239,17 +239,7 @@
             />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="计算公式" prop="formula">
-            <ElInput
-              clearable
-              placeholder="请输入计算公式"
-              type="text"
-              class="!w-full"
-              v-model="form.formula"
-            />
-          </ElFormItem>
-        </ElCol>
+        <ElCol :span="8" />
       </ElRow>
 
       <ElDivider border-style="dashed" />
@@ -376,7 +366,7 @@ import {
   ElCol,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
@@ -444,7 +434,6 @@ const headers = {
 watch(
   () => props.row,
   (val) => {
-    formRef.value?.resetFields()
     if (val) {
       // 处理行政区划
       form.value = {
@@ -486,6 +475,9 @@ const onClose = () => {
   position.longitude = 0
   position.address = ''
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 定位
@@ -514,6 +506,9 @@ const onSubmit = debounce((formEl) => {
       position.latitude = 0
       position.longitude = 0
       position.address = ''
+      nextTick(() => {
+        formRef.value?.resetFields()
+      })
     } else {
       return false
     }
@@ -529,7 +524,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       .map((fileItem) => {
         return {
           name: fileItem.name,
-          url: fileItem.url || (fileItem.response as any).data
+          url: (fileItem.response as any)?.data || fileItem.url
         }
       })
   }

@@ -1,5 +1,6 @@
 export interface EnclosureDtoType {
-  populationPic: string
-  housePic: string
+  doorNo: string
+  householdId: number
   otherPic: string
+  id?: number
 }

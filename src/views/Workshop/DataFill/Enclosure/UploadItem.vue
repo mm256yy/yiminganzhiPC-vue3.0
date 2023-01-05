@@ -15,29 +15,28 @@
         :data="{
           type: 'image'
         }"
-        :limit="1"
         accept=".jpg,.jpeg,.png,.svg"
-        :multiple="false"
+        :multiple="true"
         :file-list="fileListData"
         :list-type="'picture-card'"
         :headers="headers"
         :on-success="uploadFileChange"
-        :before-remove="beforeRemove"
+        :before-remove="() => false"
       >
         <template #trigger>
-          <Icon icon="ant-design:plus-outlined" size="22" />
+          <Icon icon="ant-design:plus-outlined" :size="22" />
         </template>
 
         <template #file="{ file }">
-          <div>
+          <div class="relative">
             <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-            <ElInput />
+            <ElInput class="mt-8px" v-model="file.name" placeholder="请更换名称" />
             <span class="el-upload-list__item-actions">
               <span class="el-upload-list__item-preview" @click="imgPreview(file)">
                 <Icon icon="bi:zoom-in" />
               </span>
 
-              <span class="el-upload-list__item-delete">
+              <span class="el-upload-list__item-delete" @click="removeFile(file)">
                 <Icon icon="material-symbols:delete-outline" />
               </span>
             </span>
@@ -53,18 +52,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElUpload, ElMessageBox, ElDialog, ElInput } from 'element-plus'
+import { ref, watch, nextTick } from 'vue'
+import { ElUpload, ElDialog, ElInput } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
-
-interface PropsType {
-  title: string
-}
 
 interface FileItemType {
   name: string
   url: string
+}
+
+interface PropsType {
+  title: string
+  fileList: FileItemType[]
 }
 
 const appStore = useAppStore()
@@ -74,6 +74,14 @@ const dialogVisible = ref<boolean>(false)
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['change'])
+
+watch(
+  () => props.fileList,
+  (val) => {
+    fileListData.value = val
+  },
+  { immediate: true, deep: true }
+)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -89,11 +97,14 @@ const handleFileList = (fileList: UploadFiles) => {
       .map((fileItem) => {
         return {
           name: fileItem.name,
-          url: fileItem.url || (fileItem.response as any).data
+          url: (fileItem.response as any)?.data || fileItem.url
         }
       })
   }
-  emit('change', list)
+  fileListData.value = list
+  nextTick(() => {
+    emit('change', list)
+  })
 }
 
 // 文件上传
@@ -101,17 +112,9 @@ const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFil
   handleFileList(fileList)
 }
 
-// 移除之前
-const beforeRemove = (uploadFile: UploadFile) => {
-  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
-    () => true,
-    () => false
-  )
-}
-
 // 文件移除
-const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList)
+const removeFile = (file: UploadFile) => {
+  fileListData.value = fileListData.value.filter((item) => item.url !== file.url)
 }
 
 const imgPreview = (uploadFile: UploadFile) => {
@@ -153,9 +156,15 @@ const imgPreview = (uploadFile: UploadFile) => {
       }
     }
   }
+}
+</style>
 
-  .upload-cont {
-    padding: 14px 16px;
+<style lang="less">
+.upload-cont {
+  padding: 14px 16px;
+  .el-upload-list__item {
+    margin-bottom: 40px;
+    overflow: visible !important;
   }
 }
 </style>

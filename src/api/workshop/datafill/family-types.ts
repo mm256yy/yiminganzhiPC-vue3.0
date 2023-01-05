@@ -9,3 +9,11 @@ export interface FamilyIncomeDtoType {
   remark: string
   [key: string]: any
 }
+
+export interface FamilyIncomeOptionType {
+  id: number
+  sort: string
+  type: string
+  name: string
+  projectId: number
+}

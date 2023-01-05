@@ -342,7 +342,7 @@ import {
   ElCol,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
@@ -403,7 +403,6 @@ const headers = {
 watch(
   () => props.row,
   (val) => {
-    formRef.value?.resetFields()
     if (val) {
       // 处理行政区划
       form.value = {
@@ -442,6 +441,9 @@ const rules = reactive<FormRules>({})
 // 关闭弹窗
 const onClose = () => {
   emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+  })
 }
 
 // 提交表单
@@ -455,6 +457,9 @@ const onSubmit = debounce((formEl) => {
         otherPic: JSON.stringify(otherPic.value)
       }
       emit('submit', data)
+      nextTick(() => {
+        formRef.value?.resetFields()
+      })
     } else {
       return false
     }
@@ -470,7 +475,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       .map((fileItem) => {
         return {
           name: fileItem.name,
-          url: fileItem.url || (fileItem.response as any).data
+          url: (fileItem.response as any)?.data || fileItem.url
         }
       })
   }

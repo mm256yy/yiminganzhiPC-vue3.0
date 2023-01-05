@@ -61,8 +61,10 @@ import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn, ElMessage } from 'e
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getFamilyIncomeListApi,
-  saveFamilyIncomeListApi
+  saveFamilyIncomeListApi,
+  getFamilyIncomeOptionApi
 } from '@/api/workshop/datafill/family-service'
+import { useAppStore } from '@/store/modules/app'
 import { FamilyIncomeDtoType } from '@/api/workshop/datafill/family-types'
 
 interface SpanMethodProps {
@@ -77,86 +79,141 @@ interface PropsType {
   doorNo: string
 }
 
+interface TotalItemType {
+  type: string
+  subtotal?: boolean
+  total?: boolean
+}
+
 const props = defineProps<PropsType>()
+const appStore = useAppStore()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
-const types = ref<string[]>(['1', '2'])
+const cateTypes = ref<string[]>([])
 
-const getList = () => {
+const getOption = async () => {
+  const result = await getFamilyIncomeOptionApi({
+    projectId: appStore.getCurrentProjectId,
+    size: 1000
+  })
+  console.log(result, 'optionList')
+  return result.content || []
+}
+
+const addSubtotal = (arr?: FamilyIncomeDtoType[]) => {
+  if (!arr || !arr.length) return []
+  // 拿到所有的类型
+  const types: string[] = []
+  arr.forEach((item) => {
+    if (types.indexOf(item.type) === -1) {
+      types.push(item.type)
+    }
+  })
+
+  cateTypes.value = types
+
+  let mutArray: Array<FamilyIncomeDtoType | TotalItemType>[] = []
+  // 根据type生成多个数组
+  types.forEach((typeItem, typeIndex) => {
+    arr.forEach((arrItem) => {
+      if (arrItem.type === typeItem) {
+        mutArray[typeIndex] = mutArray[typeIndex] || []
+        mutArray[typeIndex].push(arrItem)
+      }
+    })
+  })
+
+  // 在分类数组中添加上 小计 和 总计
+  mutArray.forEach((item, index) => {
+    // 中间添加上小计
+    if (index !== mutArray.length - 1) {
+      const subItem: TotalItemType = {
+        type: `subtotal-${types[index]}`,
+        subtotal: true,
+        total: false
+      }
+      item.push(subItem)
+    } else {
+      // 末尾添加上总计
+      const totalItem: TotalItemType = {
+        type: `total-${types[index]}`,
+        subtotal: false,
+        total: true
+      }
+      item.push(totalItem)
+    }
+  })
+
+  return mutArray.flat(Infinity) || []
+}
+
+const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
     householdId: props.householdId,
     size: 100
   }
-  getFamilyIncomeListApi(params).then((res) => {
-    console.log(res.content, 'FamilyIncomeList res')
-    // tableData.value = res.content
-    tableData.value = [
-      {
-        id: 0,
-        doorNo: '',
-        householdId: 0,
-        sort: '',
-        type: '1',
-        name: '测试1',
+  const res = await getFamilyIncomeListApi(params)
+  console.log(res.content, 'FamilyIncomeList res')
+  const arr = [
+    {
+      id: 0,
+      doorNo: '',
+      householdId: 0,
+      sort: '',
+      type: '1',
+      name: '测试1',
+      amount: 0,
+      remark: ''
+    },
+    {
+      id: 0,
+      doorNo: '',
+      householdId: 0,
+      sort: '',
+      type: '1',
+      name: '测试2',
+      amount: 0,
+      remark: ''
+    },
+    {
+      id: 0,
+      doorNo: '',
+      householdId: 0,
+      sort: '',
+      type: '1',
+      name: '测试3',
+      amount: 0,
+      remark: ''
+    },
+    {
+      id: 0,
+      doorNo: '',
+      householdId: 0,
+      sort: '',
+      type: '2',
+      name: '测试1111',
+      amount: 0,
+      remark: ''
+    }
+  ]
+  if (res && res.content && res.content.length) {
+    tableData.value = addSubtotal(res.content)
+  } else {
+    const defaultList = await getOption()
+    const baseList = defaultList.map((item) => {
+      const newItem: FamilyIncomeDtoType = {
+        ...item,
+        doorNo: props.doorNo,
+        householdId: props.householdId,
         amount: 0,
         remark: ''
-      },
-      {
-        id: 0,
-        doorNo: '',
-        householdId: 0,
-        sort: '',
-        type: '1',
-        name: '测试2',
-        amount: 0,
-        remark: ''
-      },
-      {
-        id: 0,
-        doorNo: '',
-        householdId: 0,
-        sort: '',
-        type: '1',
-        name: '测试3',
-        amount: 0,
-        remark: ''
-      },
-      {
-        type: 'subtotal-1',
-        subtotal: true
-      },
-      {
-        id: 0,
-        doorNo: '',
-        householdId: 0,
-        sort: '',
-        type: '2',
-        name: '测试1111',
-        amount: 0,
-        remark: ''
-      },
-      {
-        id: 0,
-        doorNo: '',
-        householdId: 0,
-        sort: '',
-        type: '2',
-        name: '测试2222',
-        amount: 0,
-        remark: ''
-      },
-      {
-        type: 'subtotal-2',
-        subtotal: true
-      },
-      {
-        type: 'total',
-        total: true
       }
-    ]
-  })
+      return newItem
+    })
+    tableData.value = addSubtotal(arr || baseList)
+  }
 }
 
 getList()
@@ -179,7 +236,7 @@ const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
 
 // 小计
 const getSubtotal = (type: string) => {
-  for (let typeItem of types.value) {
+  for (let typeItem of cateTypes.value) {
     if (`subtotal-${typeItem}` === type) {
       const tableList = tableData.value.filter((item) => item.type === typeItem)
       const result = tableList.reduce((pre, current) => {

@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { FamilyIncomeDtoType } from './family-types'
+import { FamilyIncomeDtoType, FamilyIncomeOptionType } from './family-types'
 
 /**
  * 查询家庭收入信息列表
@@ -16,4 +16,13 @@ export const getFamilyIncomeListApi = (
  */
 export const saveFamilyIncomeListApi = (data: any): Promise<TableResponse<FamilyIncomeDtoType>> => {
   return request.post({ url: '/immigrant_income/createAll', data })
+}
+
+/**
+ * 获取家庭收入配置
+ */
+export const getFamilyIncomeOptionApi = (
+  params
+): Promise<TableResponse<FamilyIncomeOptionType>> => {
+  return request.get({ url: '/immigrant_income_config', params })
 }

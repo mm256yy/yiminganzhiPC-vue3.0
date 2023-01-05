@@ -2,12 +2,11 @@ export interface GraveDtoType {
   id: number
   doorNo: string
   householdId: number
-  surveyId: number
-  name: string
-  usageType: string
-  size: string
-  unit: string
+  graveType: string
   number: number
+  materials: string
+  graveYear: string
+  gravePosition: string
   remark: string
   [key: string]: any
 }
