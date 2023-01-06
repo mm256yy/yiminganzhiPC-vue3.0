@@ -18,18 +18,6 @@ export const locationTypes = [
   }
 ]
 
-// 性别
-export const sexEnmus = [
-  {
-    label: '男',
-    value: 1
-  },
-  {
-    label: '女',
-    value: 2
-  }
-]
-
 // yes or no
 export const yesAndNoEnums = [
   {

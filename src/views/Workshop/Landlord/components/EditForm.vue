@@ -40,7 +40,7 @@
       <ElFormItem label="性别" prop="sex">
         <ElSelect clearable v-model="form.sex">
           <ElOption
-            v-for="item in sexEnmus"
+            v-for="item in dictObj[292]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -96,7 +96,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          />@/api/workshop/landlord/types
+          />
         </ElSelect>
       </ElFormItem>
 
@@ -125,13 +125,14 @@ import {
   ElTreeSelect,
   ElDivider
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
-import { locationTypes, sexEnmus, yesAndNoEnums } from '../config'
+import { locationTypes, yesAndNoEnums } from '../config'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -143,11 +144,14 @@ interface PropsType {
   row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
+
+const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
 
+const dictObj = computed(() => dictStore.getDictObj)
 const treeSelectDefaultProps = {
   value: 'code',
   label: 'name'

@@ -30,7 +30,13 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="房产所有权证编号" prop="propertyNo">
-            <ElInput clearable placeholder="请输入编号" type="text" v-model="form.propertyNo" />
+            <ElInput
+              clearable
+              filterable
+              placeholder="请输入编号"
+              type="text"
+              v-model="form.propertyNo"
+            />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -38,9 +44,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="房屋用途" prop="usageType">
-            <ElSelect class="!w-full" clearable v-model="form.usageType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.usageType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[265]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -50,12 +56,12 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="层高" prop="storeyHeight">
-            <ElInput v-model="form.storeyHeight" placeholder="请输入层高" />
+            <ElInput type="number" v-model="form.storeyHeight" placeholder="请输入层高" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="层数" prop="storeyNumber">
-            <ElInput v-model="form.storeyNumber" placeholder="请输入层数" />
+            <ElInput type="number" v-model="form.storeyNumber" placeholder="请输入层数" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -63,9 +69,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="房屋产别" prop="propertyType">
-            <ElSelect class="!w-full" clearable v-model="form.propertyType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.propertyType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[284]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -75,9 +81,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="房屋类别" prop="houseType">
-            <ElSelect class="!w-full" clearable v-model="form.houseType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.houseType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[266]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -89,8 +95,9 @@
           <ElFormItem label="房屋高程" prop="houseHeight">
             <ElInput
               clearable
+              filterable
               placeholder="请输入房屋高程"
-              type="text"
+              type="number"
               class="!w-full"
               v-model="form.houseHeight"
             />
@@ -103,9 +110,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="结构类型" prop="constructionType">
-            <ElSelect class="!w-full" clearable v-model="form.constructionType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.constructionType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[252]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -115,9 +122,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="屋面形式" prop="roofType">
-            <ElSelect class="!w-full" clearable v-model="form.roofType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.roofType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[246]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -127,9 +134,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="屋面材料" prop="roofMaterialsType">
-            <ElSelect class="!w-full" clearable v-model="form.roofMaterialsType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.roofMaterialsType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[309]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -142,9 +149,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="外墙" prop="outerWallType">
-            <ElSelect class="!w-full" clearable v-model="form.outerWallType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.outerWallType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[280]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -154,9 +161,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="内墙" prop="interiorWallType">
-            <ElSelect class="!w-full" clearable v-model="form.interiorWallType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.interiorWallType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[257]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -166,9 +173,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="地面" prop="groundType">
-            <ElSelect class="!w-full" clearable v-model="form.groundType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.groundType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[320]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -181,9 +188,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="门窗" prop="doorsWindowsType">
-            <ElSelect class="!w-full" clearable v-model="form.doorsWindowsType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.doorsWindowsType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[333]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -193,9 +200,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="水电" prop="waterElectricityType">
-            <ElSelect class="!w-full" clearable v-model="form.waterElectricityType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.waterElectricityType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[241]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -218,9 +225,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="土地性质" prop="landType">
-            <ElSelect class="!w-full" clearable v-model="form.landType">
+            <ElSelect class="!w-full" clearable filterable v-model="form.landType">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[222]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -232,8 +239,9 @@
           <ElFormItem label="建筑面积" prop="landArea">
             <ElInput
               clearable
+              filterable
               placeholder="请输入建筑面积"
-              type="text"
+              type="number"
               class="!w-full"
               v-model="form.landArea"
             />
@@ -327,7 +335,14 @@
           :on-preview="imgPreview"
         >
           <template #trigger>
-            <Icon icon="ant-design:plus-outlined" :size="22" />
+            <div class="relative w-148px h-148px">
+              <div class="flex items-center justify-center w-148px h-148px">
+                <Icon icon="ant-design:plus-outlined" :size="22" />
+              </div>
+              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
+                >点击上传附件</div
+              >
+            </div>
           </template>
         </ElUpload>
       </ElFormItem>
@@ -358,7 +373,6 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage,
   ElUpload,
   ElDatePicker,
   ElDivider,
@@ -366,13 +380,14 @@ import {
   ElCol,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -395,21 +410,37 @@ const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 
-const treeSelectDefaultProps = {
-  value: 'code',
-  label: 'name'
-}
-
 const defaultValue: Omit<HouseDtoType, 'id'> = {
-  address: '',
-  doorNo: '',
-  latitude: 0,
-  longitude: 0,
-  name: '',
-  parentCode: [],
-  locationType: 'SubmergedArea'
+  houseNo: '',
+  propertyType: '',
+  usageType: '',
+  houseType: '',
+  constructionType: '',
+  storeyNumber: '',
+  completedTime: '',
+  propertyNo: '',
+  landNo: '',
+  landType: '',
+  landArea: '',
+  storeyHeight: '',
+  houseHeight: '',
+  outerWallType: '',
+  interiorWallType: '',
+  groundType: '',
+  roofType: '',
+  roofMaterialsType: '',
+  doorsWindowsType: '',
+  waterElectricityType: '',
+  formula: '',
+  longitude: '',
+  latitude: '',
+  housePic: '',
+  remark: ''
 }
 
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 const form = ref<Omit<HouseDtoType, 'id'>>(defaultValue)
 const position: {
   latitude: number
@@ -491,10 +522,6 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      if (!position.latitude || !position.longitude) {
-        ElMessage.error('请选择位置')
-        return
-      }
       const data: any = {
         ...form.value,
         ...position,

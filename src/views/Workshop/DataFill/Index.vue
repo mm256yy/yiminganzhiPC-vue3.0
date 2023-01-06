@@ -25,42 +25,7 @@
         <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
       </div>
 
-      <div class="user-info">
-        <div class="base">
-          <div class="user">
-            <Icon icon="mdi:user-circle" color="#3E73EC" />
-            <span class="pl-12px text-size-16px text-[#000]">{{ baseInfo.name }}</span>
-            <span class="pl-8px text-size-14px text-[#000]">{{ baseInfo.doorNo }}</span>
-          </div>
-          <div :class="{ status: true, success: baseInfo.status === ReportStatus.ReportSucceed }"
-            ><span class="point"></span
-            >{{ baseInfo.status === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
-          >
-        </div>
-
-        <div class="other">
-          <div class="info-item">
-            <div class="tit">行政村名称：</div>
-            <div class="txt">{{ baseInfo.villageText || '-' }}</div>
-          </div>
-          <div class="info-item">
-            <div class="tit">自然村名称：</div>
-            <div class="txt">{{ baseInfo.virutalVillageText || '-' }}</div>
-          </div>
-          <div class="info-item">
-            <div class="tit">所在位置：</div>
-            <div class="txt">{{ baseInfo.address || '-' }}</div>
-          </div>
-          <div class="info-item">
-            <div class="tit">联系电话：</div>
-            <div class="txt">{{ baseInfo.phone || '-' }}</div>
-          </div>
-          <div class="info-item">
-            <div class="tit">家庭人数：</div>
-            <div class="txt">{{ baseInfo.familyNum || '-' }}</div>
-          </div>
-        </div>
-      </div>
+      <UserInfo :baseInfo="baseInfo" />
 
       <div class="report-tabs">
         <div
@@ -75,18 +40,38 @@
       </div>
     </div>
     <div class="data-fill-body">
-      <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === 1" />
-      <House :doorNo="doorNo" v-else-if="reportTabCurrentId === 2" />
-      <Accessory :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 3" />
-      <Fruitwood :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 4" />
+      <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
+      <House
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[1]"
+      />
+      <Accessory
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[2]"
+      />
+      <Fruitwood
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[3]"
+      />
       <FamilyIncome
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === 5"
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
       />
-      <div v-else-if="reportTabCurrentId === 6">安置意愿</div>
-      <Grave :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 7" />
-      <Enclosure :doorNo="doorNo" :householdId="householdId" v-else-if="reportTabCurrentId === 8" />
+      <div v-else-if="reportTabCurrentId === ReportTabIds[5]">安置意愿</div>
+      <Grave
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[6]"
+      />
+      <Enclosure
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[7]"
+      />
     </div>
 
     <ElDialog
@@ -129,7 +114,7 @@ import { ref } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
-import { ReportTabs, FlowTabs, ReportStatus } from './config'
+import { ReportTabs, FlowTabs, ReportTabIds } from './config'
 import { useRouter } from 'vue-router'
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 
@@ -140,11 +125,12 @@ import Fruitwood from './Fruitwood/Index.vue'
 import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
+import UserInfo from './components/UserInfo.vue'
 
 const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabCurrentId = ref<number>(1)
-const reportTabCurrentId = ref<number>(1)
+const reportTabCurrentId = ref<number>(ReportTabIds[0])
 const { doorNo, householdId } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)
 
@@ -223,74 +209,6 @@ const onBack = () => {
       &.active {
         color: #fff;
         background-color: var(--el-color-primary);
-      }
-    }
-  }
-}
-
-.user-info {
-  min-height: 88px;
-  margin-top: 14px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  border: 1px solid #e8eaf0;
-
-  .base {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 40px;
-    padding: 0 16px;
-    border-bottom: 2px dashed #dcdfe6;
-    .user {
-      display: flex;
-      align-items: center;
-    }
-    .status {
-      display: flex;
-      align-items: center;
-      padding: 0 13px 0 10px;
-      height: 24px;
-      font-size: 12px;
-      color: #ff2d2d;
-      background: #ffffff;
-      border-radius: 14px;
-      border: 1px solid #ff5d5d;
-
-      .point {
-        width: 6px;
-        height: 6px;
-        margin-right: 5px;
-        border-radius: 50%;
-        background: #ff6767;
-      }
-
-      &.success {
-        color: #30a952;
-        border: 1px solid #30a952;
-
-        .point {
-          background: #30a952;
-        }
-      }
-    }
-  }
-
-  .other {
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    height: 48px;
-
-    .info-item {
-      margin-right: 40px;
-      display: flex;
-      align-items: center;
-      font-size: 14px;
-      line-height: 28px;
-      color: #000;
-      .txt {
-        font-weight: 500;
       }
     }
   }

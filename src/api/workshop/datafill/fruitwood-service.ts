@@ -1,12 +1,12 @@
 import request from '@/config/axios'
-import { FruitwoodDtoType } from './fruitwood-types'
+import { FruitwoodDtoType, FruitwoodParamsType } from './fruitwood-types'
 
 /**
  * 查询果木信息列表
  */
 
 export const getFruitwoodListApi = (
-  query: Partial<FruitwoodDtoType>
+  query: Partial<FruitwoodParamsType>
 ): Promise<TableResponse<FruitwoodDtoType>> => {
   return request.get({ url: '/immigrant_tree', params: query })
 }

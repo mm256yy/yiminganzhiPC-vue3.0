@@ -1,7 +1,15 @@
 <template>
-  <div class="p-16px">
-    <div class="flex items-center justify-between pb-12px">
-      <div> </div>
+  <div class="table-wrap !py-12px !mt-0px">
+    <div class="flex items-center justify-between pb-14px">
+      <div class="table-header-left">
+        <div class="icon">
+          <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
+        </div>
+        <div class="desc">
+          上传说明：请将上传的图片进行文字命名，图片为
+          <span class="unit">jpg、png、svg</span> 格式
+        </div>
+      </div>
       <ElSpace>
         <ElButton
           :icon="saveIcon"
@@ -33,7 +41,7 @@ interface FileItemType {
   url: string
 }
 interface PropsType {
-  householdId: number
+  householdId: string
   doorNo: string
 }
 
@@ -66,19 +74,32 @@ const onSave = () => {
     updateEnclosureListApi({
       id: id.value,
       doorNo: props.doorNo,
-      householdId: props.householdId,
+      householdId: +props.householdId,
       otherPic: JSON.stringify(otherPic.value)
     }).then(() => {
       ElMessage.success('操作成功！')
+      getList()
     })
   } else {
     addEnclosureListApi({
       doorNo: props.doorNo,
-      householdId: props.householdId,
+      householdId: +props.householdId,
       otherPic: JSON.stringify(otherPic.value)
     }).then(() => {
       ElMessage.success('操作成功！')
+      getList()
     })
   }
 }
 </script>
+
+<style lang="less" scoped>
+.desc {
+  padding-left: 10px;
+  font-size: 12px;
+  color: #000000;
+  .unit {
+    color: var(--el-color-primary);
+  }
+}
+</style>

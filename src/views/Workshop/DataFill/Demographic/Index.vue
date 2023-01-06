@@ -234,12 +234,14 @@ const onFormPupClose = () => {
 const onSubmit = async (data: DemographicDtoType) => {
   if (actionType.value === 'add') {
     await addDemographicApi({
-      ...data
+      ...data,
+      doorNo: props.doorNo
     })
   } else {
     await updateDemographicApi({
       ...data,
-      id: tableObject.currentRow?.id as number
+      id: tableObject.currentRow?.id as number,
+      doorNo: props.doorNo
     })
   }
   ElMessage.success('操作成功！')

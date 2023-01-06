@@ -11,3 +11,9 @@ export interface FruitwoodDtoType {
   remark: string
   [key: string]: any
 }
+
+export interface FruitwoodParamsType {
+  doorNo: string
+  householdId: number
+  size: number
+}

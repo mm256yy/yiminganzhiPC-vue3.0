@@ -26,9 +26,16 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请输入品种名称" v-if="row.isAdd" v-model="row.name">
+            <ElSelect
+              clearable
+              filterable
+              allow-create
+              placeholder="请输入品种名称"
+              v-if="row.isAdd"
+              v-model="row.name"
+            >
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[250]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -47,9 +54,15 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择用途" v-if="row.isAdd" v-model="row.usageType">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择用途"
+              v-if="row.isAdd"
+              v-model="row.usageType"
+            >
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[325]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -62,9 +75,15 @@
         </ElTableColumn>
         <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择规格" v-if="row.isAdd" v-model="row.size">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择规格"
+              v-if="row.isAdd"
+              v-model="row.size"
+            >
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[269]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -77,9 +96,15 @@
         </ElTableColumn>
         <ElTableColumn label="单位" :width="180" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择单位" v-if="row.isAdd" v-model="row.unit">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择单位"
+              v-if="row.isAdd"
+              v-model="row.unit"
+            >
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[264]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -107,7 +132,7 @@
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   ElButton,
   ElInputNumber,
@@ -124,9 +149,10 @@ import {
   getFruitwoodListApi,
   saveFruitwoodListApi
 } from '@/api/workshop/datafill/fruitwood-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
-  householdId: number
+  householdId: string
   doorNo: string
 }
 
@@ -136,10 +162,9 @@ const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
-const treeSelectDefaultProps = {
-  value: 'code',
-  label: 'name'
-}
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultRow = {
   doorNo: props.doorNo,
@@ -154,9 +179,9 @@ const defaultRow = {
 }
 
 const getList = () => {
-  const params: any = {
+  const params = {
     doorNo: props.doorNo,
-    householdId: props.householdId,
+    householdId: +props.householdId,
     size: 1000
   }
   getFruitwoodListApi(params).then((res) => {
@@ -173,6 +198,7 @@ const onAddRow = () => {
 const onSave = () => {
   saveFruitwoodListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
+    getList()
   })
 }
 </script>

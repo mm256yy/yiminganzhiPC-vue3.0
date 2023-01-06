@@ -1,14 +1,5 @@
 <template>
   <div class="upload-wrap">
-    <div class="upload-title">
-      <span class="line"></span>
-      <div class="tit">{{ props.title }}</div>
-      <Icon color="var(--el-color-primary)" icon="material-symbols:info-outline-rounded" />
-      <div class="desc">
-        上传说明：请将上传的图片进行文字命名，图片为
-        <span class="unit">jpg、png、svg</span> 格式
-      </div>
-    </div>
     <div class="upload-cont">
       <ElUpload
         action="/api/file/type"
@@ -18,28 +9,27 @@
         accept=".jpg,.jpeg,.png,.svg"
         :multiple="true"
         :file-list="fileListData"
-        :list-type="'picture-card'"
+        :list-type="'picture'"
         :headers="headers"
         :on-success="uploadFileChange"
         :before-remove="() => false"
       >
-        <template #trigger>
-          <Icon icon="ant-design:plus-outlined" :size="22" />
-        </template>
-
         <template #file="{ file }">
-          <div class="relative">
-            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-            <ElInput class="mt-8px" v-model="file.name" placeholder="请更换名称" />
-            <span class="el-upload-list__item-actions">
-              <span class="el-upload-list__item-preview" @click="imgPreview(file)">
-                <Icon icon="bi:zoom-in" />
-              </span>
-
-              <span class="el-upload-list__item-delete" @click="removeFile(file)">
-                <Icon icon="material-symbols:delete-outline" />
-              </span>
-            </span>
+          <div class="flex items-center w-full">
+            <div class="img-box" @click="imgPreview(file)">
+              <img :src="file.url" alt="" />
+            </div>
+            <div class="flex-1">
+              <ElInput v-model="file.name" clearable placeholder="修改附件名称" />
+            </div>
+            <div class="upload-delete" @click="removeFile(file)">
+              <Icon icon="ph:x" :size="16" />
+            </div>
+          </div>
+        </template>
+        <template #trigger>
+          <div class="trigger">
+            <ElButton :icon="addIcon" type="default">上传附件</ElButton>
           </div>
         </template>
       </ElUpload>
@@ -53,9 +43,10 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { ElUpload, ElDialog, ElInput } from 'element-plus'
+import { ElUpload, ElDialog, ElInput, ElButton } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
 
 interface FileItemType {
   name: string
@@ -71,6 +62,7 @@ const appStore = useAppStore()
 const fileListData = ref<Array<FileItemType>>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['change'])
@@ -123,48 +115,56 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 </script>
 
-<style lang="less" scoped>
-.upload-wrap {
-  margin-bottom: 16px;
-  background: #f6f6f6;
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
-
-  .upload-title {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    padding: 0 16px;
-    border-bottom: 1px dashed #dcdfe6;
-    .line {
-      width: 4px;
-      height: 16px;
-      background: linear-gradient(90deg, var(--el-color-primary) 0%, #ffffff 100%);
-      border-radius: 3px;
-    }
-    .tit {
-      margin: 0 35px 0 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-color-1);
-    }
-    .desc {
-      font-size: 12px;
-      color: #000000;
-      .unit {
-        color: var(--el-color-primary);
-      }
-    }
-  }
-}
-</style>
-
 <style lang="less">
 .upload-cont {
-  padding: 14px 16px;
-  .el-upload-list__item {
-    margin-bottom: 40px;
-    overflow: visible !important;
+  .el-upload-list.el-upload-list--picture {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 !important;
+    .el-upload-list__item {
+      width: 358px;
+      height: 90px;
+      margin: 0 24px 16px 0;
+      background: #ffffff;
+      border-radius: 4px;
+      border: 1px solid #c3cbd9;
+    }
+  }
+  .img-box {
+    width: 70px;
+    height: 70px;
+    margin-right: 10px;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .upload-delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 358px;
+    height: 90px;
+    margin: 0 24px 16px 0;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #c3cbd9;
   }
 }
 </style>

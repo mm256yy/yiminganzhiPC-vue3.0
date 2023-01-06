@@ -75,7 +75,7 @@ interface SpanMethodProps {
 }
 
 interface PropsType {
-  householdId: number
+  householdId: string
   doorNo: string
 }
 
@@ -163,7 +163,7 @@ const getList = async () => {
       const newItem: FamilyIncomeDtoType = {
         ...item,
         doorNo: props.doorNo,
-        householdId: props.householdId,
+        householdId: +props.householdId,
         amount: 0,
         remark: ''
       }
@@ -216,6 +216,7 @@ const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
   saveFamilyIncomeListApi(realTableData).then(() => {
     ElMessage.success('操作成功！')
+    getList()
   })
 }
 </script>

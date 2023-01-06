@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
+          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
             type="primary"
@@ -20,7 +20,14 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn label="项目" prop="name" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入项目" v-if="row.isAdd" v-model="row.name" />
+            <ElSelect clearable filterable allow-create v-if="row.isAdd" v-model="row.name">
+              <ElOption
+                v-for="item in dictObj[329]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
             <div v-else>
               {{ row.name }}
             </div>
@@ -28,7 +35,14 @@
         </ElTableColumn>
         <ElTableColumn label="规格" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入规格" v-if="row.isAdd" v-model="row.size" />
+            <ElSelect clearable filterable v-if="row.isAdd" v-model="row.size">
+              <ElOption
+                v-for="item in dictObj[267]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
             <div v-else>
               {{ row.size }}
             </div>
@@ -36,7 +50,14 @@
         </ElTableColumn>
         <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入单位" v-if="row.isAdd" v-model="row.unit" />
+            <ElSelect clearable filterable v-if="row.isAdd" v-model="row.unit">
+              <ElOption
+                v-for="item in dictObj[243]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
             <div v-else>
               {{ row.unit }}
             </div>
@@ -59,7 +80,7 @@
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   ElButton,
   ElInputNumber,
@@ -67,7 +88,9 @@ import {
   ElSpace,
   ElTable,
   ElTableColumn,
-  ElMessage
+  ElMessage,
+  ElSelect,
+  ElOption
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -75,28 +98,33 @@ import {
   saveAccessoryListApi,
   getAppendantOptionApi
 } from '@/api/workshop/datafill/accessory-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
-  householdId: number
+  householdId: string
   doorNo: string
 }
 
 const props = defineProps<PropsType>()
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
-const defaultRow = {
-  doorNo: props.doorNo,
-  householdId: props.householdId,
-  name: '',
-  size: '',
-  unit: '',
-  number: 0,
-  remark: '',
-  isAdd: true
-}
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
+
+// const defaultRow = {
+//   doorNo: props.doorNo,
+//   householdId: props.householdId,
+//   name: '',
+//   size: '',
+//   unit: '',
+//   number: 0,
+//   remark: '',
+//   isAdd: true
+// }
 
 const getAppendantOption = async () => {
   const info = await getAppendantOptionApi()
@@ -121,7 +149,7 @@ const getList = async () => {
         ...ret
       }
       newItem.doorNo = props.doorNo
-      newItem.householdId = props.householdId
+      newItem.householdId = +props.householdId
       newItem.surveyId = id + ''
       newItem.number = 0
       newItem.remark = ''
@@ -132,13 +160,14 @@ const getList = async () => {
 
 getList()
 
-const onAddRow = () => {
-  tableData.value.push(defaultRow)
-}
+// const onAddRow = () => {
+//   tableData.value.push(defaultRow)
+// }
 
 const onSave = () => {
   saveAccessoryListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
+    getList()
   })
 }
 </script>

@@ -29,6 +29,7 @@
                 action: () => onViewRow(row)
               }
             ]"
+            :view-type="'link'"
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
@@ -66,6 +67,7 @@ import {
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 
 interface PropsType {
+  householdId: string
   doorNo: string
 }
 
@@ -234,12 +236,16 @@ const onFormPupClose = () => {
 const onSubmit = async (data: HouseDtoType) => {
   if (actionType.value === 'add') {
     await addHouseApi({
-      ...data
+      ...data,
+      doorNo: props.doorNo,
+      householdId: +props.householdId
     })
   } else {
     await updateHouseApi({
       ...data,
-      id: tableObject.currentRow?.id as number
+      id: tableObject.currentRow?.id as number,
+      doorNo: props.doorNo,
+      householdId: +props.householdId
     })
   }
   ElMessage.success('操作成功！')

@@ -18,10 +18,13 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect v-model="row.graveType">
-              <ElOption value="1" label="单穴" />
-              <ElOption value="2" label="双穴" />
-              <ElOption value="3" label="多穴" />
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.graveType">
+              <ElOption
+                v-for="item in dictObj[345]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
             </ElSelect>
           </template>
         </ElTableColumn>
@@ -32,7 +35,14 @@
         </ElTableColumn>
         <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入材料" v-model="row.materials" />
+            <ElSelect clearable filterable placeholder="请选择材料" v-model="row.materials">
+              <ElOption
+                v-for="item in dictObj[295]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
@@ -59,7 +69,7 @@
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import {
   ElButton,
   ElInputNumber,
@@ -73,8 +83,10 @@ import {
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+
 interface PropsType {
-  householdId: number
+  householdId: string
   doorNo: string
 }
 
@@ -82,6 +94,10 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
+
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultRow = {
   doorNo: props.doorNo,
@@ -98,7 +114,7 @@ const defaultRow = {
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
-    householdId: props.householdId
+    householdId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
@@ -114,6 +130,7 @@ const onAddRow = () => {
 const onSave = () => {
   saveGraveListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
+    getList()
   })
 }
 </script>

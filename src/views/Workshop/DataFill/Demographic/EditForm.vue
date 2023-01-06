@@ -20,9 +20,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="与户主关系" prop="relation">
-            <ElSelect clearable v-model="form.relation" class="!w-full">
+            <ElSelect clearable filterable v-model="form.relation" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[307]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -39,6 +39,7 @@
           <ElFormItem label="身份证号" prop="card">
             <ElInput
               clearable
+              filterable
               placeholder="请输入身份证号"
               type="text"
               class="!w-full"
@@ -51,9 +52,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="性别" prop="sex">
-            <ElSelect clearable v-model="form.sex" class="!w-full">
+            <ElSelect clearable filterable v-model="form.sex" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[292]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -73,7 +74,14 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="民族" prop="nation">
-            <ElInput v-model="form.nation" placeholder="请输入民族" class="!w-full" />
+            <ElSelect clearable filterable v-model="form.nation" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[278]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -83,9 +91,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="人口类型" prop="populationType">
-            <ElSelect clearable v-model="form.populationType" class="!w-full">
+            <ElSelect clearable filterable v-model="form.populationType" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[244]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -97,6 +105,7 @@
           <ElFormItem label="户籍所在地" prop="censusRegister">
             <ElInput
               clearable
+              filterable
               placeholder="请输入户籍所在地"
               type="text"
               class="!w-full"
@@ -106,9 +115,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="文化程度" prop="education">
-            <ElSelect clearable v-model="form.education" class="!w-full">
+            <ElSelect clearable filterable v-model="form.education" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[272]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -121,9 +130,9 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="婚姻状况" prop="marital">
-            <ElSelect clearable v-model="form.marital" class="!w-full">
+            <ElSelect clearable filterable v-model="form.marital" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[260]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -133,9 +142,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="户籍类别" prop="censusType">
-            <ElSelect clearable v-model="form.censusType" class="!w-full">
+            <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[249]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -144,9 +153,9 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="职业" prop="occupation">
-            <ElSelect clearable v-model="form.occupation" class="!w-full">
+            <ElSelect clearable filterable v-model="form.occupation" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[305]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -161,6 +170,7 @@
           <ElFormItem label="工作单位" prop="company">
             <ElInput
               clearable
+              filterable
               placeholder="请输入工作单位"
               type="text"
               class="!w-full"
@@ -170,9 +180,9 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="参保情况" prop="insuranceType">
-            <ElSelect clearable v-model="form.insuranceType" class="!w-full">
+            <ElSelect clearable filterable v-model="form.insuranceType" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[306]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -181,9 +191,9 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="人口类别" prop="category">
-            <ElSelect clearable v-model="form.category" class="!w-full">
+            <ElSelect clearable filterable v-model="form.category" class="!w-full">
               <ElOption
-                v-for="item in [treeSelectDefaultProps]"
+                v-for="item in dictObj[274]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -307,7 +317,14 @@
           :on-preview="imgPreview"
         >
           <template #trigger>
-            <Icon icon="ant-design:plus-outlined" :size="22" />
+            <div class="relative w-148px h-148px">
+              <div class="flex items-center justify-center w-148px h-148px">
+                <Icon icon="ant-design:plus-outlined" :size="22" />
+              </div>
+              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
+                >点击上传附件</div
+              >
+            </div>
           </template>
         </ElUpload>
       </ElFormItem>
@@ -342,13 +359,14 @@ import {
   ElCol,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import type { DistrictNodeType } from '@/api/district/types'
 import { useAppStore } from '@/store/modules/app'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -371,11 +389,9 @@ const emit = defineEmits(['close', 'submit'])
 // const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
 
-const treeSelectDefaultProps = {
-  value: 'code',
-  label: 'name'
-}
+const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<DemographicDtoType, 'id'> = {
   address: '',
