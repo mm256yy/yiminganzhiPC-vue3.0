@@ -21,10 +21,7 @@ export const useDictStore = defineStore('dict', {
   },
   actions: {
     setDictObj(dictObj: Recordable) {
-      this.dictObj = {
-        ...this.dictObj,
-        ...dictObj
-      }
+      this.dictObj = dictObj
     },
     setIsSetDict(isSetDict: boolean) {
       this.isSetDict = isSetDict

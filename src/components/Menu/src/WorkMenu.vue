@@ -66,6 +66,7 @@ export default defineComponent({
     const renderMenu = () => {
       return (
         <ElMenu
+          class="user-menu"
           defaultActive={unref(activeMenu)}
           mode={unref(menuMode)}
           collapse={false}
@@ -124,6 +125,39 @@ export default defineComponent({
         border-bottom: 2px solid #fff;
       }
     }
+  }
+}
+</style>
+
+<style lang="less">
+.drop-menu {
+  border-radius: 4px !important;
+  .el-menu {
+    .el-menu-item {
+      padding: 0 36px !important;
+      height: 48px !important;
+      font-size: 16px !important;
+      color: #131313 !important;
+      &:hover {
+        color: var(--el-color-primary) !important;
+        background-color: transparent !important;
+      }
+
+      &.is-active {
+        color: var(--el-color-primary) !important;
+        border: 0 none !important;
+        background-color: transparent !important;
+
+        &:after {
+          display: none !important;
+        }
+      }
+    }
+  }
+}
+.user-menu {
+  .el-menu-item:not(.is-disabled):focus {
+    background-color: transparent !important;
   }
 }
 </style>

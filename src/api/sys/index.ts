@@ -153,7 +153,9 @@ export const deleteMenuApi = (ids: number[]): Promise<void> => {
 /**
  * 分页读取字典列表
  */
-export const listDictApi = (query: DictQueryType): Promise<TableResponse<DictInfoType>> => {
+export const listDictApi = (
+  query: Partial<DictQueryType>
+): Promise<TableResponse<DictInfoType>> => {
   return request.get({ url: 'dict', params: query })
 }
 

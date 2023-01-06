@@ -38,6 +38,7 @@
                 :span-method="objectSpanMethod"
                 @register="register"
                 @row-click="handleRowClick"
+                :show-overflow-tooltip="false"
               >
                 <template v-if="appStore.getIsSysAdmin" #action="{ row }">
                   <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
@@ -90,6 +91,7 @@ const blurry = ref<string>()
 
 const columns = reactive<TableColumn[]>([
   { field: 'dictGroup', label: '分组' },
+  { field: 'id', label: '标识' },
   { field: 'name', label: '名称' },
   { field: 'remark', label: '描述' },
   { field: 'action', label: '操作', width: '120px', align: 'right' }

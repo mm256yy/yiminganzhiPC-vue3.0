@@ -128,6 +128,7 @@ export interface IMenuSearchParams {
 export type DictQueryType = {
   blurry: string
   dictGroup: string
+  includeVal: boolean
 } & PagedQueryType
 
 /**
@@ -138,6 +139,7 @@ export type DictInfoType = {
   name: string
   dictGroup: string
   remark: string
+  dictValList: DictDetailType[] | null
 }
 
 /**
