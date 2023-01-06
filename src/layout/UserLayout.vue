@@ -63,13 +63,13 @@ export default defineComponent({
 
 <style lang="less">
 .drop-menu {
-  border-radius: 4px;
+  border-radius: 4px !important;
   .el-menu {
     .el-menu-item {
-      padding: 0 36px;
-      height: 48px;
-      font-size: 16px;
-      color: #131313;
+      padding: 0 36px !important;
+      height: 48px !important;
+      font-size: 16px !important;
+      color: #131313 !important;
       &:hover {
         color: var(--el-color-primary) !important;
         background-color: transparent !important;
@@ -77,11 +77,11 @@ export default defineComponent({
 
       &.is-active {
         color: var(--el-color-primary) !important;
-        border: 0 none;
+        border: 0 none !important;
         background-color: transparent !important;
 
         &:after {
-          display: none;
+          display: none !important;
         }
       }
     }
