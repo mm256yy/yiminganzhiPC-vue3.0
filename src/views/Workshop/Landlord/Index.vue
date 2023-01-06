@@ -18,8 +18,12 @@
             >共<span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span
             >户<span class="distance"></span
             ><span class="num">{{ headInfo.demographicNum || 20 }}</span
-            >人<span class="distance"></span>已上报<span class="num !text-[#30A952]">32</span
-            ><span class="distance"></span>未上报<span class="num !text-[#F68418]">32</span>
+            >人<span class="distance"></span>已上报<span class="num !text-[#30A952]">{{
+              headInfo.reportSucceedNum
+            }}</span
+            ><span class="distance"></span>未上报<span class="num !text-[#F68418]">{{
+              headInfo.unReportNum
+            }}</span>
           </div>
         </div>
         <ElSpace>
@@ -46,6 +50,9 @@
       >
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
+        </template>
+        <template #hasPropertyAccount="{ row }">
+          <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
         <template #status="{ row }">
           <div class="flex items-center">
@@ -116,7 +123,7 @@ import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from './config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType } from '@/api/workshop/landlord/types'
+import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
 const appStore = useAppStore()
 const { push } = useRouter()
@@ -126,7 +133,12 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
-const headInfo = ref<any>({})
+const headInfo = ref<LandlordHeadInfoType>({
+  demographicNum: 0,
+  peasantHouseholdNum: 0,
+  reportSucceedNum: 0,
+  unReportNum: 0
+})
 const printDialog = ref(false)
 
 const { register, tableObject, methods } = useTable({
@@ -224,7 +236,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: '',
+    field: 'hasPropertyAccount',
     label: '财产户',
     search: {
       show: true,
@@ -233,11 +245,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: 1
+            value: true
           },
           {
             label: '否',
-            value: 0
+            value: false
           }
         ]
       }
@@ -350,7 +362,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'address',
+    field: 'hasPropertyAccount',
     label: '财产户',
     width: 100,
     search: {
@@ -477,6 +489,12 @@ const onSearch = (data) => {
   // 需要重置一次params
   tableObject.params = {
     projectId
+  }
+  if (!params.hasPropertyAccount) {
+    delete params.hasPropertyAccount
+  }
+  if (!params.status) {
+    delete params.status
   }
   if (params.villageCode) {
     // 拿到对应的参数key

@@ -101,7 +101,6 @@ const getList = () => {
     householdId: props.householdId
   }
   getGraveListApi(params).then((res) => {
-    console.log(res.content, 'res')
     tableData.value = res.content
   })
 }
@@ -113,9 +112,7 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  console.log(tableData.value, 'tabledata')
-  saveGraveListApi(tableData.value).then((res) => {
-    console.log(res, 'res')
+  saveGraveListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
   })
 }

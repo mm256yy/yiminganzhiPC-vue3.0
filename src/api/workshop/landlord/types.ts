@@ -17,3 +17,10 @@ export interface LandlordDtoType {
   areaCode: string
   [key: string]: any
 }
+
+export interface LandlordHeadInfoType {
+  demographicNum: number
+  peasantHouseholdNum: number
+  reportSucceedNum: number
+  unReportNum: number
+}

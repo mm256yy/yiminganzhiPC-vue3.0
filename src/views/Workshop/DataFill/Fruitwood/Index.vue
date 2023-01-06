@@ -160,22 +160,7 @@ const getList = () => {
     size: 1000
   }
   getFruitwoodListApi(params).then((res) => {
-    console.log(res.content, 'res')
     tableData.value = res.content
-    tableData.value = [
-      {
-        id: 0,
-        doorNo: 'string',
-        householdId: 0,
-        surveyId: 'string',
-        name: '',
-        usageType: '',
-        size: '',
-        unit: '',
-        number: 0,
-        remark: ''
-      }
-    ]
   })
 }
 
@@ -186,9 +171,7 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  console.log(tableData.value, 'tabledata')
-  saveFruitwoodListApi(tableData.value).then((res) => {
-    console.log(res, 'res')
+  saveFruitwoodListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
   })
 }

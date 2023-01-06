@@ -97,7 +97,6 @@ const getOption = async () => {
     projectId: appStore.getCurrentProjectId,
     size: 1000
   })
-  console.log(result, 'optionList')
   return result.content || []
 }
 
@@ -155,49 +154,7 @@ const getList = async () => {
     size: 100
   }
   const res = await getFamilyIncomeListApi(params)
-  console.log(res.content, 'FamilyIncomeList res')
-  const arr = [
-    {
-      id: 0,
-      doorNo: '',
-      householdId: 0,
-      sort: '',
-      type: '1',
-      name: '测试1',
-      amount: 0,
-      remark: ''
-    },
-    {
-      id: 0,
-      doorNo: '',
-      householdId: 0,
-      sort: '',
-      type: '1',
-      name: '测试2',
-      amount: 0,
-      remark: ''
-    },
-    {
-      id: 0,
-      doorNo: '',
-      householdId: 0,
-      sort: '',
-      type: '1',
-      name: '测试3',
-      amount: 0,
-      remark: ''
-    },
-    {
-      id: 0,
-      doorNo: '',
-      householdId: 0,
-      sort: '',
-      type: '2',
-      name: '测试1111',
-      amount: 0,
-      remark: ''
-    }
-  ]
+
   if (res && res.content && res.content.length) {
     tableData.value = addSubtotal(res.content)
   } else {
@@ -212,7 +169,7 @@ const getList = async () => {
       }
       return newItem
     })
-    tableData.value = addSubtotal(arr || baseList)
+    tableData.value = addSubtotal(baseList)
   }
 }
 
@@ -257,9 +214,7 @@ const total = computed(() => {
 
 const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  console.log(realTableData, 'tabledata')
-  saveFamilyIncomeListApi(realTableData).then((res) => {
-    console.log(res, 'res')
+  saveFamilyIncomeListApi(realTableData).then(() => {
     ElMessage.success('操作成功！')
   })
 }

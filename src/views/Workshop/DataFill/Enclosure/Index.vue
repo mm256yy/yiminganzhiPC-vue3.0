@@ -48,7 +48,6 @@ const getList = () => {
     householdId: props.householdId
   }
   getEnclosureListApi(params).then((res) => {
-    console.log(res, 'res')
     if (res && res.content && res.content.length) {
       id.value = res.content[0].id
       otherPic.value = JSON.parse(res.content[0].otherPic)

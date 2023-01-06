@@ -100,7 +100,6 @@ const defaultRow = {
 
 const getAppendantOption = async () => {
   const info = await getAppendantOptionApi()
-  console.log(info, '附属物配置信息')
   return info.content || []
 }
 
@@ -138,9 +137,7 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  console.log(tableData.value, 'tabledata')
-  saveAccessoryListApi(tableData.value).then((res) => {
-    console.log(res, 'res')
+  saveAccessoryListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
   })
 }
