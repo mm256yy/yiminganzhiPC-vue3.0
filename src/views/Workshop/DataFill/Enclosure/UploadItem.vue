@@ -6,6 +6,7 @@
         :data="{
           type: 'image'
         }"
+        class="upload-trigger"
         accept=".jpg,.jpeg,.png,.svg"
         :multiple="true"
         :file-list="fileListData"
@@ -117,7 +118,13 @@ const imgPreview = (uploadFile: UploadFile) => {
 
 <style lang="less">
 .upload-cont {
+  .upload-trigger {
+    display: flex;
+    flex-wrap: wrap;
+  }
   .el-upload-list.el-upload-list--picture {
+    order: 1;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     margin: 0 !important;
@@ -129,6 +136,9 @@ const imgPreview = (uploadFile: UploadFile) => {
       border-radius: 4px;
       border: 1px solid #c3cbd9;
     }
+  }
+  .el-upload.el-upload--picture {
+    order: 2;
   }
   .img-box {
     width: 70px;
