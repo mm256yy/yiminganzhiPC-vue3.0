@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">农户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />

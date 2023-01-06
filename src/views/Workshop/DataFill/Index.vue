@@ -1,10 +1,15 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民信息采集</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">数据填报</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" type="default" class="px-9px py-0px !h-28px mr-8px"
+        >返回</ElButton
+      >
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">数据填报</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
 
     <div class="data-fill-head">
       <div class="head-top">
@@ -136,16 +141,15 @@ import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
 
-const { currentRoute } = useRouter()
+const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabCurrentId = ref<number>(1)
 const reportTabCurrentId = ref<number>(1)
 const { doorNo, householdId } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)
 
-const EscalationIcon = useIcon({
-  icon: 'carbon:send-alt'
-})
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -179,6 +183,10 @@ const onClose = () => {
 const onReportData = async () => {
   const result = await reportLandlordApi(householdId)
   console.log(result, 'report res')
+}
+
+const onBack = () => {
+  back()
 }
 </script>
 

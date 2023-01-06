@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    :title="actionType === 'edit' ? '编辑农户' : actionType === 'add' ? '新增农户' : '查看详情'"
+    :title="actionType === 'edit' ? '编辑居民户' : actionType === 'add' ? '新增居民户' : '查看详情'"
     :model-value="props.show"
     :width="609"
     @close="onClose"
