@@ -34,24 +34,34 @@
               </div>
             </template>
             <div class="file-list">
-              <div class="file-item">
+              <div class="file-item" v-for="item in excelList" :key="item.id">
                 <div class="flex items-center">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="ml-5px">范德萨地方.excl</div>
+                  <div class="w-160px overflow-x-scroll whitespace-nowrap ml-5px">{{
+                    item.name
+                  }}</div>
                 </div>
-                <div class="status">
-                  <div class="flex items-center">
+                <div class="status flex-shrink-0">
+                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px"
-                      >( 共导入 <span class="number">20</span> 人，<span class="number">20</span> 户
-                      )</span
+                      >( 共导入 <span class="number">{{ item.demographicNum }}</span> 人，<span
+                        class="number"
+                        >{{ item.peasantHouseholdNum }}</span
+                      >
+                      户 )</span
                     >
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
                   </div>
 
-                  <!-- <div class="flex items-center text-[#F93F3F]">
+                  <div
+                    class="flex items-center text-[#F93F3F]"
+                    v-else-if="item.status === FileReportStatus.failure"
+                  >
                     <span class="pr-10px">上传失败</span>
                     <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
-                  </div> -->
+                  </div>
+
+                  <div v-else>导入中</div>
                 </div>
               </div>
             </div>
@@ -137,6 +147,12 @@ import type {
   ExcelListType
 } from '@/api/workshop/population/types'
 
+enum FileReportStatus {
+  success = 'Succeed',
+  failure = 'Failure',
+  importing = 'Importing'
+}
+
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
@@ -168,7 +184,6 @@ getList()
 
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
-  console.log(list, 'village list')
   villageTree.value = list || []
   return list || []
 }
@@ -183,7 +198,6 @@ const getExcelUploadList = async () => {
   if (res && res.content) {
     excelList.value = res.content
   }
-  console.log(res, 'list')
 }
 
 onMounted(() => {
@@ -439,6 +453,9 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
+  tableObject.params = {
+    projectId
+  }
   if (params.villageCode) {
     // 拿到对应的参数key
     findRecursion(villageTree.value, params.villageCode, (item) => {
@@ -454,7 +471,6 @@ const onSearch = (data) => {
   }
 }
 
-// todo
 const onDownloadTemplate = () => {
   downLandlordTemplateApi('demographic').then((res) => {
     if (res && res.templateUrl) {

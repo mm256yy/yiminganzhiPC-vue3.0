@@ -9,7 +9,7 @@ export const validOptions = [
   }
 ]
 
-// todo 改成字典取值
+// 改成字典取值
 export const policyTypes = [
   {
     label: '民政政策',
