@@ -60,7 +60,9 @@ export const usePermissionStore = defineStore('permission', {
           }
         ])
         // 渲染菜单的所有路由
-
+        // 增加一层过滤
+        routerMap = routerMap.filter((item) => item.name && item.meta)
+        console.log(routerMap, '菜单-路由')
         this.routers = cloneDeep(baseConstantRouterMap).concat(routerMap)
         resolve()
       })
