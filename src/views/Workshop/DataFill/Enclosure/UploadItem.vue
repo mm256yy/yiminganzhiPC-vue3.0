@@ -21,10 +21,26 @@
               <img :src="file.url" alt="" />
             </div>
             <div class="flex-1">
-              <ElInput v-model="file.name" clearable placeholder="修改附件名称" />
+              <ElInput
+                v-if="file.edit"
+                v-model="file.name"
+                clearable
+                placeholder="修改附件名称"
+                @blur="file.edit = false"
+              />
+              <div v-else class="flex items-center justify-between">
+                <div class="w-234px overflow-ellipsis">{{ file.name }}</div>
+                <ElTooltip placement="top" content="修改附件名称">
+                  <Icon
+                    icon="uil:edit-alt"
+                    color="var(--el-color-primary)"
+                    @click="file.edit = true"
+                  />
+                </ElTooltip>
+              </div>
             </div>
             <div class="upload-delete" @click="removeFile(file)">
-              <Icon icon="ph:x" :size="16" />
+              <Icon icon="ph:x" :size="14" />
             </div>
           </div>
         </template>
@@ -44,7 +60,7 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { ElUpload, ElDialog, ElInput, ElButton } from 'element-plus'
+import { ElUpload, ElDialog, ElInput, ElButton, ElTooltip } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -135,6 +151,11 @@ const imgPreview = (uploadFile: UploadFile) => {
       background: #ffffff;
       border-radius: 4px;
       border: 1px solid #c3cbd9;
+      &:hover {
+        .upload-delete {
+          display: flex;
+        }
+      }
     }
   }
   .el-upload.el-upload--picture {
@@ -158,8 +179,8 @@ const imgPreview = (uploadFile: UploadFile) => {
     top: 0;
     right: 0;
     width: 20px;
-    height: 20px;
-    display: flex;
+    height: 22px;
+    display: none;
     align-items: center;
     justify-content: center;
     cursor: pointer;

@@ -33,12 +33,14 @@ const props = defineProps({
   expand: propTypes.bool.def(false),
   // 伸缩的界限字段
   expandField: propTypes.string.def(''),
+  // 默认展开伸缩
+  defaultExpand: propTypes.bool.def(false),
   inline: propTypes.bool.def(true)
 })
 
 const emit = defineEmits(['search', 'reset'])
 
-const visible = ref(true)
+const visible = ref(props.defaultExpand)
 
 const newSchema = computed(() => {
   let schema: FormSchema[] = cloneDeep(props.schema)

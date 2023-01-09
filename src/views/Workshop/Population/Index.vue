@@ -5,7 +5,13 @@
       <ElBreadcrumbItem class="text-size-12px">人口信息预导入</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        expand
+        :expand-field="'doorNo'"
+        @search="onSearch"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
@@ -95,7 +101,6 @@
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        tableLayout="auto"
         row-key="id"
         headerAlign="center"
         align="center"

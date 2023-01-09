@@ -6,7 +6,6 @@ import { usePermissionStore } from '@/store/modules/permission'
 import { useRenderMenuItem } from './components/useRenderMenuItemWork'
 import { useRouter } from 'vue-router'
 import { isUrl } from '@/utils/is'
-import { LayoutType } from '@/types/layout'
 
 export default defineComponent({
   name: 'Menu',
@@ -27,13 +26,9 @@ export default defineComponent({
 
     const menuMode = computed((): 'vertical' | 'horizontal' => {
       // 竖
-      const vertical: LayoutType[] = ['classic', 'topLeft', 'cutMenu']
+      // const vertical: LayoutType[] = ['classic', 'topLeft', 'cutMenu']
 
-      if (vertical.includes(unref(layout))) {
-        return 'vertical'
-      } else {
-        return 'horizontal'
-      }
+      return 'horizontal'
     })
 
     const routers = computed(() =>

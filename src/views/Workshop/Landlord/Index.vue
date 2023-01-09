@@ -5,7 +5,13 @@
       <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        expand
+        :expand-field="'card'"
+        @search="onSearch"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
@@ -32,6 +38,7 @@
         </ElSpace>
       </div>
       <Table
+        selection
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -40,7 +47,6 @@
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        tableLayout="auto"
         row-key="id"
         headerAlign="center"
         align="center"
@@ -145,7 +151,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-const { getList, setSearchParams } = methods
+const { getList, setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId
@@ -258,10 +264,15 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+
+  // table字段 分割
   {
     field: 'index',
     type: 'index',
-    label: '序号'
+    label: '序号',
+    search: {
+      show: false
+    }
   },
   {
     field: 'cityCodeText',
@@ -511,8 +522,14 @@ const onSearch = (data) => {
   }
 }
 
-const onPrint = () => {
-  printDialog.value = true
+const onPrint = async () => {
+  const res = await getSelections()
+  console.log(res, '选择的数据')
+  if (res && res.length) {
+    printDialog.value = true
+  } else {
+    ElMessage.warning('请选择需要打印的居民户')
+  }
 }
 
 const onPrintDialogClose = () => {
@@ -521,7 +538,6 @@ const onPrintDialogClose = () => {
 
 // 数据填报
 const fillData = (row) => {
-  console.log(row, 'row')
   push({
     name: 'DataFill',
     query: {

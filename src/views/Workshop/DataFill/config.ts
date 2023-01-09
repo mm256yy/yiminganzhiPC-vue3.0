@@ -60,7 +60,29 @@ export const FlowTabs = [
   }
 ]
 
+// 上报状态
 export const ReportStatus = {
   ReportSucceed: 'ReportSucceed',
   UnReport: 'UnReport'
 }
+
+// 生产安置方式
+
+export const ProductionPlaceWay = [
+  {
+    label: '市内县外',
+    value: 'Out'
+  },
+  {
+    label: '县内安置（有土）',
+    value: 'HasLand'
+  },
+  {
+    label: '县内安置（无土）',
+    value: 'NoLand'
+  },
+  {
+    label: '自谋出路',
+    value: 'Ohter'
+  }
+]

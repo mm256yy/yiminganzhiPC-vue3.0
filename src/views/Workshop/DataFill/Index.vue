@@ -61,7 +61,11 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
       />
-      <div v-else-if="reportTabCurrentId === ReportTabIds[5]">安置意愿</div>
+      <Resettlement
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[5]"
+      />
       <Grave
         :doorNo="doorNo"
         :householdId="householdId"
@@ -125,6 +129,7 @@ import Fruitwood from './Fruitwood/Index.vue'
 import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
+import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 
 const { currentRoute, back } = useRouter()

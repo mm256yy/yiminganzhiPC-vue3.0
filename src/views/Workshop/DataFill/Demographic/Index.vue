@@ -12,7 +12,6 @@
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        tableLayout="auto"
         row-key="id"
         headerAlign="center"
         align="center"
