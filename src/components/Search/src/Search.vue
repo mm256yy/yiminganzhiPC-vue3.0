@@ -34,7 +34,7 @@ const props = defineProps({
   // 伸缩的界限字段
   expandField: propTypes.string.def(''),
   // 默认展开伸缩
-  defaultExpand: propTypes.bool.def(false),
+  defaultExpand: propTypes.bool.def(true),
   inline: propTypes.bool.def(true)
 })
 

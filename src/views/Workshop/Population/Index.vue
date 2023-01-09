@@ -8,6 +8,7 @@
       <Search
         :schema="allSchemas.searchSchema"
         expand
+        :defaultExpand="false"
         :expand-field="'doorNo'"
         @search="onSearch"
         @reset="setSearchParams"
