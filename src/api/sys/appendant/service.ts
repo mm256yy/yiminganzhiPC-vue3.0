@@ -7,7 +7,7 @@ import type { AppendantInfoType, AppendantQueryType } from './types'
 export const listAppendantApi = (
   query: Partial<AppendantQueryType>
 ): Promise<TableResponse<AppendantInfoType>> => {
-  return request.get({ url: '/immigrant_appendant_option', params: query })
+  return request.get({ url: 'immigrant_appendant_option', params: query })
 }
 
 /**
@@ -25,5 +25,5 @@ export const saveAppendantApi = (appendant: AppendantInfoType): Promise<Appendan
  * @param id 用户id
  */
 export const deleteAppendantApi = (id: number): Promise<void> => {
-  return request.post({ url: `/immigrant_appendant_option/${id}` })
+  return request.post({ url: `/immigrant_appendant_option/delete/${id}` })
 }

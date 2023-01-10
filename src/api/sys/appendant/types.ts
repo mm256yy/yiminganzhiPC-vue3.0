@@ -8,5 +8,5 @@ export type AppendantInfoType = {
 }
 
 export type AppendantQueryType = {
-  blurry?: string
+  name?: string
 } & PagedQueryType
