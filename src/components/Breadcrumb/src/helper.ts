@@ -9,12 +9,12 @@ export const filterBreadcrumb = (
 
   for (const route of routes) {
     const meta = route?.meta as RouteMeta
-    if (meta.hidden && !meta.canTo) {
+    if (meta && meta.hidden && !meta.canTo) {
       continue
     }
 
     const data: AppRouteRecordRaw =
-      !meta.alwaysShow && route.children?.length === 1
+      meta && !meta.alwaysShow && route.children?.length === 1
         ? { ...route.children[0], path: pathResolve(route.path, route.children[0].path) }
         : { ...route }
 
