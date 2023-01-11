@@ -11,10 +11,6 @@ import { ConfigGlobal } from '@/components/ConfigGlobal'
 import { isDark } from '@/utils/is'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useCache } from '@/hooks/web/useCache'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-import { listDictApi } from '@/api/sys/index'
-
-const dictStore = useDictStoreWithOut()
 
 const { getPrefixCls } = useDesign()
 
@@ -39,28 +35,6 @@ const setDefaultTheme = () => {
 }
 
 setDefaultTheme()
-
-const setDictObj = async () => {
-  // 拿到字典
-  const res = await listDictApi({
-    includeVal: true,
-    size: 1000
-  })
-  const list = res.content || []
-  const dictObj: any = {}
-  list.forEach((item) => {
-    // 使用Id作为key 保证唯一 避免name作为key改动时影响页面
-    dictObj[item.id as number] = (item.dictValList || []).map((dictItem) => {
-      return {
-        label: dictItem.label,
-        value: dictItem.value
-      }
-    })
-  })
-  dictStore.setDictObj(dictObj)
-}
-
-setDictObj()
 </script>
 
 <style lang="less">

@@ -106,7 +106,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'propertyType',
+    field: 'propertyTypeText',
     label: '房屋产别',
     width: 120,
     search: {
@@ -115,7 +115,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'usageType',
+    field: 'usageTypeText',
     label: '房屋用途',
     width: 120,
     search: {
@@ -123,7 +123,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'houseType',
+    field: 'houseTypeText',
     label: '房屋类别',
     width: 154,
     search: {
@@ -131,7 +131,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'constructionType',
+    field: 'constructionTypeText',
     label: '结构类型',
     width: 154,
     search: {
@@ -172,7 +172,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'landType',
+    field: 'landTypeText',
     label: '土地性质',
     width: 100,
     search: {

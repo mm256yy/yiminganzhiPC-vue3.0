@@ -42,7 +42,7 @@
               />
             </ElSelect>
             <div v-else>
-              {{ row.name }}
+              {{ row.nameText }}
             </div>
           </template>
         </ElTableColumn>
@@ -69,7 +69,7 @@
               />
             </ElSelect>
             <div v-else>
-              {{ row.usageType }}
+              {{ row.usageTypeText }}
             </div>
           </template>
         </ElTableColumn>
@@ -90,7 +90,7 @@
               />
             </ElSelect>
             <div v-else>
-              {{ row.size }}
+              {{ row.sizeText }}
             </div>
           </template>
         </ElTableColumn>
@@ -111,7 +111,7 @@
               />
             </ElSelect>
             <div v-else>
-              {{ row.unit }}
+              {{ row.unitText }}
             </div>
           </template>
         </ElTableColumn>

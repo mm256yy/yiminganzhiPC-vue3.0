@@ -70,8 +70,8 @@
 
       <ElDivider border-style="dashed" />
 
-      <ElFormItem label="财产户" prop="sex">
-        <ElSelect clearable v-model="form.sex">
+      <ElFormItem label="财产户" prop="hasPropertyAccount">
+        <ElSelect clearable v-model="form.hasPropertyAccount">
           <ElOption
             v-for="item in yesAndNoEnums"
             :key="item.value"
