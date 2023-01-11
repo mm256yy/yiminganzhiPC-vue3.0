@@ -106,7 +106,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sex',
+    field: 'sexText',
     label: '性别',
     width: 60,
     search: {
@@ -130,7 +130,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'nation',
+    field: 'nationText',
     label: '民族',
     width: 80,
     search: {
@@ -146,7 +146,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'education',
+    field: 'educationText',
     label: '文化程度',
     width: 100,
     search: {
@@ -154,7 +154,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'marital',
+    field: 'maritalText',
     label: '婚姻状况',
     width: 100,
     search: {
@@ -162,7 +162,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'occupation',
+    field: 'occupationText',
     label: '职业',
     width: 170,
     search: {
@@ -178,7 +178,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'insuranceType',
+    field: 'insuranceTypeText',
     label: '参保情况',
     width: 80,
     search: {

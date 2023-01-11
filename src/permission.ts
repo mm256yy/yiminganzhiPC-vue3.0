@@ -4,9 +4,12 @@ import { useTitle } from '@/hooks/web/useTitle'
 import { useNProgress } from '@/hooks/web/useNProgress'
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
 import { usePageLoading } from '@/hooks/web/usePageLoading'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { listDictApi } from '@/api/sys/index'
 
 const permissionStore = usePermissionStoreWithOut()
 const appStore = useAppStoreWithOut()
+const dictStore = useDictStoreWithOut()
 
 const { start, done } = useNProgress()
 const { loadStart, loadDone } = usePageLoading()
@@ -22,6 +25,27 @@ router.beforeEach(async (to, from, next) => {
       if (permissionStore.getIsAddRouters) {
         next()
         return
+      }
+
+      if (!dictStore.getIsSetDict) {
+        // 拿到字典
+        const res = await listDictApi({
+          includeVal: true,
+          size: 1000
+        })
+        const list = res.content || []
+        const dictObj: any = {}
+        list.forEach((item) => {
+          // 使用Id作为key 保证唯一 避免name作为key改动时影响页面
+          dictObj[item.id as number] = (item.dictValList || []).map((dictItem) => {
+            return {
+              label: dictItem.label,
+              value: dictItem.value
+            }
+          })
+        })
+        dictStore.setDictObj(dictObj)
+        dictStore.setIsSetDict(true)
       }
 
       await permissionStore.initRoutes(router.addRoute)

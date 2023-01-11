@@ -15,6 +15,7 @@ export interface LandlordDtoType {
   locationType: string
   cityCode: string
   areaCode: string
+  hasPropertyAccount: boolean
   [key: string]: any
 }
 
