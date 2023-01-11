@@ -30,7 +30,7 @@ export const useRenderMenuItem = (menuMode: 'vertical' | 'horizontal') => {
               }}
             </ElMenuItem>
           ) : (
-            <div class="flex w-104px items-center justify-center overflow-hidden">
+            <div class="flex min-w-104px px-20px items-center justify-center">
               <ElMenuItem
                 index={onlyOneChild ? pathResolve(fullPath, onlyOneChild.path) : fullPath}
               >
@@ -45,7 +45,7 @@ export const useRenderMenuItem = (menuMode: 'vertical' | 'horizontal') => {
 
           const preFixCls = getPrefixCls('menu-popper')
           return (
-            <div class="flex w-104px items-center justify-center overflow-hidden">
+            <div class="flex min-w-104px px-20px items-center justify-center">
               <ElSubMenu index={fullPath} popperClass={`${preFixCls}--horizontal drop-menu`}>
                 {{
                   title: () => renderMenuTitle(meta),

@@ -88,7 +88,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
   {
     path: '/workshop',
     component: UserLayout,
-    name: 'Workshop',
+    name: 'RootWorkshop',
     meta: {
       title: '用户首页'
     },
@@ -100,39 +100,6 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         meta: {
           title: '用户首页',
           icon: 'ant-design:home-outlined'
-        }
-      },
-      {
-        path: 'landlord',
-        name: 'Landlord',
-        component: () => import('@/views/Workshop/Landlord/Index.vue'),
-        meta: {
-          title: '农户信息'
-        }
-      },
-      {
-        path: 'population',
-        name: 'Population',
-        component: () => import('@/views/Workshop/Population/Index.vue'),
-        meta: {
-          title: '人口信息'
-        }
-      },
-      {
-        path: 'village',
-        name: 'Village',
-        component: () => import('@/views/Workshop/Village/Index.vue'),
-        meta: {
-          title: '自然村'
-        }
-      },
-      {
-        path: 'datafill',
-        name: 'DataFill',
-        component: () => import('@/views/Workshop/DataFill/Index.vue'),
-        meta: {
-          title: '数据填报',
-          hidden: true
         }
       }
     ]

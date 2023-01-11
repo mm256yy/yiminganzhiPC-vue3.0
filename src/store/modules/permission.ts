@@ -47,6 +47,9 @@ export const usePermissionStore = defineStore('permission', {
             ? adminConstantRouterMap
             : workshopConstantRouterMap
         routerMap = routerMap.concat(generateRoutesFn2(routers as AppCustomRouteRecordRaw[]))
+        // 增加一层过滤
+        routerMap = routerMap.filter((item) => item.name && item.meta)
+        console.log(routerMap, '菜单-路由')
         // 动态路由，404一定要放到最后面
         this.addRouters = routerMap.concat([
           {
@@ -60,9 +63,6 @@ export const usePermissionStore = defineStore('permission', {
           }
         ])
         // 渲染菜单的所有路由
-        // 增加一层过滤
-        routerMap = routerMap.filter((item) => item.name && item.meta)
-        console.log(routerMap, '菜单-路由')
         this.routers = cloneDeep(baseConstantRouterMap).concat(routerMap)
         resolve()
       })

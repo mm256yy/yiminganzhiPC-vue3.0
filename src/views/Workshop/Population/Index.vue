@@ -36,7 +36,7 @@
           >
             <template #reference>
               <div class="view-upload">
-                <span class="pr-10px">批量导入</span>
+                <span class="pr-10px">批量导入记录</span>
                 <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
               </div>
             </template>
