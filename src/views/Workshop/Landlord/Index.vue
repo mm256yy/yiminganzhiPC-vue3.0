@@ -55,6 +55,9 @@
         :show-overflow-tooltip="false"
         @register="register"
       >
+        <template #cityCodeText="{ row }">
+          <div>{{ `${row.cityCodeText} ${row.areaCodeText}` }}</div>
+        </template>
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template>
@@ -333,7 +336,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'householdNumber',
     label: '户籍册编号',
     width: 194,
     search: {
@@ -341,7 +344,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'id',
+    field: 'doorNo',
     label: '户号',
     width: 120,
     search: {

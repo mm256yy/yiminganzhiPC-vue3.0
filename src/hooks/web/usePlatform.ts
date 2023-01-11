@@ -4,9 +4,12 @@ import { userMenuApi } from '@/api/sys'
 import { getPermissionApi } from '@/api/login'
 import { usePermissionStoreWithOut } from '@/store/modules/permission'
 import { RouteRecordRaw } from 'vue-router'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { listDictApi } from '@/api/sys/index'
 
 const appStore = useAppStoreWithOut()
 const permissionStore = usePermissionStoreWithOut()
+const dictStore = useDictStoreWithOut()
 
 /**
  * 设置用户的工作平台，可以是管理员或普通用户。
@@ -43,6 +46,29 @@ export const usePlatform = () => {
       const permissions = await getPermissionApi()
       appStore.setPermissions(permissions)
     }
+
+    if (!dictStore.getIsSetDict) {
+      // 拿到字典
+      const res = await listDictApi({
+        includeVal: true,
+        size: 1000
+      })
+      const list = res.content || []
+      const dictObj: any = {}
+      list.forEach((item) => {
+        // 使用Id作为key 保证唯一 避免name作为key改动时影响页面
+        dictObj[item.id as number] = (item.dictValList || []).map((dictItem) => {
+          return {
+            label: dictItem.label,
+            value: dictItem.value
+          }
+        })
+      })
+      dictStore.setDictObj(dictObj)
+      dictStore.setIsSetDict(true)
+    }
+
+    console.log(1000)
     permissionStore.initRoutes(addRoute, menus)
     appStore.setCurrentPlatform(platform)
   }

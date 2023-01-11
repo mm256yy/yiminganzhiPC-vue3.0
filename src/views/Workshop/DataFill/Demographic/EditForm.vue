@@ -394,13 +394,8 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<DemographicDtoType, 'id'> = {
-  address: '',
-  doorNo: '',
-  latitude: 0,
-  longitude: 0,
   name: '',
-  parentCode: [],
-  locationType: 'SubmergedArea'
+  card: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 
