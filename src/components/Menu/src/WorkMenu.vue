@@ -70,7 +70,7 @@ export default defineComponent({
           textColor="#fff"
           activeTextColor="#fff"
           onSelect={menuSelect}
-          menu-trigger="click"
+          menu-trigger="hover"
         >
           {{
             default: () => {
@@ -82,7 +82,7 @@ export default defineComponent({
       )
     }
 
-    return () => <ElScrollbar>{renderMenu()}</ElScrollbar>
+    return () => <ElScrollbar class="work-scrollbar">{renderMenu()}</ElScrollbar>
   }
 })
 </script>
@@ -153,6 +153,12 @@ export default defineComponent({
 .user-menu {
   .el-menu-item:not(.is-disabled):focus {
     background-color: transparent !important;
+  }
+}
+
+.work-scrollbar {
+  .el-scrollbar__view {
+    overflow: hidden;
   }
 }
 </style>
