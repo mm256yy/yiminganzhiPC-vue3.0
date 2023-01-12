@@ -142,7 +142,7 @@ const doSave = async () => {
   }
   saveFamilyIncomeApi(familyIncome as FamilyIncomeInfoType)
     .then(() => {
-      ElMessage.success('保存附属物成功')
+      ElMessage.success('保存成功')
       onClose()
     })
     .catch(() => {
