@@ -15,33 +15,31 @@
           :value="item.value"
         />
       </ElSelect>
-      <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchFamilyIncome"
+      <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchResettleConfig"
         >查询</ElButton
       >
       <ElButton
         v-if="appStore.getIsSysAdmin || appStore.getIsProjectAdmin"
         type="primary"
-        @click="onAddFamilyIncome"
+        @click="onAddResettleConfig"
         >新增</ElButton
       >
     </div>
     <div>
-      <ContentWrap>
-        <Table
-          border
-          :loading="tableObject.loading"
-          header-align="center"
-          align="center"
-          :data="tableObject.tableList"
-          class="w-90%"
-          @register="register"
-          :span-method="objectSpanMethod"
-        >
-          <template #action="{ row }">
-            <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
-          </template>
-        </Table>
-      </ContentWrap>
+      <Table
+        border
+        :loading="tableObject.loading"
+        header-align="center"
+        align="center"
+        :data="tableObject.tableList"
+        class="w-90%"
+        @register="register"
+        :span-method="objectSpanMethod"
+      >
+        <template #action="{ row }">
+          <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
+        </template>
+      </Table>
     </div>
   </ContentWrap>
   <EditForm
@@ -66,28 +64,31 @@ import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-
 // 公共类型
 import { TableColumn } from '@/types/table'
 // 接口及自定义数据类型
-import { FamilyIncomeInfoType } from '@/api/project/familyIncome/types'
-import { listFamilyIncomeApi, deleteFamilyIncomeApi } from '@/api/project/familyIncome/service'
+import { ResettleConfigInfoType } from '@/api/project/resettleConfig/types'
+import {
+  listResettleConfigApi,
+  deleteResettleConfigApi
+} from '@/api/project/resettleConfig/service'
 import { listProjectApi } from '@/api/project'
 // 页面组件
 import EditForm from './EditForm.vue'
 
 const appStore = useAppStore()
 const showEdit = ref(false)
-const currentRow = ref<FamilyIncomeInfoType>()
+const currentRow = ref<ResettleConfigInfoType>()
 const projectId = ref<number>(appStore.getCurrentProjectId)
 const projectList = ref<Array<{ label: string; value: number }>>([])
 
 const columns = reactive<TableColumn[]>([
   { field: 'index', label: '序号', type: 'index', width: '60px' },
-  { field: 'type', label: '类型' },
-  { field: 'name', label: '收入项名称' },
-  { field: 'sort', label: '排序' },
+  { field: 'type', label: '安置类型' },
+  { field: 'way', label: '安置方式' },
+  { field: 'area', label: '安置区域' },
   { field: 'action', label: '操作', width: '120px', align: 'right' }
 ])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: listFamilyIncomeApi,
+  getListApi: listResettleConfigApi,
   props: {
     columns
   }
@@ -108,34 +109,35 @@ const loadProject = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
   if (appStore.getIsSysAdmin) {
-    loadProject()
+    await loadProject()
   }
+  tableObject.params.projectId = projectId.value
   getList()
 })
 
-const searchFamilyIncome = () => {
+const searchResettleConfig = () => {
   tableObject.params.projectId = projectId.value
   getList()
 }
 
-const onEdit = (row: FamilyIncomeInfoType) => {
+const onEdit = (row: ResettleConfigInfoType) => {
   currentRow.value = row
   showEdit.value = true
 }
 
-const onDelete = (row: FamilyIncomeInfoType) => {
-  ElMessageBox.confirm(`确定要删除项目 ${row.name} 吗？`)
+const onDelete = (row: ResettleConfigInfoType) => {
+  ElMessageBox.confirm(`确定要删除该行数据吗？`)
     .then(async () => {
-      await deleteFamilyIncomeApi(row.id ?? 0)
+      await deleteResettleConfigApi(row.id ?? 0)
       ElMessage.success('删除成功')
       getList()
     })
     .catch(() => {})
 }
 
-const onAddFamilyIncome = () => {
+const onAddResettleConfig = () => {
   currentRow.value = undefined
   showEdit.value = true
 }
@@ -146,8 +148,8 @@ const onClose = () => {
 }
 
 interface SpanMethodProps {
-  row: FamilyIncomeInfoType
-  column: TableColumnCtx<FamilyIncomeInfoType>
+  row: ResettleConfigInfoType
+  column: TableColumnCtx<ResettleConfigInfoType>
   rowIndex: number
   columnIndex: number
 }

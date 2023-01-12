@@ -3,9 +3,4 @@ export type FamilyIncomeInfoType = {
   name: string
   type: string
   sort: string
-  projectId: number
-}
-
-export type FamilyIncomeQueryType = {
-  projectId: number
 }

@@ -1,13 +1,11 @@
 import request from '@/config/axios'
-import type { FamilyIncomeInfoType, FamilyIncomeQueryType } from './types'
+import type { FamilyIncomeInfoType } from './types'
 
 /**
  * 分页读取家庭收入项配置列表
  */
-export const listFamilyIncomeApi = (
-  query: Partial<FamilyIncomeQueryType>
-): Promise<TableResponse<FamilyIncomeInfoType>> => {
-  return request.get({ url: 'immigrant_income_config', params: query })
+export const listFamilyIncomeApi = (): Promise<TableResponse<FamilyIncomeInfoType>> => {
+  return request.get({ url: 'immigrant_income_config' })
 }
 
 /**
