@@ -74,15 +74,15 @@
         <ElSelect clearable v-model="form.hasPropertyAccount">
           <ElOption
             v-for="item in yesAndNoEnums"
-            :key="item.value"
+            :key="item.label"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="户籍册编号" prop="doorNo">
-        <ElInput v-model="form.doorNo" placeholder="请输入户籍册编号" />
+      <ElFormItem label="户籍册编号" prop="householdNumber">
+        <ElInput v-model="form.householdNumber" placeholder="请输入户籍册编号" />
       </ElFormItem>
 
       <ElFormItem label="户籍所在地" prop="address">
@@ -159,7 +159,7 @@ const treeSelectDefaultProps = {
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  doorNo: '',
+  householdNumber: '',
   latitude: 0,
   longitude: 0,
   name: '',
@@ -201,7 +201,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  doorNo: [required()],
+  householdNumber: [required()],
   phone: [required()],
   parentCode: [required()]
 })

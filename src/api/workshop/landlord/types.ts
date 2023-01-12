@@ -16,6 +16,7 @@ export interface LandlordDtoType {
   cityCode: string
   areaCode: string
   hasPropertyAccount: boolean
+  householdNumber: string // 户籍册编号
   [key: string]: any
 }
 

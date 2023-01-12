@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'doorNo'"
+        :expand-field="'householdNumber'"
         @search="onSearch"
         @reset="setSearchParams"
       />
@@ -245,7 +245,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'householdNumber',
     label: '户籍册编号',
     width: 120,
     search: {
@@ -326,11 +326,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: 1
+            value: '1'
           },
           {
             label: '否',
-            value: 0
+            value: '0'
           }
         ]
       }
@@ -377,7 +377,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'householdNumber',
     label: '户籍册编号',
     search: {
       show: true,
