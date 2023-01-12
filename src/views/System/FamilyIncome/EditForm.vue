@@ -8,7 +8,7 @@
     @close="onClose"
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="false">
-      <template #projectId>
+      <!-- <template #projectId>
         <ElSelect
           style="width: 490px"
           v-if="appStore.getIsSysAdmin"
@@ -22,7 +22,7 @@
             :value="item.value"
           />
         </ElSelect>
-      </template>
+      </template> -->
     </Form>
     <template #footer>
       <ElButton type="primary" :loading="loading" @click="onSave">确认</ElButton>
@@ -32,22 +32,22 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '@/store/modules/app'
+// import { useAppStore } from '@/store/modules/app'
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElMessage, ElSelect, ElOption } from 'element-plus'
+import { ElButton, ElMessage } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { useValidator } from '@/hooks/web/useValidator'
-import { FamilyIncomeInfoType } from '@/api/project/familyIncome/types'
-import { saveFamilyIncomeApi } from '@/api/project/familyIncome/service'
+import { FamilyIncomeInfoType } from '@/api/sys/familyIncome/types'
+import { saveFamilyIncomeApi } from '@/api/sys/familyIncome/service'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
-const appStore = useAppStore()
+// const appStore = useAppStore()
 
 interface Props {
   show: boolean
-  projectId: number
-  projectList: Array<{ label: string; value: number }>
+  // projectId: number
+  // projectList: Array<{ label: string; value: number }>
   row?: FamilyIncomeInfoType
 }
 
@@ -57,7 +57,7 @@ const emit = defineEmits(['close'])
 const { required } = useValidator()
 const loading = ref(false)
 const currentRow = ref(props.row)
-const projectId = ref(props.projectId)
+// const projectId = ref(props.projectId)
 
 const title = computed(() => {
   return props.row ? '编辑家庭收入项' : '新增家庭收入项'
@@ -66,23 +66,23 @@ const title = computed(() => {
 const rules = {
   name: [required()],
   type: [required()],
-  sort: [required()],
-  projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
+  sort: [required()]
+  // projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
 
 const schema = reactive<FormSchema[]>([
-  {
-    field: 'projectId',
-    label: '所属项目',
-    component: 'Select',
-    formItemProps: {
-      style: { width: '450px' }
-    },
-    componentProps: {
-      placeholder: '选择收入项大类',
-      options: props.projectList
-    }
-  },
+  // {
+  //   field: 'projectId',
+  //   label: '所属项目',
+  //   component: 'Select',
+  //   formItemProps: {
+  //     style: { width: '450px' }
+  //   },
+  //   componentProps: {
+  //     placeholder: '选择收入项大类',
+  //     options: props.projectList
+  //   }
+  // },
   {
     field: 'type',
     label: '类别',
@@ -135,7 +135,7 @@ const onSave = async () => {
 const doSave = async () => {
   loading.value = true
   const familyIncome = (await methods.getFormData()) || {}
-  familyIncome.projectId = projectId.value
+  // familyIncome.projectId = projectId.value
   // 修改
   if (currentRow.value && currentRow.value.id) {
     familyIncome.id = currentRow.value.id
