@@ -74,7 +74,7 @@ export default defineComponent({
         >
           {{
             default: () => {
-              const { renderMenuItem } = useRenderMenuItem(unref(menuMode))
+              const { renderMenuItem } = useRenderMenuItem()
               return renderMenuItem(unref(routers))
             }
           }}
@@ -93,12 +93,14 @@ export default defineComponent({
   border-bottom: 0 none;
 
   .@{elNamespace}-menu-item {
-    font-size: 16px;
-    padding: 0;
     height: 40px;
+    padding: 0;
+    font-size: 16px;
+
     &:hover {
       background-color: transparent;
     }
+
     &.is-active {
       color: #fff;
       border-bottom: 2px solid #fff;
@@ -106,8 +108,8 @@ export default defineComponent({
   }
   .@{elNamespace}-sub-menu {
     :deep(.@{elNamespace}-sub-menu__title) {
-      padding: 0 !important;
       height: 40px;
+      padding: 0 !important;
       font-size: 16px;
     }
     :deep(.@{elNamespace}-sub-menu__icon-arrow) {
@@ -127,12 +129,14 @@ export default defineComponent({
 <style lang="less">
 .drop-menu {
   border-radius: 4px !important;
+
   .el-menu {
     .el-menu-item {
-      padding: 0 36px !important;
       height: 48px !important;
+      padding: 0 36px !important;
       font-size: 16px !important;
       color: #131313 !important;
+
       &:hover {
         color: var(--el-color-primary) !important;
         background-color: transparent !important;
@@ -140,8 +144,8 @@ export default defineComponent({
 
       &.is-active {
         color: var(--el-color-primary) !important;
-        border: 0 none !important;
         background-color: transparent !important;
+        border: 0 none !important;
 
         &:after {
           display: none !important;
@@ -150,6 +154,7 @@ export default defineComponent({
     }
   }
 }
+
 .user-menu {
   .el-menu-item:not(.is-disabled):focus {
     background-color: transparent !important;

@@ -7,7 +7,7 @@ import { useRenderDropMenuTitle } from './useRenderDropMenuTitle'
 import { useDesign } from '@/hooks/web/useDesign'
 import { pathResolve } from '@/utils/routerHelper'
 
-export const useRenderMenuItem = (a: any) => {
+export const useRenderMenuItem = () => {
   const renderMenuItem = (routers: AppRouteRecordRaw[], parentPath = '/', sub?: boolean) => {
     return routers.map((v) => {
       const meta = (v.meta ?? {}) as RouteMeta
