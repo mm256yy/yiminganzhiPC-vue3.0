@@ -5,7 +5,6 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton :icon="printIcon" type="default" @click="() => {}">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -74,7 +73,6 @@ const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,

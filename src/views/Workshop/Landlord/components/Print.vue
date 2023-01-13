@@ -7,6 +7,7 @@
     alignCenter
     appendToBody
     :closeOnClickModal="false"
+    destroy-on-close
   >
     <div>
       <div
@@ -32,69 +33,96 @@
               @change="checkChildItem($event, child)"
               :label="child.name"
             />
-            {{ child.selected ? '选中' : '未选' }}
-            <span class="view">预览</span>
+            <span class="view" @click="onPreview(child)">预览</span>
           </div>
         </div>
       </div>
     </div>
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" class="!bg-[#30A952] !border-[#30A952]" @click="onDownLoad"
+      <ElButton
+        type="primary"
+        class="!bg-[#30A952] !border-[#30A952]"
+        :disabled="selectedTableIds.length === 0"
+        @click="onDownLoad"
         >下载</ElButton
       >
-      <ElButton type="primary" @click="onPrint">打印</ElButton>
+      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint"
+        >打印</ElButton
+      >
     </template>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import axios from 'axios'
+import { uniqueId } from 'lodash-es'
+import printJS from 'print-js'
 import { ElDialog, ElButton, ElCheckbox } from 'element-plus'
+import { getPrintTemplateListApi, printLandlordApi } from '@/api/workshop/landlord/service'
 
 interface PropsType {
   show: boolean
+  landlordIds: number[]
 }
+
+interface PrintListType {
+  name: string
+  selected: boolean
+  showAll: boolean
+  uid: string
+  children: Array<Omit<PrintListType & { url: string }, 'children' | 'showAll'>>
+}
+
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
+const list = ref<PrintListType[]>([])
 
-const list = ref([
-  {
-    uid: 99,
-    name: 'ces1',
-    selected: false,
-    showAll: false,
-    children: [
-      {
-        uid: 1,
-        name: 'child 1',
-        selected: false
-      },
-      {
-        uid: 2,
-        name: 'child 2',
-        selected: false
+const getPrintList = async () => {
+  const res = await getPrintTemplateListApi({
+    templateType: 'print'
+  })
+  const map: {
+    [key: string]: PrintListType
+  } = {}
+  if (res && res.content) {
+    res.content.forEach((item) => {
+      if (!map[item.templateModule]) {
+        map[item.templateModule] = {
+          name: item.templateModule,
+          selected: false,
+          showAll: false,
+          uid: uniqueId('parent'),
+          children: [
+            {
+              name: item.templateName,
+              url: item.templateUrl,
+              selected: false,
+              uid: item.id
+            }
+          ]
+        }
+      } else {
+        map[item.templateModule].children.push({
+          name: item.templateName,
+          url: item.templateUrl,
+          selected: false,
+          uid: item.id
+        })
       }
-    ]
-  },
-  {
-    uid: 66,
-    name: 'ces11',
-    selected: false,
-    children: [
-      {
-        uid: 11,
-        name: 'child 11',
-        selected: false
-      },
-      {
-        uid: 12,
-        name: 'child 22',
-        selected: false
-      }
-    ]
+    })
+    const arr: PrintListType[] = []
+    for (let key in map) {
+      const val = map[key]
+      arr.push(val)
+    }
+
+    list.value = arr
   }
-])
+}
+
+getPrintList()
 
 const onClose = () => {
   emit('close')
@@ -136,7 +164,7 @@ const checkChildItem = (val, childItem) => {
 }
 
 const selectedTableIds = computed(() => {
-  const ids: number[] = []
+  const ids: Array<string | number> = []
   list.value.forEach((item) => {
     const { children } = item
     children.forEach((child) => {
@@ -148,16 +176,43 @@ const selectedTableIds = computed(() => {
   return ids
 })
 
-const onDownLoad = () => {
-  console.log(selectedTableIds.value, 'ids')
+const downLoad = (url: string) => {
+  const a = document.createElement('a')
+
+  axios.get(url, { responseType: 'blob' }).then((res) => {
+    if (!res || !res.data) return
+    // 将链接地址字符内容转变成blob地址
+    a.href = URL.createObjectURL(res.data)
+    a.download = '居民户信息' // 下载文件的名字
+    document.body.appendChild(a)
+    a.click()
+
+    //在资源下载完成后 清除 占用的缓存资源
+    window.URL.revokeObjectURL(a.href)
+    document.body.removeChild(a)
+  })
 }
 
-const onPrint = () => {
-  console.log(selectedTableIds.value, 'ids')
+const onDownLoad = async () => {
+  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
+  if (result) {
+    downLoad(result)
+  }
+}
+
+const onPrint = async () => {
+  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
+  if (result) {
+    printJS(result)
+  }
+}
+
+const onPreview = (item) => {
+  window.open(`https://view.officeapps.live.com/op/view.aspx?src=${item.url}`)
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .collopase-item {
   width: 570px;
   height: 40px;
@@ -167,14 +222,15 @@ const onPrint = () => {
 
   .collopase-item-head {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     height: 40px;
     padding: 0 16px;
     background: #f5f7fa;
-    border-radius: 4px;
     border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: space-between;
   }
+
   .collopase-item-body {
     .body-item {
       display: flex;
@@ -206,11 +262,11 @@ const onPrint = () => {
     .circle-down {
       width: 0;
       height: 0;
-      border-width: 5px;
       margin-top: 5px;
       border-color: transparent;
-      border-style: solid;
       border-top-color: var(--el-color-primary);
+      border-style: solid;
+      border-width: 5px;
     }
   }
 

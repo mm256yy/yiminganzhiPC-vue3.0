@@ -11,7 +11,6 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton :icon="printIcon" type="default" @click="() => {}">打印表格</ElButton>
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -88,7 +87,6 @@ interface TotalItemType {
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 const cateTypes = ref<string[]>([])
 
@@ -227,13 +225,13 @@ const onSave = () => {
   top: 0;
   left: 0;
   display: flex;
-  align-items: center;
   width: 100%;
   height: 100%;
-  font-size: 14px;
-  color: var(--text-color-1);
-  font-weight: 500;
   padding-left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color-1);
   background-color: #f6f6f6;
+  align-items: center;
 }
 </style>

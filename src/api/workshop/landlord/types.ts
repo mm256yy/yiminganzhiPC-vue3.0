@@ -26,3 +26,10 @@ export interface LandlordHeadInfoType {
   reportSucceedNum: number
   unReportNum: number
 }
+
+export interface TemplateParamsType {
+  templateKey: string
+  projectId: number
+  templateType: string
+  templateModule: string
+}

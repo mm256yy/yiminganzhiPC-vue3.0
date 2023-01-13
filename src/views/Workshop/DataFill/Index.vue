@@ -22,7 +22,16 @@
             >{{ item.name }}</div
           >
         </div>
-        <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
+        <ElSpace>
+          <ElButton
+            :icon="printIcon"
+            type="primary"
+            class="!bg-[#30A952] !border-[#30A952]"
+            @click="onPrint"
+            >打印表格</ElButton
+          >
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
+        </ElSpace>
       </div>
 
       <UserInfo :baseInfo="baseInfo" />
@@ -78,6 +87,8 @@
       />
     </div>
 
+    <Print :show="printDialog" :landlordIds="[householdId]" @close="onPrintDialogClose" />
+
     <ElDialog
       class="report-dialog"
       title="数据上报"
@@ -90,13 +101,9 @@
       destroy-on-close
     >
       <div class="report-cont">
-        <div class="report-item">
-          <div class="report-tit">人口信息采集:</div>
-          <div class="report-txt">未添加户主外人员</div>
-        </div>
-        <div class="report-item">
-          <div class="report-tit">人口信息采集:</div>
-          <div class="report-txt">未添加户主外人员</div>
+        <div class="report-item" v-for="item in reportResult" :key="item">
+          <div class="report-tit">{{ item.split('：')[0] }}:</div>
+          <div class="report-txt">{{ item.split('：')[1] }}</div>
         </div>
       </div>
 
@@ -107,7 +114,7 @@
 
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
-        <ElButton type="primary">确认</ElButton>
+        <ElButton type="primary" @click="onConfirmReport">确认</ElButton>
       </template>
     </ElDialog>
   </WorkContentWrap>
@@ -115,7 +122,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog } from 'element-plus'
+import {
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElButton,
+  ElDialog,
+  ElMessage,
+  ElSpace
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs, FlowTabs, ReportTabIds } from './config'
@@ -131,6 +145,7 @@ import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
 import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
+import Print from './components/Print.vue'
 
 const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
@@ -138,9 +153,12 @@ const tabCurrentId = ref<number>(1)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
 const { doorNo, householdId } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)
+const printDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 
 const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -172,44 +190,67 @@ const onClose = () => {
 
 // 数据上报
 const onReportData = async () => {
-  const result = await reportLandlordApi(householdId)
+  const result = await reportLandlordApi(householdId, true)
   console.log(result, 'report res')
+  if (result && Array.isArray(result)) {
+    reportResult.value = result
+  } else {
+    ElMessage.success('上报成功！')
+    back()
+  }
+}
+
+const onConfirmReport = async () => {
+  const result = await reportLandlordApi(householdId, false)
+  if (result && Object.prototype.toString.call(result) === '[object String]') {
+    ElMessage.success('上报成功！')
+    back()
+  }
 }
 
 const onBack = () => {
   back()
+}
+
+const onPrint = () => {
+  printDialog.value = true
+}
+
+const onPrintDialogClose = () => {
+  printDialog.value = false
 }
 </script>
 
 <style lang="less" scoped>
 .data-fill-head {
   position: relative;
-  margin-top: 6px;
   padding: 14px 16px;
+  margin-top: 6px;
   background: #ffffff;
-  box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
   border-radius: 4px;
+  box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
 
   .head-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+
   .tabs {
     display: flex;
     align-items: center;
 
     .tab-item {
       display: flex;
-      align-items: center;
+      height: 32px;
       padding: 0 21px;
       margin-right: 4px;
-      height: 32px;
       font-size: 14px;
       color: #000;
+      cursor: pointer;
       background: #f0f2f7;
       border-radius: 10px 10px 0px 0px;
-      cursor: pointer;
+      align-items: center;
 
       &.active {
         color: #fff;
@@ -223,17 +264,19 @@ const onBack = () => {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+
   .report-tab-item {
     display: flex;
-    align-items: center;
     height: 32px;
     padding: 0 16px;
     margin: 14px 8px 0 0;
     font-size: 14px;
-    background: #ffffff;
-    border-radius: 4px;
-    border: 1px solid #dcdfe6;
     cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    align-items: center;
+
     .tit {
       margin-left: 6px;
       user-select: none;
@@ -248,8 +291,8 @@ const onBack = () => {
 }
 
 .data-fill-body {
-  margin-top: -10px;
   padding-top: 10px;
+  margin-top: -10px;
   background-color: #fff;
 }
 
@@ -259,22 +302,25 @@ const onBack = () => {
     padding: 22px 55px;
     margin: 0 auto;
     background: #f5f7fa;
-    border-radius: 4px;
     border: 1px solid #dcdfe6;
+    border-radius: 4px;
+
     .report-item {
       display: flex;
-      align-items: center;
-      font-size: 14px;
       height: 32px;
+      font-size: 14px;
       line-height: 32px;
+      align-items: center;
+
       .report-tit {
         margin-right: 16px;
-        text-align: right;
         color: rgba(19, 19, 19, 0.6);
+        text-align: right;
       }
+
       .report-txt {
-        color: var(--text-color-1);
         font-weight: 500;
+        color: var(--text-color-1);
       }
     }
   }
@@ -293,6 +339,7 @@ const onBack = () => {
 .el-divider--horizontal {
   margin: 8px 0 24px;
 }
+
 .report-dialog {
   .el-dialog__body {
     padding: 16px 40px !important;

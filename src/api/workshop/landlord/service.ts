@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { LandlordDtoType } from './types'
+import { LandlordDtoType, TemplateParamsType } from './types'
 
 /**
  * 查询居民户信息列表
@@ -46,6 +46,14 @@ export const downLandlordTemplateApi = (name: string): Promise<any> => {
 }
 
 /**
+ * 导出模版列表
+ */
+
+export const getPrintTemplateListApi = (params: Partial<TemplateParamsType>): Promise<any> => {
+  return request.get({ url: `/import_template`, params })
+}
+
+/**
  * 查询居民户头部信息
  */
 export const getLandlordHeadApi = (): Promise<any> => {
@@ -55,8 +63,29 @@ export const getLandlordHeadApi = (): Promise<any> => {
 /**
  * 上报居民户信息
  */
-export const reportLandlordApi = (id) => {
+export const reportLandlordApi = (id: number, isCheck: boolean) => {
   return request.post({
-    url: `/peasantHousehold/report/${id}`
+    url: `/peasantHousehold/report/${id}`,
+    headersType: 'multipart/form-data',
+    data: {
+      isCheck
+    }
+  })
+}
+
+/**
+ * 打印/下载
+ */
+export const printLandlordApi = (
+  templateIds: Array<number | string>,
+  peasantHouseholdIds: number[]
+): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/print`,
+    headersType: 'multipart/form-data',
+    data: {
+      templateIds: templateIds.join(','),
+      peasantHouseholdIds: peasantHouseholdIds.join(',')
+    }
   })
 }

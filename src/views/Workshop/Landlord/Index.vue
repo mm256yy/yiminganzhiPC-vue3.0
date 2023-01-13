@@ -106,7 +106,8 @@
       @submit="onSubmit"
     />
 
-    <Print :show="printDialog" @close="onPrintDialogClose" />
+    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
+    <Survey :show="true" />
   </WorkContentWrap>
 </template>
 
@@ -119,6 +120,7 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from './components/Print.vue'
+import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -143,6 +145,7 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
+const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -528,8 +531,8 @@ const onSearch = (data) => {
 
 const onPrint = async () => {
   const res = await getSelections()
-  console.log(res, '选择的数据')
   if (res && res.length) {
+    landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
   } else {
     ElMessage.warning('请选择需要打印的居民户')
@@ -561,15 +564,15 @@ const onViewRow = (row) => {
 <style lang="less" scoped>
 .filling-btn {
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 80px;
   height: 28px;
   font-size: 14px;
   color: var(--el-color-primary);
+  cursor: pointer;
   background: #e9f3ff;
   border-radius: 4px;
-  cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
 .status {
@@ -581,6 +584,7 @@ const onViewRow = (row) => {
   &.status-err {
     background-color: #ff3939;
   }
+
   &.status-suc {
     background-color: #0cc029;
   }

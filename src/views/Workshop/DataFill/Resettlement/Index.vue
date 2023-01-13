@@ -14,7 +14,6 @@ import { WorkContentWrap } from '@/components/ContentWrap';
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton :icon="printIcon" type="default" @click="() => {}">打印表格</ElButton>
         </ElSpace>
       </div>
 
@@ -130,7 +129,6 @@ enum PalceWay {
 
 const props = defineProps<PropsType>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 const appStore = useAppStore()
 
 const defaultVal = {
@@ -218,22 +216,24 @@ const onSave = () => {
 <style lang="less" scoped>
 .desire {
   background: #ffffff;
-  border-radius: 4px;
   border: 1px solid #ebebeb;
+  border-radius: 4px;
+
   .desire-item {
     padding-bottom: 8px;
   }
+
   .common-title {
     display: flex;
-    align-items: center;
-    padding: 0 16px;
     height: 32px;
+    padding: 0 16px;
     font-size: 14px;
     font-weight: 500;
     color: #131313;
     background: #f6f6f6;
-    border-radius: 4px 4px 0px 0px;
     border: 1px solid #ebebeb;
+    border-radius: 4px 4px 0px 0px;
+    align-items: center;
 
     .line {
       width: 4px;
@@ -252,15 +252,17 @@ const onSave = () => {
     display: flex;
     align-items: center;
     padding-bottom: 16px;
+
     .family-item {
       display: flex;
-      align-items: center;
-      white-space: nowrap;
       margin-right: 40px;
+      white-space: nowrap;
+      align-items: center;
 
       &:last-child {
         margin-right: 0;
       }
+
       .tit {
         margin-right: 10px;
         font-size: 14px;
@@ -271,10 +273,10 @@ const onSave = () => {
 
   .radio-item {
     display: flex;
-    align-items: center;
+    padding-bottom: 16px;
     font-size: 14px;
     color: #171718;
-    padding-bottom: 16px;
+    align-items: center;
   }
 }
 </style>
