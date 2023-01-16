@@ -7,6 +7,7 @@
     alignCenter
     appendToBody
     :closeOnClickModal="false"
+    destroy-on-close
   >
     <ElForm
       class="policy-form"
@@ -30,7 +31,7 @@
         <ElInput clearable :maxlength="20" v-model="form.name" />
       </ElFormItem>
 
-      <MapFormItem :positon="position" @change="onChosePosition" />
+      <MapFormItem v-if="!props.hideMap" :positon="position" @change="onChosePosition" />
     </ElForm>
 
     <template #footer>
@@ -56,16 +57,15 @@ import { ref, reactive, watch, nextTick } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
+import { useAppStore } from '@/store/modules/app'
+import { addVillageApi, updateVillageApi } from '@/api/workshop/village/service'
 import type { VillageDtoType } from '@/api/workshop/village/types'
 import type { DistrictNodeType } from '@/api/district/types'
 
 interface PropsType {
   show: boolean
+  hideMap?: boolean
   actionType: 'add' | 'edit'
-  projects?: Array<{
-    label: string
-    value: number
-  }>
   row?: VillageDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
@@ -73,6 +73,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 
 const treeSelectDefaultProps = {
   value: 'code',
@@ -120,8 +122,8 @@ const rules = reactive<FormRules>({
 })
 
 // 关闭弹窗
-const onClose = () => {
-  emit('close')
+const onClose = (flag = false) => {
+  emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
   })
@@ -134,21 +136,34 @@ const onChosePosition = (ps) => {
   position.address = ps.address
 }
 
+const submit = async (data: VillageDtoType) => {
+  if (props.actionType === 'add') {
+    await addVillageApi({
+      ...data,
+      projectId
+    })
+  } else {
+    await updateVillageApi({
+      ...data,
+      projectId
+    })
+  }
+  ElMessage.success('操作成功！')
+  onClose(true)
+}
+
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      if (!position || !position.longitude) {
+      if (!props.hideMap && (!position || !position.longitude)) {
         return ElMessage.error('请点击地图选择经纬度')
       }
-      const data = {
+      const data: any = {
         ...form.value,
         ...position
       }
-      emit('submit', data)
-      nextTick(() => {
-        formRef.value?.resetFields()
-      })
+      submit(data)
     } else {
       return false
     }
@@ -162,6 +177,7 @@ const onSubmit = debounce((formEl) => {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+
   .el-input__wrapper {
     width: 100%;
   }

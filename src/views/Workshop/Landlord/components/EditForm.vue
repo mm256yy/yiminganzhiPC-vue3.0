@@ -17,28 +17,29 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem class="w-full" label="自然村" prop="parentCode">
-        <ElTreeSelect
-          class="!w-full"
+      <ElFormItem label="自然村" prop="parentCode">
+        <!-- <ElTreeSelect
+          class="!w-350px"
           v-model="form.parentCode"
           :data="props.districtTree"
           node-key="code"
           :props="treeSelectDefaultProps"
           :default-expanded-keys="[form.parentCode]"
-        />
-        <!-- <ElCascader
-          class="!w-full"
+        /> -->
+        <ElCascader
+          class="!w-350px"
           v-model="form.parentCode"
           :options="props.districtTree"
           :props="treeSelectDefaultProps"
           expandTrigger="hover"
-        /> -->
+        />
+        <ElButton type="text" class="ml-10px" @click="onVillageDialogOpen">添加自然村</ElButton>
       </ElFormItem>
       <ElFormItem label="户主姓名" prop="name">
-        <ElInput v-model="form.name" placeholder="请输入户主姓名" />
+        <ElInput v-model="form.name" class="!w-350px" placeholder="请输入户主姓名" />
       </ElFormItem>
       <ElFormItem label="性别" prop="sex">
-        <ElSelect clearable v-model="form.sex">
+        <ElSelect class="!w-350px" clearable v-model="form.sex">
           <ElOption
             v-for="item in dictObj[292]"
             :key="item.value"
@@ -53,7 +54,7 @@
           clearable
           placeholder="请输入身份证号"
           type="text"
-          class="!w-full"
+          class="!w-350px"
           v-model="form.card"
         />
       </ElFormItem>
@@ -63,7 +64,7 @@
           clearable
           placeholder="请输入联系方式"
           type="text"
-          class="!w-full"
+          class="!w-350px"
           v-model="form.phone"
         />
       </ElFormItem>
@@ -71,7 +72,7 @@
       <ElDivider border-style="dashed" />
 
       <ElFormItem label="财产户" prop="hasPropertyAccount">
-        <ElSelect clearable v-model="form.hasPropertyAccount">
+        <ElSelect class="!w-350px" clearable v-model="form.hasPropertyAccount">
           <ElOption
             v-for="item in yesAndNoEnums"
             :key="item.label"
@@ -82,15 +83,15 @@
       </ElFormItem>
 
       <ElFormItem label="户籍册编号" prop="householdNumber">
-        <ElInput v-model="form.householdNumber" placeholder="请输入户籍册编号" />
+        <ElInput class="!w-350px" v-model="form.householdNumber" placeholder="请输入户籍册编号" />
       </ElFormItem>
 
       <ElFormItem label="户籍所在地" prop="address">
-        <ElInput v-model="form.address" placeholder="请输入户籍所在地" />
+        <ElInput class="!w-350px" v-model="form.address" placeholder="请输入户籍所在地" />
       </ElFormItem>
 
       <ElFormItem label="所在位置" prop="locationType">
-        <ElSelect class="w-full" v-model="form.locationType">
+        <ElSelect class="w-350px" v-model="form.locationType">
           <ElOption
             v-for="item in locationTypes"
             :key="item.value"
@@ -100,8 +101,19 @@
         </ElSelect>
       </ElFormItem>
 
-      <MapFormItem :positon="position" @change="onChosePosition" />
+      <div class="w-466px">
+        <MapFormItem :positon="position" @change="onChosePosition" />
+      </div>
     </ElForm>
+
+    <VillageEditForm
+      :district-tree="districtTree"
+      :show="villageDialog"
+      :row="null"
+      :hideMap="true"
+      action-type="add"
+      @close="onVillageDialogClose"
+    />
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
@@ -122,34 +134,36 @@ import {
   ElOption,
   ElSelect,
   ElMessage,
-  ElTreeSelect,
+  ElCascader,
   ElDivider
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
+import { useAppStore } from '@/store/modules/app'
 import { locationTypes, yesAndNoEnums } from '../config'
+import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getDistrictTreeApi } from '@/api/district'
+import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  projects?: Array<{
-    label: string
-    value: number
-  }>
   row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
 
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits(['close', 'updateDistrict'])
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 
 const dictObj = computed(() => dictStore.getDictObj)
 const treeSelectDefaultProps = {
@@ -175,6 +189,15 @@ const position: {
   latitude: 0,
   longitude: 0
 })
+const districtTree = ref([])
+const villageDialog = ref(false)
+
+const getDistrictTree = async () => {
+  const list = await getDistrictTreeApi(projectId)
+  districtTree.value = list || []
+}
+
+getDistrictTree()
 
 watch(
   () => props.row,
@@ -232,6 +255,7 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请选择位置')
         return
       }
+      console.log(form.value.parentCode, '自然c')
       const data: any = {
         ...form.value,
         ...position,
@@ -241,19 +265,39 @@ const onSubmit = debounce((formEl) => {
         virutalVillageCode: form.value.parentCode[3] || ''
       }
       delete data.parentCode
-      emit('submit', data)
-
-      nextTick(() => {
-        formRef.value?.resetFields()
-        position.latitude = 0
-        position.longitude = 0
-        position.address = ''
-      })
+      submit(data)
     } else {
       return false
     }
   })
 }, 600)
+
+const submit = async (data: LandlordDtoType) => {
+  if (props.actionType === 'add') {
+    await addLandlordApi({
+      ...data,
+      projectId
+    })
+  } else {
+    await updateLandlordApi({
+      ...data,
+      projectId
+    })
+  }
+  ElMessage.success('操作成功！')
+  onClose()
+}
+
+const onVillageDialogOpen = () => {
+  villageDialog.value = true
+}
+
+const onVillageDialogClose = (flag?: boolean) => {
+  villageDialog.value = false
+  if (flag) {
+    emit('updateDistrict')
+  }
+}
 </script>
 
 <style lang="less">
@@ -262,6 +306,7 @@ const onSubmit = debounce((formEl) => {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+
   .el-input__wrapper {
     width: 100%;
   }

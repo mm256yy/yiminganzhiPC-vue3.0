@@ -26,3 +26,18 @@ export interface LandlordHeadInfoType {
   reportSucceedNum: number
   unReportNum: number
 }
+
+export interface TemplateParamsType {
+  templateKey: string
+  projectId: number
+  templateType: string
+  templateModule: string
+}
+
+export interface SurveyInfoType {
+  immigrantGraveList: any[]
+  immigrantHouseList: any[]
+  immigrantTreeList: any[]
+  demographicList: any[]
+  immigrantAppendantList: any[]
+}

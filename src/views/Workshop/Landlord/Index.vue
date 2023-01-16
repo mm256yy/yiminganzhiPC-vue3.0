@@ -84,7 +84,7 @@
             :icons="[
               {
                 icon: '',
-                tooltip: '详情',
+                tooltip: '概况',
                 type: 'primary',
                 action: () => onViewRow(row)
               }
@@ -103,10 +103,11 @@
       :row="tableObject.currentRow"
       :districtTree="villageTree"
       @close="onFormPupClose"
-      @submit="onSubmit"
+      @update-district="onUpdateDistrict"
     />
 
-    <Print :show="printDialog" @close="onPrintDialogClose" />
+    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
+    <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
 
@@ -119,21 +120,25 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from './components/Print.vue'
+import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getLandlordListApi,
-  addLandlordApi,
-  updateLandlordApi,
   delLandlordByIdApi,
-  getLandlordHeadApi
+  getLandlordHeadApi,
+  getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from './config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import type {
+  LandlordDtoType,
+  LandlordHeadInfoType,
+  SurveyInfoType
+} from '@/api/workshop/landlord/types'
 
 const appStore = useAppStore()
 const { push } = useRouter()
@@ -143,6 +148,7 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
+const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -150,6 +156,8 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const surveyDialog = ref(false)
+const surveyInfo = ref<SurveyInfoType | null>(null)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -165,9 +173,12 @@ getList()
 
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
-  console.log(list, 'village list')
   villageTree.value = list || []
   return list || []
+}
+
+const onUpdateDistrict = () => {
+  getVillageTree()
 }
 
 const getLandlordHeadInfo = async () => {
@@ -452,24 +463,6 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: LandlordDtoType) => {
-  if (actionType.value === 'add') {
-    await addLandlordApi({
-      ...data,
-      projectId
-    })
-  } else {
-    await updateLandlordApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      projectId
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
-}
-
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
   data.forEach((item, index, arr) => {
@@ -528,8 +521,8 @@ const onSearch = (data) => {
 
 const onPrint = async () => {
   const res = await getSelections()
-  console.log(res, '选择的数据')
   if (res && res.length) {
+    landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
   } else {
     ElMessage.warning('请选择需要打印的居民户')
@@ -551,25 +544,33 @@ const fillData = (row) => {
   })
 }
 
-const onViewRow = (row) => {
-  actionType.value = 'view'
-  tableObject.currentRow = row
-  dialog.value = true
+const onSurveyDialogClose = () => {
+  surveyDialog.value = false
+}
+
+const onViewRow = async (row) => {
+  const result = await getLandlordSurveyByIdApi(row.id)
+  if (result) {
+    surveyInfo.value = result
+    surveyDialog.value = true
+  } else {
+    ElMessage.warning('查看失败！')
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .filling-btn {
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 80px;
   height: 28px;
   font-size: 14px;
   color: var(--el-color-primary);
+  cursor: pointer;
   background: #e9f3ff;
   border-radius: 4px;
-  cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
 .status {
@@ -581,6 +582,7 @@ const onViewRow = (row) => {
   &.status-err {
     background-color: #ff3939;
   }
+
   &.status-suc {
     background-color: #0cc029;
   }

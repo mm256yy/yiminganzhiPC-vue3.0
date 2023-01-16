@@ -13,7 +13,6 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton :icon="printIcon" type="default" @click="() => {}">打印表格</ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -108,7 +107,6 @@ interface PropsType {
 const props = defineProps<PropsType>()
 // const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 const tableData = ref<any[]>([])
 
 const dictStore = useDictStoreWithOut()

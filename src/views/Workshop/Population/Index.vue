@@ -5,14 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">人口信息预导入</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        expand
-        :defaultExpand="false"
-        :expand-field="'householdNumber'"
-        @search="onSearch"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
     </div>
 
     <div class="table-wrap">
@@ -28,12 +21,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElPopover
-            v-if="excelList && excelList.length"
-            placement="bottom"
-            :width="460"
-            trigger="hover"
-          >
+          <ElPopover v-if="excelList && excelList.length" :width="460" trigger="hover">
             <template #reference>
               <div class="view-upload">
                 <span class="pr-10px">批量导入记录</span>
@@ -229,7 +217,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sex',
+    field: 'sexText',
     label: '性别',
     width: 88,
     search: {
@@ -253,7 +241,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relation',
+    field: 'relationText',
     label: '与户主关系',
     width: 120,
     search: {
@@ -326,11 +314,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: '1'
+            value: 'Master'
           },
           {
             label: '否',
-            value: '0'
+            value: 'Daughter,Son,Wife,Husband'
           }
         ]
       }
@@ -370,34 +358,6 @@ const schema = reactive<CrudSchema[]>([
       component: 'Input',
       componentProps: {
         placeholder: '请输入姓名'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'householdNumber',
-    label: '户籍册编号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户籍册编号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'phone',
-    label: '联系方式',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入联系方式'
       }
     },
     table: {
@@ -507,29 +467,33 @@ const uploadError = (error) => {
 <style lang="less" scoped>
 .view-upload {
   display: flex;
-  align-items: center;
   height: 32px;
   padding: 0 10px;
   font-size: 14px;
-  color: var(--text-color-1);
   font-weight: 500;
-  background: #ffffff;
-  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
+  color: var(--text-color-1);
+  white-space: nowrap;
   cursor: default;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
+  align-items: center;
 }
 
 .file-list {
+  height: 210px;
+  overflow-y: scroll;
+
   .file-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    padding: 0 16px;
     height: 40px;
+    padding: 0 16px;
+    margin-bottom: 8px;
     font-size: 14px;
     color: var(--text-color-1);
+    align-items: center;
+    justify-content: space-between;
 
     .number {
       font-weight: 500;

@@ -5,7 +5,6 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton :icon="printIcon" type="default" @click="() => {}">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -42,9 +41,8 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :district-tree="[]"
+      :doorNo="props.doorNo"
       @close="onFormPupClose"
-      @submit="onSubmit"
     />
   </WorkContentWrap>
 </template>
@@ -52,18 +50,13 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { ElButton, ElMessage, ElSpace } from 'element-plus'
+import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  addDemographicApi,
-  updateDemographicApi,
-  delDemographicByIdApi
-} from '@/api/workshop/population/service'
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 
 interface PropsType {
@@ -74,7 +67,6 @@ const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -228,24 +220,6 @@ const onEditRow = (row: DemographicDtoType) => {
 
 const onFormPupClose = () => {
   dialog.value = false
-}
-
-const onSubmit = async (data: DemographicDtoType) => {
-  if (actionType.value === 'add') {
-    await addDemographicApi({
-      ...data,
-      doorNo: props.doorNo
-    })
-  } else {
-    await updateDemographicApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      doorNo: props.doorNo
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
 }
 
 const onViewRow = (row) => {
