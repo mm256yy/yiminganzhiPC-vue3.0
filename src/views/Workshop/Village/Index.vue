@@ -54,7 +54,6 @@
       :row="tableObject.currentRow"
       :districtTree="districtTree"
       @close="onFormPupClose"
-      @submit="onSubmit"
     />
   </WorkContentWrap>
 </template>
@@ -62,7 +61,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -70,12 +69,7 @@ import EditForm from './components/EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getVillageListApi,
-  addVillageApi,
-  updateVillageApi,
-  delVillageByIdApi
-} from '@/api/workshop/village/service'
+import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
 import { getDistrictTreeApi } from '@/api/district'
 import type { VillageDtoType } from '@/api/workshop/village/types'
 
@@ -252,23 +246,5 @@ const onEditRow = (row: VillageDtoType) => {
 
 const onFormPupClose = () => {
   dialog.value = false
-}
-
-const onSubmit = async (data: VillageDtoType) => {
-  if (actionType.value === 'add') {
-    await addVillageApi({
-      ...data,
-      projectId
-    })
-  } else {
-    await updateVillageApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      projectId
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
 }
 </script>

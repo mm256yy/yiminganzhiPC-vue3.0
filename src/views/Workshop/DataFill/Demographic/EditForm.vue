@@ -357,26 +357,23 @@ import {
   ElDivider,
   ElRow,
   ElCol,
-  ElMessageBox
+  ElMessageBox,
+  ElMessage
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
-import type { DistrictNodeType } from '@/api/district/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { addDemographicApi, updateDemographicApi } from '@/api/workshop/population/service'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  projects?: Array<{
-    label: string
-    value: number
-  }>
   row?: DemographicDtoType | null | undefined
-  districtTree: DistrictNodeType[]
+  doorNo: string
 }
 
 interface FileItemType {
@@ -457,6 +454,22 @@ const onClose = () => {
   })
 }
 
+const submit = async (data: DemographicDtoType) => {
+  if (props.actionType === 'add') {
+    await addDemographicApi({
+      ...data,
+      doorNo: props.doorNo
+    })
+  } else {
+    await updateDemographicApi({
+      ...data,
+      doorNo: props.doorNo
+    })
+  }
+  ElMessage.success('操作成功！')
+  onClose()
+}
+
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
@@ -467,10 +480,7 @@ const onSubmit = debounce((formEl) => {
         householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)
       }
-      emit('submit', data)
-      nextTick(() => {
-        formRef.value?.resetFields()
-      })
+      submit(data)
     } else {
       return false
     }

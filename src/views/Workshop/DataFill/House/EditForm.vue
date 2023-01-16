@@ -378,7 +378,8 @@ import {
   ElDivider,
   ElRow,
   ElCol,
-  ElMessageBox
+  ElMessageBox,
+  ElMessage
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { MapFormItem } from '@/components/Map'
@@ -388,15 +389,14 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { addHouseApi, updateHouseApi } from '@/api/workshop/datafill/house-service'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  projects?: Array<{
-    label: string
-    value: number
-  }>
   row?: HouseDtoType | null | undefined
+  householdId: string
+  doorNo: string
 }
 
 interface FileItemType {
@@ -529,13 +529,7 @@ const onSubmit = debounce((formEl) => {
         landPic: JSON.stringify(landPic.value || []),
         otherPic: JSON.stringify(otherPic.value || [])
       }
-      emit('submit', data)
-      position.latitude = 0
-      position.longitude = 0
-      position.address = ''
-      nextTick(() => {
-        formRef.value?.resetFields()
-      })
+      submit(data)
     } else {
       return false
     }
@@ -597,6 +591,24 @@ const beforeRemove = (uploadFile: UploadFile) => {
 const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
+}
+
+const submit = async (data: HouseDtoType) => {
+  if (props.actionType === 'add') {
+    await addHouseApi({
+      ...data,
+      doorNo: props.doorNo,
+      householdId: +props.householdId
+    })
+  } else {
+    await updateHouseApi({
+      ...data,
+      doorNo: props.doorNo,
+      householdId: +props.householdId
+    })
+  }
+  ElMessage.success('操作成功！')
+  onClose()
 }
 </script>
 <style lang="less">

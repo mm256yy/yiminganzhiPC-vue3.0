@@ -84,7 +84,7 @@
             :icons="[
               {
                 icon: '',
-                tooltip: '详情',
+                tooltip: '概况',
                 type: 'primary',
                 action: () => onViewRow(row)
               }
@@ -103,11 +103,11 @@
       :row="tableObject.currentRow"
       :districtTree="villageTree"
       @close="onFormPupClose"
-      @submit="onSubmit"
+      @update-district="onUpdateDistrict"
     />
 
     <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
-    <Survey :show="true" />
+    <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
 
@@ -126,16 +126,19 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getLandlordListApi,
-  addLandlordApi,
-  updateLandlordApi,
   delLandlordByIdApi,
-  getLandlordHeadApi
+  getLandlordHeadApi,
+  getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from './config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import type {
+  LandlordDtoType,
+  LandlordHeadInfoType,
+  SurveyInfoType
+} from '@/api/workshop/landlord/types'
 
 const appStore = useAppStore()
 const { push } = useRouter()
@@ -153,6 +156,8 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const surveyDialog = ref(false)
+const surveyInfo = ref<SurveyInfoType | null>(null)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -168,9 +173,12 @@ getList()
 
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
-  console.log(list, 'village list')
   villageTree.value = list || []
   return list || []
+}
+
+const onUpdateDistrict = () => {
+  getVillageTree()
 }
 
 const getLandlordHeadInfo = async () => {
@@ -455,24 +463,6 @@ const onFormPupClose = () => {
   dialog.value = false
 }
 
-const onSubmit = async (data: LandlordDtoType) => {
-  if (actionType.value === 'add') {
-    await addLandlordApi({
-      ...data,
-      projectId
-    })
-  } else {
-    await updateLandlordApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      projectId
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
-}
-
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
   data.forEach((item, index, arr) => {
@@ -554,10 +544,18 @@ const fillData = (row) => {
   })
 }
 
-const onViewRow = (row) => {
-  actionType.value = 'view'
-  tableObject.currentRow = row
-  dialog.value = true
+const onSurveyDialogClose = () => {
+  surveyDialog.value = false
+}
+
+const onViewRow = async (row) => {
+  const result = await getLandlordSurveyByIdApi(row.id)
+  if (result) {
+    surveyInfo.value = result
+    surveyDialog.value = true
+  } else {
+    ElMessage.warning('查看失败！')
+  }
 }
 </script>
 

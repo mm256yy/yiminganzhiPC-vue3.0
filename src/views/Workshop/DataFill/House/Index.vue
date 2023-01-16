@@ -40,9 +40,9 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :district-tree="[]"
+      :householdId="props.householdId"
+      :doorNo="props.doorNo"
       @close="onFormPupClose"
-      @submit="onSubmit"
     />
   </WorkContentWrap>
 </template>
@@ -50,18 +50,13 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { ElButton, ElMessage, ElSpace } from 'element-plus'
+import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getHouseListApi,
-  addHouseApi,
-  updateHouseApi,
-  delHouseByIdApi
-} from '@/api/workshop/datafill/house-service'
+import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 
 interface PropsType {
@@ -228,26 +223,6 @@ const onEditRow = (row: HouseDtoType) => {
 
 const onFormPupClose = () => {
   dialog.value = false
-}
-
-const onSubmit = async (data: HouseDtoType) => {
-  if (actionType.value === 'add') {
-    await addHouseApi({
-      ...data,
-      doorNo: props.doorNo,
-      householdId: +props.householdId
-    })
-  } else {
-    await updateHouseApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      doorNo: props.doorNo,
-      householdId: +props.householdId
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
 }
 
 const onViewRow = (row) => {

@@ -33,3 +33,11 @@ export interface TemplateParamsType {
   templateType: string
   templateModule: string
 }
+
+export interface SurveyInfoType {
+  immigrantGraveList: any[]
+  immigrantHouseList: any[]
+  immigrantTreeList: any[]
+  demographicList: any[]
+  immigrantAppendantList: any[]
+}

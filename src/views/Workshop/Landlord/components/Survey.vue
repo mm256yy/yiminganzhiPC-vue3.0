@@ -11,11 +11,14 @@
   >
     <div class="survey-box">
       <div class="survey-item">
-        <div class="survey-head">人口信息：共<span class="num">5</span>人</div>
+        <div class="survey-head"
+          >人口信息：共<span class="num">{{ props.data?.demographicList.length || 0 }}</span
+          >人</div
+        >
         <div class="survey-body">
           <ElTable
             :border="true"
-            :data="array[0]"
+            :data="props.data ? props.data.demographicList : []"
             :header-cell-style="headerStyle"
             :cell-style="cellStyle"
             style="width: 100%"
@@ -26,76 +29,102 @@
             <ElTableColumn prop="nationText" label="民族" width="107" />
             <ElTableColumn prop="maritalText" label="婚姻状况" width="107" />
             <ElTableColumn prop="censusRegister" label="户籍所在地" />
-            <ElTableColumn prop="card" label="身份证号" width="172" />
+            <ElTableColumn prop="card" label="身份证号" width="180" />
             <ElTableColumn prop="populationTypeText" label="人口类型" width="130" />
           </ElTable>
         </div>
       </div>
 
       <div class="survey-item">
-        <div class="survey-head">房屋信息：共<span class="num">5</span>人</div>
+        <div class="survey-head"
+          >房屋信息：共<span class="num">{{ props.data?.immigrantHouseList.length || 0 }}</span
+          >幢</div
+        >
         <div class="survey-body">
           <ElTable
             :border="true"
-            :data="tableData"
+            :data="props.data ? props.data.immigrantHouseList : []"
             :header-cell-style="headerStyle"
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="date" label="Date" width="180" />
-            <ElTableColumn prop="name" label="Name" width="180" />
-            <ElTableColumn prop="address" label="Address" />
+            <ElTableColumn prop="houseNo" label="编号" width="57" />
+            <ElTableColumn prop="houseTypeText" label="类别" width="107" />
+            <ElTableColumn prop="houseHeight" label="高程(m)" width="85" />
+            <ElTableColumn prop="storeyNumber" label="层数(层)" width="85" />
+            <ElTableColumn prop="landArea" label="建筑面积" width="107" />
+            <ElTableColumn prop="constructionType" label="结构类型" width="134" />
+            <ElTableColumn prop="completedTime" label="竣工年月" width="134" />
+            <ElTableColumn prop="propertyNo" label="房屋所有权证" width="233" />
+            <ElTableColumn prop="landNo" label="土地使用权证" />
           </ElTable>
         </div>
       </div>
 
       <div class="survey-item">
-        <div class="survey-head">附属物信息：共<span class="num">5</span>人</div>
+        <div class="survey-head"
+          >附属物信息：共<span class="num">{{
+            props.data?.immigrantAppendantList.length || 0
+          }}</span
+          >件</div
+        >
         <div class="survey-body">
           <ElTable
             :border="true"
-            :data="tableData"
+            :data="props.data ? props.data.immigrantAppendantList : []"
             :header-cell-style="headerStyle"
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="date" label="Date" width="180" />
-            <ElTableColumn prop="name" label="Name" width="180" />
-            <ElTableColumn prop="address" label="Address" />
+            <ElTableColumn type="index" label="序号" width="154" />
+            <ElTableColumn prop="name" label="项目" width="291" />
+            <ElTableColumn prop="size" label="规格" width="235" />
+            <ElTableColumn prop="unit" label="单位" width="235" />
+            <ElTableColumn prop="number" label="数量" />
           </ElTable>
         </div>
       </div>
 
       <div class="survey-item">
-        <div class="survey-head">零星林果木信息：共<span class="num">5</span>人</div>
+        <div class="survey-head"
+          >零星林果木信息：共<span class="num">{{ props.data?.immigrantTreeList.length || 0 }}</span
+          >处</div
+        >
         <div class="survey-body">
           <ElTable
             :border="true"
-            :data="tableData"
+            :data="props.data ? props.data.immigrantTreeList : []"
             :header-cell-style="headerStyle"
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="date" label="Date" width="180" />
-            <ElTableColumn prop="name" label="Name" width="180" />
-            <ElTableColumn prop="address" label="Address" />
+            <ElTableColumn type="index" label="序号" width="154" />
+            <ElTableColumn prop="name" label="项目" width="291" />
+            <ElTableColumn prop="sizeText" label="规格" width="235" />
+            <ElTableColumn prop="unitText" label="单位" width="235" />
+            <ElTableColumn prop="number" label="数量" />
           </ElTable>
         </div>
       </div>
 
       <div class="survey-item">
-        <div class="survey-head">坟墓信息：共<span class="num">5</span>人</div>
+        <div class="survey-head"
+          >坟墓信息：共<span class="num">{{ props.data?.immigrantGraveList.length || 0 }}</span
+          >处</div
+        >
         <div class="survey-body">
           <ElTable
             :border="true"
-            :data="tableData"
+            :data="props.data ? props.data.immigrantGraveList : []"
             :header-cell-style="headerStyle"
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="date" label="Date" width="180" />
-            <ElTableColumn prop="name" label="Name" width="180" />
-            <ElTableColumn prop="address" label="Address" />
+            <ElTableColumn type="index" label="序号" width="154" />
+            <ElTableColumn prop="graveType" label="穴位" width="291" />
+            <ElTableColumn prop="materials" label="材料" width="235" />
+            <ElTableColumn prop="graveYear" label="立坟年份" width="235" />
+            <ElTableColumn prop="number" label="数量(座)" />
           </ElTable>
         </div>
       </div>
@@ -106,10 +135,11 @@
 <script setup lang="ts">
 // import { ref } from 'vue'
 import { ElDialog, ElTableColumn, ElTable } from 'element-plus'
-// import { printLandlordApi } from '@/api/workshop/landlord/service'
+import { SurveyInfoType } from '@/api/workshop/landlord/types'
 
 interface PropsType {
   show: boolean
+  data: SurveyInfoType | null
 }
 
 const props = defineProps<PropsType>()
@@ -129,86 +159,6 @@ const headerStyle: any = {
 const cellStyle: any = {
   textAlign: 'center'
 }
-
-const array = [
-  [
-    {
-      address: '浙江省丽水市莲都区苏港村昆濑１３号',
-      areaCode: '331102',
-      areaCodeText: '莲都区',
-      birthday: '2020年09月',
-      card: '331102202009132415',
-      cardPic: null,
-      censusRegister: null,
-      censusType: null,
-      censusTypeText: null,
-      cityCode: '331100',
-      cityCodeText: '丽水市',
-      comeAddressCause: null,
-      comeAddressTime: null,
-      comeCause: null,
-      comeTime: null,
-      company: null,
-      doorNo: '74d24da6-3ce3-492b-b064-80509e',
-      education: null,
-      educationText: null,
-      fromAddress: null,
-      fromTown: null,
-      householdNumber: '006010394',
-      householdPic: null,
-      id: 14836,
-      insuranceType: null,
-      insuranceTypeText: null,
-      marital: null,
-      maritalText: null,
-      name: '季悠扬',
-      nation: '汉族',
-      nationText: null,
-      occupation: null,
-      occupationText: null,
-      otherPic: null,
-      phone: '13333333333',
-      populationSort: null,
-      populationSortText: null,
-      populationType: null,
-      populationTypeText: null,
-      projectId: 2,
-      relation: 'Son',
-      relationText: '子',
-      remark: null,
-      sex: '1',
-      sexText: '男',
-      townCode: '331102005',
-      townCodeText: '联城街道',
-      villageCode: '331102005210',
-      villageText: '苏港村',
-      virutalVillageCode: '3311020052100001',
-      virutalVillageText: '昆濑'
-    }
-  ]
-]
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }
-]
 </script>
 
 <style lang="less" scoped>

@@ -41,9 +41,8 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :district-tree="[]"
+      :doorNo="props.doorNo"
       @close="onFormPupClose"
-      @submit="onSubmit"
     />
   </WorkContentWrap>
 </template>
@@ -51,18 +50,13 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { ElButton, ElMessage, ElSpace } from 'element-plus'
+import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  addDemographicApi,
-  updateDemographicApi,
-  delDemographicByIdApi
-} from '@/api/workshop/population/service'
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 
 interface PropsType {
@@ -226,24 +220,6 @@ const onEditRow = (row: DemographicDtoType) => {
 
 const onFormPupClose = () => {
   dialog.value = false
-}
-
-const onSubmit = async (data: DemographicDtoType) => {
-  if (actionType.value === 'add') {
-    await addDemographicApi({
-      ...data,
-      doorNo: props.doorNo
-    })
-  } else {
-    await updateDemographicApi({
-      ...data,
-      id: tableObject.currentRow?.id as number,
-      doorNo: props.doorNo
-    })
-  }
-  ElMessage.success('操作成功！')
-  dialog.value = false
-  getList()
 }
 
 const onViewRow = (row) => {

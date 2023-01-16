@@ -290,7 +290,7 @@ export const useAppStore = defineStore('app', {
       this.layout = layout
       wsCache.set('layout', this.layout)
     },
-    setUserJwtInfo(user: JwtUserType) {
+    setUserJwtInfo(user: JwtUserType | null) {
       wsCache.set(JWT_INFO_NAME, user)
       this.userJwtInfo = user
     },
