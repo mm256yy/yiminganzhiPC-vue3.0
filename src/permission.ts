@@ -27,6 +27,10 @@ router.beforeEach(async (to, from, next) => {
         return
       }
 
+      await permissionStore.initRoutes(router.addRoute)
+      const redirectPath = from.query.redirect || to.path
+      const redirect = decodeURIComponent(redirectPath as string)
+      const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
       if (!dictStore.getIsSetDict) {
         // 拿到字典
         const res = await listDictApi({
@@ -47,11 +51,6 @@ router.beforeEach(async (to, from, next) => {
         dictStore.setDictObj(dictObj)
         dictStore.setIsSetDict(true)
       }
-
-      await permissionStore.initRoutes(router.addRoute)
-      const redirectPath = from.query.redirect || to.path
-      const redirect = decodeURIComponent(redirectPath as string)
-      const nextData = to.path === redirect ? { ...to, replace: true } : { path: redirect }
       next(nextData)
     }
   } else {
