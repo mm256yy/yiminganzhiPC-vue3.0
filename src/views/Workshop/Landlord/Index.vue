@@ -290,6 +290,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'doorNo',
+    label: '户号',
+    width: 120,
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'cityCodeText',
     label: '区域名称(市县)',
     width: 192,
@@ -330,46 +338,39 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'card',
-    label: '身份证号',
-    width: 180,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'phone',
-    label: '联系方式',
-    width: 174,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'householdNumber',
-    label: '户籍册编号',
-    width: 194,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    width: 120,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '所属阶段',
-    width: 134,
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'card',
+  //   label: '身份证号',
+  //   width: 180,
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'phone',
+  //   label: '联系方式',
+  //   width: 174,
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'householdNumber',
+  //   label: '户籍册编号',
+  //   width: 194,
+  //   search: {
+  //     show: false
+  //   }
+  // },
+
+  // {
+  //   field: 'doorNo',
+  //   label: '所属阶段',
+  //   width: 134,
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'status',
     label: '填报状态',
@@ -379,14 +380,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
 
-  {
-    field: 'address',
-    label: '户籍所在地',
-    width: 195,
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'address',
+  //   label: '户籍所在地',
+  //   width: 195,
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'hasPropertyAccount',
     label: '财产户',
