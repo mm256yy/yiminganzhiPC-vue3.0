@@ -86,14 +86,11 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'index',
     type: 'index',
-    fixed: true,
     label: '序号'
   },
   {
     field: 'houseNo',
     label: '幢号',
-    fixed: true,
-    width: 100,
     search: {
       show: false
     }
@@ -101,7 +98,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'propertyTypeText',
     label: '房屋产别',
-    width: 120,
     search: {
       show: false
     }
@@ -110,7 +106,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'usageTypeText',
     label: '房屋用途',
-    width: 120,
     search: {
       show: false
     }
@@ -118,7 +113,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'houseTypeText',
     label: '房屋类别',
-    width: 154,
     search: {
       show: false
     }
@@ -126,7 +120,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'constructionTypeText',
     label: '结构类型',
-    width: 154,
     search: {
       show: false
     }
@@ -134,7 +127,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'storeyNumber',
     label: '层数',
-    width: 100,
     search: {
       show: false
     }
@@ -143,7 +135,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'completedTime',
     label: '竣工年月',
-    width: 130,
     search: {
       show: false
     }
@@ -151,7 +142,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'propertyNo',
     label: '房产所有权证编号',
-    width: 258,
     search: {
       show: false
     }
@@ -159,7 +149,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'landNo',
     label: '土地使用权证编号',
-    width: 258,
     search: {
       show: false
     }
@@ -167,7 +156,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'landTypeText',
     label: '土地性质',
-    width: 100,
     search: {
       show: false
     }
@@ -175,7 +163,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'landArea',
     label: '建筑面积(m²)',
-    width: 120,
     search: {
       show: false
     }
@@ -184,7 +171,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 150,
+    width: 130,
     search: {
       show: false
     },

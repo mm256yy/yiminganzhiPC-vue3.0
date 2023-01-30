@@ -95,7 +95,6 @@
         align="center"
         highlightCurrentRow
         @register="register"
-        :showOverflowTooltip="false"
       >
         <template #longitude="{ row }">
           <div>{{ row.longitude || '-' }}</div>
@@ -204,14 +203,11 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'index',
     type: 'index',
-    fixed: true,
     label: '序号'
   },
   {
     field: 'name',
     label: '姓名',
-    fixed: true,
-    width: 88,
     search: {
       show: false
     }
@@ -219,7 +215,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'sexText',
     label: '性别',
-    width: 88,
     search: {
       show: false
     }
@@ -227,7 +222,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'card',
     label: '身份证号',
-    width: 180,
     search: {
       show: false
     }
@@ -235,7 +229,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'householdNumber',
     label: '户籍册编号',
-    width: 120,
     search: {
       show: false
     }
@@ -243,7 +236,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'relationText',
     label: '与户主关系',
-    width: 120,
     search: {
       show: false
     }
@@ -251,7 +243,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'townCodeText',
     label: '街道/乡镇',
-    width: 150,
     search: {
       show: false
     }
@@ -259,7 +250,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'villageText',
     label: '行政村',
-    width: 150,
     search: {
       show: false
     }
@@ -267,7 +257,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'virutalVillageText',
     label: '自然村',
-    width: 136,
     search: {
       show: false
     }
@@ -275,7 +264,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'phone',
     label: '联系方式',
-    width: 120,
     search: {
       show: false
     }
@@ -283,7 +271,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'censusRegister',
     label: '户籍所在地',
-    width: 188,
     search: {
       show: false
     }
@@ -292,7 +279,6 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 106,
     search: {
       show: false
     },

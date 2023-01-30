@@ -2,7 +2,7 @@
   <ElDialog
     title="居民概况表"
     :model-value="props.show"
-    :width="1210"
+    :width="1000"
     @close="onClose"
     alignCenter
     appendToBody
@@ -23,14 +23,14 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="name" label="姓名" width="110" />
-            <ElTableColumn prop="relationText" label="与户主关系" width="132" />
-            <ElTableColumn prop="sexName" label="性别" width="85" />
-            <ElTableColumn prop="nationText" label="民族" width="107" />
-            <ElTableColumn prop="maritalText" label="婚姻状况" width="107" />
+            <ElTableColumn prop="name" label="姓名" />
+            <ElTableColumn prop="relationText" label="与户主关系" />
+            <ElTableColumn prop="sexName" label="性别" />
+            <ElTableColumn prop="nationText" label="民族" />
+            <ElTableColumn prop="maritalText" label="婚姻状况" />
             <ElTableColumn prop="censusRegister" label="户籍所在地" />
-            <ElTableColumn prop="card" label="身份证号" width="180" />
-            <ElTableColumn prop="populationTypeText" label="人口类型" width="130" />
+            <ElTableColumn prop="card" label="身份证号" />
+            <ElTableColumn prop="populationTypeText" label="人口类型" />
           </ElTable>
         </div>
       </div>
@@ -48,14 +48,14 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="houseNo" label="编号" width="57" />
-            <ElTableColumn prop="houseTypeText" label="类别" width="107" />
-            <ElTableColumn prop="houseHeight" label="高程(m)" width="85" />
-            <ElTableColumn prop="storeyNumber" label="层数(层)" width="85" />
-            <ElTableColumn prop="landArea" label="建筑面积" width="107" />
-            <ElTableColumn prop="constructionType" label="结构类型" width="134" />
-            <ElTableColumn prop="completedTime" label="竣工年月" width="134" />
-            <ElTableColumn prop="propertyNo" label="房屋所有权证" width="233" />
+            <ElTableColumn prop="houseNo" label="编号" />
+            <ElTableColumn prop="houseTypeText" label="类别" />
+            <ElTableColumn prop="houseHeight" label="高程(m)" />
+            <ElTableColumn prop="storeyNumber" label="层数(层)" />
+            <ElTableColumn prop="landArea" label="建筑面积" />
+            <ElTableColumn prop="constructionType" label="结构类型" />
+            <ElTableColumn prop="completedTime" label="竣工年月" />
+            <ElTableColumn prop="propertyNo" label="房屋所有权证" />
             <ElTableColumn prop="landNo" label="土地使用权证" />
           </ElTable>
         </div>
@@ -76,10 +76,10 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn type="index" label="序号" width="154" />
-            <ElTableColumn prop="name" label="项目" width="291" />
-            <ElTableColumn prop="size" label="规格" width="235" />
-            <ElTableColumn prop="unit" label="单位" width="235" />
+            <ElTableColumn type="index" label="序号" />
+            <ElTableColumn prop="name" label="项目" />
+            <ElTableColumn prop="size" label="规格" />
+            <ElTableColumn prop="unit" label="单位" />
             <ElTableColumn prop="number" label="数量" />
           </ElTable>
         </div>
@@ -98,10 +98,10 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn type="index" label="序号" width="154" />
-            <ElTableColumn prop="name" label="项目" width="291" />
-            <ElTableColumn prop="sizeText" label="规格" width="235" />
-            <ElTableColumn prop="unitText" label="单位" width="235" />
+            <ElTableColumn type="index" label="序号" />
+            <ElTableColumn prop="name" label="项目" />
+            <ElTableColumn prop="sizeText" label="规格" />
+            <ElTableColumn prop="unitText" label="单位" />
             <ElTableColumn prop="number" label="数量" />
           </ElTable>
         </div>
@@ -120,10 +120,10 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn type="index" label="序号" width="154" />
-            <ElTableColumn prop="graveType" label="穴位" width="291" />
-            <ElTableColumn prop="materials" label="材料" width="235" />
-            <ElTableColumn prop="graveYear" label="立坟年份" width="235" />
+            <ElTableColumn type="index" label="序号" />
+            <ElTableColumn prop="graveType" label="穴位" />
+            <ElTableColumn prop="materials" label="材料" />
+            <ElTableColumn prop="graveYear" label="立坟年份" />
             <ElTableColumn prop="number" label="数量(座)" />
           </ElTable>
         </div>
