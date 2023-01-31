@@ -54,9 +54,6 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #doorNo>
-          <div>222222222222223333</div>
-        </template>
         <template #cityCodeText="{ row }">
           <div>{{ `${row.cityCodeText}/${row.areaCodeText}` }}</div>
         </template>
@@ -378,7 +375,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   // {
-  //   field: 'censusRegister',
+  //   field: 'address',
   //   label: '户籍所在地',
   //   width: 195,
   //   search: {
@@ -393,7 +390,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: '',
+    field: 'locationTypeText',
     label: '所在位置',
     search: {
       show: false
