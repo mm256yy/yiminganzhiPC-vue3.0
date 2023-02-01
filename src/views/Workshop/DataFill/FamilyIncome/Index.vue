@@ -37,7 +37,7 @@
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"></div>
             <div v-else-if="row.total" class="total-item"></div>
-            <ElInput v-else placeholder="请输入金额" type="number" v-model="row.amount" />
+            <ElInput v-else placeholder="请输入金额" type="number" min="0" v-model="row.amount" />
           </template>
         </ElTableColumn>
 
