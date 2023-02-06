@@ -1,6 +1,6 @@
 # 移民安置管理平台工作平台
 
-该代码库为移民安置管理平台的工作平台web仓库，使用了 Vue3, Typescript, Element-Plus 的技术栈。该项目的初始脚手架参考了 [element-plus-admin](https://element-plus-admin-doc.cn/)
+该代码库为移民安置管理平台的工作平台 web 仓库，使用了 Vue3, Typescript, Element-Plus 的技术栈。该项目的初始脚手架参考了 [element-plus-admin](https://element-plus-admin-doc.cn/)
 
 ## 技术参考
 
@@ -16,7 +16,6 @@
 ## 安装和使用
 
 该项目使用 [pnpm](https://pnpm.io/zh/), 如果还没有安装请先 [安装](https://pnpm.io/zh/installation)。
- 
 
 - 获取代码
 
@@ -27,7 +26,7 @@ git clone https://e.coding.net/zdwp/migrate/migrate-web.git
 - 安装依赖
 
 ```bash
-cd migrate-web 
+cd migrate-web
 
 pnpm install
 
@@ -47,7 +46,7 @@ pnpm run build:pro
 
 ## Git 贡献提交规范
 
-该项目启用了强制的 git提交规范，提交时请遵守，具体可参考 [这里](https://zdwp.coding.net/p/dev-doc/d/doc/git/tree/master/dev-corp/commit.md)
+该项目启用了强制的 git 提交规范，提交时请遵守，具体可参考 [这里](https://zdwp.coding.net/p/dev-doc/d/doc/git/tree/master/dev-corp/commit.md)
 
 下面是一些提交类型的说明。
 
@@ -67,6 +66,32 @@ pnpm run build:pro
 - `wip` 开发中
 - `types` 类型
 
+分支规范：
+
+目前走的是 gitlabFlow, 分为 功能分支`feature/xxx` 和 `master`
+
+个人功能不要直接提交 master，一定是单独的分支
+
+合并走 `mergeRequest`，会有审核阶段
+
 ## 账号
 
-测试: 管理员账号: mg-admin  admin
+管理员账号: mg-admin 1234@qwe
+
+项目经理账号：mg-project 1234@qwe
+
+普通用户账号：mg-user 1234@qwe
+
+## 代码命名规范
+
+#### 页面/组件
+
+都为大驼峰命名规则 例如：登录 Login/Index.vue
+
+⚠️ 注意：Workshop 文件夹内为用户平台页面 区别于后台管理系统，具体详看代码
+
+#### 代码级别
+
+类型命名：大驼峰 + `Type`后缀 例如：UserInfoType
+
+接口命名：动词 + 大驼峰 + `Api`后缀 例如：GetUserInfoApi / AddUserItemApi
