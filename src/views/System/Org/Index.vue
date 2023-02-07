@@ -20,7 +20,7 @@
           <el-table-column label="状态" width="" align="left">
             <template #default="scope">
               <el-tag v-if="scope.row.data.enabled" class="ml-2" type="success">启用</el-tag>
-              <el-tag v-else class="ml-2" type="warn">停用</el-tag>
+              <el-tag v-else class="ml-2" type="warning">停用</el-tag>
             </template>
           </el-table-column>
           <el-table-column prop="data.createdDate" label="创建时间" width="" align="left">

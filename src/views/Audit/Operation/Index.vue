@@ -21,9 +21,9 @@
             {{ formatDateTime(row.createTime) }}
           </template>
           <template #operationType="{ row }">
-            <el-tag :type="getOperTagType(row.operationType)">{{
-              getOperationName(row.operationType)
-            }}</el-tag>
+            <el-tag :type="getOperTagType(row.operationType)">
+              {{ getOperationName(row.operationType) }}
+            </el-tag>
           </template>
         </Table>
       </ContentWrap>
@@ -175,7 +175,7 @@ tableObject.params = {
 
 const { getList } = methods
 
-const getOperTagType = (type: string): string => {
+const getOperTagType = (type: string) => {
   if (type === 'LIST' || type === 'DETAIL' || type === 'READ' || type === 'PAGE_LIST') {
     return 'success'
   } else if (type === 'ADD' || type === 'EDIT' || type === 'UPLOAD' || type === 'SAVE') {
@@ -187,7 +187,7 @@ const getOperTagType = (type: string): string => {
   }
 }
 
-const getOperationName = (type: string): string => {
+const getOperationName = (type: string) => {
   if (type) {
     const operationType = operationList.value.find((item) => item.value === type)
     return operationType.label

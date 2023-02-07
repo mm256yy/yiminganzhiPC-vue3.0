@@ -21,7 +21,7 @@
               <template #default="scope">
                 <el-tag
                   :type="
-                    scope.row.projectRole === ProjectRoleEnum.PROJECT_ADMIN ? 'primary' : 'info'
+                    scope.row.projectRole === ProjectRoleEnum.PROJECT_ADMIN ? 'success' : 'info'
                   "
                 >
                   {{ getProjectRoleName(scope.row.projectRole) }}
