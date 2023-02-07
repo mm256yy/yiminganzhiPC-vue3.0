@@ -156,6 +156,10 @@ export default defineComponent({
 }
 
 .user-menu {
+  .without-outline:focus {
+    outline: none;
+  }
+
   .el-menu-item:not(.is-disabled):focus {
     background-color: transparent !important;
   }

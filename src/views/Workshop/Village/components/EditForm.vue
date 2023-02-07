@@ -102,12 +102,12 @@ watch(
       form.value = {
         ...val
       }
+      position.latitude = form.value.latitude
+      position.longitude = form.value.longitude
+      position.address = form.value.address
     } else {
       form.value = defaultValue
     }
-    position.latitude = form.value.latitude
-    position.longitude = form.value.longitude
-    position.address = form.value.address
   },
   {
     immediate: true,

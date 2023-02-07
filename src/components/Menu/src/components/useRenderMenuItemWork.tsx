@@ -30,7 +30,7 @@ export const useRenderMenuItem = () => {
               }}
             </ElMenuItem>
           ) : (
-            <div class="flex min-w-104px px-20px items-center justify-center">
+            <div class="flex min-w-104px px-20px items-center justify-center without-outline">
               <ElMenuItem
                 index={onlyOneChild ? pathResolve(fullPath, onlyOneChild.path) : fullPath}
               >
