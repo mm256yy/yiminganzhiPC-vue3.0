@@ -14,14 +14,13 @@
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
-          <div class="text"
-            >共<span class="num">{{ headInfo.peasantHouseholdNum }}</span
-            >户<span class="distance"></span><span class="num">{{ headInfo.demographicNum }}</span
-            >人
+          <div class="text">
+            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
+            <span class="distance"></span> <span class="num">{{ headInfo.demographicNum }}</span> 人
           </div>
         </div>
         <ElSpace>
-          <ElPopover v-if="excelList && excelList.length" :width="460" trigger="hover">
+          <ElPopover v-if="excelList && excelList.length" :width="800" trigger="hover">
             <template #reference>
               <div class="view-upload">
                 <span class="pr-10px">批量导入记录</span>
@@ -32,19 +31,19 @@
               <div class="file-item" v-for="item in excelList" :key="item.id">
                 <div class="flex items-center">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-160px overflow-x-scroll whitespace-nowrap ml-5px">{{
-                    item.name
-                  }}</div>
+                  <div class="w-200px overflow-x-scroll whitespace-nowrap ml-5px">
+                    {{ item.name }}
+                  </div>
+                </div>
+                <div class="flex m-lr-20px">
+                  {{ item.remark }}
                 </div>
                 <div class="status flex-shrink-0">
                   <div class="flex items-center" v-if="item.status === FileReportStatus.success">
-                    <span class="pr-10px"
-                      >( 共导入 <span class="number">{{ item.demographicNum }}</span> 人，<span
-                        class="number"
-                        >{{ item.peasantHouseholdNum }}</span
-                      >
-                      户 )</span
-                    >
+                    <span class="pr-10px">
+                      ( 共导入 <span class="number">{{ item.demographicNum }}</span> 人，
+                      <span class="number">{{ item.peasantHouseholdNum }}</span> 户 )
+                    </span>
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
                   </div>
 
@@ -76,9 +75,9 @@
               <ElButton :icon="importIcon" type="primary">批量导入</ElButton>
             </template>
           </ElUpload>
-          <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate"
-            >模版下载</ElButton
-          >
+          <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
+            模版下载
+          </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -109,7 +108,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElButton,
@@ -139,6 +138,7 @@ import type {
   DemographicHeadType,
   ExcelListType
 } from '@/api/workshop/population/types'
+import { Icon } from '@/components/Icon'
 
 enum FileReportStatus {
   success = 'Succeed',
@@ -157,6 +157,7 @@ const headInfo = ref<DemographicHeadType>({
 })
 const uploadLoading = ref(false)
 const excelList = ref<ExcelListType[]>([])
+let timer = 0
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -197,6 +198,14 @@ onMounted(() => {
   getVillageTree()
   getDemographicHeadInfo()
   getExcelUploadList()
+  timer = window.setInterval(() => {
+    getExcelUploadList()
+  }, 30000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  timer = 0
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -473,13 +482,17 @@ const uploadError = (error) => {
 
   .file-item {
     display: flex;
-    height: 40px;
     padding: 0 16px;
     margin-bottom: 8px;
     font-size: 14px;
     color: var(--text-color-1);
+    border-bottom: 1px solid #ebebeb;
     align-items: center;
     justify-content: space-between;
+
+    .m-lr-20px {
+      margin: 0 20px;
+    }
 
     .number {
       font-weight: 500;

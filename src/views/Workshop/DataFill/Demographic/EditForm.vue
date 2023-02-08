@@ -391,8 +391,21 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<DemographicDtoType, 'id'> = {
+  relation: '',
   name: '',
-  card: ''
+  card: '',
+  sex: '',
+  birthday: '',
+  nation: '',
+  populationType: '',
+  censusRegister: '',
+  education: '',
+  marital: '',
+  censusType: '',
+  occupation: '',
+  company: '',
+  insuranceType: '',
+  category: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 
@@ -416,25 +429,25 @@ watch(
       form.value = {
         ...val
       }
+      try {
+        if (form.value.cardPic) {
+          const pics = JSON.parse(form.value.cardPic)
+          cardFront.value = pics.slice(0, 1)
+          cardEnd.value = pics.slice(1)
+        }
+
+        if (form.value.householdPic) {
+          householdPic.value = JSON.parse(form.value.householdPic)
+        }
+
+        if (form.value.otherPic) {
+          otherPic.value = JSON.parse(form.value.otherPic)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       form.value = defaultValue
-    }
-    try {
-      if (form.value.cardPic) {
-        const pics = JSON.parse(form.value.cardPic)
-        cardFront.value = pics.slice(0, 1)
-        cardEnd.value = pics.slice(1)
-      }
-
-      if (form.value.householdPic) {
-        householdPic.value = JSON.parse(form.value.householdPic)
-      }
-
-      if (form.value.otherPic) {
-        otherPic.value = JSON.parse(form.value.otherPic)
-      }
-    } catch (error) {
-      console.log(error)
     }
   },
   {
@@ -451,6 +464,10 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
+    cardFront.value = []
+    cardEnd.value = []
+    householdPic.value = []
+    otherPic.value = []
   })
 }
 

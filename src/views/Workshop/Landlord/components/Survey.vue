@@ -11,10 +11,10 @@
   >
     <div class="survey-box">
       <div class="survey-item">
-        <div class="survey-head"
-          >人口信息：共<span class="num">{{ props.data?.demographicList.length || 0 }}</span
-          >人</div
-        >
+        <div class="survey-head">
+          人口信息：共
+          <span class="num">{{ props.data?.demographicList.length || 0 }}</span> 人
+        </div>
         <div class="survey-body">
           <ElTable
             :border="true"
@@ -25,7 +25,7 @@
           >
             <ElTableColumn prop="name" label="姓名" />
             <ElTableColumn prop="relationText" label="与户主关系" />
-            <ElTableColumn prop="sexName" label="性别" />
+            <ElTableColumn prop="sexText" label="性别" />
             <ElTableColumn prop="nationText" label="民族" />
             <ElTableColumn prop="maritalText" label="婚姻状况" />
             <ElTableColumn prop="censusRegister" label="户籍所在地" />
@@ -53,7 +53,7 @@
             <ElTableColumn prop="houseHeight" label="高程(m)" />
             <ElTableColumn prop="storeyNumber" label="层数(层)" />
             <ElTableColumn prop="landArea" label="建筑面积" />
-            <ElTableColumn prop="constructionType" label="结构类型" />
+            <ElTableColumn prop="constructionTypeText" label="结构类型" />
             <ElTableColumn prop="completedTime" label="竣工年月" />
             <ElTableColumn prop="propertyNo" label="房屋所有权证" />
             <ElTableColumn prop="landNo" label="土地使用权证" />

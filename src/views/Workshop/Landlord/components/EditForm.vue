@@ -208,12 +208,12 @@ watch(
         ...val,
         parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
       }
+      position.longitude = form.value.longitude
+      position.latitude = form.value.latitude
+      position.address = form.value.address
     } else {
       form.value = defaultValue
     }
-    position.longitude = form.value.longitude
-    position.latitude = form.value.latitude
-    position.address = form.value.address
   },
   {
     immediate: true,
@@ -230,11 +230,11 @@ const rules = reactive<FormRules>({
 })
 
 // 关闭弹窗
-const onClose = () => {
+const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
-  emit('close')
+  emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
   })
@@ -285,7 +285,7 @@ const submit = async (data: LandlordDtoType) => {
     })
   }
   ElMessage.success('操作成功！')
-  onClose()
+  onClose(true)
 }
 
 const onVillageDialogOpen = () => {
