@@ -208,8 +208,11 @@ const onEditRow = (row: HouseDtoType) => {
   dialog.value = true
 }
 
-const onFormPupClose = () => {
+const onFormPupClose = (flag: boolean) => {
   dialog.value = false
+  if (flag === true) {
+    getList()
+  }
 }
 
 const onViewRow = (row) => {

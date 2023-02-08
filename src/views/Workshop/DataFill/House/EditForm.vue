@@ -501,11 +501,11 @@ watch(
 const rules = reactive<FormRules>({})
 
 // 关闭弹窗
-const onClose = () => {
+const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
-  emit('close')
+  emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
   })
@@ -608,7 +608,7 @@ const submit = async (data: HouseDtoType) => {
     })
   }
   ElMessage.success('操作成功！')
-  onClose()
+  onClose(true)
 }
 </script>
 <style lang="less">

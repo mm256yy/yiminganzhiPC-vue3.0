@@ -126,6 +126,9 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
+    position.latitude = 0
+    position.longitude = 0
+    position.address = ''
   })
 }
 
