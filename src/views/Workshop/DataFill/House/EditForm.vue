@@ -252,7 +252,7 @@
 
       <ElDivider border-style="dashed" />
 
-      <MapFormItem :positon="position" @change="onChosePosition" />
+      <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
 
       <ElRow :gutter="30">
         <ElCol :span="8">
@@ -317,6 +317,36 @@
         </ElCol>
       </ElRow>
 
+      <ElFormItem label="房屋照片">
+        <ElUpload
+          action="/api/file/type"
+          :data="{
+            type: 'image'
+          }"
+          :disabled="actionType === 'view'"
+          :list-type="'picture-card'"
+          accept=".jpg,.jpeg,.png"
+          :multiple="true"
+          :file-list="homePic"
+          :headers="headers"
+          :on-success="uploadFileChange3"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile3"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <div class="relative w-148px h-148px">
+              <div class="flex items-center justify-center w-148px h-148px">
+                <Icon icon="ant-design:plus-outlined" :size="22" />
+              </div>
+              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
+                点击上传
+              </div>
+            </div>
+          </template>
+        </ElUpload>
+      </ElFormItem>
+
       <ElFormItem label="其他附件">
         <ElUpload
           action="/api/file/type"
@@ -329,9 +359,9 @@
           :multiple="true"
           :file-list="otherPic"
           :headers="headers"
-          :on-success="uploadFileChange3"
+          :on-success="uploadFileChange4"
           :before-remove="beforeRemove"
-          :on-remove="removeFile3"
+          :on-remove="removeFile4"
           :on-preview="imgPreview"
         >
           <template #trigger>
@@ -453,6 +483,7 @@ const position: {
 
 const housePic = ref<FileItemType[]>([])
 const landPic = ref<FileItemType[]>([])
+const homePic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<any>()
 const dialogVisible = ref<boolean>()
@@ -466,29 +497,31 @@ watch(
   () => props.row,
   (val) => {
     if (val) {
-      // 处理行政区划
+      // 表单数据赋值
       form.value = {
         ...val
       }
+      position.longitude = form.value.longitude
+      position.latitude = form.value.latitude
+      position.address = form.value.address
+      try {
+        if (form.value.housePic) {
+          housePic.value = JSON.parse(form.value.housePic)
+        }
+        if (form.value.landPic) {
+          landPic.value = JSON.parse(form.value.landPic)
+        }
+        if (form.value.homePic) {
+          homePic.value = JSON.parse(form.value.homePic)
+        }
+        if (form.value.otherPic) {
+          otherPic.value = JSON.parse(form.value.otherPic)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     } else {
       form.value = defaultValue
-    }
-    position.longitude = form.value.longitude
-    position.latitude = form.value.latitude
-    position.address = form.value.address
-
-    try {
-      if (form.value.housePic) {
-        housePic.value = JSON.parse(form.value.housePic)
-      }
-      if (form.value.landPic) {
-        landPic.value = JSON.parse(form.value.landPic)
-      }
-      if (form.value.otherPic) {
-        otherPic.value = JSON.parse(form.value.otherPic)
-      }
-    } catch (error) {
-      console.log(error)
     }
   },
   {
@@ -522,11 +555,16 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
+      if (!position.latitude || !position.longitude) {
+        ElMessage.error('请选择位置')
+        return
+      }
       const data: any = {
         ...form.value,
         ...position,
         housePic: JSON.stringify(housePic.value || []),
         landPic: JSON.stringify(landPic.value || []),
+        homePic: JSON.stringify(homePic.value || []),
         otherPic: JSON.stringify(otherPic.value || [])
       }
       submit(data)
@@ -553,6 +591,8 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     housePic.value = list
   } else if (type === 'land') {
     landPic.value = list
+  } else if (type === 'home') {
+    homePic.value = list
   } else if (type === 'other') {
     otherPic.value = list
   }
@@ -566,6 +606,9 @@ const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFi
   handleFileList(fileList, 'land')
 }
 const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'home')
+}
+const uploadFileChange4 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
 }
 
@@ -577,6 +620,9 @@ const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'land')
 }
 const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'home')
+}
+const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
 }
 

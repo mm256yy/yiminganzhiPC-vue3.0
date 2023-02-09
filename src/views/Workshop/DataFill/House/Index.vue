@@ -17,6 +17,11 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #completedTime="{ row }">
+          <div>
+            {{ formatDate(row.completedTime) }}
+          </div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn
             :icons="[
@@ -58,6 +63,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
+import { formatDate } from '@/utils/index'
 
 interface PropsType {
   householdId: string

@@ -102,7 +102,7 @@
       </ElFormItem>
 
       <div class="w-466px">
-        <MapFormItem :positon="position" @change="onChosePosition" />
+        <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
       </div>
     </ElForm>
 
@@ -255,7 +255,6 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请选择位置')
         return
       }
-      console.log(form.value.parentCode, '自然c')
       const data: any = {
         ...form.value,
         ...position,

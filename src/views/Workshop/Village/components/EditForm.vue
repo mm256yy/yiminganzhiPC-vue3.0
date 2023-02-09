@@ -17,7 +17,7 @@
       label-width="100px"
       :rules="rules"
     >
-      <ElFormItem label="行政区划" prop="parentCode" required>
+      <ElFormItem label="所属区域" prop="parentCode" required>
         <ElTreeSelect
           class="!w-full"
           v-model="form.parentCode"
@@ -31,7 +31,12 @@
         <ElInput clearable :maxlength="20" v-model="form.name" />
       </ElFormItem>
 
-      <MapFormItem v-if="!props.hideMap" :positon="position" @change="onChosePosition" />
+      <MapFormItem
+        v-if="!props.hideMap"
+        :required="true"
+        :positon="position"
+        @change="onChosePosition"
+      />
     </ElForm>
 
     <template #footer>

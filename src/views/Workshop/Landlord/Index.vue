@@ -21,16 +21,14 @@
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
-          <div class="text"
-            >共<span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span
-            >户<span class="distance"></span
-            ><span class="num">{{ headInfo.demographicNum || 20 }}</span
-            >人<span class="distance"></span>已上报<span class="num !text-[#30A952]">{{
-              headInfo.reportSucceedNum
-            }}</span
-            ><span class="distance"></span>未上报<span class="num !text-[#F68418]">{{
-              headInfo.unReportNum
-            }}</span>
+          <div class="text">
+            共 <span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span> 户
+            <span class="distance"></span>
+            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人
+            <span class="distance"></span>
+            已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
+            <span class="distance"></span>
+            未上报<span class="num !text-[#F68418]">{{ headInfo.unReportNum }}</span>
           </div>
         </div>
         <ElSpace>
@@ -54,8 +52,18 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #cityCodeText="{ row }">
-          <div>{{ `${row.cityCodeText}/${row.areaCodeText}` }}</div>
+        <template #regionText="{ row }">
+          <div>
+            {{
+              `
+              ${row.cityCodeText ? row.cityCodeText + '/' : ''}
+              ${row.areaCodeText ? row.areaCodeText : ''}
+              ${row.townCodeText ? '/' + row.townCodeText : ''}
+              ${row.villageText ? '/' + row.villageText : ''}
+              ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
+              `
+            }}
+          </div>
         </template>
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
@@ -73,6 +81,9 @@
             ></span>
             {{ row.status === ReportStatus.UnReport ? '未填报' : '已填报' }}</div
           >
+        </template>
+        <template #reportDate="{ row }">
+          <div>{{ formatDate(row.reportDate) }}</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
@@ -138,6 +149,7 @@ import type {
   LandlordHeadInfoType,
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
+import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
@@ -193,7 +205,7 @@ onMounted(() => {
 const schema = reactive<CrudSchema[]>([
   {
     field: 'villageCode',
-    label: '行政区划',
+    label: '所属区域',
     search: {
       show: true,
       component: 'TreeSelect',
@@ -289,6 +301,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'name',
+    label: '户主姓名',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'doorNo',
     label: '户号',
     width: 180,
@@ -297,41 +316,41 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'cityCodeText',
-    label: '市县',
+    field: 'regionText',
+    label: '所属区域',
     search: {
       show: false
     }
   },
-  {
-    field: 'townCodeText',
-    label: '街道',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'cityCodeText',
+  //   label: '市县',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'townCodeText',
+  //   label: '街道',
+  //   search: {
+  //     show: false
+  //   }
+  // },
 
-  {
-    field: 'villageText',
-    label: '行政村',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'virutalVillageText',
-    label: '自然村',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '户主姓名',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'villageText',
+  //   label: '行政村',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'virutalVillageText',
+  //   label: '自然村',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   // {
   //   field: 'card',
   //   label: '身份证号',
@@ -391,7 +410,21 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'locationTypeText',
-    label: '所在位置',
+    label: '所属位置',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'reportUserName',
+    label: '上报人员',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'reportDate',
+    label: '上报时间',
     search: {
       show: false
     }

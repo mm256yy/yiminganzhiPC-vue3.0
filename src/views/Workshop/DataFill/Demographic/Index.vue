@@ -17,6 +17,11 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #birthday="{ row }">
+          <div>
+            {{ formatDate(row.birthday) }}
+          </div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
@@ -57,6 +62,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
+import { formatDate } from '@/utils/index'
 
 interface PropsType {
   doorNo: string

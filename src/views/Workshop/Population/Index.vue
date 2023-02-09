@@ -29,9 +29,9 @@
             </template>
             <div class="file-list">
               <div class="file-item" v-for="item in excelList" :key="item.id">
-                <div class="flex items-center">
+                <div class="file-name flex items-center">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-200px overflow-x-scroll whitespace-nowrap ml-5px">
+                  <div class="w-200px ml-5px">
                     {{ item.name }}
                   </div>
                 </div>
@@ -99,6 +99,9 @@
           <div>{{ row.longitude || '-' }}</div>
           <div>{{ row.latitude || '-' }}</div>
         </template>
+        <template #createdDate="{ row }">
+          <div>{{ formatDate(row.createdDate) }}</div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn :view-type="'link'" :row="row" :edit="false" @delete="onDelRow" />
         </template>
@@ -139,6 +142,7 @@ import type {
   ExcelListType
 } from '@/api/workshop/population/types'
 import { Icon } from '@/components/Icon'
+import { formatDate } from '@/utils/index'
 
 enum FileReportStatus {
   success = 'Succeed',
@@ -285,6 +289,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'createdDate',
+    label: '导入时间',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'action',
     label: '操作',
     fixed: 'right',
@@ -324,7 +335,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'villageCode',
-    label: '行政区划',
+    label: '所属区域',
     search: {
       show: true,
       component: 'TreeSelect',
@@ -482,7 +493,7 @@ const uploadError = (error) => {
 
   .file-item {
     display: flex;
-    padding: 0 16px;
+    padding: 5px 16px;
     margin-bottom: 8px;
     font-size: 14px;
     color: var(--text-color-1);
@@ -492,6 +503,11 @@ const uploadError = (error) => {
 
     .m-lr-20px {
       margin: 0 20px;
+    }
+
+    .file-name {
+      text-align: justify;
+      word-break: break-all;
     }
 
     .number {

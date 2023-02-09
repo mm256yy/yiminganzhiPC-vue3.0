@@ -119,7 +119,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     field: 'districtName',
-    label: '行政区划',
+    label: '所属区域',
     search: {
       show: false
     },
@@ -160,7 +160,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'parentCode',
-    label: '行政区划',
+    label: '所属区域',
     search: {
       show: true,
       component: 'TreeSelect',

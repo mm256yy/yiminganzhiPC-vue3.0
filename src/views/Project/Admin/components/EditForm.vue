@@ -116,7 +116,7 @@ const schema = reactive<FormSchema[]>([
   },
   {
     field: 'townCode',
-    label: '行政区划',
+    label: '所属区域',
     colProps: { span: 12 },
     component: 'TreeSelect',
     componentProps: {
