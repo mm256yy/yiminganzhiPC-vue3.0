@@ -16,8 +16,9 @@
           type="primary"
           class="!bg-[#30A952] !border-[#30A952]"
           @click="onSave"
-          >保存</ElButton
         >
+          保存
+        </ElButton>
       </ElSpace>
     </div>
     <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
@@ -48,6 +49,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const otherPic = ref<FileItemType[]>([])
 const id = ref<number>()
+const uid = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 const getList = () => {
@@ -59,6 +61,7 @@ const getList = () => {
     if (res && res.content && res.content.length) {
       id.value = res.content[0].id
       otherPic.value = JSON.parse(res.content[0].otherPic)
+      uid.value = res.content[0].uid
     }
   })
 }
@@ -75,7 +78,8 @@ const onSave = () => {
       id: id.value,
       doorNo: props.doorNo,
       householdId: +props.householdId,
-      otherPic: JSON.stringify(otherPic.value)
+      otherPic: JSON.stringify(otherPic.value),
+      uid: uid.value
     }).then(() => {
       ElMessage.success('操作成功！')
       getList()
@@ -84,7 +88,8 @@ const onSave = () => {
     addEnclosureListApi({
       doorNo: props.doorNo,
       householdId: +props.householdId,
-      otherPic: JSON.stringify(otherPic.value)
+      otherPic: JSON.stringify(otherPic.value),
+      uid: uid.value
     }).then(() => {
       ElMessage.success('操作成功！')
       getList()
@@ -98,6 +103,7 @@ const onSave = () => {
   padding-left: 10px;
   font-size: 12px;
   color: #000000;
+
   .unit {
     color: var(--el-color-primary);
   }

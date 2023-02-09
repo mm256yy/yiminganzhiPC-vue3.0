@@ -228,9 +228,9 @@
                 <template #trigger v-if="cardFront.length === 0">
                   <div class="relative w-148px h-148px">
                     <img class="block w-148px h-148px" src="@/assets/imgs/card-front.png" alt="" />
-                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
-                      >点击上传正面</div
-                    >
+                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
+                      点击上传正面
+                    </div>
                   </div>
                 </template>
                 <template #trigge v-else></template>
@@ -257,9 +257,9 @@
                 <template #trigger>
                   <div class="relative w-148px h-148px">
                     <img class="block w-148px h-148px" src="@/assets/imgs/card-back.png" alt="" />
-                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
-                      >点击上传反面</div
-                    >
+                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
+                      点击上传反面
+                    </div>
                   </div>
                 </template>
               </ElUpload>
@@ -289,9 +289,9 @@
               <template #trigger>
                 <div class="relative w-148px h-148px">
                   <img class="block w-148px h-148px" src="@/assets/imgs/household.png" alt="" />
-                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
-                    >点击上传</div
-                  >
+                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]">
+                    点击上传
+                  </div>
                 </div>
               </template>
             </ElUpload>
@@ -321,9 +321,9 @@
               <div class="flex items-center justify-center w-148px h-148px">
                 <Icon icon="ant-design:plus-outlined" :size="22" />
               </div>
-              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
-                >点击上传附件</div
-              >
+              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
+                点击上传附件
+              </div>
             </div>
           </template>
         </ElUpload>
@@ -425,29 +425,33 @@ watch(
   () => props.row,
   (val) => {
     if (val) {
-      // 处理行政区划
+      // 处理表单数据
       form.value = {
         ...val
       }
-      try {
-        if (form.value.cardPic) {
-          const pics = JSON.parse(form.value.cardPic)
-          cardFront.value = pics.slice(0, 1)
-          cardEnd.value = pics.slice(1)
-        }
-
-        if (form.value.householdPic) {
-          householdPic.value = JSON.parse(form.value.householdPic)
-        }
-
-        if (form.value.otherPic) {
-          otherPic.value = JSON.parse(form.value.otherPic)
-        }
-      } catch (error) {
-        console.log(error)
-      }
     } else {
-      form.value = defaultValue
+      form.value = { ...defaultValue }
+      cardFront.value = []
+      cardEnd.value = []
+      householdPic.value = []
+      otherPic.value = []
+    }
+    try {
+      if (form.value.cardPic) {
+        const pics = JSON.parse(form.value.cardPic)
+        cardFront.value = pics.slice(0, 1)
+        cardEnd.value = pics.slice(1)
+      }
+
+      if (form.value.householdPic) {
+        householdPic.value = JSON.parse(form.value.householdPic)
+      }
+
+      if (form.value.otherPic) {
+        otherPic.value = JSON.parse(form.value.otherPic)
+      }
+    } catch (error) {
+      console.log(error)
     }
   },
   {
@@ -464,10 +468,6 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
-    cardFront.value = []
-    cardEnd.value = []
-    householdPic.value = []
-    otherPic.value = []
   })
 }
 

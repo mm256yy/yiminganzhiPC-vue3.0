@@ -54,7 +54,7 @@
             <ElTableColumn prop="storeyNumber" label="层数(层)" />
             <ElTableColumn prop="landArea" label="建筑面积" />
             <ElTableColumn prop="constructionTypeText" label="结构类型" />
-            <ElTableColumn prop="completedTime" label="竣工年月" />
+            <ElTableColumn prop="completedTime" :formatter="formatCompletedTime" label="竣工年月" />
             <ElTableColumn prop="propertyNo" label="房屋所有权证" />
             <ElTableColumn prop="landNo" label="土地使用权证" />
           </ElTable>
@@ -99,7 +99,7 @@
             style="width: 100%"
           >
             <ElTableColumn type="index" label="序号" />
-            <ElTableColumn prop="name" label="项目" />
+            <ElTableColumn prop="nameText" label="项目" />
             <ElTableColumn prop="sizeText" label="规格" />
             <ElTableColumn prop="unitText" label="单位" />
             <ElTableColumn prop="number" label="数量" />
@@ -121,8 +121,8 @@
             style="width: 100%"
           >
             <ElTableColumn type="index" label="序号" />
-            <ElTableColumn prop="graveType" label="穴位" />
-            <ElTableColumn prop="materials" label="材料" />
+            <ElTableColumn prop="graveTypeText" label="穴位" />
+            <ElTableColumn prop="materialsText" label="材料" />
             <ElTableColumn prop="graveYear" label="立坟年份" />
             <ElTableColumn prop="number" label="数量(座)" />
           </ElTable>
@@ -136,6 +136,7 @@
 // import { ref } from 'vue'
 import { ElDialog, ElTableColumn, ElTable } from 'element-plus'
 import { SurveyInfoType } from '@/api/workshop/landlord/types'
+import { formatDate } from '@/utils/index'
 
 interface PropsType {
   show: boolean
@@ -158,6 +159,10 @@ const headerStyle: any = {
 
 const cellStyle: any = {
   textAlign: 'center'
+}
+
+const formatCompletedTime = (row) => {
+  return formatDate(row.completedTime)
 }
 </script>
 

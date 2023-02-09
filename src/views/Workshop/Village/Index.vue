@@ -132,7 +132,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '村名',
+    label: '自然村',
     search: {
       show: true,
       component: 'Input'

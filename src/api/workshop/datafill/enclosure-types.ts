@@ -3,4 +3,5 @@ export interface EnclosureDtoType {
   householdId: number
   otherPic: string
   id?: number
+  uid: string
 }

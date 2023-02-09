@@ -277,11 +277,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: true
+            value: 'true'
           },
           {
             label: '否',
-            value: false
+            value: 'false'
           }
         ]
       }
