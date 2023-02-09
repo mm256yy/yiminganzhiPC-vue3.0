@@ -76,10 +76,10 @@
             <span
               :class="[
                 'status',
-                row.status === ReportStatus.UnReport ? 'status-err' : 'status-suc'
+                row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
               ]"
             ></span>
-            {{ row.status === ReportStatus.UnReport ? '未填报' : '已填报' }}</div
+            {{ row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
           >
         </template>
         <template #reportDate="{ row }">

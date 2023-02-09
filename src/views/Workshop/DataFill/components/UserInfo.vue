@@ -6,9 +6,13 @@
         <span class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</span>
         <span class="pl-8px text-size-14px text-[#000]">{{ props.baseInfo.doorNo }}</span>
       </div>
-      <div :class="{ status: true, success: props.baseInfo.status === ReportStatus.ReportSucceed }"
+      <div
+        :class="{
+          status: true,
+          success: props.baseInfo.reportStatus === ReportStatus.ReportSucceed
+        }"
         ><span class="point"></span
-        >{{ props.baseInfo.status === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
+        >{{ props.baseInfo.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
       >
     </div>
 
@@ -52,8 +56,8 @@ const props = defineProps<PropsType>()
   min-height: 88px;
   margin-top: 14px;
   background: #f5f7fa;
-  border-radius: 4px;
   border: 1px solid #e8eaf0;
+  border-radius: 4px;
 
   .base {
     display: flex;
@@ -62,27 +66,29 @@ const props = defineProps<PropsType>()
     height: 40px;
     padding: 0 16px;
     border-bottom: 2px dashed #dcdfe6;
+
     .user {
       display: flex;
       align-items: center;
     }
+
     .status {
       display: flex;
-      align-items: center;
-      padding: 0 13px 0 10px;
       height: 24px;
+      padding: 0 13px 0 10px;
       font-size: 12px;
       color: #ff2d2d;
       background: #ffffff;
-      border-radius: 14px;
       border: 1px solid #ff5d5d;
+      border-radius: 14px;
+      align-items: center;
 
       .point {
         width: 6px;
         height: 6px;
         margin-right: 5px;
-        border-radius: 50%;
         background: #ff6767;
+        border-radius: 50%;
       }
 
       &.success {
@@ -98,17 +104,18 @@ const props = defineProps<PropsType>()
 
   .other {
     display: flex;
-    align-items: center;
-    padding: 0 16px;
     height: 48px;
+    padding: 0 16px;
+    align-items: center;
 
     .info-item {
-      margin-right: 40px;
       display: flex;
-      align-items: center;
+      margin-right: 40px;
       font-size: 14px;
       line-height: 28px;
       color: #000;
+      align-items: center;
+
       .txt {
         font-weight: 500;
       }

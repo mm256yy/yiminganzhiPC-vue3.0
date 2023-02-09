@@ -1,9 +1,14 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" type="default" class="px-9px py-0px !h-28px mr-8px"
-        >返回</ElButton
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        type="default"
+        class="px-9px py-0px !h-28px mr-8px"
       >
+        返回
+      </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
@@ -19,8 +24,9 @@
             v-for="item in FlowTabs"
             :key="item.id"
             @click="onTabClick(item)"
-            >{{ item.name }}</div
           >
+            {{ item.name }}
+          </div>
         </div>
         <ElSpace>
           <ElButton
@@ -28,9 +34,17 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onPrint"
-            >打印表格</ElButton
           >
-          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">数据上报</ElButton>
+            打印表格
+          </ElButton>
+          <ElButton
+            v-if="baseInfo.reportStatus === ReportStatus.UnReport"
+            type="primary"
+            :icon="EscalationIcon"
+            @click="onReportData"
+          >
+            数据上报
+          </ElButton>
         </ElSpace>
       </div>
 
@@ -135,6 +149,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { ReportTabs, FlowTabs, ReportTabIds } from './config'
 import { useRouter } from 'vue-router'
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
+import { ReportStatus } from '@/views/Workshop/DataFill/config'
 
 import Demographic from './Demographic/Index.vue'
 import House from './House/Index.vue'
@@ -191,11 +206,12 @@ const onClose = () => {
 // 数据上报
 const onReportData = async () => {
   const result = await reportLandlordApi(householdId, true)
-  console.log(result, 'report res')
   if (result && Array.isArray(result)) {
+    reportDialog.value = true
     reportResult.value = result
   } else {
     ElMessage.success('上报成功！')
+    getLandlordInfo()
     back()
   }
 }
@@ -204,6 +220,7 @@ const onConfirmReport = async () => {
   const result = await reportLandlordApi(householdId, false)
   if (result && Object.prototype.toString.call(result) === '[object String]') {
     ElMessage.success('上报成功！')
+    getLandlordInfo()
     back()
   }
 }
