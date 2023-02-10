@@ -190,7 +190,7 @@ const getList = () => {
 getList()
 
 const onAddRow = () => {
-  tableData.value.push(defaultRow)
+  tableData.value.push({ ...defaultRow })
 }
 
 const onSave = () => {
