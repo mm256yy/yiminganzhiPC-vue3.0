@@ -204,7 +204,7 @@ onMounted(() => {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -508,8 +508,8 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'villageCode',
-    naturalVillage: 'virutalVillageCode'
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]
 }
@@ -533,18 +533,18 @@ const onSearch = (data) => {
   if (!params.status) {
     delete params.status
   }
-  if (params.villageCode) {
+  if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
+    findRecursion(villageTree.value, params.code, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
+        params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.villageCode
-      setSearchParams(params)
+      delete params.code
+      setSearchParams({ ...params })
     })
   } else {
-    delete params.villageCode
-    setSearchParams(params)
+    delete params.code
+    setSearchParams({ ...params })
   }
 }
 
