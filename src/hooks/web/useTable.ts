@@ -118,7 +118,6 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       tableObject.loading = true
       const params = unref(paramsObj)
       const realParams = { ...params, page: params.page - 1 }
-      console.log('config', config?.getListApi)
       const data = await config?.getListApi(realParams).finally(() => {
         tableObject.loading = false
       })
