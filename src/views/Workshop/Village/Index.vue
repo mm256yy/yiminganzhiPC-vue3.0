@@ -26,7 +26,7 @@
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :showOverflowTooltip="false"
+        :showOverflowTooltip="true"
         tableLayout="auto"
         row-key="id"
         headerAlign="center"
