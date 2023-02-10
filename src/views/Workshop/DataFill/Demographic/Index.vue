@@ -217,7 +217,7 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
-const onViewRow = (row) => {
+const onViewRow = (row: DemographicDtoType) => {
   actionType.value = 'view'
   tableObject.currentRow = row
   dialog.value = true
