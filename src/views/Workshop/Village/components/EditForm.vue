@@ -27,7 +27,7 @@
           :default-expanded-keys="[form.parentCode]"
         />
       </ElFormItem>
-      <ElFormItem label="村名" prop="name" required>
+      <ElFormItem label="自然村名称" prop="name" required>
         <ElInput clearable :maxlength="20" v-model="form.name" />
       </ElFormItem>
 

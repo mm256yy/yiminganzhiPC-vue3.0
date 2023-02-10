@@ -101,6 +101,21 @@
         </ElSelect>
       </ElFormItem>
 
+      <ElFormItem label="淹没范围" prop="inundationRange">
+        <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
+      </ElFormItem>
+
+      <ElFormItem label="房屋高程" prop="houseHeight">
+        <ElInput
+          clearable
+          filterable
+          placeholder="请输入房屋高程"
+          type="number"
+          class="!w-350px"
+          v-model="form.houseHeight"
+        />
+      </ElFormItem>
+
       <div class="w-466px">
         <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
       </div>

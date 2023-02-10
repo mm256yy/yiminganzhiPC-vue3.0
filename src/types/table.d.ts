@@ -47,5 +47,6 @@ export type TableColumnActionIcon = {
    */
   tooltip?: string
   type?: ButtonType
+  disabled?: boolean
   action?: Function
 } & Recordable
