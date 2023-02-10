@@ -103,7 +103,13 @@
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
         <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" :edit="false" @delete="onDelRow" />
+          <TableEditColumn
+            :view-type="'link'"
+            :disabled="row.relation === '1'"
+            :row="row"
+            :edit="false"
+            @delete="onDelRow"
+          />
         </template>
       </Table>
     </div>

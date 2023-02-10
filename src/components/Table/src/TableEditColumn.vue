@@ -19,6 +19,7 @@ export default defineComponent({
       type: Array as PropType<TableColumnActionIcon[]>,
       default: () => []
     },
+    disabled: propTypes.bool.def(false),
     buttonType: propTypes.oneOf(['plain', 'round', 'circle', 'default']).def('circle'),
     viewType: propTypes.oneOf(['link', 'default']).def('default')
   },
@@ -38,7 +39,8 @@ export default defineComponent({
         icons.push({
           icon: 'ant-design:delete-outlined',
           tooltip: '删除',
-          type: 'danger',
+          type: props.disabled ? 'default' : 'danger',
+          disabled: props.disabled,
           action: () => emit('delete', props.row)
         })
       }

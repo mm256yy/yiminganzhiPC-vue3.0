@@ -118,8 +118,8 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'districtName',
-    label: '所属区域',
+    field: 'city',
+    label: '市',
     search: {
       show: false
     },
@@ -131,7 +131,46 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'area',
+    label: '区县',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'town',
+    label: '街道',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'village',
+    label: '行政村',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'virutalVillage',
     label: '自然村',
     search: {
       show: true,
@@ -145,11 +184,10 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'code',
-    label: '编码',
+    field: 'createdDate',
+    label: '创建时间',
     search: {
-      show: true,
-      component: 'Input'
+      show: false
     },
     form: {
       show: false
@@ -180,26 +218,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     },
     table: {
-      show: false
-    }
-  },
-  {
-    field: 'address',
-    label: '具体地址',
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'latitude',
-    label: '经纬度',
-    form: {
-      show: false
-    },
-    detail: {
       show: false
     }
   },
