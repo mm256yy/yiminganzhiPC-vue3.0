@@ -170,7 +170,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'virutalVillage',
+    field: 'name',
     label: '自然村',
     search: {
       show: true,

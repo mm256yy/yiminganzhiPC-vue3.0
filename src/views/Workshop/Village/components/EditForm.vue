@@ -33,7 +33,7 @@
 
       <MapFormItem
         v-if="!props.hideMap"
-        :required="true"
+        :required="false"
         :positon="position"
         @change="onChosePosition"
       />

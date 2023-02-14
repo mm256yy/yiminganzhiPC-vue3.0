@@ -252,7 +252,7 @@
 
       <ElDivider border-style="dashed" />
 
-      <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
+      <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
 
       <ElRow :gutter="30">
         <ElCol :span="8">

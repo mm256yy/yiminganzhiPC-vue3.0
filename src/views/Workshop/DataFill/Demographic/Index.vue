@@ -8,20 +8,25 @@
         </ElSpace>
       </div>
       <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
         align="center"
+        :pagination="{
+          total: tableObject.total
+        }"
         highlightCurrentRow
         @register="register"
       >
-        <template #birthday="{ row }">
+        <!-- <template #birthday="{ row }">
           <div>
             {{ formatDate(row.birthday) }}
           </div>
-        </template>
+        </template> -->
         <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
@@ -62,7 +67,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
-import { formatDate } from '@/utils/index'
+// import { formatDate } from '@/utils/index'
 
 interface PropsType {
   doorNo: string

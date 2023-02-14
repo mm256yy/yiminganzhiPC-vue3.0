@@ -20,7 +20,13 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="与户主关系" prop="relation">
-            <ElSelect clearable filterable v-model="form.relation" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.relation"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[307]"
                 :key="item.value"
@@ -32,7 +38,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="姓名" prop="name">
-            <ElInput v-model="form.name" placeholder="请输入姓名" class="!w-full" />
+            <ElInput v-model="form.name" :placeholder="placeholderList[0]" class="!w-full" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
@@ -40,7 +46,7 @@
             <ElInput
               clearable
               filterable
-              placeholder="请输入身份证号"
+              :placeholder="placeholderList[1]"
               type="text"
               class="!w-full"
               v-model="form.card"
@@ -52,7 +58,13 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="性别" prop="sex">
-            <ElSelect clearable filterable v-model="form.sex" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.sex"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[292]"
                 :key="item.value"
@@ -67,14 +79,20 @@
             <ElDatePicker
               v-model="form.birthday"
               type="date"
-              placeholder="请选择日期"
+              :placeholder="placeholderList[2]"
               class="!w-full"
             />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="民族" prop="nation">
-            <ElSelect clearable filterable v-model="form.nation" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.nation"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[278]"
                 :key="item.value"
@@ -91,7 +109,13 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="人口类型" prop="populationType">
-            <ElSelect clearable filterable v-model="form.populationType" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.populationType"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[244]"
                 :key="item.value"
@@ -106,7 +130,7 @@
             <ElInput
               clearable
               filterable
-              placeholder="请输入户籍所在地"
+              :placeholder="placeholderList[4]"
               type="text"
               class="!w-full"
               v-model="form.censusRegister"
@@ -115,7 +139,13 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="文化程度" prop="education">
-            <ElSelect clearable filterable v-model="form.education" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.education"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[272]"
                 :key="item.value"
@@ -130,7 +160,13 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="婚姻状况" prop="marital">
-            <ElSelect clearable filterable v-model="form.marital" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.marital"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[260]"
                 :key="item.value"
@@ -142,7 +178,13 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="户籍类别" prop="censusType">
-            <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.censusType"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[249]"
                 :key="item.value"
@@ -153,7 +195,13 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="职业" prop="occupation">
-            <ElSelect clearable filterable v-model="form.occupation" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.occupation"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[305]"
                 :key="item.value"
@@ -171,7 +219,7 @@
             <ElInput
               clearable
               filterable
-              placeholder="请输入工作单位"
+              :placeholder="placeholderList[3]"
               type="text"
               class="!w-full"
               v-model="form.company"
@@ -180,7 +228,13 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="参保情况" prop="insuranceType">
-            <ElSelect clearable filterable v-model="form.insuranceType" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.insuranceType"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[306]"
                 :key="item.value"
@@ -191,7 +245,13 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="人口类别" prop="category">
-            <ElSelect clearable filterable v-model="form.category" class="!w-full">
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.category"
+              class="!w-full"
+              :placeholder="placeholderList[5]"
+            >
               <ElOption
                 v-for="item in dictObj[274]"
                 :key="item.value"
@@ -408,7 +468,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   category: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-
+const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
 const householdPic = ref<FileItemType[]>([])
@@ -420,6 +480,25 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
+watch(
+  () => props.actionType,
+  (newValue) => {
+    if (newValue == 'view') {
+      placeholderList.value = ['', '', '', '', '', ' ']
+    } else {
+      placeholderList.value = [
+        '请输入姓名',
+        '请输入身份证号',
+        '请选择日期',
+        '请输入工作单位',
+        '请输入户籍所在地',
+        '请选择'
+      ]
+    }
+  },
+  //可选immediate: true马上执行
+  { deep: true, immediate: true }
+)
 
 watch(
   () => props.row,

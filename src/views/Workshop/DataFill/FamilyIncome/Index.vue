@@ -211,6 +211,17 @@ const total = computed(() => {
 })
 
 const onSave = () => {
+  // tableData.value.forEach((item) => {
+  //   for (const key in item) {
+  //     // console.log('item[key]', item[key]) //值
+  //     // console.log('key', key) //键
+  //     if (key == 'id') {
+  //       delete item[key]
+  //     }
+  //   }
+  // })
+  // console.log(tableData.value)
+
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
   saveFamilyIncomeListApi(realTableData).then(() => {
     ElMessage.success('操作成功！')

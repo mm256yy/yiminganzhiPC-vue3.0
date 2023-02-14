@@ -11,6 +11,8 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
+          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">人口预导入表</span>
+
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
@@ -102,6 +104,11 @@
         <template #createdDate="{ row }">
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
+
+        <template #age="{ row }">
+          <div>{{ analyzeIDCard(row.card) }}</div>
+        </template>
+
         <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
@@ -148,7 +155,7 @@ import type {
   ExcelListType
 } from '@/api/workshop/population/types'
 import { Icon } from '@/components/Icon'
-import { formatDate } from '@/utils/index'
+import { formatDate, analyzeIDCard } from '@/utils/index'
 
 enum FileReportStatus {
   success = 'Succeed',
@@ -239,6 +246,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'age',
+    label: '年龄',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'card',
     label: '身份证号',
     search: {
@@ -246,47 +260,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householdNumber',
-    label: '户籍册编号',
+    field: 'nationText',
+    label: '民族',
     search: {
       show: false
     }
   },
-  {
-    field: 'relationText',
-    label: '与户主关系',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'townCodeText',
-    label: '街道/乡镇',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'villageText',
-    label: '行政村',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'virutalVillageText',
-    label: '自然村',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'phone',
-    label: '联系方式',
-    search: {
-      show: false
-    }
-  },
+
   {
     field: 'censusRegister',
     label: '户籍所在地',
@@ -295,12 +275,84 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createdDate',
-    label: '导入时间',
+    field: 'censusTypeText',
+    label: '户籍类型',
     search: {
       show: false
     }
   },
+  {
+    field: 'maritalText',
+    label: '婚姻状况',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'populationTypeText',
+    label: '人口类型',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'insuranceTypeText',
+    label: '参保情况',
+    search: {
+      show: false
+    }
+  },
+
+  // {
+  //   field: 'householdNumber',
+  //   label: '户籍册编号',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'relationText',
+  //   label: '与户主关系',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'townCodeText',
+  //   label: '街道/乡镇',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'villageText',
+  //   label: '行政村',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'virutalVillageText',
+  //   label: '自然村',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'phone',
+  //   label: '联系方式',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+
+  // {
+  //   field: 'createdDate',
+  //   label: '导入时间',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'action',
     label: '操作',
@@ -326,11 +378,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: 'Master'
+            value: '1'
           },
           {
             label: '否',
-            value: 'Daughter,Son,Wife,Husband'
+            value: '0'
           }
         ]
       }
