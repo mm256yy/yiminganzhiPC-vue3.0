@@ -392,7 +392,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'villageCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -472,8 +472,8 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'neighborhoodCommittee',
-    naturalVillage: 'villageCode'
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]
 }
@@ -481,10 +481,14 @@ const getParamsKey = (key: string) => {
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
-  if (searchData.relation == 1) {
+  console.log(searchData)
+
+  if (searchData.relation == '1') {
     searchData.relation = ['is', 1]
-  } else if (searchData.relation == 0) {
+  } else if (searchData.relation == '0') {
     searchData.relation = ['not', 1]
+  } else {
+    delete searchData.relation
   }
 
   // 处理参数
@@ -494,18 +498,18 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (params.villageCode) {
+  if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
+    findRecursion(villageTree.value, params.code, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
+        params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.villageCode
-      setSearchParams(params)
+      delete params.code
+      setSearchParams({ ...params })
     })
   } else {
-    delete params.villageCode
-    setSearchParams(params)
+    delete params.code
+    setSearchParams({ ...params })
   }
 }
 

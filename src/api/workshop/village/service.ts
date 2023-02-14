@@ -7,7 +7,13 @@ import { VillageDtoType } from './types'
 export const getVillageListApi = (
   query: Partial<VillageDtoType>
 ): Promise<TableResponse<VillageDtoType>> => {
-  return request.get({ url: '/village', params: query })
+  return request.get({
+    url: '/village',
+    params: {
+      sort: ['createdDate', 'desc'],
+      ...query
+    }
+  })
 }
 
 /**

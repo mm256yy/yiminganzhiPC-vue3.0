@@ -101,10 +101,19 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="淹没范围" prop="inundationRange">
+      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
         <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
+      </ElFormItem> -->
+      <ElFormItem label="淹没范围" prop="inundationRange">
+        <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
+          <ElOption
+            v-for="item in dictObj[346]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
-
       <ElFormItem label="房屋高程" prop="houseHeight">
         <ElInput
           clearable
@@ -164,14 +173,12 @@ import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
-
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
-
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])

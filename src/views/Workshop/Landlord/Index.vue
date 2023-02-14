@@ -525,6 +525,10 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
+  if (!data.reportStatus) {
+    Reflect.deleteProperty(params, 'reportStatus')
+  }
+
   // 需要重置一次params
   tableObject.params = {
     projectId

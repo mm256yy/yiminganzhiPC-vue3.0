@@ -197,7 +197,7 @@ const projectUser = ref<ProjectUser>(
 )
 const orgs = ref<TreeNodeType[]>([])
 const roles = ref<RoleType[]>([])
-
+const systemRoleFlag = ref<any>('')
 const title = computed(() => {
   return props.row ? '编辑用户' : '新增用户'
 })
@@ -236,6 +236,8 @@ const schema = reactive<FormSchema[]>([
 const { register, elFormRef, methods } = useForm()
 
 onMounted(async () => {
+  systemRoleFlag.value = appStore.getUserInfo?.systemRole
+
   // 如果是系统管理员，则添加设置系统用户角色的选择, 并且如果是项目管理员，允许设置加入哪些项目，以及在这些项目中的信息
   // 如果是项目管理员，则只能修改用户在当前项目中的项目信息（项目中的角色，岗位，钉钉号等）
   if (appStore.getIsSysAdmin) {
@@ -271,6 +273,7 @@ onMounted(async () => {
       projectUser.value.position = first.position
       projectUser.value.dingId = first.dingId
       projectUser.value.projectId = first.projectId
+      // console.log(projectUser.value.projectRole, '项目权限')
     }
   }
 })
@@ -334,8 +337,12 @@ const doSave = async () => {
   const user = (await methods.getFormData()) || {}
   if (appStore.getIsProjectAdmin) {
     const pu = unref(projectUser.value)
+    console.log(pu, 'useruser')
+
     pu.roles = pu.roleIds?.map((x) => ({ id: x }))
-    user.systemRole = ProjectRoleEnum.NORMAL_USER
+    // user.systemRole = ProjectRoleEnum.NORMAL_USER
+    user.systemRole = pu.projectRole
+
     user.projectUsers = [unref(projectUser.value)]
   } else {
     user.projectUsers = unref(projectUsers.value)
@@ -343,6 +350,7 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     user.id = currentRow.value.id
   }
+
   saveUserApi(user as UserInfoType)
     .then(() => {
       ElMessage.success('保存用户成功')

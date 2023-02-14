@@ -167,18 +167,3 @@ export function analyzeIDCard(identityCard) {
   }
   return age
 }
-
-//根据日期排序
-export function compare(prop, align): any {
-  return function (a, b) {
-    const value1 = a[prop]
-    const value2 = b[prop]
-    if (align == 'positive') {
-      //正序
-      return <any>new Date(value1) - <any>new Date(value2)
-    } else if (align == 'inverted') {
-      //倒序
-      return <any>new Date(value2) - <any>new Date(value1)
-    }
-  }
-}
