@@ -152,6 +152,11 @@ const onPreview = (item) => {
 </script>
 
 <style lang="less" scoped>
+@page {
+  margin: 18mm 15mm 8mm 15mm !important;
+  size: A4 !important;
+}
+
 .print-box {
   padding-left: 16px;
 

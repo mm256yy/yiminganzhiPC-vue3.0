@@ -110,6 +110,17 @@ watch(
 
 onMounted(async () => {
   projects.value = await (await listProjectApi({ page: 0, size: 100 })).content
+  if (row.value.projectId) {
+    const pId: any = row.value.projectId
+    row.value.projectName = projects.value.find((x) => x.id === pId)?.name
+    orgs.value = [await getOrgTreeApi(pId)]
+    roles.value = await getAllRoleApi(pId)
+    const arr: any = row.value.roles
+    row.value.roles = []
+    arr.forEach((item) => {
+      row.value.roleIds?.push(item.id)
+    })
+  }
 })
 
 const onProjectChange = async (pId: number) => {
@@ -134,6 +145,8 @@ const onSave = () => {
         }))
       }
       emit('save', unref(row.value))
+    } else {
+      return
     }
   })
 }

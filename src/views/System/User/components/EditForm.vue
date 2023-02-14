@@ -281,6 +281,8 @@ const onAddProjectUser = () => {
 }
 
 const onEditProjectUser = (row: ProjectUserType) => {
+  console.log(row, 'row')
+
   currentProjectUser.value = row
   showProjectUserForm.value = true
 }

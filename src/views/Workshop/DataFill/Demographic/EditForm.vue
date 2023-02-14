@@ -480,6 +480,8 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
+
+//处理表单不同状态下的placeholder
 watch(
   () => props.actionType,
   (newValue) => {

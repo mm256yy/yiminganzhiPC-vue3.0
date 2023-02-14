@@ -38,6 +38,9 @@
           <div>{{ row.longitude }}</div>
           <div>{{ row.latitude }}</div>
         </template>
+        <template #createdDate="{ row }">
+          <div>{{ formatDate(row.createdDate) }}</div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn
             :row="row"
@@ -59,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -72,7 +75,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
 import { getDistrictTreeApi } from '@/api/district'
 import type { VillageDtoType } from '@/api/workshop/village/types'
-
+import { compare, formatDate } from '@/utils'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
@@ -102,6 +105,14 @@ onMounted(() => {
   getDistrictTree()
 })
 
+watch(
+  () => tableObject.tableList,
+  (val) => {
+    val.sort(compare('createdDate', 'inverted'))
+  },
+  //可选immediate: true马上执行
+  { deep: true, immediate: true }
+)
 const schema = reactive<CrudSchema[]>([
   {
     field: 'id',

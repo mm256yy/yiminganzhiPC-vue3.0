@@ -194,6 +194,8 @@ const onSearch = (query: any) => {
 }
 
 const onEdit = (row: UserInfoType) => {
+  console.log(row, 'rowrow')
+
   currentRow.value = row
   showEdit.value = true
 }

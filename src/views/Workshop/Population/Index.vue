@@ -479,9 +479,17 @@ const getParamsKey = (key: string) => {
 }
 
 const onSearch = (data) => {
+  //解决是否户主relation入参变化
+  let searchData = JSON.parse(JSON.stringify(data))
+  if (searchData.relation == 1) {
+    searchData.relation = ['is', 1]
+  } else if (searchData.relation == 0) {
+    searchData.relation = ['not', 1]
+  }
+
   // 处理参数
   let params = {
-    ...data
+    ...searchData
   }
   tableObject.params = {
     projectId
