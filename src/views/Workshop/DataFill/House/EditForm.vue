@@ -555,10 +555,10 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      if (!position.latitude || !position.longitude) {
-        ElMessage.error('请选择位置')
-        return
-      }
+      // if (!position.latitude || !position.longitude) {
+      //   ElMessage.error('请选择位置')
+      //   return
+      // }
       const data: any = {
         ...form.value,
         ...position,

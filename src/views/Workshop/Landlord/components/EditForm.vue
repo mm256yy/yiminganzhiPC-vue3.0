@@ -114,14 +114,14 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="房屋高程" prop="houseHeight">
+      <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
-          placeholder="请输入房屋高程"
+          placeholder="请输入高程"
           type="number"
           class="!w-350px"
-          v-model="form.houseHeight"
+          v-model="form.altitude"
         />
       </ElFormItem>
 
@@ -273,10 +273,10 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      if (!position.latitude || !position.longitude) {
-        ElMessage.error('请选择位置')
-        return
-      }
+      // if (!position.latitude || !position.longitude) {
+      //   ElMessage.error('请选择位置')
+      //   return
+      // }
       const data: any = {
         ...form.value,
         ...position,
