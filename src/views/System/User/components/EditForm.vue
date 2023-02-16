@@ -8,7 +8,15 @@
     @close="onClose"
   >
     <Form :schema="schema" @register="register" :rules="rules">
-      <template #project>
+      <template #systemRole>
+        <el-select v-model="systemRole" @change="systemRoleChange">
+          <el-option label="系统管理员" :value="SystemRoleEnum.SYS_ADMIN" />
+
+          <el-option label="项目管理员" :value="SystemRoleEnum.PROJECT_ADMIN" />
+          <el-option label="普通用户" :value="SystemRoleEnum.NORMAL_USER" />
+        </el-select>
+      </template>
+      <template #project v-if="relationFlag">
         <ContentWrap title="关联项目">
           <div class="flex relative w-700px">
             <div class="absolute right-10px top-[-65px]">
@@ -119,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, unref, ref, onMounted } from 'vue'
+import { computed, reactive, unref, ref, onMounted, watch } from 'vue'
 import {
   ElCol,
   ElForm,
@@ -175,6 +183,8 @@ const defaultProps = {
 }
 
 const { required } = useValidator()
+const systemRole = ref()
+const relationFlag = ref()
 const projectForm = ref<ComponentRef<typeof ElForm>>()
 const maxHeight = ref(appStore.getIsSysAdmin ? 500 : 300)
 const loading = ref(false)
@@ -234,7 +244,25 @@ const schema = reactive<FormSchema[]>([
 ])
 
 const { register, elFormRef, methods } = useForm()
-
+const systemRoleChange = async (val) => {
+  systemRole.value = val
+  let user = (await methods.getFormData()) || {}
+  user.systemRole = systemRole.value
+  methods.setValues(user as UserInfoType)
+  const formRef = unref(elFormRef)
+  // await formRef?.validate()
+  formRef?.clearValidate()
+}
+watch(
+  () => systemRole.value,
+  async (val) => {
+    if (val == 'SYS_ADMIN') {
+      relationFlag.value = false
+    } else {
+      relationFlag.value = true
+    }
+  }
+)
 onMounted(async () => {
   systemRoleFlag.value = appStore.getUserInfo?.systemRole
 
@@ -260,6 +288,8 @@ onMounted(async () => {
     orgs.value = [await getOrgTreeApi(appStore.getCurrentProjectId)]
     roles.value = await getAllRoleApi(appStore.getCurrentProjectId)
   }
+  systemRole.value = currentRow.value?.systemRole
+
   methods.setValues(currentRow.value as UserInfoType)
   // 初始化项目管理员的项目信息
   if (appStore.getIsProjectAdmin && currentRow.value && currentRow.value.projectUsers.length > 0) {
@@ -284,8 +314,6 @@ const onAddProjectUser = () => {
 }
 
 const onEditProjectUser = (row: ProjectUserType) => {
-  console.log(row, 'row')
-
   currentProjectUser.value = row
   showProjectUserForm.value = true
 }
@@ -337,7 +365,6 @@ const doSave = async () => {
   const user = (await methods.getFormData()) || {}
   if (appStore.getIsProjectAdmin) {
     const pu = unref(projectUser.value)
-    console.log(pu, 'useruser')
 
     pu.roles = pu.roleIds?.map((x) => ({ id: x }))
     // user.systemRole = ProjectRoleEnum.NORMAL_USER
@@ -350,6 +377,7 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     user.id = currentRow.value.id
   }
+  user.systemRole = systemRole.value
 
   saveUserApi(user as UserInfoType)
     .then(() => {

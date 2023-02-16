@@ -548,7 +548,6 @@ const rules = reactive<FormRules>({})
 const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
-    cardFront.value = []
     formRef.value?.resetFields()
   })
 }

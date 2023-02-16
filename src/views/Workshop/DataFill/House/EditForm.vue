@@ -215,7 +215,7 @@
             <ElDatePicker
               class="!w-full"
               v-model="form.completedTime"
-              type="date"
+              type="month"
               placeholder="请选择日期"
             />
           </ElFormItem>
@@ -247,8 +247,32 @@
             />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8" />
+        <ElCol :span="8">
+          <ElFormItem label="所在位置" prop="locationType">
+            <ElSelect class="w-350px" v-model="form.locationType">
+              <ElOption
+                v-for="item in locationTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
       </ElRow>
+
+      <ElRow :gutter="30">
+        <ElCol :span="8">
+          <ElFormItem label="淹没范围" prop="inundationRange">
+            <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
+              <ElOption
+                v-for="item in dictObj[346]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem></ElCol
+      ></ElRow>
 
       <ElDivider border-style="dashed" />
 
@@ -416,6 +440,7 @@ import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
+import { locationTypes } from '@/views/Workshop/Landlord/config'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'

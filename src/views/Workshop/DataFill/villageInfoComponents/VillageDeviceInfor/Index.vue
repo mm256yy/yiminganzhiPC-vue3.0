@@ -18,37 +18,24 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="品种名称"
+          label="设施名称"
           :width="175"
           prop="name"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              allow-create
-              placeholder="请输入品种名称"
-              v-if="row.isAdd"
-              v-model="row.name"
-            >
-              <ElOption
-                v-for="item in dictObj[250]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+            <ElInput placeholder="请输入设施名称" v-model="row.name" v-if="row.isAdd" />
             <div v-else>
               {{ row.nameText }}
             </div>
           </template>
         </ElTableColumn>
+
         <ElTableColumn
-          label="用途"
+          label="设施类别"
           :width="180"
-          prop="usageType"
+          prop="size"
           align="center"
           header-align="center"
         >
@@ -56,23 +43,29 @@
             <ElSelect
               clearable
               filterable
-              placeholder="请选择用途"
+              placeholder="请选择设施类别"
               v-if="row.isAdd"
-              v-model="row.usageType"
+              v-model="row.size"
             >
               <ElOption
-                v-for="item in dictObj[325]"
+                v-for="item in dictObj[269]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
             </ElSelect>
             <div v-else>
-              {{ row.usageTypeText }}
+              {{ row.sizeText }}
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
+
+        <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.number" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="单位" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -93,45 +86,115 @@
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单位" :width="180" prop="unit" align="center" header-align="center">
+        <ElTableColumn label="所在位置" align="center">
+          <template #default="{ row }">
+            <ElSelect v-model="row.locationType">
+              <ElOption
+                v-for="item in locationTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="具体位置" align="center">
+          <template #default="{ row }">
+            <ElSelect v-model="row.locationType">
+              <ElOption
+                v-for="item in locationTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="主管单位"
+          :width="180"
+          prop="size"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect
               clearable
               filterable
-              placeholder="请选择单位"
+              placeholder="请选择主管单位"
               v-if="row.isAdd"
-              v-model="row.unit"
+              v-model="row.size"
             >
               <ElOption
-                v-for="item in dictObj[264]"
+                v-for="item in dictObj[269]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
             </ElSelect>
             <div v-else>
-              {{ row.unitText }}
+              {{ row.sizeText }}
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
+        <!-- <ElTableColumn label="用途" :width="175" prop="name" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInput placeholder="请输入内容" v-model="row.name" v-if="row.isAdd" />
+            <div v-else>
+              {{ row.nameText }}
+            </div>
+          </template>
+        </ElTableColumn> -->
+        <ElTableColumn
+          label="建成年月"
+          :width="175"
+          prop="name"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElDatePicker
+              v-if="row.isAdd"
+              v-model="row.birthday"
+              type="month"
+              placeholder="选择年月"
+              class="!w-full"
+            />
+            <div v-else>
+              {{ row.nameText }}
+            </div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="规模" :width="200" prop="number" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.altitude" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.inundationRange" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+
+        <!-- <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+          </template>
+        </ElTableColumn> -->
+        <ElTableColumn label="操作" prop="action">
+          <template #default="scope">
+            <!-- <TableEditColumn
+              :view-type="'link'"
+              :icons="[
+                {
+                  icon: '',
+                  tooltip: '概况',
+                  type: 'primary',
+                  action: () => onViewRow(row)
+                }
+              ]"
+              :row="row"
+              @edit="onEditRow(row)"
+              @delete="onDelRow"
+            /> -->
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
+              >删除</span
+            >
           </template>
         </ElTableColumn>
       </ElTable>
@@ -151,8 +214,11 @@ import {
   ElTableColumn,
   ElMessage,
   ElSelect,
-  ElOption
+  ElOption,
+  ElDatePicker,
+  ElMessageBox
 } from 'element-plus'
+import { locationTypes } from '@/views/Workshop/Landlord/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getFruitwoodListApi,
@@ -185,7 +251,18 @@ const defaultRow = {
   remark: '',
   isAdd: true
 }
-
+const onDelRow = (row) => {
+  ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+    type: 'warning',
+    cancelButtonText: '取消',
+    confirmButtonText: '确认'
+  })
+    .then(() => {
+      tableData.value.splice(tableData.value.indexOf(row), 1)
+      ElMessage.success('删除成功')
+    })
+    .catch(() => {})
+}
 const getList = () => {
   const params = {
     doorNo: props.doorNo,

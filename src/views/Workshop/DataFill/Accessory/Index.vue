@@ -67,6 +67,17 @@
             <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
+        <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.altitude" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.inundationRange" />
+          </template>
+        </ElTableColumn>
+
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入内容" v-model="scope.row.remark" />

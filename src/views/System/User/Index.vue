@@ -71,7 +71,7 @@ import {
   resetPwdApi
 } from '@/api/sys'
 import { LeftPanel, EditForm } from './components'
-
+const showType = ref()
 const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<UserInfoType>()
@@ -198,6 +198,7 @@ const onEdit = (row: UserInfoType) => {
 
   currentRow.value = row
   showEdit.value = true
+  showType.value = 'view'
 }
 
 const onDelete = (row: UserInfoType) => {
@@ -214,6 +215,7 @@ const onDelete = (row: UserInfoType) => {
 const onAddUser = () => {
   currentRow.value = undefined
   showEdit.value = true
+  showType.value = 'add'
 }
 
 const onClose = () => {

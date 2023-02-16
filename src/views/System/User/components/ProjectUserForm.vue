@@ -6,12 +6,12 @@
           <el-option v-for="p in projects" :label="p.name" :value="p.id" :key="p.id" />
         </el-select>
       </el-form-item>
-      <el-form-item prop="projectRole" label="项目权限">
+      <!-- <el-form-item prop="projectRole" label="项目权限">
         <el-select v-model="row.projectRole">
           <el-option label="项目管理员" :value="ProjectRoleEnum.PROJECT_ADMIN" />
           <el-option label="普通用户" :value="ProjectRoleEnum.NORMAL_USER" />
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="orgId" label="所属组织">
         <el-tree-select
           v-model="row.orgId"
@@ -115,6 +115,7 @@ onMounted(async () => {
     row.value.projectName = projects.value.find((x) => x.id === pId)?.name
     orgs.value = [await getOrgTreeApi(pId)]
     roles.value = await getAllRoleApi(pId)
+
     const arr: any = row.value.roles
     row.value.roles = []
     arr.forEach((item) => {
@@ -129,6 +130,7 @@ const onProjectChange = async (pId: number) => {
   row.value.projectName = projects.value.find((x) => x.id === pId)?.name
   orgs.value = [await getOrgTreeApi(pId)]
   roles.value = await getAllRoleApi(pId)
+  row.value.roleIds = [roles.value[0].id]
 }
 
 const onNodeClick = (data: TreeNodeType) => {

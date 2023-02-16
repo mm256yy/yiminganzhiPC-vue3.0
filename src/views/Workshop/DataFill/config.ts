@@ -28,26 +28,152 @@ export const ReportTabs = [
     active: false
   },
   {
-    name: '家庭收入情况信息',
+    name: '坟墓调查信息',
     id: ReportTabIds[4],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    name: '家庭收入情况信息',
+    id: ReportTabIds[5],
     icon: 'ri:exchange-cny-fill',
     active: false
   },
   {
     name: '安置意愿调查信息',
+    id: ReportTabIds[6],
+    icon: 'bxs:smile',
+    active: false
+  },
+
+  {
+    name: '附件上传',
+    id: ReportTabIds[7],
+    icon: 'material-symbols:file-present-rounded',
+    active: false
+  }
+]
+
+export const EnterpriseTabs = [
+  {
+    name: '企业基本情况',
+    id: ReportTabIds[0],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    name: '房屋信息',
+    id: ReportTabIds[1],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    name: '附属物信息',
+    id: ReportTabIds[2],
+    icon: 'bi:device-hdd-fill',
+    active: false
+  },
+  {
+    name: '零星(林)果木信息',
+    id: ReportTabIds[3],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    name: '设施设备信息',
+    id: ReportTabIds[4],
+    icon: 'ri:exchange-cny-fill',
+    active: false
+  },
+  {
+    name: '经营现状信息',
     id: ReportTabIds[5],
     icon: 'bxs:smile',
+    active: false
+  }
+]
+
+export const IndividualBTabs = [
+  {
+    name: '个体工商基本情况',
+    id: ReportTabIds[0],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    name: '房屋信息',
+    id: ReportTabIds[1],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    name: '零星(林)果木信息',
+    id: ReportTabIds[2],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    name: '附属物信息',
+    id: ReportTabIds[3],
+    icon: 'bi:device-hdd-fill',
+    active: false
+  },
+
+  {
+    name: '设施设备信息',
+    id: ReportTabIds[4],
+    icon: 'ri:exchange-cny-fill',
+    active: false
+  },
+  {
+    name: '附件上传',
+    id: ReportTabIds[5],
+    icon: 'material-symbols:file-present-rounded',
+    active: false
+  }
+]
+
+export const villageInfoCTabs = [
+  {
+    name: '村集体基本情况',
+    id: ReportTabIds[0],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    name: '房屋信息',
+    id: ReportTabIds[1],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    name: '零星(林)果木信息',
+    id: ReportTabIds[2],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    name: '附属物信息',
+    id: ReportTabIds[3],
+    icon: 'bi:device-hdd-fill',
+    active: false
+  },
+
+  {
+    name: '农村小型转项目及农副业设施信息',
+    id: ReportTabIds[4],
+    icon: 'ri:exchange-cny-fill',
     active: false
   },
   {
     name: '坟墓调查信息',
-    id: ReportTabIds[6],
+    id: ReportTabIds[5],
     icon: 'tabler:grave-2',
     active: false
   },
   {
     name: '附件上传',
-    id: ReportTabIds[7],
+    id: ReportTabIds[6],
     icon: 'material-symbols:file-present-rounded',
     active: false
   }

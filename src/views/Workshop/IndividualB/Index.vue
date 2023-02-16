@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">个体工商信息采集</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -18,24 +18,26 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">居民户列表</span>
+          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">个体工商列表</span>
 
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span> 户
+            共 <span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span> 家个体工商
+            <!-- <span class="distance"></span>
+            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人 -->
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人
+            已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span
+            >家
             <span class="distance"></span>
-            已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
-            <span class="distance"></span>
-            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
+            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
+            >家
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加农户</ElButton>
-          <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增个体工商</ElButton>
+          <!-- <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton> -->
         </ElSpace>
       </div>
       <Table
@@ -96,7 +98,7 @@
             :icons="[
               {
                 icon: '',
-                tooltip: '概况',
+                tooltip: '查看',
                 type: 'primary',
                 action: () => onViewRow(row)
               }
@@ -126,7 +128,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -139,11 +141,10 @@ import { useIcon } from '@/hooks/web/useIcon'
 import {
   getLandlordListApi,
   delLandlordByIdApi,
-  getLandlordHeadApi,
-  getLandlordSurveyByIdApi
+  getLandlordHeadApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import { locationTypes, ReportStatusEnums } from './config'
+import { locationTypes } from './config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
 import type {
@@ -159,7 +160,7 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
+// const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
@@ -176,7 +177,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-const { getList, setSearchParams, getSelections } = methods
+const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId
@@ -229,12 +230,26 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'blurry',
-    label: '关键字',
+    label: '个体工商名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '户主/户号/联系方式'
+        placeholder: '请输入姓名'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'blurry',
+    label: '个体工商编码',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入编码'
       }
     },
     table: {
@@ -243,7 +258,21 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'card',
-    label: '身份证号',
+    label: '法人姓名',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入法人姓名'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'card',
+    label: '法人身份证号',
     search: {
       show: true,
       component: 'Input',
@@ -255,43 +284,71 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'reportStatus',
-    label: '上报状态',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: ReportStatusEnums
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'hasPropertyAccount',
-    label: '财产户',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: '是',
-            value: 'true'
-          },
-          {
-            label: '否',
-            value: 'false'
-          }
-        ]
-      }
-    },
-    table: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'blurry',
+  //   label: '关键字',
+  //   search: {
+  //     show: true,
+  //     component: 'Input',
+  //     componentProps: {
+  //       placeholder: '户主/户号/联系方式'
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'card',
+  //   label: '身份证号',
+  //   search: {
+  //     show: true,
+  //     component: 'Input',
+  //     componentProps: {
+  //       placeholder: '请输入身份证号'
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'reportStatus',
+  //   label: '上报状态',
+  //   search: {
+  //     show: true,
+  //     component: 'Select',
+  //     componentProps: {
+  //       options: ReportStatusEnums
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'hasPropertyAccount',
+  //   label: '财产户',
+  //   search: {
+  //     show: true,
+  //     component: 'Select',
+  //     componentProps: {
+  //       options: [
+  //         {
+  //           label: '是',
+  //           value: 'true'
+  //         },
+  //         {
+  //           label: '否',
+  //           value: 'false'
+  //         }
+  //       ]
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   }
+  // },
 
   // table字段 分割
   {
@@ -304,122 +361,44 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '户主姓名',
+    label: '个体工商名称',
     search: {
       show: false
     }
   },
   {
     field: 'doorNo',
-    label: '户号',
-    width: 180,
+    label: '个体工商编码',
+    width: 100,
     search: {
       show: false
     }
   },
   {
     field: 'regionText',
-    label: '所属区域',
+    label: '法人姓名',
     search: {
       show: false
     }
   },
-  // {
-  //   field: 'cityCodeText',
-  //   label: '市县',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'townCodeText',
-  //   label: '街道',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'villageText',
-  //   label: '行政村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'virutalVillageText',
-  //   label: '自然村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'card',
-  //   label: '身份证号',
-  //   width: 180,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'phone',
-  //   label: '联系方式',
-  //   width: 174,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'householdNumber',
-  //   label: '户籍册编号',
-  //   width: 194,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'doorNo',
-  //   label: '所属阶段',
-  //   width: 134,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'status',
-    label: '填报状态',
-    width: 100,
+    label: '所属区域',
+    width: 180,
     search: {
       show: false
     }
   },
-
-  // {
-  //   field: 'address',
-  //   label: '户籍所在地',
-  //   width: 195,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'hasPropertyAccount',
-    label: '财产户',
+    label: '填报人',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
-    label: '所属位置',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'reportUserName',
-    label: '上报人员',
+    field: 'status',
+    label: '是否上报',
     search: {
       show: false
     }
@@ -554,15 +533,15 @@ const onSearch = (data) => {
   }
 }
 
-const onPrint = async () => {
-  const res = await getSelections()
-  if (res && res.length) {
-    landlordIds.value = res.map((item) => item.id)
-    printDialog.value = true
-  } else {
-    ElMessage.warning('请选择需要打印的居民户')
-  }
-}
+// const onPrint = async () => {
+//   const res = await getSelections()
+//   if (res && res.length) {
+//     landlordIds.value = res.map((item) => item.id)
+//     printDialog.value = true
+//   } else {
+//     ElMessage.warning('请选择需要打印的个体工商')
+//   }
+// }
 
 const onPrintDialogClose = () => {
   printDialog.value = false
@@ -575,7 +554,7 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Landlord'
+      type: 'IndividualB'
     }
   })
 }
@@ -585,13 +564,16 @@ const onSurveyDialogClose = () => {
 }
 
 const onViewRow = async (row) => {
-  const result = await getLandlordSurveyByIdApi(row.id)
-  if (result) {
-    surveyInfo.value = result
-    surveyDialog.value = true
-  } else {
-    ElMessage.warning('查看失败！')
-  }
+  // const result = await getLandlordSurveyByIdApi(row.id)
+  // if (result) {
+  //   surveyInfo.value = result
+  //   surveyDialog.value = true
+  // } else {
+  //   ElMessage.warning('查看失败！')
+  // }
+  actionType.value = 'view'
+  tableObject.currentRow = row
+  dialog.value = true
 }
 </script>
 

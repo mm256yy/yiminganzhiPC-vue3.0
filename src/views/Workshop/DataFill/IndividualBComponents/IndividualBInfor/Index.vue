@@ -8,23 +8,28 @@
         </ElSpace>
       </div>
       <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
         align="center"
+        :pagination="{
+          total: tableObject.total
+        }"
         highlightCurrentRow
         @register="register"
       >
-        <template #completedTime="{ row }">
+        <!-- <template #birthday="{ row }">
           <div>
-            {{ formatDate(row.completedTime) }}
+            {{ formatDate(row.birthday) }}
           </div>
-        </template>
-
+        </template> -->
         <template #action="{ row }">
           <TableEditColumn
+            :view-type="'link'"
             :icons="[
               {
                 icon: '',
@@ -33,7 +38,6 @@
                 action: () => onViewRow(row)
               }
             ]"
-            :view-type="'link'"
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
@@ -46,7 +50,6 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :householdId="props.householdId"
       :doorNo="props.doorNo"
       @close="onFormPupClose"
     />
@@ -62,138 +65,113 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
-import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
-import { formatDate } from '@/utils/index'
-import { useRouter } from 'vue-router'
-const { currentRoute } = useRouter()
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
+import { DemographicDtoType } from '@/api/workshop/population/types'
+// import { formatDate } from '@/utils/index'
+
 interface PropsType {
-  householdId: string
   doorNo: string
 }
-const { type } = currentRoute.value.query as any
-const props = defineProps<PropsType>()
 
+const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getHouseListApi,
-  delListApi: delHouseByIdApi
+  getListApi: getDemographicListApi,
+  delListApi: delDemographicByIdApi
 })
 const { getList } = methods
 
+// 根据户号来做筛选
 tableObject.params = {
   doorNo: props.doorNo
 }
 
 getList()
-console.log(type)
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'index',
     type: 'index',
+    field: 'index',
     label: '序号'
   },
   {
-    field: 'houseNo',
-    label: '幢号',
+    field: 'name',
+    label: '姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'propertyTypeText',
-    label: '房屋产别',
-    search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'usageTypeText',
-    label: '房屋用途',
+    field: 'sexText',
+    label: '性别',
     search: {
       show: false
     }
   },
   {
-    field: 'houseTypeText',
-    label: '房屋类别',
+    field: 'birthday',
+    label: '出生年月',
     search: {
       show: false
     }
   },
   {
-    field: 'constructionTypeText',
-    label: '结构类型',
+    field: 'card',
+    label: '身份证号',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
-    label: '层数',
-    search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'completedTime',
-    label: '竣工年月',
+    field: 'nationText',
+    label: '民族',
     search: {
       show: false
     }
   },
   {
-    field: 'propertyNo',
-    label: '房产所有权证编号',
+    field: 'censusRegister',
+    label: '户籍所在地',
     search: {
       show: false
     }
   },
   {
-    field: 'landNo',
-    label: '土地使用权证编号',
+    field: 'educationText',
+    label: '文化程度',
     search: {
       show: false
     }
   },
   {
-    field: 'landTypeText',
-    label: '土地性质',
+    field: 'maritalText',
+    label: '婚姻状况',
     search: {
       show: false
     }
   },
   {
-    field: 'landArea',
-    label: '建筑面积(m²)',
+    field: 'occupationText',
+    label: '职业',
     search: {
       show: false
     }
   },
   {
-    field: 'locationType',
-    label: '所在位置',
+    field: 'company',
+    label: '工作单位',
     search: {
       show: false
-    },
-    table: {
-      show: true
     }
   },
   {
-    field: 'inundationRange',
-    label: '淹没范围',
+    field: 'insuranceTypeText',
+    label: '参保情况',
     search: {
       show: false
-    },
-    table: {
-      show: true
     }
   },
   {
@@ -215,7 +193,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: HouseDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -224,19 +202,14 @@ const onDelRow = async (row: HouseDtoType | null, multiple: boolean) => {
     multiple
   )
 }
-// onMounted(() => {
-//   if (type == 'Landlord') {
-//     allSchemas.tableColumns.splice(12, 1)
-//     allSchemas.tableColumns.splice(12, 1)
-//   }
-// })
+
 const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
   dialog.value = true
 }
 
-const onEditRow = (row: HouseDtoType) => {
+const onEditRow = (row: DemographicDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -248,7 +221,8 @@ const onFormPupClose = (flag: boolean) => {
     getList()
   }
 }
-const onViewRow = (row) => {
+
+const onViewRow = (row: DemographicDtoType) => {
   actionType.value = 'view'
   tableObject.currentRow = row
   dialog.value = true

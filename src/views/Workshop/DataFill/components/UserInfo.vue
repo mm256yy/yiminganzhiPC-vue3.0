@@ -4,7 +4,7 @@
       <div class="user">
         <Icon icon="mdi:user-circle" color="#3E73EC" />
         <span class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</span>
-        <span class="pl-8px text-size-14px text-[#000]">{{ props.baseInfo.doorNo }}</span>
+        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</span>
       </div>
       <div
         :class="{
@@ -16,7 +16,7 @@
       >
     </div>
 
-    <div class="other">
+    <div class="other" v-if="type == 'Landlord'">
       <div class="info-item">
         <div class="tit">行政村名称：</div>
         <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
@@ -38,6 +38,62 @@
         <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
       </div>
     </div>
+    <div class="other" v-if="type == 'Enterprise'">
+      <div class="info-item">
+        <div class="tit">县（市/区）：</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">行政村：</div>
+        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">所在位置：</div>
+        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">法人：</div>
+        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+      </div>
+    </div>
+
+    <div class="other" v-if="type == 'IndividualB'">
+      <div class="info-item">
+        <div class="tit">县（市/区）：</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">行政村：</div>
+        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">所在位置：</div>
+        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">法人：</div>
+        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+      </div>
+    </div>
+
+    <div class="other" v-if="type == 'villageInfoC'">
+      <div class="info-item">
+        <div class="tit">县（市/区）：</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">行政村：</div>
+        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">所在位置：</div>
+        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">联系方式：</div>
+        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -46,6 +102,7 @@ import { ReportStatus } from '../config'
 
 interface PropsType {
   baseInfo: any
+  type: any
 }
 
 const props = defineProps<PropsType>()
@@ -115,6 +172,10 @@ const props = defineProps<PropsType>()
       line-height: 28px;
       color: #000;
       align-items: center;
+
+      .tit {
+        color: rgb(171, 173, 175);
+      }
 
       .txt {
         font-weight: 500;

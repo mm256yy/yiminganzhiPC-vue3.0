@@ -1,5 +1,6 @@
 import Table from './src/Table.vue'
 import { ElTable } from 'element-plus'
+
 import { TableSetPropsType } from '@/types/table'
 import TableEditColumn from './src/TableEditColumn.vue'
 export interface TableExpose {

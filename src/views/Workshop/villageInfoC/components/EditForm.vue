@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    :title="actionType === 'edit' ? '编辑居民户' : actionType === 'add' ? '新增居民户' : '查看详情'"
+    :title="actionType === 'edit' ? '编辑村集体' : actionType === 'add' ? '新增村集体' : '查看详情'"
     :model-value="props.show"
     :width="609"
     @close="onClose"
@@ -13,32 +13,14 @@
       class="form"
       ref="formRef"
       :model="form"
-      label-width="100px"
+      label-width="150px"
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="自然村" prop="parentCode">
-        <!-- <ElTreeSelect
-          class="!w-350px"
-          v-model="form.parentCode"
-          :data="props.districtTree"
-          node-key="code"
-          :props="treeSelectDefaultProps"
-          :default-expanded-keys="[form.parentCode]"
-        /> -->
-        <ElCascader
-          class="!w-350px"
-          v-model="form.parentCode"
-          :options="props.districtTree"
-          :props="treeSelectDefaultProps"
-          expandTrigger="hover"
-        />
-        <ElButton type="text" class="ml-10px" @click="onVillageDialogOpen">添加自然村</ElButton>
+      <ElFormItem label="村集体名称" prop="name">
+        <ElInput v-model="form.name" class="!w-350px" placeholder="请输入村集体名称" />
       </ElFormItem>
-      <ElFormItem label="户主姓名" prop="name">
-        <ElInput v-model="form.name" class="!w-350px" placeholder="请输入户主姓名" />
-      </ElFormItem>
-      <ElFormItem label="性别" prop="sex">
+      <ElFormItem label="所属区域" prop="sex">
         <ElSelect class="!w-350px" clearable v-model="form.sex">
           <ElOption
             v-for="item in dictObj[292]"
@@ -49,27 +31,27 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="身份证号" prop="card">
+      <ElFormItem label="村集体编码" prop="card">
         <ElInput
           clearable
-          placeholder="请输入身份证号"
+          placeholder="请输入村集体编码"
           type="text"
           class="!w-350px"
           v-model="form.card"
         />
       </ElFormItem>
 
-      <ElFormItem label="联系方式" prop="phone">
+      <ElFormItem label="村集体联系方式" prop="phone">
         <ElInput
           clearable
-          placeholder="请输入联系方式"
+          placeholder="请输入村集体联系方式"
           type="text"
           class="!w-350px"
           v-model="form.phone"
         />
       </ElFormItem>
 
-      <ElDivider border-style="dashed" />
+      <!-- <ElDivider border-style="dashed" />
 
       <ElFormItem label="财产户" prop="hasPropertyAccount">
         <ElSelect class="!w-350px" clearable v-model="form.hasPropertyAccount">
@@ -99,12 +81,12 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
+      </ElFormItem> -->
 
       <!-- <ElFormItem label="淹没范围" prop="inundationRange">
         <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
       </ElFormItem> -->
-      <ElFormItem label="淹没范围" prop="inundationRange">
+      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -123,11 +105,11 @@
           class="!w-350px"
           v-model="form.altitude"
         />
-      </ElFormItem>
+      </ElFormItem> -->
 
-      <div class="w-466px">
+      <!-- <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
-      </div>
+      </div> -->
     </ElForm>
 
     <VillageEditForm
@@ -147,6 +129,7 @@
 </template>
 
 <script setup lang="ts">
+// ElCascader,ElDivider
 import {
   ElDialog,
   ElForm,
@@ -157,16 +140,14 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage,
-  ElCascader,
-  ElDivider
+  ElMessage
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
-import { MapFormItem } from '@/components/Map'
+// import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-import { locationTypes, yesAndNoEnums } from '../config'
+// import { locationTypes, yesAndNoEnums } from '../config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
@@ -188,10 +169,10 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const dictObj = computed(() => dictStore.getDictObj)
-const treeSelectDefaultProps = {
-  value: 'code',
-  label: 'name'
-}
+// const treeSelectDefaultProps = {
+//   value: 'code',
+//   label: 'name'
+// }
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
@@ -234,8 +215,6 @@ watch(
       position.latitude = form.value.latitude
       position.address = form.value.address
     } else {
-      console.log(defaultValue)
-
       form.value = defaultValue
     }
   },
@@ -265,11 +244,11 @@ const onClose = (flag = false) => {
 }
 
 // 定位
-const onChosePosition = (ps) => {
-  position.latitude = ps.latitude
-  position.longitude = ps.longitude
-  position.address = ps.address
-}
+// const onChosePosition = (ps) => {
+//   position.latitude = ps.latitude
+//   position.longitude = ps.longitude
+//   position.address = ps.address
+// }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
@@ -282,14 +261,11 @@ const onSubmit = debounce((formEl) => {
       const data: any = {
         ...form.value,
         ...position,
-        address: form.value.address,
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
         virutalVillageCode: form.value.parentCode[3] || ''
       }
-      console.log(form.value, data)
-
       delete data.parentCode
       submit(data)
     } else {
@@ -314,9 +290,9 @@ const submit = async (data: LandlordDtoType) => {
   onClose(true)
 }
 
-const onVillageDialogOpen = () => {
-  villageDialog.value = true
-}
+// const onVillageDialogOpen = () => {
+//   villageDialog.value = true
+// }
 
 const onVillageDialogClose = (flag?: boolean) => {
   villageDialog.value = false
