@@ -143,7 +143,7 @@ import {
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import { locationTypes, ReportStatusEnums } from './config'
+import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
 import type {

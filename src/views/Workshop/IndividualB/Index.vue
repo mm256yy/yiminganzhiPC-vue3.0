@@ -144,7 +144,7 @@ import {
   getLandlordHeadApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import { locationTypes } from './config'
+import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
 import type {

@@ -130,7 +130,7 @@ const onProjectChange = async (pId: number) => {
   row.value.projectName = projects.value.find((x) => x.id === pId)?.name
   orgs.value = [await getOrgTreeApi(pId)]
   roles.value = await getAllRoleApi(pId)
-  row.value.roleIds = [roles.value[0].id]
+  // row.value.roleIds = [roles.value[0].id]
 }
 
 const onNodeClick = (data: TreeNodeType) => {

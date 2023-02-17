@@ -218,7 +218,7 @@ import {
   ElDatePicker,
   ElMessageBox
 } from 'element-plus'
-import { locationTypes } from '@/views/Workshop/Landlord/config'
+import { locationTypes } from '@/views/Workshop/components/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getFruitwoodListApi,
