@@ -1,5 +1,7 @@
 export interface DemographicDtoType {
   id: number
+  altitude: number
+  benefit: number
   name: string
   sex: string
   card: string

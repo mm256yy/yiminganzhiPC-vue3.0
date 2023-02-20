@@ -4,10 +4,12 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="false">编辑</ElButton>
+          <ElButton :icon="saveIcon" type="primary" @click="onAddRow">保存</ElButton>
         </ElSpace>
       </div>
       <Table
+        v-if="false"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
@@ -22,11 +24,11 @@
         highlightCurrentRow
         @register="register"
       >
-        <!-- <template #birthday="{ row }">
+        <template #birthday="{ row }">
           <div>
             {{ formatDate(row.birthday) }}
           </div>
-        </template> -->
+        </template>
         <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
@@ -44,6 +46,17 @@
           />
         </template>
       </Table>
+
+      <div class="emptyBox" v-if="emptyShow">
+        <img src="@/assets/imgs/empty.png" alt="" width="400" />
+        <span
+          >当前企业未进行数据填报，请<span
+            style="color: rgba(62, 115, 236, 1); cursor: pointer; border-bottom: 1px solid"
+            @click="onAddRow"
+            >点击填报</span
+          >
+        </span>
+      </div>
     </div>
 
     <EditForm
@@ -67,16 +80,19 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
-// import { formatDate } from '@/utils/index'
+import { formatDate } from '@/utils/index'
 
 interface PropsType {
   doorNo: string
 }
 
+const emptyShow = ref<boolean>(true)
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
+const dialog = ref(true) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
+const saveIcon = useIcon({ icon: 'ant-design:vertical-align-bottom-outlined' })
+//
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -205,6 +221,7 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
 
 const onAddRow = () => {
   actionType.value = 'add'
+  emptyShow.value = false
   tableObject.currentRow = null
   dialog.value = true
 }
@@ -228,3 +245,10 @@ const onViewRow = (row: DemographicDtoType) => {
   dialog.value = true
 }
 </script>
+<style lang="less">
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>

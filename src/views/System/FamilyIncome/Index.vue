@@ -2,19 +2,14 @@
   <ContentWrap title="家庭收入项配置">
     <div class="flex mb-5">
       <!-- 系统管理员时增加 ELSelect 下拉选择项目 -->
-      <!-- <ElSelect
-        v-if="appStore.getIsSysAdmin"
-        class="w-230px mr-20px"
-        placeholder="选择项目"
-        v-model="projectId"
-      >
+      <ElSelect class="w-230px mr-20px" placeholder="选择项目" v-model="projectId" @change="change">
         <ElOption
           v-for="item in projectList"
           :key="item.value"
           :label="item.label"
           :value="item.value"
         />
-      </ElSelect> -->
+      </ElSelect>
       <!-- <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchFamilyIncome"
         >查询</ElButton
       > -->
@@ -52,7 +47,7 @@ import { onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 // 公共组件
-import { ElButton, ElMessageBox, ElMessage } from 'element-plus'
+import { ElButton, ElMessageBox, ElMessage, ElSelect, ElOption } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import { ContentWrap } from '@/components/ContentWrap'
 import type { TableColumnCtx } from 'element-plus/es/components/table/src/table-column/defaults'
@@ -68,7 +63,7 @@ import EditForm from './EditForm.vue'
 const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<FamilyIncomeInfoType>()
-// const projectId = ref<number>(appStore.getCurrentProjectId)
+const projectId = ref()
 // const projectList = ref<Array<{ label: string; value: number }>>([])
 
 const columns = reactive<TableColumn[]>([
@@ -77,6 +72,17 @@ const columns = reactive<TableColumn[]>([
   { field: 'name', label: '收入项名称' },
   { field: 'sort', label: '排序' },
   { field: 'action', label: '操作', width: '120px', align: 'right' }
+])
+
+const projectList = ref([
+  {
+    value: 'PeasantHousehold',
+    label: '家庭收入项配置'
+  },
+  {
+    value: 'Company',
+    label: '企业经营现状'
+  }
 ])
 
 const { register, tableObject, methods } = useTable({
@@ -100,7 +106,9 @@ const { getList } = methods
 //     projectId.value = pjs[0].value
 //   })
 // }
-
+const change = (val) => {
+  console.log(val)
+}
 onMounted(() => {
   // if (appStore.getIsSysAdmin) {
   //   loadProject()

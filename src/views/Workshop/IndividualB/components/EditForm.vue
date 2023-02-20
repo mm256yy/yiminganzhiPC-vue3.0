@@ -22,25 +22,25 @@
       <ElFormItem label="个体工商名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入个体工商名称" />
       </ElFormItem>
-      <ElFormItem label="所属区域" prop="sex">
-        <ElSelect class="!w-350px" clearable v-model="form.sex">
+      <ElFormItem label="所属区域" prop="parentCode" required>
+        <ElCascader
+          class="!w-350px"
+          v-model="form.parentCode"
+          :options="props.districtTree"
+          :props="treeSelectDefaultProps"
+          expandTrigger="hover"
+        />
+      </ElFormItem>
+
+      <ElFormItem label="所在位置" prop="locationType">
+        <ElSelect class="w-350px" v-model="form.locationType">
           <ElOption
-            v-for="item in dictObj[292]"
+            v-for="item in locationTypes"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
-
-      <ElFormItem label="个体工商编码" prop="card">
-        <ElInput
-          clearable
-          placeholder="请输入个体工商编码"
-          type="text"
-          class="!w-350px"
-          v-model="form.card"
-        />
       </ElFormItem>
 
       <ElFormItem label="个体工商联系方式" prop="phone">
@@ -88,7 +88,7 @@
       <!-- <ElFormItem label="淹没范围" prop="inundationRange">
         <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
       </ElFormItem> -->
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
+      <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -98,7 +98,7 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="高程" prop="altitude">
+      <!-- <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
@@ -142,14 +142,15 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElCascader
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-// import { locationTypes, yesAndNoEnums } from '../config'
+import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
@@ -171,14 +172,14 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const dictObj = computed(() => dictStore.getDictObj)
-// const treeSelectDefaultProps = {
-//   value: 'code',
-//   label: 'name'
-// }
+const treeSelectDefaultProps = {
+  value: 'code',
+  label: 'name'
+}
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  householdNumber: '',
+  // householdNumber: '',
   latitude: 0,
   longitude: 0,
   name: '',
@@ -199,6 +200,8 @@ const villageDialog = ref(false)
 
 const getDistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
+  console.log(districtTree.value)
+
   districtTree.value = list || []
 }
 
@@ -229,7 +232,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  householdNumber: [required()],
+  // householdNumber: [required()],
   phone: [required()],
   parentCode: [required()]
 })
@@ -266,7 +269,8 @@ const onSubmit = debounce((formEl) => {
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
-        virutalVillageCode: form.value.parentCode[3] || ''
+        virutalVillageCode: form.value.parentCode[3] || '',
+        type: 'IndividualHousehold'
       }
       delete data.parentCode
       submit(data)

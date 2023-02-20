@@ -1,7 +1,8 @@
 <template>
-  <ElDialog
+  <div
+    class="FillingBox"
     :title="actionType === 'edit' ? '编辑' : actionType === 'add' ? '新增' : '查看详情'"
-    :model-value="props.show"
+    v-if="props.show"
     :width="1140"
     @close="onClose"
     alignCenter
@@ -394,16 +395,15 @@
       </ElFormItem>
     </ElForm>
 
-    <template #footer v-if="actionType !== 'view'">
+    <template v-if="false">
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
-  </ElDialog>
+  </div>
 </template>
 
 <script setup lang="ts">
 import {
-  ElDialog,
   ElForm,
   ElFormItem,
   ElInput,
@@ -656,5 +656,9 @@ const imgPreview = (uploadFile: UploadFile) => {
   .el-upload--picture-card {
     display: none;
   }
+}
+
+.FillingBox {
+  padding: 15px 30px;
 }
 </style>

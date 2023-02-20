@@ -20,7 +20,15 @@
             <div v-if="row.subtotal" class="total-item">小计：{{ getSubtotal(row.type) }}</div>
             <div v-else-if="row.total" class="total-item">总计：{{ total }}</div>
             <div v-else>
-              {{ row.type }}
+              {{
+                row.type == 1
+                  ? '第一产业收入'
+                  : row.type == 2
+                  ? '第二、三产业收入'
+                  : row.type == 3
+                  ? '其它'
+                  : ''
+              }}
             </div>
           </template>
         </ElTableColumn>
@@ -98,7 +106,6 @@ const getOption = async () => {
   result.content.forEach((item) => {
     for (const key in item) {
       // console.log('item[key]', item[key]) //值
-      console.log('key', key) //键
 
       key == 'id' && Reflect.deleteProperty(item, 'id')
     }

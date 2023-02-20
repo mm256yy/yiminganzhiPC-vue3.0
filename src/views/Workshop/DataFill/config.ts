@@ -58,7 +58,7 @@ export const EnterpriseTabs = [
   {
     name: '企业基本情况',
     id: ReportTabIds[0],
-    icon: 'mdi:user-details',
+    icon: 'bi:building-fill-exclamation',
     active: false
   },
   {
@@ -82,7 +82,7 @@ export const EnterpriseTabs = [
   {
     name: '设施设备信息',
     id: ReportTabIds[4],
-    icon: 'ri:exchange-cny-fill',
+    icon: 'fluent-mdl2:product-variant',
     active: false
   },
   {
@@ -97,7 +97,7 @@ export const IndividualBTabs = [
   {
     name: '个体工商基本情况',
     id: ReportTabIds[0],
-    icon: 'mdi:user-details',
+    icon: 'material-symbols:add-business-outline-rounded',
     active: false
   },
   {
@@ -122,7 +122,7 @@ export const IndividualBTabs = [
   {
     name: '设施设备信息',
     id: ReportTabIds[4],
-    icon: 'ri:exchange-cny-fill',
+    icon: 'fluent-mdl2:product-variant',
     active: false
   },
   {
@@ -162,7 +162,7 @@ export const villageInfoCTabs = [
   {
     name: '农村小型转项目及农副业设施信息',
     id: ReportTabIds[4],
-    icon: 'ri:exchange-cny-fill',
+    icon: 'fluent-mdl2:product-variant',
     active: false
   },
   {

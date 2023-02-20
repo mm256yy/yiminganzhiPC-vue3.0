@@ -28,9 +28,9 @@ export default defineComponent({
     return () => (
       <section class={[prefixCls, `${prefixCls}__top`, 'w-[100%] h-[100%] relative']}>
         {/* 顶部背景 */}
-        <div class="absolute z-0 bg-gradient-to-b from-[#295EE6] to-[#DFE8FF] w-full h-517px"></div>
+        <div class="absolute z-0 bg-gradient-to-b from-[#295EE6] to-[#DFE8FF] w-full h-517px bg"></div>
 
-        <div class="flex items-center justify-between px-16px h-64px">
+        <div class="flex items-center justify-between px-16px h-64px ">
           <WorkLogo></WorkLogo>
           <WorkMenu class="flex-1 pl-24px"></WorkMenu>
           <WorkUserInfo></WorkUserInfo>
@@ -58,5 +58,10 @@ export default defineComponent({
   :deep(.@{elNamespace}-scrollbar__view) {
     height: 100% !important;
   }
+}
+
+.bg {
+  background: url(@/assets/imgs/headerbg.png) no-repeat;
+  background-size: 100% 100%;
 }
 </style>

@@ -112,14 +112,14 @@
     </div>
 
     <EditForm
+      :districtTree="districtTree"
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :districtTree="villageTree"
       @close="onFormPupClose"
-      @update-district="onUpdateDistrict"
     />
-
+    <!-- @update-district="onUpdateDistrict"
+    -->
     <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
@@ -129,7 +129,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 // ElMessage
-import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem, ElMessageBox } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -137,13 +137,14 @@ import EditForm from './components/EditForm.vue'
 import Print from './components/Print.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { getDistrictTreeApi } from '@/api/district'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-// getLandlordSurveyByIdApi
 import {
   getLandlordListApi,
   delLandlordByIdApi,
-  getLandlordHeadApi
+  getLandlordHeadApi,
+  getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 // ReportStatusEnums
@@ -180,27 +181,36 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-// getSelections
-const { getList, setSearchParams } = methods
+// getSelections,getList
+const { setSearchParams } = methods
 
 tableObject.params = {
   projectId
 }
 
-getList()
-
+// getList()
+setSearchParams({ type: 'Company' })
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
   villageTree.value = list || []
   return list || []
 }
 
-const onUpdateDistrict = () => {
-  getVillageTree()
+// const onUpdateDistrict = () => {
+//   getVillageTree()
+// }
+const districtTree = ref([])
+const getDistrictTree = async () => {
+  const list = await getDistrictTreeApi(projectId)
+  districtTree.value = list || []
+  return list || []
 }
 
+onMounted(() => {
+  getDistrictTree()
+})
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi()
+  const info = await getLandlordHeadApi({ type: 'Company' })
   headInfo.value = info
 }
 
@@ -217,7 +227,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'TreeSelect',
       componentProps: {
-        data: villageTree,
+        data: districtTree,
         nodeKey: 'code',
         props: {
           value: 'code',
@@ -247,7 +257,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'blurry',
+    field: 'doorNo',
     label: '企业编码',
     search: {
       show: true,
@@ -261,7 +271,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'card',
+    field: 'name',
     label: '法人姓名',
     search: {
       show: true,
@@ -288,72 +298,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'blurry',
-  //   label: '关键字',
-  //   search: {
-  //     show: true,
-  //     component: 'Input',
-  //     componentProps: {
-  //       placeholder: '户主/户号/联系方式'
-  //     }
-  //   },
-  //   table: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'card',
-  //   label: '身份证号',
-  //   search: {
-  //     show: true,
-  //     component: 'Input',
-  //     componentProps: {
-  //       placeholder: '请输入身份证号'
-  //     }
-  //   },
-  //   table: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'reportStatus',
-  //   label: '上报状态',
-  //   search: {
-  //     show: true,
-  //     component: 'Select',
-  //     componentProps: {
-  //       options: ReportStatusEnums
-  //     }
-  //   },
-  //   table: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'hasPropertyAccount',
-  //   label: '财产户',
-  //   search: {
-  //     show: true,
-  //     component: 'Select',
-  //     componentProps: {
-  //       options: [
-  //         {
-  //           label: '是',
-  //           value: 'true'
-  //         },
-  //         {
-  //           label: '否',
-  //           value: 'false'
-  //         }
-  //       ]
-  //     }
-  //   },
-  //   table: {
-  //     show: false
-  //   }
-  // },
-
   // table字段 分割
   {
     field: 'index',
@@ -379,22 +323,21 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
+    field: 'name',
     label: '法人姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'status',
+    field: 'regionText',
     label: '所属区域',
-    width: 180,
     search: {
       show: false
     }
   },
   {
-    field: 'hasPropertyAccount',
+    field: 'reportUserName',
     label: '填报人',
     search: {
       show: false
@@ -402,7 +345,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'status',
-    label: '是否上报',
+    label: '是否填报',
     search: {
       show: false
     }
@@ -448,14 +391,43 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: LandlordDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: LandlordDtoType) => {
   tableObject.currentRow = row
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
+  const result = await getLandlordSurveyByIdApi(row?.id)
+  console.log(result.immigrantGraveList.length)
+  ElMessageBox.confirm(
+    `
+    <div style='text-align:center'>
+    <strong>${row.name}企业包含:</strong>
+  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+
+  <strong>是否删除该企业信息</strong>
+</div>
+  `,
+    '提示',
+    {
+      dangerouslyUseHTMLString: true,
+
+      cancelButtonText: '取消',
+      confirmButtonText: '确认'
+    }
   )
+    .then(() => {
+      delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
+        // getList()
+        setSearchParams({ type: 'PeasantHousehold' })
+      })
+    })
+    .catch(() => {})
+
+  // const { delList, getSelections } = methods
+  // const selections = await getSelections()
+  // await delList(
+  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+  //   multiple
+  // )
 }
 
 const onAddRow = () => {
@@ -473,7 +445,8 @@ const onEditRow = (row: LandlordDtoType) => {
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
-    getList()
+    // getList()
+    setSearchParams({ type: 'Company' })
   }
 }
 
@@ -506,7 +479,8 @@ const getLocationText = (key: string) => {
 const onSearch = (data) => {
   // 处理参数
   let params = {
-    ...data
+    ...data,
+    type: 'Company'
   }
   if (!data.reportStatus) {
     Reflect.deleteProperty(params, 'reportStatus')
@@ -522,16 +496,21 @@ const onSearch = (data) => {
   if (!params.status) {
     delete params.status
   }
+  if (!params.card) {
+    delete params.card
+  }
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(districtTree.value, params.code, (item) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
       delete params.code
+      params.type = 'Company'
       setSearchParams({ ...params })
     })
   } else {
+    params.type = 'Company'
     delete params.code
     setSearchParams({ ...params })
   }

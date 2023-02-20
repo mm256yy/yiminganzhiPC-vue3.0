@@ -74,17 +74,21 @@
       </div>
     </div>
     <div class="data-fill-body" v-if="type == 'Landlord'">
+      <!-- 人口信息 -->
       <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
+      <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
       />
+      <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
       />
+      <!-- 0星果木 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
@@ -95,16 +99,19 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
       />
+      <!-- 安置 -->
       <Resettlement
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
       />
+      <!-- 坟墓 -->
       <Grave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
       />
+      <!-- 附件上传 -->
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
@@ -303,6 +310,8 @@ const printIcon = useIcon({ icon: 'ion:print-outline' })
 const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
+    console.log(res)
+
     baseInfo.value = res
   })
 }
@@ -339,7 +348,18 @@ onMounted(() => {
 })
 // 数据上报
 const onReportData = async () => {
-  const result = await reportLandlordApi(householdId, true)
+  let typeFlag = ''
+  if (type == 'Landlord') {
+    typeFlag = 'PeasantHousehold'
+  } else if (type == 'Enterprise') {
+    typeFlag = 'Company'
+  } else if (type == 'IndividualB') {
+    typeFlag = 'IndividualHousehold'
+  } else if (type == 'villageInfoC') {
+    typeFlag = 'Village'
+  }
+
+  const result = await reportLandlordApi(householdId, true, typeFlag)
   if (result && Array.isArray(result)) {
     reportDialog.value = true
     reportResult.value = result
@@ -351,7 +371,17 @@ const onReportData = async () => {
 }
 
 const onConfirmReport = async () => {
-  const result = await reportLandlordApi(householdId, false)
+  let typeFlag = ''
+  if (type == 'Landlord') {
+    typeFlag = 'PeasantHousehold'
+  } else if (type == 'Enterprise') {
+    typeFlag = 'Company'
+  } else if (type == 'IndividualB') {
+    typeFlag = 'IndividualHousehold'
+  } else if (type == 'villageInfoC') {
+    typeFlag = 'Village'
+  }
+  const result = await reportLandlordApi(householdId, false, typeFlag)
   if (result && Object.prototype.toString.call(result) === '[object String]') {
     ElMessage.success('上报成功！')
     getLandlordInfo()

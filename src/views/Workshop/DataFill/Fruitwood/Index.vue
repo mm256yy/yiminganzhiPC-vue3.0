@@ -126,7 +126,14 @@
         </ElTableColumn>
         <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.inundationRange" />
+            <ElSelect clearable v-model="scope.row.inundationRange">
+              <ElOption
+                v-for="item in dictObj[346]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -183,7 +190,8 @@ const defaultRow = {
   unit: '',
   number: 0,
   remark: '',
-  isAdd: true
+  isAdd: true,
+  altitude: 0
 }
 
 const getList = () => {

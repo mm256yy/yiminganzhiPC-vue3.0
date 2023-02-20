@@ -20,25 +20,25 @@
       <ElFormItem label="企业名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入企业名称" />
       </ElFormItem>
-      <ElFormItem label="所属区域" prop="sex">
-        <ElSelect class="!w-350px" clearable v-model="form.sex">
+      <ElFormItem label="所属区域" prop="parentCode" required>
+        <ElCascader
+          class="!w-350px"
+          v-model="form.parentCode"
+          :options="props.districtTree"
+          :props="treeSelectDefaultProps"
+          expandTrigger="hover"
+        />
+      </ElFormItem>
+
+      <ElFormItem label="所在位置" prop="locationType">
+        <ElSelect class="w-350px" v-model="form.locationType">
           <ElOption
-            v-for="item in dictObj[292]"
+            v-for="item in locationTypes"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
-
-      <ElFormItem label="企业编码" prop="card">
-        <ElInput
-          clearable
-          placeholder="请输入企业编码"
-          type="text"
-          class="!w-350px"
-          v-model="form.card"
-        />
       </ElFormItem>
 
       <ElFormItem label="企业联系方式" prop="phone">
@@ -86,7 +86,7 @@
       <!-- <ElFormItem label="淹没范围" prop="inundationRange">
         <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
       </ElFormItem> -->
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
+      <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -96,7 +96,7 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="高程" prop="altitude">
+      <!-- <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
@@ -140,14 +140,15 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElCascader
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-// import { locationTypes, yesAndNoEnums } from '../config'
+import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
@@ -155,7 +156,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/BasicInfor/Village/components/EditForm.vue'
 interface PropsType {
-  show: boolean
+  show: any
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
@@ -169,14 +170,14 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const dictObj = computed(() => dictStore.getDictObj)
-// const treeSelectDefaultProps = {
-//   value: 'code',
-//   label: 'name'
-// }
+const treeSelectDefaultProps = {
+  value: 'code',
+  label: 'name'
+}
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  householdNumber: '',
+
   latitude: 0,
   longitude: 0,
   name: '',
@@ -192,20 +193,13 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-const districtTree = ref([])
-const villageDialog = ref(false)
-
-const getDistrictTree = async () => {
-  const list = await getDistrictTreeApi(projectId)
-  districtTree.value = list || []
-}
-
-getDistrictTree()
 
 watch(
   () => props.row,
   (val) => {
     if (val) {
+      console.log(val)
+
       // 处理行政区划
       form.value = {
         ...val,
@@ -227,7 +221,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  householdNumber: [required()],
+
   phone: [required()],
   parentCode: [required()]
 })
@@ -258,15 +252,22 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
+
       const data: any = {
         ...form.value,
-        ...position,
+        id: form.value.id,
+        name: form.value.name,
+        phone: form.value.phone,
+        locationType: form.value.locationType,
+        type: 'Company',
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
         virutalVillageCode: form.value.parentCode[3] || ''
       }
+
       delete data.parentCode
+
       submit(data)
     } else {
       return false
@@ -293,7 +294,15 @@ const submit = async (data: LandlordDtoType) => {
 // const onVillageDialogOpen = () => {
 //   villageDialog.value = true
 // }
+const districtTree = ref([])
+const villageDialog = ref(false)
 
+const getDistrictTree = async () => {
+  const list = await getDistrictTreeApi(projectId)
+  districtTree.value = list || []
+}
+
+getDistrictTree()
 const onVillageDialogClose = (flag?: boolean) => {
   villageDialog.value = false
   if (flag) {

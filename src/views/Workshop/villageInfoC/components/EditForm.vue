@@ -20,56 +20,14 @@
       <ElFormItem label="村集体名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入村集体名称" />
       </ElFormItem>
-      <ElFormItem label="所属区域" prop="sex">
-        <ElSelect class="!w-350px" clearable v-model="form.sex">
-          <ElOption
-            v-for="item in dictObj[292]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
-      </ElFormItem>
-
-      <ElFormItem label="村集体编码" prop="card">
-        <ElInput
-          clearable
-          placeholder="请输入村集体编码"
-          type="text"
+      <ElFormItem label="所属区域" prop="parentCode" required>
+        <ElCascader
           class="!w-350px"
-          v-model="form.card"
+          v-model="form.parentCode"
+          :options="props.districtTree"
+          :props="treeSelectDefaultProps"
+          expandTrigger="hover"
         />
-      </ElFormItem>
-
-      <ElFormItem label="村集体联系方式" prop="phone">
-        <ElInput
-          clearable
-          placeholder="请输入村集体联系方式"
-          type="text"
-          class="!w-350px"
-          v-model="form.phone"
-        />
-      </ElFormItem>
-
-      <!-- <ElDivider border-style="dashed" />
-
-      <ElFormItem label="财产户" prop="hasPropertyAccount">
-        <ElSelect class="!w-350px" clearable v-model="form.hasPropertyAccount">
-          <ElOption
-            v-for="item in yesAndNoEnums"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
-      </ElFormItem>
-
-      <ElFormItem label="户籍册编号" prop="householdNumber">
-        <ElInput class="!w-350px" v-model="form.householdNumber" placeholder="请输入户籍册编号" />
-      </ElFormItem>
-
-      <ElFormItem label="户籍所在地" prop="address">
-        <ElInput class="!w-350px" v-model="form.address" placeholder="请输入户籍所在地" />
       </ElFormItem>
 
       <ElFormItem label="所在位置" prop="locationType">
@@ -81,12 +39,18 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem> -->
+      </ElFormItem>
 
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
-        <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
-      </ElFormItem> -->
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
+      <ElFormItem label="村集体联系方式" prop="phone">
+        <ElInput
+          clearable
+          placeholder="请输入村集体联系方式"
+          type="text"
+          class="!w-350px"
+          v-model="form.phone"
+        />
+      </ElFormItem>
+      <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -96,16 +60,6 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="高程" prop="altitude">
-        <ElInput
-          clearable
-          filterable
-          placeholder="请输入高程"
-          type="number"
-          class="!w-350px"
-          v-model="form.altitude"
-        />
-      </ElFormItem> -->
 
       <!-- <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
@@ -140,13 +94,15 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElCascader
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
+import { locationTypes } from '@/views/Workshop/components/config'
 // import { locationTypes, yesAndNoEnums } from '../config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
@@ -169,14 +125,14 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const dictObj = computed(() => dictStore.getDictObj)
-// const treeSelectDefaultProps = {
-//   value: 'code',
-//   label: 'name'
-// }
+const treeSelectDefaultProps = {
+  value: 'code',
+  label: 'name'
+}
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  householdNumber: '',
+  // householdNumber: '',
   latitude: 0,
   longitude: 0,
   name: '',
@@ -264,7 +220,8 @@ const onSubmit = debounce((formEl) => {
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
-        virutalVillageCode: form.value.parentCode[3] || ''
+        virutalVillageCode: form.value.parentCode[3] || '',
+        type: 'Village'
       }
       delete data.parentCode
       submit(data)

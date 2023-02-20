@@ -126,7 +126,14 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessage, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import {
+  ElButton,
+  ElMessage,
+  ElSpace,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElMessageBox
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -182,7 +189,8 @@ tableObject.params = {
   projectId
 }
 
-getList()
+// getList()
+setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
   const list = await getVillageTreeApi(projectId)
@@ -195,7 +203,7 @@ const onUpdateDistrict = () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi()
+  const info = await getLandlordHeadApi({ type: 'PeasantHousehold' })
   headInfo.value = info
 }
 
@@ -234,7 +242,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '户主/户号/联系方式'
+        placeholder: '户主或人口/户号/联系方式'
       }
     },
     table: {
@@ -465,14 +473,44 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onDelRow = async (row: LandlordDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: LandlordDtoType) => {
   tableObject.currentRow = row
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
+  const result = await getLandlordSurveyByIdApi(row?.id)
+  console.log(result.immigrantGraveList.length)
+  ElMessageBox.confirm(
+    `
+    <div style='text-align:center'>
+    <strong>${row.name}居民户包含:</strong>
+  <div>人口信息: ${result.demographicList.length} 口人信息</div>
+  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+  <div>坟墓信息: ${result.immigrantGraveList.length} 条坟墓信息</div>
+  <strong>是否删除该居户信息</strong>
+</div>
+  `,
+    '提示',
+    {
+      dangerouslyUseHTMLString: true,
+
+      cancelButtonText: '取消',
+      confirmButtonText: '确认'
+    }
   )
+    .then(() => {
+      delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
+        // getList()
+        setSearchParams({ type: 'PeasantHousehold' })
+      })
+    })
+    .catch(() => {})
+
+  // const { delList, getSelections } = methods
+  // const selections = await getSelections()
+  // await delList(
+  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+  //   multiple
+  // )
 }
 
 const onAddRow = () => {
@@ -546,9 +584,11 @@ const onSearch = (data) => {
         params[getParamsKey(item.districtType)] = params.code
       }
       delete params.code
+      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
+    params.type = 'PeasantHousehold'
     delete params.code
     setSearchParams({ ...params })
   }

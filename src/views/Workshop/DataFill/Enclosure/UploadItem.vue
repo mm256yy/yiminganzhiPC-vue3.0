@@ -62,7 +62,8 @@
 import { ref, watch, nextTick } from 'vue'
 import { ElUpload, ElDialog, ElInput, ElButton, ElTooltip } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import type { UploadFile, UploadFiles } from 'element-plus'
+// UploadFiles
+import type { UploadFile } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 
 interface FileItemType {
@@ -86,6 +87,7 @@ const emit = defineEmits(['change'])
 
 watch(
   () => props.fileList,
+  // () => {}
   (val) => {
     fileListData.value = val
   },
@@ -98,32 +100,46 @@ const headers = {
 }
 
 // 处理函数
-const handleFileList = (fileList: UploadFiles) => {
-  let list: FileItemType[] = []
-  if (fileList && fileList.length) {
-    list = fileList
-      .filter((fileItem) => fileItem.status === 'success')
-      .map((fileItem) => {
-        return {
-          name: fileItem.name,
-          url: (fileItem.response as any)?.data || fileItem.url
-        }
-      })
-  }
-  fileListData.value = list
+// const handleFileList = (fileList: UploadFiles) => {
+//   let list: FileItemType[] = []
+//   if (fileList && fileList.length) {
+//     list = fileList
+//       .filter((fileItem) => fileItem.status === 'success')
+//       .map((fileItem) => {
+//         return {
+//           name: fileItem.name,
+//           url: (fileItem.response as any)?.data || fileItem.url
+//         }
+//       })
+//   }
+//   fileListData.value=list
+//   nextTick(() => {
+//     emit('change', list)
+//   })
+// }
+
+const handleFileList = (_file) => {
+  fileListData.value.push({ name: _file.name, url: _file.response.data })
+
   nextTick(() => {
-    emit('change', list)
+    emit('change', fileListData.value)
   })
 }
 
 // 文件上传
-const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList)
+// const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+//   handleFileList(fileList)
+// }
+const uploadFileChange = (_response: any, _file: UploadFile) => {
+  handleFileList(_file)
 }
 
 // 文件移除
 const removeFile = (file: UploadFile) => {
   fileListData.value = fileListData.value.filter((item) => item.url !== file.url)
+  nextTick(() => {
+    emit('change', fileListData.value)
+  })
 }
 
 const imgPreview = (uploadFile: UploadFile) => {
@@ -138,19 +154,22 @@ const imgPreview = (uploadFile: UploadFile) => {
     display: flex;
     flex-wrap: wrap;
   }
+
   .el-upload-list.el-upload-list--picture {
-    order: 1;
-    width: 100%;
     display: flex;
-    flex-wrap: wrap;
+    width: 100%;
     margin: 0 !important;
+    order: 1;
+    flex-wrap: wrap;
+
     .el-upload-list__item {
       width: 358px;
       height: 90px;
       margin: 0 24px 16px 0;
       background: #ffffff;
-      border-radius: 4px;
       border: 1px solid #c3cbd9;
+      border-radius: 4px;
+
       &:hover {
         .upload-delete {
           display: flex;
@@ -158,44 +177,48 @@ const imgPreview = (uploadFile: UploadFile) => {
       }
     }
   }
+
   .el-upload.el-upload--picture {
     order: 2;
   }
+
   .img-box {
     width: 70px;
     height: 70px;
     margin-right: 10px;
     overflow: hidden;
+    cursor: pointer;
     background: #ffffff;
     border-radius: 4px;
-    cursor: pointer;
+
     img {
       display: block;
       width: 100%;
     }
   }
+
   .upload-delete {
     position: absolute;
     top: 0;
     right: 0;
+    display: none;
     width: 20px;
     height: 22px;
-    display: none;
+    cursor: pointer;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
   }
 
   .trigger {
     display: flex;
-    align-items: center;
-    justify-content: center;
     width: 358px;
     height: 90px;
     margin: 0 24px 16px 0;
     background: #ffffff;
-    border-radius: 4px;
     border: 1px solid #c3cbd9;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

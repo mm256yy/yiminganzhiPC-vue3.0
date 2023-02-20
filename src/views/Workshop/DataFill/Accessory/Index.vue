@@ -74,7 +74,14 @@
         </ElTableColumn>
         <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.inundationRange" />
+            <ElSelect clearable v-model="scope.row.inundationRange">
+              <ElOption
+                v-for="item in dictObj[346]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
 
@@ -162,6 +169,7 @@ const getList = async () => {
       newItem.surveyId = id + ''
       newItem.number = 0
       newItem.remark = ''
+      newItem.altitude = 0
       return newItem
     })
   }

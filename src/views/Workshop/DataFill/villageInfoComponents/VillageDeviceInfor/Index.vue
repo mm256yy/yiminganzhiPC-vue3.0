@@ -1,289 +1,224 @@
-<!-- 果木 -->
 <template>
   <WorkContentWrap>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
-          <ElButton
-            :icon="saveIcon"
-            type="primary"
-            class="!bg-[#30A952] !border-[#30A952]"
-            @click="onSave"
-            >保存</ElButton
-          >
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
-        <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn
-          label="设施名称"
-          :width="175"
-          prop="name"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElInput placeholder="请输入设施名称" v-model="row.name" v-if="row.isAdd" />
-            <div v-else>
-              {{ row.nameText }}
-            </div>
-          </template>
-        </ElTableColumn>
-
-        <ElTableColumn
-          label="设施类别"
-          :width="180"
-          prop="size"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择设施类别"
-              v-if="row.isAdd"
-              v-model="row.size"
-            >
-              <ElOption
-                v-for="item in dictObj[269]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-            <div v-else>
-              {{ row.sizeText }}
-            </div>
-          </template>
-        </ElTableColumn>
-
-        <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="单位" :width="180" prop="size" align="center" header-align="center">
-          <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择规格"
-              v-if="row.isAdd"
-              v-model="row.size"
-            >
-              <ElOption
-                v-for="item in dictObj[269]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-            <div v-else>
-              {{ row.sizeText }}
-            </div>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="所在位置" align="center">
-          <template #default="{ row }">
-            <ElSelect v-model="row.locationType">
-              <ElOption
-                v-for="item in locationTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="具体位置" align="center">
-          <template #default="{ row }">
-            <ElSelect v-model="row.locationType">
-              <ElOption
-                v-for="item in locationTypes"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="主管单位"
-          :width="180"
-          prop="size"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择主管单位"
-              v-if="row.isAdd"
-              v-model="row.size"
-            >
-              <ElOption
-                v-for="item in dictObj[269]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-            <div v-else>
-              {{ row.sizeText }}
-            </div>
-          </template>
-        </ElTableColumn>
-        <!-- <ElTableColumn label="用途" :width="175" prop="name" align="center" header-align="center">
-          <template #default="{ row }">
-            <ElInput placeholder="请输入内容" v-model="row.name" v-if="row.isAdd" />
-            <div v-else>
-              {{ row.nameText }}
-            </div>
-          </template>
-        </ElTableColumn> -->
-        <ElTableColumn
-          label="建成年月"
-          :width="175"
-          prop="name"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElDatePicker
-              v-if="row.isAdd"
-              v-model="row.birthday"
-              type="month"
-              placeholder="选择年月"
-              class="!w-full"
-            />
-            <div v-else>
-              {{ row.nameText }}
-            </div>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="规模" :width="200" prop="number" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" />
-          </template>
-        </ElTableColumn>
-
-        <!-- <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
-          <template #default="scope">
-            <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
-          </template>
-        </ElTableColumn> -->
-        <ElTableColumn label="操作" prop="action">
-          <template #default="scope">
-            <!-- <TableEditColumn
-              :view-type="'link'"
-              :icons="[
-                {
-                  icon: '',
-                  tooltip: '概况',
-                  type: 'primary',
-                  action: () => onViewRow(row)
-                }
-              ]"
-              :row="row"
-              @edit="onEditRow(row)"
-              @delete="onDelRow"
-            /> -->
-            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
-              >删除</span
-            >
-          </template>
-        </ElTableColumn>
-      </ElTable>
+      <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
+        :loading="tableObject.loading"
+        :data="tableObject.tableList"
+        :columns="allSchemas.tableColumns"
+        row-key="id"
+        headerAlign="center"
+        align="center"
+        :pagination="{
+          total: tableObject.total
+        }"
+        highlightCurrentRow
+        @register="register"
+      >
+        <template #locationType="{ row }">
+          <div>
+            {{ getLocationText(row.locationType) }}
+          </div>
+        </template>
+        <template #action="{ row }">
+          <TableEditColumn
+            :view-type="'link'"
+            :icons="[
+              {
+                icon: '',
+                tooltip: '详情',
+                type: 'primary',
+                action: () => onViewRow(row)
+              }
+            ]"
+            :row="row"
+            @edit="onEditRow(row)"
+            @delete="onDelRow"
+          />
+        </template>
+      </Table>
     </div>
+
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      :doorNo="props.doorNo"
+      :householdId="props.householdId"
+      @close="onFormPupClose"
+    />
   </WorkContentWrap>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, computed } from 'vue'
-import {
-  ElButton,
-  ElInputNumber,
-  ElInput,
-  ElSpace,
-  ElTable,
-  ElTableColumn,
-  ElMessage,
-  ElSelect,
-  ElOption,
-  ElDatePicker,
-  ElMessageBox
-} from 'element-plus'
-import { locationTypes } from '@/views/Workshop/components/config'
+import { reactive, ref } from 'vue'
+import { ElButton, ElSpace } from 'element-plus'
+import { Table, TableEditColumn } from '@/components/Table'
+import EditForm from './EditForm.vue'
+import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getFruitwoodListApi,
-  saveFruitwoodListApi
-} from '@/api/workshop/datafill/fruitwood-service'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-
+  deleteDevicel
+} from '@/api/workshop/datafill/immigrantFacilities-service'
+// import { DemographicDtoType } from '@/api/workshop/population/types'
+// import { formatDate } from '@/utils/index'
+import { locationTypes } from '@/views/Workshop/components/config'
 interface PropsType {
-  householdId: string
   doorNo: string
+  householdId
 }
 
 const props = defineProps<PropsType>()
+const dialog = ref(false) // 弹窗标识
+const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const tableData = ref<any[]>([])
 
-const dictStore = useDictStoreWithOut()
+const { register, tableObject, methods } = useTable({
+  getListApi: getFruitwoodListApi,
+  delListApi: deleteDevicel
+})
+const { getList } = methods
 
-const dictObj = computed(() => dictStore.getDictObj)
-
-const defaultRow = {
-  doorNo: props.doorNo,
-  householdId: props.householdId,
-  name: '',
-  usageType: '',
-  size: '',
-  unit: '',
-  number: 0,
-  remark: '',
-  isAdd: true
-}
-const onDelRow = (row) => {
-  ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
-    type: 'warning',
-    cancelButtonText: '取消',
-    confirmButtonText: '确认'
-  })
-    .then(() => {
-      tableData.value.splice(tableData.value.indexOf(row), 1)
-      ElMessage.success('删除成功')
-    })
-    .catch(() => {})
-}
-const getList = () => {
-  const params = {
-    doorNo: props.doorNo,
-    householdId: +props.householdId,
-    size: 1000
-  }
-  getFruitwoodListApi(params).then((res) => {
-    tableData.value = res.content
-  })
+// 根据户号来做筛选
+tableObject.params = {
+  doorNo: props.doorNo
 }
 
 getList()
+const getLocationText = (key: string) => {
+  return locationTypes.find((item) => item.value === key)?.label
+}
+const schema = reactive<CrudSchema[]>([
+  {
+    type: 'index',
+    field: 'index',
+    label: '序号'
+  },
+  {
+    field: 'facilitiesName',
+    label: '设施名称',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'facilitiesType',
+    label: '设施类别',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'number',
+    label: '数量',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'unit',
+    label: '单位',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'locationType',
+    label: '所在位置',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'specificLocation',
+    label: '具体位置',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'competentUnit',
+    label: '主管单位',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'completedTime',
+    label: '建成年月',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'scopes',
+    label: '规模',
+    search: {
+      show: false
+    }
+  },
 
-const onAddRow = () => {
-  tableData.value.push({ ...defaultRow })
+  {
+    field: 'action',
+    label: '操作',
+    fixed: 'right',
+    width: 130,
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  }
+])
+
+const { allSchemas } = useCrudSchemas(schema)
+
+const onDelRow = async (row: any | null, multiple: boolean) => {
+  tableObject.currentRow = row
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
 }
 
-const onSave = () => {
-  saveFruitwoodListApi(tableData.value).then(() => {
-    ElMessage.success('操作成功！')
+const onAddRow = () => {
+  actionType.value = 'add'
+  tableObject.currentRow = null
+  dialog.value = true
+}
+
+const onEditRow = (row: any) => {
+  actionType.value = 'edit'
+  tableObject.currentRow = row
+  dialog.value = true
+}
+
+const onFormPupClose = (flag: boolean) => {
+  dialog.value = false
+  if (flag === true) {
     getList()
-  })
+  }
+}
+
+const onViewRow = (row: any) => {
+  actionType.value = 'view'
+  tableObject.currentRow = row
+  dialog.value = true
 }
 </script>

@@ -3,7 +3,7 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="type != 'Landlord'">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -18,7 +18,13 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择" v-model="row.graveType">
+            <ElSelect
+              clearable
+              filterable
+              :placeholder="type == 'Landlord' ? '' : '请选择'"
+              v-model="row.graveType"
+              :disabled="type == 'Landlord'"
+            >
               <ElOption
                 v-for="item in dictObj[345]"
                 :key="item.value"
@@ -30,12 +36,23 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
+            <ElInputNumber
+              :min="0"
+              :placeholder="type == 'Landlord' ? '' : '请输入数量'"
+              v-model="row.number"
+              :disabled="type == 'Landlord'"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择材料" v-model="row.materials">
+            <ElSelect
+              clearable
+              filterable
+              :placeholder="type == 'Landlord' ? '' : '请选择'"
+              v-model="row.materials"
+              :disabled="type == 'Landlord'"
+            >
               <ElOption
                 v-for="item in dictObj[295]"
                 :key="item.value"
@@ -47,19 +64,31 @@
         </ElTableColumn>
         <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput v-model="row.graveYear" placeholder="请输入年份">
+            <ElInput
+              v-model="row.graveYear"
+              :placeholder="type == 'Landlord' ? '' : '请输入年份'"
+              :disabled="type == 'Landlord'"
+            >
               <template #append>年</template>
             </ElInput>
           </template>
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput v-model="row.gravePosition" placeholder="请输入所处位置" />
+            <ElInput
+              v-model="row.gravePosition"
+              :placeholder="type == 'Landlord' ? '' : '请输入所处位置'"
+              :disabled="type == 'Landlord'"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入内容" v-model="row.remark" />
+            <ElInput
+              :placeholder="type == 'Landlord' ? '' : '请输入'"
+              v-model="row.remark"
+              :disabled="type == 'Landlord'"
+            />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -84,7 +113,9 @@ import {
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-
+import { useRouter } from 'vue-router'
+const { currentRoute } = useRouter()
+const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
@@ -99,17 +130,17 @@ const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 
-const defaultRow = {
-  doorNo: props.doorNo,
-  householdId: props.householdId,
-  graveType: '',
-  materials: '',
-  graveYear: '',
-  gravePosition: '',
-  number: 0,
-  remark: '',
-  isAdd: true
-}
+// const defaultRow = {
+//   doorNo: props.doorNo,
+//   householdId: props.householdId,
+//   graveType: '',
+//   materials: '',
+//   graveYear: '',
+//   gravePosition: '',
+//   number: 0,
+//   remark: '',
+//   isAdd: true
+// }
 
 const getList = () => {
   const params = {
@@ -124,10 +155,14 @@ const getList = () => {
 getList()
 
 const onAddRow = () => {
-  tableData.value.push(defaultRow)
+  tableData.value.push({})
 }
 
 const onSave = () => {
+  tableData.value.forEach((item) => {
+    item.doorNo = props.doorNo
+    item.householdId = props.householdId
+  })
   saveGraveListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()

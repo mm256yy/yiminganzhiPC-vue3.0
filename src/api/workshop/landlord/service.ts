@@ -56,19 +56,20 @@ export const getPrintTemplateListApi = (params: Partial<TemplateParamsType>): Pr
 /**
  * 查询居民户头部信息
  */
-export const getLandlordHeadApi = (): Promise<any> => {
-  return request.get({ url: `/peasantHousehold/head` })
+export const getLandlordHeadApi = (params: any): Promise<any> => {
+  return request.get({ url: `/peasantHousehold/head?type=${params.type}` })
 }
 
 /**
  * 上报居民户信息
  */
-export const reportLandlordApi = (id: number, isCheck: boolean) => {
+export const reportLandlordApi = (id: number, isCheck: boolean, type: string) => {
   return request.post({
     url: `/peasantHousehold/report/${id}`,
     headersType: 'multipart/form-data',
     data: {
-      isCheck
+      isCheck,
+      type
     }
   })
 }

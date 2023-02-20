@@ -428,6 +428,7 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { addDemographicApi, updateDemographicApi } from '@/api/workshop/population/service'
+// import { standardFormatDate } from '@/utils/index'
 
 interface PropsType {
   show: boolean
@@ -573,6 +574,7 @@ const submit = async (data: DemographicDtoType) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
+      // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
         ...form.value,
         cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),

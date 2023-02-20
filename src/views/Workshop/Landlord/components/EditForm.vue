@@ -164,6 +164,7 @@ import {
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import { MapFormItem } from '@/components/Map'
+// import { validateIdNo } from '@/utils/index'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
 import { locationTypes, yesAndNoEnums } from '@/views/Workshop/components/config'
@@ -234,7 +235,7 @@ watch(
       position.latitude = form.value.latitude
       position.address = form.value.address
     } else {
-      console.log(defaultValue)
+      // console.log(defaultValue)
 
       form.value = defaultValue
     }
@@ -251,6 +252,7 @@ const rules = reactive<FormRules>({
   householdNumber: [required()],
   phone: [required()],
   parentCode: [required()]
+  // card: [{ validator: validateIdNo, trigger: 'blur' }]
 })
 
 // 关闭弹窗

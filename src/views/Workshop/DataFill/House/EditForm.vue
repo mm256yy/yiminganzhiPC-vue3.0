@@ -271,75 +271,66 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem></ElCol
-      ></ElRow>
+            </ElSelect> </ElFormItem
+        ></ElCol>
+        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+      </ElRow>
 
       <ElDivider border-style="dashed" />
 
-      <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+      <ElFormItem label="房屋平面示意图">
+        <ElUpload
+          :list-type="'picture-card'"
+          action="/api/file/type"
+          :data="{
+            type: 'image'
+          }"
+          accept=".jpg,.jpeg,.png"
+          :multiple="false"
+          :file-list="housePic"
+          :headers="headers"
+          :on-success="uploadFileChange1"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile1"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <div class="relative w-148px h-148px">
+              <img class="block w-148px h-148px" src="@/assets/imgs/house.png" alt="" />
+              <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
+                >点击上传</div
+              >
+            </div>
+          </template>
+        </ElUpload>
+      </ElFormItem>
 
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="房屋平面示意图">
-            <ElUpload
-              :class="[housePic.length > 0 ? 'upload' : '']"
-              :list-type="'picture-card'"
-              action="/api/file/type"
-              :data="{
-                type: 'image'
-              }"
-              :limit="1"
-              accept=".jpg,.jpeg,.png"
-              :multiple="false"
-              :file-list="housePic"
-              :headers="headers"
-              :on-success="uploadFileChange1"
-              :before-remove="beforeRemove"
-              :on-remove="removeFile1"
-              :on-preview="imgPreview"
-            >
-              <template #trigger>
-                <div class="relative w-148px h-148px">
-                  <img class="block w-148px h-148px" src="@/assets/imgs/house.png" alt="" />
-                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
-                    >点击上传</div
-                  >
-                </div>
-              </template>
-            </ElUpload>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="16">
-          <ElFormItem label="土地证">
-            <ElUpload
-              :class="[landPic.length > 0 ? 'upload' : '']"
-              :list-type="'picture-card'"
-              action="/api/file/type"
-              :data="{
-                type: 'image'
-              }"
-              :limit="1"
-              accept=".jpg,.jpeg,.png"
-              :multiple="false"
-              :file-list="landPic"
-              :headers="headers"
-              :on-success="uploadFileChange2"
-              :before-remove="beforeRemove"
-              :on-remove="removeFile2"
-              :on-preview="imgPreview"
-            >
-              <template #trigger>
-                <div class="relative w-148px h-148px">
-                  <img class="block w-148px h-148px" src="@/assets/imgs/land.png" alt="" />
-                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
-                    >点击上传</div
-                  >
-                </div>
-              </template>
-            </ElUpload>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
+      <ElFormItem label="土地证">
+        <ElUpload
+          :list-type="'picture-card'"
+          action="/api/file/type"
+          :data="{
+            type: 'image'
+          }"
+          accept=".jpg,.jpeg,.png"
+          :multiple="false"
+          :file-list="landPic"
+          :headers="headers"
+          :on-success="uploadFileChange2"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile2"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <div class="relative w-148px h-148px">
+              <img class="block w-148px h-148px" src="@/assets/imgs/land.png" alt="" />
+              <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
+                >点击上传</div
+              >
+            </div>
+          </template>
+        </ElUpload>
+      </ElFormItem>
 
       <ElFormItem label="房屋照片">
         <ElUpload
@@ -519,12 +510,12 @@ const headers = {
 }
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
       // 表单数据赋值
       form.value = {
-        ...val
+        ...props.row
       }
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
@@ -592,6 +583,7 @@ const onSubmit = debounce((formEl) => {
         homePic: JSON.stringify(homePic.value || []),
         otherPic: JSON.stringify(otherPic.value || [])
       }
+      data.type = 'Company'
       submit(data)
     } else {
       return false

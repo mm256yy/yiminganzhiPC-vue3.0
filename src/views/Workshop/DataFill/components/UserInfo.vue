@@ -2,7 +2,7 @@
   <div class="user-info">
     <div class="base">
       <div class="user">
-        <Icon icon="mdi:user-circle" color="#3E73EC" />
+        <Icon :icon="infoData.icon" color="#3E73EC" />
         <span class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</span>
         <span class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</span>
       </div>
@@ -27,7 +27,7 @@
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
-        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">联系电话：</div>
@@ -49,7 +49,7 @@
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
-        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">法人：</div>
@@ -68,7 +68,7 @@
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
-        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">法人：</div>
@@ -87,7 +87,7 @@
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
-        <div class="txt">{{ props.baseInfo.address || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">联系方式：</div>
@@ -99,13 +99,25 @@
 
 <script lang="ts" setup>
 import { ReportStatus } from '../config'
-
+import { ref, onMounted } from 'vue'
 interface PropsType {
   baseInfo: any
   type: any
 }
 
+const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const props = defineProps<PropsType>()
+onMounted(() => {
+  if (props.type == 'Landlord') {
+    infoData.value = { icon: 'mdi:user-circle' }
+  } else if (props.type == 'Enterprise') {
+    infoData.value = { icon: 'carbon:enterprise' }
+  } else if (props.type == 'IndividualB') {
+    infoData.value = { icon: 'material-symbols:add-business' }
+  } else if (props.type == 'villageInfoC') {
+    infoData.value = { icon: 'ic:round-holiday-village' }
+  }
+})
 </script>
 
 <style lang="less" scoped>

@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="打印表格"
+    title="打印表1格"
     :model-value="props.show"
     :width="500"
     @close="onClose"

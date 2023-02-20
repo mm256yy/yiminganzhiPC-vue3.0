@@ -79,6 +79,11 @@ export function formatDateTime(time: Date | number | string) {
   return formatTime(time, 'yyyy-MM-dd HH:mm:ss')
 }
 
+export function standardFormatDate(date) {
+  console.log('data=', date)
+  return `${date.getFullYear()}年${date.getMonth() + 1}月`
+}
+
 /**
  * @param {Date | number | string} time 需要转换的时间
  * @param {String} fmt 需要转换的格式 如 yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
@@ -166,4 +171,19 @@ export function analyzeIDCard(identityCard) {
     age--
   }
   return age
+}
+
+export function validateIdNo(rule, value, callback) {
+  console.log(rule)
+
+  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+  if (value === '' || value === undefined || value == null) {
+    callback()
+  } else {
+    if (!reg.test(value) && value !== '') {
+      callback(new Error('请输入正确的公民身份号码'))
+    } else {
+      callback()
+    }
+  }
 }

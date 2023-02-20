@@ -22,7 +22,11 @@
             {{ formatDate(row.completedTime) }}
           </div>
         </template>
-
+        <template #locationType="{ row }">
+          <div>
+            {{ getLocationText(row.locationType) }}
+          </div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn
             :icons="[
@@ -65,13 +69,14 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { formatDate } from '@/utils/index'
-import { useRouter } from 'vue-router'
-const { currentRoute } = useRouter()
+// import { useRouter } from 'vue-router'
+import { locationTypes } from '@/views/Workshop/components/config'
+// const { currentRoute } = useRouter()
 interface PropsType {
   householdId: string
   doorNo: string
 }
-const { type } = currentRoute.value.query as any
+// const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
 
 const dialog = ref(false) // 弹窗标识
@@ -89,8 +94,10 @@ tableObject.params = {
 }
 
 getList()
-console.log(type)
 
+const getLocationText = (key: string) => {
+  return locationTypes.find((item) => item.value === key)?.label
+}
 const schema = reactive<CrudSchema[]>([
   {
     field: 'index',
