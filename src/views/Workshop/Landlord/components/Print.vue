@@ -210,7 +210,8 @@ const onPrint = async () => {
 const onPreview = (item) => {
   console.log(item, 1)
 
-  window.open(`https://view.officeapps.live.com/op/view.aspx?src=${item.url}`)
+  //  window.open(`https://view.officeapps.live.com/op/view.aspx?src=${item.url}`)
+  window.open(item.url)
 }
 </script>
 
