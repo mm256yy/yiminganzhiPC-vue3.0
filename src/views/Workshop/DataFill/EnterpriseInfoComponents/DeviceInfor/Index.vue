@@ -81,7 +81,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.amount" />
+            <ElInputNumber :min="0" v-model="scope.row.amount" :precision="6" />
           </template>
         </ElTableColumn>
         <ElTableColumn

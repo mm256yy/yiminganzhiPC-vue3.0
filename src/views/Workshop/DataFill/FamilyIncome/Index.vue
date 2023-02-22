@@ -99,8 +99,10 @@ const tableData = ref<any[]>([])
 const cateTypes = ref<string[]>([])
 
 const getOption = async () => {
+  console.log(appStore.getCurrentProjectId)
   const result = await getFamilyIncomeOptionApi({
-    projectId: appStore.getCurrentProjectId,
+    // projectId: appStore.getCurrentProjectId,
+    configType: 'PeasantHousehold',
     size: 1000
   })
   result.content.forEach((item) => {
@@ -228,7 +230,7 @@ const total = computed(() => {
 
 const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  saveFamilyIncomeListApi(realTableData).then(() => {
+  saveFamilyIncomeListApi({ ...realTableData, configType: 'PeasantHousehold' }).then(() => {
     ElMessage.success('操作成功！')
     getList()
   })

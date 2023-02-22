@@ -7,355 +7,416 @@
     @close="onClose"
     alignCenter
     appendToBody
-    :closeOnClickModal="false"
   >
+    <div style="text-align: right">
+      <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="false">编辑</ElButton>
+      <ElButton :icon="saveIcon" type="primary" @click="onSubmit(formRef)">保存</ElButton>
+    </div>
+
     <ElForm
       :disabled="actionType === 'view'"
       class="form"
       ref="formRef"
       :model="form"
-      label-width="100px"
+      label-width="150px"
       :label-position="'right'"
       :rules="rules"
     >
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="与户主关系" prop="relation">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.relation"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[307]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+      <div class="titleBox">
+        <span class="text">企业法人信息：</span>
+      </div>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="企业法人" prop="legalPersonName">
+            <ElInput v-model="form.legalPersonName" placeholder="企业法人" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="姓名" prop="name">
-            <ElInput v-model="form.name" :placeholder="placeholderList[0]" class="!w-full" />
+        <ElCol :span="7">
+          <ElFormItem label="法人身份证号" prop="legalPersonCard">
+            <ElInput v-model="form.legalPersonCard" placeholder="法人身份证号" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="身份证号" prop="card">
+        <ElCol :span="7">
+          <ElFormItem label="法人联系方式" prop="legalPersonPhone">
             <ElInput
               clearable
               filterable
-              :placeholder="placeholderList[1]"
+              placeholder="法人联系方式"
               type="text"
               class="!w-full"
-              v-model="form.card"
+              v-model="form.legalPersonPhone"
             />
           </ElFormItem>
         </ElCol>
       </ElRow>
-
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="性别" prop="sex">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.sex"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[292]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+      <div class="titleBox">
+        <span class="text">企业证照信息：</span>
+      </div>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="税务许可证编号" prop="taxLicenceNo">
+            <ElInput v-model="form.taxLicenceNo" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="出生年月" prop="birthday">
-            <ElDatePicker
-              v-model="form.birthday"
-              type="month"
-              :placeholder="placeholderList[2]"
-              class="!w-full"
-            />
+        <ElCol :span="7">
+          <ElFormItem label="税务许可证有效期" prop="taxPeriodValidity">
+            <ElInput v-model="form.taxPeriodValidity" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="民族" prop="nation">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.nation"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[278]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+        <ElCol :span="7">
+          <ElFormItem label="税务许可证颁布单位" prop="taxLicenceCompany">
+            <ElInput v-model="form.taxLicenceCompany" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
       </ElRow>
 
-      <ElDivider border-style="dashed" />
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="许可证类型" prop="licenceType">
+            <ElSelect clearable filterable v-model="form.licenceType" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[217]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7" />
+        <ElCol :span="7" />
+      </ElRow>
 
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="人口类型" prop="populationType">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.populationType"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[244]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="编号" prop="licenceNo">
+            <ElInput v-model="form.licenceNo" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="户籍所在地" prop="censusRegister">
-            <ElInput
-              clearable
-              filterable
-              :placeholder="placeholderList[4]"
-              type="text"
-              class="!w-full"
-              v-model="form.censusRegister"
-            />
+        <ElCol :span="7">
+          <ElFormItem label="有效期" prop="periodValidity">
+            <ElInput v-model="form.periodValidity" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="文化程度" prop="education">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.education"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[272]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+        <ElCol :span="7">
+          <ElFormItem label="许可证颁布单位" prop="issuingCompany">
+            <ElInput v-model="form.issuingCompany" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
       </ElRow>
-
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="婚姻状况" prop="marital">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.marital"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[260]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+      <div class="titleBox">
+        <span class="text">企业工商信息：</span>
+      </div>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="企业地址" prop="companyAddress">
+            <ElInput v-model="form.companyAddress" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="户籍类别" prop="censusType">
+        <ElCol :span="7">
+          <ElFormItem label="所属分类" prop="companyType">
             <ElSelect
               clearable
               filterable
-              v-model="form.censusType"
+              v-model="form.companyType"
               class="!w-full"
-              :placeholder="placeholderList[5]"
+              placeholder=""
             >
               <ElOption
-                v-for="item in dictObj[249]"
+                v-for="item in dictObj[216]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
             </ElSelect> </ElFormItem
         ></ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="职业" prop="occupation">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.occupation"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[305]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+        <ElCol :span="7">
+          <ElFormItem label="经济性质" prop="economicNature">
+            <ElInput v-model="form.economicNature" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
       </ElRow>
 
-      <ElRow :gutter="30">
-        <ElCol :span="8">
-          <ElFormItem label="工作单位" prop="company">
-            <ElInput
-              clearable
-              filterable
-              :placeholder="placeholderList[3]"
-              type="text"
-              class="!w-full"
-              v-model="form.company"
-            />
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="其他权证情况" prop="ohterLicence">
+            <ElInput v-model="form.ohterLicence" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="参保情况" prop="insuranceType">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.insuranceType"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
+        <ElCol :span="7">
+          <ElFormItem label="登记注册类型" prop="registerType">
+            <ElSelect clearable filterable v-model="form.registerType" class="!w-full">
               <ElOption
-                v-for="item in dictObj[306]"
+                v-for="item in dictObj[219]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
             </ElSelect> </ElFormItem
         ></ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="人口类别" prop="category">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.category"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[274]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+        <ElCol :span="7">
+          <ElFormItem label="成立日期" prop="establishDate">
+            <el-date-picker v-model="form.establishDate" type="date" placeholder="Pick a day" />
           </ElFormItem>
         </ElCol>
       </ElRow>
 
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="所属行业" prop="industryType">
+            <ElSelect clearable filterable v-model="form.industryType" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[215]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem
+        ></ElCol>
+        <!-- :oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+6)}" -->
+        <ElCol :span="7">
+          <ElFormItem label="注册资金" prop="registeredAmount">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.registeredAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+
+        <ElCol :span="7" />
+      </ElRow>
+
+      <ElRow justify="center">
+        <ElCol :span="14">
+          <ElFormItem label="经营范围" prop="natureBusiness">
+            <ElInput type="textarea" v-model="form.natureBusiness" /> </ElFormItem
+        ></ElCol>
+
+        <ElCol :span="7" />
+      </ElRow>
+      <div class="titleBox">
+        <span class="text">企业资产信息：</span>
+      </div>
+
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="固定资产原值" prop="fixedAssetsOriginalValue">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.fixedAssetsOriginalValue"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="固定资产净值" prop="fixedAssetsNetValue">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.fixedAssetsNetValue"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7" />
+      </ElRow>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="正式工人数量" prop="regularWorkerNum">
+            <ElInput type="number" :min="0" v-model="form.regularWorkerNum">
+              <template #append>人</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="临时工人数量" prop="temporaryWorkerNum">
+            <ElInput type="number" :min="0" v-model="form.temporaryWorkerNum">
+              <template #append>人</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="年工资总额" prop="annualPayroll">
+            <ElInput type="number" :min="0" v-model="form.annualPayroll">
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="近三年平均年产值" prop="averageAnnualOutputValue">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.averageAnnualOutputValue"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="近三年平均年利润" prop="averageAnnualProfit">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.averageAnnualProfit"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="近三年平均年缴税额" prop="averageAnnualTaxPaid">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.averageAnnualTaxPaid"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+            >
+              <template #append>万元</template></ElInput
+            >
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <div class="titleBox">
+        <span class="text">企业资产信息：</span>
+      </div>
+
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="生产经营情况" prop="managementStatus">
+            <ElSelect clearable filterable v-model="form.managementStatus" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[213]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem
+        ></ElCol>
+        <ElCol :span="7">
+          <ElFormItem label="主要产品种类" prop="productCategory">
+            <ElInput :min="0" v-model="form.productCategory" />
+          </ElFormItem>
+        </ElCol>
+
+        <ElCol :span="7" />
+      </ElRow>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="涉及情况(可多选)" prop="informationInvolved">
+            <ElSelect
+              clearable
+              filterable
+              multiple
+              v-model="form.informationInvolved"
+              class="!w-full"
+            >
+              <ElOption
+                v-for="item in dictObj[209]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem
+        ></ElCol>
+
+        <ElCol :span="7" />
+        <ElCol :span="7" />
+      </ElRow>
+      <ElRow justify="center">
+        <ElCol :span="7">
+          <ElFormItem label="初步处理方案(可多选)" prop="treatmentScheme">
+            <ElSelect clearable filterable multiple v-model="form.treatmentScheme" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[210]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem
+        ></ElCol>
+
+        <ElCol :span="7" />
+        <ElCol :span="7" />
+      </ElRow>
+      <div class="titleBox">
+        <span class="text">企业土地情况：</span>
+      </div>
+      <ElRow justify="center">
+        <ElCol :span="14">
+          <ElTable border :data="tableData" style="width: 100%">
+            <ElTableColumn label="" :width="60" align="center" header-align="center" prop="type" />
+            <ElTableColumn label="权属面积(亩)" prop="value" align="center" header-align="center">
+              <template #default="{ row }">
+                <div v-if="row.type == '合计'">{{ total }}</div>
+                <ElInput v-else placeholder="请输入" type="number" min="0" v-model="row.value" />
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="占用面积(亩)" prop="value2" align="center" header-align="center">
+              <template #default="{ row }">
+                <div v-if="row.type == '合计'">{{ total2 }}</div>
+                <ElInput v-else placeholder="请输入" type="number" min="0" v-model="row.value2" />
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+              <!-- <ElInput placeholder="请输入内容" v-model="row.remark" /> -->
+              <template #default="{ row }">
+                <div v-if="row.type == '合计'"></div>
+                <ElInput v-else placeholder="请输入" type="number" min="0" v-model="row.remark" />
+              </template>
+            </ElTableColumn> </ElTable
+        ></ElCol>
+
+        <ElCol :span="7" />
+      </ElRow>
+      <div class="titleBox">
+        <span class="text">企业图片：</span>
+      </div>
       <ElRow :gutter="30">
-        <ElCol :span="9">
-          <ElFormItem label="身份证照片">
+        <ElCol>
+          <ElFormItem label="营业执照">
             <div class="flex items-center">
               <ElUpload
-                :class="[cardFront.length > 0 ? 'upload' : '']"
                 action="/api/file/type"
                 :data="{
                   type: 'image'
                 }"
                 :disabled="actionType === 'view'"
-                :limit="1"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
-                :multiple="false"
-                :file-list="cardFront"
+                :multiple="true"
+                :file-list="licensePic"
                 :headers="headers"
                 :on-success="uploadFileChange1"
                 :before-remove="beforeRemove"
                 :on-remove="removeFile1"
                 :on-preview="imgPreview"
               >
-                <template #trigger v-if="cardFront.length === 0">
-                  <div class="relative w-148px h-148px">
-                    <img class="block w-148px h-148px" src="@/assets/imgs/card-front.png" alt="" />
-                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                      点击上传正面
-                    </div>
-                  </div>
-                </template>
-                <template #trigge v-else></template>
-              </ElUpload>
-              <ElUpload
-                class="ml-8px"
-                :class="[cardEnd.length > 0 ? 'upload' : '']"
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :disabled="actionType === 'view'"
-                :limit="1"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="false"
-                :file-list="cardEnd"
-                :headers="headers"
-                :on-success="uploadFileChange2"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile2"
-                :on-preview="imgPreview"
-              >
                 <template #trigger>
                   <div class="relative w-148px h-148px">
-                    <img class="block w-148px h-148px" src="@/assets/imgs/card-back.png" alt="" />
+                    <div class="flex items-center justify-center w-148px h-148px">
+                      <Icon icon="ant-design:plus-outlined" :size="22" />
+                    </div>
                     <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                      点击上传反面
+                      点击上传附件
                     </div>
                   </div>
                 </template>
               </ElUpload>
             </div>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="15">
-          <ElFormItem label="户口本照片">
-            <ElUpload
-              :class="[householdPic.length > 0 ? 'upload' : '']"
-              action="/api/file/type"
-              :data="{
-                type: 'image'
-              }"
-              :disabled="actionType === 'view'"
-              :limit="1"
-              :list-type="'picture-card'"
-              accept=".jpg,.jpeg,.png"
-              :multiple="false"
-              :file-list="householdPic"
-              :headers="headers"
-              :on-success="uploadFileChange3"
-              :before-remove="beforeRemove"
-              :on-remove="removeFile3"
-              :on-preview="imgPreview"
-            >
-              <template #trigger>
-                <div class="relative w-148px h-148px">
-                  <img class="block w-148px h-148px" src="@/assets/imgs/household.png" alt="" />
-                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]">
-                    点击上传
-                  </div>
-                </div>
-              </template>
-            </ElUpload>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -389,16 +450,13 @@
           </template>
         </ElUpload>
       </ElFormItem>
-
+      <div class="titleBox">
+        <span class="text">备注:</span>
+      </div>
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" />
       </ElFormItem>
     </ElForm>
-
-    <template v-if="false">
-      <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
-    </template>
   </div>
 </template>
 
@@ -414,33 +472,63 @@ import {
   ElSelect,
   ElUpload,
   ElDatePicker,
-  ElDivider,
+  ElTable,
+  ElTableColumn,
   ElRow,
   ElCol,
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch, nextTick, computed } from 'vue'
+import { ref, reactive, watch, nextTick, computed, defineExpose } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
-// import { useValidator } from '@/hooks/web/useValidator'
+import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { addDemographicApi, updateDemographicApi } from '@/api/workshop/population/service'
+import {
+  addDemographicApi,
+  updateDemographicApi,
+  getDemographicListApi
+} from '@/api/workshop/enterprise/service'
+import { validateIdNo, checkTel } from '@/utils/index'
+import { useIcon } from '@/hooks/web/useIcon'
+const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
+const saveIcon = useIcon({ icon: 'ant-design:vertical-align-bottom-outlined' })
 
+const { required } = useValidator()
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  row?: DemographicDtoType | null | undefined
+  rowdata: any
   doorNo: string
+  householdId
 }
 
 interface FileItemType {
   name: string
   url: string
 }
+const tableData = ref([
+  { type: '出让', value: 0, value2: 0, remake: '' },
+  { type: '划拨', value: 0, value2: 0, remake: '' },
+  { type: '租用', value: 0, value2: 0, remake: '' },
+  { type: '其他', value: 0, value2: 0, remake: '' },
+  { type: '合计', value: 0, value2: 0, remake: '' }
+])
+const total = computed(() => {
+  return tableData.value.reduce((pre: any, current: any) => {
+    return pre + current.value * 1
+  }, 0)
+})
 
+const total2 = computed(() => {
+  return tableData.value.reduce((pre: any, current: any) => {
+    return pre + current.value2 * 1
+  }, 0)
+})
+
+const onAddRow = () => {}
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 // const { required } = useValidator()
@@ -450,26 +538,10 @@ const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 
-const defaultValue: Omit<DemographicDtoType, 'id'> = {
-  relation: '',
-  name: '',
-  card: '',
-  sex: '',
-  birthday: '',
-  nation: '',
-  populationType: '',
-  censusRegister: '',
-  education: '',
-  marital: '',
-  censusType: '',
-  occupation: '',
-  company: '',
-  insuranceType: '',
-  category: ''
-}
+const defaultValue: Omit<DemographicDtoType, 'id'> = {}
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-const placeholderList = ref<string[]>([])
-const cardFront = ref<FileItemType[]>([])
+// const placeholderList = ref<string[]>([])
+const licensePic = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
 const householdPic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
@@ -481,47 +553,71 @@ const headers = {
   Authorization: appStore.getToken
 }
 
-//处理表单不同状态下的placeholder
-watch(
-  () => props.actionType,
-  (newValue) => {
-    if (newValue == 'view') {
-      placeholderList.value = ['', '', '', '', '', ' ']
-    } else {
-      placeholderList.value = [
-        '请输入姓名',
-        '请输入身份证号',
-        '请选择日期',
-        '请输入工作单位',
-        '请输入户籍所在地',
-        '请选择'
-      ]
-    }
-  },
-  //可选immediate: true马上执行
-  { deep: true, immediate: true }
-)
+// //处理表单不同状态下的placeholder
+// watch(
+//   () => props.actionType,
+//   (newValue) => {
+//     if (newValue == 'view') {
+//       placeholderList.value = ['', '', '', '', '', ' ']
+//     } else {
+//       placeholderList.value = [
+//         '请输入姓名',
+//         '请输入身份证号',
+//         '请选择日期',
+//         '请输入工作单位',
+//         '请输入户籍所在地',
+//         '请选择'
+//       ]
+//     }
+//   },
+//   //可选immediate: true马上执行
+//   { deep: true, immediate: true }
+// )
 
 watch(
-  () => props.row,
+  () => props.rowdata,
   (val) => {
     if (val) {
       // 处理表单数据
       form.value = {
         ...val
       }
+      form.value.informationInvolved &&
+        (form.value.informationInvolved = form.value.informationInvolved.split(','))
+      form.value.treatmentScheme &&
+        (form.value.treatmentScheme = form.value.treatmentScheme.split(','))
+      tableData.value.forEach((item: any) => {
+        if (item.type == '出让') {
+          item.value = form.value.sellOwnershipArea
+          item.value2 = form.value.sellOccupiedArea
+          item.remark = form.value.sellRemark
+        }
+        if (item.type == '划拨') {
+          item.value = form.value.transferOwnershipArea
+          item.value2 = form.value.transferOccupiedArea
+          item.remark = form.value.transferRemark
+        }
+        if (item.type == '租用') {
+          item.value = form.value.rentOwnershipArea
+          item.value2 = form.value.rentOccupiedArea
+          item.remark = form.value.rentRemark
+        }
+        if (item.type == '其他') {
+          item.value = form.value.otherOwnershipArea
+          item.value2 = form.value.otherOccupiedArea
+          item.remark = form.value.otherRemark
+        }
+      })
     } else {
       form.value = { ...defaultValue }
-      cardFront.value = []
+      licensePic.value = []
       cardEnd.value = []
       householdPic.value = []
       otherPic.value = []
     }
     try {
-      if (form.value.cardPic) {
-        const pics = JSON.parse(form.value.cardPic)
-        cardFront.value = pics.slice(0, 1)
-        cardEnd.value = pics.slice(1)
+      if (form.value.licensePic) {
+        licensePic.value = JSON.parse(form.value.licensePic)
       }
 
       if (form.value.householdPic) {
@@ -542,7 +638,12 @@ watch(
 )
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  legalPersonName: [required()],
+
+  legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
+  legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()]
+})
 
 // 关闭弹窗
 const onClose = (flag = false) => {
@@ -553,17 +654,52 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
+  console.log(1)
+
   if (props.actionType === 'add') {
     await addDemographicApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      householdId: props.householdId
     })
   } else {
     await updateDemographicApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      householdId: props.householdId
     })
   }
+  getDemographicListApi({
+    doorNo: props.doorNo
+  }).then((res) => {
+    form.value = res.content[0]
+    tableData.value.forEach((item: any) => {
+      if (item.type == '出让') {
+        item.value = res.content[0].sellOwnershipArea
+        item.value2 = res.content[0].sellOccupiedArea
+        item.remark = res.content[0].sellRemark
+      }
+      if (item.type == '划拨') {
+        item.value = res.content[0].transferOwnershipArea
+        item.value2 = res.content[0].transferOccupiedArea
+        item.remark = res.content[0].transferRemark
+      }
+      if (item.type == '租用') {
+        item.value = res.content[0].rentOwnershipArea
+        item.value2 = res.content[0].rentOccupiedArea
+        item.remark = res.content[0].rentRemark
+      }
+      if (item.type == '其他') {
+        item.value = res.content[0].otherOwnershipArea
+        item.value2 = res.content[0].otherOccupiedArea
+        item.remark = res.content[0].otherRemark
+      }
+    })
+    form.value.informationInvolved &&
+      (form.value.informationInvolved = form.value.informationInvolved.split(','))
+    form.value.treatmentScheme &&
+      (form.value.treatmentScheme = form.value.treatmentScheme.split(','))
+  })
   ElMessage.success('操作成功！')
   onClose(true)
 }
@@ -571,20 +707,51 @@ const submit = async (data: DemographicDtoType) => {
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
+    console.log(tableData.value)
     if (valid) {
       const data: any = {
         ...form.value,
-        cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
+        licensePic: JSON.stringify(licensePic.value),
         householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)
       }
+      data.informationInvolved && (data.informationInvolved = data.informationInvolved.join())
+      data.treatmentScheme && (data.treatmentScheme = data.treatmentScheme.join())
+      tableData.value.forEach((item: any) => {
+        if (item.type == '出让') {
+          data.sellOwnershipArea = item.value
+          data.sellOccupiedArea = item.value2
+          data.sellRemark = item.remark
+        }
+        if (item.type == '划拨') {
+          data.transferOwnershipArea = item.value
+          data.transferOccupiedArea = item.value2
+          data.transferRemark = item.remark
+        }
+        if (item.type == '租用') {
+          data.rentOwnershipArea = item.value
+          data.rentOccupiedArea = item.value2
+          data.rentRemark = item.remark
+        }
+        if (item.type == '其他') {
+          data.otherOwnershipArea = item.value
+          data.otherOccupiedArea = item.value2
+          data.otherRemark = item.remark
+        }
+        if (item.type == '合计') {
+          data.totalOwnershipArea = total.value
+          data.totalOccupiedArea = total2.value
+        }
+      })
       submit(data)
     } else {
       return false
     }
   })
-}, 600)
-
+}, 0)
+defineExpose({
+  onSubmit
+})
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
   let list: FileItemType[] = []
@@ -599,7 +766,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
   if (type === 'card-front') {
-    cardFront.value = list
+    licensePic.value = list
   } else if (type === 'card-end') {
     cardEnd.value = list
   } else if (type === 'householdPic') {
@@ -610,28 +777,19 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
 }
 
 // 文件上传
-const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'card-front')
+const uploadFileChange1 = (_response: any, _file: any, fileList: UploadFiles) => {
+  console.log(fileList)
+  licensePic.value.push({ name: _file.name, url: _file.response.data })
 }
-const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'card-end')
-}
-const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'householdPic')
-}
-const uploadFileChange4 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'other')
+const uploadFileChange4 = (_response: any, _file: any, fileList: UploadFiles) => {
+  console.log(fileList)
+  // handleFileList(fileList, 'other')
+  otherPic.value.push({ name: _file.name, url: _file.response.data })
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'card-front')
-}
-const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'card-end')
-}
-const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'householdPic')
 }
 const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
@@ -660,5 +818,32 @@ const imgPreview = (uploadFile: UploadFile) => {
 
 .FillingBox {
   padding: 15px 30px;
+}
+
+.titleBox {
+  height: 48px;
+  padding-left: 15px;
+  margin: 20px 0px;
+  line-height: 48px;
+  background: #f5f7fa;
+  box-shadow: 0px 1px 0px 0px rgba(235, 235, 235, 1);
+
+  .text {
+    padding-left: 15px;
+    font-family: PingFangSC-Semibold, PingFang SC;
+    font-size: 21px;
+    font-weight: 600;
+    color: #171718;
+    border-left: 5px solid blue;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 </style>

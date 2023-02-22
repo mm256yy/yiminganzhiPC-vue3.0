@@ -52,8 +52,9 @@ export default defineComponent({
 
 <style lang="less" scoped>
 @prefix-cls: ~'@{namespace}-layout';
-
 .@{prefix-cls} {
+  max-width: 1920px;
+  margin: 0 auto;
   background-color: var(--app-content-bg-color);
   :deep(.@{elNamespace}-scrollbar__view) {
     height: 100% !important;

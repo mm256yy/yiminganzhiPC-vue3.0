@@ -120,7 +120,11 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'Enterprise'">
-      <EnterpriseInfor :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
+      <EnterpriseInfor
+        :doorNo="doorNo"
+        v-if="reportTabCurrentId === ReportTabIds[0]"
+        :householdId="householdId"
+      />
       <House
         :doorNo="doorNo"
         :householdId="householdId"
@@ -150,7 +154,11 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'IndividualB'">
-      <IndividualBInfor :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
+      <IndividualBInfor
+        :doorNo="doorNo"
+        v-if="reportTabCurrentId === ReportTabIds[0]"
+        :householdId="householdId"
+      />
       <House
         :doorNo="doorNo"
         :householdId="householdId"
@@ -159,12 +167,12 @@
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        v-else-if="reportTabCurrentId === ReportTabIds[3]"
       />
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        v-else-if="reportTabCurrentId === ReportTabIds[2]"
       />
       <DeviceInfor
         :doorNo="doorNo"
@@ -179,17 +187,16 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'villageInfoC'">
-      <villageInfoCInfor :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
       <House
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        v-if="reportTabCurrentId === ReportTabIds[0]"
       />
 
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        v-else-if="reportTabCurrentId === ReportTabIds[1]"
       />
       <!-- 附属物 -->
       <Accessory
@@ -200,18 +207,18 @@
       <VillageDeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        v-else-if="reportTabCurrentId === ReportTabIds[3]"
       />
 
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[6]"
+        v-else-if="reportTabCurrentId === ReportTabIds[5]"
       />
       <Grave
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
       />
     </div>
 
@@ -285,7 +292,7 @@ import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vu
 import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
 
 import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue'
-import villageInfoCInfor from './villageInfoComponents/villageInfoCInfor/Index.vue'
+// import villageInfoCInfor from './villageInfoComponents/villageInfoCInfor/Index.vue'
 import VillageDeviceInfor from './villageInfoComponents/VillageDeviceInfor/Index.vue'
 
 import Resettlement from './Resettlement/Index.vue'

@@ -67,7 +67,7 @@
             <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
+        <!-- <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.altitude" />
           </template>
@@ -83,7 +83,7 @@
               />
             </ElSelect>
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
 
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="scope">

@@ -135,45 +135,39 @@ export const IndividualBTabs = [
 
 export const villageInfoCTabs = [
   {
-    name: '村集体基本情况',
-    id: ReportTabIds[0],
-    icon: 'mdi:user-details',
-    active: false
-  },
-  {
     name: '房屋信息',
-    id: ReportTabIds[1],
+    id: ReportTabIds[0],
     icon: 'clarity:house-solid',
     active: false
   },
   {
     name: '零星(林)果木信息',
-    id: ReportTabIds[2],
+    id: ReportTabIds[1],
     icon: 'mdi:pine-tree',
     active: false
   },
   {
     name: '附属物信息',
-    id: ReportTabIds[3],
+    id: ReportTabIds[2],
     icon: 'bi:device-hdd-fill',
     active: false
   },
 
   {
     name: '农村小型转项目及农副业设施信息',
-    id: ReportTabIds[4],
+    id: ReportTabIds[3],
     icon: 'fluent-mdl2:product-variant',
     active: false
   },
   {
     name: '坟墓调查信息',
-    id: ReportTabIds[5],
+    id: ReportTabIds[4],
     icon: 'tabler:grave-2',
     active: false
   },
   {
     name: '附件上传',
-    id: ReportTabIds[6],
+    id: ReportTabIds[5],
     icon: 'material-symbols:file-present-rounded',
     active: false
   }

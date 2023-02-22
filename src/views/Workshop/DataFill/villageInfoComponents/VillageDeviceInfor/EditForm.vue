@@ -162,11 +162,11 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="淹没范围" prop="category">
+          <ElFormItem label="淹没范围" prop="inundationRang">
             <ElSelect
               clearable
               filterable
-              v-model="form.category"
+              v-model="form.inundationRang"
               class="!w-full"
               placeholder="清输入淹没范围"
             >
@@ -180,7 +180,13 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-
+      <ElRow :gutter="30">
+        <ElCol :span="8">
+          <ElFormItem label="具体位置" prop="specificLocation">
+            <ElInput type="textarea" v-model="form.specificLocation" />
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" style="width: 400px" />
       </ElFormItem>

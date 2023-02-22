@@ -35,11 +35,34 @@
           <template #action="{ row }">
             <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
           </template>
+          <template #type="{ row }">
+            <div v-if="tabType == 'PeasantHousehold'">
+              {{
+                row.type == 1
+                  ? '第一产业收入'
+                  : row.type == 2
+                  ? '第二、三产业收入'
+                  : row.type == 3
+                  ? '其它'
+                  : ''
+              }}
+            </div>
+            <div v-else>
+              {{ getTypeList2Lable(row.type) }}
+            </div>
+          </template>
         </Table>
       </ContentWrap>
     </div>
   </ContentWrap>
-  <EditForm v-if="showEdit" :row="currentRow" :show="showEdit" @close="onClose" />
+  <EditForm
+    v-if="showEdit"
+    :row="currentRow"
+    :show="showEdit"
+    @close="onClose"
+    :tabType="tabType"
+    :typeList2="typeList2"
+  />
 </template>
 
 <script setup lang="ts">
@@ -59,7 +82,7 @@ import { listFamilyIncomeApi, deleteFamilyIncomeApi } from '@/api/sys/familyInco
 // import { listProjectApi } from '@/api/project'
 // 页面组件
 import EditForm from './EditForm.vue'
-
+const tabType = ref<string>('PeasantHousehold')
 const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<FamilyIncomeInfoType>()
@@ -73,7 +96,20 @@ const columns = reactive<TableColumn[]>([
   { field: 'sort', label: '排序' },
   { field: 'action', label: '操作', width: '120px', align: 'right' }
 ])
-
+const typeList2 = ref<any>([
+  { label: '收入情况', value: 1 },
+  { label: '工资情况', value: 2 },
+  { label: '职工福利基金', value: 3 },
+  { label: '工会经费', value: 4 },
+  { label: '企业公积金', value: 5 },
+  { label: '离休人员费用', value: 6 },
+  { label: '上缴税收', value: 7 },
+  { label: '企业留利', value: 8 },
+  { label: '流动资产贷款', value: 9 },
+  { label: '上交管理费', value: 10 },
+  { label: '其他财务费用', value: 11 },
+  { label: '其他', value: ' ' }
+])
 const projectList = ref([
   {
     value: 'PeasantHousehold',
@@ -84,16 +120,25 @@ const projectList = ref([
     label: '企业经营现状'
   }
 ])
-
-const { register, tableObject, methods } = useTable({
+// methods
+const { register, tableObject } = useTable({
   getListApi: listFamilyIncomeApi,
   props: {
     columns
   }
 })
+const getTypeList2Lable = (val) => {
+  return typeList2.value.find((item) => item.value != ' ' && item.value == val)?.label
+}
+// const { getList } = methods
 
-const { getList } = methods
-
+const getListType = (type) => {
+  listFamilyIncomeApi(type).then((res: any) => {
+    tableObject.tableList = res.content
+    tableObject.loading = false
+    // console.log()
+  })
+}
 // const loadProject = () => {
 //   return listProjectApi({ page: 0, size: 100 }).then((res) => {
 //     const pjs = res.content.map((p) => {
@@ -107,13 +152,14 @@ const { getList } = methods
 //   })
 // }
 const change = (val) => {
-  console.log(val)
+  tabType.value = val
+  getListType(val)
 }
 onMounted(() => {
   // if (appStore.getIsSysAdmin) {
   //   loadProject()
   // }
-  getList()
+  getListType(tabType.value)
 })
 
 // const searchFamilyIncome = () => {
@@ -131,7 +177,7 @@ const onDelete = (row: FamilyIncomeInfoType) => {
     .then(async () => {
       await deleteFamilyIncomeApi(row.id ?? 0)
       ElMessage.success('删除成功')
-      getList()
+      getListType(tabType.value)
     })
     .catch(() => {})
 }
@@ -143,7 +189,7 @@ const onAddFamilyIncome = () => {
 
 const onClose = () => {
   showEdit.value = false
-  getList()
+  getListType(tabType.value)
 }
 
 interface SpanMethodProps {

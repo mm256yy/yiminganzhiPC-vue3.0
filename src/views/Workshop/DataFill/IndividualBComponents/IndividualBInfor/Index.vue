@@ -3,11 +3,10 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-        </ElSpace>
+        <ElSpace />
       </div>
       <Table
+        v-if="false"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
@@ -44,39 +43,53 @@
           />
         </template>
       </Table>
+
+      <div class="emptyBox" v-if="emptyShow">
+        <img src="@/assets/imgs/empty.png" alt="" width="400" />
+        <span
+          >当前个体工商户未进行数据填报，请<span
+            style="color: rgba(62, 115, 236, 1); cursor: pointer; border-bottom: 1px solid"
+            @click="onAddRow"
+            >点击填报</span
+          >
+        </span>
+      </div>
     </div>
 
     <EditForm
+      :householdId="props.householdId"
       :show="dialog"
       :actionType="actionType"
-      :row="tableObject.currentRow"
+      :rowdata="tableObject.currentRow"
       :doorNo="props.doorNo"
-      @close="onFormPupClose"
     />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
-import { ElButton, ElSpace } from 'element-plus'
+import { reactive, ref, onMounted } from 'vue'
+import { ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
+
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/IndividualB/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { formatDate } from '@/utils/index'
 
 interface PropsType {
   doorNo: string
+  householdId
 }
 
+const emptyShow = ref<boolean>(false)
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
+const dialog = ref(true) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+
+//
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -89,7 +102,19 @@ tableObject.params = {
   doorNo: props.doorNo
 }
 
-getList()
+onMounted(async () => {
+  await getList()
+  if (tableObject.total > 0) {
+    emptyShow.value = false
+    dialog.value = true
+    tableObject.currentRow = tableObject.tableList[0]
+    actionType.value = 'edit'
+  } else {
+    dialog.value = false
+    emptyShow.value = true
+    actionType.value = 'add'
+  }
+})
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -203,23 +228,16 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   )
 }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
-  dialog.value = true
-}
+// 延迟使用，因为还没挂载
 
 const onEditRow = (row: DemographicDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
 }
-
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    getList()
-  }
+const onAddRow = () => {
+  emptyShow.value = false
+  dialog.value = true
 }
 
 const onViewRow = (row: DemographicDtoType) => {
@@ -228,3 +246,10 @@ const onViewRow = (row: DemographicDtoType) => {
   dialog.value = true
 }
 </script>
+<style lang="less">
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>

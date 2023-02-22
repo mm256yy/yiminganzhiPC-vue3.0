@@ -45,6 +45,8 @@ import { FormSchema } from '@/types/form'
 // const appStore = useAppStore()
 
 interface Props {
+  typeList2: any
+  tabType: string
   show: boolean
   // projectId: number
   // projectList: Array<{ label: string; value: number }>
@@ -69,6 +71,11 @@ const rules = {
   sort: [required()]
   // projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
+const typeList = ref<any>([
+  { label: '第一产业收入', value: 1 },
+  { label: '第二、三产业收入', value: 2 },
+  { label: '其它', value: 3 }
+])
 
 const schema = reactive<FormSchema[]>([
   // {
@@ -92,11 +99,7 @@ const schema = reactive<FormSchema[]>([
     },
     componentProps: {
       placeholder: '选择收入项大类',
-      options: [
-        { label: '第一产业收入', value: 1 },
-        { label: '第二、三产业收入', value: 2 },
-        { label: '其它', value: 3 }
-      ]
+      options: props.tabType == 'PeasantHousehold' ? typeList : props.typeList2
     }
   },
   {
@@ -140,7 +143,7 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     familyIncome.id = currentRow.value.id
   }
-  saveFamilyIncomeApi(familyIncome as FamilyIncomeInfoType)
+  saveFamilyIncomeApi(familyIncome as FamilyIncomeInfoType, props.tabType)
     .then(() => {
       ElMessage.success('保存成功')
       onClose()

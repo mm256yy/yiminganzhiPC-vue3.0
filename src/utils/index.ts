@@ -79,8 +79,8 @@ export function formatDateTime(time: Date | number | string) {
   return formatTime(time, 'yyyy-MM-dd HH:mm:ss')
 }
 
-export function standardFormatDate(date) {
-  console.log('data=', date)
+export function standardFormatDate(time: Date | number | string) {
+  const date = new Date(time)
   return `${date.getFullYear()}年${date.getMonth() + 1}月`
 }
 
@@ -185,5 +185,22 @@ export function validateIdNo(rule, value, callback) {
     } else {
       callback()
     }
+  }
+}
+
+export function checkTel(rule, value, callback) {
+  console.log(rule)
+  const regTel1 = /^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/.test(value) //带区号的固定电话
+  const regTel2 = /^(\d{7,8})(-(\d{3,}))?$/.test(value) //不带区号的固定电话
+  const regTel3 = /^1[3,4,5,6,7,8,9][0-9]{9}$/.test(value)
+
+  if (value != '') {
+    if (!regTel1 && !regTel2 && !regTel3) {
+      callback(new Error('电话号码输入有误！'))
+    } else {
+      callback()
+    }
+  } else {
+    callback()
   }
 }
