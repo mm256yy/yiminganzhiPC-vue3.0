@@ -41,7 +41,7 @@
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="金额" prop="amount" align="center" header-align="center">
+        <ElTableColumn label="金额(万元)" prop="amount" align="center" header-align="center">
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"></div>
             <div v-else-if="row.total" class="total-item"></div>

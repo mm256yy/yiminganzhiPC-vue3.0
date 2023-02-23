@@ -304,11 +304,13 @@ const submit = async (data: LandlordDtoType) => {
   if (props.actionType === 'add') {
     await addLandlordApi({
       ...data,
+      type: 'PeasantHousehold',
       projectId
     })
   } else {
     await updateLandlordApi({
       ...data,
+      type: 'PeasantHousehold',
       projectId
     })
   }
