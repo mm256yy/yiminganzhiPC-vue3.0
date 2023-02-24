@@ -74,7 +74,9 @@
             :on-error="uploadError"
           >
             <template #trigger>
-              <ElButton :icon="importIcon" type="primary">批量导入</ElButton>
+              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading"
+                >批量导入</ElButton
+              >
             </template>
           </ElUpload>
           <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
@@ -531,6 +533,7 @@ const beforeUpload = () => {
 
 const uploadDone = () => {
   uploadLoading.value = false
+  ElMessage.success('操作成功！')
 }
 
 const uploadError = (error) => {

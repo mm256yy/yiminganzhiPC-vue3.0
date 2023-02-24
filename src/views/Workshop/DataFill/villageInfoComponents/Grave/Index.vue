@@ -17,10 +17,10 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
 
-        <ElTableColumn label="登记人" prop="registrantId" align="center" header-align="center">
+        <ElTableColumn label="登记人" prop="registrantName" align="center" header-align="center">
           <template #default="{ row }">
             <el-select
-              v-model="row.registrantId"
+              v-model="row.registrantName"
               filterable
               remote
               reserve-keyword
@@ -33,7 +33,7 @@
                 v-for="item in options"
                 :key="item.id"
                 :label="item.name"
-                :value="item.id"
+                :value="item.name"
               />
             </el-select>
           </template>
@@ -199,9 +199,10 @@ const options = ref<any[]>([])
 // }
 const graveTypeChange = (val) => {
   options.value.forEach((item) => {
-    if (item.id == val) {
+    if (item.name == val) {
       tableData.value.forEach((item2) => {
-        if (item2.registrantId == item.id) {
+        if (item2.registrantName == item.name) {
+          item2.registrantId = item.id
           item2.registrantDoorNo = item.doorNo
         }
       })

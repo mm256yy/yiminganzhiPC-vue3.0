@@ -135,11 +135,16 @@ const uploadFileChange = (_response: any, _file: UploadFile) => {
 }
 
 // 文件移除
-const removeFile = (file: UploadFile) => {
-  fileListData.value = fileListData.value.filter((item) => item.url !== file.url)
-  nextTick(() => {
-    emit('change', fileListData.value)
+const removeFile = (file: any) => {
+  fileListData.value = fileListData.value.filter((item) => {
+    if (file.response) {
+      return item.url != file.response.data
+    } else {
+      return item.url != file.url
+    }
   })
+
+  emit('change', fileListData.value)
 }
 
 const imgPreview = (uploadFile: UploadFile) => {
