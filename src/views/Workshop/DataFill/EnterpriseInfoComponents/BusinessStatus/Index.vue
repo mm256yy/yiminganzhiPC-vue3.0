@@ -43,6 +43,7 @@
               type="number"
               min="0"
               v-model="row.lastYearAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             />
           </template>
         </ElTableColumn>
@@ -61,6 +62,7 @@
               type="number"
               min="0"
               v-model="row.lastTwoYearAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             />
           </template>
         </ElTableColumn>
@@ -79,6 +81,7 @@
               type="number"
               min="0"
               v-model="row.lastThreeYearAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             />
           </template>
         </ElTableColumn>

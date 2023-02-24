@@ -7,6 +7,12 @@ import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
 export const getLandlordListApi = (
   query: Partial<LandlordDtoType>
 ): Promise<TableResponse<LandlordDtoType>> => {
+  if (!query.code) {
+    delete query.areaCode
+    delete query.townCode
+    delete query.villageCode
+    delete query.virutalVillageCode
+  }
   return request.get({ url: '/peasantHousehold', params: { sort: ['createdDate,desc'], ...query } })
 }
 

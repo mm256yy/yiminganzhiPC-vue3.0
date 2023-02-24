@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'card'"
+        :expand-field="'legalPersonName'"
         @search="onSearch"
         @reset="setSearchParams"
       />
@@ -260,7 +260,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'card',
+    field: 'legalPersonName',
     label: '法人姓名',
     search: {
       show: true,
@@ -274,7 +274,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'card',
+    field: 'legalPersonCard',
     label: '法人身份证号',
     search: {
       show: true,
@@ -307,13 +307,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '个体工商编码',
-    width: 100,
+
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'legalPersonName',
     label: '法人姓名',
     search: {
       show: false
@@ -385,7 +385,6 @@ const { allSchemas } = useCrudSchemas(schema)
 const onDelRow = async (row: LandlordDtoType) => {
   tableObject.currentRow = row
   const result = await getLandlordSurveyByIdApi(row?.id)
-  console.log(result.immigrantGraveList.length)
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
@@ -409,7 +408,7 @@ const onDelRow = async (row: LandlordDtoType) => {
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
-        setSearchParams({ type: 'PeasantHousehold' })
+        setSearchParams({ type: 'IndividualHousehold' })
       })
     })
     .catch(() => {})
@@ -493,12 +492,11 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.code
+
       params.type = 'IndividualHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    delete params.code
     params.type = 'IndividualHousehold'
     setSearchParams({ ...params })
   }

@@ -24,7 +24,7 @@
         <ElCascader
           class="!w-350px"
           v-model="form.parentCode"
-          :options="props.districtTree"
+          :options="districtTree"
           :props="treeSelectDefaultProps"
           expandTrigger="hover"
         />
@@ -106,15 +106,15 @@ import { locationTypes } from '@/views/Workshop/components/config'
 // import { locationTypes, yesAndNoEnums } from '../config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-import type { DistrictNodeType } from '@/api/district/types'
+// import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
+
 import VillageEditForm from '@/views/BasicInfor/Village/components/EditForm.vue'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
-  districtTree: DistrictNodeType[]
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()

@@ -53,7 +53,7 @@
       </div>
       <div class="info-item">
         <div class="tit">法人：</div>
-        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.legalPersonName || '-' }}</div>
       </div>
     </div>
 
@@ -72,7 +72,7 @@
       </div>
       <div class="info-item">
         <div class="tit">法人：</div>
-        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.legalPersonName || '-' }}</div>
       </div>
     </div>
 

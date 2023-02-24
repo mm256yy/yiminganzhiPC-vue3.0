@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div class="table-wrap">
+    <div class="table-wrap" v-if="showBox">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace />
@@ -86,7 +86,7 @@ interface PropsType {
 
 const emptyShow = ref<boolean>(false)
 const props = defineProps<PropsType>()
-const dialog = ref(true) // 弹窗标识
+const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 
 //
@@ -101,7 +101,7 @@ const { getList } = methods
 tableObject.params = {
   doorNo: props.doorNo
 }
-
+const showBox = ref(false)
 onMounted(async () => {
   await getList()
   if (tableObject.total > 0) {
@@ -109,10 +109,12 @@ onMounted(async () => {
     dialog.value = true
     tableObject.currentRow = tableObject.tableList[0]
     actionType.value = 'edit'
+    showBox.value = false
   } else {
     dialog.value = false
     emptyShow.value = true
     actionType.value = 'add'
+    showBox.value = true
   }
 })
 
@@ -238,6 +240,7 @@ const onEditRow = (row: DemographicDtoType) => {
 const onAddRow = () => {
   emptyShow.value = false
   dialog.value = true
+  showBox.value = false
 }
 
 const onViewRow = (row: DemographicDtoType) => {

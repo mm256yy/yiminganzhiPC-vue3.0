@@ -20,7 +20,12 @@
       :rules="rules"
     >
       <ElFormItem label="个体工商名称" prop="name">
-        <ElInput v-model="form.name" class="!w-350px" placeholder="请输入个体工商名称" />
+        <ElInput
+          v-model="form.name"
+          class="!w-350px"
+          placeholder="请输入个体工商名称"
+          :draggable="false"
+        />
       </ElFormItem>
       <ElFormItem label="所属区域" prop="parentCode" required>
         <ElCascader

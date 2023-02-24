@@ -52,45 +52,27 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
+        <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="用途" :width="175" prop="name" align="center" header-align="center">
+        <ElTableColumn label="用途" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入内容" v-model="row.purpose" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="建造/购置年份"
-          :width="175"
-          prop="name"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="建造/购置年份" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElDatePicker v-model="row.year" type="year" placeholder="选择年份" class="!w-full" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="原值(万元)"
-          :width="200"
-          prop="number"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="原值(万元)" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.amount" :precision="6" />
+            <ElInputNumber :min="0" v-model="scope.row.amount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="搬迁方式"
-          :width="180"
-          prop="size"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="搬迁方式" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择搬迁方式" v-model="row.moveType">
               <ElOption

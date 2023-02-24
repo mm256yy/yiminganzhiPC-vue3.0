@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'card'"
+        :expand-field="'legalPersonName'"
         @search="onSearch"
         @reset="setSearchParams"
       />
@@ -278,7 +278,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'legalPersonName',
     label: '法人姓名',
     search: {
       show: true,
@@ -292,7 +292,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'card',
+    field: 'legalPersonCard',
     label: '法人身份证号',
     search: {
       show: true,
@@ -330,7 +330,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'legalPersonName',
     label: '法人姓名',
     search: {
       show: false
@@ -424,7 +424,7 @@ const onDelRow = async (row: LandlordDtoType) => {
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
-        setSearchParams({ type: 'PeasantHousehold' })
+        setSearchParams({ type: 'Company' })
       })
     })
     .catch(() => {})
@@ -512,13 +512,13 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.code
+
       params.type = 'Company'
       setSearchParams({ ...params })
     })
   } else {
     params.type = 'Company'
-    delete params.code
+
     setSearchParams({ ...params })
   }
 }

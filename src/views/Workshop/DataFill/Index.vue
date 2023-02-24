@@ -215,7 +215,7 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
       />
-      <Grave
+      <villageGrave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
@@ -228,7 +228,7 @@
       class="report-dialog"
       title="数据上报"
       :model-value="reportDialog"
-      :width="500"
+      :width="type == 'villageInfoC' ? 650 : 500"
       @close="onClose"
       alignCenter
       appendToBody
@@ -286,7 +286,7 @@ import Fruitwood from './Fruitwood/Index.vue'
 import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
-
+import villageGrave from './villageInfoComponents/Grave/Index.vue'
 import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
 import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'
 import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
@@ -486,7 +486,6 @@ const onPrintDialogClose = () => {
 
 .report-dialog {
   .report-cont {
-    width: 420px;
     padding: 22px 55px;
     margin: 0 auto;
     background: #f5f7fa;

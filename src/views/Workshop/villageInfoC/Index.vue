@@ -116,7 +116,6 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :districtTree="villageTree"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -146,7 +145,8 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+// import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { getDistrictTreeApi } from '@/api/district'
 // ReportStatusEnums
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
@@ -191,7 +191,7 @@ tableObject.params = {
 // getList()
 setSearchParams({ type: 'Village' })
 const getVillageTree = async () => {
-  const list = await getVillageTreeApi(projectId)
+  const list = await getDistrictTreeApi(projectId)
   villageTree.value = list || []
   return list || []
 }
@@ -412,7 +412,7 @@ const onDelRow = async (row: LandlordDtoType) => {
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
-        setSearchParams({ type: 'PeasantHousehold' })
+        setSearchParams({ type: 'Village' })
       })
     })
     .catch(() => {})
@@ -496,12 +496,11 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.code
+
       params.type = 'Village'
       setSearchParams({ ...params })
     })
   } else {
-    delete params.code
     params.type = 'Village'
     setSearchParams({ ...params })
   }

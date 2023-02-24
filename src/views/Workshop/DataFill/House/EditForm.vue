@@ -512,6 +512,18 @@ const headers = {
 watch(
   () => props.show,
   (val) => {
+    if (!val) {
+      housePic.value = []
+      landPic.value = []
+      homePic.value = []
+      otherPic.value = []
+    }
+  }
+)
+
+watch(
+  () => props.show,
+  (val) => {
     if (val) {
       // 表单数据赋值
       form.value = {

@@ -504,11 +504,10 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-      delete params.code
+
       setSearchParams({ ...params })
     })
   } else {
-    delete params.code
     setSearchParams({ ...params })
   }
 }

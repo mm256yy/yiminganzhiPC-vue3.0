@@ -156,7 +156,7 @@
         ></ElCol>
         <ElCol :span="7">
           <ElFormItem label="成立日期" prop="establishDate">
-            <el-date-picker v-model="form.establishDate" type="date" placeholder="Pick a day" />
+            <el-date-picker v-model="form.establishDate" type="date" placeholder="请选择成立日期" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -179,7 +179,7 @@
               type="number"
               :min="0"
               v-model="form.registeredAmount"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -208,7 +208,7 @@
               type="number"
               :min="0"
               v-model="form.fixedAssetsOriginalValue"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -220,7 +220,7 @@
               type="number"
               :min="0"
               v-model="form.fixedAssetsNetValue"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -249,7 +249,7 @@
               type="number"
               :min="0"
               v-model="form.annualPayroll"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -263,7 +263,7 @@
               type="number"
               :min="0"
               v-model="form.averageAnnualOutputValue"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -275,7 +275,7 @@
               type="number"
               :min="0"
               v-model="form.averageAnnualProfit"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -287,7 +287,7 @@
               type="number"
               :min="0"
               v-model="form.averageAnnualTaxPaid"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+7)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >
@@ -320,14 +320,8 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="涉及情况(可多选)" prop="informationInvolved">
-            <ElSelect
-              clearable
-              filterable
-              multiple
-              v-model="form.informationInvolved"
-              class="!w-full"
-            >
+          <ElFormItem label="涉及情况" prop="informationInvolved">
+            <ElSelect clearable filterable v-model="form.informationInvolved" class="!w-full">
               <ElOption
                 v-for="item in dictObj[209]"
                 :key="item.value"
@@ -342,8 +336,8 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="初步处理方案(可多选)" prop="treatmentScheme">
-            <ElSelect clearable filterable multiple v-model="form.treatmentScheme" class="!w-full">
+          <ElFormItem label="初步处理方案" prop="treatmentScheme">
+            <ElSelect clearable filterable v-model="form.treatmentScheme" class="!w-full">
               <ElOption
                 v-for="item in dictObj[210]"
                 :key="item.value"
@@ -467,7 +461,7 @@ import {
 import { validateIdNo, checkTel } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
 const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
-const saveIcon = useIcon({ icon: 'ant-design:vertical-align-bottom-outlined' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 const { required } = useValidator()
 interface PropsType {
@@ -538,10 +532,6 @@ watch(
       form.value = {
         ...val
       }
-      form.value.informationInvolved &&
-        (form.value.informationInvolved = form.value.informationInvolved.split(','))
-      form.value.treatmentScheme &&
-        (form.value.treatmentScheme = form.value.treatmentScheme.split(','))
     } else {
       form.value = { ...defaultValue }
       licensePic.value = []
@@ -607,10 +597,6 @@ const submit = async (data: DemographicDtoType) => {
     doorNo: props.doorNo
   }).then((res) => {
     form.value = res.content[0]
-    form.value.informationInvolved &&
-      (form.value.informationInvolved = form.value.informationInvolved.split(','))
-    form.value.treatmentScheme &&
-      (form.value.treatmentScheme = form.value.treatmentScheme.split(','))
   })
   ElMessage.success('操作成功！')
   onClose(true)
@@ -626,8 +612,6 @@ const onSubmit = debounce((formEl) => {
         householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)
       }
-      data.informationInvolved && (data.informationInvolved = data.informationInvolved.join())
-      data.treatmentScheme && (data.treatmentScheme = data.treatmentScheme.join())
 
       submit(data)
     } else {

@@ -128,17 +128,17 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="固定资产原值(万元)" prop="cost">
-            <ElInputNumber :min="0" v-model="form.cost" />
+            <ElInputNumber :min="0" v-model="form.cost" :precision="2" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="固定资产净值(万元)" prop="netBal">
-            <ElInputNumber :min="0" v-model="form.netBal" />
+            <ElInputNumber :min="0" v-model="form.netBal" :precision="2" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="固定资产净值(万元)" prop="originalInvest">
-            <ElInputNumber :min="0" v-model="form.originalInvest" />
+            <ElInputNumber :min="0" v-model="form.originalInvest" :precision="2" />
           </ElFormItem>
         </ElCol>
       </ElRow>

@@ -81,7 +81,7 @@ const list = ref<PrintListType[]>([])
 
 const getPrintList = async () => {
   const res = await getPrintTemplateListApi({
-    templateType: 'print'
+    templateType: 'printCompany'
   })
   const map: {
     [key: string]: PrintListType
