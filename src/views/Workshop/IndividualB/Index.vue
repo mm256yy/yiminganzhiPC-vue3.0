@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'legalPersonName'"
+        :expand-field="'doorNo'"
         @search="onSearch"
         @reset="setSearchParams"
       />
@@ -37,7 +37,7 @@
         </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增个体工商</ElButton>
-          <!-- <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton> -->
+          <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -128,7 +128,14 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem, ElMessageBox } from 'element-plus'
+import {
+  ElButton,
+  ElSpace,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElMessageBox,
+  ElMessage
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -160,7 +167,7 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-// const printIcon = useIcon({ icon: 'ion:print-outline' })
+const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
@@ -178,7 +185,7 @@ const { register, tableObject, methods } = useTable({
   delListApi: delLandlordByIdApi
 })
 // getList
-const { setSearchParams } = methods
+const { setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId
@@ -413,7 +420,6 @@ const onDelRow = async (row: LandlordDtoType) => {
     })
     .catch(() => {})
 
-  // const { delList, getSelections } = methods
   // const selections = await getSelections()
   // await delList(
   //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
@@ -502,15 +508,15 @@ const onSearch = (data) => {
   }
 }
 
-// const onPrint = async () => {
-//   const res = await getSelections()
-//   if (res && res.length) {
-//     landlordIds.value = res.map((item) => item.id)
-//     printDialog.value = true
-//   } else {
-//     ElMessage.warning('请选择需要打印的个体工商')
-//   }
-// }
+const onPrint = async () => {
+  const res = await getSelections()
+  if (res && res.length) {
+    landlordIds.value = res.map((item) => item.id)
+    printDialog.value = true
+  } else {
+    ElMessage.warning('请选择需要打印的个体工商')
+  }
+}
 
 const onPrintDialogClose = () => {
   printDialog.value = false

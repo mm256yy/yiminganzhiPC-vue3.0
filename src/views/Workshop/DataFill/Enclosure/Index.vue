@@ -7,7 +7,7 @@
         </div>
         <div class="desc">
           上传说明：请将上传的图片进行文字命名，图片为
-          <span class="unit">jpg、png、svg</span> 格式
+          <span class="unit">jpg、png</span> 格式
         </div>
       </div>
       <ElSpace>

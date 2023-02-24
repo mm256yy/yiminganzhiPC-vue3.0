@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'legalPersonName'"
+        :expand-field="'doorNo'"
         @search="onSearch"
         @reset="setSearchParams"
       />

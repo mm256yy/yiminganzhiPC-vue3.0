@@ -9,7 +9,7 @@
         :schema="allSchemas.searchSchema"
         expand
         :defaultExpand="false"
-        :expand-field="'card'"
+        :expand-field="'doorNo'"
         @search="onSearch"
         @reset="setSearchParams"
       />
@@ -248,7 +248,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'blurry',
+    field: 'doorNo',
     label: '村集体编码',
     search: {
       show: true,

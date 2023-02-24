@@ -97,7 +97,7 @@ const getPrintList = async () => {
           children: [
             {
               name: item.templateName,
-              url: item.templateUrl,
+              url: item.previewUrl,
               selected: false,
               uid: item.id
             }
@@ -106,7 +106,7 @@ const getPrintList = async () => {
       } else {
         map[item.templateModule].children.push({
           name: item.templateName,
-          url: item.templateUrl,
+          url: item.previewUrl,
           selected: false,
           uid: item.id
         })

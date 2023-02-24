@@ -504,20 +504,20 @@ watch(
 )
 
 watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      // 处理表单数据
-      form.value = {
-        ...val
-      }
-    } else {
-      form.value = { ...defaultValue }
-      cardFront.value = []
-      cardEnd.value = []
-      householdPic.value = []
-      otherPic.value = []
+  () => props.show,
+  () => {
+    // if (val) {
+    //   // 处理表单数据
+    form.value = {
+      ...props.row
     }
+    // } else {
+    //   form.value = { ...defaultValue }
+    cardFront.value = []
+    cardEnd.value = []
+    householdPic.value = []
+    otherPic.value = []
+    // }
     try {
       if (form.value.cardPic) {
         const pics = JSON.parse(form.value.cardPic)

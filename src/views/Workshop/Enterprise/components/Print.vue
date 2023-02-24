@@ -97,7 +97,7 @@ const getPrintList = async () => {
           children: [
             {
               name: item.templateName,
-              url: item.templateUrl,
+              url: item.previewUrl,
               selected: false,
               uid: item.id
             }
@@ -106,7 +106,7 @@ const getPrintList = async () => {
       } else {
         map[item.templateModule].children.push({
           name: item.templateName,
-          url: item.templateUrl,
+          url: item.previewUrl,
           selected: false,
           uid: item.id
         })
@@ -183,7 +183,7 @@ const downLoad = (url: string) => {
     if (!res || !res.data) return
     // 将链接地址字符内容转变成blob地址
     a.href = URL.createObjectURL(res.data)
-    a.download = '居民户信息' // 下载文件的名字
+    a.download = '企业信息' // 下载文件的名字
     document.body.appendChild(a)
     a.click()
 

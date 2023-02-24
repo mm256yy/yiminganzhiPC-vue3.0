@@ -41,7 +41,7 @@
         <ElSpace>
           <ElButton
             :icon="printIcon"
-            v-if="type == 'Landlord'"
+            v-if="type == 'Landlord' || type == 'Enterprise' || type == 'IndividualB'"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onPrint"
@@ -228,7 +228,7 @@
       class="report-dialog"
       title="数据上报"
       :model-value="reportDialog"
-      :width="type == 'villageInfoC' ? 650 : 500"
+      :width="type == 'villageInfoC' ? 710 : 500"
       @close="onClose"
       alignCenter
       appendToBody

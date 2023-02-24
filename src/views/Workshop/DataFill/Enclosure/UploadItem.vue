@@ -7,7 +7,7 @@
           type: 'image'
         }"
         class="upload-trigger"
-        accept=".jpg,.jpeg,.png,.svg"
+        accept=".jpg,.jpeg,.png"
         :multiple="true"
         :file-list="fileListData"
         :list-type="'picture'"

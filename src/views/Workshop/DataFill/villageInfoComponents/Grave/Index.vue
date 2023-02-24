@@ -17,39 +17,39 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
 
-        <ElTableColumn label="登记人" prop="graveType" align="center" header-align="center">
+        <ElTableColumn label="登记人" prop="registrantId" align="center" header-align="center">
           <template #default="{ row }">
             <el-select
-              v-model="row.value"
-              multiple
+              v-model="row.registrantId"
               filterable
               remote
               reserve-keyword
-              placeholder="Please enter a keyword"
+              placeholder="请输入登记人"
               :remote-method="remoteMethod"
               :loading="loading"
+              @change="graveTypeChange"
             >
               <el-option
                 v-for="item in options"
                 :key="item.id"
                 :label="item.name"
-                :value="item.name"
+                :value="item.id"
               />
             </el-select>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="户号" prop="remark" align="center" header-align="center">
+        <ElTableColumn label="户号" prop="registrantDoorNo" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
-              v-model="row.remark"
-              :disabled="type == 'Landlord'"
+              v-model="row.registrantDoorNo"
+              disabled
             />
           </template>
         </ElTableColumn>
         <ElTableColumn
           label="坟墓与登记人关系"
-          prop="graveType"
+          prop="relation"
           align="center"
           header-align="center"
         >
@@ -58,7 +58,7 @@
               clearable
               filterable
               :placeholder="type == 'Landlord' ? '' : '请选择'"
-              v-model="row.graveType"
+              v-model="row.relation"
               :disabled="type == 'Landlord'"
             >
               <ElOption
@@ -197,6 +197,17 @@ const options = ref<any[]>([])
 //   remark: '',
 //   isAdd: true
 // }
+const graveTypeChange = (val) => {
+  options.value.forEach((item) => {
+    if (item.id == val) {
+      tableData.value.forEach((item2) => {
+        if (item2.registrantId == item.id) {
+          item2.registrantDoorNo = item.doorNo
+        }
+      })
+    }
+  })
+}
 const remoteMethod = (query: string) => {
   if (query) {
     loading.value = true

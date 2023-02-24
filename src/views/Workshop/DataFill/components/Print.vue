@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="打印表1格"
+    title="打印表格"
     :model-value="props.show"
     :width="500"
     @close="onClose"
@@ -51,7 +51,9 @@ import axios from 'axios'
 import printJS from 'print-js'
 import { ElDialog, ElButton, ElTooltip } from 'element-plus'
 import { getPrintTemplateListApi, printLandlordApi } from '@/api/workshop/landlord/service'
-
+import { useRouter } from 'vue-router'
+const { currentRoute } = useRouter()
+const { type } = currentRoute.value.query as any
 interface PropsType {
   show: boolean
   landlordIds: number[]
@@ -69,8 +71,17 @@ const emit = defineEmits(['close'])
 const list = ref<PrintListType[]>([])
 
 const getPrintList = async () => {
+  let templateType = ''
+  if (type == 'Enterprise') {
+    templateType = 'printCompany'
+  } else if (type == 'Landlord') {
+    templateType = 'print'
+  } else if (type == 'IndividualB') {
+    templateType = 'printIndividualHousehold'
+  }
+
   const res = await getPrintTemplateListApi({
-    templateType: 'print'
+    templateType: templateType
   })
 
   if (res && res.content) {
