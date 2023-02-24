@@ -80,6 +80,9 @@ export function formatDateTime(time: Date | number | string) {
 }
 
 export function standardFormatDate(time: Date | number | string) {
+  if (!time) {
+    return time
+  }
   const date = new Date(time)
   return `${date.getFullYear()}年${date.getMonth() + 1}月`
 }
