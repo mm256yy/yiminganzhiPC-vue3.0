@@ -61,10 +61,11 @@ import { uniqueId } from 'lodash-es'
 import printJS from 'print-js'
 import { ElDialog, ElButton, ElCheckbox } from 'element-plus'
 import { getPrintTemplateListApi, printLandlordApi } from '@/api/workshop/landlord/service'
-
+import { formatDate } from '@/utils/index'
 interface PropsType {
   show: boolean
   landlordIds: number[]
+  outsideData: any[]
 }
 
 interface PrintListType {
@@ -78,7 +79,7 @@ interface PrintListType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 const list = ref<PrintListType[]>([])
-
+const outsideName = ref('')
 const getPrintList = async () => {
   const res = await getPrintTemplateListApi({
     templateType: 'printIndividualHousehold'
@@ -170,6 +171,7 @@ const selectedTableIds = computed(() => {
     children.forEach((child) => {
       if (child.selected) {
         ids.push(child.uid) // todo
+        outsideName.value = child.name
       }
     })
   })
@@ -178,12 +180,20 @@ const selectedTableIds = computed(() => {
 
 const downLoad = (url: string) => {
   const a = document.createElement('a')
+  let name = ''
+  if (props.landlordIds.length < 2 && selectedTableIds.value.length < 2) {
+    name = props.outsideData + outsideName.value
+  } else if (props.landlordIds.length < 2 && selectedTableIds.value.length >= 2) {
+    name = props.outsideData + '打印表'
+  } else {
+    name = '个体工商打印表' + formatDate(new Date())
+  }
 
   axios.get(url, { responseType: 'blob' }).then((res) => {
     if (!res || !res.data) return
     // 将链接地址字符内容转变成blob地址
     a.href = URL.createObjectURL(res.data)
-    a.download = '个体工商信息' // 下载文件的名字
+    a.download = name // 下载文件的名字
     document.body.appendChild(a)
     a.click()
 

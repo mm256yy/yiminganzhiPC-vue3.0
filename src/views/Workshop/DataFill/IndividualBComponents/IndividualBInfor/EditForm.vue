@@ -363,6 +363,7 @@
                 :data="{
                   type: 'image'
                 }"
+                :on-error="onError"
                 :disabled="actionType === 'view'"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
@@ -396,6 +397,7 @@
           :data="{
             type: 'image'
           }"
+          :on-error="onError"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -601,7 +603,9 @@ const submit = async (data: DemographicDtoType) => {
   ElMessage.success('操作成功！')
   onClose(true)
 }
-
+const onError = () => {
+  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+}
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {

@@ -17,3 +17,7 @@ export const getFruitwoodListApi = (
 export const saveFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
   return request.post({ url: '/immigrant_tree/createAll', data })
 }
+
+export const deleteFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
+  return request.post({ url: `/immigrant_tree/delete/${data}` })
+}

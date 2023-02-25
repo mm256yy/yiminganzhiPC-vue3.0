@@ -284,6 +284,7 @@
                 :before-remove="beforeRemove"
                 :on-remove="removeFile1"
                 :on-preview="imgPreview"
+                :on-error="onError"
               >
                 <template #trigger v-if="cardFront.length === 0">
                   <div class="relative w-148px h-148px">
@@ -302,6 +303,7 @@
                 :data="{
                   type: 'image'
                 }"
+                :on-error="onError"
                 :disabled="actionType === 'view'"
                 :limit="1"
                 :list-type="'picture-card'"
@@ -329,6 +331,7 @@
         <ElCol :span="15">
           <ElFormItem label="户口本照片">
             <ElUpload
+              :on-error="onError"
               :class="[householdPic.length > 0 ? 'upload' : '']"
               action="/api/file/type"
               :data="{
@@ -365,6 +368,7 @@
           :data="{
             type: 'image'
           }"
+          :on-error="onError"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -611,7 +615,9 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     otherPic.value = list
   }
 }
-
+const onError = () => {
+  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+}
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'card-front')

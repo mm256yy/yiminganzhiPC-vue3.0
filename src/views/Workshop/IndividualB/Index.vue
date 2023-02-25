@@ -120,7 +120,12 @@
       @update-district="onUpdateDistrict"
     />
 
-    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
+    <Print
+      :show="printDialog"
+      :landlordIds="landlordIds"
+      @close="onPrintDialogClose"
+      :outsideData="outsideData"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -179,7 +184,7 @@ const headInfo = ref<LandlordHeadInfoType>({
 const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
-
+const outsideData = ref<any>([])
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
@@ -513,6 +518,7 @@ const onPrint = async () => {
   if (res && res.length) {
     landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
+    outsideData.value = res.map((item) => item.name)
   } else {
     ElMessage.warning('请选择需要打印的个体工商')
   }

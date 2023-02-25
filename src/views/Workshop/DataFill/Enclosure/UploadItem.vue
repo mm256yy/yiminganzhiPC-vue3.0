@@ -13,6 +13,7 @@
         :list-type="'picture'"
         :headers="headers"
         :on-success="uploadFileChange"
+        :on-error="onError"
         :before-remove="() => false"
       >
         <template #file="{ file }">
@@ -60,7 +61,7 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { ElUpload, ElDialog, ElInput, ElButton, ElTooltip } from 'element-plus'
+import { ElUpload, ElDialog, ElInput, ElButton, ElTooltip, ElMessage } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 // UploadFiles
 import type { UploadFile } from 'element-plus'
@@ -124,6 +125,10 @@ const handleFileList = (_file) => {
   nextTick(() => {
     emit('change', fileListData.value)
   })
+}
+
+const onError = () => {
+  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
 }
 
 // 文件上传

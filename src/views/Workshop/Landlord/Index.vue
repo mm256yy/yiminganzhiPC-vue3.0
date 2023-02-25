@@ -118,7 +118,12 @@
       @update-district="onUpdateDistrict"
     />
 
-    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
+    <Print
+      :show="printDialog"
+      :landlordIds="landlordIds"
+      :outsideData="outsideData"
+      @close="onPrintDialogClose"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -178,7 +183,7 @@ const headInfo = ref<LandlordHeadInfoType>({
 const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
-
+const outsideData = ref<any>([])
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
@@ -476,7 +481,6 @@ const { allSchemas } = useCrudSchemas(schema)
 const onDelRow = async (row: LandlordDtoType) => {
   tableObject.currentRow = row
   const result = await getLandlordSurveyByIdApi(row?.id)
-  console.log(result.immigrantGraveList.length)
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
@@ -597,11 +601,14 @@ const onSearch = (data) => {
 const onPrint = async () => {
   const res = await getSelections()
   if (res && res.length) {
+    outsideData.value = res.map((item) => item.name)
+
     landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
   } else {
     ElMessage.warning('请选择需要打印的居民户')
   }
+  console.log(landlordIds.value, 'res')
 }
 
 const onPrintDialogClose = () => {

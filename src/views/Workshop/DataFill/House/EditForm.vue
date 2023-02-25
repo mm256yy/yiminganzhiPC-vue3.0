@@ -289,6 +289,7 @@
           :multiple="false"
           :file-list="housePic"
           :headers="headers"
+          :on-error="onError"
           :on-success="uploadFileChange1"
           :before-remove="beforeRemove"
           :on-remove="removeFile1"
@@ -307,6 +308,7 @@
 
       <ElFormItem label="土地证">
         <ElUpload
+          :on-error="onError"
           :list-type="'picture-card'"
           action="/api/file/type"
           :data="{
@@ -338,6 +340,7 @@
           :data="{
             type: 'image'
           }"
+          :on-error="onError"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -368,6 +371,7 @@
           :data="{
             type: 'image'
           }"
+          :on-error="onError"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -520,7 +524,9 @@ watch(
     }
   }
 )
-
+const onError = () => {
+  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+}
 watch(
   () => props.show,
   (val) => {
@@ -595,7 +601,7 @@ const onSubmit = debounce((formEl) => {
         homePic: JSON.stringify(homePic.value || []),
         otherPic: JSON.stringify(otherPic.value || [])
       }
-      data.type = 'Company'
+
       submit(data)
     } else {
       return false
@@ -616,6 +622,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
         }
       })
   }
+
   if (type === 'house') {
     housePic.value = list
   } else if (type === 'land') {
@@ -625,6 +632,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
   } else if (type === 'other') {
     otherPic.value = list
   }
+  console.log(landPic.value)
 }
 
 // 文件上传

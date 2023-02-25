@@ -120,7 +120,12 @@
     />
     <!-- @update-district="onUpdateDistrict"
     -->
-    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
+    <Print
+      :show="printDialog"
+      :landlordIds="landlordIds"
+      @close="onPrintDialogClose"
+      :outsideData="outsideData"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -180,6 +185,7 @@ const headInfo = ref<LandlordHeadInfoType>({
   reportSucceedNum: 0,
   unReportNum: 0
 })
+const outsideData = ref<any>([])
 const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
@@ -528,6 +534,7 @@ const onPrint = async () => {
   if (res && res.length) {
     landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
+    outsideData.value = res.map((item) => item.name)
   } else {
     ElMessage.warning('请选择需要打印的企业')
   }

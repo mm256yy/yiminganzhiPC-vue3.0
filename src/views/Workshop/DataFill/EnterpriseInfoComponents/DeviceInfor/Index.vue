@@ -91,20 +91,6 @@
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
           <template #default="scope">
-            <!-- <TableEditColumn
-              :view-type="'link'"
-              :icons="[
-                {
-                  icon: '',
-                  tooltip: '概况',
-                  type: 'primary',
-                  action: () => onViewRow(row)
-                }
-              ]"
-              :row="row"
-              @edit="onEditRow(row)"
-              @delete="onDelRow"
-            /> -->
             <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
               >删除</span
             >

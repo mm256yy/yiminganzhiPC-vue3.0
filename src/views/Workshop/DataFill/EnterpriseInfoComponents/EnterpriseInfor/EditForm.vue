@@ -329,8 +329,8 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem></ElCol
-        >s
+            </ElSelect> </ElFormItem
+        ></ElCol>
 
         <ElCol :span="7" />
         <ElCol :span="7" />
@@ -393,6 +393,7 @@
                 :data="{
                   type: 'image'
                 }"
+                :on-error="onError"
                 :disabled="actionType === 'view'"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
@@ -426,6 +427,7 @@
           :data="{
             type: 'image'
           }"
+          :on-error="onError"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -784,7 +786,9 @@ const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
 const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
 }
-
+const onError = () => {
+  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+}
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {
   return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(

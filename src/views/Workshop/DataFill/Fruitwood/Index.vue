@@ -30,7 +30,6 @@
               filterable
               allow-create
               placeholder="请输入品种名称"
-              v-if="row.isAdd"
               v-model="row.name"
             >
               <ElOption
@@ -40,9 +39,9 @@
                 :value="item.value"
               />
             </ElSelect>
-            <div v-else>
+            <!-- <div v-else>
               {{ row.nameText }}
-            </div>
+            </div> -->
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -53,13 +52,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择用途"
-              v-if="row.isAdd"
-              v-model="row.usageType"
-            >
+            <ElSelect clearable filterable placeholder="请选择用途" v-model="row.usageType">
               <ElOption
                 v-for="item in dictObj[325]"
                 :key="item.value"
@@ -67,20 +60,14 @@
                 :value="item.value"
               />
             </ElSelect>
-            <div v-else>
+            <!-- <div v-else>
               {{ row.usageTypeText }}
-            </div>
+            </div> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择规格"
-              v-if="row.isAdd"
-              v-model="row.size"
-            >
+            <ElSelect clearable filterable placeholder="请选择规格" v-model="row.size">
               <ElOption
                 v-for="item in dictObj[269]"
                 :key="item.value"
@@ -88,20 +75,14 @@
                 :value="item.value"
               />
             </ElSelect>
-            <div v-else>
+            <!-- <div v-else>
               {{ row.sizeText }}
-            </div>
+            </div> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="单位" :width="180" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              placeholder="请选择单位"
-              v-if="row.isAdd"
-              v-model="row.unit"
-            >
+            <ElSelect clearable filterable placeholder="请选择单位" v-model="row.unit">
               <ElOption
                 v-for="item in dictObj[264]"
                 :key="item.value"
@@ -109,9 +90,9 @@
                 :value="item.value"
               />
             </ElSelect>
-            <div v-else>
+            <!-- <div v-else>
               {{ row.unitText }}
-            </div>
+            </div> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
@@ -141,6 +122,13 @@
             <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
+        <ElTableColumn label="操作" prop="action">
+          <template #default="scope">
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
+              >删除</span
+            >
+          </template>
+        </ElTableColumn>
       </ElTable>
     </div>
   </WorkContentWrap>
@@ -158,12 +146,14 @@ import {
   ElTableColumn,
   ElMessage,
   ElSelect,
-  ElOption
+  ElOption,
+  ElMessageBox
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getFruitwoodListApi,
-  saveFruitwoodListApi
+  saveFruitwoodListApi,
+  deleteFruitwoodListApi
 } from '@/api/workshop/datafill/fruitwood-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 
@@ -193,7 +183,24 @@ const defaultRow = {
   isAdd: true,
   altitude: 0
 }
+const onDelRow = (row) => {
+  ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+    type: 'warning',
+    cancelButtonText: '取消',
+    confirmButtonText: '确认'
+  })
+    .then(async () => {
+      if (row.id) {
+        await deleteFruitwoodListApi(row.id)
+        getList()
+      } else {
+        tableData.value.splice(tableData.value.indexOf(row), 1)
+      }
 
+      ElMessage.success('删除成功')
+    })
+    .catch(() => {})
+}
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
