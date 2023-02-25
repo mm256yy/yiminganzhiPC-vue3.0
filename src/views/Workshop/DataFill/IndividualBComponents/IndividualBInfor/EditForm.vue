@@ -464,7 +464,7 @@ import { validateIdNo, checkTel } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
 const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-
+const actionType2 = ref('')
 const { required } = useValidator()
 interface PropsType {
   show: boolean
@@ -580,9 +580,7 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
-  console.log(1)
-
-  if (props.actionType === 'add') {
+  if (props.actionType === 'add' && actionType2.value != 'edit') {
     await addDemographicApi({
       ...data,
       doorNo: props.doorNo,
@@ -599,6 +597,7 @@ const submit = async (data: DemographicDtoType) => {
     doorNo: props.doorNo
   }).then((res) => {
     form.value = res.content[0]
+    actionType2.value = 'edit'
   })
   ElMessage.success('操作成功！')
   onClose(true)
