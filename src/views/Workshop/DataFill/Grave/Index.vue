@@ -144,8 +144,8 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const getList = () => {
   const params = {
-    doorNo: props.doorNo,
-    householdId: +props.householdId
+    // doorNo: props.doorNo,
+    registrantId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content

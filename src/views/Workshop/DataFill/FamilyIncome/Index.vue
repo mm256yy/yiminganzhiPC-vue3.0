@@ -237,7 +237,9 @@ const total = computed(() => {
 
 const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  saveFamilyIncomeListApi({ ...realTableData, configType: 'PeasantHousehold' }).then(() => {
+  // realTableData.push({ configType: 'PeasantHousehold' })
+
+  saveFamilyIncomeListApi(realTableData).then(() => {
     ElMessage.success('操作成功！')
     getList()
   })
