@@ -10,7 +10,9 @@
   >
     <div style="text-align: right">
       <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="false">编辑</ElButton>
-      <ElButton :icon="saveIcon" type="primary" @click="onSubmit(formRef)">保存</ElButton>
+      <ElButton :icon="saveIcon" type="primary" @click="onSubmit(formRef)" :loading="saveLoading"
+        >保存</ElButton
+      >
     </div>
 
     <ElForm
@@ -480,7 +482,7 @@ import {
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch, nextTick, computed, defineExpose } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -497,6 +499,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const actionType2 = ref('')
+const saveLoading = ref(false)
 const { required } = useValidator()
 interface PropsType {
   show: boolean
@@ -658,12 +661,14 @@ const submit = async (data: DemographicDtoType) => {
       doorNo: props.doorNo,
       householdId: props.householdId
     })
+    saveLoading.value = false
   } else {
     await updateDemographicApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
+    saveLoading.value = false
   }
   getDemographicListApi({
     doorNo: props.doorNo
@@ -699,8 +704,8 @@ const submit = async (data: DemographicDtoType) => {
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
+  saveLoading.value = true
   formEl?.validate((valid) => {
-    console.log(tableData.value)
     if (valid) {
       const data: any = {
         ...form.value,
@@ -741,9 +746,7 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 0)
-defineExpose({
-  onSubmit
-})
+
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
   let list: FileItemType[] = []
@@ -787,7 +790,7 @@ const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
 }
 const onError = () => {
-  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {

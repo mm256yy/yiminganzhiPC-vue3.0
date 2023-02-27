@@ -369,7 +369,6 @@ const doSave = async () => {
     pu.roles = pu.roleIds?.map((x) => ({ id: x }))
     // user.systemRole = ProjectRoleEnum.NORMAL_USER
     user.systemRole = pu.projectRole
-
     user.projectUsers = [unref(projectUser.value)]
   } else {
     user.projectUsers = unref(projectUsers.value)
@@ -377,7 +376,9 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     user.id = currentRow.value.id
   }
-  user.systemRole = systemRole.value
+  if (appStore.getCurrentProjectId != 2) {
+    user.systemRole = systemRole.value
+  }
 
   saveUserApi(user as UserInfoType)
     .then(() => {

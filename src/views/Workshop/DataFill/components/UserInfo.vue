@@ -130,11 +130,12 @@ onMounted(() => {
 
   .base {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     height: 40px;
     padding: 0 16px;
+    background: rgba(237, 245, 255, 1);
     border-bottom: 2px dashed #dcdfe6;
+    align-items: center;
+    justify-content: space-between;
 
     .user {
       display: flex;
@@ -176,6 +177,7 @@ onMounted(() => {
     height: 48px;
     padding: 0 16px;
     align-items: center;
+    background: rgba(237, 245, 255, 1);
 
     .info-item {
       display: flex;

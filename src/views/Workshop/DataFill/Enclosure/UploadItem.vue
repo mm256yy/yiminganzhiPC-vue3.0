@@ -128,7 +128,7 @@ const handleFileList = (_file) => {
 }
 
 const onError = () => {
-  ElMessage.success('上传失败,请上传5m以内的图片或者重新上传')
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 
 // 文件上传
