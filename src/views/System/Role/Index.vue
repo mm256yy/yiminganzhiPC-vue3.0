@@ -60,13 +60,13 @@
         <div v-if="tableObject.currentRow" class="flex items-center pb-18px text-size-14px"
           >当前选中角色: {{ tableObject.currentRow.name }}</div
         >
+        <!-- check-strictly -->
         <ElTree
           v-loading="treeLoading"
           ref="menuTreeRef"
           :data="menuTree"
           show-checkbox
           default-expand-all
-          check-strictly
           node-key="id"
           highlight-current
         />
