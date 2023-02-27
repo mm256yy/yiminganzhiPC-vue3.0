@@ -61,13 +61,16 @@ import { ContentWrap } from '@/components/ContentWrap'
 import { IEditorConfig } from '@wangeditor/editor'
 import { useAppStore } from '@/store/modules/app'
 import { addNewsApi, updateNewsApi, getNewsByIdApi } from '@/api/project/news/service'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useForm } from '@/hooks/web/useForm'
 import { listDictDetailApi } from '@/api/sys/index'
 import { NewsDtoType } from '@/api/project/news/types'
-
+interface Props {
+  rowID
+}
+const props = defineProps<Props>()
 type InsertFnType = (url: string, alt: string, href: string) => void
 type InsertFnVideoType = (url: string, poster?: string) => void
 interface FileItemType {
@@ -75,15 +78,14 @@ interface FileItemType {
   url: string
 }
 
-const { currentRoute, back } = useRouter()
+// const { currentRoute } = useRouter()
 const uploadIcon = useIcon({ icon: 'ant-design:cloud-upload-outlined' })
-const { query } = unref(currentRoute)
+// const { query } = unref(currentRoute)
 const appStore = useAppStore()
 const { required } = useValidator()
 const { register, elFormRef, methods } = useForm()
 const newsTypes = ref<any[]>([])
-const id: number = query.id ? +query.id : 0
-
+// const id: number = query.id ? +query.id : 0
 const coverPic = ref<FileItemType[]>([])
 const enclosure = ref<FileItemType[]>([])
 const dialogVisible = ref<boolean>(false)
@@ -146,10 +148,12 @@ const getNewsDict = async () => {
 getNewsDict()
 
 onMounted(() => {
-  if (!id) {
+  console.log(props.rowID)
+
+  if (!props.rowID) {
     return
   }
-  getNewsByIdApi(id).then((res) => {
+  getNewsByIdApi(props.rowID).then((res) => {
     if (res) {
       coverPic.value = JSON.parse(res.coverPic)
       enclosure.value = JSON.parse(res.enclosure)
@@ -250,6 +254,7 @@ const onSubmit = async () => {
   const data: NewsDtoType = (await methods.getFormData()) || {}
   data.coverPic = JSON.stringify(coverPic.value)
   data.enclosure = JSON.stringify(enclosure.value)
+  let id = props.rowID
   if (!id) {
     await addNewsApi({
       ...data
@@ -261,7 +266,8 @@ const onSubmit = async () => {
     })
   }
   ElMessage.success('操作成功！')
-  back()
+  // back()
+  emit('detailshowchange')
 }
 
 // 处理函数
@@ -320,9 +326,10 @@ const filePreview = (uploadFile: UploadFile) => {
     window.open(uploadFile.url)
   }
 }
+const emit = defineEmits(['detailshowchange'])
 
 const backToList = () => {
-  back()
+  emit('detailshowchange')
 }
 </script>
 

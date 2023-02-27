@@ -30,7 +30,7 @@
                 @blur="file.edit = false"
               />
               <div v-else class="flex items-center justify-between">
-                <div class="w-234px overflow-ellipsis">{{ file.name }}</div>
+                <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
                 <ElTooltip placement="top" content="修改附件名称">
                   <Icon
                     icon="uil:edit-alt"
