@@ -376,9 +376,9 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     user.id = currentRow.value.id
   }
-  if (appStore.getCurrentProjectId != 2) {
-    user.systemRole = systemRole.value
-  }
+  // if (appStore.getUserInfo != 'PROJECT_ADMIN') {
+  //   user.systemRole = systemRole.value
+  // }
 
   saveUserApi(user as UserInfoType)
     .then(() => {
