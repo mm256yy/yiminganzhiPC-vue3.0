@@ -141,7 +141,7 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)" :loading="btnLoading">确认</ElButton>
     </template>
   </ElDialog>
 </template>
@@ -187,7 +187,7 @@ const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
+const btnLoading = ref(false)
 const dictObj = computed(() => dictStore.getDictObj)
 const treeSelectDefaultProps = {
   value: 'code',
@@ -281,6 +281,7 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
+      btnLoading.value = true
       const data: any = {
         ...form.value,
         ...position,
@@ -314,6 +315,7 @@ const submit = async (data: LandlordDtoType) => {
       projectId
     })
   }
+  btnLoading.value = false
   ElMessage.success('操作成功！')
   onClose(true)
 }

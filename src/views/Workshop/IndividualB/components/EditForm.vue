@@ -130,7 +130,7 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)" :loading="btnLoading">确认</ElButton>
     </template>
   </ElDialog>
 </template>
@@ -168,6 +168,7 @@ interface PropsType {
   row?: LandlordDtoType | null | undefined
   districtTree: DistrictNodeType[]
 }
+const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
@@ -268,6 +269,7 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
+      btnLoading.value = true
       const data: any = {
         ...form.value,
         ...position,
@@ -297,6 +299,7 @@ const submit = async (data: LandlordDtoType) => {
       projectId
     })
   }
+  btnLoading.value = false
   ElMessage.success('操作成功！')
   onClose(true)
 }

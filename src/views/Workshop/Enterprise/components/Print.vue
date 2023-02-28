@@ -33,7 +33,9 @@
               @change="checkChildItem($event, child)"
               :label="child.name"
             />
-            <span class="view" @click="onPreview(child)">预览</span>
+            <span class="view" v-if="props.landlordIds.length < 2" @click="onPreview(child)"
+              >预览</span
+            >
           </div>
         </div>
       </div>
