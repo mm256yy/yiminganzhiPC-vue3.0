@@ -222,7 +222,12 @@
       />
     </div>
 
-    <Print :show="printDialog" :landlordIds="[householdId]" @close="onPrintDialogClose" />
+    <Print
+      :show="printDialog"
+      :landlordIds="[householdId]"
+      @close="onPrintDialogClose"
+      :baseInfo="baseInfo"
+    />
 
     <ElDialog
       class="report-dialog"

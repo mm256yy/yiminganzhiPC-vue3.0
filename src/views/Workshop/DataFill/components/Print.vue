@@ -57,6 +57,7 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   show: boolean
   landlordIds: number[]
+  baseInfo: any
 }
 
 interface PrintListType {
@@ -69,7 +70,7 @@ interface PrintListType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 const list = ref<PrintListType[]>([])
-
+const downName = ref('')
 const getPrintList = async () => {
   let templateType = ''
   if (type == 'Enterprise') {
@@ -83,6 +84,7 @@ const getPrintList = async () => {
   const res = await getPrintTemplateListApi({
     templateType: templateType
   })
+  console.log(res)
 
   if (res && res.content) {
     const arr: PrintListType[] = []
@@ -111,6 +113,9 @@ const toggleItem = (currentItem) => {
   list.value = list.value.map((item) => {
     if (item.uid === currentItem.uid) {
       item.selected = !item.selected
+      console.log(item.name)
+
+      downName.value = item.name
     }
     return item
   })
@@ -127,13 +132,18 @@ const selectedTableIds = computed(() => {
 })
 
 const downLoad = (url: string) => {
+  let name = ''
+  if (selectedTableIds.value.length < 2) {
+    name = props.baseInfo.name + downName.value
+  } else {
+    name = props.baseInfo.name + '打印表'
+  }
   const a = document.createElement('a')
-
   axios.get(url, { responseType: 'blob' }).then((res) => {
     if (!res || !res.data) return
     // 将链接地址字符内容转变成blob地址
     a.href = URL.createObjectURL(res.data)
-    a.download = '居民户信息' // 下载文件的名字
+    a.download = name // 下载文件的名字
     document.body.appendChild(a)
     a.click()
 
