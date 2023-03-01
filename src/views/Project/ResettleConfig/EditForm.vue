@@ -184,7 +184,8 @@ const onClose = () => {
 }
 
 const getChildList = (val: string) => {
-  way.value = ''
+  // way.value = ''
+
   currWayList.value = wayObj[val]
 }
 </script>

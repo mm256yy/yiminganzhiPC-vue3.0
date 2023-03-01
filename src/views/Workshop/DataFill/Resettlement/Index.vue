@@ -60,28 +60,33 @@ import { WorkContentWrap } from '@/components/ContentWrap';
         <div class="desire-item">
           <div class="common-title"><span class="line"></span>搬迁安置方式</div>
           <div class="common-cont">
-            <div class="radio-item">
-              <div>宅基地安置：</div>
+            <div class="radio-item" v-if="length == 0">
+              <div>默认：</div>
               <ElRadioGroup v-model="form.removalType">
-                <ElRadio
-                  v-for="item in placeWay[PalceWay.Homestead]"
-                  :key="item.label"
-                  :label="item.value"
-                  >{{ item.label }}</ElRadio
-                >
+                <ElRadio v-for="item in morenData" :key="item.label" :label="item.value">{{
+                  item.label
+                }}</ElRadio>
               </ElRadioGroup>
             </div>
 
-            <div class="radio-item">
-              <div>公寓房安置：</div>
-              <ElRadioGroup v-model="form.removalType">
-                <ElRadio
-                  v-for="item in placeWay[PalceWay.Apartment]"
-                  :key="item.label"
-                  :label="item.value"
-                  >{{ item.label }}</ElRadio
-                >
-              </ElRadioGroup>
+            <div v-else>
+              <div class="radio-item">
+                <div>宅基地安置：</div>
+                <ElRadioGroup v-model="form.removalType">
+                  <ElRadio v-for="item in Homestead" :key="item.label" :label="item.value">{{
+                    item.label
+                  }}</ElRadio>
+                </ElRadioGroup>
+              </div>
+
+              <div class="radio-item">
+                <div>公寓房安置：</div>
+                <ElRadioGroup v-model="form.removalType">
+                  <ElRadio v-for="item in flats" :key="item.label" :label="item.value">{{
+                    item.label
+                  }}</ElRadio>
+                </ElRadioGroup>
+              </div>
             </div>
           </div>
         </div>
@@ -121,16 +126,23 @@ interface PropsType {
   doorNo: string
 }
 
+const Homestead = ref<any>([])
+const flats = ref<any>([])
 // way 1 宅基地安置 2 公寓安置
-enum PalceWay {
-  Homestead = 1,
-  Apartment = 2
-}
-
+// enum PalceWay {
+//   Homestead = 1,
+//   Apartment = 2
+// }
+const length = ref<any>('')
 const props = defineProps<PropsType>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const appStore = useAppStore()
-
+const morenData = ref<any>([
+  { value: '市内县外', label: '市内县外' },
+  { value: '县内安置（有土）', label: '县内安置（有土）' },
+  { value: '县内安置（无土）', label: '县内安置（无土）' },
+  { value: '自谋出路', label: '自谋出路' }
+])
 const defaultVal = {
   doorNo: props.doorNo,
   householdId: +props.householdId,
@@ -149,6 +161,7 @@ const getResettlementConfig = async () => {
   const res = await getResettlementConfigApi({
     projectId: appStore.getCurrentProjectId
   })
+  length.value = res.content.length
   if (res && res.content && res.content.length) {
     let map = {}
     res.content.forEach((item) => {
@@ -167,7 +180,8 @@ const getResettlementConfig = async () => {
         })
       }
     })
-    console.log(map, '搬迁安置方式')
+    Homestead.value = map['宅基地安置']
+    flats.value = map['公寓安置']
     placeWay.value = map
   }
 }
@@ -207,6 +221,8 @@ const onSave = () => {
   if (!data.removalType) {
     return ElMessage.error('请选择搬迁安置方式')
   }
+  console.log(data)
+
   saveResettlementListApi(data).then(() => {
     ElMessage.success('操作成功！')
   })

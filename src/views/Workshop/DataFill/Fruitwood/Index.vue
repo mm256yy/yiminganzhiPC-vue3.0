@@ -219,6 +219,20 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
+  tableData.value = tableData.value.filter((item) => {
+    if (
+      !(
+        item.altitude == 0 &&
+        item.name == '' &&
+        item.remark == '' &&
+        item.size == '' &&
+        item.unit == '' &&
+        item.usageType == ''
+      )
+    ) {
+      return item
+    }
+  })
   saveFruitwoodListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()

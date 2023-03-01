@@ -187,22 +187,30 @@ export const ReportStatus = {
 }
 
 // 生产安置方式
-
+// 农业安置、社保安置、一次性补偿、有土安置、基本生活保障安置、其他安置方式
 export const ProductionPlaceWay = [
   {
-    label: '市内县外',
-    value: 'Out'
+    label: '农业安置',
+    value: '农业安置'
   },
   {
-    label: '县内安置（有土）',
-    value: 'HasLand'
+    label: '社保安置',
+    value: '社保安置'
   },
   {
-    label: '县内安置（无土）',
-    value: 'NoLand'
+    label: '一次性补偿',
+    value: '一次性补偿'
   },
   {
-    label: '自谋出路',
-    value: 'Ohter'
+    label: '有土安置',
+    value: '有土安置'
+  },
+  {
+    label: '基本生活保障安置',
+    value: '基本生活保障安置'
+  },
+  {
+    label: '其他安置方式',
+    value: '其他安置方式'
   }
 ]

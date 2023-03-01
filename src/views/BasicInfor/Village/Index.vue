@@ -73,7 +73,8 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
-import { getDistrictTreeApi } from '@/api/district'
+// import { getDistrictTreeApi } from '@/api/district'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
 import type { VillageDtoType } from '@/api/workshop/village/types'
 import { formatDate } from '@/utils'
 const appStore = useAppStore()
@@ -81,7 +82,7 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const districtTree = ref([])
+const districtTree = ref()
 
 const { register, tableObject, methods } = useTable({
   getListApi: getVillageListApi,
@@ -96,7 +97,7 @@ tableObject.params = {
 getList()
 
 const getDistrictTree = async () => {
-  const list = await getDistrictTreeApi(projectId)
+  const list = await getVillageTreeApi(projectId)
   districtTree.value = list || []
   return list || []
 }
@@ -199,26 +200,25 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+
   {
-    field: 'parentCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
       component: 'TreeSelect',
       componentProps: {
+        placeholder: '请选择县\街道\行政村\自然村',
         data: districtTree,
         nodeKey: 'code',
         props: {
           value: 'code',
           label: 'name'
-        }
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
     },
     table: {
       show: false

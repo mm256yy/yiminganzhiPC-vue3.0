@@ -19,7 +19,7 @@
       >
         <template #completedTime="{ row }">
           <div>
-            {{ formatDate(row.completedTime) }}
+            {{ formatTime(row.completedTime, 'yyyy-MM') }}
           </div>
         </template>
         <template #locationType="{ row }">
@@ -68,7 +68,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
-import { formatDate } from '@/utils/index'
+import { formatTime } from '@/utils/index'
 // import { useRouter } from 'vue-router'
 import { locationTypes } from '@/views/Workshop/components/config'
 // const { currentRoute } = useRouter()
@@ -194,7 +194,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'inundationRange',
+    field: 'inundationRangeText',
     label: '淹没范围',
     search: {
       show: false

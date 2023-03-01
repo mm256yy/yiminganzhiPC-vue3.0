@@ -24,7 +24,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span> 家企业
+            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
             <!-- <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人 -->
             <span class="distance"></span>

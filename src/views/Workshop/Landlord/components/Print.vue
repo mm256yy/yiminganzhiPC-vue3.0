@@ -219,9 +219,10 @@ const onPrint = async () => {
   }
 }
 
-const onPreview = (item) => {
-  //  window.open(`https://view.officeapps.live.com/op/view.aspx?src=${item.url}`)
-  window.open(item.url)
+const onPreview = async (item) => {
+  const result = await printLandlordApi([item.uid], props.landlordIds)
+  // window.open(`https://view.officeapps.live.com/op/view.aspx?src=${result}`)
+  window.open(result)
 }
 </script>
 

@@ -41,11 +41,11 @@
     <div class="other" v-if="type == 'Enterprise'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
-        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">行政村：</div>
-        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
@@ -60,11 +60,11 @@
     <div class="other" v-if="type == 'IndividualB'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
-        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">行政村：</div>
-        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>
@@ -79,11 +79,11 @@
     <div class="other" v-if="type == 'villageInfoC'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
-        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">行政村：</div>
-        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">所在位置：</div>

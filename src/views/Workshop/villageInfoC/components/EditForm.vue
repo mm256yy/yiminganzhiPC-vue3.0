@@ -184,7 +184,7 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
   householdNumber: [required()],
-  phone: [required()],
+  // phone: [required()],
   parentCode: [required()]
 })
 

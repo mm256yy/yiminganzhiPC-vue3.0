@@ -1,22 +1,23 @@
 <template>
   <el-form-item label="经纬度" :required="!!props.required">
     <el-popover
-      placement="bottom"
+      placement="top"
       width="424"
       trigger="click"
       @show="showPop"
       popper-class="popper-class"
     >
       <Map ref="mapRef" :h="400" :point="position" @chose="onChosePosition" />
+      <!-- :model-value="position.longitude ? `${position.longitude},${position.latitude}` : ''" -->
       <template #reference>
         <div class="flex items-center w-full">
           <el-input
             class="!w-[calc(100%-25px)]"
             :suffix-icon="locationIcon"
-            :model-value="position.longitude ? `${position.longitude},${position.latitude}` : ''"
+            v-model="seatData"
             placeholder="请选择位置"
             style="cursor: pointer"
-            readonly
+            @input="inputchange"
           />
           <el-tooltip placement="top" content="请点击地图选择经纬度">
             <Icon class="ml-5px" icon="bi:question-circle" color="#231815" />
@@ -33,7 +34,7 @@ import { ref, nextTick, watch, reactive } from 'vue'
 import { ElPopover, ElInput, ElFormItem, ElTooltip } from 'element-plus'
 import { Map } from '@/components/Map'
 import { useIcon } from '@/hooks/web/useIcon'
-
+const seatData = ref('')
 interface PositionType {
   latitude: number
   longitude: number
@@ -71,6 +72,11 @@ watch(
       position.latitude = 0
       position.address = ''
     }
+    if (position.longitude) {
+      seatData.value = position.longitude + ',' + position.latitude
+    } else {
+      seatData.value = ''
+    }
   },
   {
     immediate: true,
@@ -78,12 +84,22 @@ watch(
   }
 )
 const onChosePosition = (ps: PositionType) => {
+  console.log(ps)
+
+  if (position.longitude) {
+    seatData.value = position.longitude + ',' + position.latitude
+  } else {
+    seatData.value = ''
+  }
+
   position.longitude = ps.longitude
   position.latitude = ps.latitude
   position.address = ps.address
   emit('change', ps)
 }
-
+const inputchange = (val) => {
+  console.log(val)
+}
 const showPop = () => {
   nextTick(() => {
     mapRef.value?.resize()

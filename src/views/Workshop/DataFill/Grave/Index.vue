@@ -16,8 +16,8 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
-          <template #default="{ row }">
+        <ElTableColumn label="穴位" prop="graveTypeText" align="center" header-align="center">
+          <!-- <template #default="{ row }">
             <ElSelect
               clearable
               filterable
@@ -32,20 +32,20 @@
                 :value="item.value"
               />
             </ElSelect>
-          </template>
+          </template> -->
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
-          <template #default="{ row }">
+          <!-- <template #default="{ row }">
             <ElInputNumber
               :min="0"
               :placeholder="type == 'Landlord' ? '' : '请输入数量'"
               v-model="row.number"
               :disabled="type == 'Landlord'"
             />
-          </template>
+          </template> -->
         </ElTableColumn>
-        <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
-          <template #default="{ row }">
+        <ElTableColumn label="材料" prop="materialsText" align="center" header-align="center">
+          <!-- <template #default="{ row }">
             <ElSelect
               clearable
               filterable
@@ -60,10 +60,10 @@
                 :value="item.value"
               />
             </ElSelect>
-          </template>
+          </template> -->
         </ElTableColumn>
         <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
-          <template #default="{ row }">
+          <!-- <template #default="{ row }">
             <ElInput
               v-model="row.graveYear"
               :placeholder="type == 'Landlord' ? '' : '请输入年份'"
@@ -71,25 +71,25 @@
             >
               <template #append>年</template>
             </ElInput>
-          </template>
+          </template> -->
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
-          <template #default="{ row }">
+          <!-- <template #default="{ row }">
             <ElInput
               v-model="row.gravePosition"
               :placeholder="type == 'Landlord' ? '' : '请输入所处位置'"
               :disabled="type == 'Landlord'"
             />
-          </template>
+          </template> -->
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
-          <template #default="{ row }">
+          <!-- <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
               v-model="row.remark"
               :disabled="type == 'Landlord'"
             />
-          </template>
+          </template> -->
         </ElTableColumn>
       </ElTable>
     </div>
@@ -98,21 +98,16 @@
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, computed } from 'vue'
-import {
-  ElButton,
-  ElInputNumber,
-  ElInput,
-  ElSpace,
-  ElTable,
-  ElTableColumn,
-  ElSelect,
-  ElOption,
-  ElMessage
-} from 'element-plus'
+// , computed
+import { ref } from 'vue'
+//  ElInputNumber,
+//   ElInput,
+//   ElSelect,
+//   ElOption,
+import { ElButton, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+// import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
@@ -126,9 +121,9 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
-const dictStore = useDictStoreWithOut()
+// const dictStore = useDictStoreWithOut()
 
-const dictObj = computed(() => dictStore.getDictObj)
+// const dictObj = computed(() => dictStore.getDictObj)
 
 // const defaultRow = {
 //   doorNo: props.doorNo,

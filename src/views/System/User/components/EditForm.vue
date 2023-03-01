@@ -25,7 +25,7 @@
           </div>
           <el-table :data="projectUsers" size="small">
             <el-table-column prop="projectName" label="项目名称" />
-            <el-table-column prop="projectRole" label="项目权限">
+            <!-- <el-table-column prop="projectRole" label="项目权限">
               <template #default="scope">
                 <el-tag
                   :type="
@@ -35,7 +35,7 @@
                   {{ getProjectRoleName(scope.row.projectRole) }}
                 </el-tag>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="orgName" label="所属组织" />
             <el-table-column prop="roles" label="角色" header-align="center" align="center">
               <template #default="scope">
@@ -73,7 +73,7 @@
       :model="projectUser"
       label-width="90px"
     >
-      <el-form-item label="项目权限" required>
+      <!-- <el-form-item label="项目权限" required>
         <el-col :span="11">
           <el-form-item prop="projectRole">
             <el-select v-model="projectUser.projectRole">
@@ -82,18 +82,18 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item prop="orgId" label="所属组织">
-            <el-tree-select
-              v-model="projectUser.orgId"
-              :data="orgs"
-              :props="defaultProps"
-              default-expand-all
-              :expand-on-click-node="false"
-            />
-          </el-form-item>
-        </el-col>
-      </el-form-item>
+      </el-form-item> -->
+      <el-col :span="12">
+        <el-form-item prop="orgId" label="所属组织">
+          <el-tree-select
+            v-model="projectUser.orgId"
+            :data="orgs"
+            :props="defaultProps"
+            default-expand-all
+            :expand-on-click-node="false"
+          />
+        </el-form-item>
+      </el-col>
       <el-form-item label="用户角色" required>
         <el-col :span="11">
           <el-form-item prop="roleId">
@@ -155,7 +155,8 @@ import {
   ProjectRoleEnum,
   RoleType
 } from '@/api/sys/types'
-import { getProjectRoleName, saveUserApi, getOrgTreeApi, getAllRoleApi } from '@/api/sys'
+// getProjectRoleName,
+import { saveUserApi, getOrgTreeApi, getAllRoleApi } from '@/api/sys'
 import { TreeNodeType } from '@/api/common'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
@@ -234,12 +235,12 @@ const schema = reactive<FormSchema[]>([
       ]
     }
   },
-  {
-    field: 'enabled',
-    label: '是否启用',
-    value: true,
-    component: 'Switch'
-  },
+  // {
+  //   field: 'enabled',
+  //   label: '是否启用',
+  //   value: true,
+  //   component: 'Switch'
+  // },
   { field: 'phone', label: '电话', component: 'Input' }
 ])
 

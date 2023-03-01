@@ -472,7 +472,7 @@ const onPrintDialogClose = () => {
 
     .tit {
       margin-left: 6px;
-      user-select: none;
+      // user-select: none;
     }
 
     &.active {

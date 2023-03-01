@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap title="家庭收入项配置">
+  <ContentWrap title="安置意愿项配置">
     <div class="flex mb-5">
       <!-- 系统管理员时增加 ELSelect 下拉选择项目 -->
       <ElSelect

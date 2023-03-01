@@ -24,9 +24,9 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum || 10 }}</span> 户
+            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人
+            <span class="num">{{ headInfo.demographicNum }}</span> 人
             <span class="distance"></span>
             已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>

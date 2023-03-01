@@ -277,9 +277,10 @@
       </ElRow>
 
       <ElDivider border-style="dashed" />
-
+      <!-- :class="[actionType === 'view' && housePic.length > 0 ? 'upload' : '']" -->
       <ElFormItem label="房屋平面示意图">
         <ElUpload
+          :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           action="/api/file/type"
           :data="{
@@ -308,6 +309,7 @@
 
       <ElFormItem label="土地证">
         <ElUpload
+          :disabled="actionType === 'view'"
           :on-error="onError"
           :list-type="'picture-card'"
           action="/api/file/type"
@@ -336,12 +338,12 @@
 
       <ElFormItem label="房屋照片">
         <ElUpload
+          :disabled="actionType === 'view'"
           action="/api/file/type"
           :data="{
             type: 'image'
           }"
           :on-error="onError"
-          :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
           :multiple="true"
@@ -367,12 +369,12 @@
 
       <ElFormItem label="其他附件">
         <ElUpload
+          :disabled="actionType === 'view'"
           action="/api/file/type"
           :data="{
             type: 'image'
           }"
           :on-error="onError"
-          :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
           :multiple="true"
