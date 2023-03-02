@@ -111,6 +111,7 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+
   {
     field: 'birthday',
     label: '出生年月',
@@ -154,26 +155,33 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'occupationText',
-    label: '职业',
+    field: 'populationTypeText',
+    label: '人口类型',
     search: {
       show: false
     }
   },
-  {
-    field: 'company',
-    label: '工作单位',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'insuranceTypeText',
-    label: '参保情况',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'occupationText',
+  //   label: '职业',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'company',
+  //   label: '工作单位',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'insuranceTypeText',
+  //   label: '参保情况',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'action',
     label: '操作',

@@ -259,6 +259,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 180,
     field: 'card',
     label: '身份证号',
     search: {
