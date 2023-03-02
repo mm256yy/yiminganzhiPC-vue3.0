@@ -22,7 +22,7 @@ export const getResettlementListApi = (
 export const saveResettlementListApi = (
   data: ResettlementDtoType
 ): Promise<TableResponse<ResettlementDtoType>> => {
-  return request.post({ url: data.id ? '/immigrant_will/update' : '/immigrant_will/create', data })
+  return request.post({ url: '/immigrant_will/save', data })
 }
 
 /**

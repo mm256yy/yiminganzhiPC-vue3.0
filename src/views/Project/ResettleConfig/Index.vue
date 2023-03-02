@@ -114,6 +114,7 @@ onMounted(async () => {
     await loadProject()
   }
   tableObject.params.projectId = projectId.value
+  tableObject.size = 100
   getList()
 })
 

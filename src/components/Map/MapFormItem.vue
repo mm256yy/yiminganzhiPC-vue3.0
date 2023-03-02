@@ -84,7 +84,7 @@ watch(
   }
 )
 const onChosePosition = (ps: PositionType) => {
-  console.log(ps)
+  console.log(ps, '1')
 
   if (position.longitude) {
     seatData.value = position.longitude + ',' + position.latitude
@@ -98,7 +98,14 @@ const onChosePosition = (ps: PositionType) => {
   emit('change', ps)
 }
 const inputchange = (val) => {
-  console.log(val)
+  let ps: any = {}
+  position.longitude = val.slice(0, val.indexOf(','))
+  position.latitude = val.slice(val.indexOf(',') + 1)
+
+  ps.longitude = val.slice(0, val.indexOf(','))
+  ps.latitude = val.slice(val.indexOf(',') + 1)
+
+  emit('change', ps)
 }
 const showPop = () => {
   nextTick(() => {

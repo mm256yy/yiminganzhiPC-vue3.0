@@ -46,13 +46,23 @@ import { WorkContentWrap } from '@/components/ContentWrap';
 
         <div class="desire-item">
           <div class="common-title"><span class="line"></span>生产安置方式</div>
-          <div class="common-cont">
-            <div class="radio-item">
+          <div class="common-cont scaz">
+            <!-- <div class="radio-item">
               <ElRadioGroup v-model="form.productionType">
                 <ElRadio v-for="item in ProductionPlaceWay" :key="item.label" :label="item.value">{{
                   item.label
                 }}</ElRadio>
               </ElRadioGroup>
+            </div> -->
+            <div
+              class="common-item"
+              v-for="item in immigrantWillProductionList"
+              :key="item.productionType"
+            >
+              <div class="tit">{{ item.productionType }}</div>
+              <ElInput v-model="item.number" type="number" :min="0" placeholder="请输入">
+                <!-- <template #append>人</template> -->
+              </ElInput>
             </div>
           </div>
         </div>
@@ -109,7 +119,7 @@ import { WorkContentWrap } from '@/components/ContentWrap';
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, unref } from 'vue'
+import { ref, unref, onMounted } from 'vue'
 import { ElButton, ElRadioGroup, ElRadio, ElSpace, ElInput, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -117,7 +127,7 @@ import {
   saveResettlementListApi,
   getResettlementConfigApi
 } from '@/api/workshop/datafill/resettlement-service'
-import { ProductionPlaceWay } from '../config'
+// import { ProductionPlaceWay } from '../config'
 import { useAppStore } from '@/store/modules/app'
 import { ResettlementDtoType } from '@/api/workshop/datafill/resettlement-types'
 
@@ -159,7 +169,8 @@ const placeWay = ref<any>({})
 
 const getResettlementConfig = async () => {
   const res = await getResettlementConfigApi({
-    projectId: appStore.getCurrentProjectId
+    projectId: appStore.getCurrentProjectId,
+    size: 100
   })
   length.value = res.content.length
   if (res && res.content && res.content.length) {
@@ -179,13 +190,20 @@ const getResettlementConfig = async () => {
           value: item.area
         })
       }
+      if (item.type == '生产安置') {
+        immigrantWillProductionList.value.push({
+          productionType: item.way,
+          number: 0
+        })
+      }
     })
+
     Homestead.value = map['宅基地安置']
     flats.value = map['公寓安置']
     placeWay.value = map
   }
 }
-
+const immigrantWillProductionList = ref<any>([])
 const getResettlement = async () => {
   const params = {
     doorNo: props.doorNo,
@@ -194,21 +212,36 @@ const getResettlement = async () => {
   const res = await getResettlementListApi(params)
   if (res && res.content && res.content.length) {
     form.value = res.content[0]
+    immigrantWillProductionList.value = []
+
+    res.content[0].immigrantWillProductionList.forEach((item) => {
+      immigrantWillProductionList.value.push({
+        id: item.id,
+        productionType: item.productionType,
+        number: item.number
+      })
+    })
   }
 }
-
+onMounted(async () => {
+  await getResettlementConfig()
+  await getResettlement()
+})
 // 搬迁安置方式
-getResettlementConfig()
+
 // 获取意愿信息
-getResettlement()
 
 const onSave = () => {
   const result = unref(form)
   const data: ResettlementDtoType = {
     ...result,
     doorNo: props.doorNo,
-    householdId: +props.householdId
+    householdId: +props.householdId,
+    immigrantWillProductionList: immigrantWillProductionList.value
   }
+
+  console.log(data)
+
   data.familyNum = parseInt(data.familyNum as string)
   data.countryNum = parseInt(data.countryNum as string)
   data.unCountryNum = parseInt(data.unCountryNum as string)
@@ -293,6 +326,26 @@ const onSave = () => {
     font-size: 14px;
     color: #171718;
     align-items: center;
+  }
+}
+
+.scaz {
+  display: flex;
+  flex-flow: row wrap;
+
+  .common-item {
+    // flex-flow: row wrap;
+    // width: 30%;
+    display: flex;
+    margin: 10px 40px 10px 0;
+    align-items: center;
+
+    .tit {
+      margin-right: 10px;
+      font-size: 14px;
+      color: #171718;
+      white-space: nowrap;
+    }
   }
 }
 </style>
