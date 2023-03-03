@@ -75,7 +75,7 @@ const schema = reactive<FormSchema[]>([
   { field: 'name', label: '部门名称', component: 'Input' },
   { field: 'parentId', label: '上级部门', colProps: { span: 24 } },
   { field: 'sortNum', label: '排序', component: 'Input', value: 0 },
-  // { field: 'enabled', label: '是否启用', component: 'Switch', value: true },
+  { field: 'enabled', label: '是否允许登录', component: 'Switch', value: true },
   { field: 'remark', label: '描述', component: 'Input' }
 ])
 

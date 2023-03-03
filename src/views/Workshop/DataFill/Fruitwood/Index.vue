@@ -25,13 +25,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              allow-create
-              placeholder="请输入品种名称"
-              v-model="row.name"
-            >
+            <ElSelect clearable allow-create placeholder="请输入品种名称" v-model="row.name">
               <ElOption
                 v-for="item in dictObj[250]"
                 :key="item.value"
@@ -52,7 +46,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择用途" v-model="row.usageType">
+            <ElSelect clearable placeholder="请选择用途" v-model="row.usageType">
               <ElOption
                 v-for="item in dictObj[325]"
                 :key="item.value"
@@ -67,7 +61,7 @@
         </ElTableColumn>
         <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择规格" v-model="row.size">
+            <ElSelect clearable placeholder="请选择规格" v-model="row.size">
               <ElOption
                 v-for="item in dictObj[269]"
                 :key="item.value"
@@ -75,6 +69,7 @@
                 :value="item.value"
               />
             </ElSelect>
+
             <!-- <div v-else>
               {{ row.sizeText }}
             </div> -->
@@ -82,7 +77,7 @@
         </ElTableColumn>
         <ElTableColumn label="单位" :width="180" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择单位" v-model="row.unit">
+            <ElSelect clearable placeholder="请选择单位" v-model="row.unit">
               <ElOption
                 v-for="item in dictObj[264]"
                 :key="item.value"

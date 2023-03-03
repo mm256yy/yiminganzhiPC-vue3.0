@@ -216,8 +216,8 @@ const title = computed(() => {
 const rules = {
   userName: [required()],
   nickName: [required()],
-  sex: [required()],
-  enabled: [{ type: 'boolean', required: true }]
+  sex: [required()]
+  // enabled: [{ type: 'boolean', required: true }]
 }
 
 const schema = reactive<FormSchema[]>([
@@ -235,12 +235,12 @@ const schema = reactive<FormSchema[]>([
       ]
     }
   },
-  // {
-  //   field: 'enabled',
-  //   label: '是否启用',
-  //   value: true,
-  //   component: 'Switch'
-  // },
+  {
+    field: 'enabled',
+    label: '是否允许登录',
+    value: true,
+    component: 'Switch'
+  },
   { field: 'phone', label: '电话', component: 'Input' }
 ])
 

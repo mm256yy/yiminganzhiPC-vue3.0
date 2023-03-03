@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { EChartsOption } from 'echarts'
+// import type { EChartsOption } from 'echarts'
 import echarts from '@/plugins/echarts'
 import { debounce } from 'lodash-es'
 import { propTypes } from '@/utils/propTypes'
-import { computed, PropType, ref, unref, watch, onMounted, onBeforeUnmount, onActivated } from 'vue'
+// PropType,
+import { computed, ref, unref, watch, onMounted, onBeforeUnmount, onActivated } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { isString } from '@/utils/is'
 import { useDesign } from '@/hooks/web/useDesign'
@@ -16,7 +17,7 @@ const appStore = useAppStore()
 
 const props = defineProps({
   options: {
-    type: Object as PropType<EChartsOption>,
+    type: Object as any,
     required: true
   },
   width: propTypes.oneOfType([Number, String]).def(''),
