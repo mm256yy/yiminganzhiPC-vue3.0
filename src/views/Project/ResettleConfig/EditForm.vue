@@ -59,7 +59,8 @@
 
 <script setup lang="ts">
 import { useAppStore } from '@/store/modules/app'
-import { computed, reactive, unref, ref, onMounted } from 'vue'
+
+import { computed, reactive, unref, ref, onMounted, watch } from 'vue'
 import { ElButton, ElMessage, ElSelect, ElOption, ElInput } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
@@ -75,7 +76,7 @@ interface Props {
   show: boolean
   projectId: number
   projectList: Array<{ label: string; value: number }>
-  row?: ResettleConfigInfoType
+  row: any
 }
 
 const props = defineProps<Props>()
@@ -105,6 +106,16 @@ const rules = {
   projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
 
+watch(
+  () => props.show,
+  () => {
+    if (props.row && props.row.type == '生产安置') {
+      schema[3].hidden = true
+    } else {
+      schema[3].hidden = false
+    }
+  }
+)
 const schema = reactive<FormSchema[]>([
   {
     field: 'projectId',
@@ -134,7 +145,9 @@ const schema = reactive<FormSchema[]>([
       style: { width: '450px' }
     }
   },
+  // props.row.type == '生产安置' ? true : !props.row && false,
   {
+    hidden: true,
     field: 'area',
     label: '安置区域',
     component: 'Input',

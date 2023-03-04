@@ -43,7 +43,6 @@
     </div>
   </ContentWrap>
   <EditForm
-    v-if="showEdit"
     :row="currentRow"
     :show="showEdit"
     :project-id="projectId"
@@ -155,8 +154,7 @@ interface SpanMethodProps {
   columnIndex: number
 }
 
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  console.log(column)
+const objectSpanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
   if (columnIndex === 1) {
     // 如果与上一个分组名称相同，被合并
     if (rowIndex !== 0 && row.type === tableObject.tableList[rowIndex - 1].type) {

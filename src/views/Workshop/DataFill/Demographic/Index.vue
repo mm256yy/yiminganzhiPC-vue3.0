@@ -107,6 +107,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 100,
+    field: 'relationText',
+    label: '与户主关系',
+    search: {
+      show: false
+    }
+  },
+  {
     width: 80,
     field: 'sexText',
     label: '性别',
@@ -223,6 +231,8 @@ const onAddRow = () => {
 }
 
 const onEditRow = (row: DemographicDtoType) => {
+  console.log(row)
+
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true

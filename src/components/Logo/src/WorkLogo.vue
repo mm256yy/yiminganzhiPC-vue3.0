@@ -16,7 +16,7 @@ const title = computed(() => appStore.getTitle)
 const layout = computed(() => appStore.getLayout)
 
 const collapse = computed(() => appStore.getCollapse)
-
+const reservoirName = localStorage.getItem('reservoirName')
 onMounted(() => {
   if (unref(collapse)) show.value = false
 })
@@ -65,6 +65,8 @@ watch(
     to="/"
   >
     <img src="@/assets/imgs/logo.png" class="w-30px h-39px" />
+    <span :class="['ml-10px text-24px font-600', 'text-[#fff]']"> {{ reservoirName }}</span>
+
     <div v-if="show" :class="['ml-10px text-24px font-600', 'text-[#fff]']">
       {{ title }}
     </div>

@@ -223,7 +223,7 @@
               type="number"
               :min="0"
               v-model="form.fixedAssetsNetValue"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.'))}"
             >
               <template #append>万元</template></ElInput
             >
@@ -234,14 +234,24 @@
       <ElRow justify="center">
         <ElCol :span="7">
           <ElFormItem label="正式工人数量" prop="regularWorkerNum">
-            <ElInput type="number" :min="0" v-model="form.regularWorkerNum">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model.number="form.regularWorkerNum"
+              oninput="value=value.replace(/[^\d]/g,'')"
+            >
               <template #append>人</template></ElInput
             >
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
           <ElFormItem label="临时工人数量" prop="temporaryWorkerNum">
-            <ElInput type="number" :min="0" v-model="form.temporaryWorkerNum">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model.number="form.temporaryWorkerNum"
+              oninput="value=value.replace(/[^\d]/g,'')"
+            >
               <template #append>人</template></ElInput
             >
           </ElFormItem>
@@ -824,17 +834,17 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 
 .titleBox {
-  height: 48px;
+  height: 36px;
   padding-left: 15px;
   margin: 20px 0px;
-  line-height: 48px;
+  line-height: 36px;
   background: #f5f7fa;
   box-shadow: 0px 1px 0px 0px rgba(235, 235, 235, 1);
 
   .text {
     padding-left: 15px;
     font-family: PingFangSC-Semibold, PingFang SC;
-    font-size: 21px;
+    font-size: 17px;
     font-weight: 600;
     color: #171718;
     border-left: 5px solid blue;

@@ -547,7 +547,7 @@ const beforeUpload = () => {
 
 const uploadDone = () => {
   uploadLoading.value = false
-  ElMessage.success('操作成功！')
+  ElMessage.warning('正在导入，请等待批量导入结果')
 }
 
 const uploadError = (error) => {

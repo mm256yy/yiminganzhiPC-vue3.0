@@ -12,6 +12,7 @@ import { PlatformType } from '@/types/platform'
 
 const { wsCache } = useCache()
 const TOKEN_NAME = 'YM-TOKEN'
+
 const JWT_INFO_NAME = 'ymUserJwtInfo'
 const USER_INFO_NAME = 'ymUserInfo'
 const CURRENT_PROJECT_KEY = 'ymCurrentProjectId'
@@ -41,6 +42,7 @@ interface AppState {
   currentPlatform: PlatformType
   permissions: string[]
   token: string
+  reservoirName: string
   isDark: boolean
   currentSize: ElementPlusSize
   sizeMap: ElementPlusSize[]
@@ -63,7 +65,7 @@ export const useAppStore = defineStore('app', {
       mobile: false, // 是否是移动端
       title: import.meta.env.VITE_APP_TITLE, // 标题
       pageLoading: false, // 路由跳转loading
-
+      reservoirName: '',
       breadcrumb: true, // 面包屑
       breadcrumbIcon: true, // 面包屑图标
       collapse: false, // 折叠菜单
@@ -117,6 +119,9 @@ export const useAppStore = defineStore('app', {
     }
   },
   getters: {
+    getReservoirName(): string {
+      return this.reservoirName
+    },
     getBreadcrumb(): boolean {
       return this.breadcrumb
     },
@@ -301,6 +306,9 @@ export const useAppStore = defineStore('app', {
     setToken(token: string) {
       wsCache.set(TOKEN_NAME, token)
       this.token = token
+    },
+    setreservoirName(reservoirName: string) {
+      this.reservoirName = reservoirName
     },
     setCurrentProjectId(projectId: number) {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)

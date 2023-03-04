@@ -96,7 +96,7 @@
             :icons="[
               {
                 icon: '',
-                tooltip: '概况',
+                tooltip: '快速查看',
                 type: 'primary',
                 action: () => onViewRow(row)
               }

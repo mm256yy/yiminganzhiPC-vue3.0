@@ -5,6 +5,7 @@ export type UserLoginType = {
   password: string
   authCode: string
   authKey: string
+  reservoirName: string
 }
 
 /**
@@ -32,6 +33,7 @@ export type UserLoginResType = {
   /**
    * 用户信息
    */
+  reservoirName: string
   user: JwtUserType
   /**
    * 是否弱密码

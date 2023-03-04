@@ -118,7 +118,7 @@ const setVisible = () => {
         </ElButton>
         <ElButton v-if="expand" text @click="setVisible">
           <!-- {{ t(visible ? 'common.shrink' : 'common.expand') }}&nbsp; -->
-          <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '更多搜索' : '隐藏' }}</span
+          <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '隐藏' : '更多搜索' }}</span
           >&nbsp;
           <Icon
             style="color: rgba(62, 115, 236, 1)"
@@ -141,7 +141,7 @@ const setVisible = () => {
       </ElButton>
       <ElButton v-if="expand" text @click="setVisible">
         <!-- {{ t(visible ? 'common.shrink' : 'common.expand') }}&nbsp; -->
-        <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '更多搜索' : '隐藏' }}</span
+        <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '隐藏' : '更多搜索' }}</span
         >&nbsp;
         <Icon
           style="color: rgba(62, 115, 236, 1)"
