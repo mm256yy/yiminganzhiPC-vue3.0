@@ -250,9 +250,9 @@ const onSave = () => {
   if (data.familyNum !== data.countryNum + data.unCountryNum) {
     return ElMessage.error('家庭人数数据有误')
   }
-  if (!data.productionType) {
-    return ElMessage.error('请选择生产安置方式')
-  }
+  // if (!data.productionType) {
+  //   return ElMessage.error('请选择生产安置方式')
+  // }
   if (!data.removalType) {
     return ElMessage.error('请选择搬迁安置方式')
   }
