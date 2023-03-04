@@ -612,7 +612,6 @@ const handleClick = (val) => {
 }
 
 .bigBox {
-
   padding: 15px;
   border-radius: 11px 11px 11px 11px;
 }
