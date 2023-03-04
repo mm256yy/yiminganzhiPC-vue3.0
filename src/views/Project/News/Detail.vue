@@ -2,6 +2,8 @@
   <ContentWrap title="新闻详情">
     <Form @register="register" :schema="schema" :rules="rules">
       <template #coverPic>
+        <span style="position: absolute; top: 0; left: -78px; color: red">*</span>
+
         <ElUpload
           action="/api/file/type"
           :data="{
@@ -27,6 +29,7 @@
           action="/api/file"
           multiple
           :limit="2"
+          accept=".jpg,.jpeg,.png,.gif,.bmp,.pdf,.JPG,.JPEG,.zip,.GIF,.BMP,.PDF,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rar"
           :file-list="enclosure"
           :headers="headers"
           :on-success="uploadFileChange"
@@ -61,16 +64,13 @@ import { ContentWrap } from '@/components/ContentWrap'
 import { IEditorConfig } from '@wangeditor/editor'
 import { useAppStore } from '@/store/modules/app'
 import { addNewsApi, updateNewsApi, getNewsByIdApi } from '@/api/project/news/service'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useForm } from '@/hooks/web/useForm'
 import { listDictDetailApi } from '@/api/sys/index'
 import { NewsDtoType } from '@/api/project/news/types'
-interface Props {
-  rowID
-}
-const props = defineProps<Props>()
+
 type InsertFnType = (url: string, alt: string, href: string) => void
 type InsertFnVideoType = (url: string, poster?: string) => void
 interface FileItemType {
@@ -78,14 +78,15 @@ interface FileItemType {
   url: string
 }
 
-// const { currentRoute } = useRouter()
+const { currentRoute, back } = useRouter()
 const uploadIcon = useIcon({ icon: 'ant-design:cloud-upload-outlined' })
-// const { query } = unref(currentRoute)
+const { query } = unref(currentRoute)
 const appStore = useAppStore()
 const { required } = useValidator()
 const { register, elFormRef, methods } = useForm()
 const newsTypes = ref<any[]>([])
-// const id: number = query.id ? +query.id : 0
+const id: number = query.id ? +query.id : 0
+
 const coverPic = ref<FileItemType[]>([])
 const enclosure = ref<FileItemType[]>([])
 const dialogVisible = ref<boolean>(false)
@@ -148,12 +149,10 @@ const getNewsDict = async () => {
 getNewsDict()
 
 onMounted(() => {
-  console.log(props.rowID)
-
-  if (!props.rowID) {
+  if (!id) {
     return
   }
-  getNewsByIdApi(props.rowID).then((res) => {
+  getNewsByIdApi(id).then((res) => {
     if (res) {
       coverPic.value = JSON.parse(res.coverPic)
       enclosure.value = JSON.parse(res.enclosure)
@@ -243,7 +242,7 @@ const onSave = async () => {
   await formRef?.validate(async (isValid) => {
     if (isValid) {
       if (!coverPic.value || !coverPic.value.length) {
-        return ElMessage.success('封面必传')
+        return ElMessage.error('封面必传')
       }
       onSubmit()
     }
@@ -254,7 +253,6 @@ const onSubmit = async () => {
   const data: NewsDtoType = (await methods.getFormData()) || {}
   data.coverPic = JSON.stringify(coverPic.value)
   data.enclosure = JSON.stringify(enclosure.value)
-  let id = props.rowID
   if (!id) {
     await addNewsApi({
       ...data
@@ -266,8 +264,7 @@ const onSubmit = async () => {
     })
   }
   ElMessage.success('操作成功！')
-  // back()
-  emit('detailshowchange')
+  back()
 }
 
 // 处理函数
@@ -326,10 +323,9 @@ const filePreview = (uploadFile: UploadFile) => {
     window.open(uploadFile.url)
   }
 }
-const emit = defineEmits(['detailshowchange'])
 
 const backToList = () => {
-  emit('detailshowchange')
+  back()
 }
 </script>
 

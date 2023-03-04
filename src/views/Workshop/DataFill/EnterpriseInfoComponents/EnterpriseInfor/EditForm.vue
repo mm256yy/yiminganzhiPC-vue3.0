@@ -672,41 +672,47 @@ const submit = async (data: DemographicDtoType) => {
   }
   getDemographicListApi({
     doorNo: props.doorNo
-  }).then((res) => {
-    form.value = res.content[0]
-    tableData.value.forEach((item: any) => {
-      actionType2.value = 'edit'
-      if (item.type == '出让') {
-        item.value = res.content[0].sellOwnershipArea
-        item.value2 = res.content[0].sellOccupiedArea
-        item.remark = res.content[0].sellRemark
-      }
-      if (item.type == '划拨') {
-        item.value = res.content[0].transferOwnershipArea
-        item.value2 = res.content[0].transferOccupiedArea
-        item.remark = res.content[0].transferRemark
-      }
-      if (item.type == '租用') {
-        item.value = res.content[0].rentOwnershipArea
-        item.value2 = res.content[0].rentOccupiedArea
-        item.remark = res.content[0].rentRemark
-      }
-      if (item.type == '其他') {
-        item.value = res.content[0].otherOwnershipArea
-        item.value2 = res.content[0].otherOccupiedArea
-        item.remark = res.content[0].otherRemark
-      }
-    })
   })
-  ElMessage.success('操作成功！')
+    .then((res) => {
+      form.value = res.content[0]
+      tableData.value.forEach((item: any) => {
+        actionType2.value = 'edit'
+        if (item.type == '出让') {
+          item.value = res.content[0].sellOwnershipArea
+          item.value2 = res.content[0].sellOccupiedArea
+          item.remark = res.content[0].sellRemark
+        }
+        if (item.type == '划拨') {
+          item.value = res.content[0].transferOwnershipArea
+          item.value2 = res.content[0].transferOccupiedArea
+          item.remark = res.content[0].transferRemark
+        }
+        if (item.type == '租用') {
+          item.value = res.content[0].rentOwnershipArea
+          item.value2 = res.content[0].rentOccupiedArea
+          item.remark = res.content[0].rentRemark
+        }
+        if (item.type == '其他') {
+          item.value = res.content[0].otherOwnershipArea
+          item.value2 = res.content[0].otherOccupiedArea
+          item.remark = res.content[0].otherRemark
+        }
+        ElMessage.success('操作成功！')
+        saveLoading.value = false
+      })
+    })
+    .catch(() => {
+      saveLoading.value = false
+    })
+
   onClose(true)
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
-  saveLoading.value = true
   formEl?.validate((valid) => {
     if (valid) {
+      saveLoading.value = true
       const data: any = {
         ...form.value,
         licensePic: JSON.stringify(licensePic.value),

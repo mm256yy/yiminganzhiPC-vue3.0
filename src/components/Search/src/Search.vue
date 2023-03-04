@@ -118,10 +118,11 @@ const setVisible = () => {
         </ElButton>
         <ElButton v-if="expand" text @click="setVisible">
           <!-- {{ t(visible ? 'common.shrink' : 'common.expand') }}&nbsp; -->
-          <span style="color: rgba(62, 115, 236, 1)">更多搜索</span>&nbsp;
+          <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '更多搜索' : '隐藏' }}</span
+          >&nbsp;
           <Icon
             style="color: rgba(62, 115, 236, 1)"
-            :icon="visible ? 'ant-design:caret-up-outlined' : 'ant-design:caret-down-outlined'"
+            :icon="visible ? 'ant-design:caret-down-outlined' : 'ant-design:caret-up-outlined'"
           />
         </ElButton>
       </div>
@@ -140,10 +141,11 @@ const setVisible = () => {
       </ElButton>
       <ElButton v-if="expand" text @click="setVisible">
         <!-- {{ t(visible ? 'common.shrink' : 'common.expand') }}&nbsp; -->
-        <span style="color: rgba(62, 115, 236, 1)">更多搜索</span>&nbsp;
+        <span style="color: rgba(62, 115, 236, 1)">{{ visible ? '更多搜索' : '隐藏' }}</span
+        >&nbsp;
         <Icon
           style="color: rgba(62, 115, 236, 1)"
-          :icon="visible ? 'ant-design:caret-up-outlined' : 'ant-design:caret-down-outlined'"
+          :icon="visible ? 'ant-design:caret-down-outlined' : 'ant-design:caret-up-outlined'"
         />
       </ElButton>
     </div>

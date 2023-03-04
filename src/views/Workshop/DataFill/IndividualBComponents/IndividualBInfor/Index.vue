@@ -120,11 +120,13 @@ onMounted(async () => {
 
 const schema = reactive<CrudSchema[]>([
   {
+    width: 80,
     type: 'index',
     field: 'index',
     label: '序号'
   },
   {
+    width: 100,
     field: 'name',
     label: '姓名',
     search: {
@@ -132,6 +134,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 80,
     field: 'sexText',
     label: '性别',
     search: {
@@ -140,12 +143,13 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'birthday',
-    label: '出生年月',
+    label: '出生日期',
     search: {
       show: false
     }
   },
   {
+    width: 180,
     field: 'card',
     label: '身份证号',
     search: {
@@ -160,6 +164,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 250,
     field: 'censusRegister',
     label: '户籍所在地',
     search: {

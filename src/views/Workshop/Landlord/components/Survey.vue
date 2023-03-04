@@ -23,13 +23,13 @@
             :cell-style="cellStyle"
             style="width: 100%"
           >
-            <ElTableColumn prop="name" label="姓名" />
+            <ElTableColumn prop="name" label="姓名" :width="80" />
             <ElTableColumn prop="relationText" label="与户主关系" />
-            <ElTableColumn prop="sexText" label="性别" />
+            <ElTableColumn prop="sexText" label="性别" :width="80" />
             <ElTableColumn prop="nationText" label="民族" />
             <ElTableColumn prop="maritalText" label="婚姻状况" />
-            <ElTableColumn prop="censusRegister" label="户籍所在地" />
-            <ElTableColumn prop="card" label="身份证号" />
+            <ElTableColumn prop="censusRegister" label="户籍所在地" :width="250" />
+            <ElTableColumn prop="card" label="身份证号" :width="180" />
             <ElTableColumn prop="populationTypeText" label="人口类型" />
           </ElTable>
         </div>

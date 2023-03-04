@@ -63,7 +63,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="数量" prop="number">
-            <ElInputNumber :min="0" v-model="form.number" />
+            <ElInputNumber :min="0" v-model="form.number" :precision="2" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">

@@ -54,7 +54,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" />
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="用途" prop="name" align="center" header-align="center">

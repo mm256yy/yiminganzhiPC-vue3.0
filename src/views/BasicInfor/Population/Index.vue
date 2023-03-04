@@ -233,11 +233,13 @@ onBeforeUnmount(() => {
 
 const schema = reactive<CrudSchema[]>([
   {
+    width: 80,
     field: 'index',
     type: 'index',
     label: '序号'
   },
   {
+    width: 100,
     field: 'name',
     label: '姓名',
     search: {
@@ -245,6 +247,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 100,
+    field: 'relationText',
+    label: '与户主关系',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 80,
     field: 'sexText',
     label: '性别',
     search: {
@@ -252,6 +263,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    width: 80,
     field: 'age',
     label: '年龄',
     search: {
@@ -275,6 +287,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
+    width: 250,
     field: 'censusRegister',
     label: '户籍所在地',
     search: {

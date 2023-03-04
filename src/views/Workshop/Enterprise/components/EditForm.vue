@@ -222,7 +222,7 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
 
-  phone: [required()],
+  // phone: [required()],
   parentCode: [required()]
 })
 

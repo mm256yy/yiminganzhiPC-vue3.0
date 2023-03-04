@@ -110,11 +110,12 @@ const onClose = () => {
 }
 
 const toggleItem = (currentItem) => {
+  console.log(currentItem)
   list.value = list.value.map((item) => {
     if (item.uid === currentItem.uid) {
       item.selected = !item.selected
-      console.log(item.name)
-
+    }
+    if (item.selected) {
       downName.value = item.name
     }
     return item
@@ -138,6 +139,8 @@ const downLoad = (url: string) => {
   } else {
     name = props.baseInfo.name + '打印表'
   }
+  console.log(name)
+
   const a = document.createElement('a')
   axios.get(url, { responseType: 'blob' }).then((res) => {
     if (!res || !res.data) return

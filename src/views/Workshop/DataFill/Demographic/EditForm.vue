@@ -75,7 +75,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="出生年月" prop="birthday">
+          <ElFormItem label="出生日期" prop="birthday">
             <ElDatePicker
               v-model="form.birthday"
               type="month"
@@ -268,7 +268,7 @@
           <ElFormItem label="身份证照片">
             <div class="flex items-center">
               <ElUpload
-                :class="[cardFront.length > 0 ? 'upload' : '']"
+                :class="[cardFront.length > 0 || actionType === 'view' ? 'upload' : '']"
                 action="/api/file/type"
                 :data="{
                   type: 'image'
@@ -286,7 +286,7 @@
                 :on-preview="imgPreview"
                 :on-error="onError"
               >
-                <template #trigger v-if="cardFront.length === 0">
+                <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
                   <div class="relative w-148px h-148px">
                     <img class="block w-148px h-148px" src="@/assets/imgs/card-front.png" alt="" />
                     <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
@@ -298,7 +298,7 @@
               </ElUpload>
               <ElUpload
                 class="ml-8px"
-                :class="[cardEnd.length > 0 ? 'upload' : '']"
+                :class="[cardEnd.length > 0 || actionType === 'view' ? 'upload' : '']"
                 action="/api/file/type"
                 :data="{
                   type: 'image'
@@ -316,7 +316,7 @@
                 :on-remove="removeFile2"
                 :on-preview="imgPreview"
               >
-                <template #trigger>
+                <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
                   <div class="relative w-148px h-148px">
                     <img class="block w-148px h-148px" src="@/assets/imgs/card-back.png" alt="" />
                     <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
@@ -332,12 +332,11 @@
           <ElFormItem label="户口本照片">
             <ElUpload
               :on-error="onError"
-              :class="[householdPic.length > 0 ? 'upload' : '']"
+              :class="[actionType === 'view' ? 'upload' : '']"
               action="/api/file/type"
               :data="{
                 type: 'image'
               }"
-              :disabled="actionType === 'view'"
               :limit="1"
               :list-type="'picture-card'"
               accept=".jpg,.jpeg,.png"
@@ -349,7 +348,7 @@
               :on-remove="removeFile3"
               :on-preview="imgPreview"
             >
-              <template #trigger>
+              <template #trigger v-if="actionType !== 'view'">
                 <div class="relative w-148px h-148px">
                   <img class="block w-148px h-148px" src="@/assets/imgs/household.png" alt="" />
                   <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]">
@@ -369,6 +368,7 @@
             type: 'image'
           }"
           :on-error="onError"
+          :class="[actionType === 'view' ? 'upload' : '']"
           :disabled="actionType === 'view'"
           :list-type="'picture-card'"
           accept=".jpg,.jpeg,.png"
@@ -380,7 +380,7 @@
           :on-remove="removeFile4"
           :on-preview="imgPreview"
         >
-          <template #trigger>
+          <template #trigger v-if="actionType !== 'view'">
             <div class="relative w-148px h-148px">
               <div class="flex items-center justify-center w-148px h-148px">
                 <Icon icon="ant-design:plus-outlined" :size="22" />

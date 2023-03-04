@@ -10,7 +10,9 @@
   >
     <div style="text-align: right">
       <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="false">编辑</ElButton>
-      <ElButton :icon="saveIcon" type="primary" @click="onSubmit(formRef)">保存</ElButton>
+      <ElButton :icon="saveIcon" :loading="saveloading" type="primary" @click="onSubmit(formRef)"
+        >保存</ElButton
+      >
     </div>
 
     <ElForm
@@ -473,7 +475,7 @@ interface PropsType {
   doorNo: string
   householdId
 }
-
+const saveloading = ref(false)
 interface FileItemType {
   name: string
   url: string
@@ -600,6 +602,7 @@ const submit = async (data: DemographicDtoType) => {
     actionType2.value = 'edit'
   })
   ElMessage.success('操作成功！')
+  saveloading.value = false
   onClose(true)
 }
 const onError = () => {
@@ -609,6 +612,7 @@ const onError = () => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
+      saveloading.value = true
       const data: any = {
         ...form.value,
         licensePic: JSON.stringify(licensePic.value),

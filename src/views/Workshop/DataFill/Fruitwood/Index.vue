@@ -92,7 +92,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" />
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
@@ -214,23 +214,32 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  tableData.value = tableData.value.filter((item) => {
-    if (
-      !(
-        item.altitude == 0 &&
-        item.name == '' &&
-        item.remark == '' &&
-        item.size == '' &&
-        item.unit == '' &&
-        item.usageType == ''
-      )
-    ) {
-      return item
-    }
-  })
-  saveFruitwoodListApi(tableData.value).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  if (
+    tableData.value.some((item) => {
+      return !item.name
+    })
+  ) {
+    ElMessage.error('品种名称不能为空')
+  } else {
+    tableData.value = tableData.value.filter((item) => {
+      if (
+        !(
+          item.altitude == 0 &&
+          item.name == '' &&
+          item.remark == '' &&
+          item.size == '' &&
+          item.unit == '' &&
+          item.usageType == ''
+        )
+      ) {
+        return item
+      }
+    })
+
+    saveFruitwoodListApi(tableData.value).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+    })
+  }
 }
 </script>

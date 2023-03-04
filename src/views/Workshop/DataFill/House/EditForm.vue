@@ -295,8 +295,9 @@
           :before-remove="beforeRemove"
           :on-remove="removeFile1"
           :on-preview="imgPreview"
+          :class="[actionType === 'view' ? 'upload' : '']"
         >
-          <template #trigger>
+          <template #trigger v-if="actionType !== 'view'">
             <div class="relative w-148px h-148px">
               <img class="block w-148px h-148px" src="@/assets/imgs/house.png" alt="" />
               <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
@@ -324,8 +325,9 @@
           :before-remove="beforeRemove"
           :on-remove="removeFile2"
           :on-preview="imgPreview"
+          :class="[actionType === 'view' ? 'upload' : '']"
         >
-          <template #trigger>
+          <template #trigger v-if="actionType !== 'view'">
             <div class="relative w-148px h-148px">
               <img class="block w-148px h-148px" src="@/assets/imgs/land.png" alt="" />
               <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
@@ -352,9 +354,10 @@
           :on-success="uploadFileChange3"
           :before-remove="beforeRemove"
           :on-remove="removeFile3"
+          :class="[actionType === 'view' ? 'upload' : '']"
           :on-preview="imgPreview"
         >
-          <template #trigger>
+          <template #trigger v-if="actionType !== 'view'">
             <div class="relative w-148px h-148px">
               <div class="flex items-center justify-center w-148px h-148px">
                 <Icon icon="ant-design:plus-outlined" :size="22" />
@@ -369,7 +372,7 @@
 
       <ElFormItem label="其他附件">
         <ElUpload
-          :disabled="actionType === 'view'"
+          :class="[actionType === 'view' ? 'upload' : '']"
           action="/api/file/type"
           :data="{
             type: 'image'
@@ -385,7 +388,7 @@
           :on-remove="removeFile4"
           :on-preview="imgPreview"
         >
-          <template #trigger>
+          <template #trigger v-if="actionType !== 'view'">
             <div class="relative w-148px h-148px">
               <div class="flex items-center justify-center w-148px h-148px">
                 <Icon icon="ant-design:plus-outlined" :size="22" />

@@ -95,6 +95,7 @@
               :placeholder="type == 'Landlord' ? '' : '请输入数量'"
               v-model="row.number"
               :disabled="type == 'Landlord'"
+              :precision="2"
             />
           </template>
         </ElTableColumn>
@@ -248,13 +249,21 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  tableData.value.forEach((item) => {
-    item.doorNo = props.doorNo
-    item.householdId = props.householdId
-  })
-  saveGraveListApi(tableData.value).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  if (
+    tableData.value.some((item) => {
+      return !item.registrantName
+    })
+  ) {
+    ElMessage.error('登记人不能为空')
+  } else {
+    tableData.value.forEach((item) => {
+      item.doorNo = props.doorNo
+      item.householdId = props.householdId
+    })
+    saveGraveListApi(tableData.value).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+    })
+  }
 }
 </script>

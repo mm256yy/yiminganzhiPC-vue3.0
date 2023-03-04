@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap title="新闻管理" v-show="!DetailShow">
+  <ContentWrap title="新闻管理">
     <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
 
     <div class="flex items-center justify-between pb-18px">
@@ -26,7 +26,7 @@
       @register="register"
     >
       <template #coverPic="{ row }">
-        <div> <img :src="row.coverPic" alt="封面" /> </div>
+        <img :src="row.coverPic" alt="封面" style="height: 80px" />
       </template>
       <template #type="{ row }">
         <div> {{ getTypeText(row.type) }} </div>
@@ -56,7 +56,6 @@
       <div v-html="content"></div>
     </ElDialog>
   </ContentWrap>
-  <Detail v-if="DetailShow" :rowID="rowID" @detailshowchange="detailshowchange" />
 </template>
 
 <script setup lang="ts">
@@ -71,19 +70,18 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getNewsListApi, delNewsByIdApi } from '@/api/project/news/service'
 import type { NewsDtoType } from '@/api/project/news/types'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { listDictDetailApi } from '@/api/sys/index'
-import Detail from './Detail.vue'
+
 const appStore = useAppStore()
-// const { push } = useRouter()
+const { push } = useRouter()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const content = ref('')
 const dialog = ref(false)
 const newsTypes = ref<any[]>([])
 
 const dictName = 'news' // 字典名称
-const DetailShow = ref(false)
-const rowID = ref<number>()
+
 const { register, tableObject, methods } = useTable({
   getListApi: getNewsListApi,
   delListApi: delNewsByIdApi
@@ -218,18 +216,13 @@ const onDelRow = async (row: NewsDtoType | null, multiple: boolean) => {
 }
 
 const onAddRow = () => {
-  DetailShow.value = true
-  // push('/Project/News/Detail')
+  push('/Project/News/Detail')
 }
 
 const onEditRow = (row: NewsDtoType) => {
-  DetailShow.value = true
-  rowID.value = row.id
-  // push(`/Project/News/Detail?id=${row.id}`)
+  push(`/Project/News/Detail?id=${row.id}`)
 }
-const detailshowchange = () => {
-  DetailShow.value = false
-}
+
 const viewNews = (row: NewsDtoType) => {
   content.value = row.content
   dialog.value = true

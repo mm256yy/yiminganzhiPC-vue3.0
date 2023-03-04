@@ -59,9 +59,11 @@ import { WorkContentWrap } from '@/components/ContentWrap';
               v-for="item in immigrantWillProductionList"
               :key="item.productionType"
             >
-              <div class="tit">{{ item.productionType }}</div>
+              <div class="tit" style="width: 150px; text-align: right">{{
+                item.productionType
+              }}</div>
               <ElInput v-model="item.number" type="number" :min="0" placeholder="请输入">
-                <!-- <template #append>人</template> -->
+                <template #append>人</template>
               </ElInput>
             </div>
           </div>

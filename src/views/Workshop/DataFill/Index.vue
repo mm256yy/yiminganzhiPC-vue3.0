@@ -233,7 +233,7 @@
       class="report-dialog"
       title="数据上报"
       :model-value="reportDialog"
-      :width="type == 'villageInfoC' ? 710 : 500"
+      :width="710"
       @close="onClose"
       alignCenter
       appendToBody

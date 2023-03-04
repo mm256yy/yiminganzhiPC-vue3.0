@@ -37,7 +37,9 @@
         </ElSelect>
       </template>
       <template #way>
+        <ElInput v-model="way" v-if="row?.type == '生产安置'" />
         <ElSelect
+          v-else
           style="width: 490px"
           placeholder="请填写或选择安置方式"
           allow-create
@@ -58,7 +60,7 @@
 <script setup lang="ts">
 import { useAppStore } from '@/store/modules/app'
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElMessage, ElSelect, ElOption } from 'element-plus'
+import { ElButton, ElMessage, ElSelect, ElOption, ElInput } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -66,6 +68,7 @@ import { ResettleConfigInfoType } from '@/api/project/resettleConfig/types'
 import { saveResettleConfigApi } from '@/api/project/resettleConfig/service'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
+
 const appStore = useAppStore()
 
 interface Props {

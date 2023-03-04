@@ -15,9 +15,10 @@
             class="!w-[calc(100%-25px)]"
             :suffix-icon="locationIcon"
             v-model="seatData"
+            clearable
             placeholder="请选择位置"
             style="cursor: pointer"
-            @input="inputchange"
+            @blur="inputchange"
           />
           <el-tooltip placement="top" content="请点击地图选择经纬度">
             <Icon class="ml-5px" icon="bi:question-circle" color="#231815" />
