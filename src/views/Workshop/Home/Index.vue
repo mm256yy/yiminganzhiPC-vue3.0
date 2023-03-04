@@ -6,27 +6,13 @@
           <div class="box">
             <div>
               <div class="ft21">居民户总数</div>
-              <div> <span class="ft43">526</span> <span>户</span></div>
+              <div> <span class="ft43">860</span> <span>户</span></div>
             </div>
             <div class="shu"> </div>
             <div>
-              <div>已上报<span class="red">313</span>户</div>
-              <div>未上报<span class="red">313</span>户</div>
-              <div>我的上报<span class="red">313</span>户</div>
-            </div>
-          </div></ElCol
-        >
-        <ElCol :span="6">
-          <div class="box">
-            <div>
-              <div class="ft21">村集体总数</div>
-              <div> <span class="ft43">526</span> <span>户</span></div>
-            </div>
-            <div class="shu"> </div>
-            <div>
-              <div>已上报<span class="red">313</span>户</div>
-              <div>未上报<span class="red">313</span>户</div>
-              <div>我的上报<span class="red">313</span>户</div>
+              <div>已上报<span class="red">300</span>户</div>
+              <div>未上报<span class="red">560</span>户</div>
+              <div>我的上报<span class="red">150</span>户</div>
             </div>
           </div></ElCol
         >
@@ -34,13 +20,13 @@
           <div class="box">
             <div>
               <div class="ft21">企业总数</div>
-              <div> <span class="ft43">526</span> <span>户</span></div>
+              <div> <span class="ft43">48</span> <span>户</span></div>
             </div>
             <div class="shu"> </div>
             <div>
-              <div>已上报<span class="red">313</span>户</div>
-              <div>未上报<span class="red">313</span>户</div>
-              <div>我的上报<span class="red">313</span>户</div>
+              <div>已上报<span class="red">20</span>户</div>
+              <div>未上报<span class="red">28</span>户</div>
+              <div>我的上报<span class="red">15</span>户</div>
             </div>
           </div></ElCol
         >
@@ -48,13 +34,27 @@
           <div class="box">
             <div>
               <div class="ft21">个体户总数</div>
-              <div> <span class="ft43">526</span> <span>户</span></div>
+              <div> <span class="ft43">120</span> <span>户</span></div>
             </div>
             <div class="shu"> </div>
             <div>
-              <div>已上报<span class="red">313</span>户</div>
-              <div>未上报<span class="red">313</span>户</div>
-              <div>我的上报<span class="red">313</span>户</div>
+              <div>已上报<span class="red">80</span>户</div>
+              <div>未上报<span class="red">40</span>户</div>
+              <div>我的上报<span class="red">25</span>户</div>
+            </div>
+          </div></ElCol
+        >
+        <ElCol :span="6">
+          <div class="box">
+            <div>
+              <div class="ft21">村集体总数</div>
+              <div> <span class="ft43">10</span> <span>户</span></div>
+            </div>
+            <div class="shu"> </div>
+            <div>
+              <div>已上报<span class="red">4</span>户</div>
+              <div>未上报<span class="red">6</span>户</div>
+              <div>我的上报<span class="red">2</span>户</div>
             </div>
           </div></ElCol
         >
@@ -194,7 +194,7 @@
         <ElCol :span="16">
           <div class="echartBox h400">
             <div class="echartTitle">
-              <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
+              <img src="@/assets/imgs/Icon_collect.png" alt="" width="24" />
               <span class="text">采集进度</span>
             </div>
             <Echart :options="gatherOption" :height="350" /> </div
@@ -202,13 +202,13 @@
         <ElCol :span="8">
           <div class="echartBox h400">
             <div class="echartTitle">
-              <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
+              <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
               <span class="text">新闻通知</span>
             </div>
             <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="handleClick">
               <ElTabPane label="水库要闻" name="水库要闻">
                 <div class="listbox">
-                  <img src="@/assets/imgs/logo.png" alt="" :width="107" style="height: 67px" />
+                  <img src="@/assets/imgs/3.jpg" alt="" :width="107" style="height: 67px" />
                   <div class="text">
                     <div class="title"
                       >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div
@@ -217,7 +217,7 @@
                   </div>
                 </div>
                 <div class="listbox">
-                  <img src="@/assets/imgs/logo.png" alt="" :width="107" style="height: 67px" />
+                  <img src="@/assets/imgs/1.jpg" alt="" :width="107" style="height: 67px" />
                   <div class="text">
                     <div class="title"
                       >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div
@@ -226,7 +226,7 @@
                   </div>
                 </div>
                 <div class="listbox">
-                  <img src="@/assets/imgs/logo.png" alt="" :width="107" style="height: 67px" />
+                  <img src="@/assets/imgs/2.jpg" alt="" :width="107" style="height: 67px" />
                   <div class="text">
                     <div class="title"
                       >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div

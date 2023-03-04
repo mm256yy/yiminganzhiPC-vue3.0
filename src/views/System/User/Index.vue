@@ -40,7 +40,13 @@
                 {{ formatDateTime(row.lastLoginTime) }}
               </template>
               <template #action="{ row }">
-                <TableEditColumn :row="row" :icons="otherIcons" @edit="onEdit" @delete="onDelete" />
+                <TableEditColumn
+                  :row="row"
+                  :icons="otherIcons"
+                  @edit="onEdit"
+                  @delete="onDelete"
+                  :delete="false"
+                />
               </template>
             </Table>
           </ContentWrap>

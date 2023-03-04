@@ -91,20 +91,32 @@
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
         <template #action="{ row }">
-          <TableEditColumn
+          <!-- <TableEditColumn
             :view-type="'link'"
             :icons="[
               {
                 icon: '',
                 tooltip: '快速查看',
                 type: 'primary',
+
                 action: () => onViewRow(row)
               }
             ]"
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
-          />
+          /> -->
+          <span
+            @click="onViewRow(row)"
+            :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
+            >快速查看</span
+          >
+          <span
+            @click="onEditRow(row)"
+            :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
+            >编辑</span
+          >
+          <span @click="onDelRow(row)" :style="{ color: 'red', cursor: 'pointer' }">删除</span>
         </template>
       </Table>
     </div>
@@ -141,7 +153,8 @@ import {
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
-import { Table, TableEditColumn } from '@/components/Table'
+// TableEditColumn
+import { Table } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from './components/Print.vue'
 import Survey from './components/Survey.vue'
@@ -463,7 +476,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 150,
+    width: 200,
     search: {
       show: false
     },
