@@ -76,11 +76,11 @@ pnpm run build:pro
 
 ## 账号
 
-管理员账号: mg-admin 1234@qwe
+管理员账号: mg-admin Ymaz@2023dl
 
-项目经理账号：mg-project 1234@qwe
+项目经理账号：mg-project Ymaz@2023dl
 
-普通用户账号：mg-user 1234@qwe
+普通用户账号：mg-user Ymaz@2023dl
 
 ## 代码命名规范
 

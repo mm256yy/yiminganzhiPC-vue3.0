@@ -62,7 +62,6 @@ const dialogStyle = computed(() => {
     :fullscreen="isFullscreen"
     destroy-on-close
     lock-scroll
-    draggable
     :close-on-click-modal="false"
   >
     <template #header>

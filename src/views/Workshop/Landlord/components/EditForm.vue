@@ -38,7 +38,7 @@
       <ElFormItem label="户主姓名" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入户主姓名" />
       </ElFormItem>
-      <ElFormItem label="性别" prop="sex">
+      <!-- <ElFormItem label="性别" prop="sex">
         <ElSelect class="!w-350px" clearable v-model="form.sex">
           <ElOption
             v-for="item in dictObj[292]"
@@ -47,9 +47,9 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
+      </ElFormItem> -->
 
-      <ElFormItem label="身份证号" prop="card">
+      <!-- <ElFormItem label="身份证号" prop="card">
         <ElInput
           clearable
           placeholder="请输入身份证号"
@@ -57,7 +57,7 @@
           class="!w-350px"
           v-model="form.card"
         />
-      </ElFormItem>
+      </ElFormItem> -->
 
       <ElFormItem label="联系方式" prop="phone">
         <ElInput
@@ -201,7 +201,8 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   longitude: 0,
   name: '',
   parentCode: [],
-  locationType: 'SubmergedArea'
+  locationType: 'SubmergedArea',
+  hasPropertyAccount: true
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -251,7 +252,9 @@ const rules = reactive<FormRules>({
   name: [required()],
   householdNumber: [required()],
   phone: [required()],
-  parentCode: [required()]
+  parentCode: [required()],
+  hasPropertyAccount: [required()]
+
   // card: [{ validator: validateIdNo, trigger: 'blur' }]
 })
 

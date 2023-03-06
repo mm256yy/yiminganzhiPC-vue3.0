@@ -83,17 +83,7 @@
           </el-form-item>
         </el-col>
       </el-form-item> -->
-      <el-col :span="12">
-        <el-form-item prop="orgId" label="所属组织">
-          <el-tree-select
-            v-model="projectUser.orgId"
-            :data="orgs"
-            :props="defaultProps"
-            default-expand-all
-            :expand-on-click-node="false"
-          />
-        </el-form-item>
-      </el-col>
+
       <el-form-item label="用户角色" required>
         <el-col :span="11">
           <el-form-item prop="roleId">
@@ -103,13 +93,29 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item prop="position" label="岗位">
-            <el-input v-model="projectUser.position" />
+          <el-form-item prop="orgId" label="所属组织">
+            <el-tree-select
+              v-model="projectUser.orgId"
+              :data="orgs"
+              :props="defaultProps"
+              default-expand-all
+              :expand-on-click-node="false"
+            />
           </el-form-item>
         </el-col>
       </el-form-item>
-      <el-form-item prop="dingId" label="钉钉id" class="w-260px">
-        <el-input v-model="projectUser.dingId" />
+
+      <el-form-item label="岗位" required>
+        <el-col :span="11">
+          <el-form-item prop="position">
+            <el-input v-model="projectUser.position" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="dingId" label="钉钉id" class="w-260px">
+            <el-input v-model="projectUser.dingId" />
+          </el-form-item>
+        </el-col>
       </el-form-item>
     </el-form>
     <ProjectUserForm

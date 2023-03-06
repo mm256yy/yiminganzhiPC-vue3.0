@@ -64,7 +64,11 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.number"
+              :precision="scope.row.number > 0 ? 2 : 0"
+            />
           </template>
         </ElTableColumn>
         <!-- <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">

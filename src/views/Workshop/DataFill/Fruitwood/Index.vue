@@ -25,7 +25,13 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable allow-create placeholder="请输入品种名称" v-model="row.name">
+            <ElSelect
+              clearable
+              allow-create
+              placeholder="请输入品种名称"
+              v-model="row.name"
+              filterable
+            >
               <ElOption
                 v-for="item in dictObj[250]"
                 :key="item.value"

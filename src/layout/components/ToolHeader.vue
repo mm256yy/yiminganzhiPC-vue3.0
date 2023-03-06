@@ -27,10 +27,11 @@ const screenfull = computed(() => appStore.getScreenfull)
 const layout = computed(() => appStore.getLayout)
 // 是否显示项目切换列表
 const showProjectList = computed(() => {
+  return true
   if (appStore.getIsSysAdmin) {
-    return false
+    return true
   }
-  return appStore.getUserInfo?.projectUsers && appStore.getUserInfo?.projectUsers.length > 1
+  // return appStore.getUserInfo?.projectUsers && appStore.getUserInfo?.projectUsers.length > 1
 })
 // 当前用户有权限的所有项目
 const projects = computed(() => {

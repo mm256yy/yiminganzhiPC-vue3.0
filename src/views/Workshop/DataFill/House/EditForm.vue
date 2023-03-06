@@ -286,7 +286,7 @@
           :data="{
             type: 'image'
           }"
-          accept=".jpg,.jpeg,.png"
+          accept=".jpg,.jpeg,.png,.DWG,.DWT,.DXF"
           :multiple="false"
           :file-list="housePic"
           :headers="headers"

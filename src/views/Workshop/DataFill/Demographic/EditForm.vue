@@ -244,11 +244,11 @@
             </ElSelect> </ElFormItem
         ></ElCol>
         <ElCol :span="8">
-          <ElFormItem label="人口类别" prop="category">
+          <ElFormItem label="人口类别" prop="populationSort">
             <ElSelect
               clearable
               filterable
-              v-model="form.category"
+              v-model="form.populationSort"
               class="!w-full"
               :placeholder="placeholderList[5]"
             >
@@ -470,7 +470,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   occupation: '',
   company: '',
   insuranceType: '',
-  category: ''
+  populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const placeholderList = ref<string[]>([])
