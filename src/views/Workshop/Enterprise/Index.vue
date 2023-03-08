@@ -149,7 +149,7 @@ import EditForm from './components/EditForm.vue'
 import Print from './components/Print.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getDistrictTreeApi } from '@/api/district'
+// import { getDistrictTreeApi } from '@/api/district'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -212,9 +212,9 @@ const getVillageTree = async () => {
 // const onUpdateDistrict = () => {
 //   getVillageTree()
 // }
-const districtTree = ref([])
+const districtTree = ref<any>([])
 const getDistrictTree = async () => {
-  const list = await getDistrictTreeApi(projectId)
+  const list = await getVillageTreeApi(projectId)
   districtTree.value = list || []
   return list || []
 }

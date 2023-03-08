@@ -92,8 +92,9 @@ export function standardFormatDate(time: Date | number | string) {
  * @param {String} fmt 需要转换的格式 如 yyyy-MM-dd、yyyy-MM-dd HH:mm:ss
  */
 export function formatTime(time: Date | number | string, fmt?: string) {
-  if (!time) return ''
-  else {
+  if (!time) {
+    return null
+  } else {
     const date = new Date(time)
     const o = {
       'M+': date.getMonth() + 1,
@@ -136,14 +137,14 @@ export function toAnyString() {
 export function analyzeIDCard(identityCard) {
   const len = (identityCard + '').length
   if (len == 0) {
-    return ''
+    return null
   } else {
     if (len != 15 && len != 18) {
       //身份证号码只能为15位或18位其它不合法
-      return ''
+      return null
     }
   }
-  let strBirthday = ''
+  let strBirthday
   if (len == 18) {
     //处理18位的身份证号码从号码中得到生日和性别代码
     strBirthday =

@@ -294,7 +294,6 @@ const onSubmit = debounce((formEl) => {
         villageCode: form.value.parentCode[2],
         virutalVillageCode: form.value.parentCode[3] || ''
       }
-      console.log(form.value, data)
 
       delete data.parentCode
       submit(data)

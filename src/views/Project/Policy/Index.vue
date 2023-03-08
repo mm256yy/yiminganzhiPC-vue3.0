@@ -346,6 +346,13 @@ const onSingleJump = (item: PolicyUploadFileType) => {
 
 const onJump = (row: PolicyDtoType) => {
   const { fileList } = row
-  window.open(fileList[0].url)
+
+  if (fileList[0].url.data) {
+    window.open(fileList[0].url.data)
+  } else {
+    window.open(fileList[0].url)
+  }
+
+  // window.open(fileList[0].url)
 }
 </script>

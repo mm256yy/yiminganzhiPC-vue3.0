@@ -18,7 +18,7 @@
             clearable
             placeholder="请选择位置"
             style="cursor: pointer"
-            @blur="inputchange"
+            @change="inputchange"
           />
           <el-tooltip placement="top" content="请点击地图选择经纬度">
             <Icon class="ml-5px" icon="bi:question-circle" color="#231815" />
@@ -85,8 +85,6 @@ watch(
   }
 )
 const onChosePosition = (ps: PositionType) => {
-  console.log(ps, '1')
-
   if (position.longitude) {
     seatData.value = position.longitude + ',' + position.latitude
   } else {

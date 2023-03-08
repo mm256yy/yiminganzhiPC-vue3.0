@@ -54,7 +54,13 @@
             <ElTableColumn prop="storeyNumber" label="层数(层)" />
             <ElTableColumn prop="landArea" label="建筑面积" />
             <ElTableColumn prop="constructionTypeText" label="结构类型" />
-            <ElTableColumn prop="completedTime" :formatter="formatCompletedTime" label="竣工年月" />
+            <ElTableColumn prop="completedTime" label="竣工年月">
+              <template #default="scope">
+                {{
+                  scope.row.completedTime ? formatCompletedTime(scope.row.completedTime) : null
+                }}</template
+              >
+            </ElTableColumn>
             <ElTableColumn prop="propertyNo" label="房屋所有权证" />
             <ElTableColumn prop="landNo" label="土地使用权证" />
           </ElTable>

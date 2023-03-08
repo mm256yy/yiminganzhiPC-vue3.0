@@ -3,42 +3,44 @@
     class="w-full h-400px relative"
     :style="{ width: props.w ? `${props.w}px` : '100%', height: `${props.h}px` }"
   >
-    <div class="absolute top-6px left-60px z-500">
-      <ElInput v-model="keyword" class="!w-[70%] mr-6px" :prefix-icon="searchIcon" />
-      <ElButton @click="search">搜索</ElButton>
-      <div v-if="searchList && searchList.length" class="bg-white p-10px mt-6px">
-        <div
-          v-for="item in searchList"
-          :key="item.hotPointID"
-          class="search-item"
-          @click="selectSearchItem(item)"
-        >
-          <Icon icon="material-symbols:location-on-outline" />
-          {{ item.name }}
-        </div>
-      </div>
+    <div class="absolute top-6px left-100px z-500">
+      <!-- <ElInput v-model="keyword" class="!w-[70%] mr-6px" :prefix-icon="searchIcon" id="keyword" /> -->
     </div>
     <div id="map"></div>
+    <div
+      @click="llqgetLocation"
+      class="absolute left-150px z-500"
+      style="
+        bottom: 10px;
+        left: 342px;
+        padding: 3px;
+        cursor: pointer;
+        background-color: white;
+        border-radius: 100%;
+      "
+    >
+      <img src="@/assets/imgs/locate.png" alt="" style="height: 32px" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch, nextTick } from 'vue'
-import { ElInput, ElButton } from 'element-plus'
-import { debounce, throttle } from 'lodash-es'
-import { useIcon } from '@/hooks/web/useIcon'
-
+// import { ElInput } from 'element-plus'
+// import { debounce, throttle } from 'lodash-es'
+// import { useIcon } from '@/hooks/web/useIcon'
+import AMapLoader from '@amap/amap-jsapi-loader'
 interface PointType {
   longitude: number
   latitude: number
   address?: string
 }
 
-type SearchItemType = {
-  name: string
-  lonlat: string
-  hotPointID: string
-} & PointType
+// type SearchItemType = {
+//   name: string
+//   lonlat: string
+//   hotPointID: string
+// } & PointType
 
 interface Props {
   point: PointType
@@ -48,43 +50,216 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['chose'])
 
-const searchIcon = useIcon({ icon: 'ic:outline-search' })
-const keyword = ref('')
-const searchList = ref<Array<SearchItemType>>([])
+// const searchIcon = useIcon({ icon: 'ic:outline-search' })
+const keyword = ref()
+// const searchList = ref<Array<SearchItemType>>([])
 
 let map: any = null
-let localsearch: any = null
+let AMap: any = null
+let geocoder: any = null
+// let localsearch: any = null
 // 默认杭州市区
 const longitude = 120.17418
 const latitude = 30.26961
+const clearOverlay = () => {
+  if (map) map.clearMap()
+}
 
-const init = () => {
+const init = async () => {
   const lng = props.point.longitude || longitude
   const lat = props.point.latitude || latitude
-  map = new T.Map('map')
-  map.centerAndZoom(new T.LngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
-  map.enableScrollWheelZoom()
-  clearOverlay()
-  // 添加控件
-  addControl()
-  // 监听事件
-  addMapClick()
-  // 解决地图渲染不全的问题
-  setTimeout(() => {
-    resize()
-  }, 300)
-  initSearch()
+
+  AMap = await AMapLoader.load({
+    key: 'c4d29cb422ae2bda245486bf7953b85d', // 申请好的Web端开发者Key，首次调用 load 时必填
+    version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+
+    plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+  })
+
+  map = new AMap.Map('map', {
+    //设置地图容器id
+    zoom: 5, //初始化地图层级
+    viewMode: '3D', //是否为3D地图模式
+    //初始化地图中心点位置
+    center: [lng, lat],
+    dragEnable: true, //禁止鼠标拖拽
+    scrollWheel: true, //鼠标滚轮放大缩小
+    doubleClickZoom: true, //双击放大缩小
+    keyboardEnable: true //键盘控制放大缩小移动旋转
+  })
+  map.setDefaultCursor('pointer')
+
+  // map.add(
+  //   new AMap.Marker({
+  //     position: map.getCenter()
+  //   })
+  // )
+  const autoOptions = {
+    input: 'keyword' // 使用联想输入的input的id
+  }
+  // const location = new AMap.Geolocation({
+  //   enableHighAccuracy: true,
+  //   // 设置定位超时时间，默认：无穷大
+  //   timeout: 10000,
+  //   // 定位按钮的停靠位置的偏移量
+  //   offset: [10, 20],
+  //   //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+  //   zoomToAccuracy: true,
+  //   //  定位按钮的排放位置,  RB表示右下
+  //   position: 'RB'
+  // })
+
+  // AMap.Event.addListener(location, 'keyup', function (e) {})
+
+  // location.getCurrentPosition(function (status, result) {
+  //   console.log(status, result, 'status, result')
+  //   if (status == 'complete') {
+  //     console.log(result, '高德地图调用了')
+
+  //     addOverlay(result.position.lng, result.position.lat)
+  //     // result.position.KT
+  //     // result.position.KL
+  //     // onComplete(result)
+  //   } else {
+  //     console.log(status, result, '高德地图调用失败')
+  //     // onError(result)
+  //     llqgetLocation()
+  //   }
+  // })
+
+  const autoComplete = new AMap.AutoComplete(autoOptions)
+  // 根据关键字进行搜索
+  const placeSearch = new AMap.PlaceSearch({
+    map: map
+  })
+  geocoder = new AMap.Geocoder({
+    radius: 1000,
+    extensions: 'all'
+  })
+  console.log(AMap, 'AMap.EventAMap.Event')
+  AMap.Event.addListener(autoComplete, 'select', function (e) {
+    console.log(e, 13256)
+    placeSearch.setCity(e.poi.adcode)
+    placeSearch.search(e.poi.name, function (status, result) {
+      console.log(status)
+
+      const pois = result.poiList.pois
+      for (let i = 0; i < pois.length; i++) {
+        if (pois[i].name === e.poi.name) {
+          geocoder.getAddress(
+            [pois[i].location.lng, pois[i].location.lat],
+            function (status, result) {
+              console.log(result)
+              if (status === 'complete' && result.info === 'OK') {
+                console.log(result.regeocode.formattedAddress)
+              } else {
+              }
+            }
+          )
+          // GETAddress(pois[i].location.lng, pois[i].location.lat)
+        }
+      }
+    })
+  })
+
+  addOverlay(lng, lat)
+  autoComplete.search(keyword, function (status, result) {
+    // 搜索成功时，result即是对应的匹配数据
+    keyword.value = result.tips
+    console.log(status, result, '搜索状态')
+  })
+  // setInterval(() => {
+  //   llqgetLocation()
+  // }, 1000)
+  //   // map.add(marker); // 地图添加标记
+
+  //   //为地图注册click事件获取鼠标点击出的经纬度坐标
+  map.on('click', function (e) {
+    console.log(e)
+
+    addOverlay(e.lnglat.getLng(), e.lnglat.getLat())
+  })
+  // 浏览器自带定位
 }
+const GETAddress = (longitude, latitude) => {
+  const point: PointType = {
+    longitude: longitude,
+    latitude: latitude
+  }
+  if (geocoder) {
+    geocoder.getAddress([longitude, latitude], function (status, result) {
+      if (status === 'complete' && result.info === 'OK') {
+        console.log(point, 'point')
+        point.address = result.regeocode.formattedAddress
+        emit('chose', point)
+      } else {
+      }
+    })
+  }
+}
+// 实例化AutoComplete
+const addOverlay = (longitude, latitude) => {
+  GETAddress(longitude, latitude)
+  clearOverlay()
+  map.add(
+    new AMap.Marker({
+      position: [longitude, latitude]
+    })
+  )
+}
+// const init = () => {
+//   const lng = props.point.longitude || longitude
+//   const lat = props.point.latitude || latitude
+//   map = new T.Map('map')
+//   map.centerAndZoom(new T.LngLat(lng, lat), 12) // 初始化地图,设置中心点坐标和地图级别
+//   map.enableScrollWheelZoom()
+//   clearOverlay()
+//   // 添加控件
+//   addControl()
+//   // 监听事件
+//   addMapClick()
+//   // 解决地图渲染不全的问题
+//   setTimeout(() => {
+//     resize()
+//   }, 300)
+//   initSearch()
+// }
 
 const resize = () => {
-  map.setZoom(12)
-  map.checkResize()
+  // map.setZoom(12)
+  init()
 }
+const llqgetLocation = () => {
+  if (navigator.geolocation) navigator.geolocation.getCurrentPosition(showPosition, showError)
+  else console.log('该浏览器无法获取IP')
 
+  function showPosition(position: any) {
+    // let point = {
+    //   longitude: position.coords.longitude,
+    //   latitude: position.coords.latitude
+    // }
+
+    // emit('chose', point)
+    GETAddress(position.coords.longitude, position.coords.latitude)
+    init()
+    // addOverlay(position.coords.longitude, position.coords.latitude)
+    console.log(
+      position.coords.latitude,
+      position.coords.longitude,
+
+      '该浏览器定位成功'
+    )
+  }
+
+  function showError(error: any) {
+    console.log('H5错误编码  ' + error.code)
+  }
+}
 watch(
   () => props.point,
   (val) => {
-    // 添加标记
+    console.log(val)
+
     nextTick(() => {
       clearOverlay()
       if (val.longitude && val.latitude) {
@@ -102,124 +277,6 @@ onMounted(() => {
   init()
 })
 
-const addControl = () => {
-  // 缩放
-  const zoomCtrl = new T.Control.Zoom() // 添加缩放控件
-  const scaleCtrl = new T.Control.Scale()
-
-  map.addControl(zoomCtrl)
-  map.addControl(scaleCtrl)
-}
-
-const addOverlay = (longitude, latitude) => {
-  const marker = new T.Marker(new T.LngLat(longitude, latitude))
-  map.addOverLay(marker)
-}
-
-const clearOverlay = () => {
-  map.clearOverLays()
-}
-
-const getAddress = (point: PointType, callback: (d: string) => void) => {
-  // 创建地理编码实例
-  const myGeo = new T.Geocoder()
-  // 根据坐标得到地址描述
-  myGeo.getLocation(new T.LngLat(point.longitude, point.latitude), function (result) {
-    if (result && result.getStatus() == 0) {
-      callback && callback(result.getAddress())
-    }
-  })
-}
-
-const addListener = () => {
-  map.addEventListener('click', mapClick)
-}
-
-const mapClick = throttle((e) => {
-  //将像素坐标转换成经纬度坐标
-  const lng = e.lnglat.getLng()
-  const lat = e.lnglat.getLat()
-  clearOverlay()
-  // 添加标记
-  addOverlay(lng, lat)
-  const point: PointType = {
-    longitude: lng,
-    latitude: lat
-  }
-  // 拿到地址
-  getAddress(point, (address: string) => {
-    point.address = address
-    emit('chose', point)
-  })
-}, 200)
-
-const addMapClick = () => {
-  //移除地图的点击事件
-  removeMapClick()
-  //注册地图的点击事件
-  addListener()
-}
-
-const removeMapClick = () => {
-  //移除地图的点击事件
-  map.removeEventListener('click', mapClick)
-}
-
-const localSearchResult = (res) => {
-  if (res) {
-    const { pois } = res
-    searchList.value = pois.map((item: SearchItemType) => {
-      const [longitude, latitude] = item.lonlat.split(' ')
-      return {
-        name: item.name,
-        longitude,
-        latitude,
-        address: item.address,
-        hotPointID: item.hotPointID
-      }
-    })
-  } else {
-    searchList.value = []
-  }
-}
-
-const initSearch = () => {
-  const config = {
-    pageCapacity: 10, //每页显示的数量
-    onSearchComplete: localSearchResult //接收数据的回调函数
-  }
-  localsearch = new T.LocalSearch(map, config)
-}
-
-const search = debounce(() => {
-  //创建搜索对象
-  if (!keyword.value) return
-  localsearch.search(keyword.value, 1)
-}, 200)
-
-const selectSearchItem = (item: SearchItemType) => {
-  // 清除搜索结果
-  searchList.value = []
-  keyword.value = ''
-  // 添加标记
-  clearOverlay()
-  // 添加标记
-  addOverlay(item.longitude, item.latitude)
-  // 定位到位置
-  map.centerAndZoom(new T.LngLat(item.longitude, item.latitude), 15)
-  resize()
-
-  // 拿到地址
-  const point: PointType = {
-    longitude: item.longitude,
-    latitude: item.latitude
-  }
-  getAddress(point, (address: string) => {
-    point.address = address
-    emit('chose', point)
-  })
-}
-
 defineExpose({
   init,
   resize
@@ -228,10 +285,10 @@ defineExpose({
 <style scoped lang="less">
 .search-item {
   display: flex;
-  align-items: center;
-  overflow: hidden;
   height: 30px;
+  overflow: hidden;
   cursor: pointer;
+  align-items: center;
 
   &:hover {
     color: var(--el-color-primary);
@@ -246,6 +303,7 @@ defineExpose({
   width: 100%;
   height: 100%;
 }
+
 .tdt-control-copyright {
   display: none !important;
 }

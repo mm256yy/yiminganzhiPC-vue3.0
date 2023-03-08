@@ -41,6 +41,7 @@
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
+            :delete="row.relation == 1 ? false : true"
           />
         </template>
       </Table>
@@ -204,9 +205,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     },
     form: {
-      show: false
-    },
-    detail: {
       show: false
     }
   }

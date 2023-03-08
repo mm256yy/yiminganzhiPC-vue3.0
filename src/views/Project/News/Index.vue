@@ -146,8 +146,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'author',
-    label: '作者',
+    field: 'createdName',
+    label: '发布者',
     search: {
       show: false,
       component: 'Input'

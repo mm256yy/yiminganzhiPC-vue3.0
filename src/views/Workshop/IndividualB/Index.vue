@@ -156,8 +156,8 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
-// import { getVillageTreeApi } from '@/api/workshop/village/service'
-import { getDistrictTreeApi } from '@/api/district'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
+// import { getDistrictTreeApi } from '@/api/district'
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
@@ -201,7 +201,7 @@ tableObject.params = {
 setSearchParams({ type: 'IndividualHousehold' })
 
 const getVillageTree = async () => {
-  const list = await getDistrictTreeApi(projectId)
+  const list = await getVillageTreeApi(projectId)
   villageTree.value = list || []
 
   return list || []
