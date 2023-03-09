@@ -16,7 +16,7 @@ const title = computed(() => appStore.getTitle)
 const layout = computed(() => appStore.getLayout)
 
 const collapse = computed(() => appStore.getCollapse)
-const reservoirName = localStorage.getItem('reservoirName')
+const reservoirName = computed(() => appStore.getReservoirName)
 onMounted(() => {
   if (unref(collapse)) show.value = false
 })

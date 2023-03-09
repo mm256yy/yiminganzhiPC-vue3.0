@@ -26,6 +26,7 @@ const selectedProjectId = ref(0)
 const projects = computed(() => {
   return appStore.getUserInfo?.projectUsers
 })
+
 export default defineComponent({
   name: 'UserLayout',
   setup() {
@@ -34,10 +35,18 @@ export default defineComponent({
       appStore.setLayout('top')
 
       selectedProjectId.value = appStore.getCurrentProjectId
+
+      const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
+      console.log(project)
+
+      appStore.setreservoirName(project.reservoirName)
     })
     const onProjectChange = async (id: number) => {
       await setDefaultProjectApi(id)
-      const project = projects.value?.find((x) => x.projectId === id)
+
+      const project: any = projects.value?.find((x) => x.projectId === id)
+      appStore.setreservoirName(project.reservoirName)
+
       selectedProjectId.value = id
       appStore.setUserDefaultProject(id)
       appStore.setCurrentProjectId(id)

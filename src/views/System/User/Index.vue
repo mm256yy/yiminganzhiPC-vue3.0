@@ -104,7 +104,7 @@ const columns = reactive<TableColumn[]>([
   { field: 'index', label: '序号', type: 'index', width: '60px' },
   { field: 'userName', label: '用户名' },
   { field: 'nickName', label: '姓名' },
-  { field: 'systemRole', label: '用户角色' },
+  { field: 'systemRole', label: '用户角色', width: '140px' },
   { field: 'phone', label: '手机号' },
   { field: 'sex', label: '性别', width: '60px' },
   { field: 'enabled', label: '状态', width: '70px' },

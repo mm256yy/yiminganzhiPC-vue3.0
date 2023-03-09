@@ -2,59 +2,38 @@
   <WorkContentWrap>
     <div class="bigBox white">
       <ElRow :gutter="20">
-        <ElCol :span="6">
+        <ElCol :span="6" v-for="item in StatisticsData" :key="item.type">
           <div class="box">
             <div>
-              <div class="ft21">居民户总数</div>
-              <div> <span class="ft43">860</span> <span>户</span></div>
+              <div class="ft21"
+                >{{
+                  item.type == 'PeasantHousehold'
+                    ? '居民户'
+                    : item.type == 'Company'
+                    ? '企业'
+                    : item.type == 'IndividualHousehold'
+                    ? '个体工商'
+                    : '村集体'
+                }}总数</div
+              >
+              <div>
+                <span class="ft43">{{ item.totalNum }}</span> <span>户</span></div
+              >
             </div>
             <div class="shu"> </div>
             <div>
-              <div>已上报<span class="red">300</span>户</div>
-              <div>未上报<span class="red">560</span>户</div>
-              <div>我的上报<span class="red">150</span>户</div>
-            </div>
-          </div></ElCol
-        >
-        <ElCol :span="6">
-          <div class="box">
-            <div>
-              <div class="ft21">企业总数</div>
-              <div> <span class="ft43">48</span> <span>户</span></div>
-            </div>
-            <div class="shu"> </div>
-            <div>
-              <div>已上报<span class="red">20</span>户</div>
-              <div>未上报<span class="red">28</span>户</div>
-              <div>我的上报<span class="red">15</span>户</div>
-            </div>
-          </div></ElCol
-        >
-        <ElCol :span="6">
-          <div class="box">
-            <div>
-              <div class="ft21">个体户总数</div>
-              <div> <span class="ft43">120</span> <span>户</span></div>
-            </div>
-            <div class="shu"> </div>
-            <div>
-              <div>已上报<span class="red">80</span>户</div>
-              <div>未上报<span class="red">40</span>户</div>
-              <div>我的上报<span class="red">25</span>户</div>
-            </div>
-          </div></ElCol
-        >
-        <ElCol :span="6">
-          <div class="box">
-            <div>
-              <div class="ft21">村集体总数</div>
-              <div> <span class="ft43">10</span> <span>户</span></div>
-            </div>
-            <div class="shu"> </div>
-            <div>
-              <div>已上报<span class="red">4</span>户</div>
-              <div>未上报<span class="red">6</span>户</div>
-              <div>我的上报<span class="red">2</span>户</div>
+              <div
+                >已上报<span class="red">{{ item.reportNum }}</span
+                >户</div
+              >
+              <div
+                >未上报<span class="red">{{ item.unReportNum }}</span
+                >户</div
+              >
+              <div
+                >我的上报<span class="red">{{ item.submitNum }}</span
+                >户</div
+              >
             </div>
           </div></ElCol
         >
@@ -205,38 +184,25 @@
               <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
               <span class="text">新闻通知</span>
             </div>
-            <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="handleClick">
-              <ElTabPane label="水库要闻" name="水库要闻">
-                <div class="listbox">
-                  <img src="@/assets/imgs/3.jpg" alt="" :width="107" style="height: 67px" />
-                  <div class="text">
-                    <div class="title"
-                      >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div
-                    >
-                    <div class="time">2023/2/28</div>
+            <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
+              <ElTabPane
+                :name="item.value"
+                v-for="item in dictObj[14]"
+                :key="item.value"
+                :label="item.label"
+              >
+                <div class="element">
+                  <div class="listbox" v-for="item in newList" :key="item.id">
+                    <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
+                    <div class="text">
+                      <div class="title">{{ item.title }}</div>
+                      <div class="time">{{ item.releaseTime }}</div>
+                    </div>
                   </div>
+                  <div class="more">查看更多></div>
                 </div>
-                <div class="listbox">
-                  <img src="@/assets/imgs/1.jpg" alt="" :width="107" style="height: 67px" />
-                  <div class="text">
-                    <div class="title"
-                      >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div
-                    >
-                    <div class="time">2023/2/28</div>
-                  </div>
-                </div>
-                <div class="listbox">
-                  <img src="@/assets/imgs/2.jpg" alt="" :width="107" style="height: 67px" />
-                  <div class="text">
-                    <div class="title"
-                      >高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位高坪桥水库首次泄洪　腾出200万方库容稳水位库容稳水位</div
-                    >
-                    <div class="time">2023/2/28</div>
-                  </div>
-                </div>
-                <div class="more">查看更多></div>
               </ElTabPane>
-              <ElTabPane label="政策法规" name="政策法规">
+              <!-- <ElTabPane label="政策法规" name="政策法规">
                 <div class="policylist">
                   <div class="title"> 图解《龙游县高坪桥水库工程移民后期扶持若干意见的通知》 </div>
                   <div class="time">
@@ -244,26 +210,13 @@
                     <span>更多</span>
                   </div>
                 </div>
-                <div class="policylist">
-                  <div class="title"> 关于印发龙游县高坪桥水库工程移民后期扶持若干意见的通知 </div>
-                  <div class="time">
-                    <span> 2023/2/28</span>
-                    <span>更多</span>
-                  </div>
-                </div>
-                <div class="policylist">
-                  <div class="title"> 龙游县高坪桥水库工程建设征地搬迁安置工作实施办法 </div>
-                  <div class="time">
-                    <span> 2023/2/28</span>
-                    <span>更多</span>
-                  </div>
-                </div>
-              </ElTabPane>
-              <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
+            
+              </ElTabPane> -->
+              <!-- <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
 
               <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
               <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-              <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
+              <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane> -->
             </ElTabs>
           </div></ElCol
         >
@@ -275,15 +228,52 @@
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ElRow, ElCol, ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { getTOP10, homeStatistics, homeProgress, homeDistribution, getnewsList } from '@/api/home'
 import Rank_1 from '@/assets/imgs/Rank_1.png'
 import Rank_2 from '@/assets/imgs/Rank_2.png'
 import Rank_3 from '@/assets/imgs/Rank_3.png'
 import Rank_4 from '@/assets/imgs/Rank_4.png'
 import Rank_5 from '@/assets/imgs/Rank_5.png'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+const newList = ref<any>([])
+const newhandleClick = () => {
+  getnewsList({ size: 9999, type: activeName2.value }).then((res) => {
+    console.log(res)
 
+    newList.value = res.content
+    newList.value.forEach((item) => {
+      item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
+    })
+  })
+}
+
+const StatisticsData = ref<any>([])
+const top10List = ref<any>([])
+getTOP10().then((res) => {
+  top10List.value = res
+  let ydata: any = []
+  let seriesdata: any = []
+  let seriesdata1: any = []
+  res.forEach((item, index) => {
+    if (index <= 4) {
+      ydata.push(item.name)
+      seriesdata.push(item.number)
+      seriesdata1.push(item.todayNmber)
+    }
+  })
+  workOption.value.yAxis[0].data = ydata
+  workOption.value.series[0].data = seriesdata
+  workOption.value.series[1].data = seriesdata1
+})
+
+homeStatistics().then((res) => {
+  StatisticsData.value = res
+})
 const activeName = ref('报告归集')
-const activeName2 = ref('水库要闻')
+const activeName2 = ref(1)
 const residentOption = ref({
   // title: {
   //   text: 'Referer of a Website',
@@ -477,6 +467,28 @@ const workOption = ref({
   ]
 })
 
+homeDistribution().then((res) => {
+  let data: any = []
+  res.forEach((item) => {
+    data.push({ name: item.name, value: item.number })
+  })
+  residentOption.value.series[0].data = data
+})
+
+homeProgress().then((res) => {
+  let xData: any = []
+  let series0: any = []
+  let series1: any = []
+  res.forEach((item) => {
+    xData.push(item.villageName)
+    series0.push(item.totalNum)
+    series1.push(item.reportNum)
+  })
+  gatherOption.value.xAxis.data = xData
+  gatherOption.value.series[0].data = series0
+  gatherOption.value.series[1].data = series1
+})
+// const progressData = ref({})
 const gatherOption = ref({
   tooltip: {
     trigger: 'item'
@@ -550,223 +562,5 @@ const handleClick = (val) => {
 }
 </script>
 <style lang="less" scoped>
-.shu {
-  width: 2px;
-  height: 55px;
-  background: #ccdfff;
-}
-
-.box {
-  display: flex;
-  height: 150px;
-  padding: 10px;
-
-  font-family: PingFang SC-Medium, PingFang SC;
-  background-image: url(@/assets/imgs/bg_databoard.png);
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  justify-content: space-around;
-  align-items: center;
-  // background: white;
-}
-
-.echartBox {
-  height: 450px;
-  padding: 13px;
-  background: white;
-  border-radius: 11px 11px 11px 11px;
-  opacity: 1;
-
-  .echartTitle {
-    display: flex;
-    height: 59px;
-    background: linear-gradient(135deg, #1a63ff 0%, rgba(255, 255, 255, 0) 100%);
-    // border: 3px solid;
-    border-image: linear-gradient(90deg, rgba(244, 247, 255, 1), rgba(244, 247, 255, 0)) 3 3;
-    border-radius: 11px 11px 11px 11px;
-    opacity: 1;
-    align-items: center;
-
-    img {
-      margin: 0 8px;
-    }
-
-    .text {
-      font-family: YouSheBiaoTiHei-Regular, YouSheBiaoTiHei;
-      font-size: 27px;
-      font-style: italic;
-      font-weight: 600;
-      line-height: 29px;
-      color: #ffffff;
-    }
-  }
-}
-
-.h400 {
-  height: 420px;
-}
-
-.red {
-  height: 10px;
-  color: red;
-}
-
-.bigBox {
-  padding: 15px;
-  border-radius: 11px 11px 11px 11px;
-}
-
-.white {
-  background: white;
-}
-
-.ft19 {
-  font-size: 19px;
-}
-
-.ft43 {
-  font-size: 40px;
-  font-weight: bold;
-}
-
-.ft21 {
-  font-size: 19px;
-  font-weight: 500;
-}
-
-.tabsBox {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; /* 只要您把这个属性去掉,就不会自动换行了*/
-  .tabsContentBox {
-    position: relative;
-    display: flex;
-    width: 49.5%;
-    height: 53px;
-    padding-left: 8px;
-    margin-bottom: 10px;
-    background: #f5f5f5;
-    border-radius: 5px;
-    align-items: center;
-
-    span {
-      margin-left: 4px;
-    }
-
-    .img_r {
-      position: absolute;
-      right: 10px;
-    }
-  }
-}
-
-:deep(.el-progress-bar__inner) {
-  background-color: red;
-}
-
-.new {
-  :deep(.el-tabs--card > .el-tabs__header) {
-    border: none !important;
-  }
-
-  :deep(.el-tabs__nav-wrap::after) {
-    height: 0;
-  }
-}
-
-:deep(.el-tabs--card > .el-tabs__header) {
-  border: none !important;
-}
-
-.baogao {
-  :deep(.el-tabs__item) {
-    width: 32%;
-    height: 43px;
-    color: #666666;
-    text-align: center;
-    background: #f2f7ff;
-    border: none !important;
-    border-radius: 5px 5px 5px 5px;
-    opacity: 1;
-  }
-
-  :deep(.el-tabs__nav) {
-    display: flex;
-    width: 100%;
-    border: none !important;
-    justify-content: space-between;
-  }
-
-  :deep(.is-active) {
-    color: #ffffff !important;
-    background: #2f72fe;
-    border-radius: 5px 5px 5px 5px;
-    opacity: 1;
-  }
-}
-
-.el-row:last-child {
-  margin-bottom: 0;
-}
-
-.el-col {
-  border-radius: 4px;
-}
-
-.grid-content {
-  min-height: 36px;
-  border-radius: 4px;
-}
-
-.listbox {
-  display: flex;
-  padding: 10px 0;
-  border-bottom: 1px solid #ebebeb;
-
-  .text {
-    margin-left: 10px;
-    line-height: 30px;
-
-    .title {
-      width: 400px;
-      overflow: hidden;
-      font-family: PingFang SC-Medium, PingFang SC;
-      font-weight: 600;
-      color: #333333;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .time {
-      color: rgba(153, 153, 153, 1);
-    }
-  }
-}
-
-.policylist {
-  padding-left: 10px;
-  border-bottom: 1px solid #ebebeb;
-
-  .title {
-    width: 450px;
-    margin-top: 10px;
-    overflow: hidden;
-    font-weight: 600;
-    color: #333333;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .time {
-    display: flex;
-    margin: 10px 0;
-    color: rgba(153, 153, 153, 1);
-    justify-content: space-between;
-  }
-}
-
-.more {
-  color: #999999;
-  text-align: right;
-}
+@import './Index.less';
 </style>

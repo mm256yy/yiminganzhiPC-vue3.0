@@ -178,9 +178,9 @@ const signIn = async () => {
           const user = res.user
           appStore.setUserJwtInfo(user)
           appStore.setToken(res.token)
-          appStore.setreservoirName(res.reservoirName)
+          // appStore.setreservoirName(res.reservoirName)
 
-          localStorage.setItem('reservoirName', res.reservoirName)
+          // localStorage.setItem('reservoirName', res.reservoirName)
 
           const userInfo = await currentUserApi()
           appStore.setUserInfo(userInfo)

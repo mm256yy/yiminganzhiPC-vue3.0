@@ -71,6 +71,7 @@
       v-if="appStore.getIsProjectAdmin"
       ref="projectForm"
       :model="projectUser"
+      style="padding-left: 15px"
       label-width="90px"
     >
       <!-- <el-form-item label="项目权限" required>
@@ -85,7 +86,7 @@
       </el-form-item> -->
 
       <el-form-item label="用户角色" required>
-        <el-col :span="11">
+        <el-col :span="12">
           <el-form-item prop="roleId">
             <el-select v-model="projectUser.roleIds" multiple class="w-260px">
               <el-option v-for="r in roles" :label="r.name" :value="r.id" :key="r.id" />
@@ -93,7 +94,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item prop="orgId" label="所属组织">
+          <el-form-item prop="orgId" label="所属组织" class="w-260px">
             <el-tree-select
               v-model="projectUser.orgId"
               :data="orgs"
@@ -105,15 +106,15 @@
         </el-col>
       </el-form-item>
 
-      <el-form-item label="岗位" required>
-        <el-col :span="11">
-          <el-form-item prop="position">
+      <el-form-item label="岗位" required prop="position">
+        <el-col :span="12">
+          <el-form-item prop="position" class="w-260px">
             <el-input v-model="projectUser.position" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-form-item prop="dingId" label="钉钉id" class="w-260px">
-            <el-input v-model="projectUser.dingId" />
+            <el-input v-model="projectUser.dingId" style="width: 260px" />
           </el-form-item>
         </el-col>
       </el-form-item>
