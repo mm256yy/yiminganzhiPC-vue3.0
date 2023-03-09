@@ -59,15 +59,22 @@ let AMap: any = null
 let geocoder: any = null
 // let localsearch: any = null
 // 默认杭州市区
-const longitude = 120.17418
-const latitude = 30.26961
+let longitude = 120.17418
+let latitude = 30.26961
 const clearOverlay = () => {
   if (map) map.clearMap()
 }
 
-const init = async () => {
-  const lng = props.point.longitude || longitude
-  const lat = props.point.latitude || latitude
+const init = async (type) => {
+  let lng
+  let lat
+  if (type == 'props' && props.point.longitude && props.point.latitude) {
+    lng = props.point.longitude
+    lat = props.point.latitude
+  } else {
+    lng = longitude
+    lat = latitude
+  }
 
   AMap = await AMapLoader.load({
     key: 'c4d29cb422ae2bda245486bf7953b85d', // 申请好的Web端开发者Key，首次调用 load 时必填
@@ -227,7 +234,7 @@ const addOverlay = (longitude, latitude) => {
 
 const resize = () => {
   // map.setZoom(12)
-  init()
+  init('props')
 }
 const llqgetLocation = () => {
   if (navigator.geolocation) navigator.geolocation.getCurrentPosition(showPosition, showError)
@@ -240,8 +247,10 @@ const llqgetLocation = () => {
     // }
 
     // emit('chose', point)
+    longitude = position.coords.longitude
+    latitude = position.coords.latitude
     GETAddress(position.coords.longitude, position.coords.latitude)
-    init()
+    init('location')
     // addOverlay(position.coords.longitude, position.coords.latitude)
     console.log(
       position.coords.latitude,
@@ -274,7 +283,7 @@ watch(
 )
 
 onMounted(() => {
-  init()
+  init('props')
 })
 
 defineExpose({
