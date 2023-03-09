@@ -51,7 +51,6 @@ const setupAll = async () => {
   setupPermission(app)
 
   app.mount('#app')
-
 }
 
 setupAll()

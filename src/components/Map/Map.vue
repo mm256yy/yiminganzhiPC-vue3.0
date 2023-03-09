@@ -12,7 +12,7 @@
       class="absolute left-150px z-500"
       style="
         bottom: 10px;
-        left: 342px;
+        left: 302px;
         padding: 3px;
         cursor: pointer;
         background-color: white;
@@ -64,6 +64,7 @@ let latitude = 30.26961
 const clearOverlay = () => {
   if (map) map.clearMap()
 }
+console.log(window, 'ddddddddddddddddddd')
 
 const init = async (type) => {
   let lng
@@ -80,7 +81,7 @@ const init = async (type) => {
     key: 'c4d29cb422ae2bda245486bf7953b85d', // 申请好的Web端开发者Key，首次调用 load 时必填
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
 
-    plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+    plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder', 'AMap.Geolocation'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
   })
 
   map = new AMap.Map('map', {
@@ -95,7 +96,7 @@ const init = async (type) => {
     keyboardEnable: true //键盘控制放大缩小移动旋转
   })
   map.setDefaultCursor('pointer')
-
+  map.addControl(new AMap.Geolocation())
   // map.add(
   //   new AMap.Marker({
   //     position: map.getCenter()
@@ -104,35 +105,35 @@ const init = async (type) => {
   const autoOptions = {
     input: 'keyword' // 使用联想输入的input的id
   }
-  // const location = new AMap.Geolocation({
-  //   enableHighAccuracy: true,
-  //   // 设置定位超时时间，默认：无穷大
-  //   timeout: 10000,
-  //   // 定位按钮的停靠位置的偏移量
-  //   offset: [10, 20],
-  //   //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-  //   zoomToAccuracy: true,
-  //   //  定位按钮的排放位置,  RB表示右下
-  //   position: 'RB'
-  // })
+  const location = new AMap.Geolocation({
+    enableHighAccuracy: true,
+    // 设置定位超时时间，默认：无穷大
+    timeout: 10000,
+    // 定位按钮的停靠位置的偏移量
+    offset: [10, 20],
+    //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+    zoomToAccuracy: true,
+    //  定位按钮的排放位置,  RB表示右下
+    position: 'RB'
+  })
 
   // AMap.Event.addListener(location, 'keyup', function (e) {})
 
-  // location.getCurrentPosition(function (status, result) {
-  //   console.log(status, result, 'status, result')
-  //   if (status == 'complete') {
-  //     console.log(result, '高德地图调用了')
+  location.getCurrentPosition(function (status, result) {
+    console.log(status, result, 'status, result')
+    if (status == 'complete') {
+      console.log(result, '高德地图调用了')
 
-  //     addOverlay(result.position.lng, result.position.lat)
-  //     // result.position.KT
-  //     // result.position.KL
-  //     // onComplete(result)
-  //   } else {
-  //     console.log(status, result, '高德地图调用失败')
-  //     // onError(result)
-  //     llqgetLocation()
-  //   }
-  // })
+      addOverlay(result.position.lng, result.position.lat)
+      // result.position.KT
+      // result.position.KL
+      // onComplete(result)
+    } else {
+      console.log(status, result, '高德地图调用失败')
+      // onError(result)
+      llqgetLocation()
+    }
+  })
 
   const autoComplete = new AMap.AutoComplete(autoOptions)
   // 根据关键字进行搜索
