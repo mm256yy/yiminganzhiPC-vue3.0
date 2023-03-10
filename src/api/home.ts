@@ -20,6 +20,10 @@ export const getnewsList = (query) => {
   return request.get({ url: '/news', params: query })
 }
 
+export const getPolicyListApi = (query) => {
+  return request.get({ url: '/policyLaw', params: query })
+}
+
 // export const getLandlordListApi = (
 //   query: Partial<LandlordDtoType>
 // ): Promise<TableResponse<LandlordDtoType>> => {

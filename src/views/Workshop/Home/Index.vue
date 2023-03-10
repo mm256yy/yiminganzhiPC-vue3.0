@@ -185,12 +185,7 @@
               <span class="text">新闻通知</span>
             </div>
             <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
-              <ElTabPane
-                :name="item.value"
-                v-for="item in dictObj[14]"
-                :key="item.value"
-                :label="item.label"
-              >
+              <ElTabPane name="水库要闻" label="水库要闻">
                 <div class="element">
                   <div class="listbox" v-for="item in newList" :key="item.id">
                     <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
@@ -202,21 +197,24 @@
                   <div class="more">查看更多></div>
                 </div>
               </ElTabPane>
-              <!-- <ElTabPane label="政策法规" name="政策法规">
-                <div class="policylist">
-                  <div class="title"> 图解《龙游县高坪桥水库工程移民后期扶持若干意见的通知》 </div>
-                  <div class="time">
-                    <span> 2023/2/28</span>
-                    <span>更多</span>
+              <ElTabPane label="政策法规" name="政策法规">
+                <div class="element">
+                  <div class="policylist" v-for="item in policyList" :key="item.id">
+                    <div class="title">
+                      {{ item.title }}
+                    </div>
+                    <div class="time">
+                      <span> {{ item.publicityTime }}</span>
+                      <span>更多</span>
+                    </div>
                   </div>
                 </div>
-            
-              </ElTabPane> -->
-              <!-- <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
+              </ElTabPane>
+              <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
 
               <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
               <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-              <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane> -->
+              <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
             </ElTabs>
           </div></ElCol
         >
@@ -228,27 +226,41 @@
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ElRow, ElCol, ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
-import { ref, computed } from 'vue'
-import { getTOP10, homeStatistics, homeProgress, homeDistribution, getnewsList } from '@/api/home'
+// computed
+import { ref } from 'vue'
+import {
+  getTOP10,
+  homeStatistics,
+  homeProgress,
+  homeDistribution,
+  getnewsList,
+  getPolicyListApi
+} from '@/api/home'
 import Rank_1 from '@/assets/imgs/Rank_1.png'
 import Rank_2 from '@/assets/imgs/Rank_2.png'
 import Rank_3 from '@/assets/imgs/Rank_3.png'
 import Rank_4 from '@/assets/imgs/Rank_4.png'
 import Rank_5 from '@/assets/imgs/Rank_5.png'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
+// import { useDictStoreWithOut } from '@/store/modules/dict'
+// const dictStore = useDictStoreWithOut()
+// const dictObj = computed(() => dictStore.getDictObj)
 const newList = ref<any>([])
-const newhandleClick = () => {
-  getnewsList({ size: 9999, type: activeName2.value }).then((res) => {
-    console.log(res)
+const policyList = ref<any>([])
+getnewsList({ size: 9999 }).then((res) => {
+  console.log(res)
 
-    newList.value = res.content
-    newList.value.forEach((item) => {
-      item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-    })
+  newList.value = res.content
+  newList.value.forEach((item) => {
+    item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
   })
-}
+})
+getPolicyListApi({ size: 9999 }).then((res) => {
+  policyList.value = res.content
+  // policyList.value.forEach((item) => {
+  //   item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
+  // })
+})
+const newhandleClick = () => {}
 
 const StatisticsData = ref<any>([])
 const top10List = ref<any>([])
@@ -273,7 +285,7 @@ homeStatistics().then((res) => {
   StatisticsData.value = res
 })
 const activeName = ref('报告归集')
-const activeName2 = ref(1)
+const activeName2 = ref('水库要闻')
 const residentOption = ref({
   // title: {
   //   text: 'Referer of a Website',

@@ -71,19 +71,22 @@ export default defineComponent({
         <div class="flex items-center justify-between px-16px h-64px ">
           <WorkLogo></WorkLogo>
           <WorkMenu class="flex-1 pl-24px"></WorkMenu>
-          <ElSelect
-            modelValue={selectedProjectId.value}
-            placeholder="选择切换项目"
-            onChange={onProjectChange}
-          >
-            {{
-              default: () => {
-                return projects.value?.map((x) => (
-                  <ElOption label={x.projectName} value={x.projectId || 0} />
-                ))
-              }
-            }}
-          </ElSelect>
+          <div class="div">
+            <ElSelect
+              modelValue={selectedProjectId.value}
+              placeholder="选择切换项目"
+              onChange={onProjectChange}
+            >
+              {{
+                default: () => {
+                  return projects.value?.map((x) => (
+                    <ElOption label={x.projectName} value={x.projectId || 0} />
+                  ))
+                }
+              }}
+            </ElSelect>
+          </div>
+
           <WorkUserInfo></WorkUserInfo>
         </div>
         <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-64px)] relative z-1']}>
@@ -102,6 +105,18 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.div {
+  :deep(.el-input__wrapper) {
+    width: 120px;
+    margin-right: 50px;
+    background-color: transparent;
+  }
+
+  :deep(.el-input__inner) {
+    color: white;
+  }
+}
+
 @prefix-cls: ~'@{namespace}-layout';
 .@{prefix-cls} {
   max-width: 1920px;
