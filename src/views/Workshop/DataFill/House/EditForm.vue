@@ -308,7 +308,7 @@
           </template>
         </ElUpload>
         <div style="display: flex; height: 158px">
-          <span style=" padding: 0 12px;color: #606266">房屋平面示意图CAD格式:</span>
+          <span style="padding: '0 12px'; color: '#606266'">房屋平面示意图CAD格式:</span>
           <ElUpload
             :file-list="CADfile"
             :data="{
