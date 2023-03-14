@@ -37,6 +37,7 @@
       <template #hasShow="{ row }">
         <div> {{ row.hasShow ? '是' : '否' }} </div>
       </template>
+      <!-- v-hasPermi="['user:news:delete']" -->
       <template #content="{ row }">
         <div class="cursor-pointer text-[#409eff]" @click="viewNews(row)"> 查看 </div>
       </template>
