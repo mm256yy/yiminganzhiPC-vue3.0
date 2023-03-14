@@ -17,8 +17,10 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn label="" prop="type" align="center" header-align="center">
           <template #default="{ row }">
-            <div v-if="row.subtotal" class="total-item">小计：{{ getSubtotal(row.type) }}</div>
-            <div v-else-if="row.total" class="total-item">总计：{{ total }}</div>
+            <div v-if="row.subtotal" class="total-item"
+              >小计：{{ getSubtotal(row.type).toFixed(2) }}</div
+            >
+            <div v-else-if="row.total" class="total-item">总计：{{ isNaN(total) ? 0 : total }}</div>
             <div v-else>
               {{
                 row.type == 1

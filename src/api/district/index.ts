@@ -58,3 +58,13 @@ export const getDistrictTreeApi = (projectId: number) => {
     }
   })
 }
+
+export const screeningTree = (projectId: number, type: any) => {
+  return request.get({
+    url: `village/screeningTree`,
+    params: {
+      projectId,
+      type
+    }
+  })
+}

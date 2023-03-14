@@ -125,7 +125,7 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :districtTree="villageTree"
+      :districtTree="districtTree"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -167,7 +167,7 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
@@ -186,6 +186,8 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
+const districtTree = ref<any[]>([])
+
 const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
@@ -211,13 +213,20 @@ tableObject.params = {
 setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
-  const list = await getVillageTreeApi(projectId)
+  const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []
+  return list || []
+}
+
+const getdistrictTree = async () => {
+  const list = await getVillageTreeApi(projectId)
+  districtTree.value = list || []
   return list || []
 }
 
 const onUpdateDistrict = () => {
   getVillageTree()
+  getdistrictTree()
 }
 
 const getLandlordHeadInfo = async () => {
@@ -227,6 +236,7 @@ const getLandlordHeadInfo = async () => {
 
 onMounted(() => {
   getVillageTree()
+  getdistrictTree()
   getLandlordHeadInfo()
 })
 
@@ -455,7 +465,8 @@ const schema = reactive<CrudSchema[]>([
     label: '上报时间',
     search: {
       show: false
-    }
+    },
+    showOverflowTooltip: false
   },
   {
     field: 'filling',

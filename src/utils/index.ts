@@ -93,7 +93,7 @@ export function standardFormatDate(time: Date | number | string) {
  */
 export function formatTime(time: Date | number | string, fmt?: string) {
   if (!time) {
-    return null
+    return undefined
   } else {
     const date = new Date(time)
     const o = {

@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, nextTick } from 'vue'
+import { onMounted, ref, watch, nextTick, inject } from 'vue'
 // import { ElInput } from 'element-plus'
 // import { debounce, throttle } from 'lodash-es'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -35,7 +35,7 @@ interface PointType {
   latitude: number
   address?: string
 }
-
+const data = inject('mapType')
 // type SearchItemType = {
 //   name: string
 //   lonlat: string
@@ -209,13 +209,17 @@ const GETAddress = (longitude, latitude) => {
 }
 // 实例化AutoComplete
 const addOverlay = (longitude, latitude) => {
-  GETAddress(longitude, latitude)
-  clearOverlay()
-  map.add(
-    new AMap.Marker({
-      position: [longitude, latitude]
-    })
-  )
+  console.log(data, '1')
+
+  if (data != 'look') {
+    GETAddress(longitude, latitude)
+    clearOverlay()
+    map.add(
+      new AMap.Marker({
+        position: [longitude, latitude]
+      })
+    )
+  }
 }
 // const init = () => {
 //   const lng = props.point.longitude || longitude

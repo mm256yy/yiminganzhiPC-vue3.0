@@ -156,7 +156,8 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+// import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { screeningTree } from '@/api/workshop/village/service'
 // import { getDistrictTreeApi } from '@/api/district'
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
@@ -201,7 +202,7 @@ tableObject.params = {
 setSearchParams({ type: 'IndividualHousehold' })
 
 const getVillageTree = async () => {
-  const list = await getVillageTreeApi(projectId)
+  const list = await screeningTree(projectId, 'IndividualHousehold')
   villageTree.value = list || []
 
   return list || []
@@ -359,7 +360,8 @@ const schema = reactive<CrudSchema[]>([
     label: '上报时间',
     search: {
       show: false
-    }
+    },
+    showOverflowTooltip: false
   },
   {
     field: 'filling',

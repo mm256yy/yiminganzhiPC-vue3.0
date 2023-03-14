@@ -307,7 +307,7 @@
         </ElCol>
       </ElRow>
       <div class="titleBox">
-        <span class="text">个体工商资产信息：</span>
+        <span class="text">其他信息：</span>
       </div>
 
       <ElRow justify="center">

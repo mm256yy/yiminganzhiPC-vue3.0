@@ -55,7 +55,7 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :districtTree="districtTree"
+      :districtTree="districtTree2"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -73,7 +73,7 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
-// import { getDistrictTreeApi } from '@/api/district'
+import { getDistrictTreeApi } from '@/api/district'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import type { VillageDtoType } from '@/api/workshop/village/types'
 import { formatDate } from '@/utils'
@@ -83,7 +83,7 @@ const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const districtTree = ref()
-
+const districtTree2 = ref()
 const { register, tableObject, methods } = useTable({
   getListApi: getVillageListApi,
   delListApi: delVillageByIdApi
@@ -102,8 +102,15 @@ const getDistrictTree = async () => {
   return list || []
 }
 
+const getDistrictTree2 = async () => {
+  const list = await getDistrictTreeApi(projectId)
+  districtTree2.value = list || []
+  return list || []
+}
+
 onMounted(() => {
   getDistrictTree()
+  getDistrictTree2()
 })
 
 const schema = reactive<CrudSchema[]>([

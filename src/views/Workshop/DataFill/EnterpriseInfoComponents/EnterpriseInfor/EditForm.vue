@@ -223,7 +223,7 @@
               type="number"
               :min="0"
               v-model="form.fixedAssetsNetValue"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.'))}"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
               <template #append>万元</template></ElInput
             >

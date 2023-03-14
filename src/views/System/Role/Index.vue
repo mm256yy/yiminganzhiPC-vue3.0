@@ -302,9 +302,14 @@ const onRowClick = (row: RoleType) => {
 }
 
 const getCheckedKeys = () => {
+  console.log(menuTreeRef.value, 'menuTreeRef.value')
+
   return menuTreeRef.value?.getCheckedKeys()
 }
 
+const getCurrentNode = () => {
+  return menuTreeRef.value?.getHalfCheckedKeys()
+}
 const setCheckedKeys = (keys) => {
   menuTreeRef.value?.setCheckedKeys(keys, false)
 }
@@ -323,7 +328,10 @@ const onSaveMenu = () => {
   if (!tableObject.currentRow?.id) {
     return
   }
+  console.log()
+  const menuIds2 = getCurrentNode() //半选中的
   const menuIds = getCheckedKeys()
+  menuIds.push(...menuIds2)
   let roleMenuArray: RoleMenuType[] = []
   if (menuIds && menuIds.length) {
     roleMenuArray = menuIds.map((id) => {

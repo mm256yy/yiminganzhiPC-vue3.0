@@ -170,7 +170,7 @@ import { useAppStore } from '@/store/modules/app'
 import { locationTypes, yesAndNoEnums } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-import type { DistrictNodeType } from '@/api/district/types'
+// import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/BasicInfor/Village/components/EditForm.vue'
@@ -178,7 +178,7 @@ interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
-  districtTree: DistrictNodeType[]
+  districtTree: any[]
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
@@ -226,6 +226,7 @@ getDistrictTree()
 watch(
   () => props.row,
   (val) => {
+    btnLoading.value = false
     if (val) {
       // 处理行政区划
       form.value = {
@@ -251,7 +252,7 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
   householdNumber: [required()],
-  phone: [required()],
+  // phone: [required()],
   parentCode: [required()],
   hasPropertyAccount: [required()]
 

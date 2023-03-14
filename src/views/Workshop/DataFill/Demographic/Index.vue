@@ -129,7 +129,9 @@ const schema = reactive<CrudSchema[]>([
     label: '出生日期',
     search: {
       show: false
-    }
+    },
+    width: 120,
+    showOverflowTooltip: false
   },
   {
     width: 180,

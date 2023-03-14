@@ -24,7 +24,7 @@
         <ElCascader
           class="!w-350px"
           v-model="form.parentCode"
-          :options="props.districtTree"
+          :options="districtTree"
           :props="treeSelectDefaultProps"
           expandTrigger="hover"
         />

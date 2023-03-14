@@ -102,6 +102,7 @@
       <!-- 安置 -->
       <Resettlement
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
       />

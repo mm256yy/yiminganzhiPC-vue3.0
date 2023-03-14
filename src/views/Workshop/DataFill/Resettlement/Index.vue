@@ -23,7 +23,13 @@ import { WorkContentWrap } from '@/components/ContentWrap';
           <div class="common-cont family">
             <div class="family-item">
               <div class="tit">家庭总人数</div>
-              <ElInput v-model="form.familyNum" type="number" :min="1" placeholder="请输入人数">
+              <ElInput
+                v-model="form.familyNum"
+                type="number"
+                :min="1"
+                disabled
+                placeholder="请输入人数"
+              >
                 <template #append>人</template>
               </ElInput>
             </div>
@@ -136,6 +142,7 @@ import { ResettlementDtoType } from '@/api/workshop/datafill/resettlement-types'
 interface PropsType {
   householdId: string
   doorNo: string
+  baseInfo
 }
 
 const Homestead = ref<any>([])
@@ -228,6 +235,7 @@ const getResettlement = async () => {
 onMounted(async () => {
   await getResettlementConfig()
   await getResettlement()
+  form.value.familyNum = props.baseInfo.familyNum
 })
 // 搬迁安置方式
 
