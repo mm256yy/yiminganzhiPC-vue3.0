@@ -1,43 +1,64 @@
 <template>
-  <Form
-    :schema="schema"
-    :rules="rules"
-    :is-col="true"
-    label-position="top"
-    hide-required-asterisk
-    size="large"
-    class="dark:(border-1 border-[var(--el-border-color)] border-solid)"
-    @register="register"
-  >
-    <template #title>
-      <h2 class="text-3xl font-bold text-center w-[100%]">移民安置综合管理平台</h2>
-    </template>
+  <div class="formBox">
+    <Form
+      :schema="schema"
+      :rules="rules"
+      labelWidth="80"
+      hide-required-asterisk
+      size="large"
+      class="dark:(border-1 border-[var(--el-border-color)] border-solid)"
+      @register="register"
+    >
+      <template #title>
+        <div style="text-align: center">
+          <div style="display: flex">
+            <img src="@/assets/imgs/LOGO22.png" alt="" srcset="" width="34" />
+            <h2 class="text-3xl font-bold text-center w-[100%]">移民安置综合管理平台</h2>
+          </div>
 
-    <template #authImage>
-      <div class="mt-25px w-[100%]">
-        <img
-          v-if="authImage"
-          class="w-130px h-48px cursor-pointer"
-          :src="authImage"
-          @click="loadCaptcha"
-        />
-      </div>
-    </template>
+          <div
+            style="
+              width: 100px;
+              margin: 0 auto;
+              margin-top: 15px;
+              font-family: PingFangSC-Regular, PingFang SC;
+              font-weight: 400;
+              color: #295ee6;
+              text-align: center;
+              border-bottom: 3px solid #295ee6;
+            "
+          >
+            账户密码登录
+          </div>
+        </div>
+      </template>
 
-    <template #tool>
-      <div class="flex justify-between items-center w-[100%]">
-        <ElCheckbox v-model="remember" label="记住我" size="small" />
-      </div>
-    </template>
+      <template #authImage>
+        <div style="position: absolute; top: -65px; right: -113px">
+          <img
+            v-if="authImage"
+            class="w-130px h-48px cursor-pointer"
+            :src="authImage"
+            @click="loadCaptcha"
+          />
+        </div>
+      </template>
 
-    <template #login>
-      <div class="w-[100%]">
-        <ElButton :loading="loading" type="primary" class="w-[100%]" @click="signIn">
-          登录
-        </ElButton>
-      </div>
-    </template>
-  </Form>
+      <template #tool>
+        <div class="flex justify-between items-center w-[100%]">
+          <ElCheckbox v-model="remember" label="记住我" size="small" />
+        </div>
+      </template>
+
+      <template #login>
+        <div class="w-[100%]">
+          <ElButton :loading="loading" type="primary" class="w-[100%]" @click="signIn">
+            登录
+          </ElButton>
+        </div>
+      </template>
+    </Form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -47,11 +68,12 @@ import { ElButton, ElCheckbox } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
 import { loginApi, loginCaptchaApi } from '@/api/login'
 import { useAppStore } from '@/store/modules/app'
-import { useRouter } from 'vue-router'
+
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
 import { UserLoginType } from '@/api/login/types'
 import { useValidator } from '@/hooks/web/useValidator'
 import { FormSchema } from '@/types/form'
+import { useRouter } from 'vue-router'
 import { usePlatform } from '@/hooks/web/usePlatform'
 import { currentUserApi } from '@/api/sys'
 import { ProjectRoleEnum } from '@/api/sys/types'
@@ -116,7 +138,7 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'authImage',
     colProps: {
-      span: 10
+      span: 18
     }
   },
   {
@@ -223,5 +245,9 @@ const doRoute = async () => {
   &:hover {
     color: var(--el-color-primary) !important;
   }
+}
+
+.formBox :deep(.el-form-item) {
+  margin-bottom: 25px !important;
 }
 </style>

@@ -1,9 +1,7 @@
 <template>
-  <div
-    :class="prefixCls"
-    class="h-[100%] relative <xl:bg-v-dark <sm:px-10px <xl:px-10px <md:px-10px"
-  >
-    <div class="relative h-full flex mx-auto">
+  <div :class="prefixCls" class="h-[100%] relative <xl:bg-v-dark box">
+    <div class="leftbox"> </div>
+    <div class="relative h-full flex mx-auto rightbox">
       <div class="flex-1 p-30px <sm:p-10px dark:bg-v-dark relative">
         <div class="flex justify-between items-center text-white @2xl:justify-end @xl:justify-end">
           <div class="flex items-center @2xl:hidden @xl:hidden">
@@ -39,5 +37,20 @@ const appStore = useAppStore()
 </script>
 
 <style lang="less" scoped>
+.box {
+  display: flex;
+}
+
+.leftbox {
+  width: 50%;
+  background-image: url(@/assets/imgs/loginBg.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.rightbox {
+  width: 50%;
+  background: linear-gradient(1deg, #ffffff 0%, #e7edfd 100%);
+}
 @prefix-cls: ~'@{namespace}-login';
 </style>

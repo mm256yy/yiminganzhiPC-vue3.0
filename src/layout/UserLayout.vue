@@ -13,6 +13,8 @@ import { useRouter } from 'vue-router'
 import { setDefaultProjectApi } from '@/api/project'
 import { ProjectRoleEnum } from '@/api/sys/types'
 import { usePlatform } from '@/hooks/web/usePlatform'
+import { currentUserApi } from '@/api/sys'
+
 const { getPrefixCls } = useDesign()
 
 const prefixCls = getPrefixCls('layout')
@@ -31,11 +33,12 @@ export default defineComponent({
   name: 'UserLayout',
   setup() {
     const { addRoute } = useRouter()
-    onMounted(() => {
+    onMounted(async () => {
       appStore.setLayout('top')
-
+      const userInfo = await currentUserApi()
+      appStore.setUserInfo(userInfo)
       selectedProjectId.value = appStore.getCurrentProjectId
-
+      setPlatform('workshop', addRoute)
       const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
       console.log(project)
 

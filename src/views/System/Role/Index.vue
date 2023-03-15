@@ -60,9 +60,10 @@
         <div v-if="tableObject.currentRow" class="flex items-center pb-18px text-size-14px"
           >当前选中角色: {{ tableObject.currentRow.name }}</div
         >
-        <!-- check-strictly -->
+        <!--    -->
         <ElTree
           v-loading="treeLoading"
+          :check-strictly="isCheck"
           ref="menuTreeRef"
           :data="menuTree"
           show-checkbox
@@ -105,7 +106,7 @@ import {
 import type { RoleType, RoleMenuType } from '@/api/sys/role/types'
 
 type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
-
+const isCheck = ref(false)
 const appStore = useAppStore()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
@@ -129,6 +130,7 @@ getList()
 
 const loadMenuTree = () => {
   treeLoading.value = true
+
   getAllMenuApi()
     .then((res: LabelValueType[]) => {
       menuTree.value = res
@@ -287,11 +289,15 @@ const onSubmit = async (data: RoleType) => {
 const onRowClick = (row: RoleType) => {
   tableObject.currentRow = row
   treeLoading.value = true
+  isCheck.value = true
+
   getRoleRelationMenu(row.id)
     .then((res) => {
       if (res && res.length) {
         const menuIds = res.map((item) => item.menuId)
         setCheckedKeys(menuIds)
+
+        isCheck.value = false
       } else {
         setCheckedKeys([])
       }
