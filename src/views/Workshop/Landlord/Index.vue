@@ -248,7 +248,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'TreeSelect',
       componentProps: {
-        data: villageTree,
+        data: districtTree,
         nodeKey: 'code',
         props: {
           value: 'code',

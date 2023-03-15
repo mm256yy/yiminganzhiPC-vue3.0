@@ -17,7 +17,7 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="名称" :width="175" prop="name" align="center" header-align="center">
+        <ElTableColumn label="名称" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入内容" v-model="row.name" />
             <!-- <div v-else>
@@ -25,13 +25,7 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="规格型号"
-          :width="180"
-          prop="usageType"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="规格型号" prop="usageType" align="center" header-align="center">
           <template #default="{ row }">
             <!-- v-if="row.isAdd" -->
             <ElInput placeholder="请输入规格型号" v-model="row.size" />
@@ -40,7 +34,7 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单位" :width="180" prop="size" align="center" header-align="center">
+        <ElTableColumn label="单位" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择单位" v-model="row.unit">
               <ElOption
@@ -52,7 +46,7 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+        <ElTableColumn label="数量" :width="175" prop="number" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
@@ -67,7 +61,13 @@
             <ElDatePicker v-model="row.year" type="year" placeholder="选择年份" class="!w-full" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="原值(万元)" prop="number" align="center" header-align="center">
+        <ElTableColumn
+          label="原值(万元)"
+          :width="175"
+          prop="number"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.amount" :precision="2" />
           </template>

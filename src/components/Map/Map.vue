@@ -211,7 +211,7 @@ const GETAddress = (longitude, latitude) => {
 const addOverlay = (longitude, latitude) => {
   console.log(data, '1')
 
-  if (data != 'look') {
+  if (data != 'view') {
     GETAddress(longitude, latitude)
     clearOverlay()
     map.add(

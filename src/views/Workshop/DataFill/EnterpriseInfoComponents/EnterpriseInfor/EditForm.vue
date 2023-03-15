@@ -308,7 +308,7 @@
         </ElCol>
       </ElRow>
       <div class="titleBox">
-        <span class="text">企业资产信息：</span>
+        <span class="text">企业基本信息：</span>
       </div>
 
       <ElRow justify="center">
@@ -372,7 +372,7 @@
             <ElTableColumn label="" :width="60" align="center" header-align="center" prop="type" />
             <ElTableColumn label="权属面积(亩)" prop="value" align="center" header-align="center">
               <template #default="{ row }">
-                <div v-if="row.type == '合计'">{{ total }}</div>
+                <div v-if="row.type == '合计'">{{ total.toFixed(2) }}</div>
                 <ElInput v-else placeholder="请输入" type="number" min="0" v-model="row.value" />
               </template>
             </ElTableColumn>

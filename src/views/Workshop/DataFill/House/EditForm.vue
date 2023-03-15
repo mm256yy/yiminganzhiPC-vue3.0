@@ -273,7 +273,9 @@
               />
             </ElSelect> </ElFormItem
         ></ElCol>
-        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+        <ElCol :span="8">
+          <MapFormItem :required="false" :positon="position" @change="onChosePosition"
+        /></ElCol>
       </ElRow>
 
       <ElDivider border-style="dashed" />
@@ -289,7 +291,7 @@
           }"
           accept=".jpg,.jpeg,.png"
           :multiple="false"
-          :file-list="housePic"
+          :file-list="houseJpg"
           :headers="headers"
           :on-error="onError"
           :on-success="uploadFileChange1"
@@ -307,8 +309,11 @@
             </div>
           </template>
         </ElUpload>
-        <div style="display: flex; height: 158px">
-          <span style=" padding: 0 12px;color: #606266">房屋平面示意图CAD格式:</span>
+        <div
+          style="display: flex; height: 158px"
+          :class="[houseJpg.length == 0 ? 'CADuplogd' : '']"
+        >
+          <span style="padding: 0 12px; color: #606266">房屋平面示意图CAD格式:</span>
           <ElUpload
             :file-list="CADfile"
             :data="{
@@ -476,7 +481,7 @@ interface PropsType {
   householdId: string
   doorNo: string
 }
-provide('mapType', 'look')
+
 interface FileItemType {
   name: string
   url: string
@@ -484,6 +489,7 @@ interface FileItemType {
 const CADfile: any = ref([])
 
 const props = defineProps<PropsType>()
+provide('mapType', props.actionType)
 const emit = defineEmits(['close', 'submit'])
 // const { required } = useValidator()
 const formRef = ref<FormInstance>()
@@ -514,6 +520,7 @@ const defaultValue: Omit<HouseDtoType, 'id'> = {
   longitude: '',
   latitude: '',
   housePic: '',
+  houseJpg: '',
   remark: ''
 }
 
@@ -529,7 +536,7 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-
+const houseJpg = ref<FileItemType[]>([])
 const housePic = ref<FileItemType[]>([])
 const landPic = ref<FileItemType[]>([])
 const homePic = ref<FileItemType[]>([])
@@ -547,6 +554,7 @@ watch(
   (val) => {
     if (!val) {
       housePic.value = []
+      houseJpg.value = []
       CADfile.value = []
       landPic.value = []
       homePic.value = []
@@ -574,18 +582,24 @@ watch(
           console.log(housePic.value, ' housePic.value')
 
           housePic.value.forEach((element: any) => {
-            if (element.url.indexOf('.dwg') != -1) {
-              console.log('watch')
+            if (
+              element.url.indexOf('.dwg') != -1 ||
+              element.url.indexOf('.dxf') != -1 ||
+              element.url.indexOf('.dws') != -1
+            ) {
+              console.log(element, '1')
 
               CADfile.value.push({
                 name: element.name,
                 url: (element.response as any)?.data || element.url
               })
+            } else {
+              console.log(element, '2')
+              houseJpg.value.push({
+                name: element.name,
+                url: (element.response as any)?.data || element.url
+              })
             }
-          })
-
-          housePic.value = housePic.value.filter((item) => {
-            return item.url.indexOf('.dwg') == -1
           })
         }
         if (form.value.landPic) {
@@ -639,7 +653,10 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
-      housePic.value.push(...CADfile.value)
+      let arr: any = []
+      arr.push(...CADfile.value, ...houseJpg.value)
+      housePic.value = arr
+
       const data: any = {
         ...form.value,
         ...position,
@@ -658,6 +675,8 @@ const onSubmit = debounce((formEl) => {
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
+  console.log(fileList, 'fileListfileList')
+
   let list: FileItemType[] = []
   if (fileList && fileList.length) {
     list = fileList
@@ -672,24 +691,42 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
 
   if (type === 'house') {
     housePic.value = list
-    let CADlist: any = []
-    housePic.value.forEach((element: any) => {
-      if (element.url.indexOf('.dwg') != -1) {
-        console.log(1231231)
+    let arr: any = []
 
-        CADlist.push({
+    housePic.value.forEach((element: any) => {
+      if (
+        element.url.indexOf('.dwg') != -1 ||
+        element.url.indexOf('.dxf') != -1 ||
+        element.url.indexOf('.dws') != -1
+      ) {
+      } else {
+        arr.push({
           name: element.name,
           url: (element.response as any)?.data || element.url
         })
       }
     })
+    houseJpg.value = arr
+  } else if (type === 'houseCAD') {
+    housePic.value = list
 
-    housePic.value = housePic.value.filter((item) => {
-      return item.url.indexOf('.dwg') == -1
+    let CADarr: any = []
+    housePic.value.forEach((element: any) => {
+      if (
+        element.url.indexOf('.dwg') != -1 ||
+        element.url.indexOf('.dxf') != -1 ||
+        element.url.indexOf('.dws') != -1
+      ) {
+        console.log(1231231)
+        CADarr.push({
+          name: element.name,
+          url: (element.response as any)?.data || element.url
+        })
+      } else {
+      }
     })
-    console.log(CADlist, 'CADlist')
 
-    CADlist.length && (CADfile.value = CADlist)
+    CADfile.value = CADarr
   } else if (type === 'land') {
     landPic.value = list
   } else if (type === 'home') {
@@ -706,7 +743,7 @@ const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFi
 }
 
 const uploadFileChangeCAD = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'house')
+  handleFileList(fileList, 'houseCAD')
 }
 const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'land')
@@ -773,5 +810,9 @@ const submit = async (data: HouseDtoType) => {
   .el-upload--picture-card {
     display: none;
   }
+}
+
+.CADuplogd {
+  margin-left: 150px;
 }
 </style>

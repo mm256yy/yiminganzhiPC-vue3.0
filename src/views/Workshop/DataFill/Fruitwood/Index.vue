@@ -17,13 +17,7 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn
-          label="品种名称"
-          :width="175"
-          prop="name"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="品种名称" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -44,13 +38,7 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="用途"
-          :width="180"
-          prop="usageType"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="用途" prop="usageType" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择用途" v-model="row.usageType">
               <ElOption
@@ -65,7 +53,7 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
+        <ElTableColumn label="规格" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择规格" v-model="row.size">
               <ElOption
@@ -81,7 +69,7 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单位" :width="180" prop="unit" align="center" header-align="center">
+        <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择单位" v-model="row.unit">
               <ElOption
@@ -96,12 +84,18 @@
             </div> -->
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" :width="200" prop="number" align="center" header-align="center">
+        <ElTableColumn label="数量" prop="number" :width="180" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
+        <ElTableColumn
+          label="高程"
+          prop="altitude"
+          align="center"
+          :width="180"
+          header-align="center"
+        >
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.altitude" />
           </template>

@@ -88,7 +88,7 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+        <ElTableColumn label="数量" prop="number" :width="175" align="center" header-align="center">
           <template #default="{ row }">
             <ElInputNumber
               :min="0"

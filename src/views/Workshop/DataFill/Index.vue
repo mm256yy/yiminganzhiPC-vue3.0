@@ -152,6 +152,11 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
       />
+      <Enclosure
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[6]"
+      />
     </div>
 
     <div class="data-fill-body" v-if="type == 'IndividualB'">

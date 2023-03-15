@@ -12,7 +12,7 @@
       <template #reference>
         <div class="flex items-center w-full">
           <el-input
-            class="!w-[calc(100%-25px)]"
+            class="!w-350px"
             :suffix-icon="locationIcon"
             v-model="seatData"
             clearable

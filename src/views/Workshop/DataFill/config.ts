@@ -90,6 +90,12 @@ export const EnterpriseTabs = [
     id: ReportTabIds[5],
     icon: 'bxs:smile',
     active: false
+  },
+  {
+    name: '附件上传',
+    id: ReportTabIds[6],
+    icon: 'material-symbols:file-present-rounded',
+    active: false
   }
 ]
 
