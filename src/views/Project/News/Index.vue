@@ -37,12 +37,12 @@
       <template #hasShow="{ row }">
         <div> {{ row.hasShow ? '是' : '否' }} </div>
       </template>
-      <!-- v-hasPermi="['user:news:delete']" -->
       <template #content="{ row }">
         <div class="cursor-pointer text-[#409eff]" @click="viewNews(row)"> 查看 </div>
       </template>
+      <!-- v-hasPermi="['news:delete']" -->
       <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
+        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" :delete="deletBtn" />
       </template>
     </Table>
 
@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElDialog, ElSpace } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
@@ -73,7 +73,10 @@ import { getNewsListApi, delNewsByIdApi } from '@/api/project/news/service'
 import type { NewsDtoType } from '@/api/project/news/types'
 import { useRouter } from 'vue-router'
 import { listDictDetailApi } from '@/api/sys/index'
+import { useAppStoreWithOut } from '@/store/modules/app'
 
+const appStore2 = useAppStoreWithOut()
+const permissions = appStore2.getPermissions
 const appStore = useAppStore()
 const { push } = useRouter()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -205,7 +208,18 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
+const deletBtn = ref()
+onMounted(() => {
+  if (
+    permissions.find((item) => {
+      return item == 'news:delete'
+    })
+  ) {
+    deletBtn.value = true
+  } else {
+    deletBtn.value = false
+  }
+})
 const onDelRow = async (row: NewsDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods

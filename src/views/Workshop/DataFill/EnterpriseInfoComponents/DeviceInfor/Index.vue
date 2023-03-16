@@ -34,6 +34,11 @@
             </div> -->
           </template>
         </ElTableColumn>
+        <ElTableColumn label="数量" :width="175" prop="number" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="单位" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择单位" v-model="row.unit">
@@ -46,11 +51,7 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" :width="175" prop="number" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
-          </template>
-        </ElTableColumn>
+
         <ElTableColumn label="用途" prop="name" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入内容" v-model="row.purpose" />

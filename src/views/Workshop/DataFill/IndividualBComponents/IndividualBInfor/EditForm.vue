@@ -91,12 +91,12 @@
 
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="编号" prop="licenceNo">
+          <ElFormItem label="许可证编号" prop="licenceNo">
             <ElInput v-model="form.licenceNo" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="有效期" prop="periodValidity">
+          <ElFormItem label="许可证有效期" prop="periodValidity">
             <ElInput v-model="form.periodValidity" placeholder="请输入" class="!w-full" />
           </ElFormItem>
         </ElCol>
@@ -332,7 +332,7 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="涉及情况" prop="informationInvolved">
+          <ElFormItem label="个体户涉及情况" prop="informationInvolved">
             <ElSelect clearable filterable v-model="form.informationInvolved" class="!w-full">
               <ElOption
                 v-for="item in dictObj[209]"
@@ -348,7 +348,7 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="初步处理方案" prop="treatmentScheme">
+          <ElFormItem label="个体户初步处理方案" prop="treatmentScheme">
             <ElSelect clearable filterable v-model="form.treatmentScheme" class="!w-full">
               <ElOption
                 v-for="item in dictObj[210]"

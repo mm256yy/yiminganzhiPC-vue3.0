@@ -109,6 +109,11 @@ const rules = {
 watch(
   () => props.show,
   () => {
+    console.log(props.row)
+    // type.value = props.row.type
+    // way.value = props.row.way
+    // area.value = props.row.area
+    methods.setValues(props.row as ResettleConfigInfoType)
     if (props.row && props.row.type == '生产安置') {
       schema[3].hidden = true
     } else {
@@ -140,7 +145,7 @@ const schema = reactive<FormSchema[]>([
   {
     field: 'way',
     label: '安置方式',
-    component: 'Select',
+    component: 'Input',
     formItemProps: {
       style: { width: '450px' }
     }
@@ -160,6 +165,8 @@ const schema = reactive<FormSchema[]>([
 const { register, elFormRef, methods } = useForm()
 
 onMounted(async () => {
+  console.log(currentRow.value, 'currentRow.value')
+
   methods.setValues(currentRow.value as ResettleConfigInfoType)
   type.value = props.row ? props.row.type : ''
   way.value = props.row ? props.row.way : ''

@@ -160,7 +160,7 @@ export const villageInfoCTabs = [
   },
 
   {
-    name: '农村小型转项目及农副业设施信息',
+    name: '农村小型专项目及农副业设施信息',
     id: ReportTabIds[3],
     icon: 'fluent-mdl2:product-variant',
     active: false

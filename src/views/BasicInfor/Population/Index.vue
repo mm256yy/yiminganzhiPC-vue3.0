@@ -294,34 +294,34 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'censusTypeText',
-    label: '户籍类型',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'maritalText',
-    label: '婚姻状况',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'populationTypeText',
-    label: '人口类型',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'insuranceTypeText',
-    label: '参保情况',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'censusTypeText',
+  //   label: '户籍类型',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'maritalText',
+  //   label: '婚姻状况',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'populationTypeText',
+  //   label: '人口类型',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'insuranceTypeText',
+  //   label: '参保情况',
+  //   search: {
+  //     show: false
+  //   }
+  // },
 
   // {
   //   field: 'householdNumber',

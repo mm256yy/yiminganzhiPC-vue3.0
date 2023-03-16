@@ -220,7 +220,7 @@ import { locationTypes } from '@/views/Workshop/components/config'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import type { UploadFile, UploadFiles } from 'element-plus'
-// import { useValidator } from '@/hooks/web/useValidator'
+import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 // import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -229,7 +229,7 @@ import {
   updateApi
 } from '@/api/workshop/datafill/immigrantFacilities-service'
 // import { standardFormatDate } from '@/utils/index'
-
+const { required } = useValidator()
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -341,7 +341,9 @@ watch(
 )
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  facilitiesName: [required()]
+})
 
 // 关闭弹窗
 const onClose = (flag = false) => {

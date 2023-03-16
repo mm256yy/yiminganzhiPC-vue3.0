@@ -34,7 +34,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加农户</ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>

@@ -300,6 +300,7 @@ const onRowClick = (row: RoleType) => {
         isCheck.value = false
       } else {
         setCheckedKeys([])
+        isCheck.value = false
       }
     })
     .finally(() => {

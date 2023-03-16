@@ -16,7 +16,7 @@ export default defineComponent({
     // 是否多选
     selection: propTypes.bool.def(false),
     // 是否所有的超出隐藏，优先级低于schema中的showOverflowTooltip,
-    showOverflowTooltip: propTypes.bool.def(true),
+    showOverflowTooltip: propTypes.bool.def(false),
     // 表头
     columns: {
       type: Array as PropType<TableColumn[]>,
