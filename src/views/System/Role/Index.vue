@@ -105,7 +105,7 @@ import {
 } from '@/api/sys/role/service'
 import type { RoleType, RoleMenuType } from '@/api/sys/role/types'
 
-type LabelValueType = { label: string; id: number; children?: LabelValueType[] }
+type LabelValueType = { label: string; id: number; children?: LabelValueType[]; disabled: boolean }
 const isCheck = ref(false)
 const appStore = useAppStore()
 const dialog = ref(false) // 弹窗标识
@@ -128,11 +128,29 @@ tableObject.params = {
 
 getList()
 
+function flatten(tree: any) {
+  let node: any,
+    list: any = [...tree],
+    nodes: any = []
+  while ((node = list.shift())) {
+    nodes.push(node)
+    node.children && list.unshift(...node.children)
+  }
+  return nodes
+}
+
 const loadMenuTree = () => {
   treeLoading.value = true
 
   getAllMenuApi()
     .then((res: LabelValueType[]) => {
+      flatten(res).find((item) => {
+        if (item.id == 26) {
+          item.disabled = true
+          return item.id == 26
+        }
+      })
+
       menuTree.value = res
     })
     .finally(() => {

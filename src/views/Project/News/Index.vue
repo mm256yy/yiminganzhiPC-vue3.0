@@ -5,7 +5,9 @@
     <div class="flex items-center justify-between pb-18px">
       <div class="text-size-14px"> 新闻列表 </div>
       <ElSpace>
-        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增新闻</ElButton>
+        <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-hasPermi="['news:add']"
+          >新增新闻</ElButton
+        >
       </ElSpace>
     </div>
     <Table
@@ -42,7 +44,13 @@
       </template>
       <!-- v-hasPermi="['news:delete']" -->
       <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" :delete="deletBtn" />
+        <TableEditColumn
+          :row="row"
+          @edit="onEditRow(row)"
+          @delete="onDelRow"
+          :delete="deletBtn"
+          :edit="editBtn"
+        />
       </template>
     </Table>
 
@@ -209,6 +217,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 const deletBtn = ref()
+const editBtn = ref()
 onMounted(() => {
   if (
     permissions.find((item) => {
@@ -218,6 +227,16 @@ onMounted(() => {
     deletBtn.value = true
   } else {
     deletBtn.value = false
+  }
+
+  if (
+    permissions.find((item) => {
+      return item == 'news:add'
+    })
+  ) {
+    editBtn.value = true
+  } else {
+    editBtn.value = false
   }
 })
 const onDelRow = async (row: NewsDtoType | null, multiple: boolean) => {
