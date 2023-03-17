@@ -231,7 +231,7 @@ onMounted(() => {
 
   if (
     permissions.find((item) => {
-      return item == 'news:edit'
+      return item == 'news:update'
     })
   ) {
     editBtn.value = true
