@@ -105,6 +105,16 @@ const rules = {
   area: [required()],
   projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
+watch(
+  () => type.value,
+  (val) => {
+    if (val == '生产安置') {
+      schema[2].hidden = true
+    } else {
+      schema[2].hidden = false
+    }
+  }
+)
 
 watch(
   () => props.show,
@@ -112,6 +122,11 @@ watch(
     if (props.row) {
       type.value = props.row.type
       way.value = props.row.way
+
+      methods.setValues(props.row as ResettleConfigInfoType)
+    } else {
+      type.value = ''
+      way.value = ''
 
       methods.setValues(props.row as ResettleConfigInfoType)
     }
