@@ -74,13 +74,27 @@
           </template> -->
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElInput
+          <template #default="{ row }">
+            <!-- <ElInput
               v-model="row.gravePosition"
               :placeholder="type == 'Landlord' ? '' : '请输入所处位置'"
               :disabled="type == 'Landlord'"
-            />
-          </template> -->
+            /> -->
+            <ElSelect
+              clearable
+              filterable
+              :placeholder="type == 'Landlord' ? '' : '请选择所处位置'"
+              v-model="row.gravePosition"
+              :disabled="type == 'Landlord'"
+            >
+              <ElOption
+                v-for="item in dictObj[288]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <!-- <template #default="{ row }">
@@ -99,7 +113,7 @@
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
 // , computed
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 //  ElInputNumber,
 //   ElInput,
 //   ElSelect,
@@ -107,9 +121,12 @@ import { ref } from 'vue'
 import { ElButton, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
+const dictStore = useDictStoreWithOut()
+
 const { currentRoute } = useRouter()
+const dictObj = computed(() => dictStore.getDictObj)
 const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
