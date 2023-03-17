@@ -30,7 +30,7 @@
                 v-for="item in dictObj[250]"
                 :key="item.value"
                 :label="item.label"
-                :value="item.value"
+                :value="item.label"
               />
             </ElSelect>
             <!-- <div v-else>

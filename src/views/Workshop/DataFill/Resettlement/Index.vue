@@ -78,7 +78,7 @@ import { WorkContentWrap } from '@/components/ContentWrap';
         <div class="desire-item">
           <div class="common-title"><span class="line"></span>搬迁安置方式</div>
           <div class="common-cont">
-            <div class="radio-item" v-if="length == 0">
+            <div class="radio-item" v-if="!length">
               <div>默认：</div>
               <ElRadioGroup v-model="form.removalType">
                 <ElRadio v-for="item in morenData" :key="item.label" :label="item.value">{{
@@ -181,7 +181,10 @@ const getResettlementConfig = async () => {
     projectId: appStore.getCurrentProjectId,
     size: 100
   })
-  length.value = res.content.length
+
+  length.value = res.content.find((item) => {
+    return item.type == '搬迁安置'
+  })
   if (res && res.content && res.content.length) {
     let map = {}
     res.content.forEach((item) => {
