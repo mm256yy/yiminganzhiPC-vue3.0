@@ -128,28 +128,28 @@ tableObject.params = {
 
 getList()
 
-function flatten(tree: any) {
-  let node: any,
-    list: any = [...tree],
-    nodes: any = []
-  while ((node = list.shift())) {
-    nodes.push(node)
-    node.children && list.unshift(...node.children)
-  }
-  return nodes
-}
+// function flatten(tree: any) {
+//   let node: any,
+//     list: any = [...tree],
+//     nodes: any = []
+//   while ((node = list.shift())) {
+//     nodes.push(node)
+//     node.children && list.unshift(...node.children)
+//   }
+//   return nodes
+// }
 
 const loadMenuTree = () => {
   treeLoading.value = true
 
   getAllMenuApi()
     .then((res: LabelValueType[]) => {
-      flatten(res).find((item) => {
-        if (item.id == 26) {
-          item.disabled = true
-          return item.id == 26
-        }
-      })
+      // flatten(res).find((item) => {
+      //   if (item.id == 26) {
+      //     item.disabled = true
+      //     return item.id == 26
+      //   }
+      // })
 
       menuTree.value = res
     })

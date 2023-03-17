@@ -130,11 +130,20 @@
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput
+            <ElSelect
+              clearable
+              filterable
+              :placeholder="type == 'Landlord' ? '' : '请选择所处位置'"
               v-model="row.gravePosition"
-              :placeholder="type == 'Landlord' ? '' : '请输入所处位置'"
               :disabled="type == 'Landlord'"
-            />
+            >
+              <ElOption
+                v-for="item in dictObj[288]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -210,6 +219,7 @@ const graveTypeChange = (val) => {
     }
   })
 }
+
 const remoteMethod = (query: string) => {
   if (query) {
     loading.value = true
