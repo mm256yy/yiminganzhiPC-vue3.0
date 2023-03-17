@@ -8,21 +8,21 @@
     @close="onClose"
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="false">
-      <template #projectId>
+      <!-- <template #projectId>
         <ElSelect
           style="width: 490px"
           v-if="appStore.getIsSysAdmin"
           placeholder="选择项目"
           v-model="projectId"
         >
-          <ElOption
+          <ElOptions
             v-for="item in projectList"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
-      </template>
+      </template> -->
       <template #type>
         <ElSelect
           style="width: 490px"
@@ -109,31 +109,33 @@ const rules = {
 watch(
   () => props.show,
   () => {
-    console.log(props.row)
-    // type.value = props.row.type
-    // way.value = props.row.way
-    // area.value = props.row.area
-    methods.setValues(props.row as ResettleConfigInfoType)
+    if (props.row) {
+      type.value = props.row.type
+      way.value = props.row.way
+
+      methods.setValues(props.row as ResettleConfigInfoType)
+    }
+
     if (props.row && props.row.type == '生产安置') {
-      schema[3].hidden = true
+      schema[2].hidden = true
     } else {
-      schema[3].hidden = false
+      schema[2].hidden = false
     }
   }
 )
 const schema = reactive<FormSchema[]>([
-  {
-    field: 'projectId',
-    label: '所属项目',
-    component: 'Select',
-    formItemProps: {
-      style: { width: '450px' }
-    },
-    componentProps: {
-      placeholder: '选择项目',
-      options: props.projectList
-    }
-  },
+  // {
+  //   field: 'projectId',
+  //   label: '所属项目',
+  //   component: 'Select',
+  //   formItemProps: {
+  //     style: { width: '450px' }
+  //   },
+  //   componentProps: {
+  //     placeholder: '选择项目',
+  //     options: props.projectList
+  //   }
+  // },
   {
     field: 'type',
     label: '安置类型',
@@ -195,6 +197,7 @@ const doSave = async () => {
   saveResettleConfigApi(resettleConfig as ResettleConfigInfoType)
     .then(() => {
       ElMessage.success('保存成功')
+      loading.value = false
       onClose()
     })
     .catch(() => {

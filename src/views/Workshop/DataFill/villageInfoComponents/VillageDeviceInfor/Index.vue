@@ -22,6 +22,11 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #completedTime="{ row }">
+          <div>
+            {{ standardFormatDate(row.completedTime) }}
+          </div>
+        </template>
         <template #locationType="{ row }">
           <div>
             {{ getLocationText(row.locationType) }}
@@ -66,6 +71,7 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
+import { standardFormatDate } from '@/utils/index'
 import {
   getFruitwoodListApi,
   deleteDevicel
