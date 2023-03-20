@@ -291,7 +291,7 @@
           }"
           accept=".jpg,.jpeg,.png"
           :multiple="false"
-          :file-list="houseJpg"
+          :file-list="housePic"
           :headers="headers"
           :on-error="onError"
           :on-success="uploadFileChange1"
@@ -311,7 +311,7 @@
         </ElUpload>
         <div
           style="display: flex; height: 158px"
-          :class="[houseJpg.length == 0 ? 'CADuplogd' : '']"
+          :class="[housePic.length == 0 ? 'CADuplogd' : '']"
         >
           <span style="padding: 0 12px; color: #606266">房屋平面示意图CAD格式:</span>
           <ElUpload
@@ -536,7 +536,6 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-const houseJpg = ref<FileItemType[]>([])
 const housePic = ref<FileItemType[]>([])
 const landPic = ref<FileItemType[]>([])
 const homePic = ref<FileItemType[]>([])
@@ -554,7 +553,6 @@ watch(
   (val) => {
     if (!val) {
       housePic.value = []
-      houseJpg.value = []
       CADfile.value = []
       landPic.value = []
       homePic.value = []
@@ -576,31 +574,13 @@ watch(
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+
       try {
         if (form.value.housePic) {
           housePic.value = JSON.parse(form.value.housePic)
-          console.log(housePic.value, ' housePic.value')
-
-          housePic.value.forEach((element: any) => {
-            if (
-              element.url.indexOf('.dwg') != -1 ||
-              element.url.indexOf('.dxf') != -1 ||
-              element.url.indexOf('.dws') != -1
-            ) {
-              console.log(element, '1')
-
-              CADfile.value.push({
-                name: element.name,
-                url: (element.response as any)?.data || element.url
-              })
-            } else {
-              console.log(element, '2')
-              houseJpg.value.push({
-                name: element.name,
-                url: (element.response as any)?.data || element.url
-              })
-            }
-          })
+        }
+        if (form.value.houseCadPic) {
+          CADfile.value = JSON.parse(form.value.houseCadPic)
         }
         if (form.value.landPic) {
           landPic.value = JSON.parse(form.value.landPic)
@@ -653,13 +633,11 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
-      let arr: any = []
-      arr.push(...CADfile.value, ...houseJpg.value)
-      housePic.value = arr
 
       const data: any = {
         ...form.value,
         ...position,
+        houseCadPic: JSON.stringify(CADfile.value || []),
         housePic: JSON.stringify(housePic.value || []),
         landPic: JSON.stringify(landPic.value || []),
         homePic: JSON.stringify(homePic.value || []),
@@ -691,42 +669,8 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
 
   if (type === 'house') {
     housePic.value = list
-    let arr: any = []
-
-    housePic.value.forEach((element: any) => {
-      if (
-        element.url.indexOf('.dwg') != -1 ||
-        element.url.indexOf('.dxf') != -1 ||
-        element.url.indexOf('.dws') != -1
-      ) {
-      } else {
-        arr.push({
-          name: element.name,
-          url: (element.response as any)?.data || element.url
-        })
-      }
-    })
-    houseJpg.value = arr
   } else if (type === 'houseCAD') {
-    housePic.value = list
-
-    let CADarr: any = []
-    housePic.value.forEach((element: any) => {
-      if (
-        element.url.indexOf('.dwg') != -1 ||
-        element.url.indexOf('.dxf') != -1 ||
-        element.url.indexOf('.dws') != -1
-      ) {
-        console.log(1231231)
-        CADarr.push({
-          name: element.name,
-          url: (element.response as any)?.data || element.url
-        })
-      } else {
-      }
-    })
-
-    CADfile.value = CADarr
+    CADfile.value = list
   } else if (type === 'land') {
     landPic.value = list
   } else if (type === 'home') {
