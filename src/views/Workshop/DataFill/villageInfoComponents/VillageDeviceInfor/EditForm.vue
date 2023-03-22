@@ -137,8 +137,8 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="固定资产净值(万元)" prop="originalInvest">
-            <ElInputNumber :min="0" v-model="form.originalInvest" :precision="2" />
+          <ElFormItem label="主管单位" prop="competentUnit">
+            <ElInput v-model="form.competentUnit" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -266,11 +266,12 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   benefit: '',
   cost: '',
   netBal: '',
-  originalInvest: '',
+  competentUnit: '',
   workersNum: '',
   altitude: '',
   inundationRang: '',
-  remark: ''
+  remark: '',
+  specificLocation: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const placeholderList = ref<string[]>([])

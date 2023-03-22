@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch, nextTick, inject } from 'vue'
-// import { ElInput } from 'element-plus'
+import { ElInput } from 'element-plus'
 // import { debounce, throttle } from 'lodash-es'
 import { useIcon } from '@/hooks/web/useIcon'
 import AMapLoader from '@amap/amap-jsapi-loader'
@@ -51,7 +51,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['chose'])
 
 const searchIcon = useIcon({ icon: 'ic:outline-search' })
-const keyword = ref()
+const keyword = ref('')
 // const searchList = ref<Array<SearchItemType>>([])
 
 let map: any = null
@@ -82,7 +82,7 @@ const init = async (type) => {
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
 
     // plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder', 'AMap.Geolocation'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
-    plugins: ['AMap.Geocoder']
+    plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder']
   })
 
   map = new AMap.Map('map', {
@@ -98,86 +98,53 @@ const init = async (type) => {
     keyboardEnable: true //键盘控制放大缩小移动旋转
   })
   map.setDefaultCursor('pointer')
-  // map.addControl(new AMap.Geolocation())
-  // map.add(
-  //   new AMap.Marker({
-  //     position: map.getCenter()
-  //   })
-  // )
-  // const autoOptions = {
-  //   input: 'keyword' // 使用联想输入的input的id
-  // }
-  // const location = new AMap.Geolocation({
-  //   enableHighAccuracy: true,
-  //   // 设置定位超时时间，默认：无穷大
-  //   timeout: 10000,
-  //   // 定位按钮的停靠位置的偏移量
-  //   offset: [10, 20],
-  //   //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-  //   zoomToAccuracy: true,
-  //   //  定位按钮的排放位置,  RB表示右下
-  //   position: 'RB'
-  // })
-
-  // AMap.Event.addListener(location, 'keyup', function (e) {})
-
-  // location.getCurrentPosition(function (status, result) {
-  //   console.log(status, result, 'status, result')
-  //   if (status == 'complete') {
-  //     console.log(result, '高德地图调用了')
-
-  //     addOverlay(result.position.lng, result.position.lat)
-  //     // result.position.KT
-  //     // result.position.KL
-  //     // onComplete(result)
-  //   } else {
-  //     console.log(status, result, '高德地图调用失败')
-  //     // onError(result)
-  //     llqgetLocation()
-  //   }
-  // })
-
-  // const autoComplete = new AMap.AutoComplete(autoOptions)
-  // // 根据关键字进行搜索
-  // const placeSearch = new AMap.PlaceSearch({
-  //   map: map
-  // })
+  const autoOptions = {
+    input: 'keyword' // 使用联想输入的input的id
+  }
+  console.log(AMap, 'AMap.EventAMap.Event', autoOptions)
+  const autoComplete = new AMap.AutoComplete(autoOptions)
+  // 根据关键字进行搜索
+  const placeSearch = new AMap.PlaceSearch({
+    map: map
+  })
   geocoder = new AMap.Geocoder({
     radius: 1000,
     extensions: 'all'
   })
-  console.log(AMap, 'AMap.EventAMap.Event')
-  // AMap.Event.addListener(autoComplete, 'select', function (e) {
-  //   console.log(e, 13256)
-  //   placeSearch.setCity(e.poi.adcode)
-  //   placeSearch.search(e.poi.name, function (status, result) {
-  //     console.log(status)
 
-  //     const pois = result.poiList.pois
-  //     for (let i = 0; i < pois.length; i++) {
-  //       if (pois[i].name === e.poi.name) {
-  //         geocoder.getAddress(
-  //           [pois[i].location.lng, pois[i].location.lat],
-  //           function (status, result) {
-  //             console.log(result)
-  //             if (status === 'complete' && result.info === 'OK') {
-  //               console.log(result.regeocode.formattedAddress)
-  //             } else {
-  //             }
-  //           }
-  //         )
-  //         // GETAddress(pois[i].location.lng, pois[i].location.lat)
-  //       }
-  //     }
-  //   })
-  // })
+  AMap.Event.addListener(autoComplete, 'select', function (e) {
+    placeSearch.setCity(e.poi.adcode)
+    placeSearch.search(e.poi.name, function (status, result) {
+      console.log(status, result, '2')
+
+      // const pois = result.poiList.pois
+      // for (let i = 0; i < pois.length; i++) {
+      //   if (pois[i].name === e.poi.name) {
+      //     geocoder.getAddress(
+      //       [pois[i].location.lng, pois[i].location.lat],
+      //       function (status, result) {
+      //         console.log(result)
+      //         if (status === 'complete' && result.info === 'OK') {
+      //           console.log(result.regeocode.formattedAddress)
+      //         } else {
+      //         }
+      //       }
+      //     )
+      //     // GETAddress(pois[i].location.lng, pois[i].location.lat)
+      //   }
+      // }
+    })
+  })
 
   addOverlay(lng, lat)
-  // autoComplete.search(keyword, function (status, result) {
-  //   // 搜索成功时，result即是对应的匹配数据
-  //   keyword.value = result.tips
-  //   console.log(status, result, '搜索状态')
-  // })
+  autoComplete.search(keyword, function (status, result) {
+    // 搜索成功时，result即是对应的匹配数据
+    if (result.tips) {
+      keyword.value = result.tips
+    }
+
+    console.log(status, result, '搜索状态')
+  })
   // setInterval(() => {
   //   llqgetLocation()
   // }, 1000)
@@ -310,6 +277,10 @@ defineExpose({
     color: var(--el-color-primary);
   }
 }
+
+.amap-sug-result {
+  z-index: 2999 !important;
+}
 </style>
 <style>
 #map {
@@ -322,5 +293,9 @@ defineExpose({
 
 .tdt-control-copyright {
   display: none !important;
+}
+
+.amap-sug-result {
+  z-index: 2999 !important;
 }
 </style>

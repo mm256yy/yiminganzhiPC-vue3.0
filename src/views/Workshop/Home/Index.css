@@ -5,14 +5,18 @@
 }
 .box {
   display: flex;
-  height: 150px;
-  padding: 10px;
+  width: 326px;
+  height: 112px;
   font-family: PingFang SC-Medium, PingFang SC;
   background-image: url(@/assets/imgs/bg_databoard.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   justify-content: space-around;
   align-items: center;
+  padding: 24px 27px 22px 27px;
+}
+.box .contentRightBox {
+  display: flex;
 }
 .echartBox {
   height: 450px;
@@ -49,8 +53,15 @@
   color: red;
 }
 .bigBox {
-  padding: 15px;
-  border-radius: 11px 11px 11px 11px;
+  margin: 0 auto;
+  width: 1408px;
+  padding: 6px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.bigBox1 {
+  height: 152px;
+  padding: 20px;
 }
 .white {
   background: white;
@@ -59,12 +70,16 @@
   font-size: 19px;
 }
 .ft43 {
-  font-size: 40px;
+  font-size: 32px;
+  font-family: Helvetica-Bold, Helvetica;
   font-weight: bold;
+  color: #faad14;
 }
-.ft21 {
-  font-size: 19px;
+.ft16 {
+  font-size: 16px;
+  font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
+  color: #131313;
 }
 .tabsBox {
   display: flex;

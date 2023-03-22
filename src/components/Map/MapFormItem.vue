@@ -7,7 +7,7 @@
       @show="showPop"
       popper-class="popper-class"
     >
-      <Map ref="mapRef" :h="400" :point="position" @chose="onChosePosition" />
+      <Map ref="mapRef" :h="400" :point="position" @chose="onChosePosition" v-if="mapShow" />
       <!-- :model-value="position.longitude ? `${position.longitude},${position.latitude}` : ''" -->
       <template #reference>
         <div class="flex items-center w-full">
@@ -31,7 +31,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, reactive } from 'vue'
+// nextTick,
+import { ref, watch, reactive } from 'vue'
 import { ElPopover, ElInput, ElFormItem, ElTooltip } from 'element-plus'
 import { Map } from '@/components/Map'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -41,7 +42,6 @@ interface PositionType {
   longitude: number
   address?: string
 }
-
 interface PropsType {
   positon?: PositionType
   required?: boolean
@@ -49,7 +49,7 @@ interface PropsType {
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['change'])
-
+const mapShow = ref()
 const mapRef = ref()
 const position: PositionType = reactive({
   latitude: 0,
@@ -107,8 +107,15 @@ const inputchange = (val) => {
   emit('change', ps)
 }
 const showPop = () => {
-  nextTick(() => {
-    mapRef.value?.resize()
-  })
+  mapShow.value = true
+
+  // nextTick(() => {
+  //   mapRef.value?.resize()
+  // })
 }
 </script>
+<style>
+.amap-sug-result {
+  z-index: 2999 !important;
+}
+</style>

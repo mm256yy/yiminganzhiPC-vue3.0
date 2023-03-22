@@ -108,6 +108,10 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+:deep(.amap-sug-result) {
+  z-index: 9999 !important;
+}
+
 .div {
   :deep(.el-input__wrapper) {
     width: 120px;
@@ -120,6 +124,10 @@ export default defineComponent({
   }
 }
 
+:deep(.el-input__inner::selection) {
+  color: white;
+  background-color: rgb(51, 144, 255);
+}
 @prefix-cls: ~'@{namespace}-layout';
 .@{prefix-cls} {
   max-width: 1920px;

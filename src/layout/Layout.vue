@@ -76,6 +76,10 @@ export default defineComponent({
 <style lang="less" scoped>
 @prefix-cls: ~'@{namespace}-layout';
 
+:deep(.el-input__inner::selection) {
+  color: white;
+  background-color: rgb(51, 144, 255);
+}
 .@{prefix-cls} {
   background-color: var(--app-content-bg-color);
   :deep(.@{elNamespace}-scrollbar__view) {
