@@ -2,219 +2,215 @@
   <WorkContentWrap>
     <ScaleBox>
       <div class="bigBox white bigBox1">
-        <ElRow :gutter="20">
-          <ElCol :span="6" v-for="item in StatisticsData" :key="item.type">
-            <div class="box">
-              <div class="contentLeftBox">
-                <div class="ft16">{{
-                  item.type == 'PeasantHousehold'
-                    ? '居民户'
-                    : item.type == 'Company'
-                    ? '企业'
-                    : item.type == 'IndividualHousehold'
-                    ? '个体工商'
-                    : '村集体'
-                }}</div>
-                <div>
-                  <span class="ft43">{{ item.totalNum }}</span> <span class="ft16">户</span></div
-                >
-              </div>
+        <div class="box" v-for="item in StatisticsData" :key="item.type">
+          <div class="contentLeftBox">
+            <div class="ft16">{{
+              item.type == 'PeasantHousehold'
+                ? '居民户'
+                : item.type == 'Company'
+                ? '企业'
+                : item.type == 'IndividualHousehold'
+                ? '个体工商'
+                : '村集体'
+            }}</div>
+            <div>
+              <span class="ft43">{{ item.totalNum }}</span> <span class="ft16">户</span></div
+            >
+          </div>
 
-              <div class="contentRightBox">
-                <div
-                  ><span>已报</span><br /><span class="red">{{ item.reportNum }}</span></div
-                >
-                <div
-                  ><span>未报</span><br /><span class="red">{{ item.unReportNum }}</span></div
-                >
-                <div
-                  ><span>我的</span><br /><span class="red">{{ item.submitNum }}</span></div
-                >
-              </div>
-            </div></ElCol
-          >
-        </ElRow>
+          <div class="contentRightBox">
+            <div class="textbox"
+              ><div class="ft14">已报</div><div class="ft20">{{ item.reportNum }}</div></div
+            >
+            <div class="textbox"
+              ><div class="ft14">未报</div><div class="ft20">{{ item.unReportNum }}</div></div
+            >
+            <div class="textbox"
+              ><div class="ft14" style="margin-right: 0">我的</div
+              ><div class="ft20">{{ item.submitNum }}</div></div
+            >
+          </div>
+        </div>
       </div>
 
-      <div class="bigBox" style=" height: 338px;padding: 15px 0">
-        <ElRow :gutter="20">
-          <ElCol :span="8">
-            <div class="echartBox">
-              <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
-                <span class="text">工作组TOP5</span>
+      <div class="bigBox bigBox2">
+        <div class="echartBox">
+          <div class="echartTitle">
+            <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
+            <div class="text">比拼晾晒</div>
+          </div>
+          <ElTabs
+            v-model="activeName3"
+            type="card"
+            class="demo-tabs baogao top5"
+            @tab-click="handleClick2"
+            :lazy="false"
+          >
+            <ElTabPane label="累计" name="累计" />
+            <ElTabPane label="今日" name="今日" />
+          </ElTabs>
+          <Echart :options="workOption" :height="280" />
+        </div>
+
+        <div class="echartBox">
+          <div class="echartTitle">
+            <img src="@/assets/imgs/Icon_resident.png" alt="" width="24" />
+            <span class="text">人口分布</span>
+          </div>
+          <div style="margin-top: 30px">
+            <Echart :options="residentOption" :height="268" />
+          </div>
+        </div>
+
+        <div class="">
+          <div class="echartTitle" style="margin-bottom: 10px">
+            <img src="@/assets/imgs/Icon_report.png" alt="" width="24" />
+            <span class="text">报告展示</span>
+          </div>
+          <ElTabs
+            v-model="activeName"
+            type="card"
+            class="demo-tabs baogao"
+            @tab-click="handleClick"
+            :lazy="false"
+          >
+            <ElTabPane label="报告归集" name="报告归集">
+              <div class="tabsBox">
+                <div class="tabsContentBox"
+                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
+                /></div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>蓄水验收设计报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>调查报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>规划报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>导截流验收设计报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>规划大纲</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>设计变更报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                </div>
               </div>
-              <Echart :options="workOption" />
-            </div>
-          </ElCol>
-          <ElCol :span="8">
-            <div class="echartBox">
-              <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_resident.png" alt="" width="24" />
-                <span class="text">居民户分布</span>
+            </ElTabPane>
+            <ElTabPane label="数据归集" name="数据归集">
+              <div class="tabsBox">
+                <div class="tabsContentBox"
+                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
+                /></div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>蓄水验收设计报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+              </div></ElTabPane
+            >
+            <ElTabPane label="其他报告" name="其他报告">
+              <div class="tabsBox">
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>蓄水验收设计报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>调查大纲</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
+                <div class="tabsContentBox" style="background: #f2f7ff"
+                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                  <span>导截流验收设计报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                </div>
               </div>
-              <div style="margin-top: 50px">
-                <Echart :options="residentOption" :height="268" />
-              </div>
-            </div>
-          </ElCol>
-          <ElCol :span="8">
-            <div class="echartBox">
-              <div class="echartTitle" style="margin-bottom: 10px">
-                <img src="@/assets/imgs/Icon_report.png" alt="" width="24" />
-                <span class="text">报告展示</span>
-              </div>
-              <ElTabs
-                v-model="activeName"
-                type="card"
-                class="demo-tabs baogao"
-                @tab-click="handleClick"
-                :lazy="false"
-              >
-                <ElTabPane label="报告归集" name="报告归集">
-                  <div class="tabsBox">
-                    <div class="tabsContentBox"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
-                    /></div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>调查报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>规划报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>导截流验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>规划大纲</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>设计变更报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                    </div>
-                  </div>
-                </ElTabPane>
-                <ElTabPane label="数据归集" name="数据归集">
-                  <div class="tabsBox">
-                    <div class="tabsContentBox"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
-                    /></div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                  </div></ElTabPane
-                >
-                <ElTabPane label="其他报告" name="其他报告">
-                  <div class="tabsBox">
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>调查大纲</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>导截流验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                    </div>
-                  </div>
-                </ElTabPane>
-              </ElTabs>
-            </div>
-          </ElCol>
-        </ElRow>
+            </ElTabPane>
+          </ElTabs>
+        </div>
       </div>
 
-      <div class="bigBox" style=" height: 286px;padding: 15px 0">
-        <ElRow :gutter="20">
-          <ElCol :span="16">
-            <div class="echartBox h400">
-              <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_collect.png" alt="" width="24" />
-                <span class="text">采集进度</span>
-              </div>
-              <Echart :options="gatherOption" :height="350" /> </div
-          ></ElCol>
-          <ElCol :span="8">
-            <div class="echartBox h400">
-              <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
-                <span class="text">新闻通知</span>
-              </div>
-              <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
-                <ElTabPane name="水库要闻" label="水库要闻">
-                  <div class="element">
-                    <div class="listbox" v-for="item in newList" :key="item.id">
-                      <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
-                      <div class="text">
-                        <div class="title">{{ item.title }}</div>
-                        <div class="time">{{ item.releaseTime }}</div>
-                      </div>
-                    </div>
-                    <div class="more">查看更多></div>
+      <div class="bigBox" style="height: 286px; padding: 15px 0">
+        <div class="echartBox h400">
+          <div class="echartTitle">
+            <img src="@/assets/imgs/Icon_collect.png" alt="" width="24" />
+            <span class="text">采集进度</span>
+          </div>
+          <Echart :options="gatherOption" :height="350" />
+        </div>
+        <div class="echartBox h400">
+          <div class="echartTitle">
+            <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
+            <span class="text">新闻通知</span>
+          </div>
+          <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
+            <ElTabPane name="水库要闻" label="水库要闻">
+              <div class="element">
+                <div class="listbox" v-for="item in newList" :key="item.id">
+                  <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
+                  <div class="text">
+                    <div class="title">{{ item.title }}</div>
+                    <div class="time">{{ item.releaseTime }}</div>
                   </div>
-                </ElTabPane>
-                <ElTabPane label="政策法规" name="政策法规">
-                  <div class="element">
-                    <div class="policylist" v-for="item in policyList" :key="item.id">
-                      <div class="title">
-                        {{ item.title }}
-                      </div>
-                      <div class="time">
-                        <span> {{ item.publicityTime }}</span>
-                        <span>更多</span>
-                      </div>
-                    </div>
+                </div>
+                <div class="more">查看更多></div>
+              </div>
+            </ElTabPane>
+            <ElTabPane label="政策法规" name="政策法规">
+              <div class="element">
+                <div class="policylist" v-for="item in policyList" :key="item.id">
+                  <div class="title">
+                    {{ item.title }}
                   </div>
-                </ElTabPane>
-                <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
+                  <div class="time">
+                    <span> {{ item.publicityTime }}</span>
+                    <span>更多</span>
+                  </div>
+                </div>
+              </div>
+            </ElTabPane>
+            <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
 
-                <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
-                <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-                <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
-              </ElTabs>
-            </div></ElCol
-          >
-        </ElRow>
+            <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
+            <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
+            <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
+          </ElTabs>
+        </div>
       </div>
     </ScaleBox>
   </WorkContentWrap>
@@ -222,7 +218,7 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import ScaleBox from './ScaleBox.vue'
-import { ElRow, ElCol, ElTabs, ElTabPane } from 'element-plus'
+import { ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 // computed
 import { ref } from 'vue'
@@ -245,6 +241,7 @@ import Rank_5 from '@/assets/imgs/Rank_5.png'
 
 const newList = ref<any>([])
 const policyList = ref<any>([])
+const activeName3 = ref()
 getnewsList({ size: 9999 }).then((res) => {
   console.log(res)
 
@@ -300,7 +297,7 @@ const residentOption = ref({
   // },
   series: [
     {
-      name: '居民户分布',
+      name: '人口分布',
       type: 'pie',
       radius: ['40%', '80%'],
       data: [
@@ -340,7 +337,6 @@ const workOption = ref({
     {
       type: 'category',
       inverse: true,
-
       axisLabel: {
         formatter: function (p, v) {
           if (p) {
@@ -409,14 +405,13 @@ const workOption = ref({
         show: false
       },
       data: ['陈汉林', '梁柏林', '董化杰', '潘永浩', '董羽坤'],
-      max: 5
+      max: 4
     }
   ],
   series: [
     {
       name: '总上报',
       type: 'bar',
-
       color: {
         type: 'linear',
         x: 0, //右
@@ -435,44 +430,44 @@ const workOption = ref({
         ]
       },
       barWidth: 10,
-      barCateGoryGap: 11,
+
       data: [85, 74, 50, 45, 30],
       label: {
         show: true,
         position: 'right',
         valueAnimation: true
       }
-    },
-    {
-      name: '今日上报',
-      type: 'bar',
-
-      color: {
-        type: 'linear',
-        x: 0, //右
-        y: 0, //下
-        x2: 1, //左
-        y2: 0, //上
-        colorStops: [
-          {
-            offset: 0,
-            color: 'rgba(255, 197, 61, 0.30)' // 0% 处的颜色
-          },
-          {
-            offset: 1,
-            color: 'rgba(250, 173, 20, 1)' // 100% 处的颜色
-          }
-        ]
-      },
-      barWidth: 10,
-      barCateGoryGap: 11,
-      data: [5, 3, 7, 4, 4],
-      label: {
-        show: true,
-        position: 'right',
-        valueAnimation: true
-      }
     }
+    // {
+    //   name: '今日上报',
+    //   type: 'bar',
+
+    //   color: {
+    //     type: 'linear',
+    //     x: 0, //右
+    //     y: 0, //下
+    //     x2: 1, //左
+    //     y2: 0, //上
+    //     colorStops: [
+    //       {
+    //         offset: 0,
+    //         color: 'rgba(255, 197, 61, 0.30)' // 0% 处的颜色
+    //       },
+    //       {
+    //         offset: 1,
+    //         color: 'rgba(250, 173, 20, 1)' // 100% 处的颜色
+    //       }
+    //     ]
+    //   },
+    //   barWidth: 10,
+    //   barCateGoryGap: 11,
+    //   data: [5, 3, 7, 4, 4],
+    //   label: {
+    //     show: true,
+    //     position: 'right',
+    //     valueAnimation: true
+    //   }
+    // }
   ]
 })
 
@@ -567,6 +562,9 @@ const gatherOption = ref({
   ]
 })
 const handleClick = (val) => {
+  console.log(val)
+}
+const handleClick2 = (val) => {
   console.log(val)
 }
 </script>

@@ -177,7 +177,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="户籍类别" prop="censusType">
+          <ElFormItem label="户籍册类别" prop="censusType">
             <ElSelect
               clearable
               filterable
@@ -262,7 +262,25 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-
+      <ElRow :gutter="30">
+        <ElCol :span="8">
+          <ElFormItem label="户籍册编号" prop="householdNumber">
+            <ElInput
+              clearable
+              filterable
+              type="text"
+              class="!w-full"
+              v-model="form.householdNumber"
+            />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="8">
+          <ElFormItem label="联系方式" prop="phone">
+            <ElInput clearable filterable type="text" class="!w-full" v-model="form.phone" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="8" />
+      </ElRow>
       <ElRow :gutter="30">
         <ElCol :span="9">
           <ElFormItem label="身份证照片">

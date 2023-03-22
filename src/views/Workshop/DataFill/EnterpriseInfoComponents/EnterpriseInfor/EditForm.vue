@@ -29,8 +29,8 @@
       </div>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="企业法人" prop="legalPersonName">
-            <ElInput v-model="form.legalPersonName" placeholder="企业法人" class="!w-full" />
+          <ElFormItem label="法人姓名" prop="legalPersonName">
+            <ElInput v-model="form.legalPersonName" placeholder="法人姓名" class="!w-full" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">

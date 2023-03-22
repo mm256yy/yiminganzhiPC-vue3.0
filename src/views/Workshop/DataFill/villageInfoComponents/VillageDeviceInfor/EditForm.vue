@@ -45,7 +45,7 @@
           <ElFormItem label="所在位置" prop="locationType">
             <ElSelect v-model="form.locationType">
               <ElOption
-                v-for="item in locationTypes"
+                v-for="item in dictObj[326]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -216,7 +216,7 @@ import {
   ElCol,
   ElMessage
 } from 'element-plus'
-import { locationTypes } from '@/views/Workshop/components/config'
+// import { locationTypes } from '@/views/Workshop/components/config'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import type { UploadFile, UploadFiles } from 'element-plus'

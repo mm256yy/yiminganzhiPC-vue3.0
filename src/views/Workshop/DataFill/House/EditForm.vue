@@ -251,7 +251,7 @@
           <ElFormItem label="所在位置" prop="locationType">
             <ElSelect class="w-350px" v-model="form.locationType">
               <ElOption
-                v-for="item in locationTypes"
+                v-for="item in dictObj[326]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -468,7 +468,7 @@ import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 
 // import { useValidator } from '@/hooks/web/useValidator'
-import { locationTypes } from '@/views/Workshop/components/config'
+// import { locationTypes } from '@/views/Workshop/components/config'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'

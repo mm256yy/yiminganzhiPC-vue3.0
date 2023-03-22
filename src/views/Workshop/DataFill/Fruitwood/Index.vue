@@ -89,7 +89,7 @@
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="高程"
           prop="altitude"
           align="center"
@@ -99,7 +99,7 @@
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.altitude" />
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
           <template #default="scope">
             <ElSelect clearable v-model="scope.row.inundationRange">
