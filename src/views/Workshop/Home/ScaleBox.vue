@@ -1,11 +1,11 @@
 <template>
-  <div class="ScreenAdapter" :style="style">
+  <div class="screen-adapter" :style="style">
     <slot></slot>
   </div>
 </template>
 <script>
 export default {
-  name: '',
+  name: 'ScaleBox',
   //参数注入
   props: {
     width: {
@@ -14,7 +14,7 @@ export default {
     },
     height: {
       type: String,
-      default: '810'
+      default: '888'
     },
     bgUrl: {
       type: String
@@ -34,7 +34,7 @@ export default {
         width: this.width + 'px',
         height: this.height + 'px',
         transform: 'scale(1) translate(-50%, -50%)',
-        background: ` url(${this.bgUrl}) no-repeat center`,
+        // background: ` url(${this.bgUrl}) no-repeat center`,
         backgroundSize: 'cover',
         padding: this.padding
       }
@@ -89,8 +89,7 @@ export default {
   margin: 0;
 }
 
-.ScreenAdapter {
-  // color: #fff;
+.screen-adapter {
   position: absolute;
   top: 0%;
   left: 50%;

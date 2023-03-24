@@ -1,48 +1,57 @@
 <template>
-  <WorkContentWrap>
+  <ContentWrap>
     <ScaleBox>
-      <div class="bigBox white bigBox1">
-        <div class="box" v-for="item in StatisticsData" :key="item.type">
-          <div class="contentLeftBox">
-            <div class="ft16">{{
-              item.type == 'PeasantHousehold'
-                ? '居民户'
-                : item.type == 'Company'
-                ? '企业'
-                : item.type == 'IndividualHousehold'
-                ? '个体工商'
-                : '村集体'
-            }}</div>
+      <div class="big-box big-box-1 bg-white">
+        <div
+          class="big-box-container"
+          v-for="item in statisticsData"
+          :key="item.type"
+          @click="toLink(item.type)"
+        >
+          <div class="content-box-left">
+            <div class="ft16">
+              {{
+                item.type == 'PeasantHousehold'
+                  ? '居民户'
+                  : item.type == 'Company'
+                  ? '企业'
+                  : item.type == 'IndividualHousehold'
+                  ? '个体工商'
+                  : '村集体'
+              }}
+            </div>
             <div>
-              <span class="ft43">{{ item.totalNum }}</span> <span class="ft16">户</span></div
-            >
+              <span class="ft-43">{{ item.totalNum }}</span> <span class="ft-16">户</span>
+            </div>
           </div>
 
-          <div class="contentRightBox">
-            <div class="textbox"
-              ><div class="ft14">已报</div><div class="ft20">{{ item.reportNum }}</div></div
-            >
-            <div class="textbox"
-              ><div class="ft14">未报</div><div class="ft20">{{ item.unReportNum }}</div></div
-            >
-            <div class="textbox"
-              ><div class="ft14" style="margin-right: 0">我的</div
-              ><div class="ft20">{{ item.submitNum }}</div></div
-            >
+          <div class="content-box-right">
+            <div class="text-box">
+              <div class="ft-14">已报</div>
+              <div class="ft-20">{{ item.reportNum }}</div>
+            </div>
+            <div class="text-box">
+              <div class="ft-14">未报</div>
+              <div class="ft-20">{{ item.unReportNum }}</div>
+            </div>
+            <div class="text-box">
+              <div class="ft-14" style="margin-right: 0">我的</div>
+              <div class="ft-20">{{ item.submitNum }}</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="bigBox bigBox2">
-        <div class="echartBox">
-          <div class="echartTitle">
-            <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
-            <div class="text">比拼晾晒</div>
+      <div class="big-box big-box-2">
+        <div class="echart-box">
+          <div class="echart-title">
+            <img src="@/assets/imgs/Icon_workteam.png" width="15" />
+            <div class="text">工作组TOP5</div>
           </div>
           <ElTabs
             v-model="activeName3"
             type="card"
-            class="demo-tabs baogao top5"
+            class="demo-tabs tabs-wrapper top5"
             @tab-click="handleClick2"
             :lazy="false"
           >
@@ -52,148 +61,183 @@
           <Echart :options="workOption" :height="280" />
         </div>
 
-        <div class="echartBox">
-          <div class="echartTitle">
-            <img src="@/assets/imgs/Icon_resident.png" alt="" width="24" />
-            <span class="text">人口分布</span>
+        <div class="echart-box">
+          <div class="echart-title">
+            <img src="@/assets/imgs/Icon_resident.png" width="15" />
+            <span class="text">居民户分布</span>
           </div>
           <div style="margin-top: 30px">
-            <Echart :options="residentOption" :height="268" />
+            <Echart :options="residentOption" :height="220" />
           </div>
         </div>
 
-        <div class="">
-          <div class="echartTitle" style="margin-bottom: 10px">
-            <img src="@/assets/imgs/Icon_report.png" alt="" width="24" />
+        <div class="report-box bg-white">
+          <div class="echart-title">
+            <img src="@/assets/imgs/Icon_report.png" width="15" />
             <span class="text">报告展示</span>
           </div>
           <ElTabs
             v-model="activeName"
             type="card"
-            class="demo-tabs baogao"
+            class="demo-tabs tabs-wrapper"
             @tab-click="handleClick"
             :lazy="false"
           >
             <ElTabPane label="报告归集" name="报告归集">
-              <div class="tabsBox">
-                <div class="tabsContentBox"
-                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
-                /></div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>蓄水验收设计报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>调查报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>规划报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>导截流验收设计报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>规划大纲</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>设计变更报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
-                </div>
+              <div class="tabs-box">
+                <view class="tabs-box-left">
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>调查大纲</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>调查报告</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>规划大纲</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>规划报告</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                </view>
+                <view class="middle" />
+                <view class="tabs-box-right">
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>蓄水验收设计报告</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>竣工验收设计报告</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                </view>
               </div>
             </ElTabPane>
-            <ElTabPane label="数据归集" name="数据归集">
-              <div class="tabsBox">
-                <div class="tabsContentBox"
-                  ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
-                /></div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>蓄水验收设计报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-              </div></ElTabPane
-            >
             <ElTabPane label="其他报告" name="其他报告">
-              <div class="tabsBox">
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>蓄水验收设计报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+              <div class="tabs-box">
+                <div class="tabs-box-left">
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>社稳报告</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>地灾评估</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>安置点祥归</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>企(事)业单位</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>专业项目</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
                 </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>调查大纲</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
-                </div>
-                <div class="tabsContentBox" style="background: #f2f7ff"
-                  ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                  <span>导截流验收设计报告</span>
-                  <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                <div class="middle"></div>
+                <div class="tabs-box-right">
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>库底清理</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>土地报批</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>林地可研</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>其他</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
                 </div>
               </div>
             </ElTabPane>
+            <!-- <ElTabPane label="数据归集" name="数据归集">
+						  <div class="tabs-box">
+						    <div class="tabs-box-left">
+						      <div class="tabs-content-box">
+						        <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+						        <span>调查大纲</span>
+						        <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+						      </div>
+						    </div>
+						    <div class="middle"></div>
+						    <div class="tabs-box-right">
+						      <div class="tabs-content-box">
+						        <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+						        <span>蓄水验收设计报告</span>
+						        <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" />
+						      </div>
+						    </div>
+						  </div>
+						</ElTabPane> -->
           </ElTabs>
         </div>
       </div>
 
-      <div class="bigBox" style="height: 286px; padding: 15px 0">
-        <div class="echartBox h400">
-          <div class="echartTitle">
-            <img src="@/assets/imgs/Icon_collect.png" alt="" width="24" />
+      <div class="big-box big-box-3">
+        <div class="left bg-white">
+          <div class="echart-title w-729">
+            <img src="@/assets/imgs/Icon_collect.png" width="15" />
             <span class="text">采集进度</span>
           </div>
-          <Echart :options="gatherOption" :height="350" />
+          <Echart :options="gatherOption" :height="236" />
         </div>
-        <div class="echartBox h400">
-          <div class="echartTitle">
-            <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
+        <div class="right bg-white">
+          <div class="echart-title w-613">
+            <img src="@/assets/imgs/Icon_news.png" width="15" />
             <span class="text">新闻通知</span>
           </div>
-          <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
+          <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
             <ElTabPane name="水库要闻" label="水库要闻">
-              <div class="element">
-                <div class="listbox" v-for="item in newList" :key="item.id">
-                  <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
-                  <div class="text">
+              <div class="element news">
+                <div
+                  class="list-box left"
+                  v-if="newsList && newsList.length > 0"
+                  @click="routerJump('/Project/News/Index')"
+                >
+                  <img class="cover-pic" :src="newsList[0].coverPic" />
+                </div>
+                <div class="list-box right">
+                  <div
+                    class="text"
+                    v-for="item in newsList"
+                    :key="item.id"
+                    @click="routerJump('/Project/News/Index')"
+                  >
                     <div class="title">{{ item.title }}</div>
                     <div class="time">{{ item.releaseTime }}</div>
                   </div>
                 </div>
-                <div class="more">查看更多></div>
               </div>
             </ElTabPane>
             <ElTabPane label="政策法规" name="政策法规">
               <div class="element">
-                <div class="policylist" v-for="item in policyList" :key="item.id">
+                <div class="policy-list" v-for="item in policyList" :key="item.id">
                   <div class="title">
                     {{ item.title }}
                   </div>
@@ -205,7 +249,6 @@
               </div>
             </ElTabPane>
             <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
-
             <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
             <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
             <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
@@ -213,21 +256,22 @@
         </div>
       </div>
     </ScaleBox>
-  </WorkContentWrap>
+  </ContentWrap>
 </template>
 <script lang="ts" setup>
-import { WorkContentWrap } from '@/components/ContentWrap'
+// import { ContentWrap } from '@/components/ContentWrap'
 import ScaleBox from './ScaleBox.vue'
 import { ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 // computed
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import {
-  getTOP10,
+  getTopTen,
   homeStatistics,
   homeProgress,
   homeDistribution,
-  getnewsList,
+  getNewsList,
   getPolicyListApi
 } from '@/api/home'
 import Rank_1 from '@/assets/imgs/Rank_1.png'
@@ -238,50 +282,68 @@ import Rank_5 from '@/assets/imgs/Rank_5.png'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
-
-const newList = ref<any>([])
+const { push } = useRouter()
+const newsList = ref<any>([])
 const policyList = ref<any>([])
-const activeName3 = ref()
-getnewsList({ size: 9999 }).then((res) => {
-  console.log(res)
-
-  newList.value = res.content
-  newList.value.forEach((item) => {
-    item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-  })
-})
-getPolicyListApi({ size: 9999 }).then((res) => {
-  policyList.value = res.content
-  // policyList.value.forEach((item) => {
-  //   item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-  // })
-})
-const newhandleClick = () => {}
-
-const StatisticsData = ref<any>([])
-const top10List = ref<any>([])
-getTOP10().then((res) => {
-  top10List.value = res
-  let ydata: any = []
-  let seriesdata: any = []
-  let seriesdata1: any = []
-  res.forEach((item, index) => {
-    if (index <= 4) {
-      ydata.push(item.name)
-      seriesdata.push(item.number)
-      seriesdata1.push(item.todayNmber)
-    }
-  })
-  workOption.value.yAxis[0].data = ydata
-  workOption.value.series[0].data = seriesdata
-  workOption.value.series[1].data = seriesdata1
-})
-
-homeStatistics().then((res) => {
-  StatisticsData.value = res
-})
 const activeName = ref('报告归集')
 const activeName2 = ref('水库要闻')
+const activeName3 = ref('累计')
+
+// 初始化获取新闻通知 -- 水库要闻列表数据
+const initNewsData = () => {
+  getNewsList({ size: 9999 }).then((res: any) => {
+    newsList.value = res.content
+    newsList.value.forEach((item: any) => {
+      item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
+    })
+    console.log('newsList：', newsList.value)
+  })
+}
+
+// 初始化获取新闻通知 -- 政策法规列表数据
+const initPolicyData = () => {
+  getPolicyListApi({ size: 9999 }).then((res: any) => {
+    policyList.value = res.content
+    // policyList.value.forEach((item) => {
+    //   item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
+    // })
+  })
+}
+
+// 点击新闻跳转
+const newsHandleClick = () => {}
+
+const statisticsData = ref<any>([])
+const topTenList = ref<any>([])
+
+// 获取前十的数据
+const initTopTenData = () => {
+  getTopTen().then((res: any) => {
+    topTenList.value = res
+    let ydata: any = []
+    let seriesdata: any = []
+    let seriesdata1: any = []
+    res.forEach((item: any, index: number) => {
+      if (index <= 4) {
+        ydata.push(item.name)
+        seriesdata.push(item.number)
+        seriesdata1.push(item.todayNmber)
+      }
+    })
+    workOption.value.yAxis[0].data = ydata
+    workOption.value.series[0].data = seriesdata
+    workOption.value.series[1].data = seriesdata1
+  })
+}
+
+// 初始化获取统计数据
+const initHomeStatisticsData = () => {
+  homeStatistics().then((res: any) => {
+    statisticsData.value = res
+  })
+}
+
+// 居民户分布图表初始化数据
 const residentOption = ref({
   // title: {
   //   text: 'Referer of a Website',
@@ -297,7 +359,7 @@ const residentOption = ref({
   // },
   series: [
     {
-      name: '人口分布',
+      name: '居民户分布',
       type: 'pie',
       radius: ['40%', '80%'],
       data: [
@@ -321,6 +383,8 @@ const residentOption = ref({
     }
   ]
 })
+
+// 工作组TOP5图表初始化数据
 const workOption = ref({
   grid: {
     left: '15%',
@@ -410,8 +474,9 @@ const workOption = ref({
   ],
   series: [
     {
-      name: '总上报',
+      name: '累计',
       type: 'bar',
+      symbol: 'triangle',
       color: {
         type: 'linear',
         x: 0, //右
@@ -430,7 +495,6 @@ const workOption = ref({
         ]
       },
       barWidth: 10,
-
       data: [85, 74, 50, 45, 30],
       label: {
         show: true,
@@ -438,61 +502,18 @@ const workOption = ref({
         valueAnimation: true
       }
     }
-    // {
-    //   name: '今日上报',
-    //   type: 'bar',
-
-    //   color: {
-    //     type: 'linear',
-    //     x: 0, //右
-    //     y: 0, //下
-    //     x2: 1, //左
-    //     y2: 0, //上
-    //     colorStops: [
-    //       {
-    //         offset: 0,
-    //         color: 'rgba(255, 197, 61, 0.30)' // 0% 处的颜色
-    //       },
-    //       {
-    //         offset: 1,
-    //         color: 'rgba(250, 173, 20, 1)' // 100% 处的颜色
-    //       }
-    //     ]
-    //   },
-    //   barWidth: 10,
-    //   barCateGoryGap: 11,
-    //   data: [5, 3, 7, 4, 4],
-    //   label: {
-    //     show: true,
-    //     position: 'right',
-    //     valueAnimation: true
-    //   }
-    // }
   ]
 })
 
-homeDistribution().then((res) => {
+homeDistribution().then((res: any) => {
   let data: any = []
-  res.forEach((item) => {
+  res.forEach((item: any) => {
     data.push({ name: item.name, value: item.number })
   })
   residentOption.value.series[0].data = data
 })
 
-homeProgress().then((res) => {
-  let xData: any = []
-  let series0: any = []
-  let series1: any = []
-  res.forEach((item) => {
-    xData.push(item.villageName)
-    series0.push(item.totalNum)
-    series1.push(item.reportNum)
-  })
-  gatherOption.value.xAxis.data = xData
-  gatherOption.value.series[0].data = series0
-  gatherOption.value.series[1].data = series1
-})
-// const progressData = ref({})
+// 采集进度图标初始化数据
 const gatherOption = ref({
   tooltip: {
     trigger: 'item'
@@ -507,6 +528,12 @@ const gatherOption = ref({
       color: '#4F4F4F' //字体颜色
     }
   },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
   xAxis: {
     type: 'category',
     data: ['行政村甲', '行政村乙', '行政村丙', '行政村丁', '行政村戊', '行政村己', '行政村庚']
@@ -516,37 +543,17 @@ const gatherOption = ref({
   },
   series: [
     {
-      name: '未采集',
-      data: [100, 100, 50, 40, 30, 120, 140],
-      type: 'bar',
-      color: {
-        type: 'linear',
-        x: 0, //右
-        y: 0, //下
-        x2: 0, //左
-        y2: 1, //上
-        colorStops: [
-          {
-            offset: 0,
-            color: 'rgba(22, 208, 255, 1)' // 0% 处的颜色
-          },
-          {
-            offset: 1,
-            color: 'rgba(0, 102, 255, 1)' // 100% 处的颜色
-          }
-        ]
-      }
-    },
-    {
       name: '已采集',
-      data: [120, 200, 150, 80, 70, 110, 130],
+      data: [100, 120, 300, 200, 150, 210, 230],
       type: 'bar',
+      barWidth: 45,
+      stack: 'all',
       color: {
         type: 'linear',
-        x: 0, //右
-        y: 0, //下
-        x2: 0, //左
-        y2: 1, //上
+        x: 0, // 右
+        y: 0, // 下
+        x2: 0, // 左
+        y2: 1, // 上
         colorStops: [
           {
             offset: 0,
@@ -558,15 +565,84 @@ const gatherOption = ref({
           }
         ]
       }
+    },
+    {
+      name: '未采集',
+      data: [120, 130, 250, 210, 180, 110, 290],
+      type: 'bar',
+      barWidth: 45,
+      stack: 'all',
+      color: {
+        type: 'linear',
+        x: 0, // 右
+        y: 0, // 下
+        x2: 0, // 左
+        y2: 1, // 上
+        colorStops: [
+          {
+            offset: 0,
+            color: 'rgba(22, 208, 255, 1)' // 0% 处的颜色
+          },
+          {
+            offset: 1,
+            color: 'rgba(0, 102, 255, 1)' // 100% 处的颜色
+          }
+        ]
+      }
     }
   ]
 })
-const handleClick = (val) => {
+
+// 初始化获取采集进度数据
+const initGatherProgressData = () => {
+  homeProgress().then((res: any) => {
+    let xData: any = []
+    let series_0: any = []
+    let series_1: any = []
+    res.forEach((item: any) => {
+      xData.push(item.villageName)
+      series_0.push(item.reportNum)
+      series_1.push(item.unReportNum)
+    })
+    gatherOption.value.xAxis.data = xData
+    gatherOption.value.series[0].data = series_0
+    gatherOption.value.series[1].data = series_1
+  })
+}
+
+const handleClick = (val: any) => {
   console.log(val)
 }
-const handleClick2 = (val) => {
+
+const handleClick2 = (val: any) => {
   console.log(val)
 }
+
+// 路由跳转
+const routerJump = (path: string) => {
+  push(path)
+}
+
+// 统计数据页面跳转
+const toLink = (type: string) => {
+  if (type === 'PeasantHousehold') {
+    routerJump('/Workshop/Landlord')
+  } else if (type === 'Company') {
+    routerJump('/Workshop/Enterprise')
+  } else if (type === 'IndividualHousehold') {
+    routerJump('/Workshop/IndividualB')
+  } else {
+    routerJump('/Workshop/villageInfoC')
+  }
+}
+
+onMounted(() => {
+  initHomeStatisticsData()
+  initTopTenData()
+  initGatherProgressData()
+  initNewsData()
+  initPolicyData()
+})
 </script>
 <style lang="less" scoped>
 @import './Index.less';

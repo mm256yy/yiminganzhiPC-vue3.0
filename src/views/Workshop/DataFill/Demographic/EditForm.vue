@@ -231,6 +231,7 @@
             <ElSelect
               clearable
               filterable
+              multiple
               v-model="form.insuranceType"
               class="!w-full"
               :placeholder="placeholderList[5]"
@@ -241,8 +242,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="8">
           <ElFormItem label="人口类别" prop="populationSort">
             <ElSelect
@@ -594,11 +596,12 @@ const submit = async (data: DemographicDtoType) => {
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
-  formEl?.validate((valid) => {
+  formEl?.validate((valid: any) => {
     if (valid) {
       // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
         ...form.value,
+        insuranceType: form.value.insuranceType ? form.value.insuranceType.toString() : '',
         cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
         householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)

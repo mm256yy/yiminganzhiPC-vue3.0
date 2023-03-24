@@ -10,6 +10,7 @@ export interface DemographicDtoType {
   townCode: string
   villageCode: string
   virutalVillageCode: string
+  insuranceType: any
   address: string
   birthday: string
   nation: string

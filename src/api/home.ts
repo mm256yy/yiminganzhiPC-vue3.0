@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 
-export const getTOP10 = () => {
+export const getTopTen = () => {
   return request.get({ url: '/home/homeTop10' })
 }
 
@@ -16,7 +16,7 @@ export const homeDistribution = () => {
   return request.get({ url: '/home/homeDistribution' })
 }
 
-export const getnewsList = (query) => {
+export const getNewsList = (query) => {
   return request.get({ url: '/news', params: query })
 }
 

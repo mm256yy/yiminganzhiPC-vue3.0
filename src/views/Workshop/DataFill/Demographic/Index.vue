@@ -234,7 +234,10 @@ const onEditRow = (row: DemographicDtoType) => {
   console.log(row)
 
   actionType.value = 'edit'
-  tableObject.currentRow = row
+  tableObject.currentRow = {
+    ...row,
+    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+  }
   dialog.value = true
 }
 
@@ -247,7 +250,10 @@ const onFormPupClose = (flag: boolean) => {
 
 const onViewRow = (row: DemographicDtoType) => {
   actionType.value = 'view'
-  tableObject.currentRow = row
+  tableObject.currentRow = {
+    ...row,
+    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+  }
   dialog.value = true
 }
 </script>
