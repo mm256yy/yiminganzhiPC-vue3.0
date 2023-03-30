@@ -215,11 +215,7 @@
           <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
             <ElTabPane name="水库要闻" label="水库要闻">
               <div class="element news">
-                <div
-                  class="list-box left"
-                  v-if="newsList && newsList.length > 0"
-                  @click="routerJump('/Project/News/Index')"
-                >
+                <div class="list-box left" v-if="newsList && newsList.length > 0">
                   <img class="cover-pic" :src="newsList[0].coverPic" />
                 </div>
                 <div class="list-box right">
@@ -227,7 +223,7 @@
                     class="text"
                     v-for="item in newsList"
                     :key="item.id"
-                    @click="routerJump('/Project/News/Index')"
+                    @click="routerJump(`newDetail?id=${item.id}`)"
                   >
                     <div class="title">{{ item.title }}</div>
                     <div class="time">{{ item.releaseTime }}</div>
@@ -279,6 +275,7 @@ import Rank_2 from '@/assets/imgs/Rank_2.png'
 import Rank_3 from '@/assets/imgs/Rank_3.png'
 import Rank_4 from '@/assets/imgs/Rank_4.png'
 import Rank_5 from '@/assets/imgs/Rank_5.png'
+
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
@@ -307,32 +304,6 @@ const initPolicyData = () => {
     // policyList.value.forEach((item) => {
     //   item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
     // })
-  })
-}
-
-// 点击新闻跳转
-const newsHandleClick = () => {}
-
-const statisticsData = ref<any>([])
-const topTenList = ref<any>([])
-
-// 获取前十的数据
-const initTopTenData = () => {
-  getTopTen().then((res: any) => {
-    topTenList.value = res
-    let ydata: any = []
-    let seriesdata: any = []
-    let seriesdata1: any = []
-    res.forEach((item: any, index: number) => {
-      if (index <= 4) {
-        ydata.push(item.name)
-        seriesdata.push(item.number)
-        seriesdata1.push(item.todayNmber)
-      }
-    })
-    workOption.value.yAxis[0].data = ydata
-    workOption.value.series[0].data = seriesdata
-    workOption.value.series[1].data = seriesdata1
   })
 }
 
@@ -383,11 +354,33 @@ const residentOption = ref({
     }
   ]
 })
+// 点击新闻跳转
+const newsHandleClick = () => {}
+
+const statisticsData = ref<any>([])
+// const topTenList = ref<any>([])
+
+// 获取前十的数据
+const seriesdata = ref<any>([])
+const seriesdata2 = ref<any>([])
+const ydataName = ref<any>([])
+const initTopTenData = async () => {}
+const handleClick2 = () => {
+  console.log(activeName3.value)
+
+  if (activeName3.value == '今日') {
+    workOption.value.series[0].name = '累计'
+    workOption.value.series[0].data = seriesdata.value
+  } else {
+    workOption.value.series[0].data = seriesdata2.value
+    workOption.value.series[0].name = '今日'
+  }
+}
 
 // 工作组TOP5图表初始化数据
 const workOption = ref({
   grid: {
-    left: '15%',
+    left: '35%',
     top: '2%'
   },
   tooltip: {
@@ -614,10 +607,6 @@ const handleClick = (val: any) => {
   console.log(val)
 }
 
-const handleClick2 = (val: any) => {
-  console.log(val)
-}
-
 // 路由跳转
 const routerJump = (path: string) => {
   push(path)
@@ -636,7 +625,28 @@ const toLink = (type: string) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  let data: any = []
+  let data2: any = []
+
+  data = await getTopTen('')
+
+  data2 = await getTopTen('today')
+
+  data.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata.value.push(item.number)
+    }
+  })
+  data2.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata2.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata.value
+  workOption.value.yAxis[0].data = ydataName.value
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()

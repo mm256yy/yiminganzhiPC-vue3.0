@@ -1,7 +1,7 @@
 import request from '@/config/axios'
 
-export const getTopTen = () => {
-  return request.get({ url: '/home/homeTop10' })
+export const getTopTen = (data) => {
+  return request.get({ url: '/home/homeTop10?type=' + data })
 }
 
 export const homeStatistics = () => {
@@ -22,6 +22,10 @@ export const getNewsList = (query) => {
 
 export const getPolicyListApi = (query) => {
   return request.get({ url: '/policyLaw', params: query })
+}
+
+export const detail = (id) => {
+  return request.get({ url: `/news/${id}` })
 }
 
 // export const getLandlordListApi = (

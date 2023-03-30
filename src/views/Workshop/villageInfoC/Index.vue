@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 // ElMessage,
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem, ElMessageBox } from 'element-plus'
@@ -158,7 +158,10 @@ import type {
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
 
+const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -323,7 +326,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: locationTypes
+        options: dictObj.value[326]
       }
     },
     table: {

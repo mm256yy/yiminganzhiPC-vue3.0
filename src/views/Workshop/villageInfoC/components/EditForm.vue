@@ -33,7 +33,7 @@
       <ElFormItem label="所在位置" prop="locationType">
         <ElSelect class="w-350px" v-model="form.locationType">
           <ElOption
-            v-for="item in locationTypes"
+            v-for="item in dictObj[326]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -102,7 +102,7 @@ import { debounce } from 'lodash-es'
 // import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-import { locationTypes } from '@/views/Workshop/components/config'
+// import { locationTypes } from '@/views/Workshop/components/config'
 // import { locationTypes, yesAndNoEnums } from '../config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'

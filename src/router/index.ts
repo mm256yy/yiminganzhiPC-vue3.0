@@ -101,6 +101,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '用户首页',
           icon: 'ant-design:home-outlined'
         }
+      },
+      {
+        path: 'newDetail',
+        name: 'newDetail',
+        component: () => import('@/views/Workshop/Home/components/newDetail.vue'),
+        meta: {
+          title: '新闻详情',
+          hidden: true
+        }
       }
     ]
   }
