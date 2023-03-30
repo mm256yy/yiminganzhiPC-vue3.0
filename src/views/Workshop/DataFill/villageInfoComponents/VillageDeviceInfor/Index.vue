@@ -118,7 +118,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'facilitiesType',
+    field: 'facilitiesTypeText',
     label: '设施类别',
     search: {
       show: false

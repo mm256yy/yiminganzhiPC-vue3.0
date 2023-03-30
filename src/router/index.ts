@@ -103,6 +103,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'newDetail',
+        name: 'newDetail',
+        component: () => import('@/views/Workshop/Home/components/newDetail.vue'),
+        meta: {
+          title: '新闻详情',
+          hidden: true
+        }
+      },
+      {
         path: 'report',
         name: 'workshopReport',
         component: () => import('@/views/Workshop/Home/Report/Index.vue'),
