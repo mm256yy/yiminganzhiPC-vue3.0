@@ -101,6 +101,33 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '用户首页',
           icon: 'ant-design:home-outlined'
         }
+      },
+      {
+        path: 'report',
+        name: 'workshopReport',
+        component: () => import('@/views/Workshop/Home/Report/Index.vue'),
+        meta: {
+          title: '通用报告上传',
+          hidden: true
+        }
+      },
+      {
+        path: 'changeReport',
+        name: 'workshopChangeReport',
+        component: () => import('@/views/Workshop/Home/ChangeReport/Index.vue'),
+        meta: {
+          title: '设计变更报告上传',
+          hidden: true
+        }
+      },
+      {
+        path: 'professionalReport',
+        name: 'workshopProfessionalReport',
+        component: () => import('@/views/Workshop/Home/ProfessionalReport/Index.vue'),
+        meta: {
+          title: '专业项目/库底清理报告上传',
+          hidden: true
+        }
       }
     ]
   }
