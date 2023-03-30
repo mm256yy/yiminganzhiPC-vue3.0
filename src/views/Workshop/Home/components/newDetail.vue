@@ -64,7 +64,6 @@ const goback = () => {
   }
 
   .title {
-
     height: 42px;
     font-family: PingFang SC-Bold, PingFang SC;
     font-size: 30px;
