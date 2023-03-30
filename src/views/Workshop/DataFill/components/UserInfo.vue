@@ -133,7 +133,7 @@ onMounted(() => {
     height: 40px;
     padding: 0 16px;
     background: rgba(237, 245, 255, 1);
-    border-bottom: 2px dashed #dcdfe6;
+    border-bottom: 1px dashed #e6ecf4;
     align-items: center;
     justify-content: space-between;
 

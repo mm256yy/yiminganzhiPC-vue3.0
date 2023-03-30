@@ -2,15 +2,15 @@
 
 :root {
   /* 主题色 */
-  --el-color-primary: #3E73EC !important;
+  --el-color-primary: #3e73ec !important;
   /* 字体颜色 */
   --text-color-1: #131313;
   /* 固定间距 */
   --distance-base: 16px;
   /* 边框色 */
-  --border-color: #E1E4EA;
+  --border-color: #e1e4ea;
   /* warning */
-  --el-color-warning: #ED5454 !important;
+  --el-color-warning: #ed5454 !important;
 }
 
 /* 表格 table */
@@ -18,7 +18,20 @@
   /* 表头字体颜色 */
   --el-table-header-text-color: #131313 !important;
   /* body字体颜色 */
-  --el-table-text-color: #17212C !important;
+  --el-table-text-color: #17212c !important;
   /* 表头背景色 */
-  --el-table-header-bg-color: #EBEBEB !important;
+  --el-table-header-bg-color: #f6f6f6 !important;
+}
+
+.el-button {
+  /* 按钮文字 */
+  --el-button-font-weight: 400 !important;
+}
+
+.el-upload--picture-card {
+  border: 0 none !important;
+  --el-upload-picture-card-size: 88px !important;
+}
+.el-upload-list--picture-card {
+  --el-upload-list-picture-card-size: 88px !important;
 }

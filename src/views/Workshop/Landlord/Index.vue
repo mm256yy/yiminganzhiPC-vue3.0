@@ -18,19 +18,20 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">居民户列表</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">居民户列表</span>
 
-          <div class="icon">
+          <!-- <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
-          </div>
+          </div> -->
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
+            （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
             <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum }}</span> 人
             <span class="distance"></span>
             已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
-            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
+            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
+            >）
           </div>
         </div>
         <ElSpace>

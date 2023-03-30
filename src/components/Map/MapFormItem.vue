@@ -13,16 +13,17 @@
         <div class="flex items-center w-full">
           <el-input
             class="!w-350px"
-            :suffix-icon="locationIcon"
             v-model="seatData"
             clearable
             placeholder="请选择位置"
             style="cursor: pointer"
             @change="inputchange"
           />
-          <el-tooltip placement="top" content="请点击地图选择经纬度">
+          <!-- :suffix-icon="locationIcon" -->
+          <!-- <el-tooltip placement="top" content="请点击地图选择经纬度">
             <Icon class="ml-5px" icon="bi:question-circle" color="#231815" />
-          </el-tooltip>
+          </el-tooltip> -->
+          <Icon class="ml-10px" icon="fa6-solid:map-location-dot" color="var(--el-color-primary)" />
         </div>
       </template>
       <div v-if="position.address">{{ position.address }}</div>

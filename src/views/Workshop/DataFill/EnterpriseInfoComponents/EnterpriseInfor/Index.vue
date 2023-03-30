@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div class="table-wrap" v-if="showBox">
+    <div class="table-wrap !py-12px !mt-0px" v-if="showBox">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace />

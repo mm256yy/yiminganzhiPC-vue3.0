@@ -122,7 +122,7 @@ const setVisible = () => {
           >&nbsp;
           <Icon
             style="color: rgba(62, 115, 236, 1)"
-            :icon="visible ? 'ant-design:caret-down-outlined' : 'ant-design:caret-up-outlined'"
+            :icon="visible ? 'ant-design:caret-up-outlined' : 'ant-design:caret-down-outlined'"
           />
         </ElButton>
       </div>
@@ -145,7 +145,7 @@ const setVisible = () => {
         >&nbsp;
         <Icon
           style="color: rgba(62, 115, 236, 1)"
-          :icon="visible ? 'ant-design:caret-down-outlined' : 'ant-design:caret-up-outlined'"
+          :icon="visible ? 'ant-design:caret-up-outlined' : 'ant-design:caret-down-outlined'"
         />
       </ElButton>
     </div>

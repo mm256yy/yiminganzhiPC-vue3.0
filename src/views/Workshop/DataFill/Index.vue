@@ -5,7 +5,7 @@
         @click="onBack"
         :icon="BackIcon"
         type="default"
-        class="px-9px py-0px !h-28px mr-8px"
+        class="px-9px py-0px !h-28px mr-8px !text-12px"
       >
         返回
       </ElButton>
@@ -542,5 +542,11 @@ const onPrintDialogClose = () => {
   .el-dialog__body {
     padding: 16px 40px !important;
   }
+}
+
+.datafill-content {
+  padding: 12px 16px 16px;
+  background: #ffffff;
+  border-radius: 4px;
 }
 </style>

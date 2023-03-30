@@ -460,7 +460,7 @@ import {
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch, nextTick, computed, defineExpose } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'

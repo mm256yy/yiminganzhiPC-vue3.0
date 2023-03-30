@@ -263,10 +263,10 @@
         </ElCol>
       </ElRow>
 
-      <ElRow :gutter="30">
-        <ElCol :span="9">
+      <ElRow>
+        <ElCol :span="24">
           <ElFormItem label="身份证照片">
-            <div class="flex items-center">
+            <div class="card-img-list">
               <ElUpload
                 :class="[cardFront.length > 0 || actionType === 'view' ? 'upload' : '']"
                 action="/api/file/type"
@@ -287,11 +287,9 @@
                 :on-error="onError"
               >
                 <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
-                  <div class="relative w-148px h-148px">
-                    <img class="block w-148px h-148px" src="@/assets/imgs/card-front.png" alt="" />
-                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                      点击上传正面
-                    </div>
+                  <div class="card-img-box">
+                    <img class="card-img" src="@/assets/imgs/card-front.png" alt="" />
+                    <div class="card-txt"> 上传正面 </div>
                   </div>
                 </template>
                 <template #trigge v-else></template>
@@ -317,80 +315,80 @@
                 :on-preview="imgPreview"
               >
                 <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
-                  <div class="relative w-148px h-148px">
-                    <img class="block w-148px h-148px" src="@/assets/imgs/card-back.png" alt="" />
-                    <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                      点击上传反面
-                    </div>
+                  <div class="card-img-box">
+                    <img class="card-img" src="@/assets/imgs/card-back.png" alt="" />
+                    <div class="card-txt"> 上传背面 </div>
                   </div>
                 </template>
               </ElUpload>
             </div>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="15">
+      </ElRow>
+      <ElRow>
+        <ElCol :span="24">
           <ElFormItem label="户口本照片">
-            <ElUpload
-              :on-error="onError"
-              :class="[actionType === 'view' ? 'upload' : '']"
-              action="/api/file/type"
-              :data="{
-                type: 'image'
-              }"
-              :limit="1"
-              :list-type="'picture-card'"
-              accept=".jpg,.jpeg,.png"
-              :multiple="false"
-              :file-list="householdPic"
-              :headers="headers"
-              :on-success="uploadFileChange3"
-              :before-remove="beforeRemove"
-              :on-remove="removeFile3"
-              :on-preview="imgPreview"
-            >
-              <template #trigger v-if="actionType !== 'view'">
-                <div class="relative w-148px h-148px">
-                  <img class="block w-148px h-148px" src="@/assets/imgs/household.png" alt="" />
-                  <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]">
-                    点击上传
+            <div class="card-img-list">
+              <ElUpload
+                :on-error="onError"
+                :class="[actionType === 'view' ? 'upload' : '']"
+                action="/api/file/type"
+                :data="{
+                  type: 'image'
+                }"
+                :limit="1"
+                :list-type="'picture-card'"
+                accept=".jpg,.jpeg,.png"
+                :multiple="false"
+                :file-list="householdPic"
+                :headers="headers"
+                :on-success="uploadFileChange3"
+                :before-remove="beforeRemove"
+                :on-remove="removeFile3"
+                :on-preview="imgPreview"
+              >
+                <template #trigger v-if="actionType !== 'view'">
+                  <div class="card-img-box">
+                    <img class="card-img" src="@/assets/imgs/household.png" alt="" />
+                    <div class="card-txt"> 点击上传 </div>
                   </div>
-                </div>
-              </template>
-            </ElUpload>
+                </template>
+              </ElUpload>
+            </div>
           </ElFormItem>
         </ElCol>
       </ElRow>
 
       <ElFormItem label="其他附件">
-        <ElUpload
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          :on-error="onError"
-          :class="[actionType === 'view' ? 'upload' : '']"
-          :disabled="actionType === 'view'"
-          :list-type="'picture-card'"
-          accept=".jpg,.jpeg,.png"
-          :multiple="true"
-          :file-list="otherPic"
-          :headers="headers"
-          :on-success="uploadFileChange4"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile4"
-          :on-preview="imgPreview"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="relative w-148px h-148px">
-              <div class="flex items-center justify-center w-148px h-148px">
-                <Icon icon="ant-design:plus-outlined" :size="22" />
+        <div class="card-img-list">
+          <ElUpload
+            action="/api/file/type"
+            :data="{
+              type: 'image'
+            }"
+            :on-error="onError"
+            :class="[actionType === 'view' ? 'upload' : '']"
+            :disabled="actionType === 'view'"
+            :list-type="'picture-card'"
+            accept=".jpg,.jpeg,.png"
+            :multiple="true"
+            :file-list="otherPic"
+            :headers="headers"
+            :on-success="uploadFileChange4"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile4"
+            :on-preview="imgPreview"
+          >
+            <template #trigger v-if="actionType !== 'view'">
+              <div class="card-img-box">
+                <div class="card-img-custom">
+                  <Icon icon="ant-design:plus-outlined" :size="22" />
+                </div>
+                <div class="card-txt"> 点击上传 </div>
               </div>
-              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                点击上传附件
-              </div>
-            </div>
-          </template>
-        </ElUpload>
+            </template>
+          </ElUpload>
+        </div>
       </ElFormItem>
 
       <ElFormItem label="备注" prop="remark">
