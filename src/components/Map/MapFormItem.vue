@@ -34,9 +34,8 @@
 <script setup lang="ts">
 // nextTick,
 import { ref, watch, reactive } from 'vue'
-import { ElPopover, ElInput, ElFormItem, ElTooltip } from 'element-plus'
+import { ElPopover, ElInput, ElFormItem } from 'element-plus'
 import { Map } from '@/components/Map'
-import { useIcon } from '@/hooks/web/useIcon'
 const seatData = ref('')
 interface PositionType {
   latitude: number
@@ -56,10 +55,6 @@ const position: PositionType = reactive({
   latitude: 0,
   longitude: 0,
   address: ''
-})
-const locationIcon = useIcon({
-  icon: 'fa6-solid:map-location-dot',
-  color: 'var(--el-color-primary)'
 })
 
 watch(
