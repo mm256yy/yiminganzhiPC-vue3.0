@@ -1,11 +1,11 @@
 <template>
   <WorkContentWrap>
-    <ScaleBox>
-      <div class="bigBox white bigBox1">
+    <div class="home-wrap" :style="{ transform: `scale(${scale})` }">
+      <div class="topBox">
         <ElRow :gutter="20">
           <ElCol :span="6" v-for="item in StatisticsData" :key="item.type">
             <div class="box">
-              <div class="contentLeftBox">
+              <div class="contentLeftBox" @click="jumpToFill(item.type)">
                 <div class="ft16">{{
                   item.type == 'PeasantHousehold'
                     ? '居民户'
@@ -16,52 +16,64 @@
                     : '村集体'
                 }}</div>
                 <div>
-                  <span class="ft43">{{ item.totalNum }}</span> <span class="ft16">户</span></div
+                  <span class="ft43">{{ item.totalNum }}</span>
+                  <span class="ft16">{{
+                    item.type == 'PeasantHousehold' ? '户' : item.type == 'Village' ? '个' : '家'
+                  }}</span></div
                 >
               </div>
 
               <div class="contentRightBox">
-                <div
-                  ><span>已报</span><br /><span class="red">{{ item.reportNum }}</span></div
-                >
-                <div
-                  ><span>未报</span><br /><span class="red">{{ item.unReportNum }}</span></div
-                >
-                <div
-                  ><span>我的</span><br /><span class="red">{{ item.submitNum }}</span></div
-                >
+                <div>
+                  <span class="txt">已上报</span><span class="red">{{ item.reportNum }}</span>
+                  <span>{{
+                    item.type == 'PeasantHousehold' ? '户' : item.type == 'Village' ? '个' : '家'
+                  }}</span>
+                </div>
+                <div>
+                  <span class="txt">未上报</span><span class="red">{{ item.unReportNum }}</span>
+                  <span>{{
+                    item.type == 'PeasantHousehold' ? '户' : item.type == 'Village' ? '个' : '家'
+                  }}</span>
+                </div>
+                <div>
+                  <span class="txt">我的上报</span><span class="red">{{ item.submitNum }}</span>
+                  <span>{{
+                    item.type == 'PeasantHousehold' ? '户' : item.type == 'Village' ? '个' : '家'
+                  }}</span>
+                </div>
               </div>
             </div></ElCol
           >
         </ElRow>
       </div>
 
-      <div class="bigBox" style=" height: 338px;padding: 15px 0">
+      <div class="centerBox">
         <ElRow :gutter="20">
           <ElCol :span="8">
             <div class="echartBox">
               <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_workteam.png" alt="" width="24" />
+                <img src="@/assets/imgs/Icon_workteam.png" alt="" width="18" />
                 <span class="text">工作组TOP5</span>
               </div>
-              <Echart :options="workOption" />
+              <Echart :options="workOption" :height="265" />
             </div>
           </ElCol>
           <ElCol :span="8">
             <div class="echartBox">
               <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_resident.png" alt="" width="24" />
+                <img src="@/assets/imgs/Icon_resident.png" alt="" width="18" />
                 <span class="text">居民户分布</span>
               </div>
-              <div style="margin-top: 50px">
+              <div>
                 <Echart :options="residentOption" :height="268" />
               </div>
             </div>
           </ElCol>
           <ElCol :span="8">
             <div class="echartBox">
-              <div class="echartTitle" style="margin-bottom: 10px">
-                <img src="@/assets/imgs/Icon_report.png" alt="" width="24" />
+              <div class="echartTitle">
+                <img src="@/assets/imgs/Icon_report.png" alt="" width="18" />
                 <span class="text">报告展示</span>
               </div>
               <ElTabs
@@ -73,88 +85,93 @@
               >
                 <ElTabPane label="报告归集" name="报告归集">
                   <div class="tabsBox">
-                    <div class="tabsContentBox"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                    <div class="tabsContentBox">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r"
                     /></div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>调查报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>规划报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>导截流验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>规划大纲</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>设计变更报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" />
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" />
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" />
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" />
+                    </div>
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
+                      <span>调查大纲</span>
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" />
                     </div>
                   </div>
                 </ElTabPane>
                 <ElTabPane label="数据归集" name="数据归集">
                   <div class="tabsBox">
-                    <div class="tabsContentBox"
-                      ><img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="24" />
+                    <div class="tabsContentBox">
+                      <img src="@/assets/imgs/Icon_Report_disabled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r"
-                    /></div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
-                      <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" />
                     </div>
-                  </div></ElTabPane
-                >
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
+                      <span>蓄水验收设计报告</span>
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
+                    </div>
+                  </div>
+                </ElTabPane>
                 <ElTabPane label="其他报告" name="其他报告">
                   <div class="tabsBox">
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>蓄水验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>调查大纲</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
-                    <div class="tabsContentBox" style="background: #f2f7ff"
-                      ><img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="24" />
+                    <div class="tabsContentBox" style="background: #f2f7ff">
+                      <img src="@/assets/imgs/Icon_Report_abled.png" alt="" width="18" />
                       <span>导截流验收设计报告</span>
-                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="24" class="img_r" /> -->
+                      <!-- <img src="@/assets/imgs/Icon_Upload.png" alt="" width="18" class="img_r" /> -->
                     </div>
                   </div>
                 </ElTabPane>
@@ -164,34 +181,34 @@
         </ElRow>
       </div>
 
-      <div class="bigBox" style=" height: 286px;padding: 15px 0">
+      <div class="bottomBox">
         <ElRow :gutter="20">
           <ElCol :span="16">
-            <div class="echartBox h400">
+            <div class="echartBox">
               <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_collect.png" alt="" width="24" />
+                <img src="@/assets/imgs/Icon_collect.png" alt="" width="18" />
                 <span class="text">采集进度</span>
               </div>
-              <Echart :options="gatherOption" :height="350" /> </div
+              <Echart :options="gatherOption" :height="274" /> </div
           ></ElCol>
           <ElCol :span="8">
-            <div class="echartBox h400">
+            <div class="echartBox">
               <div class="echartTitle">
-                <img src="@/assets/imgs/Icon_news.png" alt="" width="24" />
+                <img src="@/assets/imgs/Icon_news.png" alt="" width="18" />
                 <span class="text">新闻通知</span>
               </div>
-              <ElTabs v-model="activeName2" class="demo-tabs new" @tab-click="newhandleClick">
+              <ElTabs v-model="activeName2" class="new" @tab-click="newhandleClick">
                 <ElTabPane name="水库要闻" label="水库要闻">
                   <div class="element">
                     <div class="listbox" v-for="item in newList" :key="item.id">
-                      <img :src="item.coverPic" alt="" :width="107" style="height: 67px" />
+                      <img :src="item.coverPic" alt="" :width="80" style="height: 50px" />
                       <div class="text">
                         <div class="title">{{ item.title }}</div>
                         <div class="time">{{ item.releaseTime }}</div>
                       </div>
                     </div>
-                    <div class="more">查看更多></div>
                   </div>
+                  <div class="more">查看更多></div>
                 </ElTabPane>
                 <ElTabPane label="政策法规" name="政策法规">
                   <div class="element">
@@ -206,26 +223,34 @@
                     </div>
                   </div>
                 </ElTabPane>
-                <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
+                <ElTabPane label="水库概况" name="水库概况">
+                  <div class="element"> 水库概况 </div>
+                </ElTabPane>
 
-                <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
-                <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-                <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
+                <ElTabPane label="建设历程" name="建设历程">
+                  <div class="element"> 建设历程 </div>
+                </ElTabPane>
+                <ElTabPane label="安置概况" name="安置概况">
+                  <div class="element"> 安置概况 </div>
+                </ElTabPane>
+                <ElTabPane label="水库风采" name="水库风采">
+                  <div class="element"> 水库风采 </div>
+                </ElTabPane>
               </ElTabs>
             </div></ElCol
           >
         </ElRow>
       </div>
-    </ScaleBox>
+    </div>
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import ScaleBox from './ScaleBox.vue'
 import { ElRow, ElCol, ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
+import { useRouter } from 'vue-router'
 // computed
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
   getTOP10,
   homeStatistics,
@@ -242,6 +267,31 @@ import Rank_5 from '@/assets/imgs/Rank_5.png'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
+
+const scale = ref(1)
+const { push } = useRouter()
+
+onMounted(() => {
+  // 相对于设计稿的高度
+  const innerHeight =
+    document.documentElement.scrollHeight || document.body.scrollHeight || window.innerHeight
+
+  if (innerHeight < 960) {
+    scale.value = (innerHeight - 20) / 960
+  }
+})
+
+const jumpToFill = (type) => {
+  const path =
+    type === 'PeasantHousehold'
+      ? '/Workshop/Landlord'
+      : type === 'Company'
+      ? '/Workshop/Enterprise'
+      : type === 'Village'
+      ? '/Workshop/villageInfoC'
+      : '/Workshop/IndividualB'
+  push(path)
+}
 
 const newList = ref<any>([])
 const policyList = ref<any>([])
@@ -326,7 +376,7 @@ const residentOption = ref({
 })
 const workOption = ref({
   grid: {
-    left: '15%',
+    left: '22%',
     top: '2%'
   },
   tooltip: {
@@ -340,11 +390,11 @@ const workOption = ref({
     {
       type: 'category',
       inverse: true,
-
       axisLabel: {
+        verticalAlign: 'middle',
         formatter: function (p, v) {
           if (p) {
-            return `{img${v}|}` + p
+            return `{img${v}|}{name|${p}}`
           }
         },
         rich: {
@@ -383,14 +433,9 @@ const workOption = ref({
             width: 20,
             height: 20
           },
-          num: {
-            width: 16,
-            fontSize: 16,
-            fontWeight: 800
-          },
           name: {
-            width: 16,
-            fontSize: 16
+            width: 72,
+            fontSize: 14
           }
         },
         textStyle: {
@@ -555,7 +600,7 @@ const gatherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: 'rgba(113, 242, 185, 1)' // 0% 处的颜色
+            color: 'rgba(113, 182, 185, 1)' // 0% 处的颜色
           },
           {
             offset: 1,
@@ -572,4 +617,8 @@ const handleClick = (val) => {
 </script>
 <style lang="less" scoped>
 @import './Index.less';
+
+.home-wrap {
+  transform-origin: top center;
+}
 </style>
