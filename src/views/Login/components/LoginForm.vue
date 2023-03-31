@@ -44,11 +44,11 @@
         </div>
       </template>
 
-      <template #tool>
+      <!-- <template #tool>
         <div class="flex justify-between items-center w-[100%]">
           <ElCheckbox v-model="remember" label="记住我" size="small" />
         </div>
-      </template>
+      </template> -->
 
       <template #login>
         <div class="w-[100%]">
@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { reactive, ref, unref, watch, onMounted } from 'vue'
 import { Form } from '@/components/Form'
-import { ElButton, ElCheckbox } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useForm } from '@/hooks/web/useForm'
 import { loginApi, loginCaptchaApi } from '@/api/login'
 import { useAppStore } from '@/store/modules/app'
@@ -155,7 +155,6 @@ const schema = reactive<FormSchema[]>([
   }
 ])
 
-const remember = ref(false)
 const { register, elFormRef, methods } = useForm()
 const loading = ref(false)
 const redirect = ref<string>('')

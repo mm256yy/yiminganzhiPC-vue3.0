@@ -269,9 +269,9 @@
 import ScaleBox from './ScaleBox.vue'
 import { ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
+import { useRouter } from 'vue-router'
 // computed
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import {
   getTopTen,
   homeStatistics,
@@ -405,9 +405,10 @@ const workOption = ref({
       type: 'category',
       inverse: true,
       axisLabel: {
+        verticalAlign: 'middle',
         formatter: function (p, v) {
           if (p) {
-            return `{img${v}|}` + p
+            return `{img${v}|}{name|${p}}`
           }
         },
         rich: {
@@ -446,14 +447,9 @@ const workOption = ref({
             width: 20,
             height: 20
           },
-          num: {
-            width: 16,
-            fontSize: 16,
-            fontWeight: 800
-          },
           name: {
-            width: 16,
-            fontSize: 16
+            width: 72,
+            fontSize: 14
           }
         },
         textStyle: {
@@ -560,7 +556,7 @@ const gatherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: 'rgba(113, 242, 185, 1)' // 0% 处的颜色
+            color: 'rgba(113, 182, 185, 1)' // 0% 处的颜色
           },
           {
             offset: 1,
@@ -666,4 +662,8 @@ onMounted(async () => {
 </script>
 <style lang="less" scoped>
 @import './Index.less';
+
+.home-wrap {
+  transform-origin: top center;
+}
 </style>

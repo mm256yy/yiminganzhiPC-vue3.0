@@ -49,6 +49,9 @@
 .big-box-1 {
   height: 152px;
   padding: 20px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: white;
 }
 
 .big-box-2 {
@@ -293,6 +296,16 @@
 
   :deep(.el-tabs__nav-wrap::after) {
     height: 0;
+  }
+  :deep(.el-tabs__header) {
+    margin: 0;
+    height: 32px;
+  }
+  :deep(.el-tabs__item) {
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    color: #666666;
   }
 }
 

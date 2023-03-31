@@ -1,9 +1,7 @@
-import { WorkContentWrap } from '@/components/ContentWrap';
-
 <!-- 安置意愿 -->
 <template>
   <WorkContentWrap>
-    <div class="table-wrap">
+    <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>

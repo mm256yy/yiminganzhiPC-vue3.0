@@ -14,6 +14,7 @@ import { setDefaultProjectApi } from '@/api/project'
 import { ProjectRoleEnum } from '@/api/sys/types'
 import { usePlatform } from '@/hooks/web/usePlatform'
 import { currentUserApi } from '@/api/sys'
+import bgImg from '@/assets/imgs/headerbg.png'
 
 const { getPrefixCls } = useDesign()
 
@@ -67,11 +68,12 @@ export default defineComponent({
       }
     }
     return () => (
-      <section class={[prefixCls, `${prefixCls}__top`, 'w-[100%] h-[100%] relative']}>
+      <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
         {/* 顶部背景 */}
-        <div class="absolute z-0 bg-gradient-to-b from-[#295EE6] to-[#DFE8FF] w-full h-517px bg"></div>
 
-        <div class="flex items-center justify-between px-16px h-64px ">
+        <img class="bg" src={bgImg} />
+
+        <div class="flex items-center justify-between px-16px h-64px relative z-1">
           <WorkLogo></WorkLogo>
           <WorkMenu class="flex-1 pl-24px"></WorkMenu>
           <div class="div">
@@ -107,6 +109,11 @@ export default defineComponent({
 })
 </script>
 
+<style>
+/* #app {
+  overflow: scroll;
+} */
+</style>
 <style lang="less" scoped>
 :deep(.amap-sug-result) {
   z-index: 9999 !important;
@@ -130,14 +137,27 @@ export default defineComponent({
 }
 @prefix-cls: ~'@{namespace}-layout';
 .@{prefix-cls} {
+  width: 100%;
+  max-width: 1920px;
+  min-width: 1180px;
+  margin: 0 auto;
+  // overflow: scroll;
   background-color: var(--app-content-bg-color);
   :deep(.@{elNamespace}-scrollbar__view) {
     height: 100% !important;
   }
 }
 
+// .@{prefix-cls}-content {
+//   overflow: scroll;
+// }
+
 .bg {
-  background: url(@/assets/imgs/headerbg.png) no-repeat;
-  background-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: auto;
 }
 </style>

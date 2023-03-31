@@ -282,150 +282,150 @@
       <!-- :class="[actionType === 'view' && housePic.length > 0 ? 'upload' : '']" -->
 
       <ElFormItem label="房屋平面示意图">
-        <ElUpload
-          :disabled="actionType === 'view'"
-          :list-type="'picture-card'"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          accept=".jpg,.jpeg,.png"
-          :multiple="false"
-          :file-list="housePic"
-          :headers="headers"
-          :on-error="onError"
-          :on-success="uploadFileChange1"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile1"
-          :on-preview="imgPreview"
-          :class="[actionType === 'view' ? 'upload' : '']"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="relative w-148px h-148px">
-              <img class="block w-148px h-148px" src="@/assets/imgs/house.png" alt="" />
-              <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
-                >点击上传</div
-              >
-            </div>
-          </template>
-        </ElUpload>
-        <div
-          style="display: flex; height: 158px"
-          :class="[housePic.length == 0 ? 'CADuplogd' : '']"
-        >
-          <span style="padding: 0 12px; color: #606266">房屋平面示意图CAD格式:</span>
+        <div class="card-img-list">
           <ElUpload
-            :file-list="CADfile"
+            :disabled="actionType === 'view'"
+            :list-type="'picture-card'"
+            action="/api/file/type"
             :data="{
               type: 'image'
             }"
-            accept=".dwg,.dws,.dxf"
-            class="upload-demo"
-            action="/api/file/type"
-            multiple
+            accept=".jpg,.jpeg,.png"
+            :multiple="false"
+            :file-list="housePic"
             :headers="headers"
-            :on-preview="previewClick"
-            :on-success="uploadFileChangeCAD"
+            :on-error="onError"
+            :on-success="uploadFileChange1"
             :before-remove="beforeRemove"
+            :on-remove="removeFile1"
+            :on-preview="imgPreview"
+            :class="[actionType === 'view' ? 'upload' : '']"
           >
             <template #trigger v-if="actionType !== 'view'">
-              <el-button type="primary">点击上传</el-button>
+              <div class="card-img-box">
+                <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                <div class="card-txt">点击上传</div>
+              </div>
+            </template>
+          </ElUpload>
+          <div
+            style="display: flex; height: 88px"
+            :class="[housePic.length == 0 ? 'CADuplogd' : '']"
+          >
+            <span style="padding: 0 12px; color: #606266">房屋平面示意图CAD格式:</span>
+            <ElUpload
+              :file-list="CADfile"
+              :data="{
+                type: 'image'
+              }"
+              accept=".dwg,.dws,.dxf"
+              class="upload-demo"
+              action="/api/file/type"
+              multiple
+              :headers="headers"
+              :on-preview="previewClick"
+              :on-success="uploadFileChangeCAD"
+              :before-remove="beforeRemove"
+            >
+              <template #trigger v-if="actionType !== 'view'">
+                <el-button type="primary">点击上传</el-button>
+              </template>
+            </ElUpload>
+          </div>
+        </div>
+      </ElFormItem>
+
+      <ElFormItem label="土地证">
+        <div class="card-img-list">
+          <ElUpload
+            :disabled="actionType === 'view'"
+            :on-error="onError"
+            :list-type="'picture-card'"
+            action="/api/file/type"
+            :data="{
+              type: 'image'
+            }"
+            accept=".jpg,.jpeg,.png"
+            :multiple="false"
+            :file-list="landPic"
+            :headers="headers"
+            :on-success="uploadFileChange2"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile2"
+            :on-preview="imgPreview"
+            :class="[actionType === 'view' ? 'upload' : '']"
+          >
+            <template #trigger v-if="actionType !== 'view'">
+              <div class="card-img-box">
+                <img class="card-img" src="@/assets/imgs/land.png" alt="" />
+                <div class="card-txt">点击上传</div>
+              </div>
             </template>
           </ElUpload>
         </div>
       </ElFormItem>
 
-      <ElFormItem label="土地证">
-        <ElUpload
-          :disabled="actionType === 'view'"
-          :on-error="onError"
-          :list-type="'picture-card'"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          accept=".jpg,.jpeg,.png"
-          :multiple="false"
-          :file-list="landPic"
-          :headers="headers"
-          :on-success="uploadFileChange2"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile2"
-          :on-preview="imgPreview"
-          :class="[actionType === 'view' ? 'upload' : '']"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="relative w-148px h-148px">
-              <img class="block w-148px h-148px" src="@/assets/imgs/land.png" alt="" />
-              <div class="absolute bottom-26px left-46px text-[var(--el-color-primary)]"
-                >点击上传</div
-              >
-            </div>
-          </template>
-        </ElUpload>
-      </ElFormItem>
-
       <ElFormItem label="房屋照片">
-        <ElUpload
-          :disabled="actionType === 'view'"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          :on-error="onError"
-          :list-type="'picture-card'"
-          accept=".jpg,.jpeg,.png"
-          :multiple="true"
-          :file-list="homePic"
-          :headers="headers"
-          :on-success="uploadFileChange3"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile3"
-          :class="[actionType === 'view' ? 'upload' : '']"
-          :on-preview="imgPreview"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="relative w-148px h-148px">
-              <div class="flex items-center justify-center w-148px h-148px">
-                <Icon icon="ant-design:plus-outlined" :size="22" />
+        <div class="card-img-list">
+          <ElUpload
+            :disabled="actionType === 'view'"
+            action="/api/file/type"
+            :data="{
+              type: 'image'
+            }"
+            :on-error="onError"
+            :list-type="'picture-card'"
+            accept=".jpg,.jpeg,.png"
+            :multiple="true"
+            :file-list="homePic"
+            :headers="headers"
+            :on-success="uploadFileChange3"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile3"
+            :class="[actionType === 'view' ? 'upload' : '']"
+            :on-preview="imgPreview"
+          >
+            <template #trigger v-if="actionType !== 'view'">
+              <div class="card-img-box">
+                <div class="card-img-custom">
+                  <Icon icon="ant-design:plus-outlined" :size="22" />
+                </div>
+                <div class="card-txt"> 点击上传 </div>
               </div>
-              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]">
-                点击上传
-              </div>
-            </div>
-          </template>
-        </ElUpload>
+            </template>
+          </ElUpload>
+        </div>
       </ElFormItem>
 
       <ElFormItem label="其他附件">
-        <ElUpload
-          :class="[actionType === 'view' ? 'upload' : '']"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          :on-error="onError"
-          :list-type="'picture-card'"
-          accept=".jpg,.jpeg,.png"
-          :multiple="true"
-          :file-list="otherPic"
-          :headers="headers"
-          :on-success="uploadFileChange4"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile4"
-          :on-preview="imgPreview"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="relative w-148px h-148px">
-              <div class="flex items-center justify-center w-148px h-148px">
-                <Icon icon="ant-design:plus-outlined" :size="22" />
+        <div class="card-img-list">
+          <ElUpload
+            :class="[actionType === 'view' ? 'upload' : '']"
+            action="/api/file/type"
+            :data="{
+              type: 'image'
+            }"
+            :on-error="onError"
+            :list-type="'picture-card'"
+            accept=".jpg,.jpeg,.png"
+            :multiple="true"
+            :file-list="otherPic"
+            :headers="headers"
+            :on-success="uploadFileChange4"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile4"
+            :on-preview="imgPreview"
+          >
+            <template #trigger v-if="actionType !== 'view'">
+              <div class="card-img-box">
+                <div class="card-img-custom">
+                  <Icon icon="ant-design:plus-outlined" :size="22" />
+                </div>
+                <div class="card-txt">点击上传</div>
               </div>
-              <div class="absolute bottom-26px left-32px text-[var(--el-color-primary)]"
-                >点击上传附件</div
-              >
-            </div>
-          </template>
-        </ElUpload>
+            </template>
+          </ElUpload>
+        </div>
       </ElFormItem>
 
       <ElFormItem label="备注" prop="remark">

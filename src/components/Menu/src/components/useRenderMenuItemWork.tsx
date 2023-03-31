@@ -46,7 +46,7 @@ export const useRenderMenuItem = () => {
           const preFixCls = getPrefixCls('menu-popper')
           return (
             <div class="flex min-w-104px px-20px items-center justify-center without-outline">
-              <ElSubMenu index={fullPath} popperClass={`${preFixCls}--horizontal drop-menu`}>
+              <ElSubMenu index={fullPath} popper-class={`${preFixCls}--horizontal drop-menu`}>
                 {{
                   title: () => renderMenuTitle(meta),
                   default: () => renderMenuItem(v.children!, fullPath, true)
