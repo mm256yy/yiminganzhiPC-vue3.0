@@ -56,3 +56,13 @@ export const getExcelList = (): Promise<TableResponse<ExcelListType>> => {
     }
   })
 }
+
+// 获取字典表数据
+export const getDictByName = (name: string) => {
+  return request.get({
+    url: '/dict/tree',
+    params: {
+      name
+    }
+  })
+}

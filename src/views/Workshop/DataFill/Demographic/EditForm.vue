@@ -195,20 +195,7 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="职业" prop="occupation">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.occupation"
-              class="!w-full"
-              :placeholder="placeholderList[5]"
-            >
-              <ElOption
-                v-for="item in dictObj[305]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+            <ElCascader v-model="form.occupation" :options="occupationOptions" />
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -416,6 +403,7 @@ import {
   FormRules,
   ElOption,
   ElSelect,
+  ElCascader,
   ElUpload,
   ElDatePicker,
   ElDivider,
@@ -424,14 +412,18 @@ import {
   ElMessageBox,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch, nextTick, computed } from 'vue'
+import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { addDemographicApi, updateDemographicApi } from '@/api/workshop/population/service'
+import {
+  addDemographicApi,
+  updateDemographicApi,
+  getDictByName
+} from '@/api/workshop/population/service'
 // import { standardFormatDate } from '@/utils/index'
 
 interface PropsType {
@@ -473,6 +465,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
+const occupationOptions = ref<any>([]) // 职业选项
 const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -581,6 +574,7 @@ const onSubmit = debounce((formEl) => {
       // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
         ...form.value,
+        occupation: form.value.occupation ? JSON.stringify(form.value.occupation) : '',
         insuranceType: form.value.insuranceType ? form.value.insuranceType.toString() : '',
         cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
         householdPic: JSON.stringify(householdPic.value),
@@ -592,6 +586,13 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
+
+// 获取职业列表
+const getOccupationOptions = () => {
+  getDictByName('职业').then((res: any) => {
+    occupationOptions.value = res
+  })
+}
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
@@ -659,6 +660,10 @@ const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
+
+onMounted(() => {
+  getOccupationOptions()
+})
 </script>
 
 <style lang="less">

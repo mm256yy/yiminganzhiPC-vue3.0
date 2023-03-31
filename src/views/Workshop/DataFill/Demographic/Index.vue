@@ -236,6 +236,7 @@ const onEditRow = (row: DemographicDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = {
     ...row,
+    occupation: row.occupation ? JSON.parse(row.occupation) : '',
     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
   }
   dialog.value = true
@@ -252,6 +253,7 @@ const onViewRow = (row: DemographicDtoType) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row,
+    occupation: row.occupation ? JSON.parse(row.occupation) : '',
     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
   }
   dialog.value = true
