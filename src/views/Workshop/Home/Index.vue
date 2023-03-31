@@ -86,48 +86,180 @@
             <ElTabPane label="报告归集" name="报告归集">
               <div class="tabs-box">
                 <view class="tabs-box-left">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Outline}&title=调查大纲`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Outline"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>调查大纲</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Outline"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Report}&title=调查报告`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Report"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>调查报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Report"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.PlanningOutline}&title=规划大纲`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.PlanningOutline"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>规划大纲</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.PlanningOutline"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.PlanningReport}&title=规划报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.PlanningReport"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>规划报告</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.PlanningReport"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/changeReport?type=${ReportTypes.Change}&title=设计变更报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Change"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>设计变更报告</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Change"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
                 </view>
                 <view class="middle" />
                 <view class="tabs-box-right">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.Models}&title=导截流验收设计报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Models"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>导截流验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Models"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.WaterStorage}&title=蓄水验收设计报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.WaterStorage"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>蓄水验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.WaterStorage"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.Completion}&title=竣工验收设计报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Completion"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>竣工验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Completion"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
                 </view>
               </div>
@@ -135,76 +267,194 @@
             <ElTabPane label="其他报告" name="其他报告">
               <div class="tabs-box">
                 <div class="tabs-box-left">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/report?type=${ReportTypes.SocialStability}&title=社稳报告`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.SocialStability"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>社稳报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.SocialStability"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Disaster}&title=地灾评估`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Disaster"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>地灾评估</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Disaster"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Site}&title=安置点祥归`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Site"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>安置点祥归</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Site"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Enterprise}&title=企事业单位`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Enterprise"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>企(事)业单位</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Enterprise"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/professionalReport?type=${ReportTypes.ProfessionalProject}&title=专业项目`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.ProfessionalProject"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>专业项目</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.ProfessionalProject"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
                 </div>
                 <div class="middle"></div>
                 <div class="tabs-box-right">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(
+                        `/workshop/professionalReport?type=${ReportTypes.Clean}&title=库底清理`
+                      )
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Clean"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>库底清理</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Clean"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="routerJump(`/workshop/report?type=${ReportTypes.Land}&title=土地报批`)"
+                  >
+                    <img
+                      v-if="reportResult.Land"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>土地报批</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Land"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="
+                      routerJump(`/workshop/report?type=${ReportTypes.Woodland}&title=林地可研`)
+                    "
+                  >
+                    <img
+                      v-if="reportResult.Woodland"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>林地可研</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                    <img
+                      v-if="!reportResult.Woodland"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <div
+                    class="tabs-content-box"
+                    @click="routerJump(`/workshop/report?type=${ReportTypes.Other}&title=其他`)"
+                  >
+                    <img
+                      v-if="reportResult.Other"
+                      src="@/assets/imgs/Icon_Report_abled.png"
+                      width="15"
+                    />
+                    <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>其他</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                    <img
+                      v-if="!reportResult.Other"
+                      src="@/assets/imgs/Icon_Upload.png"
+                      width="15"
+                      class="img_r"
+                    />
                   </div>
                 </div>
               </div>
             </ElTabPane>
-            <!-- <ElTabPane label="数据归集" name="数据归集">
-						  <div class="tabs-box">
-						    <div class="tabs-box-left">
-						      <div class="tabs-content-box">
-						        <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-						        <span>调查大纲</span>
-						        <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-						      </div>
-						    </div>
-						    <div class="middle"></div>
-						    <div class="tabs-box-right">
-						      <div class="tabs-content-box">
-						        <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-						        <span>蓄水验收设计报告</span>
-						        <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" />
-						      </div>
-						    </div>
-						  </div>
-						</ElTabPane> -->
           </ElTabs>
         </div>
       </div>
@@ -281,6 +531,7 @@ import {
   getPolicyListApi,
   getReportNumber
 } from '@/api/home'
+import { ReportTypes } from './type'
 import Rank_1 from '@/assets/imgs/Rank_1.png'
 import Rank_2 from '@/assets/imgs/Rank_2.png'
 import Rank_3 from '@/assets/imgs/Rank_3.png'
@@ -296,6 +547,27 @@ const policyList = ref<any>([])
 const activeName = ref('报告归集')
 const activeName2 = ref('水库要闻')
 const activeName3 = ref('累计')
+const reportData = ref<any>([]) // 报告列表
+const reportResult = ref<any>({
+  Outline: false,
+  Report: false,
+  PlanningOutline: false,
+  PlanningReport: false,
+  Change: false,
+  ChangeSon: false,
+  Models: false,
+  WaterSotrage: false,
+  Completion: false,
+  SocialStability: false,
+  Disaster: false,
+  Site: false,
+  Enterprise: false,
+  Land: false,
+  WoodLand: false,
+  Other: false,
+  ProfessionalProject: false,
+  Clean: false
+})
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
 const initNewsData = () => {
@@ -613,8 +885,25 @@ const initGatherProgressData = () => {
 // 初始化获取报告展示数据（报告是否上传及个数）
 const initReportData = () => {
   getReportNumber().then((res: any) => {
-    console.log('res:', res)
+    reportData.value = res
+    getReportResult()
   })
+}
+
+/**
+ * 是否有报告
+ * @param type 报告类型
+ */
+const getReportResult = () => {
+  if (reportData.value && reportData.value.length > 0) {
+    reportData.value.map((item: any) => {
+      if (item.number > 0) {
+        reportResult.value[item.type] = true
+      } else {
+        reportResult.value[item.type] = false
+      }
+    })
+  }
 }
 
 const handleClick = (val: any) => {
@@ -664,9 +953,9 @@ onMounted(async () => {
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()
+  initReportData()
   initNewsData()
   initPolicyData()
-  initReportData()
 })
 </script>
 <style lang="less" scoped>

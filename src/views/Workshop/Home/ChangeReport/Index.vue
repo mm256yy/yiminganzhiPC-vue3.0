@@ -1,11 +1,19 @@
 <template>
   <work-content-wrap>
-    <ElBreadcrumb separator="/">
+    <ElBreadcrumb separator="/" class="flex items-center">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        type="default"
+        class="px-9px py-0px !h-28px mr-8px !text-12px"
+      >
+        返回
+      </ElButton>
       <ElBreadcrumbItem class="text-size-12px">首页</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">报告上传</ElBreadcrumbItem>
     </ElBreadcrumb>
 
-    <div class="flex items-center justify-between pb-18px">
+    <div class="title-wrapper">
       <div class="text-size-14px"> {{ title }} </div>
       <ElSpace>
         <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 设计变更报告 </ElButton>
@@ -70,13 +78,14 @@ import { ReportUpdateType } from '@/api/workshop/report/types'
 import { formatDate } from '@/utils/index'
 import EditForm from './components/EditForm.vue'
 
-const { currentRoute } = useRouter()
+const { currentRoute, back } = useRouter()
 const { query } = unref(currentRoute)
 const dialog = ref<boolean>(false)
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const reportType = query.type ? query.type : 'Change' // 报告类型
 const title = query.title ? query.title : '报告列表' // 列表标题
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { push } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId // 项目 ID
@@ -210,12 +219,28 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
+const onBack = () => {
+  back()
+}
+
 onMounted(() => {
   setSearchParams({ type: reportType as string })
 })
 </script>
 
 <style lang="less" scoped>
+.title-wrapper {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background: #fff;
+  border-radius: 3px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .name {
   color: #3e73ec;
   cursor: pointer;
