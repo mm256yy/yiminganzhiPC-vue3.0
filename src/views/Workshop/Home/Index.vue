@@ -278,7 +278,8 @@ import {
   homeProgress,
   homeDistribution,
   getNewsList,
-  getPolicyListApi
+  getPolicyListApi,
+  getReportNumber
 } from '@/api/home'
 import Rank_1 from '@/assets/imgs/Rank_1.png'
 import Rank_2 from '@/assets/imgs/Rank_2.png'
@@ -609,6 +610,13 @@ const initGatherProgressData = () => {
   })
 }
 
+// 初始化获取报告展示数据（报告是否上传及个数）
+const initReportData = () => {
+  getReportNumber().then((res: any) => {
+    console.log('res:', res)
+  })
+}
+
 const handleClick = (val: any) => {
   console.log(val)
 }
@@ -658,6 +666,7 @@ onMounted(async () => {
   initGatherProgressData()
   initNewsData()
   initPolicyData()
+  initReportData()
 })
 </script>
 <style lang="less" scoped>

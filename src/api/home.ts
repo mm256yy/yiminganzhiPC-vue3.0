@@ -28,6 +28,11 @@ export const detail = (id) => {
   return request.get({ url: `/news/${id}` })
 }
 
+// 获取首页报告展示数据
+export const getReportNumber = () => {
+  return request.get({ url: '/report/number' })
+}
+
 // export const getLandlordListApi = (
 //   query: Partial<LandlordDtoType>
 // ): Promise<TableResponse<LandlordDtoType>> => {
