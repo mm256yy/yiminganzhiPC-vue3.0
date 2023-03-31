@@ -1,192 +1,192 @@
 <template>
-  <ContentWrap>
-    <ScaleBox>
-      <div class="big-box big-box-1 bg-white">
-        <div
-          class="big-box-container"
-          v-for="item in statisticsData"
-          :key="item.type"
-          @click="toLink(item.type)"
-        >
-          <div class="content-box-left">
-            <div class="ft16">
-              {{
-                item.type == 'PeasantHousehold'
-                  ? '居民户'
-                  : item.type == 'Company'
-                  ? '企业'
-                  : item.type == 'IndividualHousehold'
-                  ? '个体工商'
-                  : '村集体'
-              }}
-            </div>
-            <div>
-              <span class="ft-43">{{ item.totalNum }}</span> <span class="ft-16">户</span>
-            </div>
+  <div class="home-wrap">
+    <!-- <ScaleBox> -->
+    <div class="big-box big-box-1 bg-white">
+      <div
+        class="big-box-container"
+        v-for="item in statisticsData"
+        :key="item.type"
+        @click="toLink(item.type)"
+      >
+        <div class="content-box-left">
+          <div class="ft-16">
+            {{
+              item.type == 'PeasantHousehold'
+                ? '居民户'
+                : item.type == 'Company'
+                ? '企业'
+                : item.type == 'IndividualHousehold'
+                ? '个体工商'
+                : '村集体'
+            }}
           </div>
+          <div>
+            <span class="ft-32">{{ item.totalNum }}</span> <span class="ft-16">户</span>
+          </div>
+        </div>
 
-          <div class="content-box-right">
-            <div class="text-box">
-              <div class="ft-14">已报</div>
-              <div class="ft-20">{{ item.reportNum }}</div>
-            </div>
-            <div class="text-box">
-              <div class="ft-14">未报</div>
-              <div class="ft-20">{{ item.unReportNum }}</div>
-            </div>
-            <div class="text-box">
-              <div class="ft-14" style="margin-right: 0">我的</div>
-              <div class="ft-20">{{ item.submitNum }}</div>
-            </div>
+        <div class="content-box-right">
+          <div class="text-box">
+            <div class="ft-14">已报</div>
+            <div class="ft-20">{{ item.reportNum }}</div>
+          </div>
+          <div class="text-box">
+            <div class="ft-14">未报</div>
+            <div class="ft-20">{{ item.unReportNum }}</div>
+          </div>
+          <div class="text-box">
+            <div class="ft-14" style="margin-right: 0">我的</div>
+            <div class="ft-20">{{ item.submitNum }}</div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="big-box big-box-2">
-        <div class="echart-box">
-          <div class="echart-title">
-            <img src="@/assets/imgs/Icon_workteam.png" width="15" />
-            <div class="text">工作组TOP5</div>
-          </div>
-          <ElTabs
-            v-model="activeName3"
-            type="card"
-            class="demo-tabs tabs-wrapper top5"
-            @tab-click="handleClick2"
-            :lazy="false"
-          >
-            <ElTabPane label="累计" name="累计" />
-            <ElTabPane label="今日" name="今日" />
-          </ElTabs>
-          <Echart :options="workOption" :height="280" />
+    <div class="big-box big-box-2">
+      <div class="echart-box">
+        <div class="echart-title">
+          <img src="@/assets/imgs/Icon_workteam.png" width="15" />
+          <div class="text">工作组TOP5</div>
         </div>
+        <ElTabs
+          v-model="activeName3"
+          type="card"
+          class="demo-tabs tabs-wrapper top5"
+          @tab-click="handleClick2"
+          :lazy="false"
+        >
+          <ElTabPane label="累计" name="累计" />
+          <ElTabPane label="今日" name="今日" />
+        </ElTabs>
+        <Echart :options="workOption" :height="250" />
+      </div>
 
-        <div class="echart-box">
-          <div class="echart-title">
-            <img src="@/assets/imgs/Icon_resident.png" width="15" />
-            <span class="text">居民户分布</span>
-          </div>
-          <div style="margin-top: 30px">
-            <Echart :options="residentOption" :height="220" />
-          </div>
+      <div class="echart-box">
+        <div class="echart-title">
+          <img src="@/assets/imgs/Icon_resident.png" width="15" />
+          <span class="text">居民户分布</span>
         </div>
+        <div style="margin-top: 30px">
+          <Echart :options="residentOption" :height="190" />
+        </div>
+      </div>
 
-        <div class="report-box bg-white">
-          <div class="echart-title">
-            <img src="@/assets/imgs/Icon_report.png" width="15" />
-            <span class="text">报告展示</span>
-          </div>
-          <ElTabs
-            v-model="activeName"
-            type="card"
-            class="demo-tabs tabs-wrapper"
-            @tab-click="handleClick"
-            :lazy="false"
-          >
-            <ElTabPane label="报告归集" name="报告归集">
-              <div class="tabs-box">
-                <view class="tabs-box-left">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>调查大纲</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>调查报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>规划大纲</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>规划报告</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>设计变更报告</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                </view>
-                <view class="middle" />
-                <view class="tabs-box-right">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>导截流验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>蓄水验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>竣工验收设计报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                </view>
-              </div>
-            </ElTabPane>
-            <ElTabPane label="其他报告" name="其他报告">
-              <div class="tabs-box">
-                <div class="tabs-box-left">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>社稳报告</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>地灾评估</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>安置点祥归</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>企(事)业单位</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>专业项目</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
+      <div class="report-box bg-white">
+        <div class="echart-title">
+          <img src="@/assets/imgs/Icon_report.png" width="15" />
+          <span class="text">报告展示</span>
+        </div>
+        <ElTabs
+          v-model="activeName"
+          type="card"
+          class="demo-tabs tabs-wrapper"
+          @tab-click="handleClick"
+          :lazy="false"
+        >
+          <ElTabPane label="报告归集" name="报告归集">
+            <div class="tabs-box">
+              <view class="tabs-box-left">
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>调查大纲</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" /> -->
                 </div>
-                <div class="middle"></div>
-                <div class="tabs-box-right">
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>库底清理</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>土地报批</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
-                    <span>林地可研</span>
-                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
-                  </div>
-                  <div class="tabs-content-box">
-                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                    <span>其他</span>
-                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
-                  </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>调查报告</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>规划大纲</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>规划报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>设计变更报告</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+              </view>
+              <view class="middle" />
+              <view class="tabs-box-right">
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>导截流验收设计报告</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>蓄水验收设计报告</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>竣工验收设计报告</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+              </view>
+            </div>
+          </ElTabPane>
+          <ElTabPane label="其他报告" name="其他报告">
+            <div class="tabs-box">
+              <div class="tabs-box-left">
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>社稳报告</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>地灾评估</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>安置点祥归</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>企(事)业单位</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>专业项目</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
                 </div>
               </div>
-            </ElTabPane>
-            <!-- <ElTabPane label="数据归集" name="数据归集">
+              <div class="middle"></div>
+              <div class="tabs-box-right">
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>库底清理</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>土地报批</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                  <span>林地可研</span>
+                  <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                </div>
+                <div class="tabs-content-box">
+                  <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>其他</span>
+                  <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                </div>
+              </div>
+            </div>
+          </ElTabPane>
+          <!-- <ElTabPane label="数据归集" name="数据归集">
 						  <div class="tabs-box">
 						    <div class="tabs-box-left">
 						      <div class="tabs-content-box">
@@ -205,68 +205,67 @@
 						    </div>
 						  </div>
 						</ElTabPane> -->
-          </ElTabs>
-        </div>
+        </ElTabs>
       </div>
+    </div>
 
-      <div class="big-box big-box-3">
-        <div class="left bg-white">
-          <div class="echart-title w-729">
-            <img src="@/assets/imgs/Icon_collect.png" width="15" />
-            <span class="text">采集进度</span>
-          </div>
-          <Echart :options="gatherOption" :height="236" />
+    <div class="big-box big-box-3">
+      <div class="left bg-white">
+        <div class="echart-title w-729">
+          <img src="@/assets/imgs/Icon_collect.png" width="15" />
+          <span class="text">采集进度</span>
         </div>
-        <div class="right bg-white">
-          <div class="echart-title w-613">
-            <img src="@/assets/imgs/Icon_news.png" width="15" />
-            <span class="text">新闻通知</span>
-          </div>
-          <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
-            <ElTabPane name="水库要闻" label="水库要闻">
-              <div class="element news">
-                <div class="list-box left" v-if="newsList && newsList.length > 0">
-                  <img class="cover-pic" :src="newsList[0].coverPic" />
-                </div>
-                <div class="list-box right">
-                  <div
-                    class="text"
-                    v-for="item in newsList"
-                    :key="item.id"
-                    @click="routerJump(`newDetail?id=${item.id}`)"
-                  >
-                    <div class="title">{{ item.title }}</div>
-                    <div class="time">{{ item.releaseTime }}</div>
-                  </div>
-                </div>
-              </div>
-            </ElTabPane>
-            <ElTabPane label="政策法规" name="政策法规">
-              <div class="element">
-                <div class="policy-list" v-for="item in policyList" :key="item.id">
-                  <div class="title">
-                    {{ item.title }}
-                  </div>
-                  <div class="time">
-                    <span> {{ item.publicityTime }}</span>
-                    <span>更多</span>
-                  </div>
-                </div>
-              </div>
-            </ElTabPane>
-            <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
-            <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
-            <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-            <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
-          </ElTabs>
-        </div>
+        <Echart :options="gatherOption" :height="192" />
       </div>
-    </ScaleBox>
-  </ContentWrap>
+      <div class="right bg-white">
+        <div class="echart-title w-613">
+          <img src="@/assets/imgs/Icon_news.png" width="15" />
+          <span class="text">新闻通知</span>
+        </div>
+        <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
+          <ElTabPane name="水库要闻" label="水库要闻">
+            <div class="element news">
+              <div class="list-box-left" v-if="newsList && newsList.length > 0">
+                <img class="cover-pic" :src="newsList[0].coverPic" />
+              </div>
+              <div class="list-box-right">
+                <div
+                  class="text"
+                  v-for="item in newsList"
+                  :key="item.id"
+                  @click="routerJump(`newDetail?id=${item.id}`)"
+                >
+                  <div class="title">{{ item.title }}</div>
+                  <div class="time">{{ item.releaseTime }}</div>
+                </div>
+              </div>
+            </div>
+          </ElTabPane>
+          <ElTabPane label="政策法规" name="政策法规">
+            <div class="element">
+              <div class="policy-list" v-for="item in policyList" :key="item.id">
+                <div class="title">
+                  {{ item.title }}
+                </div>
+                <div class="time">
+                  <span> {{ item.publicityTime }}</span>
+                  <span>更多</span>
+                </div>
+              </div>
+            </div>
+          </ElTabPane>
+          <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
+          <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
+          <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
+          <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
+        </ElTabs>
+      </div>
+    </div>
+    <!-- </ScaleBox> -->
+  </div>
 </template>
 <script lang="ts" setup>
-// import { ContentWrap } from '@/components/ContentWrap'
-import ScaleBox from './ScaleBox.vue'
+// import ScaleBox from './ScaleBox.vue'
 import { ElTabs, ElTabPane } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 import { useRouter } from 'vue-router'
@@ -391,7 +390,7 @@ const handleClick2 = () => {
 // 工作组TOP5图表初始化数据
 const workOption = ref({
   grid: {
-    left: '35%',
+    left: '32%',
     top: '2%'
   },
   tooltip: {
@@ -673,6 +672,10 @@ onMounted(async () => {
 @import './Index.less';
 
 .home-wrap {
-  transform-origin: top center;
+  margin: -6px 0 -16px;
+}
+
+:deep(.rounded-8px) {
+  border-radius: 0;
 }
 </style>
