@@ -72,7 +72,7 @@ export default defineComponent({
           textColor="#fff"
           activeTextColor="#fff"
           onSelect={menuSelect}
-          menu-trigger="click"
+          menu-trigger="hover"
         >
           {{
             default: () => {
