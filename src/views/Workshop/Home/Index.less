@@ -19,6 +19,8 @@
     padding: 24px 27px 22px 27px;
     cursor: pointer;
 
+    .content-box-left {
+    }
     .content-box-right {
       display: flex;
       position: absolute;
@@ -47,8 +49,7 @@
 }
 
 .big-box-1 {
-  height: 152px;
-  padding: 20px;
+  padding: 12px 20px;
   overflow: hidden;
   border-radius: 8px;
   background: white;
@@ -57,13 +58,13 @@
 .big-box-2 {
   display: flex;
   align-items: center;
-  height: 338px;
+  height: 280px;
   margin-top: 16px;
   padding: 0;
 
   .echart-box {
     width: 366px;
-    height: 338px;
+    height: 280px;
     padding: 6px 8px;
     border-radius: 8px;
     background: #ffffff;
@@ -96,7 +97,7 @@
 
   .report-box {
     width: 636px;
-    height: 338px;
+    height: 280px;
     padding: 6px 8px;
     border-radius: 8px;
 
@@ -129,14 +130,14 @@
 .big-box-3 {
   display: flex;
   align-items: center;
-  height: 286px;
+  height: 252px;
   margin-top: 15px;
   padding: 15px 0;
   overflow: hidden;
 
   .left,
   .right {
-    height: 286px;
+    height: 252px;
     padding: 6px 8px;
     border-radius: 8px;
 
@@ -230,7 +231,7 @@
   font-size: 19px;
 }
 
-.ft-43 {
+.ft-32 {
   font-size: 32px;
   font-family: Helvetica-Bold, Helvetica;
   font-weight: bold;
@@ -245,7 +246,9 @@
 }
 
 .tabs-box {
+  height: 180px;
   display: flex;
+  overflow-y: scroll;
   justify-content: space-between;
   flex-wrap: wrap; /* 只要您把这个属性去掉,就不会自动换行了*/
 
@@ -326,45 +329,42 @@
   border-radius: 4px;
 }
 
-.list-box {
+.list-box-left {
+  width: 240px;
   padding: 5px 0;
 
-  &.left {
+  .cover-pic {
     width: 240px;
-
-    .cover-pic {
-      width: 240px;
-      height: 180px;
-    }
+    height: 145px;
   }
+}
 
-  &.right {
-    height: 180px;
-    padding-left: 10px;
-    overflow: hidden;
+.list-box-right {
+  height: 145px;
+  padding-left: 22px;
+  overflow: hidden;
 
-    .text {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 30px;
-      line-height: 30px;
+  .text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+    line-height: 36px;
 
-      .title {
-        width: 250px;
-        color: #333333;
-        font-size: 14px;
-        font-weight: bold;
-        font-family: PingFang SC-Medium, PingFang SC;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    .title {
+      width: 214px;
+      color: #333333;
+      font-size: 14px;
+      font-weight: bold;
+      font-family: PingFang SC-Medium, PingFang SC;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-      .time {
-        color: rgba(153, 153, 153, 1);
-        font-size: 14px;
-      }
+    .time {
+      color: rgba(153, 153, 153, 1);
+      font-size: 14px;
     }
   }
 }
@@ -407,7 +407,6 @@
 
   &.news {
     display: flex;
-    justify-content: space-between;
   }
 }
 
