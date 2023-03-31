@@ -72,7 +72,7 @@ export default defineComponent({
           textColor="#fff"
           activeTextColor="#fff"
           onSelect={menuSelect}
-          menu-trigger="hover"
+          menu-trigger="click"
         >
           {{
             default: () => {
@@ -90,6 +90,9 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+:deep(.el-popper) {
+  margin-left: -52px;
+}
 .@{elNamespace}-menu {
   margin-top: 12px;
   border-bottom: 0 none;
@@ -130,7 +133,12 @@ export default defineComponent({
 
 <style lang="less">
 .drop-menu {
+  margin-left: -52px !important;
   border-radius: 4px !important;
+
+  .drop-menu {
+    margin-left: 0 !important;
+  }
 
   .el-menu {
     .el-menu-item {

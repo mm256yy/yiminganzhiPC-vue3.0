@@ -65,7 +65,7 @@ watch(
     to="/"
   >
     <img src="@/assets/imgs/logo.png" class="w-30px h-39px" />
-    <span :class="['ml-10px text-24px font-600', 'text-[#fff]']"> {{ reservoirName }}</span>
+    <span :class="['ml-10px text-24px font-500', 'text-[#fff]']"> {{ reservoirName }}</span>
 
     <div v-if="show" :class="['ml-10px text-24px font-600', 'text-[#fff]']">
       {{ title }}
