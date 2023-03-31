@@ -106,9 +106,19 @@
                     <span>规划报告</span>
                     <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
                   </div>
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_abled.png" width="15" />
+                    <span>设计变更报告</span>
+                    <!-- <img src="@/assets/imgs/Icon_Upload.png"  width="15" class="img_r" /> -->
+                  </div>
                 </view>
                 <view class="middle" />
                 <view class="tabs-box-right">
+                  <div class="tabs-content-box">
+                    <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                    <span>导截流验收设计报告</span>
+                    <img src="@/assets/imgs/Icon_Upload.png" width="15" class="img_r" />
+                  </div>
                   <div class="tabs-content-box">
                     <img src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
                     <span>蓄水验收设计报告</span>
