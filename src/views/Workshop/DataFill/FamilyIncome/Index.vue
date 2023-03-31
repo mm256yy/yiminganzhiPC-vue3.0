@@ -15,7 +15,7 @@
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="" prop="type" align="center" header-align="center">
+        <ElTableColumn label="" :width="180" prop="type" align="center" header-align="center">
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"
               >小计：{{ getSubtotal(row.type).toFixed(2) }}</div
@@ -34,7 +34,13 @@
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="收入项目" prop="name" align="center" header-align="center">
+        <ElTableColumn
+          label="收入项目"
+          :width="283"
+          prop="name"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"></div>
             <div v-else-if="row.total" class="total-item"></div>
@@ -43,7 +49,13 @@
             </div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="金额(万元)" prop="amount" align="center" header-align="center">
+        <ElTableColumn
+          label="金额(万元)"
+          :width="218"
+          prop="amount"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"></div>
             <div v-else-if="row.total" class="total-item"></div>
