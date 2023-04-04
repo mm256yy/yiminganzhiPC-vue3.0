@@ -4,7 +4,13 @@
     :style="{ width: props.w ? `${props.w}px` : '100%', height: `${props.h}px` }"
   >
     <div class="absolute top-6px left-100px z-500">
-      <ElInput v-model="keyword" class="!w-[70%] mr-6px" :prefix-icon="searchIcon" id="keyword" />
+      <ElInput
+        v-model="keyword"
+        class="!w-[70%] mr-6px"
+        :prefix-icon="searchIcon"
+        id="keyword"
+        :popperAppendToBody="false"
+      />
     </div>
     <div id="map"></div>
     <!-- <div
@@ -117,22 +123,22 @@ const init = async (type) => {
     placeSearch.search(e.poi.name, function (status, result) {
       console.log(status, result, '2')
 
-      // const pois = result.poiList.pois
-      // for (let i = 0; i < pois.length; i++) {
-      //   if (pois[i].name === e.poi.name) {
-      //     geocoder.getAddress(
-      //       [pois[i].location.lng, pois[i].location.lat],
-      //       function (status, result) {
-      //         console.log(result)
-      //         if (status === 'complete' && result.info === 'OK') {
-      //           console.log(result.regeocode.formattedAddress)
-      //         } else {
-      //         }
-      //       }
-      //     )
-      //     // GETAddress(pois[i].location.lng, pois[i].location.lat)
-      //   }
-      // }
+      const pois = result.poiList.pois
+      for (let i = 0; i < pois.length; i++) {
+        if (pois[i].name === e.poi.name) {
+          geocoder.getAddress(
+            [pois[i].location.lng, pois[i].location.lat],
+            function (status, result) {
+              console.log(result)
+              if (status === 'complete' && result.info === 'OK') {
+                console.log(result.regeocode.formattedAddress)
+              } else {
+              }
+            }
+          )
+          GETAddress(pois[i].location.lng, pois[i].location.lat)
+        }
+      }
     })
   })
 

@@ -155,6 +155,13 @@
             />
           </template>
         </ElTableColumn>
+        <ElTableColumn label="操作" prop="action">
+          <template #default="scope">
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
+              >删除</span
+            >
+          </template>
+        </ElTableColumn>
       </ElTable>
     </div>
   </WorkContentWrap>
@@ -172,13 +179,14 @@ import {
   ElTableColumn,
   ElSelect,
   ElOption,
-  ElMessage
+  ElMessage,
+  ElMessageBox
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
 interface PropsType {
@@ -257,7 +265,24 @@ getList()
 const onAddRow = () => {
   tableData.value.push({})
 }
+const onDelRow = (row) => {
+  ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+    type: 'warning',
+    cancelButtonText: '取消',
+    confirmButtonText: '确认'
+  })
+    .then(async () => {
+      if (row.id) {
+        await immigrantGraveDelete(row.id)
+        getList()
+      } else {
+        tableData.value.splice(tableData.value.indexOf(row), 1)
+      }
 
+      ElMessage.success('删除成功')
+    })
+    .catch(() => {})
+}
 const onSave = () => {
   if (
     tableData.value.some((item) => {

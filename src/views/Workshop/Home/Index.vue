@@ -712,7 +712,7 @@ const workOption = ref({
             height: 20
           },
           name: {
-            width: 72,
+            width: 80,
             fontSize: 14
           }
         },

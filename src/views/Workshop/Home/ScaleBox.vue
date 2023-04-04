@@ -14,7 +14,7 @@ export default {
     },
     height: {
       type: String,
-      default: '888'
+      default: '780'
     },
     bgUrl: {
       type: String

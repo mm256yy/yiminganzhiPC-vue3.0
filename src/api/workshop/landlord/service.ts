@@ -36,6 +36,9 @@ export const updateLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoTyp
 export const delLandlordByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/peasantHousehold/delete/${id}` })
 }
+export const immigrantGraveDelete = (id: number): Promise<void> => {
+  return request.post({ url: `/api/immigrantGrave/delete/${id}` })
+}
 
 /**
  * 查询单个居民户信息
