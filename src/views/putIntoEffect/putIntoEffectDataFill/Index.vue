@@ -10,7 +10,7 @@
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">移民实施</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">
           {{
             type == 'Landlord'
@@ -62,61 +62,41 @@
       <UserInfo :baseInfo="baseInfo" :type="type" />
       <!-- EnterpriseTabs -->
       <div class="report-tabs">
-        <div
-          :class="['report-tab-item', reportTabCurrentId === item.id ? 'active' : '']"
-          v-for="item in tabsType"
-          :key="item.id"
-          @click="onReportTabClick(item)"
-        >
-          <Icon :icon="item.icon" color="#3E73EC" />
-          <div class="tit">{{ item.name }}</div>
+        <div v-for="item in tabsType" :key="item.id">
+          <div
+            v-if="item.type == tabCurrentId"
+            :class="['report-tab-item', reportTabCurrentId === item.id ? 'active' : '']"
+            @click="onReportTabClick(item)"
+          >
+            <Icon :icon="item.icon" color="#3E73EC" />
+            <div class="tit">{{ item.name }}</div>
+          </div>
         </div>
       </div>
     </div>
     <div class="data-fill-body" v-if="type == 'Landlord'">
-      <!-- 人口信息 -->
-      <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
-      <!-- 房屋信息 -->
-      <House
+      <!-- 人口核定 -->
+      <populationCheck
         :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
-      <!-- 附属物信息 -->
-      <Accessory
+      <!-- 房屋确权 -->
+      <houseConfirmation
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
       />
-      <!-- 0星果木 -->
-      <Fruitwood
+      <relocation
         :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        v-else-if="reportTabCurrentId + 2 === ReportTabIds[2] && tabCurrentId == 2"
       />
-      <FamilyIncome
+      <produce
         :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        v-else-if="reportTabCurrentId + 2 === ReportTabIds[3] && tabCurrentId == 2"
       />
-      <!-- 安置 -->
-      <Resettlement
+      <gaveArrange
         :doorNo="doorNo"
-        :baseInfo="baseInfo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[6]"
-      />
-      <!-- 坟墓 -->
-      <Grave
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
-      />
-      <!-- 附件上传 -->
-      <Enclosure
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[7]"
+        v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
       />
     </div>
 
@@ -290,13 +270,21 @@ import {
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 
-import Demographic from './Demographic/Index.vue'
+import populationCheck from './populationCheck/Index.vue'
+import relocation from './relocation/Index.vue'
+
 import House from './House/Index.vue'
+import houseConfirmation from './houseConfirmation/Index.vue'
+
 import Accessory from './Accessory/Index.vue'
 import Fruitwood from './Fruitwood/Index.vue'
-import Grave from './Grave/Index.vue'
+import produce from './produce/Index.vue'
+
+// import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
-import FamilyIncome from './FamilyIncome/Index.vue'
+// import FamilyIncome from './FamilyIncome/Index.vue'
+import gaveArrange from './gaveArrange/Index.vue'
+
 import villageGrave from './villageInfoComponents/Grave/Index.vue'
 import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
 import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'
@@ -306,7 +294,7 @@ import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue
 // import villageInfoCInfor from './villageInfoComponents/villageInfoCInfor/Index.vue'
 import VillageDeviceInfor from './villageInfoComponents/VillageDeviceInfor/Index.vue'
 
-import Resettlement from './Resettlement/Index.vue'
+// import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
@@ -341,6 +329,7 @@ const onTabClick = (tabItem) => {
     return
   }
   tabCurrentId.value = tabItem.id
+  reportTabCurrentId.value = 1
 }
 
 const onReportTabClick = (tabItem) => {

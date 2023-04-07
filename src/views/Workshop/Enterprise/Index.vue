@@ -28,10 +28,10 @@
             <!-- <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人 -->
             <span class="distance"></span>
-            已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span
+            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span
             >家
             <span class="distance"></span>
-            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
+            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
             >家
           </div>
         </div>
@@ -362,7 +362,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportDate',
-    label: '上报时间',
+    label: '填报时间',
     search: {
       show: false
     },

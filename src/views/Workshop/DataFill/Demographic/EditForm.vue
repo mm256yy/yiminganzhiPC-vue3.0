@@ -389,6 +389,9 @@
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
+    <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
+      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+    </el-dialog>
   </ElDialog>
 </template>
 
