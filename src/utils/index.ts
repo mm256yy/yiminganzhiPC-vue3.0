@@ -208,3 +208,33 @@ export function checkTel(rule, value, callback) {
     callback()
   }
 }
+
+/**
+ * 字符通过某个符号进行拆分为一个新的数组
+ * @param str
+ * @param separateChar
+ * @returns
+ */
+export const splitStr = (str: string, separateChar: any) => {
+  let arr: any = []
+  if (str) {
+    arr = str.split(separateChar)
+    return arr
+  } else {
+    return '-'
+  }
+}
+
+/**
+ * 超出长度的字符串进行隐藏
+ * @param{Object} str 字符串
+ * @param{Object} num 截取字符串的位数
+ */
+export const hideStr = (str: string, num: number) => {
+  if (str) {
+    if (str.length > num) {
+      str = str.substring(0, num) + '...'
+    }
+  }
+  return str
+}

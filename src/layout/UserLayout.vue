@@ -41,9 +41,10 @@ export default defineComponent({
       selectedProjectId.value = appStore.getCurrentProjectId
       setPlatform('workshop', addRoute)
       const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
-      console.log(project)
+      console.log('project:', project)
 
       appStore.setreservoirName(project.reservoirName)
+      appStore.setCurrentMapJson(project.mapJson)
     })
     const onProjectChange = async (id: number) => {
       await setDefaultProjectApi(id)
