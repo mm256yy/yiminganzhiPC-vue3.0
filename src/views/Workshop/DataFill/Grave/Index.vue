@@ -3,15 +3,19 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace v-if="type != 'Landlord'">
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
+        <ElSpace>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="type != 'Landlord'"
+            >添加行</ElButton
+          >
           <ElButton
+            v-if="type != 'Landlord'"
             :icon="saveIcon"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
             >保存</ElButton
           >
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -107,6 +111,7 @@
         </ElTableColumn>
       </ElTable>
     </div>
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
   </WorkContentWrap>
 </template>
 
@@ -118,6 +123,7 @@ import { ref, computed } from 'vue'
 //   ElInput,
 //   ElSelect,
 //   ElOption,
+import recordDialog from '../components/recordDialog.vue'
 import { ElButton, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
@@ -131,13 +137,21 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
+const recordShow = ref(false)
 
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 // const dictStore = useDictStoreWithOut()
 
 // const dictObj = computed(() => dictStore.getDictObj)
@@ -157,7 +171,8 @@ const tableData = ref<any[]>([])
 const getList = () => {
   const params = {
     // doorNo: props.doorNo,
-    registrantId: +props.householdId
+    registrantId: +props.householdId,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content

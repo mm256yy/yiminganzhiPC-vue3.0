@@ -82,6 +82,7 @@ import { formatDate } from '@/utils/index'
 interface PropsType {
   doorNo: string
   householdId
+  tabCurrentId
 }
 const showBox = ref(true)
 
@@ -100,7 +101,8 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.tabCurrentId == 2 ? 'review' : undefined
 }
 
 onMounted(async () => {

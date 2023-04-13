@@ -13,6 +13,7 @@ export const getLandlordListApi = (
     delete query.villageCode
     delete query.virutalVillageCode
   }
+
   return request.get({ url: '/peasantHousehold', params: { sort: ['createdDate,desc'], ...query } })
 }
 

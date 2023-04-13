@@ -183,6 +183,10 @@ export const FlowTabs = [
   {
     id: 1,
     name: '实物采集'
+  },
+  {
+    id: 2,
+    name: '实物复核'
   }
 ]
 

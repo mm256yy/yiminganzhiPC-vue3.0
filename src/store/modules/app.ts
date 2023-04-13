@@ -50,6 +50,7 @@ interface AppState {
   footer: boolean
   theme: ThemeTypes
   fixedMenu: boolean
+  ProjectStatus: string
 }
 
 export const useAppStore = defineStore('app', {
@@ -66,6 +67,7 @@ export const useAppStore = defineStore('app', {
       title: import.meta.env.VITE_APP_TITLE, // 标题
       pageLoading: false, // 路由跳转loading
       reservoirName: '',
+      ProjectStatus: '',
       breadcrumb: true, // 面包屑
       breadcrumbIcon: true, // 面包屑图标
       collapse: false, // 折叠菜单
@@ -121,6 +123,9 @@ export const useAppStore = defineStore('app', {
   getters: {
     getReservoirName(): string {
       return this.reservoirName
+    },
+    getProjectStatus(): string {
+      return this.ProjectStatus
     },
     getBreadcrumb(): boolean {
       return this.breadcrumb
@@ -310,6 +315,10 @@ export const useAppStore = defineStore('app', {
     setreservoirName(reservoirName: string) {
       this.reservoirName = reservoirName
     },
+    setProjectStatus(ProjectStatus: string) {
+      this.ProjectStatus = ProjectStatus
+    },
+
     setCurrentProjectId(projectId: number) {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
       // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目

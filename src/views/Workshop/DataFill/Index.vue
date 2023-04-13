@@ -75,29 +75,37 @@
     </div>
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 人口信息 -->
-      <Demographic :doorNo="doorNo" v-if="reportTabCurrentId === ReportTabIds[0]" />
+      <Demographic
+        :doorNo="doorNo"
+        v-if="reportTabCurrentId === ReportTabIds[0]"
+        :tabCurrentId="tabCurrentId"
+      />
       <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 0星果木 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        :tabCurrentId="tabCurrentId"
       />
       <FamilyIncome
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 安置 -->
       <Resettlement
@@ -105,18 +113,21 @@
         :baseInfo="baseInfo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 坟墓 -->
       <Grave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 附件上传 -->
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[7]"
+        :tabCurrentId="tabCurrentId"
       />
     </div>
 
@@ -124,38 +135,45 @@
       <EnterpriseInfor
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
+        :tabCurrentId="tabCurrentId"
         :householdId="householdId"
       />
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        :tabCurrentId="tabCurrentId"
       />
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        :tabCurrentId="tabCurrentId"
       />
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        :tabCurrentId="tabCurrentId"
       />
       <DeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :tabCurrentId="tabCurrentId"
       />
 
       <BusinessStatus
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        :tabCurrentId="tabCurrentId"
       />
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
+        :tabCurrentId="tabCurrentId"
       />
     </div>
 
@@ -163,32 +181,38 @@
       <IndividualBInfor
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
+        :tabCurrentId="tabCurrentId"
         :householdId="householdId"
       />
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        :tabCurrentId="tabCurrentId"
       />
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        :tabCurrentId="tabCurrentId"
       />
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        :tabCurrentId="tabCurrentId"
       />
       <DeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :tabCurrentId="tabCurrentId"
       />
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        :tabCurrentId="tabCurrentId"
       />
     </div>
 
@@ -197,34 +221,40 @@
         :doorNo="doorNo"
         :householdId="householdId"
         v-if="reportTabCurrentId === ReportTabIds[0]"
+        :tabCurrentId="tabCurrentId"
       />
 
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
+        :tabCurrentId="tabCurrentId"
       />
       <!-- 附属物 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
+        :tabCurrentId="tabCurrentId"
       />
       <VillageDeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
+        :tabCurrentId="tabCurrentId"
       />
 
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
+        :tabCurrentId="tabCurrentId"
       />
       <villageGrave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :tabCurrentId="tabCurrentId"
       />
     </div>
 
@@ -267,7 +297,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import {
   ElBreadcrumb,
   ElBreadcrumbItem,
@@ -311,11 +341,12 @@ import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
 const { currentRoute, back } = useRouter()
+const { doorNo, householdId, type } = currentRoute.value.query as any
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(1)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
-const { doorNo, householdId, type } = currentRoute.value.query as any
+
 const reportDialog = ref<boolean>(false)
 const printDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
@@ -335,14 +366,40 @@ const getLandlordInfo = () => {
 }
 
 getLandlordInfo()
-
+const { push } = useRouter()
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
     return
   }
+  if (tabItem.id) {
+    // push({
+    //   name: 'DataFill',
+    //   query: {
+    //     householdId: householdId,
+    //     doorNo: doorNo,
+    //     type: type,
+    //     id: tabItem.id
+    //   }
+    // })
+  }
   tabCurrentId.value = tabItem.id
 }
-
+watch(
+  () => {
+    tabCurrentId
+  },
+  () => {
+    push({
+      name: 'DataFill',
+      query: {
+        householdId: householdId,
+        doorNo: doorNo,
+        type: type,
+        id: tabCurrentId.value
+      }
+    })
+  }
+)
 const onReportTabClick = (tabItem) => {
   if (reportTabCurrentId.value === tabItem.id) {
     return

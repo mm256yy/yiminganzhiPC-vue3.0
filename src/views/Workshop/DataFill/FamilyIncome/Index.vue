@@ -11,6 +11,7 @@
             @click="onSave"
             >保存</ElButton
           >
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -79,10 +80,13 @@
         </ElTableColumn>
       </ElTable>
     </div>
+
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
+import recordDialog from '../components/recordDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed } from 'vue'
 import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
@@ -105,6 +109,7 @@ interface SpanMethodProps {
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 
 interface TotalItemType {
@@ -118,7 +123,14 @@ const appStore = useAppStore()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const cateTypes = ref<string[]>([])
+const recordShow = ref(false)
 
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 const getOption = async () => {
   console.log(appStore.getCurrentProjectId)
   const result = await getFamilyIncomeOptionApi({
@@ -188,7 +200,8 @@ const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
     householdId: props.householdId,
-    size: 100
+    size: 100,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   const res = await getFamilyIncomeListApi(params)
 

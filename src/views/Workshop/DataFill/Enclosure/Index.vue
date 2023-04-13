@@ -19,8 +19,11 @@
         >
           保存
         </ElButton>
+        <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
       </ElSpace>
     </div>
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
+
     <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
   </div>
 </template>
@@ -36,7 +39,7 @@ import {
   addEnclosureListApi
 } from '@/api/workshop/datafill/enclosure-service'
 // import { EnclosureDtoType } from '@/api/workshop/datafill/enclosure-types'
-
+import recordDialog from '../components/recordDialog.vue'
 interface FileItemType {
   name: string
   url: string
@@ -44,6 +47,7 @@ interface FileItemType {
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
@@ -52,10 +56,19 @@ const id = ref<number>()
 const uid = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
+const recordShow = ref(false)
+
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 const getList = () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: props.householdId
+    householdId: props.householdId,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   getEnclosureListApi(params).then((res) => {
     if (res && res.content && res.content.length) {

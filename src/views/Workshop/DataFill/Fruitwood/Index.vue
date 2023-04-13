@@ -13,6 +13,7 @@
             @click="onSave"
             >保存</ElButton
           >
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -126,6 +127,7 @@
         </ElTableColumn>
       </ElTable>
     </div>
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
   </WorkContentWrap>
 </template>
 
@@ -151,10 +153,11 @@ import {
   deleteFruitwoodListApi
 } from '@/api/workshop/datafill/fruitwood-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-
+import recordDialog from '../components/recordDialog.vue'
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
@@ -163,7 +166,14 @@ const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
 const dictStore = useDictStoreWithOut()
+const recordShow = ref(false)
 
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultRow = {
@@ -200,7 +210,8 @@ const getList = () => {
   const params = {
     doorNo: props.doorNo,
     householdId: +props.householdId,
-    size: 1000
+    size: 1000,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   getFruitwoodListApi(params).then((res) => {
     tableData.value = res.content

@@ -82,6 +82,7 @@ import { locationTypes } from '@/views/Workshop/components/config'
 interface PropsType {
   doorNo: string
   householdId
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
@@ -97,7 +98,8 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.tabCurrentId == 2 ? 'review' : undefined
 }
 
 getList()

@@ -129,6 +129,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
@@ -173,7 +174,8 @@ const getList = () => {
   const params = {
     doorNo: props.doorNo,
     householdId: +props.householdId,
-    size: 1000
+    size: 1000,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   getFruitwoodListApi(params).then((res) => {
     tableData.value = res.content

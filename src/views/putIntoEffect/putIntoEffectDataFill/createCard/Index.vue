@@ -2,10 +2,10 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div> </div>
-        <ElSpace>
+        <div class="title"> 家庭基本情况列表</div>
+        <!-- <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-        </ElSpace>
+        </ElSpace> -->
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -27,7 +27,7 @@
             {{ standardFormatDate(row.birthday) }}
           </div>
         </template>
-        <template #action="{ row }">
+        <!-- <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
             :icons="[
@@ -43,10 +43,24 @@
             @delete="onDelRow"
             :delete="row.relation == 1 ? false : true"
           />
-        </template>
+        </template> -->
       </Table>
+      <div class="flex items-center justify-between pb-12px mt-20px">
+        <div class="title"> 费用补偿情况列表</div>
+      </div>
+      <div class="pb-12px mt-20px">
+        <div class="title"> 备注</div>
+        <div class="text">1. 补偿费、异地搬迁补助费、奖励费等拨付至甲方指定银行</div>
+        <div class="text mt-20px"
+          >2. 搬迁补助费、过渡资金补助费、其他补助费、临时安置补助费拨付至乙方指定银行。</div
+        >
+        <div class="text mt-20px"
+          >3.
+          临时安置补助费首次发放时间为乙方腾空被拆迁房屋并办理交付手续之日起十五日内，每半年发放一次，截止时间为安置房选房的当月。</div
+        >
+      </div>
     </div>
-    <el-dialog title="删除房屋信息" v-model="dialogVisible" width="500">
+    <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
         <img src="./i.png" alt="" />是否删除
         <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
@@ -74,14 +88,14 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
-import { ElButton, ElSpace, ElDialog, ElFormItem, ElInput } from 'element-plus'
-import { Table, TableEditColumn } from '@/components/Table'
+import { ElButton, ElDialog, ElFormItem, ElInput } from 'element-plus'
+import { Table } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { useIcon } from '@/hooks/web/useIcon'
+// import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
-import { DemographicDtoType } from '@/api/workshop/population/types'
+// import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
@@ -91,7 +105,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -114,89 +128,82 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
-    field: 'storeyNumber',
-    label: '房屋编号',
+    field: 'name',
+    label: '姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
-    label: '房屋结构',
+    field: 'relationText',
+    label: '与户主关系',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
-    label: '层数',
+    field: 'sexText',
+    label: '性别',
     search: {
       show: false
     }
   },
 
   {
-    field: 'landArea',
-    label: '建筑面积(平方米)',
+    field: 'censusTypeText',
+    label: '户籍册类别',
     search: {
       show: false
     }
   },
   {
-    width: 230,
-    field: 'landNo',
-    label: '集体土地使用权证',
+    width: 180,
+    field: 'card',
+    label: '身份证号',
     search: {
       show: false
     }
   },
   {
-    width: 230,
-    field: 'propertyNo',
-    label: '房屋所有权证/不动产权权证',
+    field: 'maritalText',
+    label: '婚姻状况',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
-    label: '房屋性质',
+    field: 'maritalText',
+    label: '人口性质',
     search: {
       show: false
     }
   },
   {
-    field: '',
-    label: '房屋产权人',
+    field: 'remark',
+    label: '备注',
     search: {
-      show: false
-    }
-  },
-  {
-    field: 'storeyNumber',
-    label: '共有人情况',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 130,
-    search: {
-      show: false
-    },
-    form: {
       show: false
     }
   }
+
+  // {
+  //   field: 'action',
+  //   label: '操作',
+  //   fixed: 'right',
+  //   width: 130,
+  //   search: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   }
+  // }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
 const cause = ref()
-const multipleV = ref()
+// const multipleV = ref()
 const onClose = () => {
   cause.value = ''
   dialogVisible.value = false
@@ -204,35 +211,35 @@ const onClose = () => {
 const onSubmit = () => {
   dialogVisible.value = false
 }
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-  dialogVisible.value = true
-  tableObject.currentRow = row
-  multipleV.value = multiple
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
-  // ElMessage.success('删除成功')
-  // getList()
-}
+// const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
+//   dialogVisible.value = true
+//   tableObject.currentRow = row
+//   multipleV.value = multiple
+//   // const { delList, getSelections } = methods
+//   // const selections = await getSelections()
+//   // await delList(
+//   //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+//   //   multiple
+//   // )
+//   // ElMessage.success('删除成功')
+//   // getList()
+// }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
-  dialog.value = true
-}
+// const onAddRow = () => {
+//   actionType.value = 'add'
+//   tableObject.currentRow = null
+//   dialog.value = true
+// }
 
-const onEditRow = (row: DemographicDtoType) => {
-  actionType.value = 'edit'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  }
-  dialog.value = true
-}
+// const onEditRow = (row: DemographicDtoType) => {
+//   actionType.value = 'edit'
+//   tableObject.currentRow = {
+//     ...row,
+//     occupation: row.occupation ? JSON.parse(row.occupation) : '',
+//     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+//   }
+//   dialog.value = true
+// }
 
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
@@ -241,15 +248,15 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
-const onViewRow = (row: DemographicDtoType) => {
-  actionType.value = 'view'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  }
-  dialog.value = true
-}
+// const onViewRow = (row: DemographicDtoType) => {
+//   actionType.value = 'view'
+//   tableObject.currentRow = {
+//     ...row,
+//     occupation: row.occupation ? JSON.parse(row.occupation) : '',
+//     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+//   }
+//   dialog.value = true
+// }
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {
@@ -259,5 +266,20 @@ const onViewRow = (row: DemographicDtoType) => {
 
 :deep(.el-form-item) {
   padding: 0 10px;
+}
+
+.title {
+  margin: 5px 0;
+  font-family: PingFang SC-Bold, PingFang SC;
+  font-size: 16px;
+  font-weight: bold;
+  color: #171718;
+}
+
+.text {
+  font-family: PingFang SC-Regular, PingFang SC;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
 }
 </style>

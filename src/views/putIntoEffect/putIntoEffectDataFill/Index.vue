@@ -59,7 +59,7 @@
         </ElSpace>
       </div>
 
-      <UserInfo :baseInfo="baseInfo" :type="type" />
+      <UserInfo :baseInfo="baseInfo" :type="type" :tabCurrentId="tabCurrentId" />
       <!-- EnterpriseTabs -->
       <div class="report-tabs">
         <div v-for="item in tabsType" :key="item.id">
@@ -98,6 +98,7 @@
         :doorNo="doorNo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
       />
+      <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
     </div>
 
     <div class="data-fill-body" v-if="type == 'Enterprise'">
@@ -284,7 +285,7 @@ import produce from './produce/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 // import FamilyIncome from './FamilyIncome/Index.vue'
 import gaveArrange from './gaveArrange/Index.vue'
-
+import createCard from './createCard/Index.vue'
 import villageGrave from './villageInfoComponents/Grave/Index.vue'
 import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
 import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'

@@ -12,6 +12,7 @@
             @click="onSave"
             >保存</ElButton
           >
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
 
@@ -120,10 +121,12 @@
         </div>
       </div>
     </div>
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
+import recordDialog from '../components/recordDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, unref, onMounted } from 'vue'
 import { ElButton, ElRadioGroup, ElRadio, ElSpace, ElInput, ElMessage } from 'element-plus'
@@ -141,8 +144,17 @@ interface PropsType {
   householdId: string
   doorNo: string
   baseInfo
+  tabCurrentId
 }
 
+const recordShow = ref(false)
+
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 const Homestead = ref<any>([])
 const flats = ref<any>([])
 // way 1 宅基地安置 2 公寓安置
@@ -217,7 +229,8 @@ const immigrantWillProductionList = ref<any>([])
 const getResettlement = async () => {
   const params = {
     doorNo: props.doorNo,
-    householdId: +props.householdId
+    householdId: +props.householdId,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   const res = await getResettlementListApi(params)
   if (res && res.content && res.content.length) {

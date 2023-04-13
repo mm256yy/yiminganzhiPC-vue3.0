@@ -16,35 +16,78 @@
       >
     </div>
 
-    <div class="other" v-if="type == 'Landlord'">
-      <div class="info-item">
-        <div class="tit">行政村名称：</div>
-        <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
-      </div>
-      <div class="info-item">
-        <div class="tit">自然村名称：</div>
-        <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
-      </div>
-      <div class="info-item">
-        <div class="tit">所属网格：</div>
-        <div class="txt"></div>
-      </div>
-      <div class="info-item">
-        <div class="tit">户籍册编号：</div>
-        <div class="txt"></div>
-      </div>
-      <div class="info-item">
-        <div class="tit">所在位置：</div>
-        <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
-      </div>
-      <div class="info-item">
-        <div class="tit">联系电话：</div>
-        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
-      </div>
-      <div class="info-item">
-        <div class="tit">家庭人数：</div>
-        <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
-      </div>
+    <div class="other" v-if="type == 'Landlord'" style="display: block">
+      <el-row>
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">行政村名称：</div>
+            <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+          </div></el-col
+        >
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">自然村名称：</div>
+            <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+          </div></el-col
+        >
+        <el-col :span="3" v-if="tabCurrentId != 3">
+          <div class="info-item">
+            <div class="tit">所属网格：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">户籍册编号：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="3"
+          ><div class="info-item">
+            <div class="tit">所在位置：</div>
+            <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
+          </div></el-col
+        >
+        <el-col :span="4">
+          <div class="info-item">
+            <div class="tit">联系电话：</div>
+            <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+          </div></el-col
+        >
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">家庭人数：</div>
+            <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
+          </div></el-col
+        >
+      </el-row>
+    </div>
+    <div class="other" v-if="type == 'Landlord' && tabCurrentId == 3" style="display: block">
+      <el-row>
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">开户名：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">开户行：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="3">
+          <div class="info-item">
+            <div class="tit">银行账户：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">迁前地址：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">安置住址：</div>
+            <div class="txt"></div> </div
+        ></el-col>
+      </el-row>
     </div>
     <div class="other" v-if="type == 'Enterprise'">
       <div class="info-item">
@@ -106,11 +149,13 @@
 </template>
 
 <script lang="ts" setup>
+import { ElRow, ElCol } from 'element-plus'
 import { ReportStatus } from '../config'
 import { ref, onMounted } from 'vue'
 interface PropsType {
   baseInfo: any
   type: any
+  tabCurrentId
 }
 
 const infoData = ref<any>({ icon: 'mdi:user-circle' })

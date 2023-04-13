@@ -25,13 +25,13 @@ service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     if (
       config.method === 'post' &&
-      (config.headers as AxiosRequestHeaders)['Content-Type'] ===
-        'application/x-www-form-urlencoded'
+      (config.headers as AxiosRequestHeaders)['Content-Type'] == 'application/x-www-form-urlencoded'
     ) {
       config.data = qs.stringify(config.data)
     }
     // 添加统一的项目id请求头
     ;(config.headers as AxiosRequestConfig)['Project-Id'] = appStore.getCurrentProjectId
+    ;(config.headers as AxiosRequestConfig)['Project-Status'] = appStore.getProjectStatus
     // 添加 token
     const token = appStore.getToken
     if (token) {

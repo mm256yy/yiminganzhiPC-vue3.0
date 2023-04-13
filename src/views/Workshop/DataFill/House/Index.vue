@@ -5,8 +5,11 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
+      <recordDialog :recordShow="recordShow" @close="recordClose" />
+
       <Table
         :loading="tableObject.loading"
         :data="tableObject.tableList"
@@ -58,6 +61,7 @@
 </template>
 
 <script lang="ts" setup>
+import recordDialog from '../components/recordDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
@@ -75,6 +79,7 @@ import { locationTypes } from '@/views/Workshop/components/config'
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
@@ -90,9 +95,17 @@ const { register, tableObject, methods } = useTable({
 const { getList } = methods
 
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.tabCurrentId == 2 ? 'review' : undefined
 }
+const recordShow = ref(false)
 
+const recordClose = () => {
+  recordShow.value = false
+}
+const recordClick = () => {
+  recordShow.value = true
+}
 getList()
 
 const getLocationText = (key: string) => {

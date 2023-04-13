@@ -41,9 +41,10 @@ export default defineComponent({
       selectedProjectId.value = appStore.getCurrentProjectId
       setPlatform('workshop', addRoute)
       const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
-      console.log(project)
+      console.log(project, '123')
 
       appStore.setreservoirName(project.reservoirName)
+      appStore.setProjectStatus(project.status)
     })
     const onProjectChange = async (id: number) => {
       await setDefaultProjectApi(id)
@@ -57,15 +58,16 @@ export default defineComponent({
       if (project) {
         if (project.projectRole === ProjectRoleEnum.PROJECT_ADMIN) {
           await setPlatform('admin', addRoute)
-          window.location.href = '/admin.html#/dashboard/home'
+          // window.location.href = '/admin.html#/dashboard/home'
         } else {
           await setPlatform('workshop', addRoute)
-          window.location.href = '/#/workshop/home'
+          // window.location.href = '/#/workshop/home'
         }
         setTimeout(() => {
           window.location.reload()
         }, 500)
       }
+      console.log(project, '123456')
     }
     return () => (
       <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>

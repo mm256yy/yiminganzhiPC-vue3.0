@@ -211,7 +211,7 @@ tableObject.params = {
 }
 
 // getList()
-setSearchParams({ type: 'PeasantHousehold' })
+setSearchParams({ type: 'PeasantHousehold', status: 'implementation' })
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
@@ -458,7 +458,7 @@ const onDelRow = async (row: LandlordDtoType) => {
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
-        setSearchParams({ type: 'PeasantHousehold' })
+        setSearchParams({ type: 'PeasantHousehold', status: 'implementation' })
       })
     })
     .catch(() => {})
@@ -543,12 +543,12 @@ const onSearch = (data) => {
       }
 
       params.type = 'PeasantHousehold'
-      setSearchParams({ ...params })
+      setSearchParams({ ...params, status: 'implementation' })
     })
   } else {
     params.type = 'PeasantHousehold'
 
-    setSearchParams({ ...params })
+    setSearchParams({ ...params, status: 'implementation' })
   }
 }
 

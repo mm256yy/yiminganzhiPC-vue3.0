@@ -5,6 +5,7 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
+          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -54,6 +55,7 @@
       :doorNo="props.doorNo"
       @close="onFormPupClose"
     />
+    <recordDialog :recordShow="recordShow" @close="recordClose" />
   </WorkContentWrap>
 </template>
 
@@ -69,29 +71,33 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-
+import recordDialog from '../components/recordDialog.vue'
 interface PropsType {
   doorNo: string
+  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-
+const recordShow = ref(false)
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
   delListApi: delDemographicByIdApi
 })
 const { getList } = methods
-
+// review
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.tabCurrentId == 2 ? 'review' : undefined
 }
 
 getList()
-
+const recordClose = () => {
+  recordShow.value = false
+}
 const schema = reactive<CrudSchema[]>([
   {
     width: 80,
@@ -229,7 +235,9 @@ const onAddRow = () => {
   tableObject.currentRow = null
   dialog.value = true
 }
-
+const recordClick = () => {
+  recordShow.value = true
+}
 const onEditRow = (row: DemographicDtoType) => {
   console.log(row)
 

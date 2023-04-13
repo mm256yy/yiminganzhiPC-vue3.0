@@ -192,6 +192,7 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
+  tabCurrentId
 }
 const loading = ref(false)
 const props = defineProps<PropsType>()
@@ -253,7 +254,8 @@ onMounted(() => {
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
-    householdId: +props.householdId
+    householdId: +props.householdId,
+    status: props.tabCurrentId == 2 ? 'review' : undefined
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
