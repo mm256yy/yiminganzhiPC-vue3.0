@@ -48,6 +48,7 @@ export type ProjectUserType = {
   orgName?: string
   defaultProject?: boolean
   roles?: RoleSmallType[]
+  [key: string]: any
 }
 
 /**

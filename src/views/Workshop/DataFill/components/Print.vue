@@ -46,12 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { printPdf, getTemplate, handleLandlordWithPrint, landlordTestData } from '@/print'
+import { PrintType, LandlordType } from '@/types/print'
+import { computed, ref, onMounted } from 'vue'
 import axios from 'axios'
 import printJS from 'print-js'
 import { ElDialog, ElButton, ElTooltip } from 'element-plus'
-import { getPrintTemplateListApi, printLandlordApi } from '@/api/workshop/landlord/service'
+import { getLandlordBatchApi, printLandlordApi } from '@/api/workshop/landlord/service'
 import { useRouter } from 'vue-router'
+import { useAppStoreWithOut } from '@/store/modules/app'
+
+const appStore = useAppStoreWithOut()
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
 interface PropsType {
@@ -71,28 +76,48 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 const list = ref<PrintListType[]>([])
 const downName = ref('')
-const getPrintList = async () => {
-  let templateType = ''
-  if (type == 'Enterprise') {
-    templateType = 'printCompany'
-  } else if (type == 'Landlord') {
-    templateType = 'print'
-  } else if (type == 'IndividualB') {
-    templateType = 'printIndividualHousehold'
-  }
+// 当前调查对象的打印信息
+const landlords = ref<LandlordType[] | null>()
+// 操作类型
+const actionType = ref<'preview' | 'download' | 'batchPrint'>('preview')
 
-  const res = await getPrintTemplateListApi({
-    templateType: templateType
-  })
+onMounted(() => {
+  landlords.value = handleLandlordWithPrint(landlordTestData)
+})
+
+const projectInfo = computed(() => {
+  const projects = appStore.getUserInfo?.projectUsers
+  const currentProjectId = appStore.getCurrentProjectId
+  const project = projects?.find((x) => x.projectId === currentProjectId)
+  return {
+    name: project?.projectName || '',
+    status: project?.status || ''
+  }
+})
+
+const printType = computed(() => {
+  let templateType = PrintType.print
+  if (type == 'Enterprise') {
+    templateType = PrintType.printCompany
+  } else if (type == 'Landlord') {
+    templateType = PrintType.print
+  } else if (type == 'IndividualB') {
+    templateType = PrintType.printIndividualHousehold
+  }
+  return templateType
+})
+
+const getPrintList = () => {
+  const res = getTemplate(printType.value)
   console.log(res)
 
-  if (res && res.content) {
+  if (res && res.length) {
     const arr: PrintListType[] = []
-    res.content.forEach((item) => {
+    res.forEach((item) => {
       if (item.templateModule === '实物采集') {
         arr.push({
           name: item.templateName,
-          url: item.templateUrl,
+          url: '',
           selected: false,
           uid: item.id
         })
@@ -110,7 +135,6 @@ const onClose = () => {
 }
 
 const toggleItem = (currentItem) => {
-  console.log(currentItem)
   list.value = list.value.map((item) => {
     if (item.uid === currentItem.uid) {
       item.selected = !item.selected
@@ -123,10 +147,10 @@ const toggleItem = (currentItem) => {
 }
 
 const selectedTableIds = computed(() => {
-  const ids: Array<string | number> = []
+  const ids: Array<number> = []
   list.value.forEach((item) => {
     if (item.selected) {
-      ids.push(item.uid) // todo
+      ids.push(item.uid)
     }
   })
   return ids
@@ -156,33 +180,121 @@ const downLoad = (url: string) => {
   })
 }
 
+/**
+ * 生成pdf数据
+ * templateId 模版id
+ * returndataType pdf数据类型
+ */
+const generatorPdf = (templateId?: number, returndataType?: string): Promise<any> => {
+  return new Promise(async (resolve, reject) => {
+    // 拿到最新的调查对象信息
+    if (!landlords.value) {
+      const landlordArray = await getLandlordBatchApi([props.baseInfo.id])
+      const realLandlords = handleLandlordWithPrint(landlordArray)
+      // 缓存
+      landlords.value = realLandlords
+    }
+    const templateIds = templateId ? [templateId] : selectedTableIds.value
+    if (!templateIds.length) {
+      return
+    }
+    // 生成pdf数据
+    printPdf
+      .getPdf({
+        landlords: landlords.value,
+        templateIds,
+        type: printType.value,
+        projectInfo: projectInfo.value,
+        returndataType: returndataType || ''
+      })
+      .then((result) => {
+        if (!result) {
+          reject()
+        }
+        console.log(result, '生成的结果')
+        // 根据 actionType 不同 返回不同的数据格式
+        // 预览：base64
+        // 打印：[stream, stream]
+        // 下载：
+        // [{
+        //   name: 'b',
+        //   id: 2,
+        //   pdfList: [
+        //     {name: '', stream: ''}
+        //   ]
+        // }]
+        if (actionType.value === 'preview') {
+          resolve(result[0][0].data)
+        } else if (actionType.value === 'download') {
+          if (!result.length) {
+            reject()
+            return
+          }
+          const res = result.map((item, index) => {
+            const currentLandlord = (landlords.value as LandlordType[])[index]
+            const obj = {
+              name: currentLandlord.name,
+              id: currentLandlord.id,
+              doorNo: currentLandlord.doorNo,
+              pdfList: item
+            }
+            return obj
+          })
+          resolve(res)
+        } else if (actionType.value === 'batchPrint') {
+          const res: any[] = []
+          if (result.length) {
+            result.forEach((item) => {
+              item.forEach((pdfItem) => {
+                res.push(pdfItem.data)
+              })
+            })
+          }
+          resolve(res)
+        }
+      })
+      .catch(() => {
+        reject()
+      })
+  })
+}
+
 const onDownLoad = async () => {
+  actionType.value = 'download'
+
   const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
   if (result) {
     downLoad(result)
   }
+  generatorPdf().then((res) => {
+    console.log(res, '下载参数')
+  })
 }
 
 const onPrint = async () => {
+  actionType.value = 'batchPrint'
+
   const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
   if (result) {
     printJS(result)
   }
+  generatorPdf().then((res) => {
+    console.log(res, '参数')
+  })
 }
 
 const onPreview = async (item) => {
-  const result = await printLandlordApi([item.uid], props.landlordIds)
-  // window.open(`https://view.officeapps.live.com/op/view.aspx?src=${result}`)
-  window.open(result)
+  console.log(item)
+
+  actionType.value = 'preview'
+  generatorPdf(item.uid, 'blob').then((res) => {
+    const url = window.URL.createObjectURL(res)
+    window.open(url)
+  })
 }
 </script>
 
 <style lang="less" scoped>
-@page {
-  margin: 18mm 15mm 8mm 15mm !important;
-  size: A4 !important;
-}
-
 .print-box {
   padding-left: 16px;
 

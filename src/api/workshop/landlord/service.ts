@@ -1,5 +1,6 @@
 import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
+import { LandlordType } from '@/types/print'
 
 /**
  * 查询居民户信息列表
@@ -42,6 +43,19 @@ export const delLandlordByIdApi = (id: number): Promise<void> => {
  */
 export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
+}
+
+/**
+ * 查询多个调查对象信息
+ * 打印使用
+ */
+export const getLandlordBatchApi = (ids: number[] | string[]): Promise<LandlordType[]> => {
+  return request.get({
+    url: `/pad/printDetails`,
+    params: {
+      ids
+    }
+  })
 }
 
 /**
