@@ -16,6 +16,7 @@ const TOKEN_NAME = 'YM-TOKEN'
 const JWT_INFO_NAME = 'ymUserJwtInfo'
 const USER_INFO_NAME = 'ymUserInfo'
 const CURRENT_PROJECT_KEY = 'ymCurrentProjectId'
+const CURRENT_MAP_KEY = 'ymCurrentMapJson'
 const PERMISSION_KEY = 'ymPermission'
 
 interface AppState {
@@ -40,6 +41,7 @@ interface AppState {
   userJwtInfo: JwtUserType | null
   currentProjectId: number
   currentPlatform: PlatformType
+  currentMapJson: string
   permissions: string[]
   token: string
   reservoirName: string
@@ -60,6 +62,7 @@ export const useAppStore = defineStore('app', {
       userJwtInfo: wsCache.get(JWT_INFO_NAME) || null,
       token: wsCache.get(TOKEN_NAME) || '',
       currentProjectId: wsCache.get(CURRENT_PROJECT_KEY) || 0,
+      currentMapJson: wsCache.get(CURRENT_MAP_KEY) || '', // 地图JSON文件字符串
       currentPlatform: 'workshop',
       permissions: wsCache.get(PERMISSION_KEY) || [],
       sizeMap: ['default', 'large', 'small'],
@@ -202,6 +205,12 @@ export const useAppStore = defineStore('app', {
     getCurrentProject(): ProjectUserType | undefined {
       return this.userInfo?.projectUsers.find((x) => x.projectId === this.currentProjectId)
     },
+    /**
+     * 当前项目的地图JSON
+     */
+    getCurrentMapJson(): string {
+      return this.currentMapJson
+    },
     getCurrentPlatform(): PlatformType {
       return this.currentPlatform
     },
@@ -323,6 +332,10 @@ export const useAppStore = defineStore('app', {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
       // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目
       this.currentProjectId = projectId
+    },
+    setCurrentMapJson(mapJson: string) {
+      wsCache.set(CURRENT_PROJECT_KEY, mapJson)
+      this.currentMapJson = mapJson
     },
     setCurrentPlatform(platform: PlatformType) {
       this.currentPlatform = platform

@@ -48,6 +48,9 @@ export type ProjectUserType = {
   orgName?: string
   defaultProject?: boolean
   roles?: RoleSmallType[]
+  roleIds?: number[]
+  mapPic?: string
+  mapJson?: string
 }
 
 /**

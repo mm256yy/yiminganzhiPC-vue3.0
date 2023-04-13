@@ -7,7 +7,27 @@
     :max-height="470"
     @close="onClose"
   >
-    <Form :schema="schema" @register="register" :rules="rules" :is-col="true" />
+    <Form :schema="schema" @register="register" :rules="rules" :is-col="true">
+      <template #mapPic>
+        <span class="tips-icon">*</span>
+        <ElUpload
+          class="w-full"
+          drag
+          action="/api/file"
+          accept=".json"
+          :file-list="mapPic"
+          :headers="headers"
+          :limit="1"
+          :on-success="uploadFileChange"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile"
+          :on-preview="filePreview"
+        >
+          <Icon :size="30" icon="ant-design:cloud-upload-outlined" />
+          <div class="el-upload__text"> 拖入文件或者 <em>点击上传</em> 支持json文件 </div>
+        </ElUpload>
+      </template>
+    </Form>
     <template #footer>
       <ElButton type="primary" :loading="loading" @click="onSave">确认</ElButton>
       <ElButton @click="onClose">取消</ElButton>
@@ -17,7 +37,9 @@
 
 <script setup lang="ts">
 import { computed, reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElMessage } from 'element-plus'
+import { useAppStore } from '@/store/modules/app'
+import type { UploadFile, UploadFiles } from 'element-plus'
+import { ElButton, ElMessage, ElMessageBox, ElUpload } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -31,12 +53,26 @@ interface Props {
   show: boolean
   row?: ProjectDtoType
 }
+
+interface FileItemType {
+  name: string
+  url: string
+}
+
 const props = defineProps<Props>()
 const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
 const currentRow = ref(props.row)
+const mapPic = ref<FileItemType[]>([]) // 上传的地图JSON文件
+const mapJson = ref<string>('') // 地图JSON文件解析后的JSON数据字符串
+const appStore = useAppStore()
+
+const headers = ref({
+  'Project-Id': appStore.getCurrentProjectId,
+  Authorization: appStore.getToken
+})
 
 const title = computed(() => {
   return props.row ? '维护项目' : '新增项目'
@@ -130,6 +166,11 @@ const schema = reactive<FormSchema[]>([
     }
   },
   {
+    field: 'mapPic',
+    label: '地图JSON文件',
+    colProps: { span: 24 }
+  },
+  {
     field: 'description',
     label: '简介',
     component: 'Input',
@@ -146,9 +187,64 @@ const schema = reactive<FormSchema[]>([
 
 const { register, elFormRef, methods } = useForm()
 
+// 处理已上传的文件
+const handleFileList = (fileList: UploadFiles) => {
+  console.log('fileList:', fileList)
+  if (fileList && fileList.length) {
+    const list = fileList
+      .filter((fileItem: any) => fileItem.status === 'success')
+      .map((fileItem: any) => {
+        return {
+          name: fileItem.name,
+          url: fileItem.url || (fileItem.response.data as string)
+        }
+      })
+    mapPic.value = list
+  }
+}
+
+// 处理json文件
+const handleFiles = (files: any) => {
+  let reader = new FileReader() // 新建一个FileReader
+  reader.readAsText(files.raw, 'UTF-8') // 读取文件
+  // 读取文件完毕执行此函数
+  reader.onload = (evt: any) => {
+    const dataJson = JSON.stringify(JSON.parse(evt.target?.result))
+    mapJson.value = dataJson
+  }
+}
+
+// 文件上传
+const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+  handleFiles(_file)
+}
+
+// 移除之前
+const beforeRemove = (uploadFile: UploadFile) => {
+  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
+    () => true,
+    () => false
+  )
+}
+
+// 文件移除
+const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+}
+
+// 文件预览
+const filePreview = (uploadFile: UploadFile) => {
+  if (uploadFile.url) {
+    window.open(uploadFile.url)
+  }
+}
+
 onMounted(async () => {
   const townCode = currentRow.value?.townCode ? currentRow.value.townCode.split(',') : []
   districtTree.value = currentRow.value?.districtTree?.join(',').split(',') || []
+  mapPic.value = currentRow.value?.mapPic ? JSON.parse(currentRow.value.mapPic) : []
+  mapJson.value = currentRow.value?.mapJson ? currentRow.value.mapJson : ''
   methods.setValues({
     ...currentRow.value,
     townCode
@@ -159,6 +255,9 @@ const onSave = async () => {
   const formRef = unref(elFormRef)
   await formRef?.validate(async (isValid) => {
     if (isValid) {
+      if (!mapPic.value || !mapPic.value.length) {
+        return ElMessage.error('请上传地图JSON文件')
+      }
       doSave()
     }
   })
@@ -168,6 +267,8 @@ const doSave = async () => {
   loading.value = true
   const project = (await methods.getFormData()) || {}
   project.townCode = project.townCode.join(',')
+  project.mapPic = JSON.stringify(mapPic.value)
+  project.mapJson = mapJson.value
   if (currentRow.value && currentRow.value.id) {
     project.id = currentRow.value.id
   }
@@ -185,3 +286,11 @@ const onClose = () => {
   emit('close')
 }
 </script>
+<style>
+.tips-icon {
+  position: absolute;
+  top: 0;
+  left: -116px;
+  color: red;
+}
+</style>

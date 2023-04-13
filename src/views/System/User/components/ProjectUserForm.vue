@@ -89,7 +89,9 @@ const row = ref<ProjectUser>(
     orgId: undefined,
     position: '',
     dingId: undefined,
-    roleIds: []
+    roleIds: [],
+    mapJson: '',
+    mapPic: ''
   }
 )
 const defaultProps = {

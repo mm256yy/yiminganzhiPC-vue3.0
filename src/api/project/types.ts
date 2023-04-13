@@ -14,6 +14,8 @@ export type ProjectDtoType = {
   townCode: string
   reservoirName: string
   districtTree: string[]
+  mapPic: string
+  mapJson: string
 }
 
 /**

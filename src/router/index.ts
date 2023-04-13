@@ -137,6 +137,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '专业项目/库底清理报告上传',
           hidden: true
         }
+      },
+      {
+        path: 'mapList',
+        name: 'workshopMapList',
+        component: () => import('@/views/Workshop/MapList/Index.vue'),
+        meta: {
+          title: '地图查看',
+          hidden: true
+        }
       }
     ]
   }
