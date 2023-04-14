@@ -179,7 +179,7 @@ const defaultRow = {
   unit: '',
   quantity: 0,
   price: 0,
-  discountRate: '',
+  discountRate: 0,
   evaluationAmount: 0,
   compensationAmount: 0,
   remark: ''

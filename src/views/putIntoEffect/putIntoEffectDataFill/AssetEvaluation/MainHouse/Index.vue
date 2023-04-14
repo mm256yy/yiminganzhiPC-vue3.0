@@ -321,7 +321,7 @@ const defaultRow = {
   landNo: '',
   structureLevel: '',
   buildingHeight: 0,
-  newnessRate: '',
+  newnessRate: 0,
   price: 0,
   evaluationAmount: 0,
   compensationAmount: 0,

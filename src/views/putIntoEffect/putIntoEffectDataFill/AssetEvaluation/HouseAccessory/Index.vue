@@ -101,7 +101,7 @@
             <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
+        <!-- 字段未定 -->180
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -167,7 +167,7 @@ const defaultRow = {
   unit: '',
   quantity: 0,
   price: 0,
-  discountRate: '',
+  discountRate: 0,
   evaluationAmount: 0,
   compensationAmount: 0,
   remark: ''
