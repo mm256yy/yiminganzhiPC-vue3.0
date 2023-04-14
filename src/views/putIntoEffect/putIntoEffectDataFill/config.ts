@@ -3,6 +3,57 @@ export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
+  // 资产评估
+  {
+    type: 0,
+    name: '房屋主体评估',
+    id: ReportTabIds[0],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 0,
+    name: '房屋装修评估',
+    id: ReportTabIds[1],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 0,
+    name: '房屋附属设施评估',
+    id: ReportTabIds[2],
+    icon: 'bi:device-hdd-fill',
+    active: false
+  },
+  {
+    type: 0,
+    name: '零星林（果）木评估',
+    id: ReportTabIds[3],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    type: 0,
+    name: '土地基本情况评估',
+    id: ReportTabIds[4],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    type: 0,
+    name: '土地青苗及附着物评估',
+    id: ReportTabIds[5],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    type: 0,
+    name: '坟墓评估',
+    id: ReportTabIds[6],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  // 资格认定
   {
     type: 1,
     name: '人口核定',
@@ -10,7 +61,6 @@ export const ReportTabs = [
     icon: 'mdi:user-details',
     active: false
   },
-
   {
     type: 1,
     name: '房屋确权',
@@ -18,6 +68,7 @@ export const ReportTabs = [
     icon: 'clarity:house-solid',
     active: false
   },
+  // 安置确认
   {
     type: 2,
     name: '搬迁安置',
@@ -25,7 +76,6 @@ export const ReportTabs = [
     icon: 'mdi:lorry',
     active: false
   },
-
   {
     type: 2,
     name: '生产安置',

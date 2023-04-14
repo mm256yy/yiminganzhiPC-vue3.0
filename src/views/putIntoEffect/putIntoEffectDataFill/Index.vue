@@ -75,29 +75,83 @@
       </div>
     </div>
     <div class="data-fill-body" v-if="type == 'Landlord'">
+      <!-- 资产评估 -- 房屋主体评估 -->
+      <main-house
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
+      />
+
+      <!-- 资产评估 -- 房屋装修评估 -->
+      <house-decoration
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[1]"
+      />
+
+      <!-- 资产评估 -- 房屋附属设施评估 -->
+      <house-accessory
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[2]"
+      />
+
+      <!-- 资产评估 -- 零星林（果）木评估 -->
+      <fruit-tree
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[3]"
+      />
+
+      <!-- 资产评估 -- 土地基本情况评估 -->
+      <land-basic-info
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[4]"
+      />
+
+      <!-- 资产评估 -- 土地青苗及附着物评估 -->
+      <land-green-seedlings
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
+      />
+
+      <!-- 资产评估 -- 坟墓评估 -->
+      <grave
+        :door-no="doorNo"
+        :household-id="householdId"
+        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[6]"
+      />
+
       <!-- 人口核定 -->
       <populationCheck
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
+
       <!-- 房屋确权 -->
       <houseConfirmation
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
       />
+
       <relocation
         :doorNo="doorNo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[2] && tabCurrentId == 2"
       />
+
       <produce
         :doorNo="doorNo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[3] && tabCurrentId == 2"
       />
+
       <gaveArrange
         :doorNo="doorNo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
       />
+
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
     </div>
 
@@ -271,6 +325,14 @@ import {
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 
+import MainHouse from './AssetEvaluation/MainHouse/Index.vue' // 资产评估 -- 房屋主体评估
+import HouseDecoration from './AssetEvaluation/HouseDecoration/Index.vue' // 资产评估 -- 房屋装修评估
+import HouseAccessory from './AssetEvaluation/HouseAccessory/Index.vue' // 资产评估 -- 房屋附属设施评估
+import FruitTree from './AssetEvaluation/FruitTree/Index.vue' // 资产评估 -- 零星林（果）木评估
+import LandBasicInfo from './AssetEvaluation/LandBasicInfo/Index.vue' // 资产评估 -- 土地基本情况评估
+import LandGreenSeedlings from './AssetEvaluation/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
+import Grave from './AssetEvaluation/Grave/Index.vue' // 资产评估 -- 坟墓评估
+
 import populationCheck from './populationCheck/Index.vue'
 import relocation from './relocation/Index.vue'
 
@@ -302,7 +364,7 @@ import { useRouter } from 'vue-router'
 const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
-const tabCurrentId = ref<number>(1)
+const tabCurrentId = ref<number>(0)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
 const { doorNo, householdId, type } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)

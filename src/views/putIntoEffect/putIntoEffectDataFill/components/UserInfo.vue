@@ -3,8 +3,8 @@
     <div class="base">
       <div class="user">
         <Icon :icon="infoData.icon" color="#3E73EC" />
-        <span class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</span>
-        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</span>
+        <div class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</div>
+        <div class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</div>
       </div>
       <div
         :class="{
@@ -15,44 +15,44 @@
         >{{ props.baseInfo.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
       >
     </div>
-
+    <!-- 居民户基础信息 -->
     <div class="other" v-if="type == 'Landlord'" style="display: block">
       <el-row>
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">行政村名称：</div>
             <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
           </div></el-col
         >
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">自然村名称：</div>
             <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
           </div></el-col
         >
-        <el-col :span="3" v-if="tabCurrentId != 3">
+        <el-col :span="6" v-if="tabCurrentId != 3">
           <div class="info-item">
             <div class="tit">所属网格：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">户籍册编号：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3"
+        <el-col :span="6"
           ><div class="info-item">
             <div class="tit">所在位置：</div>
             <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
           </div></el-col
         >
-        <el-col :span="4">
+        <el-col :span="6">
           <div class="info-item">
-            <div class="tit">联系电话：</div>
+            <div class="tit">联系方式：</div>
             <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
           </div></el-col
         >
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">家庭人数：</div>
             <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
@@ -60,19 +60,74 @@
         >
       </el-row>
     </div>
+    <!-- 资产评估 -->
+    <div class="other" v-if="type == 'Landlord' && tabCurrentId == 0" style="display: block">
+      <el-row>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋主体评估合计：</div>
+            <div class="txt">145566.92（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋装修评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋附属设施评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">零星（林）果木评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">土地基本情况评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">土地青苗及附着物评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">坟墓评估合计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">资产评估总计：</div>
+            <div class="txt">14568（元）</div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
     <div class="other" v-if="type == 'Landlord' && tabCurrentId == 3" style="display: block">
       <el-row>
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">开户名：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">开户行：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3">
+        <el-col :span="6">
           <div class="info-item">
             <div class="tit">银行账户：</div>
             <div class="txt"></div> </div
@@ -176,8 +231,9 @@ onMounted(() => {
 <style lang="less" scoped>
 .user-info {
   min-height: 88px;
+  padding-bottom: 10px;
   margin-top: 14px;
-  background: #f5f7fa;
+  background: #edf5ff;
   border: 1px solid #e8eaf0;
   border-radius: 4px;
 
@@ -185,7 +241,6 @@ onMounted(() => {
     display: flex;
     height: 40px;
     padding: 0 16px;
-    background: rgba(237, 245, 255, 1);
     border-bottom: 1px dashed #e6ecf4;
     align-items: center;
     justify-content: space-between;
@@ -227,10 +282,9 @@ onMounted(() => {
 
   .other {
     display: flex;
-    height: 48px;
     padding: 0 16px;
+    box-sizing: border-box;
     align-items: center;
-    background: rgba(237, 245, 255, 1);
 
     .info-item {
       display: flex;
