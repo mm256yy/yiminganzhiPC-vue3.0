@@ -163,13 +163,15 @@ export const handleLandlordWithPrint = (landlords: LandlordType[]) => {
           const houseImgs = JSON.parse(item.housePic)
           if (houseImgs && houseImgs.length) {
             houseImgs.forEach((item) => {
-              images.push(
-                // 处理图片链接
-                item.url.replace(
-                  'https://zdwp.oss-cn-hangzhou.aliyuncs.com/',
-                  'https://oss.zdwp.tech/'
+              if (/\.(jpg|jpeg|png|JPG|PNG)/.test(item.url)) {
+                images.push(
+                  // 处理图片链接
+                  item.url.replace(
+                    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/',
+                    'https://oss.zdwp.tech/'
+                  )
                 )
-              )
+              }
             })
           }
         }
