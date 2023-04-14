@@ -1,5 +1,6 @@
 import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
+// const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 
 /**
  * 查询居民户信息列表
@@ -46,6 +47,9 @@ export const immigrantGraveDelete = (id: number): Promise<void> => {
  */
 export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
+}
+export const getupdateLog = (doorNo: number | string): Promise<LandlordDtoType> => {
+  return request.get({ url: `/updateLog?doorNo=` + doorNo })
 }
 
 /**

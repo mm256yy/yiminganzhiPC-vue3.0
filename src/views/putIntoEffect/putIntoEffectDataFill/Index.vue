@@ -101,113 +101,9 @@
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
     </div>
 
-    <div class="data-fill-body" v-if="type == 'Enterprise'">
-      <EnterpriseInfor
-        :doorNo="doorNo"
-        v-if="reportTabCurrentId === ReportTabIds[0]"
-        :householdId="householdId"
-      />
-      <House
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1]"
-      />
-      <Accessory
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
-      />
-      <Fruitwood
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
-      />
-      <DeviceInfor
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
-      />
+    <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
 
-      <BusinessStatus
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
-      />
-      <Enclosure
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[6]"
-      />
-    </div>
-
-    <div class="data-fill-body" v-if="type == 'IndividualB'">
-      <IndividualBInfor
-        :doorNo="doorNo"
-        v-if="reportTabCurrentId === ReportTabIds[0]"
-        :householdId="householdId"
-      />
-      <House
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1]"
-      />
-      <Accessory
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
-      />
-      <Fruitwood
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
-      />
-      <DeviceInfor
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
-      />
-      <Enclosure
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
-      />
-    </div>
-
-    <div class="data-fill-body" v-if="type == 'villageInfoC'">
-      <House
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-if="reportTabCurrentId === ReportTabIds[0]"
-      />
-
-      <Fruitwood
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1]"
-      />
-      <!-- 附属物 -->
-      <Accessory
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
-      />
-      <VillageDeviceInfor
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[3]"
-      />
-
-      <Enclosure
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
-      />
-      <villageGrave
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
-      />
-    </div>
+    <div class="data-fill-body" v-if="type == 'IndividualB'"> </div> -->
 
     <Print
       :show="printDialog"
@@ -270,31 +166,12 @@ import {
 
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
-
 import populationCheck from './populationCheck/Index.vue'
 import relocation from './relocation/Index.vue'
-
-import House from './House/Index.vue'
 import houseConfirmation from './houseConfirmation/Index.vue'
-
-import Accessory from './Accessory/Index.vue'
-import Fruitwood from './Fruitwood/Index.vue'
 import produce from './produce/Index.vue'
-
-// import Grave from './Grave/Index.vue'
-import Enclosure from './Enclosure/Index.vue'
-// import FamilyIncome from './FamilyIncome/Index.vue'
 import gaveArrange from './gaveArrange/Index.vue'
 import createCard from './createCard/Index.vue'
-import villageGrave from './villageInfoComponents/Grave/Index.vue'
-import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
-import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'
-import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
-
-import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue'
-// import villageInfoCInfor from './villageInfoComponents/villageInfoCInfor/Index.vue'
-import VillageDeviceInfor from './villageInfoComponents/VillageDeviceInfor/Index.vue'
-
 // import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'

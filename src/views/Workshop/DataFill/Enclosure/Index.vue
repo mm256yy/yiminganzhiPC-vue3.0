@@ -22,7 +22,7 @@
         <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
       </ElSpace>
     </div>
-    <recordDialog :recordShow="recordShow" @close="recordClose" />
+    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
 
     <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
   </div>

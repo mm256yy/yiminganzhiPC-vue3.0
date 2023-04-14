@@ -121,7 +121,7 @@
         </div>
       </div>
     </div>
-    <recordDialog :recordShow="recordShow" @close="recordClose" />
+    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
   </WorkContentWrap>
 </template>
 
@@ -237,13 +237,7 @@ const getResettlement = async () => {
     form.value = res.content[0]
     immigrantWillProductionList.value = []
 
-    res.content[0].immigrantWillProductionList.forEach((item) => {
-      immigrantWillProductionList.value.push({
-        id: item.id,
-        productionType: item.productionType,
-        number: item.number
-      })
-    })
+    immigrantWillProductionList.value = res.content[0].immigrantWillProductionList
   }
 }
 onMounted(async () => {

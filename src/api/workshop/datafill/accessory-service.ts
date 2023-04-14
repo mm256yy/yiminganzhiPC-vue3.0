@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { AccessoryDtoType } from './accessory-types'
-
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 /**
  * 查询附属物信息列表
  */
@@ -15,6 +15,9 @@ export const getAccessoryListApi = (
  * 保存
  */
 export const saveAccessoryListApi = (data: any): Promise<TableResponse<AccessoryDtoType>> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrant_appendant/createAll', data })
 }
 

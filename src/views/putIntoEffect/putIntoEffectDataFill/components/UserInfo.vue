@@ -24,7 +24,7 @@
             <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
           </div></el-col
         >
-        <el-col :span="3">
+        <el-col :span="4">
           <div class="info-item">
             <div class="tit">自然村名称：</div>
             <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
@@ -33,13 +33,15 @@
         <el-col :span="3" v-if="tabCurrentId != 3">
           <div class="info-item">
             <div class="tit">所属网格：</div>
-            <div class="txt"></div> </div
-        ></el-col>
-        <el-col :span="3">
+            <div class="txt"></div>第一网格</div
+          ></el-col
+        >
+        <el-col :span="4">
           <div class="info-item">
             <div class="tit">户籍册编号：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt"></div> 1030034</div
+          ></el-col
+        >
         <el-col :span="3"
           ><div class="info-item">
             <div class="tit">所在位置：</div>
@@ -67,12 +69,12 @@
             <div class="tit">开户名：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <div class="info-item">
             <div class="tit">开户行：</div>
             <div class="txt"></div> </div
         ></el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <div class="info-item">
             <div class="tit">银行账户：</div>
             <div class="txt"></div> </div

@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { FamilyIncomeDtoType, FamilyIncomeOptionType } from './family-types'
-
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 /**
  * 查询家庭收入信息列表
  */
@@ -21,10 +21,16 @@ export const getImmigrantManagement = (
  * 保存
  */
 export const saveFamilyIncomeListApi = (data: any): Promise<TableResponse<FamilyIncomeDtoType>> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrant_income/createAll', data })
 }
 
 export const saveImmigrantManagement = (data: any): Promise<TableResponse<FamilyIncomeDtoType>> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrantManagement/createAll', data })
 }
 /**

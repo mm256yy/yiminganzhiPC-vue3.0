@@ -1,5 +1,6 @@
 import request from '@/config/axios'
 import { FruitwoodDtoType, FruitwoodParamsType } from './immigrantFacilities-type'
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 
 /**
  * 查询果木信息列表
@@ -15,6 +16,9 @@ export const getFruitwoodListApi = (
  * 保存
  */
 export const saveFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrantFacilities/create', data })
 }
 

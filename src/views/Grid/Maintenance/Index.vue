@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="table-wrap">
-      <div style=" margin-bottom: 5px;text-align: right">
+      <div style="margin-bottom: 5px; text-align: right">
         <ElButton type="primary" @click="onAddRow">新增网格</ElButton>
         <ElButton type="primary" @click="download">网格模板下载</ElButton>
         <ElButton type="primary" @click="fenpeiClick">一键分配</ElButton></div
