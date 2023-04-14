@@ -46,13 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { printPdf, getTemplate, handleLandlordWithPrint, landlordTestData } from '@/print'
+import { printPdf, getTemplate, handleLandlordWithPrint } from '@/print'
 import { PrintType, LandlordType } from '@/types/print'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import printJS from 'print-js'
-import { ElDialog, ElButton, ElTooltip } from 'element-plus'
-import { getLandlordBatchApi, printLandlordApi } from '@/api/workshop/landlord/service'
+import { ElDialog, ElButton, ElTooltip, ElMessage } from 'element-plus'
+import {
+  getLandlordBatchApi,
+  batchPrintApi,
+  downloadPrintPdfApi
+} from '@/api/workshop/landlord/service'
 import { useRouter } from 'vue-router'
 import { useAppStoreWithOut } from '@/store/modules/app'
 
@@ -80,10 +84,6 @@ const downName = ref('')
 const landlords = ref<LandlordType[] | null>()
 // 操作类型
 const actionType = ref<'preview' | 'download' | 'batchPrint'>('preview')
-
-onMounted(() => {
-  landlords.value = handleLandlordWithPrint(landlordTestData)
-})
 
 const projectInfo = computed(() => {
   const projects = appStore.getUserInfo?.projectUsers
@@ -185,17 +185,26 @@ const downLoad = (url: string) => {
  * templateId 模版id
  * returndataType pdf数据类型
  */
-const generatorPdf = (templateId?: number, returndataType?: string): Promise<any> => {
+const generatorPdf = (options?: { templateId?: number; returndataType?: string }): Promise<any> => {
+  const { templateId, returndataType } = options || {}
   return new Promise(async (resolve, reject) => {
     // 拿到最新的调查对象信息
     if (!landlords.value) {
-      const landlordArray = await getLandlordBatchApi([props.baseInfo.id])
-      const realLandlords = handleLandlordWithPrint(landlordArray)
-      // 缓存
-      landlords.value = realLandlords
+      const data = await getLandlordBatchApi([props.baseInfo.id]).catch(() => {
+        reject()
+      })
+      const { peasantHouseholdPushDtoList } = data || {}
+      if (peasantHouseholdPushDtoList) {
+        const realLandlords = handleLandlordWithPrint(peasantHouseholdPushDtoList)
+        // 缓存
+        landlords.value = realLandlords
+      } else {
+        landlords.value = []
+      }
     }
     const templateIds = templateId ? [templateId] : selectedTableIds.value
     if (!templateIds.length) {
+      reject()
       return
     }
     // 生成pdf数据
@@ -213,40 +222,50 @@ const generatorPdf = (templateId?: number, returndataType?: string): Promise<any
         }
         console.log(result, '生成的结果')
         // 根据 actionType 不同 返回不同的数据格式
-        // 预览：base64
-        // 打印：[stream, stream]
+        // 预览：blob
+        // 打印：[bolb => file]
         // 下载：
         // [{
+        //   doorNo: '',
         //   name: 'b',
         //   id: 2,
-        //   pdfList: [
-        //     {name: '', stream: ''}
+        //   files: [
+        //     {name: '', file: base64}
         //   ]
         // }]
         if (actionType.value === 'preview') {
-          resolve(result[0][0].data)
+          // 需要bolb格式的pdf
+          resolve(result[0][0].file)
         } else if (actionType.value === 'download') {
           if (!result.length) {
             reject()
             return
           }
+          // 传入base64格式的json数据
           const res = result.map((item, index) => {
             const currentLandlord = (landlords.value as LandlordType[])[index]
             const obj = {
               name: currentLandlord.name,
               id: currentLandlord.id,
               doorNo: currentLandlord.doorNo,
-              pdfList: item
+              files: item
             }
+            // item.map((pdfItem) => {
+            //     return {
+            //       name: pdfItem.name,
+            //       file: printPdf.blobToFile(pdfItem.file, pdfItem.name, 'application/pdf')
+            //     }
+            //   })
             return obj
           })
           resolve(res)
         } else if (actionType.value === 'batchPrint') {
+          // 传入文件数组
           const res: any[] = []
           if (result.length) {
             result.forEach((item) => {
               item.forEach((pdfItem) => {
-                res.push(pdfItem.data)
+                res.push(printPdf.blobToFile(pdfItem.file, pdfItem.name, 'application/pdf'))
               })
             })
           }
@@ -261,36 +280,48 @@ const generatorPdf = (templateId?: number, returndataType?: string): Promise<any
 
 const onDownLoad = async () => {
   actionType.value = 'download'
-
-  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
-  if (result) {
-    downLoad(result)
-  }
-  generatorPdf().then((res) => {
-    console.log(res, '下载参数')
+  const res = await generatorPdf({
+    returndataType: 'base64'
+  }).catch(() => {
+    ElMessage.error('生成pdf失败')
   })
+  console.log('下载参数', res)
+  if (res && res.length) {
+    const result = await downloadPrintPdfApi(res)
+    result && downLoad(result)
+  }
 }
 
 const onPrint = async () => {
   actionType.value = 'batchPrint'
-
-  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
-  if (result) {
-    printJS(result)
-  }
-  generatorPdf().then((res) => {
-    console.log(res, '参数')
+  const res = await generatorPdf({
+    returndataType: 'blob'
+  }).catch(() => {
+    ElMessage.error('生成pdf失败')
   })
+  console.log('打印参数', res)
+  if (res && res.length) {
+    const formData = new window.FormData()
+    res.forEach((file) => {
+      formData.append('files', file)
+    })
+    const result = await batchPrintApi(formData)
+    result && printJS(result)
+  }
 }
 
 const onPreview = async (item) => {
-  console.log(item)
-
   actionType.value = 'preview'
-  generatorPdf(item.uid, 'blob').then((res) => {
-    const url = window.URL.createObjectURL(res)
-    window.open(url)
+  const res = await generatorPdf({
+    returndataType: 'blob',
+    templateId: item.uid
+  }).catch(() => {
+    ElMessage.error('生成pdf失败')
   })
+  if (res) {
+    const url = window.URL.createObjectURL(res)
+    url && window.open(url)
+  }
 }
 </script>
 

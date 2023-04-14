@@ -133,6 +133,7 @@
 
     <Print
       :show="printDialog"
+      :templateType="PrintType.print"
       :landlordIds="landlordIds"
       :outsideData="outsideData"
       @close="onPrintDialogClose"
@@ -157,7 +158,7 @@ import { Search } from '@/components/Search'
 // TableEditColumn
 import { Table } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
-import Print from './components/Print.vue'
+import Print from '../components/Print.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -178,6 +179,7 @@ import type {
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
+import { PrintType } from '@/types/print'
 
 const appStore = useAppStore()
 const { push } = useRouter()

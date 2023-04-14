@@ -47,50 +47,87 @@
         class="!bg-[#30A952] !border-[#30A952]"
         :disabled="selectedTableIds.length === 0"
         @click="onDownLoad"
+        :loading="downloadLoading"
         >下载</ElButton
       >
-      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint"
-        >打印</ElButton
+      <ElButton
+        type="primary"
+        :loading="printLoading"
+        :disabled="selectedTableIds.length === 0"
+        @click="onPrint"
       >
+        打印
+      </ElButton>
     </template>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
+import { printPdf, getTemplate, handleLandlordWithPrint } from '@/print'
+import { PrintType, LandlordType } from '@/types/print'
 import { computed, ref } from 'vue'
 import axios from 'axios'
 import { uniqueId } from 'lodash-es'
 import printJS from 'print-js'
-import { ElDialog, ElButton, ElCheckbox } from 'element-plus'
-import { getPrintTemplateListApi, printLandlordApi } from '@/api/workshop/landlord/service'
+import { ElDialog, ElButton, ElCheckbox, ElMessage } from 'element-plus'
+import {
+  getLandlordBatchApi,
+  batchPrintApi,
+  downloadPrintPdfApi
+} from '@/api/workshop/landlord/service'
 import { formatDate } from '@/utils'
+import { useAppStoreWithOut } from '@/store/modules/app'
+
 interface PropsType {
   show: boolean
   landlordIds: number[]
   outsideData: any[]
+  templateType: PrintType
 }
 
 interface PrintListType {
   name: string
   selected: boolean
   showAll: boolean
-  uid: string
+  uid: number | string
   children: Array<Omit<PrintListType & { url: string }, 'children' | 'showAll'>>
 }
+
+const appStore = useAppStoreWithOut()
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 const list = ref<PrintListType[]>([])
 const outsideName = ref('')
+
+// 当前调查对象的打印信息
+const landlords = ref<LandlordType[] | null>()
+// 操作类型
+const actionType = ref<'preview' | 'download' | 'batchPrint'>('preview')
+const downloadLoading = ref<boolean>(false)
+const printLoading = ref<boolean>(false)
+
+const projectInfo = computed(() => {
+  const projects = appStore.getUserInfo?.projectUsers
+  const currentProjectId = appStore.getCurrentProjectId
+  const project = projects?.find((x) => x.projectId === currentProjectId)
+  return {
+    name: project?.projectName || '',
+    status: project?.status || ''
+  }
+})
+
+const printType = computed(() => {
+  return props.templateType
+})
+
 const getPrintList = async () => {
-  const res = await getPrintTemplateListApi({
-    templateType: 'print'
-  })
+  const res = getTemplate(printType.value)
   const map: {
     [key: string]: PrintListType
   } = {}
-  if (res && res.content) {
-    res.content.forEach((item) => {
+  if (res && res.length) {
+    res.forEach((item) => {
       if (!map[item.templateModule]) {
         map[item.templateModule] = {
           name: item.templateModule,
@@ -100,7 +137,7 @@ const getPrintList = async () => {
           children: [
             {
               name: item.templateName,
-              url: item.previewUrl,
+              url: '',
               selected: false,
               uid: item.id
             }
@@ -109,7 +146,7 @@ const getPrintList = async () => {
       } else {
         map[item.templateModule].children.push({
           name: item.templateName,
-          url: item.previewUrl,
+          url: '',
           selected: false,
           uid: item.id
         })
@@ -167,12 +204,12 @@ const checkChildItem = (val, childItem) => {
 }
 
 const selectedTableIds = computed(() => {
-  const ids: Array<string | number> = []
+  const ids: Array<number> = []
   list.value.forEach((item) => {
     const { children } = item
     children.forEach((child) => {
       if (child.selected) {
-        ids.push(child.uid) // todo
+        ids.push(child.uid as number) // todo
         outsideName.value = child.name
       }
     })
@@ -188,7 +225,13 @@ const downLoad = (url: string) => {
   } else if (props.landlordIds.length < 2 && selectedTableIds.value.length >= 2) {
     name = props.outsideData + '打印表'
   } else {
-    name = '居民户打印表' + formatDate(new Date())
+    name = `${
+      props.templateType === PrintType.print
+        ? '居民户打印表'
+        : props.templateType === PrintType.printCompany
+        ? '企业打印表'
+        : '个体工商户打印表'
+    }${formatDate(new Date())}`
   }
 
   axios.get(url, { responseType: 'blob' }).then((res) => {
@@ -205,24 +248,162 @@ const downLoad = (url: string) => {
   })
 }
 
+/**
+ * 生成pdf数据
+ * templateId 模版id
+ * returndataType pdf数据类型
+ */
+const generatorPdf = (options?: { templateId?: number; returndataType?: string }): Promise<any> => {
+  const { templateId, returndataType } = options || {}
+  return new Promise(async (resolve, reject) => {
+    // 拿到最新的调查对象信息
+    if (!landlords.value) {
+      const data = await getLandlordBatchApi(props.landlordIds).catch(() => {
+        reject()
+      })
+      const { peasantHouseholdPushDtoList } = data || {}
+      if (peasantHouseholdPushDtoList) {
+        const realLandlords = handleLandlordWithPrint(peasantHouseholdPushDtoList)
+        // 缓存
+        landlords.value = realLandlords
+      } else {
+        landlords.value = []
+      }
+    }
+    const templateIds = templateId ? [templateId] : selectedTableIds.value
+    if (!templateIds.length) {
+      reject()
+      return
+    }
+    // 生成pdf数据
+    printPdf
+      .getPdf({
+        landlords: landlords.value,
+        templateIds,
+        type: printType.value,
+        projectInfo: projectInfo.value,
+        returndataType: returndataType || ''
+      })
+      .then((result) => {
+        if (!result) {
+          reject()
+        }
+        console.log(result, '生成的结果')
+        // 根据 actionType 不同 返回不同的数据格式
+        // 预览：blob
+        // 打印：[bolb => file]
+        // 下载：
+        // [{
+        //   doorNo: '',
+        //   name: 'b',
+        //   id: 2,
+        //   files: [
+        //     {name: '', file: base64}
+        //   ]
+        // }]
+        if (actionType.value === 'preview') {
+          // 需要bolb格式的pdf
+          resolve(result[0][0].file)
+        } else if (actionType.value === 'download') {
+          if (!result.length) {
+            reject()
+            return
+          }
+          // 传入base64格式的json数据
+          const res = result.map((item, index) => {
+            const currentLandlord = (landlords.value as LandlordType[])[index]
+            const obj = {
+              name: currentLandlord.name,
+              id: currentLandlord.id,
+              doorNo: currentLandlord.doorNo,
+              files: item
+            }
+            // item.map((pdfItem) => {
+            //     return {
+            //       name: pdfItem.name,
+            //       file: printPdf.blobToFile(pdfItem.file, pdfItem.name, 'application/pdf')
+            //     }
+            //   })
+            return obj
+          })
+          resolve(res)
+        } else if (actionType.value === 'batchPrint') {
+          // 传入文件数组
+          const res: any[] = []
+          if (result.length) {
+            result.forEach((item) => {
+              item.forEach((pdfItem) => {
+                res.push(printPdf.blobToFile(pdfItem.file, pdfItem.name, 'application/pdf'))
+              })
+            })
+          }
+          resolve(res)
+        }
+      })
+      .catch(() => {
+        reject()
+      })
+  })
+}
+
 const onDownLoad = async () => {
-  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
-  if (result) {
-    downLoad(result)
+  downloadLoading.value = true
+  actionType.value = 'download'
+  const res = await generatorPdf({
+    returndataType: 'base64'
+  }).catch(() => {
+    downloadLoading.value = false
+  })
+  console.log('下载参数', res)
+  if (res && res.length) {
+    const result = await downloadPrintPdfApi(res).catch(() => {
+      downloadLoading.value = false
+      ElMessage.error('生成pdf失败')
+    })
+    result && downLoad(result)
+    downloadLoading.value = false
+  } else {
+    downloadLoading.value = false
   }
 }
 
 const onPrint = async () => {
-  const result = await printLandlordApi(selectedTableIds.value, props.landlordIds)
-  if (result) {
-    printJS(result)
+  printLoading.value = true
+  actionType.value = 'batchPrint'
+  const res = await generatorPdf({
+    returndataType: 'blob'
+  }).catch(() => {
+    printLoading.value = false
+    ElMessage.error('生成pdf失败')
+  })
+  console.log('打印参数', res)
+  if (res && res.length) {
+    const formData = new window.FormData()
+    res.forEach((file) => {
+      formData.append('files', file)
+    })
+    const result = await batchPrintApi(formData).catch(() => {
+      printLoading.value = false
+    })
+    result && printJS(result)
+    printLoading.value = false
+  } else {
+    printLoading.value = false
   }
 }
 
 const onPreview = async (item) => {
-  const result = await printLandlordApi([item.uid], props.landlordIds)
-  // window.open(`https://view.officeapps.live.com/op/view.aspx?src=${result}`)
-  window.open(result)
+  actionType.value = 'preview'
+  const res = await generatorPdf({
+    returndataType: 'blob',
+    templateId: item.uid
+  }).catch(() => {
+    ElMessage.error('生成pdf失败')
+  })
+  if (res) {
+    const url = window.URL.createObjectURL(res)
+    url && window.open(url)
+  }
 }
 </script>
 

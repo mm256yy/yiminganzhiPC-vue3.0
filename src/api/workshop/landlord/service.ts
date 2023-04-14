@@ -49,7 +49,9 @@ export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType
  * 查询多个调查对象信息
  * 打印使用
  */
-export const getLandlordBatchApi = (ids: number[] | string[]): Promise<LandlordType[]> => {
+export const getLandlordBatchApi = (
+  ids: number[] | string[]
+): Promise<{ peasantHouseholdPushDtoList: LandlordType[] }> => {
   return request.get({
     url: `/pad/printDetails`,
     params: {
@@ -117,4 +119,25 @@ export const printLandlordApi = (
 
 export const getLandlordSurveyByIdApi = (id: number | string): Promise<SurveyInfoType> => {
   return request.get({ url: `/peasantHousehold/survey/${id}` })
+}
+
+/**
+ * 批量打印
+ */
+export const batchPrintApi = (data: any): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/mergePdf`,
+    data,
+    headersType: 'multipart/form-data'
+  })
+}
+
+/**
+ * 打印表pdf下载
+ */
+export const downloadPrintPdfApi = (data: any[]): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/packagingZip`,
+    data
+  })
 }

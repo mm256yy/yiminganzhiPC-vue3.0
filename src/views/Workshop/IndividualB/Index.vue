@@ -123,6 +123,7 @@
     <Print
       :show="printDialog"
       :landlordIds="landlordIds"
+      :templateType="PrintType.printIndividualHousehold"
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
@@ -145,7 +146,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
-import Print from './components/Print.vue'
+import Print from '../components/Print.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -168,6 +169,8 @@ import type {
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
+import { PrintType } from '@/types/print'
+
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId

@@ -30,7 +30,7 @@ import {
 
 interface PDFItemType {
   name: string
-  data: any
+  file: any
 }
 
 class PrintCore {
@@ -116,6 +116,10 @@ class PrintCore {
     })
   }
 
+  public blobToFile(blob, fileName, mimeType) {
+    return new File([blob], fileName, { type: mimeType })
+  }
+
   public getPdfData(definition: any): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -123,9 +127,10 @@ class PrintCore {
           ...this.baseConfig,
           ...definition
         }
-        console.log(definitionConfig, 'definitionConfig')
+
         const pdfRes = this.pdfMake.createPdf(definitionConfig)
-        if (this.option && this.option.returndataType && this.option.returndataType === 'blob') {
+        const returndataType = this.option ? this.option.returndataType : 'base64'
+        if (returndataType === 'blob') {
           // 返回的数据类型
           pdfRes.getBlob().then(
             (res: string) => {
@@ -140,8 +145,21 @@ class PrintCore {
               reject()
             }
           )
+        } else if (returndataType === 'buffer') {
+          pdfRes.getBuffer().then(
+            (res: string) => {
+              if (res) {
+                resolve(res)
+              } else {
+                reject()
+              }
+            },
+            () => {
+              reject()
+            }
+          )
         } else {
-          pdfRes.getStream().then(
+          pdfRes.getBase64().then(
             (res: string) => {
               if (res) {
                 resolve(res)
@@ -191,8 +209,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '农户信息表打印'
+              file: dataUrl,
+              name: '农户信息表打印.pdf'
             })
           }
         }
@@ -205,7 +223,6 @@ class PrintCore {
               images[`img_${dex}`] = url
             })
           }
-          console.log('22222')
           const definition = getPeopleHouseDefinition(landlord, projectInfo)
           const dataUrl = await this.getPdfData({ images, ...definition }).catch(() => {
             reject('生成居民户房屋示意图pdf失败')
@@ -214,8 +231,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '房屋示意图信息'
+              file: dataUrl,
+              name: '房屋示意图信息.pdf'
             })
           }
         }
@@ -264,8 +281,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '个体户信息打印'
+              file: dataUrl,
+              name: '个体户信息打印.pdf'
             })
           }
         }
@@ -278,8 +295,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '个体户实物调查表'
+              file: dataUrl,
+              name: '个体户实物调查表.pdf'
             })
           }
         }
@@ -300,8 +317,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '个体户房屋示意图打印'
+              file: dataUrl,
+              name: '个体户房屋示意图打印.pdf'
             })
           }
         }
@@ -314,8 +331,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '个体户设施设备打印'
+              file: dataUrl,
+              name: '个体户设施设备打印.pdf'
             })
           }
         }
@@ -364,8 +381,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '企业信息打印'
+              file: dataUrl,
+              name: '企业信息打印.pdf'
             })
           }
         }
@@ -378,8 +395,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '企业实物调查表'
+              file: dataUrl,
+              name: '企业实物调查表.pdf'
             })
           }
         }
@@ -400,8 +417,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '企业房屋示意图打印'
+              file: dataUrl,
+              name: '企业房屋示意图打印.pdf'
             })
           }
         }
@@ -414,8 +431,8 @@ class PrintCore {
           })
           if (dataUrl) {
             stringArray.push({
-              data: dataUrl,
-              name: '企业设施设备打印'
+              file: dataUrl,
+              name: '企业设施设备打印.pdf'
             })
           }
         }
