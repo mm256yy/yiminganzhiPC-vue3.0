@@ -32,16 +32,15 @@
             <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="是否需要评估"
           :width="120"
-          prop="estimate"
+          prop="hasEstimate"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.estimate">
+            <ElSelect clearable placeholder="请选择" v-model="row.hasEstimate">
               <ElOption
                 v-for="item in dictObj[362]"
                 :key="item.value"
@@ -51,16 +50,15 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="房屋坐落"
           :width="120"
-          prop="houseLocation"
+          prop="situated"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.houseLocation" />
+            <ElInput placeholder="请输入" v-model="scope.row.situated" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -151,12 +149,12 @@
         <ElTableColumn
           label="宅基地面积(㎡)"
           :width="180"
-          prop="landArea"
+          prop="homesteadArea"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.landArea" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.homesteadArea" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -181,16 +179,15 @@
             <ElInput placeholder="请输入" v-model="scope.row.landNo" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="结构等级"
           :width="120"
-          prop="structureLevel"
+          prop="constructionLevel"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.structureLevel">
+            <ElSelect clearable placeholder="请选择" v-model="row.constructionLevel">
               <ElOption
                 v-for="item in dictObj[223]"
                 :key="item.value"
@@ -200,7 +197,6 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="房屋高度(m)"
           :width="180"
@@ -212,7 +208,6 @@
             <ElInputNumber :min="0" v-model="scope.row.buildingHeight" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="成新率"
           :width="180"
@@ -224,31 +219,28 @@
             <ElInputNumber :min="0" v-model="scope.row.newnessRate" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估单价(元/㎡)"
           :width="180"
-          prop="price"
+          prop="valuationPrice"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationPrice" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
-          prop="evaluationAmount"
+          prop="valuationAmount"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -292,10 +284,17 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getMainHouseListApi,
+  saveMainHouseApi,
+  deleteMainHouseApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/mainHouse-service'
 
 interface PropsType {
   doorNo: string
-  householdId: string
+  householdId: number
+  projectId: number
+  uid: string
 }
 
 const props = defineProps<PropsType>()
@@ -308,10 +307,12 @@ const tableData = ref<any[]>([])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: props.householdId,
+  householdId: +props.householdId,
+  projectId: +props.projectId,
+  uid: props.uid,
   houseNo: '',
-  estimate: '',
-  houseLocation: '',
+  hasEstimate: '',
+  situated: '',
   houseType: '',
   constructionType: '',
   completedTime: '',
@@ -319,11 +320,11 @@ const defaultRow = {
   landArea: 0,
   propertyNo: '',
   landNo: '',
-  structureLevel: '',
+  constructionLevel: '',
   buildingHeight: 0,
   newnessRate: 0,
-  price: 0,
-  evaluationAmount: 0,
+  valuationPrice: 0,
+  valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
 }
@@ -335,14 +336,16 @@ const onAddRow = () => {
 
 // 获取列表数据
 const getList = () => {
-  // const params = {
-  //   doorNo: props.doorNo,
-  //   householdId: +props.householdId,
-  //   size: 1000
-  // }
-  // getFruitwoodListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: +props.householdId,
+    projectId: +props.projectId,
+    uid: props.uid,
+    size: 1000
+  }
+  getMainHouseListApi(params).then((res) => {
+    tableData.value = res.content
+  })
 }
 
 // 房屋主体评估合计
@@ -367,7 +370,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteFruitwoodListApi(row.id)
+        await deleteMainHouseApi(row.id)
         getList()
 
         ElMessage.success('删除成功')
@@ -379,7 +382,12 @@ const onDelRow = (row) => {
 }
 
 // 保存
-const onSave = () => {}
+const onSave = () => {
+  saveMainHouseApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
+}
 
 onMounted(() => {
   getList()

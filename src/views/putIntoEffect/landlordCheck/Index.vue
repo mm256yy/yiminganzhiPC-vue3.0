@@ -576,7 +576,9 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Landlord'
+      type: 'Landlord',
+      projectId: row.projectId,
+      uid: row.uid
     }
   })
 }

@@ -21,7 +21,6 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <!-- 字段未定 -->
         <ElTableColumn
           label="品种名称"
           :width="180"
@@ -46,7 +45,6 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="用途"
           :width="180"
@@ -65,7 +63,6 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="规格" :width="160" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.size">
@@ -78,7 +75,6 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.unit">
@@ -91,19 +87,16 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="折率"
           :width="180"
@@ -115,19 +108,17 @@
             <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
-          prop="evaluationAmount"
+          prop="valuationAmount"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -171,10 +162,17 @@ import {
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { onMounted } from 'vue'
+import {
+  getFruitTreeListApi,
+  saveFruitTreeApi,
+  deleteFruitTreeApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/fruitTree-service'
 
 interface PropsType {
   doorNo: string
-  householdId: string
+  householdId: number
+  projectId: number
+  uid: string
 }
 
 const props = defineProps<PropsType>()
@@ -187,7 +185,9 @@ const tableData = ref<any[]>([])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: props.householdId,
+  householdId: +props.householdId,
+  projectId: +props.projectId,
+  uid: props.uid,
   name: '',
   usageType: '',
   size: '',
@@ -195,7 +195,7 @@ const defaultRow = {
   number: 0,
   price: 0,
   discountRate: 0,
-  evaluationAmount: 0,
+  valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
 }
@@ -207,14 +207,16 @@ const onAddRow = () => {
 
 // 获取列表数据
 const getList = () => {
-  // const params = {
-  //   doorNo: props.doorNo,
-  //   householdId: +props.householdId,
-  //   size: 1000
-  // }
-  // getFruitwoodListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: +props.householdId,
+    projectId: +props.projectId,
+    uid: props.uid,
+    size: 1000
+  }
+  getFruitTreeListApi(params).then((res) => {
+    tableData.value = res.content
+  })
 }
 
 // 房屋主体评估合计
@@ -239,7 +241,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteFruitwoodListApi(row.id)
+        await deleteFruitTreeApi(row.id)
         getList()
 
         ElMessage.success('删除成功')
@@ -251,7 +253,12 @@ const onDelRow = (row) => {
 }
 
 // 保存
-const onSave = () => {}
+const onSave = () => {
+  saveFruitTreeApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
+}
 
 onMounted(() => {
   getList()

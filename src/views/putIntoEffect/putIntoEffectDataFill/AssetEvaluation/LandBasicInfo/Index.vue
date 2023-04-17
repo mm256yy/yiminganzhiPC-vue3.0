@@ -22,9 +22,15 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <!-- 字段未定 -->
-        <ElTableColumn label="组别" :width="150" prop="group" align="center" header-align="center">
+        <ElTableColumn
+          label="组别"
+          :width="150"
+          prop="groupName"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.group" />
+            <ElInput placeholder="请输入" v-model="scope.row.groupName" />
           </template>
         </ElTableColumn>
         <!-- 字段未定 -->
@@ -58,19 +64,17 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="种植户"
           :width="150"
-          prop="planter"
+          prop="growers"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.planter" />
+            <ElInput placeholder="请输入" v-model="scope.row.growers" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="地块面积(㎡)"
           :width="180"
@@ -82,7 +86,6 @@
             <ElInputNumber :min="0" v-model="scope.row.landArea" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="地类"
           :width="200"
@@ -101,67 +104,61 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="土地权属"
           :width="180"
-          prop="ownership"
+          prop="landOwner"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.ownership" />
+            <ElInput placeholder="请输入" v-model="scope.row.landOwner" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="获得方式"
           :width="160"
-          prop="obtain"
+          prop="getType"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.obtain" />
+            <ElInput placeholder="请输入" v-model="scope.row.getType" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="地块位置"
           :width="180"
-          prop="plotLocation"
+          prop="landSea"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.plotLocation" />
+            <ElInput placeholder="请输入" v-model="scope.row.landSea" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估单价(元/㎡)"
           :width="180"
-          prop="price"
+          prop="valuationPrice"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationPrice" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
-          prop="evaluationAmount"
+          prop="valuationAmount"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -188,7 +185,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -204,11 +201,17 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { onMounted } from 'vue'
+import {
+  getLandBasicInfoListApi,
+  saveLandBasicInfoApi,
+  deleteLandBasicInfoApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/landBasicInfo-service'
 
 interface PropsType {
   doorNo: string
-  householdId: string
+  householdId: number
+  projectId: number
+  uid: string
 }
 
 const props = defineProps<PropsType>()
@@ -221,18 +224,20 @@ const tableData = ref<any[]>([])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: props.householdId,
-  group: '',
+  householdId: +props.householdId,
+  projectId: +props.projectId,
+  uid: props.uid,
+  groupName: '',
   name: '',
   locationType: '',
-  planter: '',
+  growers: '',
   landArea: 0,
   landType: '',
-  ownership: '',
-  obtain: '',
-  plotLocation: '',
-  price: 0,
-  evaluationAmount: 0,
+  landOwner: '',
+  getType: '',
+  landSea: '',
+  valuationPrice: 0,
+  valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
 }
@@ -244,14 +249,16 @@ const onAddRow = () => {
 
 // 获取列表数据
 const getList = () => {
-  // const params = {
-  //   doorNo: props.doorNo,
-  //   householdId: +props.householdId,
-  //   size: 1000
-  // }
-  // getFruitwoodListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: +props.householdId,
+    projectId: +props.projectId,
+    uid: props.uid,
+    size: 1000
+  }
+  getLandBasicInfoListApi(params).then((res) => {
+    tableData.value = res.content
+  })
 }
 
 // 房屋主体评估合计
@@ -276,7 +283,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteFruitwoodListApi(row.id)
+        await deleteLandBasicInfoApi(row.id)
         getList()
 
         ElMessage.success('删除成功')
@@ -288,7 +295,12 @@ const onDelRow = (row) => {
 }
 
 // 保存
-const onSave = () => {}
+const onSave = () => {
+  saveLandBasicInfoApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
+}
 
 onMounted(() => {
   getList()

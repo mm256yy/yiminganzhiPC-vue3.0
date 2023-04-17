@@ -21,31 +21,27 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <!-- 字段未定 -->
         <ElTableColumn
           label="地块编号"
           :width="150"
-          prop="landNum"
+          prop="landNumber"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landNum" />
+            <ElInput placeholder="请输入" v-model="scope.row.landNumber" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="名称" :width="150" prop="name" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.name" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="规格" :width="150" prop="size" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.size" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="数量(㎡)"
           :width="180"
@@ -57,7 +53,6 @@
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="单价(元/㎡)"
           :width="180"
@@ -69,25 +64,22 @@
             <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="费率" :width="180" prop="rate" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.rate" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
-          prop="evaluationAmount"
+          prop="valuationAmount"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -114,7 +106,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -127,11 +119,17 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { onMounted } from 'vue'
+import {
+  getLandGreenSeedlingsListApi,
+  saveLandGreenSeedlingsApi,
+  deleteLandGreenSeedlingsApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/landGreenSeedlings-service'
 
 interface PropsType {
   doorNo: string
-  householdId: string
+  householdId: number
+  projectId: number
+  uid: string
 }
 
 const props = defineProps<PropsType>()
@@ -142,14 +140,16 @@ const tableData = ref<any[]>([])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: props.householdId,
-  landNum: '',
+  householdId: +props.householdId,
+  projectId: +props.projectId,
+  uid: props.uid,
+  landNumber: '',
   name: '',
   size: '',
   number: 0,
   price: 0,
   rate: 0,
-  evaluationAmount: 0,
+  valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
 }
@@ -161,14 +161,16 @@ const onAddRow = () => {
 
 // 获取列表数据
 const getList = () => {
-  // const params = {
-  //   doorNo: props.doorNo,
-  //   householdId: +props.householdId,
-  //   size: 1000
-  // }
-  // getFruitwoodListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: +props.householdId,
+    projectId: +props.projectId,
+    uid: props.uid,
+    size: 1000
+  }
+  getLandGreenSeedlingsListApi(params).then((res) => {
+    tableData.value = res.content
+  })
 }
 
 // 房屋主体评估合计
@@ -193,7 +195,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteFruitwoodListApi(row.id)
+        await deleteLandGreenSeedlingsApi(row.id)
         getList()
 
         ElMessage.success('删除成功')
@@ -205,7 +207,12 @@ const onDelRow = (row) => {
 }
 
 // 保存
-const onSave = () => {}
+const onSave = () => {
+  saveLandGreenSeedlingsApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
+}
 
 onMounted(() => {
   getList()

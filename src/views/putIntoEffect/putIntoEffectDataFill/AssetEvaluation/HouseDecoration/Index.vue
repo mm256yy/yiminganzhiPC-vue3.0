@@ -32,16 +32,15 @@
             <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="类别"
           :width="120"
-          prop="category"
+          prop="fitUpType"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.category">
+            <ElSelect clearable placeholder="请选择" v-model="row.fitUpType">
               <ElOption
                 v-for="item in dictObj[323]"
                 :key="item.value"
@@ -51,13 +50,17 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
-        <ElTableColumn label="名称" :width="150" prop="name" align="center" header-align="center">
+        <ElTableColumn
+          label="名称"
+          :width="150"
+          prop="fitUpName"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.name" />
+            <ElInput placeholder="请输入" v-model="scope.row.fitUpName" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.unit">
@@ -70,25 +73,16 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
-        <ElTableColumn
-          label="数量"
-          :width="180"
-          prop="quantity"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.quantity" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="折率"
           :width="180"
@@ -100,19 +94,17 @@
             <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
-          prop="evaluationAmount"
+          prop="valuationAmount"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.evaluationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -139,7 +131,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -155,11 +147,17 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { onMounted } from 'vue'
+import {
+  getHouseDecorationListApi,
+  saveHouseDecorationApi,
+  deleteHouseDecorationApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/houseDecoration-service'
 
 interface PropsType {
   doorNo: string
-  householdId: string
+  householdId: number
+  projectId: number
+  uid: string
 }
 
 const props = defineProps<PropsType>()
@@ -172,15 +170,17 @@ const tableData = ref<any[]>([])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: props.householdId,
+  householdId: +props.householdId,
+  projectId: +props.projectId,
+  uid: props.uid,
   houseNo: '',
-  category: '',
-  name: '',
+  fitUpType: '',
+  fitUpName: '',
   unit: '',
-  quantity: 0,
+  number: 0,
   price: 0,
   discountRate: 0,
-  evaluationAmount: 0,
+  valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
 }
@@ -192,14 +192,16 @@ const onAddRow = () => {
 
 // 获取列表数据
 const getList = () => {
-  // const params = {
-  //   doorNo: props.doorNo,
-  //   householdId: +props.householdId,
-  //   size: 1000
-  // }
-  // getFruitwoodListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: +props.householdId,
+    projectId: +props.projectId,
+    uid: props.uid,
+    size: 1000
+  }
+  getHouseDecorationListApi(params).then((res) => {
+    tableData.value = res.content
+  })
 }
 
 // 房屋主体评估合计
@@ -224,7 +226,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteFruitwoodListApi(row.id)
+        await deleteHouseDecorationApi(row.id)
         getList()
 
         ElMessage.success('删除成功')
@@ -236,7 +238,12 @@ const onDelRow = (row) => {
 }
 
 // 保存
-const onSave = () => {}
+const onSave = () => {
+  saveHouseDecorationApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
+}
 
 onMounted(() => {
   getList()

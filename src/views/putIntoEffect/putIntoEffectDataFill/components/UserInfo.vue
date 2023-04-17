@@ -11,10 +11,12 @@
           status: true,
           success: props.baseInfo.reportStatus === ReportStatus.ReportSucceed
         }"
-        ><span class="point"></span
-        >{{ props.baseInfo.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
       >
+        <span class="point"></span>
+        {{ props.baseInfo.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}
+      </div>
     </div>
+
     <!-- 居民户基础信息 -->
     <div class="other" v-if="type == 'Landlord'" style="display: block">
       <el-row>
@@ -22,44 +24,41 @@
           <div class="info-item">
             <div class="tit">行政村名称：</div>
             <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
-          </div></el-col
-        >
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">自然村名称：</div>
             <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
-          </div></el-col
-        >
-        <el-col :span="6" v-if="tabCurrentId != 3">
-          <div class="info-item">
-            <div class="tit">所属网格：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">户籍册编号：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt">{{ props.baseInfo.householdNumber }}</div>
+          </div>
+        </el-col>
         <el-col :span="6"
           ><div class="info-item">
             <div class="tit">所在位置：</div>
             <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
-          </div></el-col
-        >
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">联系方式：</div>
             <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
-          </div></el-col
-        >
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">家庭人数：</div>
             <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
-          </div></el-col
-        >
+          </div>
+        </el-col>
       </el-row>
     </div>
+
     <!-- 资产评估 -->
     <div class="other" v-if="type == 'Landlord' && tabCurrentId == 0" style="display: block">
       <el-row>
@@ -115,6 +114,7 @@
         </el-col>
       </el-row>
     </div>
+
     <div class="other" v-if="type == 'Landlord' && tabCurrentId == 3" style="display: block">
       <el-row>
         <el-col :span="6">
@@ -144,6 +144,7 @@
         ></el-col>
       </el-row>
     </div>
+
     <div class="other" v-if="type == 'Enterprise'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>

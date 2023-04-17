@@ -77,50 +77,64 @@
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
       />
 
       <!-- 资产评估 -- 房屋装修评估 -->
       <house-decoration
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[1]"
       />
 
       <!-- 资产评估 -- 房屋附属设施评估 -->
       <house-accessory
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[2]"
       />
 
       <!-- 资产评估 -- 零星林（果）木评估 -->
       <fruit-tree
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[3]"
       />
 
       <!-- 资产评估 -- 土地基本情况评估 -->
       <land-basic-info
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[4]"
       />
 
       <!-- 资产评估 -- 土地青苗及附着物评估 -->
       <land-green-seedlings
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
       />
 
       <!-- 资产评估 -- 坟墓评估 -->
       <grave
-        :door-no="doorNo"
-        :household-id="householdId"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :projectId="projectId"
+        :uid="uid"
         v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[6]"
       />
 
@@ -366,7 +380,7 @@ const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
-const { doorNo, householdId, type } = currentRoute.value.query as any
+const { doorNo, householdId, type, projectId, uid } = currentRoute.value.query as any
 const reportDialog = ref<boolean>(false)
 const printDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
