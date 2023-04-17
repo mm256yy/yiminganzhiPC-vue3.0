@@ -201,7 +201,7 @@ const getCompanyInfo1 = (landlord: LandlordType) => {
   return {
     layout,
     table: {
-      widths: [86, 91, 86, 91, 86, '*'],
+      widths: [80, 87, 80, 87, 80, 86],
       body: [
         [{ text: '工商、税务登记信息', colSpan: 6, style: 'td' }, '', '', '', '', ''],
         [
@@ -243,7 +243,7 @@ const getCompanyInfo2 = (landlord: LandlordType) => {
   return {
     layout,
     table: {
-      widths: [86, 91, 86, 91, 86, '*'],
+      widths: [80, 87, 80, 87, 80, 86],
       body: [
         [{ text: '财务、经营状况及初步处理意向', colSpan: 6, style: 'td' }, '', '', '', '', ''],
         [
@@ -280,7 +280,7 @@ const getCompanyInfo3 = (landlord: LandlordType) => {
   return {
     layout,
     table: {
-      widths: [40, 42, 90, 40, 42, 90, 40, 42, '*'],
+      widths: [35, 36, 86, 35, 36, 86, 35, 36, 88],
       body: [
         [{ text: '土地使用情况', colSpan: 9, style: 'td' }, '', '', '', '', '', '', '', ''],
         [
@@ -316,10 +316,14 @@ const getCompanyInfo4 = (landlord: LandlordType) => {
     layout,
     table: {
       widths: [545],
-      headerRows: 2,
+      headerRows: 1,
       body: [
         [{ text: '备注', style: 'td' }],
-        [{ text: company.remark || '', rowSpan: 3, style: 'td' }],
+        [{ text: company.remark || '', rowSpan: 7, style: 'td' }],
+        [''],
+        [''],
+        [''],
+        [''],
         [''],
         ['']
       ]

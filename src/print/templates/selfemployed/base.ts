@@ -321,7 +321,7 @@ const getMainInfo = (landlord: LandlordType) => {
   return {
     layout,
     table: {
-      widths: [40, 40, '*', 40, 40, '*', 40, 40, '*'],
+      widths: [35, 36, 86, 35, 36, 86, 35, 36, 88],
       body: [
         [
           { text: '法人代表姓名', colSpan: 2, style: 'td' },
@@ -525,9 +525,9 @@ const getMainInfo = (landlord: LandlordType) => {
         ],
 
         [
-          { text: '备注', colSpan: 2, rowSpan: 3, style: 'td_3' },
+          { text: '备注', colSpan: 2, rowSpan: 4, style: 'td_2' },
           '',
-          { text: company.remark || '', colSpan: 7, rowSpan: 3, style: 'td' },
+          { text: company.remark || '', colSpan: 7, rowSpan: 4, style: 'td_2' },
           '',
           '',
           '',
@@ -536,6 +536,7 @@ const getMainInfo = (landlord: LandlordType) => {
           ''
         ],
 
+        ['', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', ''],
         ['', '', '', '', '', '', '', '', '']
       ]

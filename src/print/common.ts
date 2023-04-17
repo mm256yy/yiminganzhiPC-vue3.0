@@ -48,7 +48,7 @@ export const getCompanyTableHead = (landlord: LandlordType, projectInfo: Project
   const { company } = landlord
   return {
     table: {
-      widths: [135, 135, 100, '*'],
+      widths: [128, 128, 90, 172],
       body: [
         [
           {
@@ -109,7 +109,7 @@ export const getCompanyTableHead = (landlord: LandlordType, projectInfo: Project
 export const getCompanyBaseTableHead = (landlord: LandlordType, projectInfo: ProjectType) => {
   return {
     table: {
-      widths: [135, 135, 100, '*'],
+      widths: [128, 128, 90, 172],
       body: [
         [
           {
@@ -159,7 +159,7 @@ export const getCompanyBaseTableHead = (landlord: LandlordType, projectInfo: Pro
 export const getPeopleTableHead = (landlord: LandlordType, projectInfo: ProjectType) => {
   return {
     table: {
-      widths: [135, 135, 100, '*'],
+      widths: [128, 128, 90, 172],
       body: [
         [
           {
@@ -283,7 +283,7 @@ export const getPopulation = (landlord: LandlordType) => {
 
   return {
     table: {
-      widths: [58, 58, 40, 58, 58, 58, 110, '*'],
+      widths: [54, 54, 54, 54, 54, 54, 104, 54],
       headerRows: 2,
       body
     },
@@ -381,7 +381,7 @@ export const getHouseInfo = (landlord: LandlordType) => {
   ])
   return {
     table: {
-      widths: [26, 40, 40, 26, 40, 50, 50, 60, 60, '*'],
+      widths: [20, 40, 40, 20, 40, 61, 61, 60, 60, 62],
       headerRows: 2,
       body
     },
@@ -429,7 +429,7 @@ export const getFushuwu = (landlord: LandlordType) => {
 
   return {
     table: {
-      widths: [26, 156, 60, 60, 60, '*'],
+      widths: [20, 150, 60, 60, 60, 150],
       headerRows: 2,
       body
     },
@@ -474,7 +474,7 @@ export const getTree = (landlord: LandlordType) => {
   }
   return {
     table: {
-      widths: [26, 126, 126, 60, 60, '*'],
+      widths: [20, 120, 120, 60, 60, 120],
       headerRows: 2,
       body
     },
@@ -519,7 +519,7 @@ export const getGrave = (landlord: LandlordType) => {
   }
   return {
     table: {
-      widths: [26, 100, 100, 100, 100, '*'],
+      widths: [20, 96, 96, 96, 96, 96],
       headerRows: 2,
       body
     },
@@ -584,7 +584,7 @@ export const getHousePic = (landlord: LandlordType) => {
 
   return {
     table: {
-      widths: ['*'],
+      widths: [545],
       headerRows: 1,
       body
     },
@@ -640,7 +640,7 @@ export const getEquipment = (landlord: LandlordType) => {
   }
   return {
     table: {
-      widths: [20, 72, 42, 26, 26, 72, 40, 58, 42, '*'],
+      widths: [20, 76, 36, 20, 20, 76, 52, 52, 36, 76],
       headerRows: 1,
       body
     },
