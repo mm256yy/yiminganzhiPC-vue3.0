@@ -137,12 +137,14 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
+const emit = defineEmits(['updateData'])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: +props.householdId,
-  projectId: +props.projectId,
+  householdId: props.householdId,
+  projectId: props.projectId,
   uid: props.uid,
+  status: 'implementation',
   landNumber: '',
   name: '',
   size: '',
@@ -163,9 +165,9 @@ const onAddRow = () => {
 const getList = () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: +props.householdId,
-    projectId: +props.projectId,
-    uid: props.uid,
+    householdId: props.householdId,
+    projectId: props.projectId,
+    status: 'implementation',
     size: 1000
   }
   getLandGreenSeedlingsListApi(params).then((res) => {
@@ -197,7 +199,7 @@ const onDelRow = (row) => {
       .then(async () => {
         await deleteLandGreenSeedlingsApi(row.id)
         getList()
-
+        emit('updateData')
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -211,6 +213,7 @@ const onSave = () => {
   saveLandGreenSeedlingsApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
+    emit('updateData')
   })
 }
 

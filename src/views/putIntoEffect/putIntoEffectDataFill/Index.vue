@@ -77,65 +77,72 @@
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 房屋装修评估 -->
       <house-decoration
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[1]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[1]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 房屋附属设施评估 -->
       <house-accessory
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[2]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 零星林（果）木评估 -->
       <fruit-tree
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[3]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[3]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 土地基本情况评估 -->
       <land-basic-info
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[4]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 土地青苗及附着物评估 -->
       <land-green-seedlings
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 资产评估 -- 坟墓评估 -->
       <grave
+        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[6]"
         :doorNo="doorNo"
-        :householdId="householdId"
-        :projectId="projectId"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
         :uid="uid"
-        v-if="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[6]"
+        @update-data="getLandlordInfo"
       />
 
       <!-- 人口核定 -->

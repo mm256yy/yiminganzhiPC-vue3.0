@@ -4,6 +4,7 @@ export interface HouseDecorationDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   houseNo: string
   fitUpType: string
   fitUpName: string

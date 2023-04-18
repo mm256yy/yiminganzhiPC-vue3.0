@@ -4,6 +4,7 @@ export interface LandBasicInfoDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   groupName: string
   name: string
   locationType: string

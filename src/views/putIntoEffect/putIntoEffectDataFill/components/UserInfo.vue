@@ -23,37 +23,37 @@
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">行政村名称：</div>
-            <div class="txt">{{ props.baseInfo.villageText || '-' }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.villageText) }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">自然村名称：</div>
-            <div class="txt">{{ props.baseInfo.virutalVillageText || '-' }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.virutalVillageText) }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">户籍册编号：</div>
-            <div class="txt">{{ props.baseInfo.householdNumber }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.householdNumber) }}</div>
           </div>
         </el-col>
         <el-col :span="6"
           ><div class="info-item">
             <div class="tit">所在位置：</div>
-            <div class="txt">{{ props.baseInfo.locationTypeText || '-' }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.locationTypeText) }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">联系方式：</div>
-            <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.phone) }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">家庭人数：</div>
-            <div class="txt">{{ props.baseInfo.familyNum || '-' }}</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.familyNum, '人') }}</div>
           </div>
         </el-col>
       </el-row>
@@ -65,25 +65,25 @@
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">房屋主体评估合计：</div>
-            <div class="txt">145566.92（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.houseTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">房屋装修评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.fitUpTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">房屋附属设施评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.appendantTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">零星（林）果木评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.treeTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
       </el-row>
@@ -91,25 +91,25 @@
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">土地基本情况评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.landTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">土地青苗及附着物评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.assetAppendantTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">坟墓评估合计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.graveTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">资产评估总计：</div>
-            <div class="txt">14568（元）</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.totalAmount, '（元）') }}</div>
           </div>
         </el-col>
       </el-row>
@@ -205,9 +205,11 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 import { ElRow, ElCol } from 'element-plus'
 import { ReportStatus } from '../config'
-import { ref, onMounted } from 'vue'
+import { fmtStr } from '@/utils/index'
+
 interface PropsType {
   baseInfo: any
   type: any

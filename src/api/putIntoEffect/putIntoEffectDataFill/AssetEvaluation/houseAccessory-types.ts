@@ -4,6 +4,7 @@ export interface HouseAccessoryDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   name: string
   size: string
   unit: string

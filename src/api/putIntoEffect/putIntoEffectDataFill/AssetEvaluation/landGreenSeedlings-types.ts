@@ -4,6 +4,7 @@ export interface LandGreenSeedlingsDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   landNumber: string
   name: string
   size: string

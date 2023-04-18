@@ -4,6 +4,7 @@ export interface FruitTreeDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   name: string
   usageType: string
   size: string

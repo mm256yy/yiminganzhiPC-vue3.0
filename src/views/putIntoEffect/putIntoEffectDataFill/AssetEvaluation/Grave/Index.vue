@@ -24,12 +24,12 @@
         <ElTableColumn
           label="坟墓名称"
           :width="150"
-          prop="name"
+          prop="graveName"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.name" />
+            <ElInput placeholder="请输入" v-model="scope.row.graveName" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -209,13 +209,17 @@ const dictObj = computed(() => dictStore.getDictObj)
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
+const emit = defineEmits(['updateData'])
 
 const defaultRow = {
+  registrantId: props.doorNo,
   doorNo: props.doorNo,
-  householdId: +props.householdId,
-  projectId: +props.projectId,
+  householdId: props.householdId,
+  projectId: props.projectId,
   uid: props.uid,
-  name: '',
+  registrantDoorNo: props.doorNo,
+  status: 'implementation',
+  graveName: '',
   hasEstimate: '',
   relation: '',
   graveYear: '',
@@ -236,10 +240,12 @@ const onAddRow = () => {
 // 获取列表数据
 const getList = () => {
   const params: any = {
+    registrantId: props.doorNo,
     doorNo: props.doorNo,
-    householdId: +props.householdId,
-    projectId: +props.projectId,
-    uid: props.uid,
+    householdId: props.householdId,
+    projectId: props.projectId,
+    registrantDoorNo: props.doorNo,
+    status: 'implementation',
     size: 1000
   }
   getGraveListApi(params).then((res) => {
@@ -250,18 +256,16 @@ const getList = () => {
 // 小计
 const subTotal = (row: any) => {
   let sum = 0
-  sum = row.compensationAmount + row.migrationFee + row.rewardFee
+  sum = row.compensationAmount + row.migrationFee + row.otherIncentiveFees
   return sum.toFixed(2)
 }
 
-// 房屋主体评估合计
+// 坟墓评估合计
 const total = () => {
   let sum = 0
   if (tableData.value && tableData.value.length) {
     tableData.value.map((item: any) => {
-      if (item.compensationAmount > 0) {
-        sum += item.compensationAmount
-      }
+      sum += Number(subTotal(item))
     })
   }
   return sum.toFixed(2)
@@ -278,7 +282,7 @@ const onDelRow = (row) => {
       .then(async () => {
         await deleteGraveApi(row.id)
         getList()
-
+        emit('updateData')
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -299,6 +303,7 @@ const onSave = () => {
   saveGraveApi(data).then(() => {
     ElMessage.success('操作成功！')
     getList()
+    emit('updateData')
   })
 }
 

@@ -1,10 +1,13 @@
 export interface GraveDtoType {
   id?: number
+  registrantId: number
   doorNo: string
   householdId: number
   projectId: number
   uid: string
-  name: string
+  registrantDoorNo: string
+  status: string
+  graveName: string
   hasEstimate: string
   relation: string
   graveYear: string

@@ -4,6 +4,7 @@ export interface MainHouseDtoType {
   householdId: number
   projectId: number
   uid: string
+  status: string
   houseNo: string
   hasEstimate: string
   situated: string

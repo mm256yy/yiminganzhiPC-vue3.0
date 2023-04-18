@@ -167,12 +167,14 @@ const dictObj = computed(() => dictStore.getDictObj)
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
+const emit = defineEmits(['updateData'])
 
 const defaultRow = {
   doorNo: props.doorNo,
-  householdId: +props.householdId,
-  projectId: +props.projectId,
+  householdId: props.householdId,
+  projectId: props.projectId,
   uid: props.uid,
+  status: 'implementation',
   houseNo: '',
   fitUpType: '',
   fitUpName: '',
@@ -194,9 +196,9 @@ const onAddRow = () => {
 const getList = () => {
   const params: any = {
     doorNo: props.doorNo,
-    householdId: +props.householdId,
-    projectId: +props.projectId,
-    uid: props.uid,
+    householdId: props.householdId,
+    projectId: props.projectId,
+    status: 'implementation',
     size: 1000
   }
   getHouseDecorationListApi(params).then((res) => {
@@ -228,7 +230,7 @@ const onDelRow = (row) => {
       .then(async () => {
         await deleteHouseDecorationApi(row.id)
         getList()
-
+        emit('updateData')
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -242,6 +244,7 @@ const onSave = () => {
   saveHouseDecorationApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
+    emit('updateData')
   })
 }
 

@@ -238,3 +238,22 @@ export const hideStr = (str: string, num: number) => {
   }
   return str
 }
+
+/**
+ * 字符串处理
+ * 1、带单位的字符串进行拼接后显示，不带单位的直接显示
+ * 2、字符串为空或不存在的，显示 '-'
+ * @param(Object) str 字符串
+ * @param(Object) unit 单位
+ */
+export const fmtStr = (str: any, unit?: string) => {
+  if (str) {
+    if (unit) {
+      return str + unit
+    } else {
+      return str
+    }
+  } else {
+    return '-'
+  }
+}
