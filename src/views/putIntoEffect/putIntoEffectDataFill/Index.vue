@@ -88,10 +88,12 @@
       />
       <relocation
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[2] && tabCurrentId == 2"
       />
       <produce
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[3] && tabCurrentId == 2"
       />
       <gaveArrange

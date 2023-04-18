@@ -17,8 +17,8 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="新增原因" prop="name" v-if="actionType === 'add'">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="新增原因" prop="addReason" v-if="actionType === 'add'">
+        <ElInput v-model="form.addReason" class="!w-full" placeholder="请输入" />
       </ElFormItem>
       <ElFormItem label="姓名" prop="name">
         <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
@@ -74,10 +74,10 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="人口性质" prop="censusType">
-        <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
+      <ElFormItem label="人口性质" prop="populationNature">
+        <ElSelect clearable filterable v-model="form.populationNature" class="!w-full">
           <ElOption
-            v-for="item in dictObj[249]"
+            v-for="item in dictObj[263]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -85,8 +85,8 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="备注" prop="remark">
-        <ElInput type="textarea" v-model="form.remark" placeholder="请输入" />
+      <ElFormItem label="备注" prop="checkRemark">
+        <ElInput type="textarea" v-model="form.checkRemark" placeholder="请输入" />
       </ElFormItem>
     </ElForm>
 

@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">保存</ElButton>
+          <ElButton :icon="saveIcon" type="primary" @click="onsave">保存</ElButton>
         </ElSpace>
       </div>
       <div class="formBox">
@@ -19,99 +19,68 @@
           :rules="rules"
         >
           <div class="titleBox">
-            <span class="text">基本信息：</span>
+            <span class="text">居民户基础信息:</span>
           </div>
-          <div style="display: flex">
-            <ElFormItem label="家庭总人数" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="农村移民" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="非农村移民" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="农业随迁" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="非农业随迁" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-          </div>
-          <div style="display: flex">
-            <ElFormItem label="增计人口" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="其他人口" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="安置总人数" prop="familyNum">
-              <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-                <template #append> 人 </template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="安置方式" prop="familyNum">
-              <ElSelect clearable filterable v-model="form.marital" class="!w-150px">
+          <div style="display: flex; align-items: center">
+            <ElFormItem label="安置方式" prop="settingWay">
+              <ElSelect clearable filterable v-model="form.settingWay" class="!w-250px">
                 <ElOption
-                  v-for="item in dictObj[260]"
+                  v-for="item in dictObj[321]"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 />
               </ElSelect>
             </ElFormItem>
-            <ElFormItem label="建房形式" prop="familyNum">
-              <ElSelect clearable filterable v-model="form.marital" class="!w-150px">
+            <ElFormItem label="建房形式" prop="buildingForm">
+              <ElSelect clearable v-model="form.buildingForm" class="!w-250px">
                 <ElOption
-                  v-for="item in dictObj[260]"
-                  :key="item.value"
+                  v-for="item in dictObj[310]"
+                  :key="item.label"
                   :label="item.label"
                   :value="item.value"
                 />
               </ElSelect>
+            </ElFormItem>
+            <ElFormItem label="开户名" prop="accountName">
+              <ElInput v-model="form.accountName" class="!w-250px" />
             </ElFormItem>
           </div>
           <div style="display: flex">
-            <ElFormItem label="财产户" prop="familyNum">
-              <ElSelect clearable filterable v-model="form.marital" class="!w-150px">
-                <ElOption
-                  v-for="item in dictObj[260]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </ElSelect>
+            <ElFormItem label="开户行" prop="bankName">
+              <ElInput v-model="form.bankName" class="!w-250px" />
             </ElFormItem>
-            <ElFormItem label="开户名" prop="familyNum">
-              <ElInput v-model="form.familyNum" class="!w-150px" />
+            <ElFormItem label="银行账户" prop="bankAccount">
+              <ElInput v-model="form.bankAccount" class="!w-250px" />
             </ElFormItem>
-            <ElFormItem label="开户行" prop="familyNum">
-              <ElInput v-model="form.familyNum" class="!w-150px" />
-            </ElFormItem>
-            <ElFormItem label="银行账户" prop="familyNum">
-              <ElInput v-model="form.familyNum" class="!w-150px" />
+            <ElFormItem label="备注" prop="accountRemark">
+              <ElInput v-model="form.accountRemark" class="!w-250px" />
             </ElFormItem>
           </div>
           <div class="titleBox">
-            <span class="text">备注：</span>
+            <span class="text">搬迁安置人数统计：</span>
           </div>
-          <ElFormItem label="备注" prop="familyNum">
-            <ElInput v-model="form.familyNum" type="textarea" row="4" />
-          </ElFormItem>
+          <div style="display: flex">
+            <ElFormItem label="家庭总人数" prop="familyNum">
+              <div class="!w-150px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="农村移民">
+              <div class="!w-150px">{{ form.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="非农村移民">
+              <div class="!w-150px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="财产户" prop="hasPropertyAccount">
+              <ElSelect class="!w-150px" clearable v-model="form.hasPropertyAccount">
+                <ElOption
+                  v-for="item in yesAndNoEnums"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </div>
         </ElForm>
       </div>
 
@@ -189,10 +158,12 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref, computed } from 'vue'
+//
+import { reactive, ref, computed, onMounted } from 'vue'
 // ElMessageBox,
-//   ElMessage,
+//
 import {
+  ElMessage,
   ElButton,
   ElSpace,
   ElDialog,
@@ -207,26 +178,38 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
+
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getassetHouse, delassetHouse } from '@/api/putIntoEffect/landlordCheck'
+import { updateLandlordApi } from '@/api/workshop/landlord/service'
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
-// import {  } from '@/api/putIntoEffect/landlordCheck'
+
 interface PropsType {
   doorNo: string
+  baseInfo
 }
-
+const yesAndNoEnums = [
+  {
+    label: '是',
+    value: true
+  },
+  {
+    label: '否',
+    value: false
+  }
+]
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getassetHouse,
+  delListApi: delassetHouse
 })
 const { getList } = methods
 
@@ -234,9 +217,14 @@ const { getList } = methods
 tableObject.params = {
   doorNo: props.doorNo
 }
+// console.log(props.baseInfo, 'baseInfobaseInfo')
 
 getList()
 const form = ref<any>({})
+onMounted(() => {
+  form.value = props.baseInfo
+})
+
 const rules = ref()
 const schema = reactive<CrudSchema[]>([
   {
@@ -246,21 +234,21 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
-    field: 'name',
+    field: 'relocationArea',
     label: '安置区',
     search: {
       show: false
     }
   },
   {
-    field: 'relationText',
+    field: 'address',
     label: '安置住址',
     search: {
       show: false
     }
   },
   {
-    field: 'sexText',
+    field: 'doorModel',
     label: '户型/套型',
     search: {
       show: false
@@ -268,29 +256,29 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'censusTypeText',
+    field: 'modelArea',
     label: '套型面积',
     search: {
       show: false
     }
   },
+  // {
+  //   width: 180,
+  //   field: 'way',
+  //   label: '安置方式',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'type',
+  //   label: '建房形式',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
-    width: 180,
-    field: 'card',
-    label: '安置方式',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'maritalText',
-    label: '建房形式',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'maritalText',
+    field: 'remake',
     label: '备注',
     search: {
       show: false
@@ -310,7 +298,11 @@ const schema = reactive<CrudSchema[]>([
     }
   }
 ])
-
+const onsave = () => {
+  updateLandlordApi(form.value).then(() => {
+    ElMessage.success('操作成功！')
+  })
+}
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
 const cause = ref()

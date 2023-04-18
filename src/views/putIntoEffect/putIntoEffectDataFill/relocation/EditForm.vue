@@ -20,26 +20,26 @@
       <!-- <ElFormItem label="新增原因" prop="name" v-if="actionType === 'add'">
         <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
       </ElFormItem> -->
-      <ElFormItem label="安置区域" prop="name">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入安置区域" />
+      <ElFormItem label="安置区域" prop="relocationArea">
+        <ElInput v-model="form.relocationArea" class="!w-full" placeholder="请输入安置区域" />
       </ElFormItem>
-      <ElFormItem label="安置住址" prop="name">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入安置住址" />
+      <ElFormItem label="安置住址" prop="address">
+        <ElInput v-model="form.address" class="!w-full" placeholder="请输入安置住址" />
       </ElFormItem>
-      <ElFormItem label="户型/套型" prop="sex">
-        <ElSelect clearable filterable v-model="form.sex" class="!w-full">
+      <ElFormItem label="户型/套型" prop="doorModel">
+        <ElSelect clearable doorModel v-model="form.sex" class="!w-full">
           <ElOption
-            v-for="item in dictObj[292]"
+            v-for="item in dictObj[363]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="套装面积" prop="sex">
-        <ElSelect clearable filterable v-model="form.sex" class="!w-full">
+      <ElFormItem label="套装面积" prop="modelArea">
+        <ElSelect clearable filterable v-model="form.modelArea" class="!w-full">
           <ElOption
-            v-for="item in dictObj[292]"
+            v-for="item in dictObj[318]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -47,8 +47,8 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="安置方式" prop="relation">
-        <ElSelect clearable filterable v-model="form.relation" class="!w-full">
+      <!-- <ElFormItem label="安置方式" prop="way">
+        <ElSelect clearable filterable v-model="form.way" class="!w-full">
           <ElOption
             v-for="item in dictObj[307]"
             :key="item.value"
@@ -57,8 +57,8 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="建房形式" prop="marital">
-        <ElSelect clearable filterable v-model="form.marital" class="!w-full">
+      <ElFormItem label="建房形式" prop="type">
+        <ElSelect clearable filterable v-model="form.type" class="!w-full">
           <ElOption
             v-for="item in dictObj[260]"
             :key="item.value"
@@ -66,7 +66,7 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
+      </ElFormItem> -->
 
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" placeholder="请输入" />
@@ -103,11 +103,8 @@ import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDictByName
-} from '@/api/workshop/population/service'
+// import { getassetHouse, delassetHouse } from '@/api/putIntoEffect/landlordCheck'
+import { addHaeeossstu, updateAssetHouse } from '@/api/putIntoEffect/landlordCheck'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/populationCheck'
 interface PropsType {
@@ -149,7 +146,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-const occupationOptions = ref<any>([]) // 职业选项
+// const occupationOptions = ref<any>([]) // 职业选项
 // const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -240,12 +237,12 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add') {
-    await addDemographicApi({
+    await addHaeeossstu({
       ...data,
       doorNo: props.doorNo
     })
   } else {
-    await updateDemographicApi({
+    await updateAssetHouse({
       ...data,
       doorNo: props.doorNo
     })
@@ -276,9 +273,9 @@ const onSubmit = debounce((formEl) => {
 
 // 获取职业列表
 const getOccupationOptions = () => {
-  getDictByName('职业').then((res: any) => {
-    occupationOptions.value = res
-  })
+  // getDictByName('职业').then((res: any) => {
+  //   occupationOptions.value = res
+  // })
 }
 
 onMounted(() => {

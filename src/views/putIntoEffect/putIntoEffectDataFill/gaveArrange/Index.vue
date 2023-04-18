@@ -80,8 +80,9 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
-import { DemographicDtoType } from '@/api/workshop/population/types'
+// import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/population/service'
+import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
+// import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
@@ -94,8 +95,8 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getLandlordListApi,
+  delListApi: immigrantGraveDelete
 })
 const { getList } = methods
 
@@ -113,13 +114,13 @@ const schema = reactive<CrudSchema[]>([
     field: 'index',
     label: '序号'
   },
-  {
-    field: 'name',
-    label: '登记权属人',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'name',
+  //   label: '登记权属人',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'relationText',
     label: '坟墓与登记权属人关系',
@@ -128,7 +129,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sexText',
+    field: 'number',
     label: '穴数(穴)',
     search: {
       show: false
@@ -136,7 +137,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'censusTypeText',
+    field: 'handleWay',
     label: '处理方式',
     search: {
       show: false
@@ -144,21 +145,21 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 180,
-    field: 'card',
+    field: 'settingGrave',
     label: '安置公墓',
     search: {
       show: false
     }
   },
   {
-    field: 'maritalText',
+    field: 'settingAddress',
     label: '详细地址',
     search: {
       show: false
     }
   },
   {
-    field: 'maritalText',
+    field: 'settingRemark',
     label: '备注',
     search: {
       show: false
@@ -190,7 +191,7 @@ const onClose = () => {
 const onSubmit = () => {
   dialogVisible.value = false
 }
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
+const onDelRow = async (row: any | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
   const selections = await getSelections()
@@ -206,7 +207,7 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: DemographicDtoType) => {
+const onEditRow = (row: any) => {
   actionType.value = 'edit'
   tableObject.currentRow = {
     ...row,
@@ -223,7 +224,7 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
-const onViewRow = (row: DemographicDtoType) => {
+const onViewRow = (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row,

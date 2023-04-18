@@ -20,25 +20,8 @@
       <!-- <ElFormItem label="新增原因" prop="name" v-if="actionType === 'add'">
         <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
       </ElFormItem> -->
-      <ElFormItem label="登记权属人" prop="name">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
-      </ElFormItem>
-      <ElFormItem label="坟墓与登记权属人关系" prop="sex">
-        <ElSelect clearable filterable v-model="form.sex" class="!w-full">
-          <ElOption
-            v-for="item in dictObj[292]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
-      </ElFormItem>
-      <ElFormItem label="穴数" prop="card">
-        <ElInput type="number" v-model="form.familyNum" class="!w-150px">
-          <template #append> 穴 </template>
-        </ElInput>
-      </ElFormItem>
-      <ElFormItem label="处理方式" prop="relation">
+
+      <ElFormItem label="坟墓与登记权属人关系" prop="relation">
         <ElSelect clearable filterable v-model="form.relation" class="!w-full">
           <ElOption
             v-for="item in dictObj[307]"
@@ -48,30 +31,31 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="安置公墓" prop="marital">
-        <ElSelect clearable filterable v-model="form.marital" class="!w-full">
+      <ElFormItem label="穴数" prop="number">
+        <ElInput type="number" v-model="form.number" class="!w-150px">
+          <template #append> 穴 </template>
+        </ElInput>
+      </ElFormItem>
+      <ElFormItem label="处理方式" prop="handleWay">
+        <ElSelect clearable filterable v-model="form.handleWay" class="!w-full">
           <ElOption
-            v-for="item in dictObj[260]"
+            v-for="item in dictObj[238]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
       </ElFormItem>
-
-      <ElFormItem label="详细地址" prop="censusType">
-        <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
-          <ElOption
-            v-for="item in dictObj[249]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
+      <ElFormItem label="安置公墓" prop="settingGrave">
+        <ElInput v-model="form.settingGrave" placeholder="请输入" />
       </ElFormItem>
 
-      <ElFormItem label="备注" prop="remark">
-        <ElInput type="textarea" v-model="form.remark" placeholder="请输入" />
+      <ElFormItem label="详细地址" prop="settingAddress">
+        <ElInput v-model="form.settingAddress" placeholder="请输入" />
+      </ElFormItem>
+
+      <ElFormItem label="备注" prop="settingRemark">
+        <ElInput type="textarea" v-model="form.settingRemark" placeholder="请输入" />
       </ElFormItem>
     </ElForm>
 
@@ -105,17 +89,14 @@ import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDictByName
-} from '@/api/workshop/population/service'
+import {} from '@/api/workshop/population/service'
+import { immigrantGravecreate, immigrantGraveupdate } from '@/api/workshop/landlord/service'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/populationCheck'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  row?: DemographicDtoType | null | undefined
+  row
   doorNo: string
 }
 
@@ -151,7 +132,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-const occupationOptions = ref<any>([]) // 职业选项
+// const occupationOptions = ref<any>([]) // 职业选项
 // const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -242,12 +223,12 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add') {
-    await addDemographicApi({
+    await immigrantGravecreate({
       ...data,
       doorNo: props.doorNo
     })
   } else {
-    await updateDemographicApi({
+    await immigrantGraveupdate({
       ...data,
       doorNo: props.doorNo
     })
@@ -262,12 +243,7 @@ const onSubmit = debounce((formEl) => {
     if (valid) {
       // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
-        ...form.value,
-        occupation: form.value.occupation ? JSON.stringify(form.value.occupation) : '',
-        insuranceType: form.value.insuranceType ? form.value.insuranceType.toString() : '',
-        cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
-        householdPic: JSON.stringify(householdPic.value),
-        otherPic: JSON.stringify(otherPic.value)
+        ...form.value
       }
       submit(data)
     } else {
@@ -278,9 +254,9 @@ const onSubmit = debounce((formEl) => {
 
 // 获取职业列表
 const getOccupationOptions = () => {
-  getDictByName('职业').then((res: any) => {
-    occupationOptions.value = res
-  })
+  // getDictByName('职业').then((res: any) => {
+  //   occupationOptions.value = res
+  // })
 }
 
 onMounted(() => {

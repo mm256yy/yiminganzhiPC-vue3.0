@@ -32,6 +32,14 @@ export const updateLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoTyp
   return request.post({ url: '/peasantHousehold/update', data })
 }
 
+export const immigrantGravecreate = (data: any): Promise<any> => {
+  return request.post({ url: '/immigrantGrave/create', data })
+}
+
+export const immigrantGraveupdate = (data: any): Promise<any> => {
+  return request.post({ url: '/immigrantGrave/update', data })
+}
+
 /**
  * 删除居民户信息
  */
