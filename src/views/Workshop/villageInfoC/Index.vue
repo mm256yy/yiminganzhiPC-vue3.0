@@ -120,7 +120,6 @@
       @update-district="onUpdateDistrict"
     />
 
-    <Print :show="printDialog" :landlordIds="landlordIds" @close="onPrintDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -134,7 +133,6 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
-import Print from './components/Print.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -170,14 +168,12 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 // const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
-const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
   unReportNum: 0
 })
-const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 
@@ -509,20 +505,6 @@ const onSearch = (data) => {
     params.type = 'Village'
     setSearchParams({ ...params })
   }
-}
-
-// const onPrint = async () => {
-//   const res = await getSelections()
-//   if (res && res.length) {
-//     landlordIds.value = res.map((item) => item.id)
-//     printDialog.value = true
-//   } else {
-//     ElMessage.warning('请选择需要打印的村集体')
-//   }
-// }
-
-const onPrintDialogClose = () => {
-  printDialog.value = false
 }
 
 // 数据填报
