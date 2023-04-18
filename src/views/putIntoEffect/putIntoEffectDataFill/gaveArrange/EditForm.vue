@@ -90,14 +90,14 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {} from '@/api/workshop/population/service'
-import { immigrantGravecreate, immigrantGraveupdate } from '@/api/workshop/landlord/service'
-// import { standardFormatDate } from '@/utils/index'
-// import {  } from '@/api/putIntoEffect/populationCheck'
+import { addGaveArrageApi, updateGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -167,7 +167,6 @@ console.log(headers)
 //   //可选immediate: true马上执行
 //   { deep: true, immediate: true }
 // )
-
 watch(
   () => props.show,
   () => {
@@ -222,13 +221,21 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
+  const { id, projectId, uid } = props.baseInfo
+  data.number = Number(data.number)
+  const baseInfo = {
+    householdId: id,
+    projectId,
+    uid
+  }
   if (props.actionType === 'add') {
-    await immigrantGravecreate({
+    await addGaveArrageApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      ...baseInfo
     })
   } else {
-    await immigrantGraveupdate({
+    await updateGaveArrageApi({
       ...data,
       doorNo: props.doorNo
     })

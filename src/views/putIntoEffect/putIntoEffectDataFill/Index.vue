@@ -98,6 +98,7 @@
       />
       <gaveArrange
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
       />
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />

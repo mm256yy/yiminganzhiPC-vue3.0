@@ -41,21 +41,18 @@
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
-            :delete="row.relation == 1 ? false : true"
+            :delete="true"
           />
+        </template>
+        <template #relation="{ row }">
+          {{ dictFmt(row.relation, 307) }}
         </template>
       </Table>
     </div>
     <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
-        <img src="./i.png" alt="" />是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
+        <img src="./i.png" alt="" />坟墓安置信息是否删除
       </div>
-      <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
-      <ElFormItem label="删除原因" prop="name">
-        <ElInput v-model="cause" class="!w-full" placeholder="请输入" type="textarea" row="3" />
-      </ElFormItem>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
@@ -67,36 +64,39 @@
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
       @close="onFormPupClose"
+      :baseInfo="props.baseInfo"
     />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
-import { ElButton, ElSpace, ElDialog, ElFormItem, ElInput } from 'element-plus'
+import { reactive, ref, computed } from 'vue'
+import { ElButton, ElSpace, ElDialog } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-// import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/population/service'
-import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
+import { getGaveArrageListApi, delGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
 // import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-// import {  } from '@/api/putIntoEffect/landlordCheck'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi,
-  delListApi: immigrantGraveDelete
+  getListApi: getGaveArrageListApi,
+  delListApi: delGaveArrageApi
 })
 const { getList } = methods
 
@@ -122,8 +122,9 @@ const schema = reactive<CrudSchema[]>([
   //   }
   // },
   {
-    field: 'relationText',
+    field: 'relation',
     label: '坟墓与登记权属人关系',
+    slot: 'relation',
     search: {
       show: false
     }
@@ -137,7 +138,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'handleWay',
+    field: 'handleWayText',
     label: '处理方式',
     search: {
       show: false
@@ -201,6 +202,12 @@ const onDelRow = async (row: any | null, multiple: boolean) => {
   )
 }
 
+const dictFmt = (value, index) => {
+  if (value && dictObj.value[index] && dictObj.value[307].length > 0) {
+    const item = dictObj.value[index].find((item: any) => item?.value === value)
+    return item ? item.label : value
+  }
+}
 const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
