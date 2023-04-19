@@ -53,10 +53,7 @@
         </div>
         <div class="pl-28">
           <div class="flex items-center justify-between pb-12px">
-            <div class="sub-title">
-              所择宅基地信息登记，所选地址数：
-              <span class="text-[#1C5DF1]">10</span>
-            </div>
+            <div class="sub-title"> 所择宅基地信息登记 </div>
             <ElSpace>
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
@@ -137,22 +134,26 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
-console.log('props:', props)
-
 const defaultForm = {
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
   govName: '', // 政府名称
   landNo: '', // 择址号
   householdler: '', // 户主（择址人）
-  doorNo: '', // 户号
+  doorNo: props.doorNo, // 户号
   relocationAddress: '' // 迁出地址
 }
 
 const defaultRow = {
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo,
   landBlock: '', // 区块
   homesteadLandNumber: '', // 宅基地编号
   homesteadLandLocation: '', // 宅基地位置

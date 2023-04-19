@@ -1,6 +1,19 @@
 <template>
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
+      <div class="flex items-center justify-between pb-12px">
+        <div> </div>
+        <ElSpace>
+          <ElButton
+            :icon="saveIcon"
+            type="primary"
+            class="!bg-[#30A952] !border-[#30A952]"
+            @click="onSave"
+          >
+            保存
+          </ElButton>
+        </ElSpace>
+      </div>
       <div class="title">青苗腾空移交确认单</div>
       <div class="content-wrap">
         <div class="row">
@@ -97,6 +110,7 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
+import { useIcon } from '@/hooks/web/useIcon'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { ElSelect, ElOption } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -109,13 +123,14 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-
-console.log('props:', props)
-
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-const defaultRow = {
+const defaultForm = {
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
   govName: '', // 政府名称
   landName: '', // 地块名称
   totalArea: '', // 总计（亩）
@@ -125,11 +140,19 @@ const defaultRow = {
   unusedLandArea: '', // 未利用地（亩）
   handoverProject: '', // 腾空移交项目
   hoseholdName: '', // 户主姓名
-  doorNo: '', // 户号
+  doorNo: props.doorNo, // 户号
   relocationAddress: '' // 迁出地址
 }
 
-const form = ref<any>(defaultRow)
+const form = ref<any>(defaultForm)
+
+// 保存
+const onSave = () => {
+  // saveMainHouseApi(form.value).then(() => {
+  //   ElMessage.success('操作成功！')
+  //   getList()
+  // })
+}
 </script>
 
 <style lang="less" scoped>

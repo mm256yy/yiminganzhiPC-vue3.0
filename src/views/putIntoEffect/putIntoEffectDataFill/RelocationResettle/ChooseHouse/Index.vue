@@ -141,22 +141,26 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
-console.log('props:', props)
-
 const defaultForm = {
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
   govName: '', // 政府名称
   houseNo: '', // 择房号
   householdler: '', // 户主（择房人）
-  doorNo: '', // 户号
+  doorNo: props.doorNo, // 户号
   relocationAddress: '' // 迁出地址
 }
 
 const defaultRow = {
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo,
   landBlock: '', // 区块
   houseType: '', // 房型
   houseNo: '', // 幢号
