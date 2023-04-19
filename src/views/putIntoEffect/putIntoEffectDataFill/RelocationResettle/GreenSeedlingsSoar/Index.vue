@@ -112,7 +112,7 @@
 import { ref, computed } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { ElSelect, ElOption } from 'element-plus'
+import { ElSpace, ElButton, ElSelect, ElOption } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 
 interface PropsType {
@@ -158,7 +158,7 @@ const onSave = () => {
 <style lang="less" scoped>
 .title {
   width: 100%;
-  padding: 45px 0 40px 0;
+  padding: 10px 0 40px 0;
   font-size: 20px;
   font-weight: bold;
   color: #171718;
