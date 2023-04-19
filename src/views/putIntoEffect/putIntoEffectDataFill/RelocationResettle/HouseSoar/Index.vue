@@ -161,7 +161,6 @@ const onSave = () => {
 }
 
 .input-txt {
-  margin: 0;
   font-size: 14px;
   border-bottom: 1px solid;
   outline: none;
