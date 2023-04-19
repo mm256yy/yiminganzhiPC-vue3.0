@@ -143,7 +143,7 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
+import { getProduceListApi, delProduceApi } from '@/api/putIntoEffect/produce'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -161,8 +161,8 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getProduceListApi,
+  delListApi: delProduceApi
 })
 const { getList } = methods
 
@@ -172,6 +172,12 @@ tableObject.params = {
 }
 
 getList()
+// const demographicHeader:any = reactive({})
+// const getHeaderData = ():void => {
+//   getHeadApi().then((res) => {
+
+//   })
+// }
 const form = ref<any>({})
 const rules = ref<any>({})
 const schema = reactive<CrudSchema[]>([
