@@ -30,8 +30,8 @@
             <span class="distance"></span>
             已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
-            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
-            >）
+            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
+            ）
           </div>
         </div>
         <ElSpace>
@@ -92,31 +92,18 @@
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
         <template #action="{ row }">
-          <!-- <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '快速查看',
-                type: 'primary',
-
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-          /> -->
           <span
             @click="onViewRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >快速查看</span
           >
+            快速查看
+          </span>
           <span
             @click="onEditRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >编辑</span
           >
+            编辑
+          </span>
           <span @click="onDelRow(row)" :style="{ color: 'red', cursor: 'pointer' }">删除</span>
         </template>
       </Table>
@@ -576,7 +563,9 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Landlord'
+      type: 'Landlord',
+      projectId: row.projectId,
+      uid: row.uid
     }
   })
 }

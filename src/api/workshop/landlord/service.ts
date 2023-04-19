@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
-// const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
+import { LandlordType } from '@/types/print'
 
 /**
  * 查询居民户信息列表
@@ -58,6 +58,21 @@ export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType
 }
 export const getupdateLog = (doorNo: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/updateLog?doorNo=` + doorNo })
+}
+
+/**
+ * 查询多个调查对象信息
+ * 打印使用
+ */
+export const getLandlordBatchApi = (
+  ids: number[] | string[]
+): Promise<{ peasantHouseholdPushDtoList: LandlordType[] }> => {
+  return request.get({
+    url: `/pad/printDetails`,
+    params: {
+      ids
+    }
+  })
 }
 
 /**
@@ -119,4 +134,25 @@ export const printLandlordApi = (
 
 export const getLandlordSurveyByIdApi = (id: number | string): Promise<SurveyInfoType> => {
   return request.get({ url: `/peasantHousehold/survey/${id}` })
+}
+
+/**
+ * 批量打印
+ */
+export const batchPrintApi = (data: any): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/mergePdf`,
+    data,
+    headersType: 'multipart/form-data'
+  })
+}
+
+/**
+ * 打印表pdf下载
+ */
+export const downloadPrintPdfApi = (data: any[]): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/packagingZip`,
+    data
+  })
 }

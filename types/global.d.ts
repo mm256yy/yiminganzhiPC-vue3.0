@@ -53,4 +53,11 @@ declare global {
    * 地图类
    */
   declare const T: any
+
+  /**
+   * window
+   */
+  declare interface Window {
+    pdfMake: any
+  }
 }
