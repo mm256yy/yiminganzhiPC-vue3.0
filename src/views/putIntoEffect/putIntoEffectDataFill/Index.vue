@@ -177,6 +177,42 @@
       />
 
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
+
+      <!-- 动迁安置 -- 房屋腾空确认单 -->
+      <house-soar
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[0]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 青苗腾空确认单 -->
+      <green-seedlings-soar
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[1]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 择房确认单 -->
+      <choose-house
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[2]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 择址确认单 -->
+      <site-selection
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[3]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
     </div>
 
     <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
@@ -259,6 +295,12 @@ import houseConfirmation from './houseConfirmation/Index.vue'
 import produce from './produce/Index.vue'
 import gaveArrange from './gaveArrange/Index.vue'
 import createCard from './createCard/Index.vue'
+
+import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
+import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
+import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
+import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
+
 // import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
