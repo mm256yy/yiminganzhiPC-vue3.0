@@ -13,5 +13,5 @@ export const addGaveArrageApi = (data: any): Promise<any> => {
 }
 // 坟墓列表
 export const getGaveArrageListApi = (data: any): Promise<any> => {
-  return request.get({ url: '/immigrantGrave', data })
+  return request.get({ url: '/immigrantGrave', params: data })
 }

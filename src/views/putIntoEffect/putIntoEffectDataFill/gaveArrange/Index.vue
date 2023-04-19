@@ -102,7 +102,9 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  householdId: props.baseInfo.id,
+  projectId: props.baseInfo.projectId
 }
 
 getList()
