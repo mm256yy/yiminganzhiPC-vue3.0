@@ -203,7 +203,7 @@
           </ElTableColumn>
         </ElTable>
       </div>
-      <recordDialog :recordShow="recordShow" @close="recordClose" />
+      <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
     </div>
   </WorkContentWrap>
 </template>

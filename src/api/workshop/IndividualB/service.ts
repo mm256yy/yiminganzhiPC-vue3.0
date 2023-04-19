@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { DemographicDtoType, DemographicHeadType, ExcelListType } from './types'
-
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 /**
  * 查询企业信息列表
  */
@@ -14,6 +14,9 @@ export const getDemographicListApi = (
  * 新增企业信息
  */
 export const addDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/company/create', data })
 }
 

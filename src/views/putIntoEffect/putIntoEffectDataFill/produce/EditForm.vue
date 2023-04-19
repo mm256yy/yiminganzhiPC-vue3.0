@@ -53,10 +53,10 @@
           placeholder="请输入"
         />
       </ElFormItem>
-      <ElFormItem label="人口性质" prop="censusType">
-        <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
+      <ElFormItem label="人口性质" prop="populationNature">
+        <ElSelect clearable filterable v-model="form.populationNature" class="!w-full">
           <ElOption
-            v-for="item in dictObj[249]"
+            v-for="item in dictObj[263]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -64,10 +64,10 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="安置方式" prop="censusType">
-        <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
+      <ElFormItem label="安置方式" prop="way">
+        <ElSelect clearable filterable v-model="form.way" class="!w-full">
           <ElOption
-            v-for="item in dictObj[249]"
+            v-for="item in dictObj[277]"
             :key="item.value"
             :label="item.label"
             :value="item.value"

@@ -74,6 +74,7 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
+// ElMessage
 import { ElButton, ElSpace, ElDialog, ElFormItem, ElInput } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -158,13 +159,26 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'maritalText',
+    field: 'populationNatureText',
     label: '人口性质',
     search: {
       show: false
     }
   },
-
+  {
+    field: 'checkRemark',
+    label: '备注',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'addReason',
+    label: '新增原因',
+    search: {
+      show: false
+    }
+  },
   {
     field: 'action',
     label: '操作',
@@ -191,15 +205,15 @@ const onSubmit = () => {
   dialogVisible.value = false
 }
 const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-  dialogVisible.value = true
+  // dialogVisible.value = true
   tableObject.currentRow = row
   multipleV.value = multiple
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
   // ElMessage.success('删除成功')
   // getList()
 }

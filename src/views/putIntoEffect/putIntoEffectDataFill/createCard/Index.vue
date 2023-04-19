@@ -172,7 +172,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'maritalText',
+    field: 'populationNatureText',
     label: '人口性质',
     search: {
       show: false
@@ -181,6 +181,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'remark',
     label: '备注',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'addReason',
+    label: '新增原因',
     search: {
       show: false
     }

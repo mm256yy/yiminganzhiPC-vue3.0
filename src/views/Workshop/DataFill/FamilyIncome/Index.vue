@@ -81,7 +81,7 @@
       </ElTable>
     </div>
 
-    <recordDialog :recordShow="recordShow" @close="recordClose" />
+    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
   </WorkContentWrap>
 </template>
 
@@ -226,6 +226,15 @@ const getList = async () => {
 getList()
 
 const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
+  // if (columnIndex == 1) {
+  //   //合并相同的名字
+  //   let nameSpan = getSpanNumber(tableData.value, 'type')
+  //   return {
+  //     rowspan: nameSpan[rowIndex],
+  //     colspan: 1
+  //   }
+  // }
+
   if (columnIndex === 1) {
     if (rowIndex !== 0 && row.type === tableData.value[rowIndex - 1].type) {
       return {
@@ -240,6 +249,39 @@ const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
     }
   }
 }
+// 合并单元格方法
+// function getSpanNumber(data, prop) {
+//   //data要处理的数组，prop要合并的属性，比如name
+
+//   //数组的长度，有时候后台可能返回个null而不是[]
+//   let length = Array.isArray(data) ? data.length : 0
+//   if (length > 0) {
+//     //用于标识位置
+//     let position = 0
+//     //用于对比的数据
+//     let temp = data[0][prop]
+//     //要返回的结果
+//     let result = [1]
+//     //假设数据是AABCC，我们的目标就是返回20120
+//     for (let i = 1; i < length; i++) {
+//       if (data[i][prop] == temp) {
+//         //标识位置的数据加一
+//         result[position] += 1
+//         //当前位置添0
+//         result[i] = 0
+//       } else {
+//         //不相同时，修改标识位置，该位置设为1，修改对比值
+//         position = i
+//         result[i] = 1
+//         temp = data[i][prop]
+//       }
+//     }
+//     //返回结果
+//     return result
+//   } else {
+//     return [0]
+//   }
+// }
 
 // 小计
 const getSubtotal = (type: string) => {

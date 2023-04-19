@@ -50,15 +50,25 @@
 
 <script lang="ts" setup>
 import { ElDialog, ElButton, ElSteps, ElStep } from 'element-plus'
-import { onMounted } from 'vue'
+import { watch } from 'vue'
+import { getupdateLog } from '@/api/workshop/landlord/service'
 const emit = defineEmits(['close'])
 interface PropsType {
   recordShow: boolean
+  doorNo
 }
 const props = defineProps<PropsType>()
-onMounted(() => {
-  console.log(props)
-})
+watch(
+  () => props.recordShow,
+  () => {
+    if (props.recordShow) {
+      getupdateLog(props.doorNo)
+    }
+  }
+)
+// onMounted(() => {
+//   getupdateLog(props.doorNo)
+// })
 const onClose = () => {
   emit('close')
 }

@@ -9,6 +9,7 @@ export interface FruitwoodDtoType {
   unit: string
   number: number
   remark: string
+  status
   [key: string]: any
 }
 
@@ -16,4 +17,5 @@ export interface FruitwoodParamsType {
   doorNo: string
   householdId: number
   size: number
+  status
 }

@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { GraveDtoType } from './grave-types'
-
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 /**
  * 查询坟墓信息列表
  */
@@ -15,5 +15,8 @@ export const getGraveListApi = (
  * 保存
  */
 export const saveGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrantGrave/createAll', data })
 }

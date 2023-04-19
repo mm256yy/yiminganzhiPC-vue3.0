@@ -219,6 +219,8 @@ interface PropsType {
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const props = defineProps<PropsType>()
 onMounted(() => {
+  console.log(props.baseInfo, 'baseInfo')
+
   if (props.type == 'Landlord') {
     infoData.value = { icon: 'mdi:user-circle' }
   } else if (props.type == 'Enterprise') {

@@ -17,18 +17,18 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="添加原因" prop="name" v-if="actionType === 'add'">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="添加原因" prop="addReason" v-if="actionType === 'add'">
+        <ElInput v-model="form.addReason" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="房屋编号" prop="name">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="房屋编号" prop="houseNo">
+        <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="层数" prop="sex">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入">
+      <ElFormItem label="层数" prop="storeyNumber">
+        <ElInput v-model="form.storeyNumber" class="!w-full" placeholder="请输入">
           <template #append> 层 </template>
         </ElInput>
       </ElFormItem>
-      <ElFormItem label="建筑面积" prop="relation">
+      <ElFormItem label="建筑面积" prop="landArea">
         <!-- <ElSelect clearable filterable v-model="form.relation" class="!w-full">
           <ElOption
             v-for="item in dictObj[307]"
@@ -37,36 +37,36 @@
             :value="item.value"
           />
         </ElSelect> -->
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入">
+        <ElInput v-model="form.landArea" class="!w-full" placeholder="请输入">
           <template #append>
             m<span style="position: absolute; top: -4px; right: 12px; font-size: 1px">2</span>
           </template>
         </ElInput>
       </ElFormItem>
-      <ElFormItem label="房屋结构" prop="card">
-        <ElSelect clearable filterable v-model="form.relation" class="!w-full">
+      <ElFormItem label="房屋结构" prop="constructionType">
+        <ElSelect clearable filterable v-model="form.constructionType" class="!w-full">
           <ElOption
-            v-for="item in dictObj[307]"
+            v-for="item in dictObj[252]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="集体土地使用权证" prop="relation">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="集体土地使用权证" prop="landNo">
+        <ElInput v-model="form.landNo" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="房屋所有权证/不动产权权证" prop="marital">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="房屋所有权证/不动产权权证" prop="propertyNo">
+        <ElInput v-model="form.propertyNo" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="房屋性质" prop="marital">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="房屋性质" prop="houseNature">
+        <ElInput v-model="form.houseNature" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="房屋产权人" prop="marital">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="房屋产权人" prop="demographicId">
+        <ElInput v-model="form.demographicId" class="!w-full" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="共有人情况" prop="marital">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+      <ElFormItem label="共有人情况" prop="ownersSituation">
+        <ElInput v-model="form.ownersSituation" class="!w-full" placeholder="请输入" />
       </ElFormItem>
     </ElForm>
 
@@ -100,17 +100,14 @@ import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDictByName
-} from '@/api/workshop/population/service'
+// , getDictByName
+import { addHouseApi, updateHouseApi } from '@/api/workshop/datafill/house-service'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  row?: DemographicDtoType | null | undefined
+  row
   doorNo: string
 }
 
@@ -146,7 +143,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-const occupationOptions = ref<any>([]) // 职业选项
+// const occupationOptions = ref<any>([]) // 职业选项
 // const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -235,14 +232,14 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = async (data: DemographicDtoType) => {
+const submit = async (data: any) => {
   if (props.actionType === 'add') {
-    await addDemographicApi({
+    await addHouseApi({
       ...data,
       doorNo: props.doorNo
     })
   } else {
-    await updateDemographicApi({
+    await updateHouseApi({
       ...data,
       doorNo: props.doorNo
     })
@@ -272,14 +269,14 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 
 // 获取职业列表
-const getOccupationOptions = () => {
-  getDictByName('职业').then((res: any) => {
-    occupationOptions.value = res
-  })
-}
+// const getOccupationOptions = () => {
+//   getDictByName('职业').then((res: any) => {
+//     occupationOptions.value = res
+//   })
+// }
 
 onMounted(() => {
-  getOccupationOptions()
+  // getOccupationOptions()
 })
 </script>
 

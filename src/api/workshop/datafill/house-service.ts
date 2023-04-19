@@ -1,6 +1,6 @@
 import request from '@/config/axios'
 import { HouseDtoType } from './house-types'
-
+const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
 /**
  * 查询房屋信息列表
  */
@@ -15,6 +15,9 @@ export const getHouseListApi = (
  * 新增房屋信息
  */
 export const addHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
+  if (id == '2') {
+    data.status = 'review'
+  }
   return request.post({ url: '/immigrant_house/create', data })
 }
 

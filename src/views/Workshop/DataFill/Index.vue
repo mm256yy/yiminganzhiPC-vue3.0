@@ -30,7 +30,7 @@
       <div class="head-top">
         <div class="tabs">
           <div
-            :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+            :class="['tab-item', tabCurrentId == item.id ? 'active' : '']"
             v-for="item in FlowTabs"
             :key="item.id"
             @click="onTabClick(item)"
@@ -341,7 +341,7 @@ import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
 const { currentRoute, back } = useRouter()
-const { doorNo, householdId, type } = currentRoute.value.query as any
+const { doorNo, householdId, type, id } = currentRoute.value.query as any
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(1)
@@ -385,9 +385,7 @@ const onTabClick = (tabItem) => {
   tabCurrentId.value = tabItem.id
 }
 watch(
-  () => {
-    tabCurrentId
-  },
+  () => tabCurrentId.value,
   () => {
     push({
       name: 'DataFill',
@@ -400,6 +398,8 @@ watch(
     })
   }
 )
+console.log(id, 'id')
+
 const onReportTabClick = (tabItem) => {
   if (reportTabCurrentId.value === tabItem.id) {
     return
@@ -420,6 +420,7 @@ onMounted(() => {
   } else if (type == 'villageInfoC') {
     tabsType.value = villageInfoCTabs
   }
+  id && (tabCurrentId.value = id)
 })
 // 填报完成
 const onReportData = async () => {
@@ -465,7 +466,7 @@ const onConfirmReport = async () => {
 }
 
 const onBack = () => {
-  back()
+  push('/Workshop/Landlord')
 }
 
 const onPrint = () => {

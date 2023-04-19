@@ -55,7 +55,7 @@
       :doorNo="props.doorNo"
       @close="onFormPupClose"
     />
-    <recordDialog :recordShow="recordShow" @close="recordClose" />
+    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
   </WorkContentWrap>
 </template>
 

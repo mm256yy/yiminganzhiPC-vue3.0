@@ -41,8 +41,8 @@
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
-            :delete="row.relation == 1 ? false : true"
           />
+          <!-- :delete="row.relation == 1 ? false : true" -->
         </template>
       </Table>
     </div>
@@ -80,8 +80,8 @@ import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
-import { DemographicDtoType } from '@/api/workshop/population/types'
+import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
+// import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
@@ -94,8 +94,8 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getHouseListApi,
+  delListApi: delHouseByIdApi
 })
 const { getList } = methods
 
@@ -114,14 +114,14 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
-    field: 'storeyNumber',
+    field: 'houseNo',
     label: '房屋编号',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
+    field: 'constructionTypeText',
     label: '房屋结构',
     search: {
       show: false
@@ -137,7 +137,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     field: 'landArea',
-    label: '建筑面积(平方米)',
+    label: '建筑面积（㎡）',
     search: {
       show: false
     }
@@ -159,22 +159,29 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'storeyNumber',
+    field: 'houseNature',
     label: '房屋性质',
     search: {
       show: false
     }
   },
   {
-    field: '',
+    field: 'demographicId',
     label: '房屋产权人',
     search: {
       show: false
     }
   },
   {
-    field: 'storeyNumber',
+    field: 'ownersSituation',
     label: '共有人情况',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'addReason',
+    label: '新增原因',
     search: {
       show: false
     }
@@ -204,16 +211,16 @@ const onClose = () => {
 const onSubmit = () => {
   dialogVisible.value = false
 }
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-  dialogVisible.value = true
+const onDelRow = async (row: any, multiple: boolean) => {
+  // dialogVisible.value = true
   tableObject.currentRow = row
   multipleV.value = multiple
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
   // ElMessage.success('删除成功')
   // getList()
 }
@@ -224,7 +231,7 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: DemographicDtoType) => {
+const onEditRow = (row: any) => {
   actionType.value = 'edit'
   tableObject.currentRow = {
     ...row,
@@ -241,7 +248,7 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
-const onViewRow = (row: DemographicDtoType) => {
+const onViewRow = (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row,
