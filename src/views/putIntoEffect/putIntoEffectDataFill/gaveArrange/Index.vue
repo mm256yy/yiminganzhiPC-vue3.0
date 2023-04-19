@@ -51,7 +51,9 @@
     </div>
     <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
-        <img src="./i.png" alt="" />坟墓安置信息是否删除
+        <el-icon><InfoFilled /></el-icon>是否删除
+        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
+        的信息
       </div>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
