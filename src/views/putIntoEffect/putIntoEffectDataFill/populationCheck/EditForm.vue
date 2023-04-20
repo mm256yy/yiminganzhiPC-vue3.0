@@ -132,6 +132,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   row?: DemographicDtoType | null | undefined
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -256,15 +257,23 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
+  const { id, projectId, status } = props.baseInfo
+  const baseInfo = {
+    householdId: id,
+    projectId,
+    status
+  }
   if (props.actionType === 'add') {
     await addDemographicApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      ...baseInfo
     })
   } else {
     await updateDemographicApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      ...baseInfo
     })
   }
   ElMessage.success('操作成功！')

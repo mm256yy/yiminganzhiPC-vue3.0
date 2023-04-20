@@ -248,14 +248,16 @@ const submit = async (data: DemographicDtoType) => {
       ...data,
       doorNo: props.doorNo,
       householdId: props.baseInfo.id,
-      status: props.baseInfo.status
+      status: props.baseInfo.status,
+      projectId: props.baseInfo.projectId
     })
   } else {
     await updateProduceApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.baseInfo.id,
-      status: props.baseInfo.status
+      status: props.baseInfo.status,
+      projectId: props.baseInfo.projectId
     })
   }
   ElMessage.success('操作成功！')

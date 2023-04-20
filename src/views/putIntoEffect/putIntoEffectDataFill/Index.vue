@@ -148,6 +148,7 @@
       <!-- 人口核定 -->
       <populationCheck
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 
