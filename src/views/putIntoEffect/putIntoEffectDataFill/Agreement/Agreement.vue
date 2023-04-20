@@ -63,7 +63,7 @@
               （二）经认定，乙方 2 人参加农业安置； 2 参加社会保障安置； 1
               人参加自谋职业安置。具体如下：
             </div>
-            <ElTable :data="tableData" class="mt-10px">
+            <ElTable :data="tableData2" class="mt-10px">
               <ElTableColumn
                 label="姓名"
                 :width="342"
@@ -79,9 +79,9 @@
                 header-align="center"
               />
               <ElTableColumn
-                label="信息"
+                label="安置方式"
                 :width="342"
-                prop="info"
+                prop="resettlementType"
                 align="center"
                 header-align="center"
               />
@@ -391,14 +391,32 @@ const navList = ref<NavType[]>([
 
 const tableData = ref([
   {
-    name: '1',
-    card: '2',
-    info: '3'
+    name: '李财',
+    card: '332621196607161178',
+    info: '农业随迁'
   },
   {
-    name: '1',
-    card: '2',
-    info: '3'
+    name: '顾金娥',
+    card: '33262119400831118X',
+    info: '非农随迁'
+  },
+  {
+    name: '程聪颖',
+    card: '331082199109031269',
+    info: '农业随迁'
+  }
+])
+
+const tableData2 = ref([
+  {
+    name: '章三',
+    card: '234222244589976',
+    resettlementType: '集中安置'
+  },
+  {
+    name: '里斯',
+    card: '987433274389923',
+    resettlementType: '分散安置'
   }
 ])
 

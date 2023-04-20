@@ -1,6 +1,19 @@
 <template>
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
+      <div class="flex items-center justify-between pb-12px">
+        <div> </div>
+        <ElSpace>
+          <ElButton
+            :icon="saveIcon"
+            type="primary"
+            class="!bg-[#30A952] !border-[#30A952]"
+            @click="onSave"
+          >
+            保存
+          </ElButton>
+        </ElSpace>
+      </div>
       <div class="title">农村移民自建房验收告知单</div>
       <div class="content-wrap">
         <div class="row">
@@ -17,7 +30,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdlerName"
+            v-model="form.householdler"
             placeholder="请输入户主名称"
           />
           户号：
@@ -32,12 +45,12 @@
           <div class="table-head">
             <div class="table-tit">房屋信息登记：</div>
             <div class="table-action">
-              <el-button>添加行</el-button>
+              <el-button type="primary" @click="onAddRow" :icon="addIcon">添加行</el-button>
             </div>
           </div>
           <el-table :data="tableData" style="width: 100%">
             <el-table-column
-              prop="id"
+              type="index"
               label="序号"
               width="80"
               align="center"
@@ -102,9 +115,10 @@
               align="center"
               header-align="center"
             >
-              <!-- ="{ row }" -->
-              <template #default>
-                <el-button type="text" class="!text-[#E43030]">删除</el-button>
+              <template #default="{ row }">
+                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]"
+                  >删除</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -123,7 +137,16 @@
 import { ref } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
-import { ElTable, ElTableColumn, ElInput, ElButton, ElSwitch } from 'element-plus'
+import {
+  ElTable,
+  ElTableColumn,
+  ElInput,
+  ElButton,
+  ElSwitch,
+  ElMessageBox,
+  ElMessage
+} from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
 
 interface PropsType {
   doorNo: string
@@ -133,36 +156,84 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 console.log('props:', props)
 
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
-const tableData = ref([
-  {
-    id: 1,
-    remark: '',
-    isPassCheck: false,
-    ground: '',
-    piping: '',
-    waterproof: '',
-    hydropower: '',
-    wall: '',
-    houseLandNum: ''
-  }
-])
+const tableData = ref<any[]>([])
 
-const defaultRow = {
-  govName: '', // 政府名称
-  natureVillageName: '', // 自然村名称
-  houseName: '', // 房屋名称
-  handoverProject: '', // 腾空移交项目
-  hoseholdName: '', // 户主姓名
-  doorNo: '', // 户号
-  relocationAddress: '' // 迁出地址
+const defaultForm = {
+  govName: '', // 业主
+  householdler: '', // 户主（择房人）
+  doorNo: '' // 户号
 }
 
-const form = ref<any>(defaultRow)
+const defaultRow = {
+  remark: '',
+  isPassCheck: false,
+  ground: '',
+  piping: '',
+  waterproof: '',
+  hydropower: '',
+  wall: '',
+  houseLandNum: ''
+}
+
+const form = ref<any>(defaultForm)
+
+// 获取列表数据
+const getList = () => {
+  // const params: any = {
+  //   doorNo: props.doorNo,
+  //   householdId: props.householdId,
+  //   projectId: props.projectId,
+  //   status: 'implementation',
+  //   size: 1000
+  // }
+  // getMainHouseListApi(params).then((res) => {
+  //   tableData.value = res.content
+  // })
+}
+
+// 添加行
+const onAddRow = () => {
+  tableData.value.push({ ...defaultRow })
+}
+
+// 删除
+const onDelRow = (row) => {
+  if (row.id) {
+    ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+      type: 'warning',
+      cancelButtonText: '取消',
+      confirmButtonText: '确认'
+    })
+      .then(async () => {
+        // await deleteMainHouseApi(row.id)
+        getList()
+        ElMessage.success('删除成功')
+      })
+      .catch(() => {})
+  } else {
+    tableData.value.splice(tableData.value.indexOf(row), 1)
+  }
+}
+
+// 保存
+const onSave = () => {
+  const params = {
+    ...form.value,
+    tableData: tableData.value
+  }
+  console.log(params, '参数')
+  // saveMainHouseApi(params).then(() => {
+  //   ElMessage.success('操作成功！')
+  //   getList()
+  // })
+}
 </script>
 
 <style lang="less" scoped>
