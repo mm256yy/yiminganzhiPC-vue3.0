@@ -337,7 +337,7 @@ import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vu
 import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
 import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
 import BuildHouse from './RelocationResettle/BuildHouse/Index.vue' // 动迁安置 -- 建房告知单
-import OptionalDelivery from './RelocationResettle/OptionalDeliverys/Index.vue' // 动迁安置 -- 择房交付告知单
+import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' // 动迁安置 -- 择房交付告知单
 import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
 import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
