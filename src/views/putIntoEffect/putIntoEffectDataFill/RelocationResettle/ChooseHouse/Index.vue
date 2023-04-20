@@ -40,7 +40,7 @@
         <div class="row">
           <div class="txt-indent-28">迁出地址：</div>
           <input
-            class="input-txt w-400 ml-10 mr-10"
+            class="input-txt w-700 ml-10 mr-10"
             v-model="form.relocationAddress"
             placeholder="请输入迁出地址"
           />
@@ -49,7 +49,7 @@
           <div class="flex items-center justify-between pb-12px">
             <div class="sub-title">
               择房信息登记，所选房型及套数：
-              <span class="text-[#1C5DF1]">10</span>
+              <span class="text-[#1C5DF1]">{{ tableData.length }}</span>
             </div>
             <ElSpace>
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
@@ -284,8 +284,8 @@ const onSave = () => {
   width: 200px;
 }
 
-.w-400 {
-  width: 400px;
+.w-700 {
+  width: 700px;
 }
 
 .txt-indent-28 {

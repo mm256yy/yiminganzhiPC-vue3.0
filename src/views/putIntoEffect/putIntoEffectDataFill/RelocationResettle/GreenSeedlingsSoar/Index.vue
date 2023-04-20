@@ -23,7 +23,7 @@
         <div class="row">
           <div class="txt-indent-28">我户因水库建设需征收的承保地块</div>
           <input
-            class="input-txt w-200 ml-10 mr-10"
+            class="input-txt w-400 ml-10 mr-10"
             v-model="form.landName"
             placeholder="请输入地块名称"
           />
@@ -94,7 +94,7 @@
           />
           迁出地址：
           <input
-            class="input-txt w-400 ml-10"
+            class="input-txt w-500 ml-10"
             v-model="form.relocationAddress"
             placeholder="请输入迁出地址"
           />
@@ -209,6 +209,10 @@ const onSave = () => {
 
 .w-400 {
   width: 400px;
+}
+
+.w-500 {
+  width: 500px;
 }
 
 .txt-indent-28 {
