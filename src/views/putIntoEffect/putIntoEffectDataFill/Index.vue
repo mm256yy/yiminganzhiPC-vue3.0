@@ -213,6 +213,42 @@
         :projectId="Number(projectId)"
         :uid="uid"
       />
+
+      <!-- 动迁安置 -- 建房告知单 -->
+      <build-house
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[4]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 择房交付告知单 -->
+      <optional-delivery
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[5]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 坟墓择址确认单 -->
+      <tomb-address
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[6]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 坟墓迁移告知单 -->
+      <tomb-migrations
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[7]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
     </div>
 
     <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
@@ -300,6 +336,10 @@ import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
 import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
 import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
+import BuildHouse from './RelocationResettle/BuildHouse/Index.vue' // 动迁安置 -- 建房告知单
+import OptionalDelivery from './RelocationResettle/OptionalDeliverys/Index.vue' // 动迁安置 -- 择房交付告知单
+import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
+import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
 // import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
