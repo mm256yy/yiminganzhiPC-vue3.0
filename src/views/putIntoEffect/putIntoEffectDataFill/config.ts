@@ -1,5 +1,5 @@
 // tab 唯一标识
-export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8]
+export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
@@ -90,14 +90,7 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
-  // 安置确认
-  {
-    type: 2,
-    name: '搬迁安置',
-    id: ReportTabIds[0],
-    icon: 'mdi:lorry',
-    active: false
-  },
+  // 动迁安置
   {
     type: 5,
     name: '房屋腾空确认单',
@@ -335,11 +328,44 @@ export const FlowTabs = [
     name: '动迁安置'
   }
 ]
-// 上报状态
-export const ReportStatus = {
-  ReportSucceed: 'ReportSucceed',
-  UnReport: 'UnReport'
+
+// 淹没区，建设区，影响区，重叠区
+export const locationTypes = [
+  {
+    label: '淹没区',
+    value: 'SubmergedArea'
+  },
+  {
+    label: '建设区',
+    value: 'ConstructionArea'
+  },
+  {
+    label: '影响区',
+    value: 'InfluenceArea'
+  },
+  {
+    label: '重叠区',
+    value: 'OverlappingArea'
+  }
+]
+
+// 填报状态
+export const FillStatus = {
+  Fill: 'Fill',
+  UnFill: 'UnFill'
 }
+
+// 填报状态枚举
+export const FillStatusEnums = [
+  {
+    label: '已填报',
+    value: 'Fill'
+  },
+  {
+    label: '未填报',
+    value: 'UnFill'
+  }
+]
 
 // 生产安置方式
 // 农业安置、社保安置、一次性补偿、有土安置、基本生活保障安置、其他安置方式

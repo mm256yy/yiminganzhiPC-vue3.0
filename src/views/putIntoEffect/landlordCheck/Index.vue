@@ -77,13 +77,10 @@
         <template #status="{ row }">
           <div class="flex items-center justify-center">
             <span
-              :class="[
-                'status',
-                row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
-              ]"
+              :class="['status', row.fillStatus === FillStatus.Fill ? 'status-suc' : 'status-err']"
             ></span>
-            {{ row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
-          >
+            {{ row.fillStatus === FillStatus.Fill ? '已填报' : '未填报' }}
+          </div>
         </template>
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
@@ -156,8 +153,11 @@ import {
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
-import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
-import { ReportStatus } from '@/views/Workshop/DataFill/config'
+import {
+  locationTypes,
+  FillStatusEnums,
+  FillStatus
+} from '@/views/putIntoEffect/putIntoEffectDataFill/config'
 import { useRouter } from 'vue-router'
 import type {
   LandlordDtoType,
@@ -280,13 +280,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportStatus',
-    label: '上报状态',
+    field: 'fillStatus',
+    label: '填报状态',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: ReportStatusEnums
+        options: FillStatusEnums
       }
     },
     table: {
@@ -508,8 +508,8 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
+  if (!data.fillStatus) {
+    Reflect.deleteProperty(params, 'fillStatus')
   }
 
   // 需要重置一次params

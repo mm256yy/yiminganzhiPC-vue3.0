@@ -49,7 +49,7 @@
             打印表格
           </ElButton>
           <ElButton
-            v-if="baseInfo.reportStatus === ReportStatus.UnReport"
+            v-if="baseInfo.fillStatus === FillStatus.Fill"
             type="primary"
             :icon="EscalationIcon"
             @click="onReportData"
@@ -145,38 +145,44 @@
         @update-data="getLandlordInfo"
       />
 
-      <!-- 人口核定 -->
+      <!-- 资格认定 -- 人口核定 -->
       <populationCheck
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 
-      <!-- 房屋确权 -->
+      <!-- 资格认定 -- 房屋确权 -->
       <houseConfirmation
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
       />
 
+      <!-- 安置确认 -- 搬迁安置 -->
       <relocation
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[2] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 2"
       />
 
+      <!-- 安置确认 -- 生产安置 -->
       <produce
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[3] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 2"
       />
 
+      <!-- 安置确认 -- 坟墓安置 -->
       <gaveArrange
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
 
+      <!-- 移民建卡 -->
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
+
+      <Agreement v-if="tabCurrentId == 4" />
 
       <!-- 动迁安置 -- 房屋腾空确认单 -->
       <house-soar
@@ -249,6 +255,41 @@
         :projectId="Number(projectId)"
         :uid="uid"
       />
+
+      <!-- 动迁安置 生产用地 -->
+      <production-land
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
+      />
+      <!-- 动迁安置 社保缴费 -->
+      <social-security
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[9]"
+      />
+
+      <!-- 动迁安置 自建房 -->
+      <build-room
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[10]"
+      />
+
+      <!-- 动迁安置 安置进度 -->
+      <placement-progress
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[11]"
+      />
     </div>
 
     <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
@@ -261,48 +302,12 @@
       @close="onPrintDialogClose"
       :baseInfo="baseInfo"
     />
-
-    <ElDialog
-      class="report-dialog"
-      title="填报完成"
-      :model-value="reportDialog"
-      :width="710"
-      @close="onClose"
-      alignCenter
-      appendToBody
-      :closeOnClickModal="false"
-      destroy-on-close
-    >
-      <div class="report-cont">
-        <div class="report-item" v-for="item in reportResult" :key="item">
-          <div class="report-tit">{{ item.split('：')[0] }}:</div>
-          <div class="report-txt">{{ item.split('：')[1] }}</div>
-        </div>
-      </div>
-
-      <div class="tips">
-        <Icon icon="ph:info-fill" color="#ED5454" :size="20" />
-        <div class="ml-6px">以上信息还未填写，是否继续上传数据？</div>
-      </div>
-
-      <template #footer>
-        <ElButton @click="onClose">取消</ElButton>
-        <ElButton type="primary" @click="onConfirmReport">确认</ElButton>
-      </template>
-    </ElDialog>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import {
-  ElBreadcrumb,
-  ElBreadcrumbItem,
-  ElButton,
-  ElDialog,
-  ElMessage,
-  ElSpace
-} from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage, ElSpace } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -314,8 +319,11 @@ import {
   villageInfoCTabs
 } from './config'
 
-import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
-import { ReportStatus } from '@/views/Workshop/DataFill/config'
+import {
+  getLandlordByIdApi,
+  reportLandlordApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/service'
+import { FillStatus } from '@/views/putIntoEffect/putIntoEffectDataFill/config'
 
 import MainHouse from './AssetEvaluation/MainHouse/Index.vue' // 资产评估 -- 房屋主体评估
 import HouseDecoration from './AssetEvaluation/HouseDecoration/Index.vue' // 资产评估 -- 房屋装修评估
@@ -325,12 +333,15 @@ import LandBasicInfo from './AssetEvaluation/LandBasicInfo/Index.vue' // 资产�
 import LandGreenSeedlings from './AssetEvaluation/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
 import Grave from './AssetEvaluation/Grave/Index.vue' // 资产评估 -- 坟墓评估
 
-import populationCheck from './populationCheck/Index.vue'
-import relocation from './relocation/Index.vue'
-import houseConfirmation from './houseConfirmation/Index.vue'
-import produce from './produce/Index.vue'
-import gaveArrange from './gaveArrange/Index.vue'
-import createCard from './createCard/Index.vue'
+import populationCheck from './populationCheck/Index.vue' // 资格认定 -- 人口核定
+import houseConfirmation from './houseConfirmation/Index.vue' // 资格认证 -- 房屋确权
+
+import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
+import produce from './produce/Index.vue' // 安置确认 -- 生产安置
+import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
+import createCard from './createCard/Index.vue' // 移民建卡
+
+import Agreement from './Agreement/Agreement.vue'
 
 import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
@@ -341,7 +352,11 @@ import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' /
 import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
 import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
-// import Resettlement from './Resettlement/Index.vue'
+import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 生产用地
+import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 社保缴费
+import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
+import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
+
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
@@ -363,8 +378,6 @@ const printIcon = useIcon({ icon: 'ion:print-outline' })
 const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
-    console.log(res)
-
     baseInfo.value = res
   })
 }
@@ -386,9 +399,6 @@ const onReportTabClick = (tabItem) => {
   reportTabCurrentId.value = tabItem.id
 }
 
-const onClose = () => {
-  reportDialog.value = false
-}
 onMounted(() => {
   if (type == 'Landlord') {
     tabsType.value = ReportTabs
@@ -400,43 +410,14 @@ onMounted(() => {
     tabsType.value = villageInfoCTabs
   }
 })
+
 // 填报完成
 const onReportData = async () => {
-  let typeFlag = ''
-  if (type == 'Landlord') {
-    typeFlag = 'PeasantHousehold'
-  } else if (type == 'Enterprise') {
-    typeFlag = 'Company'
-  } else if (type == 'IndividualB') {
-    typeFlag = 'IndividualHousehold'
-  } else if (type == 'villageInfoC') {
-    typeFlag = 'Village'
-  }
-
-  const result = await reportLandlordApi(householdId, true, typeFlag)
+  const result = await reportLandlordApi(householdId)
   if (result && Array.isArray(result)) {
     reportDialog.value = true
     reportResult.value = result
   } else {
-    ElMessage.success('上报成功！')
-    getLandlordInfo()
-    back()
-  }
-}
-
-const onConfirmReport = async () => {
-  let typeFlag = ''
-  if (type == 'Landlord') {
-    typeFlag = 'PeasantHousehold'
-  } else if (type == 'Enterprise') {
-    typeFlag = 'Company'
-  } else if (type == 'IndividualB') {
-    typeFlag = 'IndividualHousehold'
-  } else if (type == 'villageInfoC') {
-    typeFlag = 'Village'
-  }
-  const result = await reportLandlordApi(householdId, false, typeFlag)
-  if (result && Object.prototype.toString.call(result) === '[object String]') {
     ElMessage.success('上报成功！')
     getLandlordInfo()
     back()

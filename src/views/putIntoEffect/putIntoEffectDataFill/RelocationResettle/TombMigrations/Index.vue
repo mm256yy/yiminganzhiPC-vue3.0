@@ -104,7 +104,7 @@
             </ElTableColumn>
           </ElTable>
         </div>
-        <div class="row txt-indent-28">现予确认。</div>
+        <div class="row txt-indent-28">特此告知！</div>
         <div class="row right">移交人（捺印）：</div>
         <div class="row right">经办人（签字）：</div>
         <div class="row right">移交日期：</div>

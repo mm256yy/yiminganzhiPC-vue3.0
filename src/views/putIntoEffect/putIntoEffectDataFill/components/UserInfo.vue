@@ -9,11 +9,11 @@
       <div
         :class="{
           status: true,
-          success: props.baseInfo.reportStatus === ReportStatus.ReportSucceed
+          success: props.baseInfo.fillStatus === FillStatus.Fill
         }"
       >
         <span class="point"></span>
-        {{ props.baseInfo.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}
+        {{ props.baseInfo.fillStatus === FillStatus.Fill ? '已填报' : '未填报' }}
       </div>
     </div>
 
@@ -207,7 +207,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol } from 'element-plus'
-import { ReportStatus } from '../config'
+import { FillStatus } from '../config'
 import { fmtStr } from '@/utils/index'
 
 interface PropsType {
