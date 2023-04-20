@@ -221,12 +221,13 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
-  const { id, projectId, uid } = props.baseInfo
+  const { id, projectId, uid, status } = props.baseInfo
   data.number = Number(data.number)
   const baseInfo = {
     householdId: id,
     projectId,
-    uid
+    uid,
+    status
   }
   if (props.actionType === 'add') {
     await addGaveArrageApi({
