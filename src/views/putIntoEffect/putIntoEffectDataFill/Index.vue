@@ -213,6 +213,41 @@
         :projectId="Number(projectId)"
         :uid="uid"
       />
+
+      <!-- 动迁安置 生产用地 -->
+      <production-land
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
+      />
+      <!-- 动迁安置 社保缴费 -->
+      <social-security
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[9]"
+      />
+
+      <!-- 动迁安置 自建房 -->
+      <build-room
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[10]"
+      />
+
+      <!-- 动迁安置 安置进度 -->
+      <placement-progress
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[11]"
+      />
     </div>
 
     <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
@@ -300,6 +335,11 @@ import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
 import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
 import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
+
+import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 生产用地
+import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 社保缴费
+import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
+import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
 
 // import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'

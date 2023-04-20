@@ -1,5 +1,5 @@
 // tab 唯一标识
-export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8]
+export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
