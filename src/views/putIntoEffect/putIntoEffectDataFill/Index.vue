@@ -357,6 +357,7 @@ import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // �
 import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
 import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
 
+// import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
