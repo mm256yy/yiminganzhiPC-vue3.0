@@ -236,11 +236,10 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
-  const { id, projectId, uid, status } = props.baseInfo
+  const { id, projectId, status } = props.baseInfo
   const baseInfo = {
     householdId: id,
     projectId,
-    uid,
     status
   }
   if (props.actionType === 'add') {
