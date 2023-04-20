@@ -182,6 +182,8 @@
       <!-- 移民建卡 -->
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
 
+      <Agreement v-if="tabCurrentId == 4" />
+
       <!-- 动迁安置 -- 房屋腾空确认单 -->
       <house-soar
         v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[0]"
@@ -371,6 +373,8 @@ import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
 import produce from './produce/Index.vue' // 安置确认 -- 生产安置
 import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
 import createCard from './createCard/Index.vue' // 移民建卡
+
+import Agreement from './Agreement/Agreement.vue'
 
 import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
