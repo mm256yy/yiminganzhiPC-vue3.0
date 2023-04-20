@@ -64,8 +64,8 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="安置方式" prop="way">
-        <ElSelect clearable filterable v-model="form.way" class="!w-full">
+      <ElFormItem label="安置方式" prop="settingWay">
+        <ElSelect clearable filterable v-model="form.settingWay" class="!w-full">
           <ElOption
             v-for="item in dictObj[277]"
             :key="item.value"
@@ -109,12 +109,8 @@ import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
+import { addProduceApi, updateProduceApi } from '@/api/putIntoEffect/produce'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDictByName
-} from '@/api/workshop/population/service'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/populationCheck'
 interface PropsType {
@@ -122,6 +118,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   row?: DemographicDtoType | null | undefined
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -156,7 +153,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   populationSort: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-const occupationOptions = ref<any>([]) // 职业选项
+// const occupationOptions = ref<any>([]) // 职业选项
 // const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -247,14 +244,18 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add') {
-    await addDemographicApi({
+    await addProduceApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      householdId: props.baseInfo.id,
+      status: props.baseInfo.status
     })
   } else {
-    await updateDemographicApi({
+    await updateProduceApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      householdId: props.baseInfo.id,
+      status: props.baseInfo.status
     })
   }
   ElMessage.success('操作成功！')
@@ -282,14 +283,14 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 
 // 获取职业列表
-const getOccupationOptions = () => {
-  getDictByName('职业').then((res: any) => {
-    occupationOptions.value = res
-  })
-}
+// const getOccupationOptions = () => {
+//   getDictByName('职业').then((res: any) => {
+//     occupationOptions.value = res
+//   })
+// }
 
 onMounted(() => {
-  getOccupationOptions()
+  // getOccupationOptions()
 })
 </script>
 

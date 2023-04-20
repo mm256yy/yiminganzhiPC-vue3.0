@@ -15,7 +15,3 @@ export const addProduceApi = (data: any): Promise<any> => {
 export const getProduceListApi = (data: any): Promise<any> => {
   return request.get({ url: '/demographic', params: data })
 }
-// 头部信息
-export const getHeadApi = (data: any): Promise<any> => {
-  return request.get({ url: '/demographic/head', params: data })
-}
