@@ -53,7 +53,7 @@
         </div>
         <div class="pl-28">
           <div class="flex items-center justify-between pb-12px">
-            <div class="sub-title"> 所择宅基地信息登记 </div>
+            <div class="sub-title"> 所择宅基地信息登记： </div>
             <ElSpace>
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
