@@ -14,31 +14,44 @@
           </ElButton>
         </ElSpace>
       </div>
-      <div class="title">择址确认单</div>
+      <div class="title">择房交付告知单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
-          人民政府：
-        </div>
-        <div class="row txt-indent-28">
-          我户已选择农村宅基地的安置方式，现对如下择址信息予以确认：
+          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入业主姓名" />
+          业主：
         </div>
         <div class="row">
-          <div class="txt-indent-28 mr-10">择址号：</div>
+          <div class="empty"></div>
           <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.landNo"
-            placeholder="请输入政府名称"
+            class="input-txt w-400 ml-10 mr-10"
+            v-model="form.relocationAddress"
+            placeholder="输入"
           />
-          户主（择址人）：
+          <div class="txt-indent-28"
+            >移民安置房项目已顺利通过各项验收，你户所选公寓房已满足交付条件，请准备相关资料尽快前往</div
+          >
+        </div>
+        <div class="row">
+          <div class="empty"></div>
+          <input
+            class="input-txt w-400 ml-10 mr-10"
+            v-model="form.relocationAddress"
+            placeholder="输入"
+          />
+          <div class="txt-indent-28">部门办理接房手续，现对你户房屋信息予以告知。</div>
+        </div>
+        <div class="row">
+          <div class="txt-indent-28 mr-10">交房号：</div>
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.houseNo" placeholder="输入" />
+          <div class="txt-indent-28 mr-10">户主：</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
             v-model="form.householdler"
             placeholder="请输入户主姓名"
           />
-          户号：
+          <div class="txt-indent-28 mr-10">户号：</div>
           <input
-            class="input-txt w-200 ml-10"
+            class="input-txt w-200 ml-10 mr-10"
             v-model="form.householdler"
             placeholder="请输入户号"
           />
@@ -46,14 +59,14 @@
         <div class="row">
           <div class="txt-indent-28">迁出地址：</div>
           <input
-            class="input-txt w-700 ml-10 mr-10"
+            class="input-txt w-400 ml-10 mr-10"
             v-model="form.relocationAddress"
             placeholder="请输入迁出地址"
           />
         </div>
         <div class="pl-28">
           <div class="flex items-center justify-between pb-12px">
-            <div class="sub-title"> 所择宅基地信息登记 </div>
+            <div class="sub-title">择房信息登记：</div>
             <ElSpace>
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
@@ -66,34 +79,34 @@
               align="center"
               header-align="center"
             />
-            <ElTableColumn label="区块" prop="landBlock" align="center" header-align="center">
+            <ElTableColumn label="房型" prop="landBlock" align="center" header-align="center">
               <template #default="scope">
                 <ElInput placeholder="请输入" v-model="scope.row.landBlock" />
               </template>
             </ElTableColumn>
-            <ElTableColumn
-              label="宅基地编号"
-              prop="homesteadLandNumber"
-              align="center"
-              header-align="center"
-            >
+            <ElTableColumn label="区块" prop="houseType" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.homesteadLandNumber" />
+                <ElInput placeholder="请输入" v-model="scope.row.houseType" />
               </template>
             </ElTableColumn>
-            <ElTableColumn
-              label="宅基地位置"
-              prop="homesteadLandLocation"
-              align="center"
-              header-align="center"
-            >
+            <ElTableColumn label="幢号" prop="houseNo" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.homesteadLandLocation" />
+                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="面积" prop="area" align="center" header-align="center">
+            <ElTableColumn label="室号" prop="houseNo" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.area" />
+                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="储藏室编号" prop="houseNo" align="center" header-align="center">
+              <template #default="scope">
+                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="车库编号" prop="houseNo" align="center" header-align="center">
+              <template #default="scope">
+                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
               </template>
             </ElTableColumn>
             <ElTableColumn :width="100" label="操作" prop="action">
@@ -103,7 +116,11 @@
             </ElTableColumn>
           </ElTable>
         </div>
-        <div class="row txt-indent-28">现予确认。</div>
+        <div class="sub-title">
+          所选房型及套数：
+          <span class="text-[#1C5DF1]">10</span>
+        </div>
+        <div class="row txt-indent-28">特此告知！</div>
         <div class="row right">移交人（捺印）：</div>
         <div class="row right">经办人（签字）：</div>
         <div class="row right">移交日期：</div>
@@ -134,30 +151,28 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
+console.log('props:', props)
+
 const defaultForm = {
-  householdId: props.householdId,
-  projectId: props.projectId,
-  uid: props.uid,
   govName: '', // 政府名称
-  landNo: '', // 择址号
-  householdler: '', // 户主（择址人）
-  doorNo: props.doorNo, // 户号
+  houseNo: '', // 择房号
+  householdler: '', // 户主（择房人）
+  doorNo: '', // 户号
   relocationAddress: '' // 迁出地址
 }
 
 const defaultRow = {
-  householdId: props.householdId,
-  projectId: props.projectId,
-  uid: props.uid,
-  doorNo: props.doorNo,
   landBlock: '', // 区块
-  homesteadLandNumber: '', // 宅基地编号
-  homesteadLandLocation: '', // 宅基地位置
-  area: '' // 面积
+  houseType: '', // 房型
+  houseNo: '', // 幢号
+  roomNo: '', // 室号
+  storageRoomNumber: '', // 储藏室编号
+  garageNumber: '' // 车库编号
 }
 
 const form = ref<any>(defaultForm)
@@ -239,6 +254,10 @@ const onSave = () => {
   color: #171718;
   align-items: center;
 
+  .empty {
+    width: 20px;
+  }
+
   &.right {
     justify-content: right;
     padding-right: 200px;
@@ -246,6 +265,7 @@ const onSave = () => {
 }
 
 .input-txt {
+  margin: 0;
   font-size: 14px;
   border-bottom: 1px solid;
   outline: none;
@@ -275,8 +295,8 @@ const onSave = () => {
   width: 200px;
 }
 
-.w-700 {
-  width: 700px;
+.w-400 {
+  width: 400px;
 }
 
 .txt-indent-28 {

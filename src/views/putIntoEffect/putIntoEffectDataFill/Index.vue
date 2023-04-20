@@ -145,37 +145,41 @@
         @update-data="getLandlordInfo"
       />
 
-      <!-- 人口核定 -->
+      <!-- 资格认定 -- 人口核定 -->
       <populationCheck
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 
-      <!-- 房屋确权 -->
+      <!-- 资格认定 -- 房屋确权 -->
       <houseConfirmation
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
       />
 
+      <!-- 安置确认 -- 搬迁安置 -->
       <relocation
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[2] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 2"
       />
 
+      <!-- 安置确认 -- 生产安置 -->
       <produce
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[3] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 2"
       />
 
+      <!-- 安置确认 -- 坟墓安置 -->
       <gaveArrange
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId + 2 === ReportTabIds[4] && tabCurrentId == 2"
+        v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
 
+      <!-- 移民建卡 -->
       <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
 
       <!-- 动迁安置 -- 房屋腾空确认单 -->
@@ -208,6 +212,42 @@
       <!-- 动迁安置 -- 择址确认单 -->
       <site-selection
         v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[3]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 建房告知单 -->
+      <build-house
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[4]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 择房交付告知单 -->
+      <optional-delivery
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[5]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 坟墓择址确认单 -->
+      <tomb-address
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[6]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+      />
+
+      <!-- 动迁安置 -- 坟墓迁移告知单 -->
+      <tomb-migrations
+        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[7]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -324,24 +364,28 @@ import LandBasicInfo from './AssetEvaluation/LandBasicInfo/Index.vue' // 资产�
 import LandGreenSeedlings from './AssetEvaluation/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
 import Grave from './AssetEvaluation/Grave/Index.vue' // 资产评估 -- 坟墓评估
 
-import populationCheck from './populationCheck/Index.vue'
-import relocation from './relocation/Index.vue'
-import houseConfirmation from './houseConfirmation/Index.vue'
-import produce from './produce/Index.vue'
-import gaveArrange from './gaveArrange/Index.vue'
-import createCard from './createCard/Index.vue'
+import populationCheck from './populationCheck/Index.vue' // 资格认定 -- 人口核定
+import houseConfirmation from './houseConfirmation/Index.vue' // 资格认证 -- 房屋确权
+
+import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
+import produce from './produce/Index.vue' // 安置确认 -- 生产安置
+import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
+import createCard from './createCard/Index.vue' // 移民建卡
 
 import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
 import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
 import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
+import BuildHouse from './RelocationResettle/BuildHouse/Index.vue' // 动迁安置 -- 建房告知单
+import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' // 动迁安置 -- 择房交付告知单
+import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
+import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
 import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 生产用地
 import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 社保缴费
 import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
 import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
 
-// import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
@@ -363,8 +407,6 @@ const printIcon = useIcon({ icon: 'ion:print-outline' })
 const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
-    console.log(res)
-
     baseInfo.value = res
   })
 }

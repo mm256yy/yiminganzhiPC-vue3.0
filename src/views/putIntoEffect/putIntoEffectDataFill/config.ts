@@ -90,14 +90,7 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
-  // 安置确认
-  {
-    type: 2,
-    name: '搬迁安置',
-    id: ReportTabIds[0],
-    icon: 'mdi:lorry',
-    active: false
-  },
+  // 动迁安置
   {
     type: 5,
     name: '房屋腾空确认单',
