@@ -154,7 +154,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
-import VillageEditForm from '@/views/BasicInfor/Village/components/EditForm.vue'
+import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
   show: any
   actionType: 'add' | 'edit' | 'view'

@@ -110,7 +110,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 
-import VillageEditForm from '@/views/BasicInfor/Village/components/EditForm.vue'
+import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'

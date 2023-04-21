@@ -318,14 +318,14 @@ import {
   ReportTabIds,
   EnterpriseTabs,
   IndividualBTabs,
-  villageInfoCTabs
+  villageInfoCTabs,
+  FillStatus
 } from './config'
 
 import {
   getLandlordByIdApi,
   reportLandlordApi
 } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
-import { FillStatus } from '@/views/putIntoEffect/putIntoEffectDataFill/config'
 
 import MainHouse from './AssetEvaluation/MainHouse/Index.vue' // 资产评估 -- 房屋主体评估
 import HouseDecoration from './AssetEvaluation/HouseDecoration/Index.vue' // 资产评估 -- 房屋装修评估

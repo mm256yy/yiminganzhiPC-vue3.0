@@ -153,11 +153,7 @@ import {
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
-import {
-  locationTypes,
-  FillStatusEnums,
-  FillStatus
-} from '@/views/putIntoEffect/putIntoEffectDataFill/config'
+import { locationTypes, FillStatusEnums, FillStatus } from '../putIntoEffectDataFill/config'
 import { useRouter } from 'vue-router'
 import type {
   LandlordDtoType,
