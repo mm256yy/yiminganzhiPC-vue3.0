@@ -1,5 +1,5 @@
 // tab 唯一标识
-export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8]
+export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
@@ -36,14 +36,14 @@ export const ReportTabs = [
     type: 0,
     name: '土地基本情况评估',
     id: ReportTabIds[4],
-    icon: 'mdi:user-details',
+    icon: 'mdi:pine-tree',
     active: false
   },
   {
     type: 0,
     name: '土地青苗及附着物评估',
     id: ReportTabIds[5],
-    icon: 'mdi:user-details',
+    icon: 'mdi:pine-tree',
     active: false
   },
   {
@@ -88,6 +88,91 @@ export const ReportTabs = [
     name: '坟墓安置',
     id: ReportTabIds[2],
     icon: 'tabler:grave-2',
+    active: false
+  },
+  // 动迁安置
+  {
+    type: 5,
+    name: '房屋腾空确认单',
+    id: ReportTabIds[0],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 5,
+    name: '青苗腾空确认单',
+    id: ReportTabIds[1],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    type: 5,
+    name: '择房确认单',
+    id: ReportTabIds[2],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 5,
+    name: '择址确认单',
+    id: ReportTabIds[3],
+    icon: 'pixelarticons:buildings',
+    active: false
+  },
+  {
+    type: 5,
+    name: '建房告知单',
+    id: ReportTabIds[4],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 5,
+    name: '择房交付告知单',
+    id: ReportTabIds[5],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 5,
+    name: '坟墓择址确认单',
+    id: ReportTabIds[6],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    type: 5,
+    name: '坟墓迁移告知单',
+    id: ReportTabIds[7],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    type: 5,
+    name: '生产用地交付告知单',
+    id: ReportTabIds[8],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    type: 5,
+    name: '社保缴费确认单',
+    id: ReportTabIds[9],
+    icon: 'mdi:user-details',
+    active: false
+  },
+  {
+    type: 5,
+    name: '自建房验收告知单',
+    id: ReportTabIds[10],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 5,
+    name: '安置进度管理',
+    id: ReportTabIds[11],
+    icon: 'pixelarticons:buildings',
     active: false
   }
 ]
@@ -240,14 +325,47 @@ export const FlowTabs = [
   },
   {
     id: 5,
-    name: '安置状态'
+    name: '动迁安置'
   }
 ]
-// 上报状态
-export const ReportStatus = {
-  ReportSucceed: 'ReportSucceed',
-  UnReport: 'UnReport'
+
+// 淹没区，建设区，影响区，重叠区
+export const locationTypes = [
+  {
+    label: '淹没区',
+    value: 'SubmergedArea'
+  },
+  {
+    label: '建设区',
+    value: 'ConstructionArea'
+  },
+  {
+    label: '影响区',
+    value: 'InfluenceArea'
+  },
+  {
+    label: '重叠区',
+    value: 'OverlappingArea'
+  }
+]
+
+// 填报状态
+export const FillStatus = {
+  Fill: 'Fill',
+  UnFill: 'UnFill'
 }
+
+// 填报状态枚举
+export const FillStatusEnums = [
+  {
+    label: '已填报',
+    value: 'Fill'
+  },
+  {
+    label: '未填报',
+    value: 'UnFill'
+  }
+]
 
 // 生产安置方式
 // 农业安置、社保安置、一次性补偿、有土安置、基本生活保障安置、其他安置方式

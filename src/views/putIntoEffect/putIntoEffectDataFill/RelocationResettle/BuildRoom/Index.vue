@@ -1,0 +1,312 @@
+<template>
+  <WorkContentWrap>
+    <div class="table-wrap !py-12px !mt-0px">
+      <div class="flex items-center justify-between pb-12px">
+        <div> </div>
+        <ElSpace>
+          <ElButton
+            :icon="saveIcon"
+            type="primary"
+            class="!bg-[#30A952] !border-[#30A952]"
+            @click="onSave"
+          >
+            保存
+          </ElButton>
+        </ElSpace>
+      </div>
+      <div class="title">农村移民自建房验收告知单</div>
+      <div class="content-wrap">
+        <div class="row">
+          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入业主名称" />
+          业主：
+        </div>
+        <div class="row">
+          <div class="txt-indent-28"
+            >根据农村宅基地自建房的进度情况及你户的自建房验收申请，根据有关条例对你户的自建房开展了验收，现将验收信息予以告知：
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="txt-indent-28">户主</div>
+          <input
+            class="input-txt w-200 ml-10 mr-10"
+            v-model="form.householdler"
+            placeholder="请输入户主名称"
+          />
+          户号：
+          <input
+            class="input-txt w-200 ml-10 mr-10"
+            v-model="form.doorNo"
+            placeholder="请输入户号"
+          />
+        </div>
+
+        <div class="table-area">
+          <div class="table-head">
+            <div class="table-tit">房屋信息登记：</div>
+            <div class="table-action">
+              <el-button type="primary" @click="onAddRow" :icon="addIcon">添加行</el-button>
+            </div>
+          </div>
+          <el-table :data="tableData" style="width: 100%">
+            <el-table-column
+              type="index"
+              label="序号"
+              width="80"
+              align="center"
+              header-align="center"
+            />
+            <el-table-column
+              prop="houseLandNum"
+              label="宅基地编号"
+              width="180"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                <ElInput v-model="row.houseLandNum" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="wall" label="墙壁" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.wall" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="hydropower" label="水电" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.hydropower" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="waterproof" label="防水" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.waterproof" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="piping" label="管道" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.piping" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="ground" label="地面" align="center" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.ground" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="isPassCheck"
+              label="是否通过验收"
+              align="center"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                <el-switch v-model="row.isPassCheck" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="remark" label="备注" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.remark" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="option"
+              label="操作"
+              width="180"
+              align="center"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]"
+                  >删除</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+
+        <div class="row txt-indent-28">特此告知！</div>
+        <div class="row right">移交人（捺印）：</div>
+        <div class="row right">经办人（签字）：</div>
+        <div class="row right">移交日期：</div>
+      </div>
+    </div>
+  </WorkContentWrap>
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { WorkContentWrap } from '@/components/ContentWrap'
+// import { useDictStoreWithOut } from '@/store/modules/dict'
+import {
+  ElTable,
+  ElTableColumn,
+  ElInput,
+  ElButton,
+  ElSwitch,
+  ElMessageBox,
+  ElMessage
+} from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
+
+interface PropsType {
+  doorNo: string
+  householdId: number
+  projectId: number
+  uid: string
+}
+
+const props = defineProps<PropsType>()
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+
+console.log('props:', props)
+
+// const dictStore = useDictStoreWithOut()
+// const dictObj = computed(() => dictStore.getDictObj)
+const tableData = ref<any[]>([])
+
+const defaultForm = {
+  govName: '', // 业主
+  householdler: '', // 户主（择房人）
+  doorNo: '' // 户号
+}
+
+const defaultRow = {
+  remark: '',
+  isPassCheck: false,
+  ground: '',
+  piping: '',
+  waterproof: '',
+  hydropower: '',
+  wall: '',
+  houseLandNum: ''
+}
+
+const form = ref<any>(defaultForm)
+
+// 获取列表数据
+const getList = () => {
+  // const params: any = {
+  //   doorNo: props.doorNo,
+  //   householdId: props.householdId,
+  //   projectId: props.projectId,
+  //   status: 'implementation',
+  //   size: 1000
+  // }
+  // getMainHouseListApi(params).then((res) => {
+  //   tableData.value = res.content
+  // })
+}
+
+// 添加行
+const onAddRow = () => {
+  tableData.value.push({ ...defaultRow })
+}
+
+// 删除
+const onDelRow = (row) => {
+  if (row.id) {
+    ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+      type: 'warning',
+      cancelButtonText: '取消',
+      confirmButtonText: '确认'
+    })
+      .then(async () => {
+        // await deleteMainHouseApi(row.id)
+        getList()
+        ElMessage.success('删除成功')
+      })
+      .catch(() => {})
+  } else {
+    tableData.value.splice(tableData.value.indexOf(row), 1)
+  }
+}
+
+// 保存
+const onSave = () => {
+  const params = {
+    ...form.value,
+    tableData: tableData.value
+  }
+  console.log(params, '参数')
+  // saveMainHouseApi(params).then(() => {
+  //   ElMessage.success('操作成功！')
+  //   getList()
+  // })
+}
+</script>
+
+<style lang="less" scoped>
+.title {
+  width: 100%;
+  padding: 45px 0 40px 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #171718;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.row {
+  display: flex;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 30px;
+  color: #171718;
+  align-items: center;
+
+  &.right {
+    justify-content: right;
+    padding-right: 200px;
+  }
+}
+
+.input-txt {
+  margin: 0;
+  font-size: 14px;
+  border-bottom: 1px solid;
+  outline: none;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+
+.mr-10 {
+  margin-right: 10px;
+}
+
+.w-150 {
+  width: 150px;
+}
+
+.w-200 {
+  width: 200px;
+}
+
+.w-400 {
+  width: 400px;
+}
+
+.txt-indent-28 {
+  text-indent: 28px;
+}
+
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+
+  .table-tit {
+    font-weight: bold;
+  }
+
+  .table-action {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+  }
+}
+</style>
