@@ -57,7 +57,7 @@
           :row-class-name="tableRowClassName"
           :border="true"
         >
-          <ElTableColumn label="类型" align="center" prop="type" header-align="left">
+          <ElTableColumn label="类型" align="center" prop="type" header-align="center">
             <template #default="scope">
               <b>{{ scope.row.type }}</b>
             </template>
@@ -68,7 +68,7 @@
             align="left"
             :width="200"
             prop="name"
-            header-align="left"
+            header-align="right"
           >
             <template #default="scope">
               <b
@@ -84,12 +84,12 @@
               </div>
             </template>
           </ElTableColumn>
-          <ElTableColumn label="" align="center" prop="subname" header-align="left" />
-          <ElTableColumn label="单位" align="center" prop="unit" header-align="left" />
-          <ElTableColumn label="数量" align="center" prop="num" header-align="left" />
-          <ElTableColumn label="补偿单价" align="center" prop="price" header-align="left" />
-          <ElTableColumn label="补偿金额（元）" align="center" prop="money" header-align="left" />
-          <ElTableColumn label="备注" align="left" prop="center" header-align="left" />
+          <ElTableColumn label="" align="center" prop="subname" header-align="center" />
+          <ElTableColumn label="单位" align="center" prop="unit" header-align="center" />
+          <ElTableColumn label="数量" align="center" prop="num" header-align="center" />
+          <ElTableColumn label="补偿单价" align="center" prop="price" header-align="center" />
+          <ElTableColumn label="补偿金额（元）" align="center" prop="money" header-align="center" />
+          <ElTableColumn label="备注" align="left" prop="center" header-align="center" />
         </ElTable>
       </div>
       <div class="pb-12px mt-20px">
@@ -761,14 +761,6 @@ const onFormPupClose = (flag: boolean) => {
 
 :deep(.fylist .el-table__body .el-table__row:nth-child(23) .name-row) {
   border-right: 1px solid #e5e7eb;
-}
-
-:deep(.fylist .el-table__header .el-table__cell) {
-  border-right: none;
-
-  .cell {
-    text-align: center;
-  }
 }
 
 :deep(.fylist .el-table--border::before) {
