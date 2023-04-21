@@ -27,7 +27,7 @@
         <ElInput v-model="form.address" class="!w-full" placeholder="请输入安置住址" />
       </ElFormItem>
       <ElFormItem label="户型/套型" prop="doorModel">
-        <ElSelect clearable doorModel v-model="form.sex" class="!w-full">
+        <ElSelect clearable doorModel v-model="form.doorModel" class="!w-full">
           <ElOption
             v-for="item in dictObj[363]"
             :key="item.value"
@@ -104,7 +104,7 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 // import { getassetHouse, delassetHouse } from '@/api/putIntoEffect/landlordCheck'
-import { addHaeeossstu, updateAssetHouse } from '@/api/putIntoEffect/landlordCheck'
+import { addRelocationApi, updateRelocationApi } from '@/api/putIntoEffect/relocation'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/populationCheck'
 interface PropsType {
@@ -112,6 +112,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   row?: DemographicDtoType | null | undefined
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -125,7 +126,6 @@ const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
-
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<DemographicDtoType, 'id'> = {
@@ -236,15 +236,23 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
+  const { id, projectId, status } = props.baseInfo
+  const baseInfo = {
+    householdId: id,
+    projectId,
+    status
+  }
   if (props.actionType === 'add') {
-    await addHaeeossstu({
+    await addRelocationApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      ...baseInfo
     })
   } else {
-    await updateAssetHouse({
+    await updateRelocationApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      ...baseInfo
     })
   }
   ElMessage.success('操作成功！')
@@ -257,12 +265,12 @@ const onSubmit = debounce((formEl) => {
     if (valid) {
       // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
-        ...form.value,
-        occupation: form.value.occupation ? JSON.stringify(form.value.occupation) : '',
-        insuranceType: form.value.insuranceType ? form.value.insuranceType.toString() : '',
-        cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
-        householdPic: JSON.stringify(householdPic.value),
-        otherPic: JSON.stringify(otherPic.value)
+        ...form.value
+        // occupation: form.value.occupation ? JSON.stringify(form.value.occupation) : '',
+        // insuranceType: form.value.insuranceType ? form.value.insuranceType.toString() : '',
+        // cardPic: JSON.stringify(cardFront.value.concat(cardEnd.value)),
+        // householdPic: JSON.stringify(householdPic.value),
+        // otherPic: JSON.stringify(otherPic.value)
       }
       submit(data)
     } else {

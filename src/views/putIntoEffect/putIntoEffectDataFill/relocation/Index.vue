@@ -71,7 +71,7 @@
               <div class="!w-150px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="财产户" prop="hasPropertyAccount">
-              <ElSelect class="!w-150px" clearable v-model="form.hasPropertyAccount">
+              <ElSelect class="!w-150px" clearable v-model="form.hasPropertyAccount" disabled>
                 <ElOption
                   v-for="item in yesAndNoEnums"
                   :key="item.label"
@@ -151,6 +151,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
+      :baseInfo="baseInfo"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -182,7 +183,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getassetHouse, delassetHouse } from '@/api/putIntoEffect/landlordCheck'
+import { getRelocationListApi, delRelocationApi } from '@/api/putIntoEffect/relocation'
 import { updateLandlordApi } from '@/api/workshop/landlord/service'
 const dictStore = useDictStoreWithOut()
 
@@ -190,7 +191,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 interface PropsType {
   doorNo: string
-  baseInfo
+  baseInfo: any
 }
 const yesAndNoEnums = [
   {
@@ -208,14 +209,15 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const { register, tableObject, methods } = useTable({
-  getListApi: getassetHouse,
-  delListApi: delassetHouse
+  getListApi: getRelocationListApi,
+  delListApi: delRelocationApi
 })
 const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.baseInfo.status
 }
 // console.log(props.baseInfo, 'baseInfobaseInfo')
 
@@ -248,7 +250,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorModel',
+    field: 'doorModelText',
     label: '户型/套型',
     search: {
       show: false
@@ -256,29 +258,14 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'modelArea',
+    field: 'modelAreaText',
     label: '套型面积',
     search: {
       show: false
     }
   },
-  // {
-  //   width: 180,
-  //   field: 'way',
-  //   label: '安置方式',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'type',
-  //   label: '建房形式',
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
-    field: 'remake',
+    field: 'remark',
     label: '备注',
     search: {
       show: false

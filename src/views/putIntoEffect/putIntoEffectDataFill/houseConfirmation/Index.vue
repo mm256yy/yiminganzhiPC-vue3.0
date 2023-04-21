@@ -66,6 +66,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
+      :baseInfo="baseInfo"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -86,6 +87,7 @@ import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -101,7 +103,8 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.baseInfo.status
 }
 
 getList()

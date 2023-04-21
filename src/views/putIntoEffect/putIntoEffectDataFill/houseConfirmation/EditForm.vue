@@ -109,6 +109,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   row
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -233,15 +234,22 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: any) => {
+  const { status, projectId, id } = props.baseInfo
   if (props.actionType === 'add') {
     await addHouseApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      status,
+      projectId,
+      householdId: id
     })
   } else {
     await updateHouseApi({
       ...data,
-      doorNo: props.doorNo
+      doorNo: props.doorNo,
+      status,
+      projectId,
+      householdId: id
     })
   }
   ElMessage.success('操作成功！')

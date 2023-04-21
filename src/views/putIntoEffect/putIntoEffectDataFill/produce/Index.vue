@@ -4,9 +4,9 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <!-- <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">保存</ElButton>
-        </ElSpace>
+        </ElSpace> -->
       </div>
       <div class="formBox">
         <ElForm
@@ -23,30 +23,30 @@
           </div>
           <div style="display: flex">
             <ElFormItem label="家庭总人数" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农村移民" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农村移民" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农业随迁" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农业随迁" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
           <div style="display: flex">
             <ElFormItem label="增计人口" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="其他人口" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.otherPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="安置总人数" prop="familyNum">
-              <div class="!w-150px">3&nbsp; <span>(人)</span></div>
+              <div class="!w-150px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
         </ElForm>
@@ -81,6 +81,7 @@
           </div>
         </template>
         <template #action="{ row }">
+          <!-- :delete="row.relation == 1 ? false : true" -->
           <TableEditColumn
             :view-type="'link'"
             :icons="[
@@ -94,7 +95,7 @@
             :row="row"
             @edit="onEditRow(row)"
             @delete="onDelRow"
-            :delete="row.relation == 1 ? false : true"
+            :delete="true"
           />
         </template>
       </Table>
@@ -119,6 +120,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
+      :baseInfo="baseInfo"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -153,6 +155,7 @@ import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -168,16 +171,12 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  projectId: props.baseInfo.projectId,
+  status: props.baseInfo.status
 }
 
 getList()
-// const demographicHeader:any = reactive({})
-// const getHeaderData = ():void => {
-//   getHeadApi().then((res) => {
-
-//   })
-// }
 const form = ref<any>({})
 const rules = ref<any>({})
 const schema = reactive<CrudSchema[]>([
@@ -225,14 +224,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'way',
+    field: 'settingWayText',
     label: '安置方式',
     search: {
       show: false
     }
   },
   {
-    field: 'checkRemark',
+    field: 'remark',
     label: '备注',
     search: {
       show: false

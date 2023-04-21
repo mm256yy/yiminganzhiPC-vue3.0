@@ -148,12 +148,14 @@
       <!-- 人口核定 -->
       <populationCheck
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 
       <!-- 房屋确权 -->
       <houseConfirmation
         :doorNo="doorNo"
+        :baseInfo="baseInfo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
       />
