@@ -141,6 +141,7 @@ import { ref, computed } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
+  ElSpace,
   ElTable,
   ElTableColumn,
   ElInput,

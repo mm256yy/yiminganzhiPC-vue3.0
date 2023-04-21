@@ -169,6 +169,7 @@
 import { ref, computed } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
+  ElSpace,
   ElTable,
   ElTableColumn,
   ElInput,
