@@ -782,4 +782,8 @@ const onFormPupClose = (flag: boolean) => {
 :deep(.fylist .el-table--border::after) {
   background: #fff;
 }
+
+:deep(.fylist .el-table--border .el-table__inner-wrapper::after) {
+  background: #fff;
+}
 </style>
