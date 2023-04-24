@@ -450,7 +450,6 @@ const jump = (index) => {
 
 // 内容部分滚动事件
 const listenScroll = (scrollTop) => {
-  console.log('scrollTop:', scrollTop)
   contentLocation.value.forEach((el, index) => {
     if (scrollTop === 0) {
       activeIndex.value = 0
@@ -461,7 +460,6 @@ const listenScroll = (scrollTop) => {
 }
 
 const scroll = ({ scrollTop }) => {
-  console.log('scrollTop:', scrollTop)
   listenScroll(scrollTop)
 }
 </script>
