@@ -430,8 +430,10 @@ onMounted(() => {
   floors.forEach((floor: any, index: number) => {
     if (index === 0) {
       arr.push(0)
+    } else if (index === 1) {
+      arr.push(floor.offsetTop + 130)
     } else {
-      arr.push(floor.offsetTop + 140)
+      arr.push(floor.offsetTop + 220)
     }
   })
   contentLocation.value = arr
