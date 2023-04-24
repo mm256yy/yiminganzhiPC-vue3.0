@@ -6,7 +6,7 @@ export interface LandBasicInfoDtoType {
   uid: string
   status: string
   groupName: string
-  name: string
+  landName: string
   locationType: string
   growers: string
   landArea: number
