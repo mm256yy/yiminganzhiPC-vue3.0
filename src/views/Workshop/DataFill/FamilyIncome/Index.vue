@@ -9,8 +9,9 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
+            保存
+          </ElButton>
           <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
         </ElSpace>
       </div>
@@ -18,9 +19,9 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn label="" :width="180" prop="type" align="center" header-align="center">
           <template #default="{ row }">
-            <div v-if="row.subtotal" class="total-item"
-              >小计：{{ getSubtotal(row.type).toFixed(2) }}</div
-            >
+            <div v-if="row.subtotal" class="total-item">
+              小计：{{ getSubtotal(row.type).toFixed(2) }}
+            </div>
             <div v-else-if="row.total" class="total-item">总计：{{ isNaN(total) ? 0 : total }}</div>
             <div v-else>
               {{
@@ -140,12 +141,9 @@ const getOption = async () => {
   })
   result.content.forEach((item) => {
     for (const key in item) {
-      // console.log('item[key]', item[key]) //值
-
       key == 'id' && Reflect.deleteProperty(item, 'id')
     }
   })
-  // console.log(tableData.value)
   return result.content || []
 }
 
@@ -226,15 +224,6 @@ const getList = async () => {
 getList()
 
 const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
-  // if (columnIndex == 1) {
-  //   //合并相同的名字
-  //   let nameSpan = getSpanNumber(tableData.value, 'type')
-  //   return {
-  //     rowspan: nameSpan[rowIndex],
-  //     colspan: 1
-  //   }
-  // }
-
   if (columnIndex === 1) {
     if (rowIndex !== 0 && row.type === tableData.value[rowIndex - 1].type) {
       return {
@@ -249,39 +238,6 @@ const spanMethod = ({ row, rowIndex, columnIndex }: SpanMethodProps) => {
     }
   }
 }
-// 合并单元格方法
-// function getSpanNumber(data, prop) {
-//   //data要处理的数组，prop要合并的属性，比如name
-
-//   //数组的长度，有时候后台可能返回个null而不是[]
-//   let length = Array.isArray(data) ? data.length : 0
-//   if (length > 0) {
-//     //用于标识位置
-//     let position = 0
-//     //用于对比的数据
-//     let temp = data[0][prop]
-//     //要返回的结果
-//     let result = [1]
-//     //假设数据是AABCC，我们的目标就是返回20120
-//     for (let i = 1; i < length; i++) {
-//       if (data[i][prop] == temp) {
-//         //标识位置的数据加一
-//         result[position] += 1
-//         //当前位置添0
-//         result[i] = 0
-//       } else {
-//         //不相同时，修改标识位置，该位置设为1，修改对比值
-//         position = i
-//         result[i] = 1
-//         temp = data[i][prop]
-//       }
-//     }
-//     //返回结果
-//     return result
-//   } else {
-//     return [0]
-//   }
-// }
 
 // 小计
 const getSubtotal = (type: string) => {
@@ -306,8 +262,6 @@ const total = computed(() => {
 
 const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  // realTableData.push({ configType: 'PeasantHousehold' })
-
   saveFamilyIncomeListApi(realTableData).then(() => {
     ElMessage.success('操作成功！')
     getList()
