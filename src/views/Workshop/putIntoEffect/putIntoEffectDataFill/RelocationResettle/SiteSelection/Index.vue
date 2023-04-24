@@ -58,7 +58,7 @@
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
           </div>
-          <ElTable :data="tableData" style="width: 100%" class="mb-20">
+          <ElTable :data="tableData" stripe style="width: 100%" class="mb-20">
             <ElTableColumn
               label="序号"
               :width="60"
