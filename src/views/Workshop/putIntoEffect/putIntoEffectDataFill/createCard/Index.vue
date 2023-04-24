@@ -77,8 +77,9 @@
                   (scope.row.name.includes('小计') || scope.row.name.includes('合计')) &&
                   scope.row.name !== '其他费用/专项费小计'
                 "
-                >{{ scope.row.name }}</b
               >
+                {{ scope.row.name }}
+              </b>
               <div v-else>
                 <span>{{ scope.row.name }}</span>
               </div>
@@ -95,13 +96,12 @@
       <div class="pb-12px mt-20px">
         <div class="title"> 备注</div>
         <div class="text">1. 补偿费、异地搬迁补助费、奖励费等拨付至甲方指定银行</div>
-        <div class="text mt-20px"
-          >2. 搬迁补助费、过渡资金补助费、其他补助费、临时安置补助费拨付至乙方指定银行。</div
-        >
-        <div class="text mt-20px"
-          >3.
-          临时安置补助费首次发放时间为乙方腾空被拆迁房屋并办理交付手续之日起十五日内，每半年发放一次，截止时间为安置房选房的当月。</div
-        >
+        <div class="text mt-20px">
+          2. 搬迁补助费、过渡资金补助费、其他补助费、临时安置补助费拨付至乙方指定银行。
+        </div>
+        <div class="text mt-20px">
+          3.临时安置补助费首次发放时间为乙方腾空被拆迁房屋并办理交付手续之日起十五日内，每半年发放一次，截止时间为安置房选房的当月。
+        </div>
       </div>
     </div>
     <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
@@ -481,6 +481,7 @@ const fyTableObject = [
     remark: ''
   }
 ]
+
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   console.log(row, column)
   if (columnIndex === 0) {
@@ -549,10 +550,12 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
     }
   }
 }
+
 // 根据户号来做筛选
 tableObject.params = {
   doorNo: props.doorNo
 }
+
 getList()
 
 const schema = reactive<CrudSchema[]>([
