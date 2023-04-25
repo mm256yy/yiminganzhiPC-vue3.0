@@ -45,7 +45,7 @@
             {{ row.townName }}
           </template>
           <template #action="{ row }">
-            <TableEditColumn :row="row" :icons="otherIcons" @edit="onEdit" @delete="onDelete" />
+            <TableEditColumn :row="row" :icons="otherIcons" :delete="false" @edit="onEdit" />
           </template>
         </Table>
       </ContentWrap>
@@ -64,13 +64,13 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElMessageBox, ElMessage, ElTreeSelect, ElInput } from 'element-plus'
+import { ElButton, ElMessageBox, ElTreeSelect, ElInput } from 'element-plus'
 import { useTable } from '@/hooks/web/useTable'
 import { Table, TableEditColumn } from '@/components/Table'
 import { ContentWrap } from '@/components/ContentWrap'
 import { TableColumn, TableColumnActionIcon } from '@/types/table'
 import { ProjectDtoType, ProjectConfigType, ProjectQueryType } from '@/api/project/types'
-import { listProjectApi, deleteProjectApi, projectConfigApi } from '@/api/project'
+import { listProjectApi, projectConfigApi } from '@/api/project'
 // import { DistrictNodeType } from '@/api/district/types'
 // import { TreeNodeType } from '@/api/common'
 import { getDistrictChildrenApi } from '@/api/district'
@@ -189,15 +189,15 @@ const onEdit = (row: ProjectDtoType) => {
   showEdit.value = true
 }
 
-const onDelete = (row: ProjectDtoType) => {
-  ElMessageBox.confirm(`确定要删除项目 ${row.name} 吗？`)
-    .then(async () => {
-      await deleteProjectApi(row.id)
-      ElMessage.success('删除用户成功')
-      getList()
-    })
-    .catch(() => {})
-}
+// const onDelete = (row: ProjectDtoType) => {
+//   ElMessageBox.confirm(`确定要删除项目 ${row.name} 吗？`)
+//     .then(async () => {
+//       await deleteProjectApi(row.id)
+//       ElMessage.success('删除用户成功')
+//       getList()
+//     })
+//     .catch(() => {})
+// }
 
 const onAddProject = () => {
   currentRow.value = undefined
