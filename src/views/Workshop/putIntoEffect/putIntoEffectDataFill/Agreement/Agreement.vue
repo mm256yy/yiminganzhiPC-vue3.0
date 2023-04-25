@@ -306,9 +306,9 @@
         <div class="agm-nav">
           <div class="toc-box">
             <div
-              :class="['toc-item', item.id === activeIndex + 1 ? 'active' : '']"
               v-for="(item, index) in navList"
               :key="item.id"
+              :class="['toc-item', item.id === activeIndex ? 'active' : '']"
               @click="jump(index)"
             >
               <div>{{ item.name }}</div>
@@ -333,57 +333,57 @@ interface NavType {
 
 const navList = ref<NavType[]>([
   {
-    id: 1,
+    id: 0,
     name: '第一条 基础信息',
     active: false
   },
   {
-    id: 2,
+    id: 1,
     name: '第二条 安置方式',
     active: false
   },
   {
-    id: 3,
+    id: 2,
     name: '第三条 安置房',
     active: false
   },
   {
-    id: 4,
+    id: 3,
     name: '第四条 补偿费、补助费及奖励费',
     active: false
   },
   {
-    id: 5,
+    id: 4,
     name: '第五条 安置房房款结算及交付',
     active: false
   },
   {
-    id: 6,
+    id: 5,
     name: '第六条',
     active: false
   },
   {
-    id: 7,
+    id: 6,
     name: '第七条',
     active: false
   },
   {
-    id: 8,
+    id: 7,
     name: '第八条',
     active: false
   },
   {
-    id: 9,
+    id: 8,
     name: '第九条',
     active: false
   },
   {
-    id: 10,
+    id: 9,
     name: '第十条',
     active: false
   },
   {
-    id: 11,
+    id: 10,
     name: '第十一条',
     active: false
   }
@@ -427,8 +427,14 @@ const scrollRef = ref()
 onMounted(() => {
   const floors = document.querySelectorAll('.floor-item')
   const arr: any[] = []
-  floors.forEach((floor: any) => {
-    arr.push(floor.offsetTop)
+  floors.forEach((floor: any, index: number) => {
+    if (index === 0) {
+      arr.push(0)
+    } else if (index === 1) {
+      arr.push(floor.offsetTop + 130)
+    } else {
+      arr.push(floor.offsetTop + 220)
+    }
   })
   contentLocation.value = arr
 })
@@ -445,8 +451,10 @@ const jump = (index) => {
 // 内容部分滚动事件
 const listenScroll = (scrollTop) => {
   contentLocation.value.forEach((el, index) => {
-    if (scrollTop >= el) {
-      activeIndex.value = index
+    if (scrollTop === 0) {
+      activeIndex.value = 0
+    } else if (scrollTop >= el) {
+      activeIndex.value = index + 1
     }
   })
 }

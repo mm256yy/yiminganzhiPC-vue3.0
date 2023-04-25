@@ -37,12 +37,12 @@
         <ElTableColumn
           label="地块名称"
           :width="150"
-          prop="name"
+          prop="landName"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.name" />
+            <ElInput placeholder="请输入" v-model="scope.row.landName" />
           </template>
         </ElTableColumn>
         <!-- 字段未定 -->
@@ -230,7 +230,7 @@ const defaultRow = {
   uid: props.uid,
   status: 'implementation',
   groupName: '',
-  name: '',
+  landName: '',
   locationType: '',
   growers: '',
   landArea: 0,

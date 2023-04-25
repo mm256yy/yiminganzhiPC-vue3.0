@@ -37,11 +37,7 @@
             placeholder="请输入户主姓名"
           />
           户号：
-          <input
-            class="input-txt w-200 ml-10"
-            v-model="form.householdler"
-            placeholder="请输入户号"
-          />
+          <input class="input-txt w-200 ml-10" v-model="form.doorNo" placeholder="请输入户号" />
         </div>
         <div class="row">
           <div class="txt-indent-28">迁出地址：</div>
@@ -58,7 +54,7 @@
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
           </div>
-          <ElTable :data="tableData" style="width: 100%" class="mb-20">
+          <ElTable :data="tableData" stripe style="width: 100%" class="mb-20">
             <ElTableColumn
               label="序号"
               :width="60"

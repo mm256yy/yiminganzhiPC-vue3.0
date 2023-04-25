@@ -9,7 +9,7 @@
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="true">
       <template #mapPic>
-        <span class="tips-icon">*</span>
+        <!-- <span class="tips-icon">*</span> -->
         <ElUpload
           class="w-full"
           drag
@@ -189,7 +189,7 @@ const { register, elFormRef, methods } = useForm()
 
 // 处理已上传的文件
 const handleFileList = (fileList: UploadFiles) => {
-  console.log('fileList:', fileList)
+  // console.log('fileList:', fileList)
   if (fileList && fileList.length) {
     const list = fileList
       .filter((fileItem: any) => fileItem.status === 'success')
@@ -255,9 +255,9 @@ const onSave = async () => {
   const formRef = unref(elFormRef)
   await formRef?.validate(async (isValid) => {
     if (isValid) {
-      if (!mapPic.value || !mapPic.value.length) {
-        return ElMessage.error('请上传地图JSON文件')
-      }
+      // if (!mapPic.value || !mapPic.value.length) {
+      //   return ElMessage.error('请上传地图JSON文件')
+      // }
       doSave()
     }
   })
