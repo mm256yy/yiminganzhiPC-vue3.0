@@ -55,6 +55,7 @@ export default defineComponent({
       selectedProjectId.value = id
       appStore.setUserDefaultProject(id)
       appStore.setCurrentProjectId(id)
+      appStore.setProjectStatus(project.status || '')
       if (project) {
         if (project.projectRole === ProjectRoleEnum.PROJECT_ADMIN) {
           await setPlatform('admin', addRoute)

@@ -139,6 +139,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/end',
+    name: 'End',
+    component: () => import('@/views/Workshop/EndCollection/Index.vue'),
+    meta: {
+      title: '结束实物采集',
+      hidden: false
+    }
   }
 ]
 

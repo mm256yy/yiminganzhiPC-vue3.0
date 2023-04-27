@@ -94,7 +94,7 @@ export const getPrintTemplateListApi = (params: Partial<TemplateParamsType>): Pr
  * 查询居民户头部信息
  */
 export const getLandlordHeadApi = (params: any): Promise<any> => {
-  return request.get({ url: `/peasantHousehold/head?type=${params.type}` })
+  return request.get({ url: `/peasantHousehold/head`, params })
 }
 
 /**

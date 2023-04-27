@@ -41,6 +41,8 @@ export const usePlatform = () => {
         const projectId = defaultProject.projectId || 0
         // 设置当前项目，顶部可以支持项目切换
         appStore.setCurrentProjectId(projectId)
+        // 设置项目状态
+        appStore.setProjectStatus(defaultProject.status || '')
       }
       menus = await userMenuApi(appStore.getCurrentProjectId)
       const permissions = await getPermissionApi()

@@ -23,55 +23,76 @@
         <div class="content">
           <div class="text1">
             <div>涉及总居民户</div>
-            <div class="numberBox">1000 <span>户</span> </div>
+            <div class="numberBox"
+              >{{ statisticalInfo.peasantHouseholdTotalCount }} <span>户</span>
+            </div>
           </div>
           <div class="shu"> </div>
           <div class="text2">
             <div>
-              <span>居民户 <span style="color: red">380</span> 户</span>
+              <span
+                >居民户
+                <span style="color: red">{{ statisticalInfo.notPropertyAccountCount }}</span>
+                户</span
+              >
             </div>
             <div style="margin-top: 5px">
-              <span>财产户 <span style="color: red">380</span> 户</span>
+              <span
+                >财产户
+                <span style="color: red">{{ statisticalInfo.propertyAccountCount }}</span> 户</span
+              >
             </div>
           </div>
         </div>
         <div class="content">
           <div class="text1">
             <div>涉及总人口</div>
-            <div class="numberBox">1000 <span>户</span> </div>
+            <div class="numberBox">{{ statisticalInfo.demographicCount }} <span>户</span> </div>
           </div>
           <div class="shu"> </div>
           <div class="text2">
             <div>
-              <span>搬迁安置 <span style="color: red">380</span> 户</span>
+              <span
+                >册内人口 <span style="color: red">{{ statisticalInfo.inCount }}</span> 户</span
+              >
             </div>
             <div style="margin-top: 5px">
-              <span>生产安置 <span style="color: red">380</span> 户</span>
+              <span
+                >册外人口 <span style="color: red">{{ statisticalInfo.outCount }}</span> 户</span
+              >
             </div>
           </div>
         </div>
         <div class="content content3">
           <div class="textbox">
             <div class="text">涉及个体户</div>
-            <div class="numberBox">103 <span>家</span> </div>
+            <div class="numberBox"
+              >{{ statisticalInfo.individualHouseholdTotalCount }} <span>家</span>
+            </div>
           </div>
           <div class="textbox">
-            <div class="text">设计企业</div>
-            <div class="numberBox">103 <span>家</span> </div>
+            <div class="text">涉及企业</div>
+            <div class="numberBox">{{ statisticalInfo.companyTotalCount }} <span>家</span> </div>
           </div>
         </div>
         <div class="content">
           <div class="text1">
             <div>涉及村集体</div>
-            <div class="numberBox">13 <span>个</span> </div>
+            <div class="numberBox">{{ statisticalInfo.villageTotalCount }} <span>个</span> </div>
           </div>
           <div class="shu"> </div>
           <div class="text2">
             <div>
-              <span>乡镇 <span style="color: red">3</span> 个</span>
+              <span
+                >区县 <span style="color: red">{{ statisticalInfo.areaCodeCount }}</span> 个</span
+              >
             </div>
             <div style="margin-top: 5px">
-              <span>行政村 <span style="color: red">10</span> 个</span>
+              <span
+                >自然村
+                <span style="color: red">{{ statisticalInfo.initialVillageCodeCount }}</span>
+                个</span
+              >
             </div>
           </div>
         </div>
@@ -80,53 +101,78 @@
 
     <div class="steps">
       <div style="text-align: center">
-        <el-button @click="btnClick" type="primary" style="width: 150px">
+        <el-button @click="endInvestigate" type="primary" style="width: 150px">
           <template #icon> <img src="./icon_gd.png" alt="" style="margin-bottom: 3px" /> </template>
-          数据归档
+          阶段结束
         </el-button>
       </div>
       <div class="stepsBox">
-        <el-steps :active="1" align-center>
+        <el-steps align-center>
           <el-step>
             <template #title><div class="title">实物采集数据归档</div></template>
-            <template #icon> <img src="./icon_wc.png" alt="" /> </template>
-            <template #description>
-              <div style="position: relative">
-                <div class="descriptionDiv">
-                  <div>2023-01-01</div>
-                  <div>已归档</div>
-                </div>
-              </div>
-            </template>
-          </el-step>
-          <el-step>
-            <template #title><div class="title">实物采集数据归档</div></template>
+
             <template #icon>
-              <div v-loading="true" style="left: -20px; height: 37px"></div>
+              <img v-if="stepActiveIndex <= 0" src="./icon_wwc.png" alt="" />
+              <div
+                v-else-if="stepActiveIndex === 1"
+                v-loading="true"
+                style="left: -20px; height: 37px"
+              ></div>
+              <img v-else-if="stepActiveIndex >= 2" src="./icon_wc.png" alt="" />
             </template>
+
             <template #description>
               <div style="position: relative">
                 <div class="descriptionDiv">
-                  <div>2023-01-01</div>
-                  <div>已归档</div>
+                  <div v-if="stepActiveIndex <= 0">未开始</div>
+                  <div v-else-if="stepActiveIndex === 1">进行中</div>
+                  <div v-else-if="stepActiveIndex >= 2">已完成</div>
                 </div>
               </div>
             </template>
           </el-step>
-          <el-step>
-            <template #title><div class="title">实物采集数据归档</div></template>
-            <template #icon> <img src="./icon_wwc.png" alt="" /> </template>
+          <el-step title="实物复核数据库初始化">
+            <template #title><div class="title">实物复核数据库初始化</div></template>
+            <template #icon>
+              <img v-if="stepActiveIndex <= 3" src="./icon_wwc.png" alt="" />
+              <div
+                v-else-if="stepActiveIndex === 4"
+                v-loading="true"
+                style="left: -20px; height: 37px"
+              ></div>
+              <img v-else-if="stepActiveIndex >= 5" src="./icon_wc.png" alt="" />
+            </template>
             <template #description>
               <div style="position: relative">
                 <div class="descriptionDiv">
-                  <div>2023-01-01</div>
-                  <div>已归档</div>
+                  <div v-if="stepActiveIndex <= 3">未开始</div>
+                  <div v-else-if="stepActiveIndex === 4">进行中</div>
+                  <div v-else-if="stepActiveIndex >= 5">已完成</div>
                 </div>
               </div>
             </template>
           </el-step>
-          <!-- <el-step title="实物复核数据库初始化" description="这是一段很长很长很长的描述性文字" />
-          <el-step title="实物采集结束" description="这段就没那么长了" /> -->
+          <el-step title="实物采集结束">
+            <template #title><div class="title">实物采集结束</div></template>
+            <template #icon>
+              <img v-if="stepActiveIndex <= 6" src="./icon_wwc.png" alt="" />
+              <div
+                v-else-if="stepActiveIndex === 7"
+                v-loading="true"
+                style="left: -20px; height: 37px"
+              ></div>
+              <img v-else-if="stepActiveIndex >= 8" src="./icon_wc.png" alt="" />
+            </template>
+            <template #description>
+              <div style="position: relative">
+                <div class="descriptionDiv">
+                  <div v-if="stepActiveIndex <= 6">未开始</div>
+                  <div v-else-if="stepActiveIndex === 7">进行中</div>
+                  <div v-else-if="stepActiveIndex >= 8">已完成</div>
+                </div>
+              </div>
+            </template>
+          </el-step>
         </el-steps>
       </div>
     </div>
@@ -140,27 +186,94 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useAppStore } from '@/store/modules/app'
+import { reviewProjectApi, getProjectStatisticalApi } from '@/api/project/index'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElSteps, ElStep } from 'element-plus'
-// import { useRouter } from 'vue-router'
-// import { useIcon } from '@/hooks/web/useIcon'
 import EditForm from './components/EditForm.vue'
-// const { setSearchParams } = methods
-// const downloadIcon = useIcon({ icon: 'material-symbols:check-circle-outline' })
-const btnClick = () => {
-  editFormShow.value = true
+
+interface StatisticalType {
+  areaCodeCount: number
+  companyTotalCount: number
+  demographicCount: number
+  inCount: number
+  individualHouseholdTotalCount: number
+  initialVillageCodeCount: number
+  notPropertyAccountCount: number
+  otherCount: number
+  outCount: number
+  peasantHouseholdTotalCount: number
+  propertyAccountCount: number
+  villageTotalCount: number
 }
+
+const appStore = useAppStore()
 const editFormShow = ref()
 const actionType = ref('add')
 const reportType = ref()
+const statisticalInfo = ref<Partial<StatisticalType>>({})
+const stepActiveIndex = ref(0)
+const intervalId = ref()
+
+const projectStatus = computed(() => {
+  return appStore.getProjectStatus
+})
 const onFormPupClose = (flag: boolean) => {
   editFormShow.value = false
   console.log(flag)
-
-  // if (flag === true) {
-  //   setSearchParams({ type: reportType as string })
-  // }
 }
+
+const btnClick = () => {
+  editFormShow.value = true
+}
+
+// 获取统计信息
+const getStatistical = async () => {
+  const res = await getProjectStatisticalApi()
+  console.log(res, 'res')
+  statisticalInfo.value = res || {}
+}
+
+const endInvestigate = async () => {
+  if (projectStatus.value === 'review') {
+    return
+  }
+  clearInterval(intervalId.value)
+  stepActiveIndex.value = 0
+  animationHandle()
+  reviewProjectApi()
+    .then(() => {
+      stepActiveIndex.value = 8
+      appStore.setProjectStatus('review')
+    })
+    .catch((res) => {
+      if (res?.response?.data?.message === '提示: 该项目已经复核') {
+        clearInterval(intervalId.value)
+        stepActiveIndex.value = 8
+      } else {
+        clearInterval(intervalId.value)
+        stepActiveIndex.value = 0
+      }
+    })
+}
+
+const animationHandle = () => {
+  intervalId.value = setInterval(() => {
+    if (stepActiveIndex.value >= 7) {
+      clearInterval(intervalId.value)
+      return
+    }
+    stepActiveIndex.value += 1
+  }, 2000)
+}
+
+onMounted(() => {
+  getStatistical()
+  console.log(projectStatus.value, 'status')
+  if (projectStatus.value === 'review') {
+    stepActiveIndex.value = 8
+  }
+})
 </script>
 
 <style lang="less" scoped>
