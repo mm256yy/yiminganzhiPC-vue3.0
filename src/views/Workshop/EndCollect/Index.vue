@@ -230,7 +230,7 @@ const btnClick = () => {
 // 获取统计信息
 const getStatistical = async () => {
   const res = await getProjectStatisticalApi()
-  console.log(res, 'res')
+  // console.log(res, 'res')
   statisticalInfo.value = res || {}
 }
 
