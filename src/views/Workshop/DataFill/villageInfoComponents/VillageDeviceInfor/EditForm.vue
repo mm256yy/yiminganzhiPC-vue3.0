@@ -225,8 +225,8 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 // import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
-  saveFruitwoodListApi,
-  updateApi
+  addFacilitiesListApi,
+  updateFacilitiesApi
 } from '@/api/workshop/datafill/immigrantFacilities-service'
 // import { standardFormatDate } from '@/utils/index'
 const { required } = useValidator()
@@ -357,13 +357,13 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add') {
-    await saveFruitwoodListApi({
+    await addFacilitiesListApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
   } else {
-    await updateApi({
+    await updateFacilitiesApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId

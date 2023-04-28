@@ -174,7 +174,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         'intro.js',
         'qrcode',
         '@wangeditor/editor',
-        '@wangeditor/editor-for-vue'
+        '@wangeditor/editor-for-vue',
+        'print-js',
+        '@amap/amap-jsapi-loader',
+        'dayjs' 
       ]
     }
   }

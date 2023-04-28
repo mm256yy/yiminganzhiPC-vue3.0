@@ -120,9 +120,9 @@ import {
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
-  getFruitwoodListApi,
-  saveFruitwoodListApi,
-  deleteDevicel
+  getDeviceListApi,
+  saveDeviceListApi,
+  deleteDeviceApi
 } from '@/api/workshop/datafill/device-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 
@@ -160,7 +160,7 @@ const onDelRow = (row) => {
   })
     .then(async () => {
       if (row.id) {
-        await deleteDevicel(row.id)
+        await deleteDeviceApi(row.id)
         getList()
       } else {
         tableData.value.splice(tableData.value.indexOf(row), 1)
@@ -177,7 +177,7 @@ const getList = () => {
     size: 1000,
     status: props.tabCurrentId == 2 ? 'review' : undefined
   }
-  getFruitwoodListApi(params).then((res) => {
+  getDeviceListApi(params).then((res) => {
     tableData.value = res.content
   })
 }
@@ -189,7 +189,7 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  saveFruitwoodListApi(tableData.value).then(() => {
+  saveDeviceListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
   })

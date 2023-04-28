@@ -74,7 +74,7 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #status="{ row }">
+        <template #reportStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="[
@@ -141,6 +141,24 @@
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { globalData } from '@/config/fill'
+
+export default defineComponent({
+  beforeRouteEnter(to, _from, next) {
+    if (to.path === '/Workshop/Landlord') {
+      // 实物采集
+      globalData.currentSurveyStatus = 'survey'
+    } else {
+      // 实物复核
+      globalData.currentSurveyStatus = 'review'
+    }
+    next()
+  }
+})
+</script>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
@@ -296,7 +314,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportStatus',
-    label: '填报状态',
+    label: '上报状态',
     search: {
       show: true,
       component: 'Select',
@@ -426,7 +444,7 @@ const schema = reactive<CrudSchema[]>([
   //   }
   // },
   {
-    field: 'status',
+    field: 'reportStatus',
     label: '填报状态',
     width: 100,
     search: {
@@ -605,8 +623,8 @@ const onSearch = (data) => {
   if (!params.hasPropertyAccount) {
     delete params.hasPropertyAccount
   }
-  if (!params.status) {
-    delete params.status
+  if (!params.fillStatus) {
+    delete params.fillStatus
   }
   if (params.code) {
     // 拿到对应的参数key

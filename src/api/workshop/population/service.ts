@@ -1,33 +1,40 @@
 import request from '@/config/axios'
 import { DemographicDtoType, DemographicHeadType, ExcelListType } from './types'
-const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
+import { globalData } from '@/config/fill'
+
 /**
  * 查询人口信息列表
  */
 export const getDemographicListApi = (
   query: Partial<DemographicDtoType>
 ): Promise<TableResponse<DemographicDtoType>> => {
-  return request.get({ url: '/demographic', params: query })
+  return request.get({
+    url: '/demographic',
+    params: {
+      ...query,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 新增人口信息
  */
 export const addDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
-  // console.log(id)
-
-  if (id == '2') {
-    data.status = 'review'
-  }
-
-  return request.post({ url: '/demographic/create', data })
+  return request.post({
+    url: '/demographic/create',
+    data: { ...data, status: globalData.currentSurveyStatus }
+  })
 }
 
 /**
  * 更新人口信息
  */
 export const updateDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
-  return request.post({ url: '/demographic/update', data })
+  return request.post({
+    url: '/demographic/update',
+    data: { ...data, status: globalData.currentSurveyStatus }
+  })
 }
 
 /**
@@ -48,7 +55,12 @@ export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> =
  * 查询人口头部信息
  */
 export const getDemographicHeadApi = (): Promise<DemographicHeadType> => {
-  return request.get({ url: `/demographic/head` })
+  return request.get({
+    url: `/demographic/head`,
+    params: {
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**

@@ -1,29 +1,31 @@
 import request from '@/config/axios'
-import { FruitwoodDtoType, FruitwoodParamsType } from './device-types'
-const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
-/**
- * 查询果木信息列表
- */
+import { globalData } from '@/config/fill'
+import { DeviceDtoType, DeviceParamsType } from './device-types'
 
-export const getFruitwoodListApi = (
-  query: Partial<FruitwoodParamsType>
-): Promise<TableResponse<FruitwoodDtoType>> => {
-  return request.get({ url: '/immigrantEquipment', params: query })
+export const getDeviceListApi = (
+  query: Partial<DeviceParamsType>
+): Promise<TableResponse<DeviceDtoType>> => {
+  return request.get({
+    url: '/immigrantEquipment',
+    params: { ...query, status: globalData.currentSurveyStatus }
+  })
 }
 
 /**
  * 保存
  */
-export const saveFruitwoodListApi = (data: any): Promise<TableResponse<FruitwoodDtoType>> => {
-  if (id == '2') {
-    data.status = 'review'
-  }
-  return request.post({ url: '/immigrantEquipment/createAll', data })
+export const saveDeviceListApi = (data: any): Promise<TableResponse<DeviceDtoType>> => {
+  return request.post({
+    url: '/immigrantEquipment/createAll',
+    data: data.map((item) => {
+      item.status = globalData.currentSurveyStatus
+    })
+  })
 }
 
 /**
  * 删除
  */
-export const deleteDevicel = (id: number): Promise<void> => {
+export const deleteDeviceApi = (id: number): Promise<void> => {
   return request.post({ url: `/immigrantEquipment/delete/${id}` })
 }

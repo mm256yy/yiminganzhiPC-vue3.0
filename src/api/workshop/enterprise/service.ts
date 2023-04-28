@@ -1,61 +1,57 @@
 import request from '@/config/axios'
-import { DemographicDtoType, DemographicHeadType, ExcelListType } from './types'
-const id = window.location.href.substring(location.href.lastIndexOf('=') + 1)
+import { CompanyDtoType } from './types'
+import { globalData } from '@/config/fill'
 /**
  * 查询企业信息列表
  */
-export const getDemographicListApi = (
-  query: Partial<DemographicDtoType>
-): Promise<TableResponse<DemographicDtoType>> => {
-  return request.get({ url: '/company', params: query })
+export const getCompanyListApi = (
+  query: Partial<CompanyDtoType>
+): Promise<TableResponse<CompanyDtoType>> => {
+  return request.get({
+    url: '/company',
+    params: {
+      ...query,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 新增企业信息
  */
-export const addDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
-  if (id == '2') {
-    data.status = 'review'
-  }
-  return request.post({ url: '/company/create', data })
+export const addCompanyApi = (data: CompanyDtoType): Promise<CompanyDtoType> => {
+  return request.post({
+    url: '/company/create',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 更新企业信息
  */
-export const updateDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
-  return request.post({ url: '/company/update', data })
+export const updateCompanyApi = (data: CompanyDtoType): Promise<CompanyDtoType> => {
+  return request.post({
+    url: '/company/update',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 删除企业信息
  */
-export const delDemographicByIdApi = (id: number): Promise<void> => {
-  return request.post({ url: `/demographic/delete/${id}` })
+export const delCompanyByIdApi = (id: number): Promise<void> => {
+  return request.post({ url: `/company/delete/${id}` })
 }
 
 /**
  * 查询单个企业信息
  */
-export const getDemographicByIdApi = (id: number): Promise<DemographicDtoType> => {
-  return request.get({ url: `/demographic/${id}` })
-}
-
-/**
- * 查询企业头部信息
- */
-export const getDemographicHeadApi = (): Promise<DemographicHeadType> => {
-  return request.get({ url: `/demographic/head` })
-}
-
-/**
- * excel文件列表
- */
-export const getExcelList = (): Promise<TableResponse<ExcelListType>> => {
-  return request.get({
-    url: '/import_file',
-    params: {
-      sort: ['id', 'desc']
-    }
-  })
+export const getCompanyByIdApi = (id: number): Promise<CompanyDtoType> => {
+  return request.get({ url: `/company/${id}` })
 }

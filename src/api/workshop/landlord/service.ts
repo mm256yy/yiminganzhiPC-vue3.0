@@ -1,6 +1,7 @@
 import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
 import { LandlordType } from '@/types/print'
+import { globalData } from '@/config/fill'
 
 /**
  * 查询居民户信息列表
@@ -15,29 +16,60 @@ export const getLandlordListApi = (
     delete query.virutalVillageCode
   }
 
-  return request.get({ url: '/peasantHousehold', params: { sort: ['createdDate,desc'], ...query } })
+  return request.get({
+    url: '/peasantHousehold',
+    params: {
+      sort: ['createdDate,desc'],
+      ...query,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 新增居民户信息
  */
 export const addLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> => {
-  return request.post({ url: '/peasantHousehold/create', data })
+  return request.post({
+    url: '/peasantHousehold/create',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 更新居民户信息
  */
 export const updateLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> => {
-  return request.post({ url: '/peasantHousehold/update', data })
+  return request.post({
+    url: '/peasantHousehold/update',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 export const immigrantGravecreate = (data: any): Promise<any> => {
-  return request.post({ url: '/immigrantGrave/create', data })
+  return request.post({
+    url: '/immigrantGrave/create',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 export const immigrantGraveupdate = (data: any): Promise<any> => {
-  return request.post({ url: '/immigrantGrave/update', data })
+  return request.post({
+    url: '/immigrantGrave/update',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
@@ -94,7 +126,13 @@ export const getPrintTemplateListApi = (params: Partial<TemplateParamsType>): Pr
  * 查询居民户头部信息
  */
 export const getLandlordHeadApi = (params: any): Promise<any> => {
-  return request.get({ url: `/peasantHousehold/head`, params })
+  return request.get({
+    url: `/peasantHousehold/head`,
+    params: {
+      ...params,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**

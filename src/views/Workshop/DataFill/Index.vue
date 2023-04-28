@@ -29,14 +29,14 @@
     <div class="data-fill-head">
       <div class="head-top">
         <div class="tabs">
-          <div
+          <!-- <div
             :class="['tab-item', tabCurrentId == item.id ? 'active' : '']"
             v-for="item in FlowTabs"
             :key="item.id"
             @click="onTabClick(item)"
           >
             {{ item.name }}
-          </div>
+          </div> -->
         </div>
         <ElSpace>
           <ElButton
@@ -250,7 +250,7 @@
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
         :tabCurrentId="tabCurrentId"
       />
-      <villageGrave
+      <VillageGrave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
@@ -296,6 +296,25 @@
   </WorkContentWrap>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { globalData } from '@/config/fill'
+
+export default defineComponent({
+  beforeRouteEnter(to, _from, next) {
+    console.log(to, 'to')
+    if (to.path === '/Workshop/DataFill') {
+      // 实物采集
+      globalData.currentSurveyStatus = 'survey'
+    } else {
+      // 实物复核
+      globalData.currentSurveyStatus = 'review'
+    }
+    next()
+  }
+})
+</script>
+
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import {
@@ -310,7 +329,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ReportTabs,
-  FlowTabs,
+  // FlowTabs,
   ReportTabIds,
   EnterpriseTabs,
   IndividualBTabs,
@@ -327,14 +346,14 @@ import Fruitwood from './Fruitwood/Index.vue'
 import Grave from './Grave/Index.vue'
 import Enclosure from './Enclosure/Index.vue'
 import FamilyIncome from './FamilyIncome/Index.vue'
-import villageGrave from './villageInfoComponents/Grave/Index.vue'
+import VillageGrave from './VillageInfoComponents/Grave/Index.vue'
 import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
 import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'
 import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
 
 import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue'
-// import villageInfoCInfor from './villageInfoComponents/villageInfoCInfor/Index.vue'
-import VillageDeviceInfor from './villageInfoComponents/VillageDeviceInfor/Index.vue'
+// import villageInfoCInfor from './VillageInfoComponents/villageInfoCInfor/Index.vue'
+import VillageDeviceInfor from './VillageInfoComponents/VillageDeviceInfor/Index.vue'
 
 import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
@@ -367,23 +386,12 @@ const getLandlordInfo = () => {
 
 getLandlordInfo()
 const { push } = useRouter()
-const onTabClick = (tabItem) => {
-  if (tabCurrentId.value === tabItem.id) {
-    return
-  }
-  if (tabItem.id) {
-    // push({
-    //   name: 'DataFill',
-    //   query: {
-    //     householdId: householdId,
-    //     doorNo: doorNo,
-    //     type: type,
-    //     id: tabItem.id
-    //   }
-    // })
-  }
-  tabCurrentId.value = tabItem.id
-}
+// const onTabClick = (tabItem) => {
+//   if (tabCurrentId.value === tabItem.id) {
+//     return
+//   }
+//   tabCurrentId.value = tabItem.id
+// }
 watch(
   () => tabCurrentId.value,
   () => {

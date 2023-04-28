@@ -1,4 +1,4 @@
-export interface DemographicDtoType {
+export interface CompanyDtoType {
   id: number
   altitude: number
   benefit: number
@@ -35,20 +35,5 @@ export interface DemographicDtoType {
   villageText: string
   virutalVillageText: string
   insured: boolean
-  [key: string]: any
-}
-
-export interface DemographicHeadType {
-  demographicNum: number
-  peasantHouseholdNum: number
-}
-
-export interface ExcelListType {
-  id: number
-  importFile: string
-  status: string
-  remark: string
-  demographicNum: number
-  peasantHouseholdNum: number
   [key: string]: any
 }

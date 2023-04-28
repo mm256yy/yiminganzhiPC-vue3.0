@@ -1,4 +1,4 @@
-export interface FruitwoodDtoType {
+export interface FacilitiesDtoType {
   id: number
   doorNo: string
   householdId: number
@@ -12,7 +12,7 @@ export interface FruitwoodDtoType {
   [key: string]: any
 }
 
-export interface FruitwoodParamsType {
+export interface FacilitiesParamsType {
   doorNo: string
   householdId: number
   size: number
