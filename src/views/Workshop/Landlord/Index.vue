@@ -662,8 +662,12 @@ const onPrintDialogClose = () => {
 
 // 数据填报
 const fillData = (row) => {
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === 'review') {
+    routerName = 'DataFillCheck'
+  }
   push({
-    name: 'DataFill',
+    name: routerName,
     query: {
       householdId: row.id,
       doorNo: row.doorNo,

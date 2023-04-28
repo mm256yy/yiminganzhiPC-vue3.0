@@ -176,6 +176,7 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
@@ -526,8 +527,12 @@ const onSearch = (data) => {
 
 // 数据填报
 const fillData = (row) => {
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === 'review') {
+    routerName = 'DataFillCheck'
+  }
   push({
-    name: 'DataFill',
+    name: routerName,
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
