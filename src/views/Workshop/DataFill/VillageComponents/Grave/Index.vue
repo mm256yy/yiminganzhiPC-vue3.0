@@ -2,7 +2,27 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div> </div>
+        <ElSpace>
+          <ElUpload
+            action="/api/immigrantGrave/import"
+            :headers="headers"
+            :data="{ peasanHouseId }"
+            :show-file-list="false"
+            accept=".xls,.xlsx"
+            :before-upload="beforeUpload"
+            :on-success="uploadDone"
+            :on-error="uploadError"
+          >
+            <template #trigger>
+              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading">
+                批量导入
+              </ElButton>
+            </template>
+          </ElUpload>
+          <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
+            模版下载
+          </ElButton>
+        </ElSpace>
         <ElSpace v-if="type != 'Landlord'">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
@@ -10,8 +30,9 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
+            保存
+          </ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -157,9 +178,9 @@
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
           <template #default="scope">
-            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
-              >删除</span
-            >
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
+              删除
+            </span>
           </template>
         </ElTableColumn>
       </ElTable>
@@ -168,9 +189,10 @@
 </template>
 
 <script setup lang="ts">
-import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed, onMounted } from 'vue'
+import { useAppStore } from '@/store/modules/app'
 import {
+  ElUpload,
   ElButton,
   ElInputNumber,
   ElInput,
@@ -183,10 +205,16 @@ import {
   ElMessageBox
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
+import {
+  exportGraveTemplate,
+  getGraveListApi,
+  saveGraveListApi
+} from '@/api/workshop/datafill/grave-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
+import { WorkContentWrap } from '@/components/ContentWrap'
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
+
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
 interface PropsType {
@@ -194,10 +222,17 @@ interface PropsType {
   doorNo: string
   tabCurrentId
 }
+
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const loading = ref(false)
+const uploadLoading = ref(false)
 const props = defineProps<PropsType>()
+const peasanHouseId = +props.householdId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
+const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const tableData = ref<any[]>([])
 const states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas']
 const dictStore = useDictStoreWithOut()
@@ -205,6 +240,11 @@ const list = ref<any[]>([])
 
 const dictObj = computed(() => dictStore.getDictObj)
 const options = ref<any[]>([])
+
+const headers = ref({
+  'Project-Id': projectId,
+  Authorization: appStore.getToken
+})
 // const defaultRow = {
 //   doorNo: props.doorNo,
 //   householdId: props.householdId,
@@ -246,11 +286,7 @@ const remoteMethod = (query: string) => {
     options.value = []
   }
 }
-onMounted(() => {
-  list.value = states.map((item) => {
-    return { value: `value:${item}`, label: `label:${item}` }
-  })
-})
+
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
@@ -267,6 +303,7 @@ getList()
 const onAddRow = () => {
   tableData.value.push({})
 }
+
 const onDelRow = (row) => {
   ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
     type: 'warning',
@@ -285,6 +322,7 @@ const onDelRow = (row) => {
     })
     .catch(() => {})
 }
+
 const onSave = () => {
   if (
     tableData.value.some((item) => {
@@ -303,4 +341,46 @@ const onSave = () => {
     })
   }
 }
+
+// 下载模板
+const onDownloadTemplate = () => {
+  exportGraveTemplate().then((res) => {
+    let a = document.createElement('a')
+    // ArrayBuffer 转为 Blob
+    let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
+    let objectUrl = URL.createObjectURL(blob)
+    a.setAttribute('href', objectUrl)
+    a.setAttribute('download', '模板.xls')
+    a.click()
+  })
+}
+
+const beforeUpload = () => {
+  uploadLoading.value = true
+}
+
+const uploadDone = () => {
+  uploadLoading.value = false
+  ElMessage({
+    message: '正在导入，请等待批量导入结果',
+    type: 'success'
+  })
+  getList()
+}
+
+const uploadError = (error) => {
+  try {
+    const response = JSON.parse(error.message)
+    ElMessage.error(response.message)
+    uploadLoading.value = false
+  } catch (err) {
+    console.log('导入报错信息:', err)
+  }
+}
+
+onMounted(() => {
+  list.value = states.map((item) => {
+    return { value: `value:${item}`, label: `label:${item}` }
+  })
+})
 </script>

@@ -26,3 +26,11 @@ export const saveGraveListApi = (data: any[]): Promise<TableResponse<GraveDtoTyp
     })
   })
 }
+
+// 坟墓模板导出
+export const exportGraveTemplate = () => {
+  return request.get({
+    url: '/peasantHousehold/exportGraveTemplate',
+    responseType: 'blob'
+  })
+}
