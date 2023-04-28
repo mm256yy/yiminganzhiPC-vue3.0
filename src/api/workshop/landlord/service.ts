@@ -46,8 +46,14 @@ export const immigrantGraveupdate = (data: any): Promise<any> => {
 export const delLandlordByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/peasantHousehold/delete/${id}` })
 }
+
+/**
+ * 删除坟墓信息
+ * @param id 当前行ID
+ * @returns
+ */
 export const immigrantGraveDelete = (id: number): Promise<void> => {
-  return request.post({ url: `/api/immigrantGrave/delete/${id}` })
+  return request.post({ url: `/immigrantGrave/delete/${id}` })
 }
 
 /**

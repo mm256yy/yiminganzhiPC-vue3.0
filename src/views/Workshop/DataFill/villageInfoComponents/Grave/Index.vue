@@ -345,10 +345,9 @@ const onSave = () => {
 // 下载模板
 const onDownloadTemplate = () => {
   exportGraveTemplate().then((res) => {
-    console.log('res:', res)
     let a = document.createElement('a')
     // ArrayBuffer 转为 Blob
-    let blob = new Blob([res], { type: 'application/vnd.ms-excel' })
+    let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
     let objectUrl = URL.createObjectURL(blob)
     a.setAttribute('href', objectUrl)
     a.setAttribute('download', '模板.xls')
@@ -362,7 +361,11 @@ const beforeUpload = () => {
 
 const uploadDone = () => {
   uploadLoading.value = false
-  ElMessage.warning('正在导入，请等待批量导入结果')
+  ElMessage({
+    message: '正在导入，请等待批量导入结果',
+    type: 'success'
+  })
+  getList()
 }
 
 const uploadError = (error) => {
