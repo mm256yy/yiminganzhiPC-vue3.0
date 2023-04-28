@@ -20,3 +20,8 @@ export const saveGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>
   }
   return request.post({ url: '/immigrantGrave/createAll', data })
 }
+
+// 坟墓模板导出
+export const exportGraveTemplate = () => {
+  return request.get({ url: '/peasantHousehold/exportGraveTemplate' })
+}

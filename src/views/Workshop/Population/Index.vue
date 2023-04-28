@@ -75,9 +75,9 @@
             :on-error="uploadError"
           >
             <template #trigger>
-              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading"
-                >批量导入</ElButton
-              >
+              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading">
+                批量导入
+              </ElButton>
             </template>
           </ElUpload>
           <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
