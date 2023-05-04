@@ -10,14 +10,17 @@
     <div class="head">
       <div class="title">
         <div>实物采集汇总</div>
-        <el-button @click="btnClick" type="success">
+        <div class="title-info">
+          结束实物采集阶段，需上传实物采集【批复文件】，若该阶段未上传，可在首页【报告展示】中【实采批复】完成上传。
+        </div>
+        <el-button v-if="statisticalInfo.uploadStatus" type="success">
           <Icon icon="material-symbols:check-circle-outline" class="mr-5px" style="color: white" />
           实物采集确认批复
         </el-button>
-        <!-- <el-button @click="btnClick" type="danger">
+        <el-button v-else @click="btnClick" type="danger">
           <Icon icon="mingcute:folder-upload-line" class="mr-5px" style="color: white" />
           实物采集确认批复
-        </el-button> -->
+        </el-button>
       </div>
       <div class="contentBox">
         <div class="content">
@@ -189,9 +192,20 @@
 import { computed, onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { reviewProjectApi, getProjectStatisticalApi } from '@/api/project/index'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElSteps, ElStep } from 'element-plus'
+import {
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElButton,
+  ElSteps,
+  ElStep,
+  ElMessageBox
+} from 'element-plus'
 import EditForm from './components/EditForm.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { useCache } from '@/hooks/web/useCache'
+import { resetRouter } from '@/router'
+import { logoutApi } from '@/api/login'
+import { useTagsViewStore } from '@/store/modules/tagsView'
 
 interface StatisticalType {
   areaCodeCount: number
@@ -206,8 +220,11 @@ interface StatisticalType {
   peasantHouseholdTotalCount: number
   propertyAccountCount: number
   villageTotalCount: number
+  uploadStatus: boolean
 }
 
+const { wsCache } = useCache()
+const tagsViewStore = useTagsViewStore()
 const appStore = useAppStore()
 const editFormShow = ref()
 const actionType = ref('add')
@@ -222,6 +239,9 @@ const projectStatus = computed(() => {
 const onFormPupClose = (flag: boolean) => {
   editFormShow.value = false
   console.log(flag)
+  if (flag) {
+    statisticalInfo.value.uploadStatus = true
+  }
 }
 
 const btnClick = () => {
@@ -235,6 +255,15 @@ const getStatistical = async () => {
   statisticalInfo.value = res || {}
 }
 
+const loginOut = async () => {
+  await logoutApi().catch(() => {})
+  wsCache.clear()
+  tagsViewStore.delAllViews()
+  resetRouter() // 重置静态路由表
+  window.location.href = '/#/login'
+  setTimeout(() => window.location.reload(), 500)
+}
+
 const endInvestigate = async () => {
   if (projectStatus.value === SurveyStatusEnum.Review) {
     return
@@ -246,6 +275,18 @@ const endInvestigate = async () => {
     .then(() => {
       stepActiveIndex.value = 8
       appStore.setProjectStatus(SurveyStatusEnum.Review)
+      // 已经结束了
+      const msg = '系统重启后，可进入【实物复核】阶段'
+      ElMessageBox.confirm(msg, '【实物采集】阶段结束', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        showCancelButton: false,
+        type: 'warning',
+        center: true
+      }).then(() => {
+        // 退出登录的逻辑
+        loginOut()
+      })
     })
     .catch((res) => {
       if (res?.response?.data?.message === '提示: 该项目已经复核') {
@@ -301,6 +342,11 @@ onMounted(() => {
       font-weight: bold;
       color: #171718;
       justify-content: space-between;
+    }
+
+    .title-info {
+      font-size: 14px;
+      font-weight: normal;
     }
 
     .contentBox {
