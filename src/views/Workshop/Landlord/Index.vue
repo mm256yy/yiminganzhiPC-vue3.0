@@ -20,9 +20,6 @@
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">居民户列表</span>
 
-          <!-- <div class="icon">
-            <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
-          </div> -->
           <div class="text">
             （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
             <span class="distance"></span>
@@ -92,31 +89,18 @@
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
         <template #action="{ row }">
-          <!-- <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '快速查看',
-                type: 'primary',
-
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-          /> -->
           <span
             @click="onViewRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >快速查看</span
           >
+            快速查看
+          </span>
           <span
             @click="onEditRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >编辑</span
           >
+            编辑
+          </span>
           <span @click="onDelRow(row)" :style="{ color: 'red', cursor: 'pointer' }">删除</span>
         </template>
       </Table>
@@ -381,68 +365,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'cityCodeText',
-  //   label: '市县',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'townCodeText',
-  //   label: '街道',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'villageText',
-  //   label: '行政村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'virutalVillageText',
-  //   label: '自然村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'card',
-  //   label: '身份证号',
-  //   width: 180,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'phone',
-  //   label: '联系方式',
-  //   width: 174,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'householdNumber',
-  //   label: '户籍册编号',
-  //   width: 194,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'doorNo',
-  //   label: '所属阶段',
-  //   width: 134,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'reportStatus',
     label: '填报状态',
@@ -451,15 +373,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
-  // {
-  //   field: 'address',
-  //   label: '户籍所在地',
-  //   width: 195,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'hasPropertyAccount',
     label: '财产户',
@@ -476,7 +389,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportUserName',
-    label: '填报人员',
+    label: '填报人',
     search: {
       show: false
     }
@@ -529,14 +442,14 @@ const onDelRow = async (row: LandlordDtoType) => {
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
-    <strong>${row.name}居民户包含:</strong>
-  <div>人口信息: ${result.demographicList.length} 口人信息</div>
-  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
-  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
-  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
-  <div>坟墓信息: ${result.immigrantGraveList.length} 条坟墓信息</div>
-  <strong>是否删除该居户信息</strong>
-</div>
+      <strong>${row.name}居民户包含:</strong>
+      <div>人口信息: ${result.demographicList.length} 口人信息</div>
+      <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+      <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+      <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+      <div>坟墓信息: ${result.immigrantGraveList.length} 条坟墓信息</div>
+      <strong>是否删除该居户信息</strong>
+    </div>
   `,
     '提示',
     {
@@ -553,13 +466,6 @@ const onDelRow = async (row: LandlordDtoType) => {
       })
     })
     .catch(() => {})
-
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
 }
 
 const onAddRow = () => {
