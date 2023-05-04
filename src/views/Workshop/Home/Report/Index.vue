@@ -52,10 +52,10 @@
 
     <EditForm
       :show="dialog"
-      :action-type="actionType"
-      :report-type="reportType as string"
-      :change-id="changeId as string"
-      :row="tableObject.currentRow as any"
+      :actionType="actionType"
+      :reportType="(reportType as string)"
+      :changeId="(changeId as string)"
+      :row="(tableObject.currentRow as any)"
       @close="onFormPupClose"
     />
   </work-content-wrap>
