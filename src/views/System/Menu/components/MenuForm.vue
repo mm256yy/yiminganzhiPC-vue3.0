@@ -138,6 +138,21 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
+
+      <ElRow :gutter="10">
+        <ElCol :span="12">
+          <ElFormItem required label="展示阶段" prop="status">
+            <ElSelect v-model="form.status">
+              <ElOption
+                v-for="item in projectStatus"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
     </ElForm>
 
     <template #footer>
@@ -205,6 +220,22 @@ const menuTypes = ref([
   }
 ])
 
+// 菜单 在哪个项目阶段展示
+const projectStatus = ref([
+  {
+    label: '实物调查',
+    value: 'survey'
+  },
+  {
+    label: '实物复核',
+    value: 'review'
+  },
+  {
+    label: '默认',
+    value: 'default'
+  }
+])
+
 const defaultValue = {
   type: 0,
   parentId: 0,
@@ -212,7 +243,8 @@ const defaultValue = {
   cache: false,
   hidden: false,
   iframe: false,
-  sort: 999
+  sort: 999,
+  status: 'default'
 } as MenuDtoType
 const form = ref<MenuDtoType>(defaultValue)
 
@@ -252,7 +284,8 @@ const rules = reactive<FormRules>({
   componentCode: [required()],
   permission: [required()],
   icon: [required()],
-  parentId: [required()]
+  parentId: [required()],
+  status: [required()]
 })
 
 // 关闭弹窗

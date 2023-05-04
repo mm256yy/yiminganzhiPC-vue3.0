@@ -96,6 +96,7 @@ export type MenuDtoType = {
   icon: string
   children: MenuDtoType[]
   projectId: number
+  status: string
 }
 
 /**
