@@ -134,16 +134,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { globalData } from '@/config/fill'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 export default defineComponent({
   beforeRouteEnter(to, _from, next) {
     console.log(to, 'to')
     if (to.path === '/Workshop/Enterprise') {
       // 实物采集
-      globalData.currentSurveyStatus = 'survey'
+      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
     } else {
       // 实物复核
-      globalData.currentSurveyStatus = 'review'
+      globalData.currentSurveyStatus = SurveyStatusEnum.Review
     }
     next()
   }
@@ -564,7 +565,7 @@ const onPrintDialogClose = () => {
 // 数据填报
 const fillData = (row) => {
   let routerName = 'DataFill'
-  if (globalData.currentSurveyStatus === 'review') {
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
     routerName = 'DataFillCheck'
   }
   push({

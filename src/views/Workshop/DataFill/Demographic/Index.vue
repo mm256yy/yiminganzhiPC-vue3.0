@@ -5,7 +5,9 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <Table
@@ -53,6 +55,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
+      :survey-status="surveyStatus"
       @close="onFormPupClose"
     />
     <RecordListDialog type="人口" :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
@@ -72,9 +75,11 @@ import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/pop
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 import RecordListDialog from '../components/RecordListDialog.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
 interface PropsType {
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()
@@ -225,7 +230,9 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   const selections = await getSelections()
   await delList(
     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
+    multiple,
+    true,
+    true
   )
 }
 

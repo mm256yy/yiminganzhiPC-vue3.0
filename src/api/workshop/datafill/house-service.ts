@@ -37,8 +37,13 @@ export const updateHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
 /**
  * 删除房屋信息
  */
-export const delHouseByIdApi = (id: number): Promise<void> => {
-  return request.post({ url: `/immigrant_house/delete/${id}` })
+export const delHouseByIdApi = (id: number, reason?: string): Promise<void> => {
+  return request.post({
+    url: `/immigrant_house/delete/${id}`,
+    data: {
+      reason
+    }
+  })
 }
 
 /**

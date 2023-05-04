@@ -12,7 +12,9 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -104,6 +106,7 @@ import {
 } from '@/api/workshop/datafill/family-service'
 import { useAppStore } from '@/store/modules/app'
 import { FamilyIncomeDtoType } from '@/api/workshop/datafill/family-types'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface SpanMethodProps {
   row: FamilyIncomeDtoType
@@ -115,7 +118,7 @@ interface SpanMethodProps {
 interface PropsType {
   householdId: string
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 
 interface TotalItemType {

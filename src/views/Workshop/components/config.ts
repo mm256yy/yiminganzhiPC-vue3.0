@@ -41,3 +41,8 @@ export const ReportStatusEnums = [
     value: 'UnReport'
   }
 ]
+
+export enum SurveyStatusEnum {
+  Survey = 'survey', // 实物调查
+  Review = 'review' // 实物复核
+}

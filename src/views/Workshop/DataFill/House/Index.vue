@@ -5,7 +5,9 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <RecordListDialog
@@ -60,6 +62,7 @@
       :row="tableObject.currentRow"
       :householdId="props.householdId"
       :doorNo="props.doorNo"
+      :survey-status="surveyStatus"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -79,12 +82,13 @@ import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { formatTime } from '@/utils/index'
 // import { useRouter } from 'vue-router'
-import { locationTypes } from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
+
 // const { currentRoute } = useRouter()
 interface PropsType {
   householdId: string
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
@@ -245,7 +249,9 @@ const onDelRow = async (row: HouseDtoType | null, multiple: boolean) => {
   const selections = await getSelections()
   await delList(
     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
+    multiple,
+    true,
+    true
   )
 }
 // onMounted(() => {

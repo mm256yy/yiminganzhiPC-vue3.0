@@ -40,8 +40,13 @@ export const updateDemographicApi = (data: DemographicDtoType): Promise<Demograp
 /**
  * 删除人口信息
  */
-export const delDemographicByIdApi = (id: number): Promise<void> => {
-  return request.post({ url: `/demographic/delete/${id}` })
+export const delDemographicByIdApi = (id: number, reason?: string): Promise<void> => {
+  return request.post({
+    url: `/demographic/delete/${id}`,
+    data: {
+      reason
+    }
+  })
 }
 
 /**

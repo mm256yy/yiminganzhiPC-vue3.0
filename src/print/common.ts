@@ -1,6 +1,6 @@
 import { LandlordType, ProjectType, MainType } from '@/types/print'
 import { imgHeight, layout } from './config'
-
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 /**
  * 公共模块
  */
@@ -20,7 +20,9 @@ export const getHead = (landlord: LandlordType, projectInfo: ProjectType) => {
       },
       {
         text: `所属阶段：${
-          projectInfo.status && projectInfo.status === 'review' ? '实物复核' : '实物调查'
+          projectInfo.status && projectInfo.status === SurveyStatusEnum.Review
+            ? '实物复核'
+            : '实物调查'
         }`,
         width: 170
       }
@@ -36,7 +38,9 @@ export const getBottom = (landlord: LandlordType, projectInfo: ProjectType) => {
     columns: [
       `分类目录：${landlord.type === MainType.PeasantHousehold ? '移民' : '企业'}`,
       `所属阶段：${
-        projectInfo.status && projectInfo.status === 'review' ? '实物复核' : '实物调查'
+        projectInfo.status && projectInfo.status === SurveyStatusEnum.Review
+          ? '实物复核'
+          : '实物调查'
       }`,
       ''
     ]

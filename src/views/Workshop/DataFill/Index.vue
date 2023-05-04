@@ -296,10 +296,10 @@ export default defineComponent({
     console.log(to, 'to')
     if (to.path === '/Workshop/DataFill') {
       // 实物采集
-      globalData.currentSurveyStatus = 'survey'
+      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
     } else {
       // 实物复核
-      globalData.currentSurveyStatus = 'review'
+      globalData.currentSurveyStatus = SurveyStatusEnum.Review
     }
     next()
   }
@@ -345,7 +345,7 @@ import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
 import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue'
 // import villageInfoCInfor from './VillageComponents/villageInfoCInfor/Index.vue'
 import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue'
-
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
@@ -354,7 +354,7 @@ const { currentRoute, back } = useRouter()
 const { doorNo, householdId, type } = currentRoute.value.query as any
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
-const surveyStatus = ref<'survey' | 'review'>('survey')
+const surveyStatus = ref<SurveyStatusEnum>(SurveyStatusEnum.Survey)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
 
 const reportDialog = ref<boolean>(false)

@@ -13,7 +13,9 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -159,10 +161,12 @@ import {
 } from '@/api/workshop/datafill/fruitwood-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import RecordListDialog from '../components/RecordListDialog.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
 interface PropsType {
   householdId: string
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()

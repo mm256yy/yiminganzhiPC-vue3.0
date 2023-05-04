@@ -191,6 +191,7 @@ import { useAppStore } from '@/store/modules/app'
 import { reviewProjectApi, getProjectStatisticalApi } from '@/api/project/index'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElSteps, ElStep } from 'element-plus'
 import EditForm from './components/EditForm.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface StatisticalType {
   areaCodeCount: number
@@ -235,7 +236,7 @@ const getStatistical = async () => {
 }
 
 const endInvestigate = async () => {
-  if (projectStatus.value === 'review') {
+  if (projectStatus.value === SurveyStatusEnum.Review) {
     return
   }
   clearInterval(intervalId.value)
@@ -244,7 +245,7 @@ const endInvestigate = async () => {
   reviewProjectApi()
     .then(() => {
       stepActiveIndex.value = 8
-      appStore.setProjectStatus('review')
+      appStore.setProjectStatus(SurveyStatusEnum.Review)
     })
     .catch((res) => {
       if (res?.response?.data?.message === '提示: 该项目已经复核') {
@@ -270,7 +271,7 @@ const animationHandle = () => {
 onMounted(() => {
   getStatistical()
   console.log(projectStatus.value, 'status')
-  if (projectStatus.value === 'review') {
+  if (projectStatus.value === SurveyStatusEnum.Review) {
     stepActiveIndex.value = 8
   }
 })

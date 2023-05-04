@@ -13,7 +13,9 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -138,6 +140,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 // import { useRouter } from 'vue-router'
 
 // const { currentRoute } = useRouter()
@@ -148,7 +151,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   householdId: string
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()
@@ -208,8 +211,7 @@ const initCollectiveData = (data: any) => {
 const getList = () => {
   const params = {
     // doorNo: props.doorNo,
-    registrantId: +props.householdId,
-    status: props.surveyStatus == 2 ? 'review' : undefined
+    registrantId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content

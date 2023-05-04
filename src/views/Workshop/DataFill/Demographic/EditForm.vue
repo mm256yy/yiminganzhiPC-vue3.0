@@ -383,6 +383,15 @@
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" />
       </ElFormItem>
+
+      <ElFormItem
+        v-if="actionType === 'add' && surveyStatus === SurveyStatusEnum.Review"
+        label="新增原因"
+        prop="reason"
+        required
+      >
+        <ElInput type="textarea" v-model="form.reason" />
+      </ElFormItem>
     </ElForm>
 
     <template #footer v-if="actionType !== 'view'">
@@ -427,13 +436,14 @@ import {
   updateDemographicApi,
   getDictByName
 } from '@/api/workshop/population/service'
-// import { standardFormatDate } from '@/utils/index'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: DemographicDtoType | null | undefined
   doorNo: string
+  surveyStatus: SurveyStatusEnum
 }
 
 interface FileItemType {

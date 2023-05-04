@@ -12,7 +12,9 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
 
@@ -144,12 +146,13 @@ import {
 // import { ProductionPlaceWay } from '../config'
 import { useAppStore } from '@/store/modules/app'
 import { ResettlementDtoType } from '@/api/workshop/datafill/resettlement-types'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface PropsType {
   householdId: string
   doorNo: string
-  baseInfo
-  surveyStatus
+  baseInfo: any
+  surveyStatus: SurveyStatusEnum
 }
 
 const recordShow = ref(false)

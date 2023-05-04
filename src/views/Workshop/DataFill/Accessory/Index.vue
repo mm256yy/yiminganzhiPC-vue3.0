@@ -13,7 +13,9 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <div style="display: flex">
@@ -235,11 +237,12 @@ import {
   getAppendantOptionApi
 } from '@/api/workshop/datafill/accessory-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface PropsType {
   householdId: string
   doorNo: string
-  surveyStatus
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()
