@@ -12,7 +12,7 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -82,12 +82,17 @@
       </ElTable>
     </div>
 
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="收入信息"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed } from 'vue'
 import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
@@ -110,7 +115,7 @@ interface SpanMethodProps {
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  surveyStatus
 }
 
 interface TotalItemType {
@@ -198,8 +203,7 @@ const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
     householdId: props.householdId,
-    size: 100,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    size: 100
   }
   const res = await getFamilyIncomeListApi(params)
 

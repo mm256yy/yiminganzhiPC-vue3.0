@@ -5,7 +5,7 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -55,7 +55,7 @@
       :doorNo="props.doorNo"
       @close="onFormPupClose"
     />
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog type="人口" :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
   </WorkContentWrap>
 </template>
 
@@ -71,10 +71,10 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 interface PropsType {
   doorNo: string
-  tabCurrentId
+  surveyStatus
 }
 
 const props = defineProps<PropsType>()
@@ -90,8 +90,7 @@ const { getList } = methods
 // review
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.tabCurrentId == 2 ? 'review' : undefined
+  doorNo: props.doorNo
 }
 
 getList()

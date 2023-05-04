@@ -5,10 +5,15 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
         </ElSpace>
       </div>
-      <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+      <RecordListDialog
+        type="房屋信息"
+        :recordShow="recordShow"
+        @close="recordClose"
+        :doorNo="doorNo"
+      />
 
       <Table
         :loading="tableObject.loading"
@@ -61,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
@@ -79,7 +84,7 @@ import { locationTypes } from '@/views/Workshop/components/config'
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  surveyStatus
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
@@ -95,8 +100,7 @@ const { register, tableObject, methods } = useTable({
 const { getList } = methods
 
 tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.tabCurrentId == 2 ? 'review' : undefined
+  doorNo: props.doorNo
 }
 const recordShow = ref(false)
 

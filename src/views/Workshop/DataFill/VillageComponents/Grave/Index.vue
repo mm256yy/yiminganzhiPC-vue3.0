@@ -220,7 +220,6 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
 }
 
 const appStore = useAppStore()
@@ -290,8 +289,7 @@ const remoteMethod = (query: string) => {
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
-    householdId: +props.householdId,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    householdId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content

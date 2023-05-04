@@ -13,7 +13,7 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
         </ElSpace>
       </div>
       <div style="display: flex">
@@ -203,13 +203,18 @@
           </ElTableColumn>
         </ElTable>
       </div>
-      <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+      <RecordListDialog
+        type="附属物信息"
+        :recordShow="recordShow"
+        @close="recordClose"
+        :doorNo="doorNo"
+      />
     </div>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed } from 'vue'
 import {
@@ -234,7 +239,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  surveyStatus
 }
 
 const props = defineProps<PropsType>()
@@ -274,8 +279,7 @@ const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
     householdId: props.householdId,
-    size: 1000,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    size: 1000
   }
   tableDataLeft.value = []
   tableDataRight.value = []

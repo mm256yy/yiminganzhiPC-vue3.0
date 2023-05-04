@@ -35,7 +35,6 @@ import { getCompanyListApi, delCompanyByIdApi } from '@/api/workshop/enterprise/
 interface PropsType {
   doorNo: string
   householdId
-  tabCurrentId
 }
 const showBox = ref(true)
 
@@ -54,8 +53,7 @@ const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.tabCurrentId == 2 ? 'review' : undefined
+  doorNo: props.doorNo
 }
 
 onMounted(async () => {

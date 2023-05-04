@@ -121,7 +121,6 @@ interface SpanMethodProps {
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
 }
 
 interface TotalItemType {
@@ -220,8 +219,7 @@ const getList = async () => {
     doorNo: props.doorNo,
     householdId: props.householdId,
     configType: 'Company',
-    size: 100,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    size: 100
   }
   const res = await getImmigrantManagement(params)
 

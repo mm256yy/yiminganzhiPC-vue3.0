@@ -94,8 +94,11 @@ export const immigrantGraveDelete = (id: number): Promise<void> => {
 export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
 }
-export const getupdateLog = (doorNo: number | string): Promise<LandlordDtoType> => {
-  return request.get({ url: `/updateLog?doorNo=` + doorNo })
+export const getupdateLog = (params: any): Promise<LandlordDtoType> => {
+  return request.get({
+    url: `/updateLog`,
+    params
+  })
 }
 
 /**

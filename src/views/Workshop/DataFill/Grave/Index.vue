@@ -13,7 +13,7 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="props.surveyStatus === 'review'">修改日志</ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -109,14 +109,19 @@
         </ElTableColumn>
       </ElTable>
     </div>
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="坟墓信息"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed, onMounted } from 'vue'
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import {
   ElButton,
   ElSpace,
@@ -143,7 +148,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  surveyStatus
 }
 
 const props = defineProps<PropsType>()
@@ -204,7 +209,7 @@ const getList = () => {
   const params = {
     // doorNo: props.doorNo,
     registrantId: +props.householdId,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    status: props.surveyStatus == 2 ? 'review' : undefined
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
