@@ -5,7 +5,9 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+          <ElButton
+            @click="recordClick"
+            v-if="surveyStatus === SurveyStatusEnum.Review && type === 'Landlord'"
             >修改日志</ElButton
           >
         </ElSpace>
@@ -63,6 +65,7 @@
       :householdId="props.householdId"
       :doorNo="props.doorNo"
       :survey-status="surveyStatus"
+      :type="type"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -89,6 +92,7 @@ interface PropsType {
   householdId: string
   doorNo: string
   surveyStatus: SurveyStatusEnum
+  type?: string
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()

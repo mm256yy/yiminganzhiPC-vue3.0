@@ -387,10 +387,10 @@
       <ElFormItem
         v-if="actionType === 'add' && surveyStatus === SurveyStatusEnum.Review"
         label="新增原因"
-        prop="reason"
+        prop="addReason"
         required
       >
-        <ElInput type="textarea" v-model="form.reason" />
+        <ElInput type="textarea" v-model="form.addReason" />
       </ElFormItem>
     </ElForm>
 

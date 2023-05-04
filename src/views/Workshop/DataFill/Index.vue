@@ -75,6 +75,7 @@
       <House
         :doorNo="doorNo"
         :householdId="householdId"
+        :type="type"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
