@@ -447,6 +447,36 @@
               </div>
             </div>
           </ElTabPane>
+          <ElTabPane label="实采批复" name="实采批复">
+            <div class="tabs-box">
+              <div class="tabs-box-left">
+                <div
+                  class="tabs-content-box"
+                  @click="
+                    routerJump(
+                      `/workshop/report?type=${ReportTypes.ConfirmPhysicalApproval}&title=实物采集确认批复`
+                    )
+                  "
+                >
+                  <img
+                    v-if="reportResult.ConfirmPhysicalApproval"
+                    src="@/assets/imgs/Icon_Report_abled.png"
+                    width="15"
+                  />
+                  <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>实物采集确认批复</span>
+                  <img
+                    v-if="!reportResult.ConfirmPhysicalApproval"
+                    src="@/assets/imgs/Icon_Upload.png"
+                    width="15"
+                    class="img_r"
+                  />
+                </div>
+              </div>
+              <div class="middle"></div>
+              <div class="tabs-box-right"></div>
+            </div>
+          </ElTabPane>
         </ElTabs>
       </div>
     </div>
@@ -557,7 +587,8 @@ const reportResult = ref<any>({
   WoodLand: false,
   Other: false,
   ProfessionalProject: false,
-  Clean: false
+  Clean: false,
+  ConfirmPhysicalApproval: false
 })
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
