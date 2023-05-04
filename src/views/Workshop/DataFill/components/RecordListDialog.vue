@@ -48,6 +48,7 @@
 <script lang="ts" setup>
 import { ElDialog, ElButton, ElSteps, ElStep } from 'element-plus'
 import { watch, ref } from 'vue'
+import dayjs from 'dayjs'
 import { getupdateLog } from '@/api/workshop/landlord/service'
 
 interface PropsType {
@@ -84,14 +85,15 @@ watch(
         if (res && res.content) {
           console.log(res.content, '操作日志')
           const result = res.content
+            .filter((item) => item.type === props.type)
             .map((item) => {
               item.updateJsonArray = []
               if (item.updateJson) {
                 item.updateJsonArray = JSON.parse(item.updateJson)
               }
+              item.createdDate = dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss')
               return item
             })
-            .filter((item) => item.type === props.type)
           list.value = result
         }
       })
