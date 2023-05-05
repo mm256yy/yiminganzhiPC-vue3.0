@@ -15,7 +15,7 @@ export const ReportTabs = [
     type: 0,
     name: '房屋装修评估',
     id: ReportTabIds[1],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-city',
     active: false
   },
   {
@@ -36,14 +36,14 @@ export const ReportTabs = [
     type: 0,
     name: '土地基本情况评估',
     id: ReportTabIds[4],
-    icon: 'mdi:pine-tree',
+    icon: 'mdi:land-fields',
     active: false
   },
   {
     type: 0,
     name: '土地青苗及附着物评估',
     id: ReportTabIds[5],
-    icon: 'mdi:pine-tree',
+    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
     active: false
   },
   {

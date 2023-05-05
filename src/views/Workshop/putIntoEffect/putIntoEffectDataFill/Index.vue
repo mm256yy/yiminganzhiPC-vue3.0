@@ -60,7 +60,8 @@
       </div>
 
       <UserInfo :baseInfo="baseInfo" :type="type" :tabCurrentId="tabCurrentId" />
-      <!-- EnterpriseTabs -->
+
+      <!-- Tabs -->
       <div class="report-tabs">
         <div v-for="item in tabsType" :key="item.id">
           <div
@@ -74,6 +75,7 @@
         </div>
       </div>
     </div>
+
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
@@ -266,6 +268,7 @@
         :uid="uid"
         v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
       />
+
       <!-- 动迁安置 社保缴费 -->
       <social-security
         :doorNo="doorNo"
@@ -341,9 +344,10 @@ import houseConfirmation from './houseConfirmation/Index.vue' // 资格认证 --
 import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
 import produce from './produce/Index.vue' // 安置确认 -- 生产安置
 import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
+
 import createCard from './createCard/Index.vue' // 移民建卡
 
-import Agreement from './Agreement/Agreement.vue'
+import Agreement from './Agreement/Agreement.vue' // 协议签订
 
 import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
@@ -354,14 +358,15 @@ import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' /
 import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
 import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
-import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 生产用地
-import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 社保缴费
-import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
-import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
+import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 -- 生产用地
+import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 -- 社保缴费
+import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
+import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
 
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
+
 const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
