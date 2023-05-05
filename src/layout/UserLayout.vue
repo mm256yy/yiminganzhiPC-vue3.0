@@ -125,7 +125,7 @@ export default defineComponent({
 .div {
   :deep(.el-input__wrapper) {
     width: 120px;
-    margin-right: 50px;
+    margin-right: 20px;
     background-color: transparent;
   }
 

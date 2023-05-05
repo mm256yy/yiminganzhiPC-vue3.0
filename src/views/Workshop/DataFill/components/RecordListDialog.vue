@@ -81,7 +81,8 @@ watch(
       getupdateLog({
         doorNo: props.doorNo,
         size: 1000,
-        type: props.type
+        type: props.type,
+        sort: ['createdDate', 'desc']
       }).then((res) => {
         if (res && res.content) {
           console.log(res.content, '操作日志')

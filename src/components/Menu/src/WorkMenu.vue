@@ -67,6 +67,7 @@ export default defineComponent({
           defaultActive={unref(activeMenu)}
           mode={unref(menuMode)}
           collapse={false}
+          ellipsis={false}
           uniqueOpened={unref(layout) === 'top' ? false : unref(uniqueOpened)}
           backgroundColor="transparent"
           textColor="#fff"

@@ -11,7 +11,7 @@ const appStore = useAppStore()
 
 const show = ref(true)
 
-const title = computed(() => appStore.getTitle)
+// const title = computed(() => appStore.getTitle)
 
 const layout = computed(() => appStore.getLayout)
 
@@ -64,11 +64,11 @@ watch(
     ]"
     to="/"
   >
-    <img src="@/assets/imgs/logo.png" class="w-30px h-39px" />
+    <img src="@/assets/imgs/logo.png" class="w-39px h-39px" />
     <span :class="['ml-10px text-24px font-500', 'text-[#fff]']"> {{ reservoirName }}</span>
 
     <div v-if="show" :class="['ml-10px text-24px font-600', 'text-[#fff]']">
-      {{ title }}
+      <!-- {{ title }} -->
     </div>
   </router-link>
 </template>
