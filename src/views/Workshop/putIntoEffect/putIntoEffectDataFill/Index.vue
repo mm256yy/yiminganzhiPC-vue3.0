@@ -60,7 +60,8 @@
       </div>
 
       <UserInfo :baseInfo="baseInfo" :type="type" :tabCurrentId="tabCurrentId" />
-      <!-- EnterpriseTabs -->
+
+      <!-- Tabs -->
       <div class="report-tabs">
         <div v-for="item in tabsType" :key="item.id">
           <div
@@ -74,6 +75,7 @@
         </div>
       </div>
     </div>
+
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
@@ -266,6 +268,7 @@
         :uid="uid"
         v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
       />
+
       <!-- 动迁安置 社保缴费 -->
       <social-security
         :doorNo="doorNo"
