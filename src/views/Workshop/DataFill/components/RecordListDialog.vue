@@ -80,12 +80,13 @@ watch(
     if (props.recordShow) {
       getupdateLog({
         doorNo: props.doorNo,
-        size: 1000
+        size: 1000,
+        type: props.type
       }).then((res) => {
         if (res && res.content) {
           console.log(res.content, '操作日志')
           const result = res.content
-            .filter((item) => item.type === props.type)
+            // .filter((item) => item.type === props.type)
             .map((item) => {
               item.updateJsonArray = []
               if (item.updateJson) {
