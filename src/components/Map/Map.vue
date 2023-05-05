@@ -84,7 +84,7 @@ const init = async (type) => {
   }
 
   AMap = await AMapLoader.load({
-    key: 'c4d29cb422ae2bda245486bf7953b85d', // 申请好的Web端开发者Key，首次调用 load 时必填
+    key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
 
     // plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder', 'AMap.Geolocation'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
