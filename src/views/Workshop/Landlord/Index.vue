@@ -35,7 +35,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
+          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton> -->
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
@@ -205,7 +205,7 @@ const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -563,11 +563,11 @@ const onDelRow = async (row: LandlordDtoType) => {
   // )
 }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
-  dialog.value = true
-}
+// const onAddRow = () => {
+//   actionType.value = 'add'
+//   tableObject.currentRow = null
+//   dialog.value = true
+// }
 
 const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
