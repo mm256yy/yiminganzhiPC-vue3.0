@@ -59,7 +59,13 @@
             </el-select>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="户号" prop="registrantDoorNo" align="center" header-align="center">
+        <ElTableColumn
+          label="户号"
+          width="180"
+          prop="registrantDoorNo"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
@@ -138,11 +144,17 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
+        <ElTableColumn
+          label="立坟年份"
+          width="150"
+          prop="graveYear"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput
               v-model="row.graveYear"
-              :placeholder="type == 'Landlord' ? '' : '请输入年份'"
+              :placeholder="type == 'Landlord' ? '' : '请输入'"
               :disabled="type == 'Landlord'"
             >
               <template #append>年</template>
@@ -154,7 +166,7 @@
             <ElSelect
               clearable
               filterable
-              :placeholder="type == 'Landlord' ? '' : '请选择所处位置'"
+              :placeholder="type == 'Landlord' ? '' : '请选择'"
               v-model="row.gravePosition"
               :disabled="type == 'Landlord'"
             >
@@ -245,8 +257,11 @@ const headers = ref({
   Authorization: appStore.getToken
 })
 // const defaultRow = {
-//   doorNo: props.doorNo,
-//   householdId: props.householdId,
+//   villageDoorNo: props.doorNo,
+//   villageId: props.householdId,
+//   registrantName: '',
+//   registrantDoorNo: '',
+//   registrantId: '',
 //   graveType: '',
 //   materials: '',
 //   graveYear: '',
@@ -288,8 +303,8 @@ const remoteMethod = (query: string) => {
 
 const getList = () => {
   const params = {
-    doorNo: props.doorNo,
-    householdId: +props.householdId
+    villageDoorNo: props.doorNo,
+    villageId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
@@ -330,8 +345,8 @@ const onSave = () => {
     ElMessage.error('登记人不能为空')
   } else {
     tableData.value.forEach((item) => {
-      item.doorNo = props.doorNo
-      item.householdId = props.householdId
+      item.villageDoorNo = props.doorNo
+      item.villageId = props.householdId
     })
     saveGraveListApi(tableData.value).then(() => {
       ElMessage.success('操作成功！')

@@ -49,7 +49,7 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+        <ElTableColumn label="数量" width="180" prop="number" align="center" header-align="center">
           <template #default="{ row }">
             <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
           </template>
@@ -75,7 +75,7 @@
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择所处位置" v-model="row.gravePosition">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.gravePosition">
               <ElOption
                 v-for="item in dictObj[288]"
                 :key="item.value"
@@ -85,9 +85,15 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所属村集体" prop="householdId" align="center" header-align="center">
+        <ElTableColumn label="所属村集体" prop="villageId" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择所属村集体" v-model="row.householdId">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择"
+              v-model="row.villageId"
+              @change="change"
+            >
               <ElOption
                 v-for="item in villageList"
                 :key="item.value"
@@ -151,6 +157,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   householdId: string
   doorNo: string
+  name: string
   surveyStatus: SurveyStatusEnum
 }
 
@@ -169,9 +176,11 @@ const recordClick = () => {
 }
 
 const defaultRow = {
-  doorNo: props.doorNo,
-  registrantId: props.householdId,
-  householdId: '',
+  registrantId: props.householdId, // 登记人 ID
+  registrantDoorNo: props.doorNo, // 登记人户号
+  registrantName: props.name, // 登记人姓名
+  villageId: '', // 村集体 ID
+  villageDoorNo: '', // 村集体户号
   relation: '',
   graveType: '',
   materials: '',
@@ -199,6 +208,7 @@ const initCollectiveData = (data: any) => {
   if (data && data.length) {
     data.map((item: any) => {
       newArr.push({
+        doorNo: item.doorNo,
         label: item.name,
         value: item.id
       })
@@ -210,7 +220,7 @@ const initCollectiveData = (data: any) => {
 
 const getList = () => {
   const params = {
-    // doorNo: props.doorNo,
+    registrantDoorNo: props.doorNo,
     registrantId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
@@ -219,6 +229,21 @@ const getList = () => {
 }
 
 getList()
+
+/**
+ * 选择所属村集体
+ * @param e 当前所选的值
+ */
+const change = (e: any) => {
+  if (e) {
+    let itemData = villageList.value.find((item: any) => item.value === e)
+    tableData.value.map((item: any) => {
+      if (item.villageId === e) {
+        item.villageDoorNo = itemData.doorNo
+      }
+    })
+  }
+}
 
 const onAddRow = () => {
   tableData.value.push({ ...defaultRow })

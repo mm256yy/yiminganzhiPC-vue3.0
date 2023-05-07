@@ -576,6 +576,7 @@ const fillData = (row) => {
   push({
     name: routerName,
     query: {
+      name: row.name,
       householdId: row.id,
       doorNo: row.doorNo,
       type: 'Landlord'
