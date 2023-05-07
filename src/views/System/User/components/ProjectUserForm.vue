@@ -64,6 +64,7 @@ import { useValidator } from '@/hooks/web/useValidator'
 interface Props {
   show: boolean
   projectUser?: ProjectUserType
+  title: string
 }
 
 interface ProjectUser extends ProjectUserType {
@@ -117,12 +118,13 @@ onMounted(async () => {
     row.value.projectName = projects.value.find((x) => x.id === pId)?.name
     orgs.value = [await getOrgTreeApi(pId)]
     roles.value = await getAllRoleApi(pId)
-
-    const arr: any = row.value.roles
-    row.value.roles = []
-    arr.forEach((item) => {
-      row.value.roleIds?.push(item.id)
-    })
+    if (props.title === '编辑用户') {
+      const arr: any = row.value.roles
+      row.value.roles = []
+      arr.forEach((item) => {
+        row.value.roleIds?.push(item.id)
+      })
+    }
   }
 })
 

@@ -198,13 +198,13 @@ const initVillageData = async () => {
           longitude: item.longitude,
           latitude: item.latitude,
           areaCodeText: splitStr(item.districtName, '/')
-            ? splitStr(item.districtName, '/')[1]
-            : '-',
-          townCodeText: splitStr(item.districtName, '/')
             ? splitStr(item.districtName, '/')[2]
             : '-',
-          villageCodeText: splitStr(item.districtName, '/')
+          townCodeText: splitStr(item.districtName, '/')
             ? splitStr(item.districtName, '/')[3]
+            : '-',
+          villageCodeText: splitStr(item.districtName, '/')
+            ? splitStr(item.districtName, '/')[4]
             : '-',
           type: 'Village'
         })
@@ -271,7 +271,9 @@ const initMarker = async () => {
         context.marker.setOffset(offset)
 
         // 设置点击标记点事件
-        context.marker.on('click', handlerClickMarker)
+        context.marker.on('click', function () {
+          handlerClickMarker(item.id)
+        })
       })
     }
   }
@@ -323,12 +325,11 @@ const initPolygon = async () => {
  * 点击标记点
  * @param{Object} e
  */
-const handlerClickMarker = (e: any) => {
-  const [lng, lat] = e.target._position
+const handlerClickMarker = (uid: any) => {
   let arr: any = [...householdList.value, ...villageList.value]
   if (arr && arr.length) {
     arr.map((item: any) => {
-      if (Number(item.longitude) === Number(lng) && Number(item.latitude) == Number(lat)) {
+      if (item.uid === uid) {
         if (item.type === 'PeasantHousehold') {
           dataInfo.value = {
             iconPath: iconPath.userIconPath,
