@@ -14,8 +14,7 @@ export const useValidator = () => {
   const required = (message?: string) => {
     return {
       required: true,
-      message: message || t('common.required'),
-      pattern: '[^ \x22]+'
+      message: message || t('common.required')
     }
   }
 
