@@ -171,7 +171,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       }
       if (message) {
         if (prompt) {
-          ElMessageBox.prompt(t('common.delMessage'), t('common.delWarning'), {
+          await ElMessageBox.prompt(t('common.delMessage'), t('common.delWarning'), {
             confirmButtonText: t('common.delOk'),
             cancelButtonText: t('common.delCancel'),
             type: 'warning',
@@ -185,7 +185,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
             await delData(ids, value)
           })
         } else {
-          ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
+          await ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
             confirmButtonText: t('common.delOk'),
             cancelButtonText: t('common.delCancel'),
             type: 'warning'

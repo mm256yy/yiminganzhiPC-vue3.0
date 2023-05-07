@@ -190,7 +190,7 @@ export const FlowTabs = [
   // }
 ]
 
-// 上报状态
+// 填报状态
 export const ReportStatus = {
   ReportSucceed: 'ReportSucceed',
   UnReport: 'UnReport'
