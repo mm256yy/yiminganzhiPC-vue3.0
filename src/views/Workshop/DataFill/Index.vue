@@ -377,7 +377,7 @@ const getLandlordInfo = () => {
 }
 
 getLandlordInfo()
-const { push } = useRouter()
+// const { push } = useRouter()
 
 watch(
   () => globalData.currentSurveyStatus,
@@ -452,7 +452,8 @@ const onConfirmReport = async () => {
 }
 
 const onBack = () => {
-  push('/Workshop/Landlord')
+  // push('/Workshop/Landlord')
+  back()
 }
 
 const onPrint = () => {

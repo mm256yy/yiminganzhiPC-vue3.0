@@ -198,13 +198,13 @@ const initVillageData = async () => {
           longitude: item.longitude,
           latitude: item.latitude,
           areaCodeText: splitStr(item.districtName, '/')
-            ? splitStr(item.districtName, '/')[1]
-            : '-',
-          townCodeText: splitStr(item.districtName, '/')
             ? splitStr(item.districtName, '/')[2]
             : '-',
-          villageCodeText: splitStr(item.districtName, '/')
+          townCodeText: splitStr(item.districtName, '/')
             ? splitStr(item.districtName, '/')[3]
+            : '-',
+          villageCodeText: splitStr(item.districtName, '/')
+            ? splitStr(item.districtName, '/')[4]
             : '-',
           type: 'Village'
         })
