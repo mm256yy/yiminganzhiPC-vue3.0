@@ -145,7 +145,7 @@ export const getLandlordHeadApi = (params: any): Promise<any> => {
 }
 
 /**
- * 上报居民户信息
+ * 填报居民户信息
  */
 export const reportLandlordApi = (id: number, isCheck: boolean, type: string) => {
   return request.post({

@@ -435,6 +435,7 @@ const onDelRow = async (row: LandlordDtoType) => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
         setSearchParams({ type: 'Village' })
+        getLandlordHeadInfo()
       })
     })
     .catch(() => {})
@@ -464,6 +465,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     // getList()
     setSearchParams({ type: 'Village' })
+    getLandlordHeadInfo()
   }
 }
 

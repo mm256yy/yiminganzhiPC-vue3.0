@@ -299,7 +299,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportStatus',
-    label: '上报状态',
+    label: '填报状态',
     search: {
       show: true,
       component: 'Select',

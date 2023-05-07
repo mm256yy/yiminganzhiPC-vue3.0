@@ -70,6 +70,7 @@
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
+        @update-info="getLandlordInfo"
       />
       <!-- 房屋信息 -->
       <House
