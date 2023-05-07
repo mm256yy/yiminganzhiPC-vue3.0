@@ -110,6 +110,7 @@
       />
       <!-- 坟墓 -->
       <Grave
+        :name="name"
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
@@ -353,7 +354,7 @@ import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
 const { currentRoute, back } = useRouter()
-const { doorNo, householdId, type } = currentRoute.value.query as any
+const { doorNo, householdId, type, name } = currentRoute.value.query as any
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const surveyStatus = ref<SurveyStatusEnum>(SurveyStatusEnum.Survey)
