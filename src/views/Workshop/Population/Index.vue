@@ -224,7 +224,7 @@ onMounted(() => {
   getExcelUploadList()
   timer = window.setInterval(() => {
     getExcelUploadList()
-  }, 30000)
+  }, 3000)
 })
 
 onBeforeUnmount(() => {
