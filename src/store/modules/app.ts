@@ -334,7 +334,7 @@ export const useAppStore = defineStore('app', {
       this.currentProjectId = projectId
     },
     setCurrentMapJson(mapJson: string) {
-      wsCache.set(CURRENT_PROJECT_KEY, mapJson)
+      wsCache.set(CURRENT_MAP_KEY, mapJson)
       this.currentMapJson = mapJson
     },
     setCurrentPlatform(platform: PlatformType) {

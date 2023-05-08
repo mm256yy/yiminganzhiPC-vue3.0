@@ -78,13 +78,16 @@ const projectId = appStore.currentProjectId
 const initCoordinatesData = (obj: any) => {
   let arr: any = []
   obj?.features.map((item: any) => {
+    console.log('coordinates:', ...item.geometry?.coordinates[0][0])
     arr.push(...item.geometry?.coordinates[0][0])
   })
   return arr
 }
 
 const mapJson: any = appStore.currentMapJson ? JSON.parse(appStore.currentMapJson) : null
+console.log('mapJson:', mapJson)
 const points = mapJson ? initCoordinatesData(mapJson) : []
+console.log('points:', points)
 const pointsLength = points.length
 
 interface LocationType {
