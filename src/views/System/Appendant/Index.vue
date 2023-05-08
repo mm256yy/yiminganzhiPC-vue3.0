@@ -57,6 +57,7 @@ const currentRow = ref<AppendantInfoType>()
 const name = ref<string>()
 
 const columns = reactive<TableColumn[]>([
+  { field: 'sort', label: '排序' },
   { field: 'name', label: '项目' },
   { field: 'size', label: '规格' },
   { field: 'unit', label: '单位' },
@@ -69,6 +70,8 @@ const { register, tableObject, methods } = useTable({
     columns
   }
 })
+
+tableObject.params.sort = 'sort,asc'
 
 const { getList } = methods
 

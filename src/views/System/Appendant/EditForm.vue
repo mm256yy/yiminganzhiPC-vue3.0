@@ -51,7 +51,8 @@ const rules = {
 const schema = reactive<FormSchema[]>([
   { field: 'name', label: '项目', component: 'Input' },
   { field: 'size', label: '规格', component: 'Input' },
-  { field: 'unit', label: '单位', component: 'Input' }
+  { field: 'unit', label: '单位', component: 'Input' },
+  { field: 'sort', label: '排序', component: 'Input' }
 ])
 
 const { register, elFormRef, methods } = useForm()
