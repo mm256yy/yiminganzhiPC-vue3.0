@@ -74,8 +74,13 @@ const doSave = async () => {
   loading.value = true
   const appendant = (await methods.getFormData()) || {}
   // 修改
-  if (currentRow.value && currentRow.value.id) {
-    appendant.id = currentRow.value.id
+  if (currentRow.value) {
+    if (currentRow.value.id) {
+      appendant.id = currentRow.value.id
+    }
+    if (currentRow.value.sort) {
+      appendant.sort = +currentRow.value.sort
+    }
   }
   saveAppendantApi(appendant as AppendantInfoType)
     .then(() => {

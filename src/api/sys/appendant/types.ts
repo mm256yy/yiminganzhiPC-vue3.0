@@ -5,6 +5,7 @@ export type AppendantInfoType = {
   name: string
   size: string
   unit: string
+  sort?: number
 }
 
 export type AppendantQueryType = {
