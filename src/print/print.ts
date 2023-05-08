@@ -100,7 +100,7 @@ const formatDict = (value: any, id: number) => {
   if (value) {
     const arr: any = dict[id]
     const arrItem = arr.find((item: any) => String(item.value) === String(value))
-    str = arrItem ? arrItem.text : ''
+    str = arrItem ? arrItem.label : ''
     return str
   } else {
     return ''
