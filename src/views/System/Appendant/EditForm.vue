@@ -51,7 +51,8 @@ const rules = {
 const schema = reactive<FormSchema[]>([
   { field: 'name', label: '项目', component: 'Input' },
   { field: 'size', label: '规格', component: 'Input' },
-  { field: 'unit', label: '单位', component: 'Input' }
+  { field: 'unit', label: '单位', component: 'Input' },
+  { field: 'sort', label: '排序', component: 'Input' }
 ])
 
 const { register, elFormRef, methods } = useForm()
@@ -73,8 +74,13 @@ const doSave = async () => {
   loading.value = true
   const appendant = (await methods.getFormData()) || {}
   // 修改
-  if (currentRow.value && currentRow.value.id) {
-    appendant.id = currentRow.value.id
+  if (currentRow.value) {
+    if (currentRow.value.id) {
+      appendant.id = currentRow.value.id
+    }
+    if (currentRow.value.sort) {
+      appendant.sort = +currentRow.value.sort
+    }
   }
   saveAppendantApi(appendant as AppendantInfoType)
     .then(() => {
