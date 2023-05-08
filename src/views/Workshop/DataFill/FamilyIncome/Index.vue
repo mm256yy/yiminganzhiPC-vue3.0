@@ -254,7 +254,7 @@ const getSubtotal = (type: string) => {
       const result = tableList.reduce((pre, current) => {
         return pre + parseFloat(current.amount)
       }, 0)
-      return result
+      return isNaN(result) ? 0 : result
     }
   }
 }
@@ -263,7 +263,7 @@ const getSubtotal = (type: string) => {
 const total = computed(() => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
   return realTableData.reduce((pre, current) => {
-    return pre + parseFloat(current.amount)
+    return (pre ? pre : 0) + (current.amount ? parseFloat(current.amount) : 0)
   }, 0)
 })
 
