@@ -179,6 +179,19 @@ const defaultValue: Omit<PolicyDtoType, 'id'> = {
   keyWord: '',
   fileList: []
 }
+const tempDefaultValue: Omit<PolicyDtoType, 'id'> = {
+  title: '',
+  docNo: '',
+  enclosure: '',
+  sortNum: 999,
+  type: '',
+  projectId: 0,
+  publicityTime: '',
+  status: '1',
+  issuingAgency: '',
+  keyWord: '',
+  fileList: []
+}
 const form = ref<Omit<PolicyDtoType, 'id'>>(defaultValue)
 
 watch(
@@ -197,6 +210,20 @@ watch(
     deep: true
   }
 )
+
+const initData = () => {
+  if (props.actionType === 'edit') {
+    form.value = {
+      ...props.row
+    }
+  } else {
+    form.value = Object.assign({}, tempDefaultValue)
+  }
+}
+
+defineExpose({
+  initData
+})
 
 // 规则校验
 const rules = reactive<FormRules>({
@@ -271,6 +298,7 @@ const onSubmit = debounce((formEl) => {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+
   .el-input__wrapper {
     width: 100%;
   }
