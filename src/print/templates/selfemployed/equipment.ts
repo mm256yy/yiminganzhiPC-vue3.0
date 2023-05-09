@@ -109,7 +109,7 @@ const getInfo = (landlord: LandlordType) => {
         }
       ],
       [{ text: `所在位置：${landlord.locationTypeText}` }],
-      [{ text: `联系方式：${landlord.phone}` }]
+      [{ text: `联系方式：${landlord.phone || ''}` }]
     ]
   }
 }
