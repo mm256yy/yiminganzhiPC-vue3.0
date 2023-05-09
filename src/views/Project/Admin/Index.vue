@@ -155,6 +155,9 @@ const reset = () => {
   query.townCode = ''
   tableObject.currentPage = 1
   tableObject.size = 10
+  tableObject.params.name = null
+  tableObject.params.townCode = null
+  getList()
 }
 
 onMounted(() => {
