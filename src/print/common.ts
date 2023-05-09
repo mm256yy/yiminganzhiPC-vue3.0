@@ -15,7 +15,15 @@ export const getHead = (landlord: LandlordType, projectInfo: ProjectType) => {
     margin: [0, 8],
     columns: [
       {
-        text: `分类目录：${landlord.type === MainType.PeasantHousehold ? '移民' : '企业'}`,
+        text: `分类目录：${
+          landlord.type === MainType.PeasantHousehold
+            ? '移民'
+            : landlord.type === MainType.Company
+            ? '企业'
+            : landlord.type === MainType.IndividualHousehold
+            ? '个体工商户'
+            : ''
+        }`,
         width: 170
       },
       {
@@ -36,7 +44,15 @@ export const getBottom = (landlord: LandlordType, projectInfo: ProjectType) => {
     alignment: 'left',
     margin: [0, 10, 0, 0],
     columns: [
-      `分类目录：${landlord.type === MainType.PeasantHousehold ? '移民' : '企业'}`,
+      `分类目录：${
+        landlord.type === MainType.PeasantHousehold
+          ? '移民'
+          : landlord.type === MainType.Company
+          ? '企业'
+          : landlord.type === MainType.IndividualHousehold
+          ? '个体工商户'
+          : ''
+      }`,
       `所属阶段：${
         projectInfo.status && projectInfo.status === SurveyStatusEnum.Review
           ? '实物复核'
@@ -61,16 +77,30 @@ export const getCompanyTableHead = (landlord: LandlordType, projectInfo: Project
             border: [true, true, false, false],
             stack: [
               {
-                text: `${projectInfo.name} 工程建设 征地移民实物调查表`,
+                text: `${projectInfo.name} 工程建设 征地${
+                  landlord.type === MainType.PeasantHousehold
+                    ? '移民'
+                    : landlord.type === MainType.Company
+                    ? '企业'
+                    : landlord.type === MainType.IndividualHousehold
+                    ? '个体工商户'
+                    : ''
+                }实物调查表`,
                 alignment: 'center',
                 fontSize: 16,
                 bold: true,
                 margin: [headMargin, 0, headMargin, 2]
               },
               {
-                text: `（${landlord.type === MainType.Company ? '企业' : '个体户'} ${
-                  landlord.name
-                } ${landlord.doorNo} 号）`,
+                text: `（${
+                  landlord.type === MainType.PeasantHousehold
+                    ? '移民'
+                    : landlord.type === MainType.Company
+                    ? '企业'
+                    : landlord.type === MainType.IndividualHousehold
+                    ? '个体工商户'
+                    : ''
+                } ${landlord.name} ${landlord.doorNo} 号）`,
                 alignment: 'center',
                 margin: [headMargin, 0, headMargin, 0]
               }
@@ -122,7 +152,15 @@ export const getCompanyBaseTableHead = (landlord: LandlordType, projectInfo: Pro
             border: [true, true, false, false],
             stack: [
               {
-                text: `${projectInfo.name} 工程建设 征地企业实物调查表`,
+                text: `${projectInfo.name} 工程建设 征地${
+                  landlord.type === MainType.PeasantHousehold
+                    ? '移民'
+                    : landlord.type === MainType.Company
+                    ? '企业'
+                    : landlord.type === MainType.IndividualHousehold
+                    ? '个体工商户'
+                    : ''
+                }实物调查表`,
                 alignment: 'center',
                 fontSize: 16,
                 bold: true,
@@ -135,8 +173,40 @@ export const getCompanyBaseTableHead = (landlord: LandlordType, projectInfo: Pro
           ''
         ],
         ['', '', { text: '地理位置', style: 'td' }, { text: landlord.address || '', style: 'td' }],
-        ['', '', { text: '企业名称', style: 'td' }, { text: landlord.name || '', style: 'td' }],
-        ['', '', { text: '企业编码', style: 'td' }, { text: landlord.doorNo || '', style: 'td' }],
+        [
+          '',
+          '',
+          {
+            text: `${
+              landlord.type === MainType.PeasantHousehold
+                ? '移民'
+                : landlord.type === MainType.Company
+                ? '企业'
+                : landlord.type === MainType.IndividualHousehold
+                ? '个体工商户'
+                : ''
+            }名称`,
+            style: 'td'
+          },
+          { text: landlord.name || '', style: 'td' }
+        ],
+        [
+          '',
+          '',
+          {
+            text: `${
+              landlord.type === MainType.PeasantHousehold
+                ? '移民'
+                : landlord.type === MainType.Company
+                ? '企业'
+                : landlord.type === MainType.IndividualHousehold
+                ? '个体工商户'
+                : ''
+            }编码`,
+            style: 'td'
+          },
+          { text: landlord.doorNo || '', style: 'td' }
+        ],
         [
           {
             text: `所属区域：${landlord.locationTypeText}`,
