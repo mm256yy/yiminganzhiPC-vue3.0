@@ -141,7 +141,7 @@ import {
 } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
-import { ref, reactive, watch, nextTick, defineExpose } from 'vue'
+import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { validOptions, policyTypes } from '../config'
 import { useValidator } from '@/hooks/web/useValidator'
