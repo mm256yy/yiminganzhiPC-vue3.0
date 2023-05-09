@@ -19,7 +19,7 @@ export const selfemployedBaseDefinition = {
         [{ text: '县（市/区）：' }, { text: '个体工商户名称：', style: 'td' }],
         [{ text: '行政村：' }, { text: '所在位置：', style: 'td' }],
         [{ text: '村编码：' }, { text: '联系方式：', style: 'td' }],
-        [{ text: '表号：QY_02_02_01' }, { text: '企业编码：', style: 'td' }]
+        [{ text: '表号：QY_02_02_01' }, { text: '个体工商户编码：', style: 'td' }]
       ]
     },
     {
@@ -250,7 +250,7 @@ export const selfemployedBaseDefinition = {
     {
       alignment: 'left',
       margin: [0, 10, 0, 0],
-      columns: ['分类目录：企业', '所属阶段：', '']
+      columns: ['分类目录：个体工商户', '所属阶段：', '']
     }
   ],
   footer: function () {
@@ -308,9 +308,9 @@ const getInfo = (landlord: LandlordType) => {
       ],
       [
         { text: `村编码：${landlord.villageCode}` },
-        { text: `联系方式：${landlord.phone}`, style: 'td' }
+        { text: `联系方式：${landlord.phone || ''}`, style: 'td' }
       ],
-      [{ text: `表号：QY_02_02_01` }, { text: `企业编码：${company.doorNo}`, style: 'td' }]
+      [{ text: `个体工商户编码：${company.doorNo}` }, { text: ``, style: 'td' }]
     ]
   }
 }
@@ -429,9 +429,9 @@ const getMainInfo = (landlord: LandlordType) => {
           ''
         ],
         [
-          { text: '注册资金', colSpan: 2, style: 'td' },
+          { text: '年工资总额', colSpan: 2, style: 'td' },
           '',
-          { text: company.registeredAmount || '', colSpan: 7, style: 'td' },
+          { text: company.annualPayroll || '', colSpan: 7, style: 'td' },
           '',
           '',
           '',
