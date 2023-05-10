@@ -659,6 +659,7 @@ export const getHousePic = (landlord: LandlordType) => {
   return {
     table: {
       widths: [545],
+      headerRows: 1,
       body
     },
     layout
