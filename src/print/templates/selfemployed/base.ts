@@ -428,9 +428,9 @@ const getMainInfo = (landlord: LandlordType) => {
           ''
         ],
         [
-          { text: '年工资总额', colSpan: 2, style: 'td' },
+          { text: '注册资金', colSpan: 2, style: 'td' },
           '',
-          { text: company.annualPayroll || '', colSpan: 7, style: 'td' },
+          { text: company.registeredAmount || '', colSpan: 7, style: 'td' },
           '',
           '',
           '',
@@ -446,9 +446,9 @@ const getMainInfo = (landlord: LandlordType) => {
           { text: '职工人数', rowSpan: 2, style: 'td_2' },
           { text: '正式工（人）', style: 'td' },
           { text: company.regularWorkerNum || '', style: 'td' },
-          { text: '注册资金', rowSpan: 2, colSpan: 2, style: 'td_2' },
+          { text: '年工资总额', rowSpan: 2, colSpan: 2, style: 'td_2' },
           '',
-          { text: company.registeredAmount || '', rowSpan: 2, style: 'td_2' }
+          { text: company.annualPayroll || '', rowSpan: 2, style: 'td_2' }
         ],
         [
           '',
