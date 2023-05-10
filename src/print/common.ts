@@ -6,7 +6,7 @@ import { SurveyStatusEnum } from '@/views/Workshop/components/config'
  */
 
 // 顶部项目名称栏边距
-const headMargin = 40
+const headMargin = 20
 
 // 顶部两栏信息
 export const getHead = (landlord: LandlordType, projectInfo: ProjectType) => {
@@ -610,7 +610,8 @@ export const getHousePic = (landlord: LandlordType) => {
       body.push([
         {
           image: `img_${dex}`,
-          fit: [550, imgHeight]
+          fit: [550, imgHeight],
+          pageBreak: 'after'
         }
       ])
     })
