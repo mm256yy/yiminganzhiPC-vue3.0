@@ -147,6 +147,7 @@ const onSave = () => {
 
 .row {
   display: flex;
+  padding-left: 180px;
   margin-bottom: 20px;
   font-size: 14px;
   font-weight: bold;

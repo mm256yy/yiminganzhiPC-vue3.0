@@ -66,12 +66,15 @@
         </div>
         <div class="pl-28">
           <div class="flex items-center justify-between pb-12px">
-            <div class="sub-title">择房信息登记：</div>
+            <div class="sub-title">
+              择房信息登记，所选房型及套数：
+              <span class="text-[#1C5DF1]">{{ tableData.length }}</span>
+            </div>
             <ElSpace>
               <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
             </ElSpace>
           </div>
-          <ElTable :data="tableData" style="width: 100%" class="mb-20">
+          <ElTable :data="tableData" stripe border style="width: 100%" class="mb-20">
             <ElTableColumn
               label="序号"
               :width="60"
@@ -115,10 +118,6 @@
               </template>
             </ElTableColumn>
           </ElTable>
-        </div>
-        <div class="sub-title">
-          所选房型及套数：
-          <span class="text-[#1C5DF1]">10</span>
         </div>
         <div class="row txt-indent-28">特此告知！</div>
         <div class="row right">移交人（捺印）：</div>

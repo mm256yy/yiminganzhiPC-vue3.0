@@ -95,42 +95,42 @@ export const ReportTabs = [
     type: 5,
     name: '房屋腾空确认单',
     id: ReportTabIds[0],
-    icon: 'clarity:house-solid',
+    icon: 'material-symbols:emoji-transportation',
     active: false
   },
   {
     type: 5,
     name: '青苗腾空确认单',
     id: ReportTabIds[1],
-    icon: 'mdi:pine-tree',
+    icon: 'icon-park-outline:sapling',
     active: false
   },
   {
     type: 5,
     name: '择房确认单',
     id: ReportTabIds[2],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-clock-outline',
     active: false
   },
   {
     type: 5,
     name: '择址确认单',
     id: ReportTabIds[3],
-    icon: 'pixelarticons:buildings',
+    icon: 'mdi:selection-multiple-marker',
     active: false
   },
   {
     type: 5,
     name: '建房告知单',
     id: ReportTabIds[4],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:notice-board',
     active: false
   },
   {
     type: 5,
     name: '择房交付告知单',
     id: ReportTabIds[5],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-city-outline',
     active: false
   },
   {
@@ -151,7 +151,7 @@ export const ReportTabs = [
     type: 5,
     name: '生产用地交付告知单',
     id: ReportTabIds[8],
-    icon: 'mdi:pine-tree',
+    icon: 'mdi:land-fields',
     active: false
   },
   {
@@ -165,7 +165,7 @@ export const ReportTabs = [
     type: 5,
     name: '自建房验收告知单',
     id: ReportTabIds[10],
-    icon: 'clarity:house-solid',
+    icon: 'material-symbols:fact-check-outline-rounded',
     active: false
   },
   {

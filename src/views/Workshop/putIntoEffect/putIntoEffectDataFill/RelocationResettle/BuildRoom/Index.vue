@@ -48,7 +48,7 @@
               <el-button type="primary" @click="onAddRow" :icon="addIcon">添加行</el-button>
             </div>
           </div>
-          <el-table :data="tableData" style="width: 100%">
+          <el-table :data="tableData" stripe border style="width: 100%" class="mb-20">
             <el-table-column
               type="index"
               label="序号"
@@ -270,6 +270,10 @@ const onSave = () => {
   outline: none;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+}
+
 .ml-10 {
   margin-left: 10px;
 }
@@ -294,20 +298,25 @@ const onSave = () => {
   text-indent: 28px;
 }
 
-.table-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
+.table-area {
+  padding-left: 28px;
 
-  .table-tit {
-    font-weight: bold;
-  }
-
-  .table-action {
+  .table-head {
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: space-between;
+    padding: 20px 0;
+
+    .table-tit {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .table-action {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
   }
 }
 </style>

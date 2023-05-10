@@ -88,7 +88,7 @@ export const getTemplate = (type: PrintType) => {
 /**
  * 字典回显处理
  * 1、字典的 value 不为空或存在时，取字典表中对应的 text
- * 2、字典的 value 值为控或不存在时，显示 '-'
+ * 2、字典的 value 值为空或不存在时，显示 ''
  * @param(Object) value 字典 value
  * @param(Object) id 对应字典的 id
  */
@@ -99,7 +99,8 @@ const formatDict = (value: any, id: number) => {
   // 获取数据字典
   if (value) {
     const arr: any = dict[id]
-    const arrItem = arr.find((item: any) => String(item.value) === String(value))
+    const arrItem =
+      arr && arr.length && arr.find((item: any) => String(item.value) === String(value))
     str = arrItem ? arrItem.label : ''
     return str
   } else {
