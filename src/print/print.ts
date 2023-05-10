@@ -190,6 +190,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
         }
       })
     }
+    console.log(images, 'images')
 
     if (landlord.immigrantTreeList && landlord.immigrantTreeList.length) {
       landlord.immigrantTreeList.forEach((item) => {
