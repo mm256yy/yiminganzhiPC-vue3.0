@@ -76,17 +76,18 @@ const projectId = appStore.currentProjectId
 
 // 初始化聚合点坐标
 const initCoordinatesData = (obj: any) => {
-  let arr: any = []
+  let arr1: any = []
+  let arr2: any = []
   obj?.features.map((item: any) => {
-    console.log('coordinates:', ...item.geometry?.coordinates[0][0])
-    arr.push(...item.geometry?.coordinates[0][0])
+    arr1.push(...item.geometry?.coordinates[0][0])
+    arr2.push(item.geometry?.coordinates[0][0])
   })
-  return arr
+  return [arr1, arr2]
 }
 
 const mapJson: any = appStore.currentMapJson ? JSON.parse(appStore.currentMapJson) : null
 console.log('mapJson:', mapJson)
-const points = mapJson ? initCoordinatesData(mapJson) : []
+const points = mapJson ? initCoordinatesData(mapJson)[0] : []
 console.log('points:', points)
 const pointsLength = points.length
 
@@ -301,7 +302,7 @@ const initMarker = async () => {
     }
     const lat = alllat / item.clusterData.length
     const lng = alllng / item.clusterData.length
-    // 这里是放大地图，此处写死了每次点击放大的级别，可以根据点的数量和当前大小适应放大，体验更佳
+    // 这里是放大地图，此处写死了每次点击放大的级别，可以根据点的数量和当前大小适当放大，体验更佳
     map.setZoomAndCenter(map.getZoom() + 4, [lng, lat])
   })
 
@@ -311,17 +312,40 @@ const initMarker = async () => {
 
 // 初始化多边形轮廓
 const initPolygon = async () => {
+  let pointsArr = mapJson ? initCoordinatesData(mapJson)[1] : []
+  pointsArr &&
+    pointsArr.map((item: any) => {
+      let polygon = new AMap.Polygon({
+        path: item, // 路径
+        // strokeColor: '#ff0000', // 轮廓线颜色
+        strokeColor: randomColor(), // 轮廓线颜色
+        strokeWeight: 2, // 轮廓线宽度
+        strokeOpacity: 1, // 轮廓线透明度
+        fillOpacity: 0.2, // 矩形内部填充颜色透明度
+        fillColor: 'transparent', // 矩形 内部填充颜色透明度
+        zIndex: 50 // 多边形覆盖物的叠加顺序。地图上存在多个多边形覆盖物叠加时，通过该属性使级别较高的多边形覆盖物在上层显示
+      })
+      map.add(polygon)
+    })
   // 配置多边形
-  let polygon = new AMap.Polygon({
-    path: points, // 路径
-    strokeColor: '#ff0000', // 轮廓线颜色
-    strokeWeight: 2, // 轮廓线宽度
-    strokeOpacity: 1, // 轮廓线透明度
-    fillOpacity: 0.2, // 矩形内部填充颜色透明度
-    fillColor: 'transparent', // 矩形 内部填充颜色透明度
-    zIndex: 50 // 多边形覆盖物的叠加顺序。地图上存在多个多边形覆盖物叠加时，通过该属性使级别较高的多边形覆盖物在上层显示
-  })
-  map.add(polygon)
+  // let polygon = new AMap.Polygon({
+  //   path: points, // 路径
+  //   strokeColor: '#ff0000', // 轮廓线颜色
+  //   strokeWeight: 2, // 轮廓线宽度
+  //   strokeOpacity: 1, // 轮廓线透明度
+  //   fillOpacity: 0.2, // 矩形内部填充颜色透明度
+  //   fillColor: 'transparent', // 矩形 内部填充颜色透明度
+  //   zIndex: 50 // 多边形覆盖物的叠加顺序。地图上存在多个多边形覆盖物叠加时，通过该属性使级别较高的多边形覆盖物在上层显示
+  // })
+  // map.add(polygon)
+}
+
+// 生成随机颜色
+const randomColor = () => {
+  let r = Math.random() * 255
+  let g = Math.random() * 255
+  let b = Math.random() * 255
+  return `rgb(${r},${g},${b})`
 }
 
 /**
