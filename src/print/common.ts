@@ -610,8 +610,7 @@ export const getHousePic = (landlord: LandlordType) => {
       body.push([
         {
           image: `img_${dex}`,
-          fit: [540, imgHeight],
-          pageBreak: 'after'
+          fit: [540, imgHeight]
         }
       ])
     })
