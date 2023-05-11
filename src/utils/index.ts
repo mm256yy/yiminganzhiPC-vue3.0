@@ -1,4 +1,4 @@
-// import type { Plugin } from 'vue'
+import type { Plugin } from 'vue'
 
 /**
  *
@@ -177,10 +177,14 @@ export function analyzeIDCard(identityCard) {
   return age
 }
 
+// 校验身份证
+export const cardReg =
+  /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+
 export function validateIdNo(rule, value, callback) {
   console.log(rule)
 
-  const reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+  const reg = cardReg
   if (value === '' || value === undefined || value == null) {
     callback()
   } else {
