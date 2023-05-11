@@ -426,6 +426,7 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
+import { cardReg } from '@/utils'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
@@ -553,7 +554,15 @@ watch(
 )
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  card: [
+    {
+      pattern: cardReg,
+      trigger: 'change',
+      message: '请输入正确的身份证号'
+    }
+  ]
+})
 
 // 关闭弹窗
 const onClose = (flag = false) => {
