@@ -593,12 +593,12 @@ const reportResult = ref<any>({
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
 const initNewsData = () => {
-  getNewsList({ size: 9999 }).then((res: any) => {
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'] }).then((res: any) => {
     newsList.value = res.content
     newsList.value.forEach((item: any) => {
       item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
     })
-    console.log('newsList：', newsList.value)
+    // console.log('newsList：', newsList.value)
   })
 }
 
