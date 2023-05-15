@@ -261,3 +261,8 @@ export const fmtStr = (str: any, unit?: string) => {
     return '-'
   }
 }
+
+export const urlReg =
+  /^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*([\?&]\w+=\w*)*/
+
+export const versionReg = /^[1-9]\.(\d{1,2})\.(\d{1,2})$/

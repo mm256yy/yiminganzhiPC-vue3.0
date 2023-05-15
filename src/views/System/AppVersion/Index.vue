@@ -82,11 +82,7 @@ const schema = reactive<CrudSchema[]>([
     label: '版本',
     search: {
       show: true,
-      component: 'InputNumber',
-      value: 1,
-      componentProps: {
-        step: 0.1
-      }
+      component: 'Input'
     },
 
     form: {
