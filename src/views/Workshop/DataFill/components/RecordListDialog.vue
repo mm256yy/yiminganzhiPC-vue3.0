@@ -10,9 +10,10 @@
         <el-step :title="item.createdDate" v-for="item in list" :key="item.id">
           <template #description>
             <div class="stepDesc">
-              <div
-                ><span class="label">操作人员姓名:</span><span>{{ item.createdName }}</span></div
-              >
+              <div>
+                <span class="label">操作人员姓名:</span>
+                <span>{{ item.createdName }}</span>
+              </div>
 
               <template v-if="item.operationType === '修改'">
                 <div v-for="(record, dex) in item.updateJsonArray" :key="dex">

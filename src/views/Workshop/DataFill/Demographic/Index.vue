@@ -5,9 +5,9 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
-            >修改日志</ElButton
-          >
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -59,7 +59,7 @@
       @close="onFormPupClose"
     />
     <RecordListDialog
-      type="人口"
+      type="人口信息"
       :isReason="true"
       :recordShow="recordShow"
       @close="recordClose"
