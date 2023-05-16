@@ -14,15 +14,19 @@
           </ElButton>
         </ElSpace>
       </div>
-      <div class="title">坟墓择址确认单</div>
+      <div class="title">坟墓迁移告知单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="输入" />
+          <input class="input-txt w-200" v-model="form.householder" placeholder="请输入户主姓名" />
           <div class="txt-indent-28"> 户： </div>
         </div>
         <div class="row">
           <div class="empty"></div>
-          <input class="input-txt w-200 ml-10 mr-10" v-model="form.houseNo" placeholder="输入" />
+          <input
+            class="input-txt w-200 ml-10 mr-10"
+            v-model="form.graveMigrateName"
+            placeholder="请输入坟墓名称"
+          />
           <div class="txt-indent-28">
             公墓项目已顺利通过各项验收，你户为先人选择的坟墓墓穴已满足交付条件，请尽快办理先人坟墓迁移事项。现对
           </div>
@@ -30,17 +34,21 @@
         <div class="row txt-indent-28">如下坟墓墓穴信息予以告知:</div>
         <div class="row">
           <div class="txt-indent-28 mr-10">择址号：</div>
-          <input class="input-txt w-200 ml-10 mr-10" v-model="form.houseNo" placeholder="输入" />
+          <input
+            class="input-txt w-200 ml-10 mr-10"
+            v-model="form.graveMigrateNum"
+            placeholder="请输入择址号"
+          />
           <div class="txt-indent-28 mr-10">登记权属人：</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入权属人姓名"
           />
           <div class="txt-indent-28 mr-10">户号：</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.doorNo"
             placeholder="请输入户号"
           />
         </div>
@@ -48,7 +56,7 @@
           <div class="txt-indent-28">迁出地址：</div>
           <input
             class="input-txt w-400 ml-10 mr-10"
-            v-model="form.relocationAddress"
+            v-model="form.graveMigrateOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -69,32 +77,42 @@
             />
             <ElTableColumn
               label="与登记权属人关系"
-              prop="landBlock"
+              prop="relation"
               align="center"
               header-align="center"
             >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.landBlock" />
+                <ElInput placeholder="请输入" v-model="scope.row.relation" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="处理方式" prop="houseType" align="center" header-align="center">
+            <ElTableColumn label="处理方式" prop="handleWay" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.houseType" />
+                <ElInput placeholder="请输入" v-model="scope.row.handleWay" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="安置墓地名称" prop="houseNo" align="center" header-align="center">
+            <ElTableColumn
+              label="安置墓地名称"
+              prop="graveName"
+              align="center"
+              header-align="center"
+            >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+                <ElInput placeholder="请输入" v-model="scope.row.graveName" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="详细地址" prop="houseNo" align="center" header-align="center">
+            <ElTableColumn
+              label="详细地址"
+              prop="graveAddress"
+              align="center"
+              header-align="center"
+            >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+                <ElInput placeholder="请输入" v-model="scope.row.graveAddress" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="墓地编号" prop="houseNo" align="center" header-align="center">
+            <ElTableColumn label="墓地编号" prop="graveNum" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+                <ElInput placeholder="请输入" v-model="scope.row.graveNum" />
               </template>
             </ElTableColumn>
             <ElTableColumn :width="100" label="操作" prop="action">
@@ -114,7 +132,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -126,6 +144,12 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteTombAddressApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -140,39 +164,45 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 
-console.log('props:', props)
-
 const defaultForm = {
-  govName: '', // 政府名称
-  houseNo: '', // 择房号
-  householdler: '', // 户主（择房人）
-  doorNo: '', // 户号
-  relocationAddress: '' // 迁出地址
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo, // 户号
+  graveMigrateName: '', // 坟墓名称
+  graveMigrateNum: '', // 择房号
+  householdler: '', // 登记权属人
+  graveMigrateOutAddress: '' // 迁出地址
 }
 
 const defaultRow = {
-  landBlock: '', // 区块
-  houseType: '', // 房型
-  houseNo: '', // 幢号
-  roomNo: '', // 室号
-  storageRoomNumber: '', // 储藏室编号
-  garageNumber: '' // 车库编号
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo, // 户号
+  relation: '', // 与登记权属人关系
+  handleWay: '', // 处理方式
+  graveName: '', // 安置墓地名称
+  graveAddress: '', // 详细地址
+  graveNum: '' // 墓地编号
 }
 
 const form = ref<any>(defaultForm)
 
 // 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.MigrateGrave,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    console.log('res:', res)
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrChooseGraveInfoList
+    }
+  })
 }
 
 // 添加行
@@ -189,8 +219,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteTombAddressApi(row.id)
+        initData()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -201,15 +231,20 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  // let params = {
-  //   ...form.value,
-  //   ...tableData.value
-  // }
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  let params = {
+    ...form.value,
+    rrChooseGraveInfoList: [...tableData.value],
+    type: RelocationResettleTypes.MigrateGrave
+  }
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

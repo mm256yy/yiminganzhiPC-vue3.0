@@ -151,7 +151,7 @@ import {
   delLandlordByIdApi,
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
-} from '@/api/workshop/landlord/service'
+} from '@/api/putIntoEffect/putIntoEffectDataFill/landlordCheck/landlordCheck-service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, FillStatusEnums, FillStatus } from '../putIntoEffectDataFill/config'
 import { useRouter } from 'vue-router'

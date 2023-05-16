@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="打印表格"
+    title="打印"
     :model-value="props.show"
     :width="500"
     @close="onClose"
@@ -36,11 +36,12 @@
         class="!bg-[#30A952] !border-[#30A952]"
         :disabled="selectedTableIds.length === 0"
         @click="onDownLoad"
-        >下载</ElButton
       >
-      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint"
-        >打印</ElButton
-      >
+        下载
+      </ElButton>
+      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint">
+        打印
+      </ElButton>
     </template>
   </ElDialog>
 </template>
@@ -84,7 +85,6 @@ const getPrintList = async () => {
   const res = await getPrintTemplateListApi({
     templateType: templateType
   })
-  console.log(res)
 
   if (res && res.content) {
     const arr: PrintListType[] = []

@@ -17,7 +17,7 @@
       <div class="title">农村移民自建房验收告知单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入业主名称" />
+          <input class="input-txt w-200" v-model="form.householder" placeholder="请输入业主名称" />
           业主：
         </div>
         <div class="row">
@@ -30,7 +30,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入户主名称"
           />
           户号：
@@ -57,13 +57,13 @@
               header-align="center"
             />
             <el-table-column
-              prop="houseLandNum"
+              prop="homesteadNum"
               label="宅基地编号"
               width="180"
               header-align="center"
             >
               <template #default="{ row }">
-                <ElInput v-model="row.houseLandNum" :placeholder="'请输入'" />
+                <ElInput v-model="row.homesteadNum" :placeholder="'请输入'" />
               </template>
             </el-table-column>
             <el-table-column prop="wall" label="墙壁" header-align="center">
@@ -94,13 +94,20 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="isPassCheck"
+              prop="isCheck"
               label="是否通过验收"
               align="center"
               header-align="center"
             >
               <template #default="{ row }">
-                <el-switch v-model="row.isPassCheck" />
+                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.isCheck">
+                  <ElOption
+                    v-for="item in dictObj[365]"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </ElSelect>
               </template>
             </el-table-column>
             <el-table-column prop="remark" label="备注" header-align="center">
@@ -116,9 +123,9 @@
               header-align="center"
             >
               <template #default="{ row }">
-                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]"
-                  >删除</el-button
-                >
+                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]">
+                  删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -134,20 +141,27 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
   ElSpace,
   ElTable,
   ElTableColumn,
   ElInput,
   ElButton,
-  ElSwitch,
+  ElSelect,
+  ElOption,
   ElMessageBox,
   ElMessage
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteBuildRoomApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -160,43 +174,49 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
-console.log('props:', props)
-
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const tableData = ref<any[]>([])
 
 const defaultForm = {
-  govName: '', // 业主
-  householdler: '', // 户主（择房人）
-  doorNo: '' // 户号
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  householder: '', // 业主
+  doorNo: props.doorNo // 户号
 }
 
 const defaultRow = {
-  remark: '',
-  isPassCheck: false,
-  ground: '',
-  piping: '',
-  waterproof: '',
-  hydropower: '',
-  wall: '',
-  houseLandNum: ''
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo, // 户号
+  homesteadNum: '', // 宅基地编号
+  wall: '', // 墙壁
+  hydropower: '', // 水电
+  waterproof: '', // 防水
+  piping: '', // 管道
+  ground: '', // 地面
+  isCheck: '', // 是否通过验收
+  remark: '' // 备注
 }
 
 const form = ref<any>(defaultForm)
 
 // 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.ChooseHouseCheck,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    console.log('res:', res)
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrHouseBuildCheckList
+    }
+  })
 }
 
 // 添加行
@@ -213,8 +233,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteBuildRoomApi(row.id)
+        initData()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -227,14 +247,18 @@ const onDelRow = (row) => {
 const onSave = () => {
   const params = {
     ...form.value,
-    tableData: tableData.value
+    rrHouseBuildCheckList: [...tableData.value],
+    type: RelocationResettleTypes.ChooseHouseCheck
   }
-  console.log(params, '参数')
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

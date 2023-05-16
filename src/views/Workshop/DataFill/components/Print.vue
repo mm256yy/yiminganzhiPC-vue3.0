@@ -36,11 +36,12 @@
         class="!bg-[#30A952] !border-[#30A952]"
         :disabled="selectedTableIds.length === 0"
         @click="onDownLoad"
-        >下载</ElButton
       >
-      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint"
-        >打印</ElButton
-      >
+        下载
+      </ElButton>
+      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint">
+        打印
+      </ElButton>
     </template>
   </ElDialog>
 </template>

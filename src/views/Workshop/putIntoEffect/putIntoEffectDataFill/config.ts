@@ -395,3 +395,18 @@ export const ProductionPlaceWay = [
     value: '其他安置方式'
   }
 ]
+
+// 动迁安置类型
+export const RelocationResettleTypes = {
+  HouseSoar: 'HouseSoar', // 房屋腾空确认单
+  GreenSoar: 'GreenSoar', // 青苗腾空确认单
+  ChooseHouse: 'ChooseHouse', // 择房确认单
+  ChooseAddress: 'ChooseAddress', // 择址确认单
+  BuildHouse: 'BuildHouse', // 建房告知单
+  ChooseHouseDelive: 'ChooseHouseDelive', // 择房交付告知单
+  ChooseGraveAddress: 'ChooseGraveAddress', // 坟墓择址确认单
+  MigrateGrave: 'MigrateGrave', // 坟墓迁移告知单
+  ProLandDelive: 'ProLandDelive', // 生产用地交付告知单
+  SocialSecurity: 'SocialSecurity', // 社保缴费确认单
+  ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
+}

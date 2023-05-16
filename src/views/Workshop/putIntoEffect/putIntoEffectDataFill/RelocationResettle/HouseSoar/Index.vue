@@ -17,27 +17,27 @@
       <div class="title">房屋腾空移交确认单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
+          <input class="input-txt w-200" v-model="form.town" placeholder="请输入政府名称" />
           人民政府：
         </div>
         <div class="row">
           <div class="txt-indent-28">我户坐落在</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.natureVillageName"
+            v-model="form.village"
             placeholder="请输入自然村名称"
           />
           村
           <input
             class="input-txt w-400 ml-10 mr-10"
-            v-model="form.houseName"
+            v-model="form.houseNames"
             placeholder="请输入房屋名称(多幢)"
           />
           已完成腾空
         </div>
         <div class="row">
           <div class="txt-indent-28 mr-10">现将</div>
-          <ElSelect class="w-200" clearable placeholder="请选择" v-model="form.handoverProject">
+          <ElSelect class="w-200" clearable placeholder="请选择" v-model="form.houseSoarTransfer">
             <ElOption
               v-for="item in dictObj[327]"
               :key="item.value"
@@ -48,7 +48,7 @@
           <div class="ml-10">予以移交，房屋及附属建（构）筑物和室内物品按现状移交给</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.govName"
+            v-model="form.town"
             placeholder="请输入政府名称"
           />
           人民政府，
@@ -57,7 +57,7 @@
           <div class="txt-indent-28">并归</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.govName"
+            v-model="form.town"
             placeholder="请输入政府名称"
           />
           人民政府，自移交之日起，移交人不再对其主张权利。
@@ -66,7 +66,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdlerName"
+            v-model="form.householder"
             placeholder="请输入户主名称"
           />
           户号：
@@ -78,7 +78,7 @@
           迁出地址：
           <input
             class="input-txt w-400 ml-10"
-            v-model="form.relocationAddress"
+            v-model="form.houseOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -92,11 +92,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { ElSpace, ElButton, ElSelect, ElOption } from 'element-plus'
+import { ElSpace, ElButton, ElSelect, ElOption, ElMessage } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -114,24 +119,43 @@ const defaultForm = {
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
-  govName: '', // 政府名称
-  natureVillageName: '', // 自然村名称
-  houseName: '', // 房屋名称
-  handoverProject: '', // 腾空移交项目
-  hoseholdName: '', // 户主姓名
+  type: RelocationResettleTypes.HouseSoar,
+  town: '', // 政府名称
+  village: '', // 自然村名称
+  houseNames: '', // 房屋名称
+  houseSoarTransfer: '', // 腾空移交项目
+  householder: '', // 户主姓名
   doorNo: props.doorNo, // 户号
-  relocationAddress: '' // 迁出地址
+  houseOutAddress: '' // 迁出地址
 }
 
 const form = ref<any>(defaultForm)
 
+// 初始化获取数据
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.HouseSoar,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+    }
+  })
+}
+
 // 保存
 const onSave = () => {
-  // saveMainHouseApi(form.value).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  saveRelocationResettleApi(form.value).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

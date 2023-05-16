@@ -6,19 +6,38 @@
         <div class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</div>
         <div class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</div>
       </div>
-      <div
-        :class="{
-          status: true,
-          success: props.baseInfo.fillStatus === FillStatus.Fill
-        }"
-      >
-        <span class="point"></span>
-        {{ props.baseInfo.fillStatus === FillStatus.Fill ? '已填报' : '未填报' }}
-      </div>
+      <ElSpace>
+        <ElButton
+          :icon="printIcon"
+          v-if="type == 'Landlord' || type == 'Enterprise' || type == 'IndividualB'"
+          type="primary"
+          class="!bg-[#30A952] !border-[#30A952]"
+          @click="onPrint"
+        >
+          打印
+        </ElButton>
+        <ElButton
+          v-if="baseInfo.fillStatus === FillStatus.Fill"
+          type="primary"
+          :icon="EscalationIcon"
+          @click="onReportData"
+        >
+          填报完成
+        </ElButton>
+        <div
+          :class="{
+            status: true,
+            success: props.baseInfo.fillStatus === FillStatus.Fill
+          }"
+        >
+          <span class="point"></span>
+          {{ props.baseInfo.fillStatus === FillStatus.Fill ? '已填报' : '未填报' }}
+        </div>
+      </ElSpace>
     </div>
 
     <!-- 居民户基础信息 -->
-    <div class="other" v-if="type == 'Landlord'" style="display: block">
+    <div class="other mt-15px" v-if="type == 'Landlord'" style="display: block">
       <el-row>
         <el-col :span="6">
           <div class="info-item">
@@ -201,23 +220,64 @@
         <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
       </div>
     </div>
+
+    <Print
+      :show="printDialog"
+      :landlordIds="[householdId]"
+      @close="onPrintDialogClose"
+      :baseInfo="baseInfo"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElRow, ElCol } from 'element-plus'
+import { ElRow, ElCol, ElMessage, ElSpace, ElButton } from 'element-plus'
 import { FillStatus } from '../config'
 import { fmtStr } from '@/utils/index'
+import { useIcon } from '@/hooks/web/useIcon'
+import Print from './Print.vue'
+import { reportLandlordApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 
 interface PropsType {
   baseInfo: any
   type: any
   tabCurrentId
+  householdId: number
 }
 
-const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const props = defineProps<PropsType>()
+const reportDialog = ref<boolean>(false)
+const printDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
+
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
+const printIcon = useIcon({ icon: 'ion:print-outline' })
+const infoData = ref<any>({ icon: 'mdi:user-circle' })
+
+const emit = defineEmits(['updateData'])
+
+// 填报完成
+const onReportData = async () => {
+  const result = await reportLandlordApi(props.householdId)
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+    // emit('back')
+  }
+}
+
+const onPrint = () => {
+  printDialog.value = true
+}
+
+const onPrintDialogClose = () => {
+  printDialog.value = false
+}
+
 onMounted(() => {
   console.log(props.baseInfo, 'baseInfo')
 
@@ -244,11 +304,11 @@ onMounted(() => {
 
   .base {
     display: flex;
-    height: 40px;
+    height: 50px;
     padding: 0 16px;
-    border-bottom: 1px dashed #e6ecf4;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px dotted #999;
 
     .user {
       display: flex;
@@ -257,13 +317,13 @@ onMounted(() => {
 
     .status {
       display: flex;
-      height: 24px;
+      height: 30px;
       padding: 0 13px 0 10px;
-      font-size: 12px;
+      font-size: 14px;
       color: #ff2d2d;
       background: #ffffff;
       border: 1px solid #ff5d5d;
-      border-radius: 14px;
+      border-radius: 5px;
       align-items: center;
 
       .point {

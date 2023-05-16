@@ -21,20 +21,6 @@ export interface LandlordDtoType {
   [key: string]: any
 }
 
-export interface LandlordHeadInfoType {
-  demographicNum: number
-  peasantHouseholdNum: number
-  reportSucceedNum: number
-  unReportNum: number
-}
-
-export interface TemplateParamsType {
-  templateKey: string
-  projectId: number
-  templateType: string
-  templateModule: string
-}
-
 export interface SurveyInfoType {
   immigrantGraveList: any[]
   immigrantHouseList: any[]

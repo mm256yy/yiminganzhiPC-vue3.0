@@ -17,7 +17,7 @@
       <div class="title">择房确认单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
+          <input class="input-txt w-200" v-model="form.town" placeholder="请输入政府名称" />
           人民政府：
         </div>
         <div class="row txt-indent-28"> 我户已选择公寓房安置方式，现对如下择房信息予以确认： </div>
@@ -25,13 +25,13 @@
           <div class="txt-indent-28 mr-10">择房号：</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.houseNo"
+            v-model="form.chooseHouseNum"
             placeholder="请输入择房号"
           />
           户主（择房人）：
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入户主姓名"
           />
           户号：
@@ -41,7 +41,7 @@
           <div class="txt-indent-28">迁出地址：</div>
           <input
             class="input-txt w-700 ml-10 mr-10"
-            v-model="form.relocationAddress"
+            v-model="form.chooseHouseOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -63,9 +63,9 @@
               align="center"
               header-align="center"
             />
-            <ElTableColumn label="区块" prop="landBlock" align="center" header-align="center">
+            <ElTableColumn label="区块" prop="area" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.landBlock" />
+                <ElInput placeholder="请输入" v-model="scope.row.area" />
               </template>
             </ElTableColumn>
             <ElTableColumn label="房型" prop="houseType" align="center" header-align="center">
@@ -73,34 +73,29 @@
                 <ElInput placeholder="请输入" v-model="scope.row.houseType" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="幢号" prop="houseNo" align="center" header-align="center">
+            <ElTableColumn label="幢号" prop="buildingNum" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+                <ElInput placeholder="请输入" v-model="scope.row.buildingNum" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="室号" prop="roomNo" align="center" header-align="center">
+            <ElTableColumn label="室号" prop="roomNum" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.roomNof" />
+                <ElInput placeholder="请输入" v-model="scope.row.roomNum" />
               </template>
             </ElTableColumn>
             <ElTableColumn
               label="储藏室编号"
-              prop="storageRoomNumber"
+              prop="storeroomNum"
               align="center"
               header-align="center"
             >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.storageRoomNumber" />
+                <ElInput placeholder="请输入" v-model="scope.row.storeroomNum" />
               </template>
             </ElTableColumn>
-            <ElTableColumn
-              label="车库编号"
-              prop="garageNumber"
-              align="center"
-              header-align="center"
-            >
+            <ElTableColumn label="车库编号" prop="garageNum" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.garageNumber" />
+                <ElInput placeholder="请输入" v-model="scope.row.garageNum" />
               </template>
             </ElTableColumn>
             <ElTableColumn :width="100" label="操作" prop="action">
@@ -120,7 +115,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -132,6 +127,12 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteChooseHouseApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -149,11 +150,11 @@ const defaultForm = {
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
-  govName: '', // 政府名称
-  houseNo: '', // 择房号
-  householdler: '', // 户主（择房人）
+  town: '', // 政府名称
+  chooseHouseNum: '', // 择房号
+  householder: '', // 户主（择房人）
   doorNo: props.doorNo, // 户号
-  relocationAddress: '' // 迁出地址
+  chooseHouseOutAddress: '' // 迁出地址
 }
 
 const defaultRow = {
@@ -161,28 +162,29 @@ const defaultRow = {
   projectId: props.projectId,
   uid: props.uid,
   doorNo: props.doorNo,
-  landBlock: '', // 区块
+  area: '', // 区块
   houseType: '', // 房型
-  houseNo: '', // 幢号
-  roomNo: '', // 室号
-  storageRoomNumber: '', // 储藏室编号
-  garageNumber: '' // 车库编号
+  buildingNum: '', // 幢号
+  roomNum: '', // 室号
+  storeroomNum: '', // 储藏室编号
+  garageNum: '' // 车库编号
 }
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+// 初始化获取数据
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.ChooseHouse,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrChooseHouseInfoList
+    }
+  })
 }
 
 // 添加行
@@ -199,8 +201,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteChooseHouseApi(row.id)
+        initData()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -211,15 +213,20 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  // let params = {
-  //   ...form.value,
-  //   ...tableData.value
-  // }
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  let params = {
+    ...form.value,
+    rrChooseHouseInfoList: [...tableData.value],
+    type: RelocationResettleTypes.ChooseHouse
+  }
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>
