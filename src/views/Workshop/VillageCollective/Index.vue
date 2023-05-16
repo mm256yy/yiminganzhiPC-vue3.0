@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">村集体信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">村集体信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -181,6 +181,11 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
+
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId

@@ -64,7 +64,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed, watch } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -223,6 +223,7 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
+const emit = defineEmits(['refresh'])
 
 const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
@@ -235,6 +236,13 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
     true
   )
 }
+
+const tableLength: any = computed(() => {
+  return tableObject?.tableList?.length > 0 ? tableObject?.tableList?.length : []
+})
+watch(tableLength, () => {
+  emit('refresh')
+})
 
 const onAddRow = () => {
   actionType.value = 'add'

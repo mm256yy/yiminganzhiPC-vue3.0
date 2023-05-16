@@ -29,6 +29,7 @@
                   {{ item.operationType }}[{{ item.name }}]{{ item.type }}
                 </span>
                 <span v-if="item.remark" class="fw600">:{{ item.remark }}</span>
+                <div v-if="props.isReason" style="padding: 0 66px">新增原因：{{ item.reason }}</div>
               </div>
             </div>
           </template>
@@ -55,6 +56,7 @@ interface PropsType {
   recordShow: boolean
   doorNo: string
   type: string
+  isReason?: boolean
 }
 
 interface RecordItemType {
@@ -68,6 +70,7 @@ interface RecordItemType {
   doorNo: string
   remark?: string
   createdDate: string
+  reason?: string
 }
 
 const props = defineProps<PropsType>()

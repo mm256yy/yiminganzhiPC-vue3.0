@@ -165,8 +165,9 @@ watch(
       // 处理行政区划
       form.value = {
         ...val,
-        parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
+        parentCode: [val.areaCode, val.townCode, val.villageCode]
       }
+      val.virutalVillageCode ? form.value.parentCode.push(val.virutalVillageCode) : ''
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address

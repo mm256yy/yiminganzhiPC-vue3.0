@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -111,6 +111,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :districtTree="districtTree"
+      ref="formRef"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -184,6 +185,10 @@ import type {
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -474,10 +479,11 @@ const onDelRow = async (row: LandlordDtoType) => {
 //   tableObject.currentRow = null
 //   dialog.value = true
 // }
-
+const formRef = ref<any>(null)
 const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
+  formRef.value?.initData(row)
   dialog.value = true
 }
 

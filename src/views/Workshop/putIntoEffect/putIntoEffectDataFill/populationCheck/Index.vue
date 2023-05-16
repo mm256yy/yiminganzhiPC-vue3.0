@@ -74,7 +74,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed, watch } from 'vue'
 // ElMessage
 import { ElButton, ElSpace, ElDialog, ElFormItem, ElInput } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -92,6 +92,7 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+const emit = defineEmits(['refresh'])
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -220,6 +221,13 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   // ElMessage.success('删除成功')
   // getList()
 }
+
+const tableLength: any = computed(() => {
+  return tableObject?.tableList?.length > 0 ? tableObject?.tableList?.length : []
+})
+watch(tableLength, () => {
+  emit('refresh')
+})
 
 const onAddRow = () => {
   actionType.value = 'add'

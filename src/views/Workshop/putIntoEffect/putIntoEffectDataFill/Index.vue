@@ -151,6 +151,7 @@
       <populationCheck
         :doorNo="doorNo"
         :baseInfo="baseInfo"
+        @refresh="getLandlordInfo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 

@@ -248,6 +248,26 @@ watch(
   }
 )
 
+const initData = (val) => {
+  btnLoading.value = false
+  if (val) {
+    // 处理行政区划
+    form.value = {
+      ...val,
+      parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
+    }
+    position.longitude = form.value.longitude
+    position.latitude = form.value.latitude
+    position.address = form.value.address
+  } else {
+    // console.log(defaultValue)
+
+    form.value = defaultValue
+  }
+}
+
+defineExpose({ initData })
+
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],

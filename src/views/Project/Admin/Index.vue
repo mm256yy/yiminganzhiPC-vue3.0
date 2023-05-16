@@ -139,7 +139,8 @@ const query: ProjectQueryType = reactive({
 
 tableObject.params = {
   name: null,
-  townCode: null
+  townCode: null,
+  sort: ['createdDate', 'Desc']
 }
 
 const { getList } = methods
@@ -155,6 +156,7 @@ const reset = () => {
   query.townCode = ''
   tableObject.currentPage = 1
   tableObject.size = 10
+  getList()
 }
 
 onMounted(() => {

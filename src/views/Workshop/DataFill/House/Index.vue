@@ -17,6 +17,7 @@
         :recordShow="recordShow"
         @close="recordClose"
         :doorNo="doorNo"
+        :isReason="true"
       />
 
       <Table

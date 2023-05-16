@@ -388,7 +388,6 @@
         v-if="actionType === 'add' && surveyStatus === SurveyStatusEnum.Review"
         label="新增原因"
         prop="addReason"
-        required
       >
         <ElInput type="textarea" v-model="form.addReason" />
       </ElFormItem>
@@ -553,7 +552,9 @@ watch(
 )
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }]
+})
 
 // 关闭弹窗
 const onClose = (flag = false) => {

@@ -254,6 +254,8 @@ onMounted(async () => {
 })
 // 搬迁安置方式
 
+const emit = defineEmits(['refresh'])
+
 // 获取意愿信息
 
 const onSave = () => {
@@ -283,6 +285,7 @@ const onSave = () => {
 
   saveResettlementListApi(data).then(() => {
     ElMessage.success('操作成功！')
+    emit('refresh')
   })
 }
 </script>
