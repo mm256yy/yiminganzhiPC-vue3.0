@@ -58,7 +58,13 @@
       :survey-status="surveyStatus"
       @close="onFormPupClose"
     />
-    <RecordListDialog type="人口" :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="人口"
+      :isReason="true"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
