@@ -114,7 +114,7 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="高程" prop="altitude">
+      <!-- <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
@@ -123,7 +123,7 @@
           class="!w-350px"
           v-model="form.altitude"
         />
-      </ElFormItem>
+      </ElFormItem> -->
 
       <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
