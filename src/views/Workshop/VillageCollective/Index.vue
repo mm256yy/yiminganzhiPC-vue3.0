@@ -132,7 +132,7 @@ import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 export default defineComponent({
   beforeRouteEnter(to, _from, next) {
     console.log(to, 'to')
-    if (to.path === '/Workshop/VillageInfoCollective') {
+    if (to.path === '/Workshop/VillageCollective') {
       // 实物采集
       globalData.currentSurveyStatus = SurveyStatusEnum.Survey
     } else {
@@ -440,6 +440,7 @@ const onDelRow = async (row: LandlordDtoType) => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
         setSearchParams({ type: 'Village' })
+        getLandlordHeadInfo()
       })
     })
     .catch(() => {})
@@ -469,6 +470,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     // getList()
     setSearchParams({ type: 'Village' })
+    getLandlordHeadInfo()
   }
 }
 

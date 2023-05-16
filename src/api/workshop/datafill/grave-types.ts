@@ -1,7 +1,10 @@
 export interface GraveDtoType {
   id: number
-  doorNo: string
-  householdId: number
+  villageDoorNo: string
+  villageId: number
+  registrantName: string
+  registrantId: number
+  registrantDoorNo: string
   graveType: string
   number: number
   materials: string

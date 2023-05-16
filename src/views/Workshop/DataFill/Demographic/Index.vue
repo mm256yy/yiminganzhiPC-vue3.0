@@ -83,6 +83,7 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+const emit = defineEmits(['updateInfo'])
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -232,8 +233,9 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
     multiple,
     true,
-    true
+    props.surveyStatus === SurveyStatusEnum.Review
   )
+  emit('updateInfo')
 }
 
 const onAddRow = () => {
@@ -260,6 +262,7 @@ const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
     getList()
+    emit('updateInfo')
   }
 }
 

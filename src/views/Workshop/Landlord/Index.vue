@@ -304,7 +304,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportStatus',
-    label: '上报状态',
+    label: '填报状态',
     search: {
       show: true,
       component: 'Select',
@@ -582,6 +582,7 @@ const fillData = (row) => {
   push({
     name: routerName,
     query: {
+      name: row.name,
       householdId: row.id,
       doorNo: row.doorNo,
       type: 'Landlord'

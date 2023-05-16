@@ -426,7 +426,7 @@ const onReportData = async () => {
     reportDialog.value = true
     reportResult.value = result
   } else {
-    ElMessage.success('上报成功！')
+    ElMessage.success('填报成功！')
     getLandlordInfo()
     back()
   }

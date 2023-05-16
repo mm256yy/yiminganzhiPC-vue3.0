@@ -10,7 +10,8 @@
     @close="onClose"
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="false">
-      <template #aaa>
+      <template #apkUrl>
+        <div>传入文件或者填入链接，二选一，优先取文件</div>
         <ElUpload
           class="w-full apk-upload"
           drag
@@ -29,6 +30,8 @@
         >
           <div class="el-upload__text"> 拖入文件或者 <em>点击上传</em> 只支持apk文件 </div>
         </ElUpload>
+
+        <ElInput v-model="url" placeholder="或者 输入apk链接" />
       </template>
     </Form>
     <template #footer>
@@ -40,7 +43,7 @@
 
 <script setup lang="ts">
 import { reactive, unref, ref, onMounted } from 'vue'
-import { ElButton, ElMessageBox, ElUpload } from 'element-plus'
+import { ElButton, ElMessageBox, ElMessage, ElUpload, ElInput, FormRules } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
@@ -49,6 +52,7 @@ import { AppVersionDtoType } from '@/api/appVersion/types'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
 import { useAppStore } from '@/store/modules/app'
+import { urlReg, versionReg } from '@/utils'
 
 interface Props {
   actionType: string
@@ -70,17 +74,23 @@ const headers = ref({
   Authorization: appStore.getToken
 })
 const apkUrlList = ref<any[]>([])
+const url = ref<string>('')
 
 console.log(headers)
 
 const { register, elFormRef, methods } = useForm()
 
-const rules = {
+const rules: FormRules = {
   appId: [required()],
   title: [required()],
   content: [required()],
-  version: [required()],
-  apkUrl: [required()]
+  version: [
+    required(),
+    {
+      pattern: versionReg,
+      message: '版本号请遵循 x.x.x 的规则'
+    }
+  ]
 }
 
 const schema = reactive<FormSchema[]>([
@@ -115,24 +125,18 @@ const schema = reactive<FormSchema[]>([
   },
   {
     field: 'apkUrl',
-    // label: '上传APK',
-    label: 'APK链接地址',
-    component: 'Input'
+    label: 'APK链接'
   },
   {
     field: 'version',
     label: '版本',
-    component: 'InputNumber',
-    value: 1,
-    componentProps: {
-      step: 0.1
-    }
+    component: 'Input',
+    value: '1.0.0'
   },
   {
     field: 'platform',
     label: '平台',
     component: 'Select',
-
     value: 'android',
     componentProps: {
       placeholder: '选择发布平台',
@@ -170,6 +174,7 @@ onMounted(async () => {
         url: currentRow.value?.apkUrl
       }
     ]
+    url.value = currentRow.value?.apkUrl
   }
 })
 
@@ -177,10 +182,10 @@ const onSave = async () => {
   const formRef = unref(elFormRef)
   await formRef?.validate(async (isValid) => {
     if (isValid) {
-      // if (!apkUrlList.value || !apkUrlList.value.length) {
-      //   ElMessage.error('apk文件缺失')
-      //   return
-      // }
+      if ((!apkUrlList.value || !apkUrlList.value.length) && !url.value) {
+        ElMessage.error('apk文件缺失')
+        return
+      }
       doSave()
     }
   })
@@ -193,7 +198,12 @@ const doSave = async () => {
   if (currentRow.value && currentRow.value.id) {
     data.id = currentRow.value.id
   }
-  // data.apkUrl = apkUrlList.value && apkUrlList.value.length ? apkUrlList.value[0].url : ''
+  data.apkUrl = apkUrlList.value && apkUrlList.value.length ? apkUrlList.value[0].url : url.value
+
+  if (data.apkUrl && (!urlReg.test(data.apkUrl) || !data.apkUrl.includes('.apk'))) {
+    ElMessage.error('apk链接无效，请输入正确的链接地址')
+    return
+  }
   emit('submit', data)
 }
 

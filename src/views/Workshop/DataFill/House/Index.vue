@@ -256,7 +256,7 @@ const onDelRow = async (row: HouseDtoType | null, multiple: boolean) => {
     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
     multiple,
     true,
-    true
+    props.surveyStatus === SurveyStatusEnum.Review && props.type === 'Landlord'
   )
 }
 // onMounted(() => {

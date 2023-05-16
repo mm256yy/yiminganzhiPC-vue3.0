@@ -23,7 +23,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElPopover v-if="excelList && excelList.length" :width="800" trigger="hover">
+          <ElPopover v-if="excelList && excelList.length" :width="1000" trigger="click">
             <template #reference>
               <div class="view-upload">
                 <span class="pr-10px">批量导入记录</span>
@@ -32,13 +32,16 @@
             </template>
             <div class="file-list">
               <div class="file-item" v-for="item in excelList" :key="item.id">
-                <div class="file-name flex items-center">
+                <div class="file-name flex items-center flex-none w-272px">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-200px ml-5px">
+                  <div class="w-250px ml-5px">
                     {{ item.name }}
                   </div>
                 </div>
-                <div class="flex m-lr-20px">
+                <div class="flex-none w-150px">{{
+                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
+                }}</div>
+                <div class="flex-none w-398px m-lr-20px">
                   {{ item.remark }}
                 </div>
                 <div class="status flex-shrink-0">
@@ -160,7 +163,7 @@ import { getVillageTreeApi } from '@/api/workshop/village/service'
 //   ExcelListType
 // } from '@/api/workshop/population/types'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-
+import dayjs from 'dayjs'
 import { Icon } from '@/components/Icon'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 
@@ -224,7 +227,7 @@ onMounted(() => {
   getExcelUploadList()
   timer = window.setInterval(() => {
     getExcelUploadList()
-  }, 30000)
+  }, 3000)
 })
 
 onBeforeUnmount(() => {
@@ -591,7 +594,6 @@ const uploadError = (error) => {
     color: var(--text-color-1);
     border-bottom: 1px solid #ebebeb;
     align-items: center;
-    justify-content: space-between;
 
     .m-lr-20px {
       margin: 0 20px;
@@ -605,6 +607,10 @@ const uploadError = (error) => {
     .number {
       font-weight: 500;
       color: var(--el-color-primary);
+    }
+
+    .flex-none {
+      flex: none;
     }
   }
 }
