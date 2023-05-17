@@ -120,7 +120,8 @@ const schema = reactive<FormSchema[]>([
     component: 'Input',
     componentProps: {
       type: 'textarea',
-      rows: 3
+      rows: 3,
+      maxlength: 100
     }
   },
   {
@@ -202,8 +203,10 @@ const doSave = async () => {
 
   if (data.apkUrl && (!urlReg.test(data.apkUrl) || !data.apkUrl.includes('.apk'))) {
     ElMessage.error('apk链接无效，请输入正确的链接地址')
+    loading.value = false
     return
   }
+  loading.value = false
   emit('submit', data)
 }
 
