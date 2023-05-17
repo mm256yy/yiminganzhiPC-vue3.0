@@ -79,6 +79,7 @@
             <ElDatePicker
               v-model="form.birthday"
               type="month"
+              value-format="YYYY-MM"
               :placeholder="placeholderList[2]"
               class="!w-full"
             />

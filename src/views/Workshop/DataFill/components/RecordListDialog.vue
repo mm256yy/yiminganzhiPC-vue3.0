@@ -118,12 +118,8 @@ watch(
                 item.updateJsonArray = JSON.parse(item.updateJson)
                 item.updateJsonArray.forEach((items) => {
                   if (items?.propertyName?.includes('出生日期')) {
-                    items.oldValue = items.oldValue
-                      ? dayjs(item.oldValue).format('YYYY-MM-DD')
-                      : null
-                    items.newValue = items.newValue
-                      ? dayjs(item.newValue).format('YYYY-MM-DD')
-                      : null
+                    items.oldValue = items.oldValue ? dayjs(item.oldValue).format('YYYY-MM') : null
+                    items.newValue = items.newValue ? dayjs(item.newValue).format('YYYY-MM') : null
                   }
                   if (items?.propertyName?.includes('职业')) {
                     tempZy.value = ''
@@ -137,12 +133,8 @@ watch(
                       : null
                   }
                   if (items?.propertyName?.includes('年月')) {
-                    items.oldValue = items.oldValue
-                      ? dayjs(item.oldValue).format('YYYY-MM-DD')
-                      : null
-                    items.newValue = items.newValue
-                      ? dayjs(item.newValue).format('YYYY-MM-DD')
-                      : null
+                    items.oldValue = items.oldValue ? dayjs(item.oldValue).format('YYYY-MM') : null
+                    items.newValue = items.newValue ? dayjs(item.newValue).format('YYYY-MM') : null
                   }
                   if (items?.propertyName?.includes('性别')) {
                     items.oldValue =

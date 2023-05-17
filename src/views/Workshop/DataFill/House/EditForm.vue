@@ -214,6 +214,7 @@
           <ElFormItem label="竣工日期" prop="completedTime">
             <ElDatePicker
               class="!w-full"
+              value-format="YYYY-MM"
               v-model="form.completedTime"
               type="month"
               placeholder="请选择日期"
