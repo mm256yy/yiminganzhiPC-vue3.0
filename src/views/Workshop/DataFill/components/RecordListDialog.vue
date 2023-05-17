@@ -51,6 +51,7 @@
 import { ElDialog, ElButton, ElSteps, ElStep } from 'element-plus'
 import { watch, ref } from 'vue'
 import dayjs from 'dayjs'
+import { getDictByName } from '@/api/workshop/population/service'
 import { getupdateLog } from '@/api/workshop/landlord/service'
 
 interface PropsType {
@@ -77,6 +78,25 @@ interface RecordItemType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 const list = ref<RecordItemType[]>([])
+const occupationOptions = ref()
+// 获取职业列表
+const getOccupationOptions = () => {
+  getDictByName('职业').then((res: any) => {
+    occupationOptions.value = res
+  })
+}
+
+getOccupationOptions()
+let tempZy = ref('')
+const deepFmtFun = (list, arr, index) => {
+  const value = arr[index]?.split('"')[1]?.split('"')[0]
+  let labelTemp = list?.find((item) => item.value == value)
+  tempZy.value += labelTemp?.label + '/'
+  if (labelTemp && arr[index + 1] && labelTemp.children && labelTemp.children.length > 0) {
+    deepFmtFun(labelTemp.children, arr, index + 1)
+  }
+  return tempZy.value
+}
 
 watch(
   () => props.recordShow,
@@ -103,6 +123,17 @@ watch(
                       : null
                     items.newValue = items.newValue
                       ? dayjs(item.newValue).format('YYYY-MM-DD')
+                      : null
+                  }
+                  if (items?.propertyName?.includes('职业')) {
+                    tempZy.value = ''
+                    const newValueList = items.newValue?.split('[')[1].split(']')[0].split(',')
+                    const oldValueList = items.newValue?.split('[')[1].split(']')[0].split(',')
+                    items.oldValue = items.oldValue
+                      ? deepFmtFun(occupationOptions.value, oldValueList, 0)?.slice(0, -1)
+                      : null
+                    items.newValue = items.newValue
+                      ? deepFmtFun(occupationOptions.value, newValueList, 0)?.slice(0, -1)
                       : null
                   }
                   if (items?.propertyName?.includes('年月')) {
