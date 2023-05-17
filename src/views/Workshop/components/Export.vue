@@ -1,0 +1,147 @@
+<template>
+  <ElDialog
+    title="数据导出"
+    :model-value="props.show"
+    :width="650"
+    @close="onClose"
+    alignCenter
+    appendToBody
+    :closeOnClickModal="false"
+    destroy-on-close
+  >
+    <div>
+      <el-checkbox-group v-model="checkList">
+        <div class="collopase-item" v-for="item in list" :key="item.value">
+          <div class="collopase-item-head">
+            <el-checkbox :label="item.value">{{ item.name }}</el-checkbox>
+          </div>
+        </div>
+      </el-checkbox-group>
+    </div>
+    <template #footer>
+      <ElButton @click="onClose">取消</ElButton>
+      <ElButton
+        type="primary"
+        class="!bg-[#30A952] !border-[#30A952]"
+        :disabled="checkList.length === 0"
+        @click="onDownLoad"
+        :loading="downloadLoading"
+        >导出</ElButton
+      >
+    </template>
+  </ElDialog>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { ElDialog, ElButton, ElCheckbox, ElCheckboxGroup } from 'element-plus'
+
+interface ExportListType {
+  name: string
+  value: string | number
+}
+
+interface PropsType {
+  show: boolean
+  list: ExportListType[]
+}
+
+const props = defineProps<PropsType>()
+const emit = defineEmits(['close'])
+const list = ref(props.list)
+let downloadLoading = ref(false)
+const checkList = ref([])
+
+const onClose = () => {
+  emit('close')
+}
+
+const onDownLoad = async () => {
+  // downloadLoading.value = true
+  // actionType.value = 'download'
+  // const res = await generatorPdf({
+  //   returndataType: 'base64'
+  // }).catch(() => {
+  //   downloadLoading.value = false
+  // })
+  // console.log('下载参数', res)
+  // if (res && res.length) {
+  //   const result = await downloadPrintPdfApi(res).catch(() => {
+  //     downloadLoading.value = false
+  //     ElMessage.error('生成pdf失败')
+  //   })
+  //   result && downLoad(result)
+  //   downloadLoading.value = false
+  // } else {
+  //   downloadLoading.value = false
+  // }
+}
+</script>
+
+<style lang="less" scoped>
+.collopase-item {
+  width: 570px;
+  height: 40px;
+  margin: 0 auto 8px;
+  overflow: hidden;
+  transition: all 0.3s;
+
+  .collopase-item-head {
+    display: flex;
+    height: 40px;
+    padding: 0 16px;
+    background: #f5f7fa;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .collopase-item-body {
+    .body-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 40px;
+      padding: 0 16px;
+      background: #ffffff;
+      border: 1px solid #dcdfe6;
+      border-top: 0 none;
+
+      .view {
+        font-size: 14px;
+        color: #3e73ec;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .circle-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    .circle-down {
+      width: 0;
+      height: 0;
+      margin-top: 5px;
+      border-color: transparent;
+      border-top-color: var(--el-color-primary);
+      border-style: solid;
+      border-width: 5px;
+    }
+  }
+
+  &.active {
+    height: auto;
+
+    .circle-wrap {
+      transform: rotateZ(180deg);
+    }
+  }
+}
+</style>

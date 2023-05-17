@@ -36,6 +36,7 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增企业</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
@@ -127,6 +128,7 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
+    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -168,6 +170,7 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { getDistrictTreeApi } from '@/api/district'
@@ -212,6 +215,41 @@ const headInfo = ref<LandlordHeadInfoType>({
 })
 const outsideData = ref<any>([])
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '企业统计表',
+    value: 1
+  },
+  {
+    name: '企业基本情况统计表',
+    value: 2
+  },
+  {
+    name: '企业房屋信息统计表',
+    value: 3
+  },
+  {
+    name: '企业附属物调查统计表',
+    value: 4
+  },
+  {
+    name: '企业零星林果木调查统计表',
+    value: 5
+  },
+  {
+    name: '企业设施设备调查统计表',
+    value: 6
+  },
+  {
+    name: '企业经营现状统计表',
+    value: 7
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 
@@ -565,6 +603,14 @@ const onPrint = async () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
 }
 
 // 数据填报

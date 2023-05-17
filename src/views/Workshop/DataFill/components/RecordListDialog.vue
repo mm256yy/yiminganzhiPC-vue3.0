@@ -96,6 +96,30 @@ watch(
               item.updateJsonArray = []
               if (item.updateJson) {
                 item.updateJsonArray = JSON.parse(item.updateJson)
+                item.updateJsonArray.forEach((items) => {
+                  if (items?.propertyName?.includes('出生日期')) {
+                    items.oldValue = items.oldValue
+                      ? dayjs(item.oldValue).format('YYYY-MM-DD')
+                      : null
+                    items.newValue = items.newValue
+                      ? dayjs(item.newValue).format('YYYY-MM-DD')
+                      : null
+                  }
+                  if (items?.propertyName?.includes('年月')) {
+                    items.oldValue = items.oldValue
+                      ? dayjs(item.oldValue).format('YYYY-MM-DD')
+                      : null
+                    items.newValue = items.newValue
+                      ? dayjs(item.newValue).format('YYYY-MM-DD')
+                      : null
+                  }
+                  if (items?.propertyName?.includes('性别')) {
+                    items.oldValue =
+                      items.oldValue === '1' ? '男' : items.oldValue === '2' ? '女' : null
+                    items.newValue =
+                      items.newValue === '1' ? '男' : items.newValue === '2' ? '女' : null
+                  }
+                })
               }
               item.createdDate = dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss')
               return item

@@ -36,6 +36,7 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增个体工商</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
@@ -127,6 +128,7 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
+    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -167,6 +169,7 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -211,6 +214,37 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '个体工商户统计表',
+    value: 1
+  },
+  {
+    name: '个体工商基本情况统计表',
+    value: 2
+  },
+  {
+    name: '个体工商房屋信息统计表',
+    value: 3
+  },
+  {
+    name: '个体工商附属物调查统计表',
+    value: 4
+  },
+  {
+    name: '个体工商零星林果木调查统计表',
+    value: 5
+  },
+  {
+    name: '个体工商设施设备调查统计表',
+    value: 6
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const outsideData = ref<any>([])
@@ -556,6 +590,14 @@ const onPrint = async () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
 }
 
 // 数据填报

@@ -32,7 +32,8 @@
           </div>
         </div>
         <ElSpace>
-          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton> -->
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
@@ -123,6 +124,7 @@
       :outsideData="outsideData"
       @close="onPrintDialogClose"
     />
+    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -163,6 +165,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -194,7 +197,7 @@ const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -207,6 +210,37 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '居民户统计表',
+    value: 1
+  },
+  {
+    name: '人口调查统计表',
+    value: 2
+  },
+  {
+    name: '房屋调查统计表',
+    value: 3
+  },
+  {
+    name: '附属物调查统计表',
+    value: 4
+  },
+  {
+    name: '零星林果木调查统计表',
+    value: 5
+  },
+  {
+    name: '家庭收入统计表',
+    value: 6
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const outsideData = ref<any>([])
@@ -474,11 +508,11 @@ const onDelRow = async (row: LandlordDtoType) => {
     .catch(() => {})
 }
 
-// const onAddRow = () => {
-//   actionType.value = 'add'
-//   tableObject.currentRow = null
-//   dialog.value = true
-// }
+const onAddRow = () => {
+  actionType.value = 'add'
+  tableObject.currentRow = null
+  dialog.value = true
+}
 const formRef = ref<any>(null)
 const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
@@ -571,6 +605,14 @@ const onPrint = async () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
 }
 
 // 数据填报
