@@ -56,6 +56,7 @@ import dayjs from 'dayjs'
 import { getDictByName } from '@/api/workshop/population/service'
 import { getupdateLog } from '@/api/workshop/landlord/service'
 import { standardFormatDate } from '@/utils/index'
+import { formatTime } from '@/utils/index'
 
 interface PropsType {
   recordShow: boolean
@@ -136,8 +137,8 @@ watch(
                       : null
                   }
                   if (items?.propertyName?.includes('年月')) {
-                    items.oldValue = items.oldValue ? standardFormatDate(item.oldValue) : null
-                    items.newValue = items.newValue ? standardFormatDate(item.newValue) : null
+                    items.oldValue = items.oldValue ? formatTime(item.oldValue, 'yyyy-MM') : null
+                    items.newValue = items.newValue ? formatTime(item.newValue, 'yyyy-MM') : null
                   }
                   if (items?.propertyName?.includes('性别')) {
                     items.oldValue =
