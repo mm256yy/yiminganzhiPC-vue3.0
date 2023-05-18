@@ -30,7 +30,9 @@
                   {{ item.operationType }}[{{ item.name }}]{{ item.type }}
                 </span>
                 <span v-if="item.remark" class="fw600">:{{ item.remark }}</span>
-                <div v-if="props.isReason" style="padding: 0 66px">新增原因：{{ item.reason }}</div>
+                <div v-if="props.isReason" style="padding: 0 66px"
+                  >{{ item.operationType }}原因：{{ item.reason }}</div
+                >
               </div>
             </div>
           </template>
