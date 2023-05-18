@@ -531,6 +531,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     getList()
   }
+  getLandlordHeadInfo()
 }
 
 const findRecursion = (data, code, callback) => {
