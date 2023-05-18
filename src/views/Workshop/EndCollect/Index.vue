@@ -283,6 +283,7 @@ const endInvestigate = async () => {
         showCancelButton: false,
         type: 'warning',
         closeOnClickModal: false,
+        showClose: false,
         center: true
       }).then(() => {
         // 退出登录的逻辑
