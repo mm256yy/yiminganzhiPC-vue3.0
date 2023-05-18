@@ -117,24 +117,16 @@ watch(
               if (item.updateJson) {
                 item.updateJsonArray = JSON.parse(item.updateJson)
                 item.updateJsonArray.forEach((items) => {
-                  if (items?.propertyName?.includes('出生日期')) {
-                    items.oldValue = items.oldValue ? dayjs(item.oldValue).format('YYYY-MM') : null
-                    items.newValue = items.newValue ? dayjs(item.newValue).format('YYYY-MM') : null
-                  }
                   if (items?.propertyName?.includes('职业')) {
                     tempZy.value = ''
-                    const newValueList = items.newValue?.split('[')[1].split(']')[0].split(',')
-                    const oldValueList = items.newValue?.split('[')[1].split(']')[0].split(',')
+                    const newValueList = items.newValue?.split('[')[1]?.split(']')[0]?.split(',')
+                    const oldValueList = items.newValue?.split('[')[1]?.split(']')[0]?.split(',')
                     items.oldValue = items.oldValue
                       ? deepFmtFun(occupationOptions.value, oldValueList, 0)?.slice(0, -1)
                       : null
                     items.newValue = items.newValue
                       ? deepFmtFun(occupationOptions.value, newValueList, 0)?.slice(0, -1)
                       : null
-                  }
-                  if (items?.propertyName?.includes('年月')) {
-                    items.oldValue = items.oldValue ? dayjs(item.oldValue).format('YYYY-MM') : null
-                    items.newValue = items.newValue ? dayjs(item.newValue).format('YYYY-MM') : null
                   }
                   if (items?.propertyName?.includes('性别')) {
                     items.oldValue =
