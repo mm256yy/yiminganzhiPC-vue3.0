@@ -19,12 +19,12 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="户号" prop="doorNo">
+      <ElFormItem label="个体工商编码" prop="doorNo">
         <ElInput
           v-model="form.doorNo"
           :disabled="actionType === 'edit'"
           class="!w-350px"
-          placeholder="请输入户号"
+          placeholder="请输入个体工商编码"
         />
       </ElFormItem>
       <ElFormItem label="个体工商名称" prop="name">

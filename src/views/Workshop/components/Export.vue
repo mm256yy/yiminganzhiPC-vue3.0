@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { getExportApi } from '@/api/workshop/export/service'
 import { ElDialog, ElButton, ElCheckbox, ElCheckboxGroup } from 'element-plus'
 
 interface ExportListType {
@@ -44,6 +45,7 @@ interface ExportListType {
 interface PropsType {
   show: boolean
   list: ExportListType[]
+  type?: string
 }
 
 const props = defineProps<PropsType>()
@@ -57,24 +59,21 @@ const onClose = () => {
 }
 
 const onDownLoad = async () => {
-  // downloadLoading.value = true
-  // actionType.value = 'download'
-  // const res = await generatorPdf({
-  //   returndataType: 'base64'
-  // }).catch(() => {
-  //   downloadLoading.value = false
-  // })
-  // console.log('下载参数', res)
-  // if (res && res.length) {
-  //   const result = await downloadPrintPdfApi(res).catch(() => {
-  //     downloadLoading.value = false
-  //     ElMessage.error('生成pdf失败')
-  //   })
-  //   result && downLoad(result)
-  //   downloadLoading.value = false
-  // } else {
-  //   downloadLoading.value = false
-  // }
+  const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 </script>
 
