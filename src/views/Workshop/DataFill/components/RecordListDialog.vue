@@ -55,8 +55,6 @@ import { watch, ref } from 'vue'
 import dayjs from 'dayjs'
 import { getDictByName } from '@/api/workshop/population/service'
 import { getupdateLog } from '@/api/workshop/landlord/service'
-import { standardFormatDate } from '@/utils/index'
-import { formatTime } from '@/utils/index'
 
 interface PropsType {
   recordShow: boolean
@@ -121,10 +119,6 @@ watch(
               if (item.updateJson) {
                 item.updateJsonArray = JSON.parse(item.updateJson)
                 item.updateJsonArray.forEach((items) => {
-                  if (items?.propertyName?.includes('出生日期')) {
-                    items.oldValue = items.oldValue ? standardFormatDate(item.oldValue) : null
-                    items.newValue = items.newValue ? standardFormatDate(item.newValue) : null
-                  }
                   if (items?.propertyName?.includes('职业')) {
                     tempZy.value = ''
                     const newValueList = items.newValue?.split('[')[1]?.split(']')[0]?.split(',')
@@ -135,10 +129,6 @@ watch(
                     items.newValue = items.newValue
                       ? deepFmtFun(occupationOptions.value, newValueList, 0)?.slice(0, -1)
                       : null
-                  }
-                  if (items?.propertyName?.includes('年月')) {
-                    items.oldValue = items.oldValue ? formatTime(item.oldValue, 'yyyy-MM') : null
-                    items.newValue = items.newValue ? formatTime(item.newValue, 'yyyy-MM') : null
                   }
                   if (items?.propertyName?.includes('性别')) {
                     items.oldValue =

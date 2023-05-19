@@ -14,7 +14,10 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
+          <ElButton
+            @click="recordClick"
+            v-if="surveyStatus === SurveyStatusEnum.Review && isUpdateShow === 'Landlord'"
+          >
             修改日志
           </ElButton>
         </ElSpace>
@@ -163,6 +166,9 @@ import {
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const isUpdateShow = router.currentRoute.value?.query?.type
 
 interface PropsType {
   householdId: string

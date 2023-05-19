@@ -370,7 +370,7 @@ const titleMsg = (type: string) => {
   } else if (type == 'Enterprise') {
     return '企业信息' + titleStatus
   } else if (type == 'IndividualB') {
-    return '工商个体信息' + titleStatus
+    return '个体工商信息' + titleStatus
   } else {
     return '村集体信息' + titleStatus
   }
