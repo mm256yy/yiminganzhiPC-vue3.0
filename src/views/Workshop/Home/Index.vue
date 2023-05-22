@@ -671,13 +671,14 @@ const seriesdata2 = ref<any>([])
 const ydataName = ref<any>([])
 const initTopTenData = async () => {}
 const handleClick2 = () => {
-  onToday()
   console.log(activeName3.value)
 
   if (activeName3.value == '今日') {
+    onAll()
     workOption.value.series[0].name = '累计'
     workOption.value.series[0].data = seriesdata.value
   } else {
+    onToday()
     workOption.value.series[0].data = seriesdata2.value
     workOption.value.series[0].name = '今日'
   }
@@ -952,18 +953,7 @@ const toLink = (type: string) => {
 }
 
 onMounted(async () => {
-  let data: any = []
-
-  data = await getTopTen('')
-  ydataName.value = []
-  data.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata.value.push(item.number)
-    }
-  })
-  workOption.value.series[0].data = seriesdata.value
-  workOption.value.yAxis[0].data = ydataName.value
+  onAll()
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()
@@ -981,6 +971,22 @@ const onToday = async () => {
       seriesdata2.value.push(item.number)
     }
   })
+  workOption.value.series[0].data = seriesdata.value
+  workOption.value.yAxis[0].data = ydataName.value
+}
+const onAll = async () => {
+  let data: any = []
+
+  data = await getTopTen('')
+  ydataName.value = []
+  data.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata.value
+  workOption.value.yAxis[0].data = ydataName.value
 }
 </script>
 <style lang="less" scoped>
