@@ -1,7 +1,7 @@
 import request from '@/config/axios'
 
 export const getTopTen = (data) => {
-  return request.get({ url: '/home/homeTop10?type=' + data })
+  return request.get({ url: '/home/homeTop10?type=' + data + '&sort=createdDate, id, desc' })
 }
 
 export const homeStatistics = () => {
