@@ -958,9 +958,6 @@ onMounted(async () => {
 
   data2 = await getTopTen('today')
 
-  seriesdata.value = []
-  ydataName.value = []
-  seriesdata2.value = []
   data.forEach((item: any, index: number) => {
     if (index <= 4) {
       ydataName.value.push(item.name)
