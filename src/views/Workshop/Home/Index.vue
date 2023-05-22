@@ -671,6 +671,7 @@ const seriesdata2 = ref<any>([])
 const ydataName = ref<any>([])
 const initTopTenData = async () => {}
 const handleClick2 = () => {
+  onToday()
   console.log(activeName3.value)
 
   if (activeName3.value == '今日') {
@@ -952,22 +953,13 @@ const toLink = (type: string) => {
 
 onMounted(async () => {
   let data: any = []
-  let data2: any = []
 
   data = await getTopTen('')
-
-  data2 = await getTopTen('today')
-
+  ydataName.value = []
   data.forEach((item: any, index: number) => {
     if (index <= 4) {
       ydataName.value.push(item.name)
       seriesdata.value.push(item.number)
-    }
-  })
-  data2.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata2.value.push(item.number)
     }
   })
   workOption.value.series[0].data = seriesdata.value
@@ -979,6 +971,17 @@ onMounted(async () => {
   initNewsData()
   initPolicyData()
 })
+const onToday = async () => {
+  let data2: any = []
+  ydataName.value = []
+  data2 = await getTopTen('today')
+  data2.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata2.value.push(item.number)
+    }
+  })
+}
 </script>
 <style lang="less" scoped>
 @import './Index.less';
