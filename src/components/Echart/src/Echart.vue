@@ -32,7 +32,7 @@ const theme = computed(() => {
   return echartTheme
 })
 
-const options = computed(() => {
+const optionsComputed = computed(() => {
   return Object.assign(props.options, {
     darkMode: unref(theme)
   })
@@ -57,12 +57,12 @@ const styles = computed(() => {
 const initChart = () => {
   if (unref(elRef) && props.options) {
     echartRef = echarts.init(unref(elRef) as HTMLElement)
-    echartRef?.setOption(unref(options))
+    echartRef?.setOption(unref(optionsComputed))
   }
 }
 
 watch(
-  () => options.value,
+  () => optionsComputed.value,
   (options) => {
     if (echartRef) {
       echartRef?.setOption(options)
