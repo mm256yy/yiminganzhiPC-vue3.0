@@ -101,7 +101,7 @@ const columns = reactive<TableColumn[]>([
   { field: 'reservoirName', label: '水库名称' },
   { field: 'projectType', label: '工程类型' },
   { field: 'townName', label: '所在市县' },
-  { field: 'description', label: '项目简介' },
+  { field: 'description', label: '项目简介', showOverflowTooltip: true },
   { field: 'action', label: '操作', width: '140px', align: 'right' }
 ])
 
@@ -139,7 +139,8 @@ const query: ProjectQueryType = reactive({
 
 tableObject.params = {
   name: null,
-  townCode: null
+  townCode: null,
+  sort: ['createdDate', 'Desc']
 }
 
 const { getList } = methods
@@ -151,10 +152,11 @@ const searchProject = () => {
 }
 
 const reset = () => {
-  query.name = ''
-  query.townCode = ''
   tableObject.currentPage = 1
   tableObject.size = 10
+  tableObject.params.name = null
+  tableObject.params.townCode = null
+  getList()
 }
 
 onMounted(() => {

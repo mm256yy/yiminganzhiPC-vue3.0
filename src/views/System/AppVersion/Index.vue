@@ -26,6 +26,11 @@
       headerAlign="center"
       align="center"
     >
+      <template #publish="{ row }">
+        <el-tag effect="dark" :type="row.publish ? 'success' : 'info'">
+          {{ row.publish ? '已发布' : '未发布' }}
+        </el-tag>
+      </template>
       <template #action="{ row }">
         <TableEditColumn :row="row" @edit="onEditItem(row)" @delete="onDelItem" />
       </template>
@@ -45,7 +50,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import dayjs from 'dayjs'
-import { ElButton, ElMessage } from 'element-plus'
+import { ElButton, ElMessage, ElTag } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
@@ -82,11 +87,7 @@ const schema = reactive<CrudSchema[]>([
     label: '版本',
     search: {
       show: true,
-      component: 'InputNumber',
-      value: 1,
-      componentProps: {
-        step: 0.1
-      }
+      component: 'Input'
     },
 
     form: {
@@ -177,9 +178,6 @@ const schema = reactive<CrudSchema[]>([
     },
     detail: {
       show: false
-    },
-    formatter: (_: Recordable, __: AppVersionDtoType, cellValue: boolean) => {
-      return cellValue ? '已发布' : '未发布'
     }
   },
   {

@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -32,7 +32,8 @@
           </div>
         </div>
         <ElSpace>
-          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton> -->
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
@@ -111,6 +112,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :districtTree="districtTree"
+      ref="formRef"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -121,6 +123,12 @@
       :landlordIds="landlordIds"
       :outsideData="outsideData"
       @close="onPrintDialogClose"
+    />
+    <Export
+      :show="exportDialog"
+      :type="'PeasantHousehold'"
+      :list="exportList"
+      @close="onExportDialogClose"
     />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
@@ -162,6 +170,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -184,12 +193,16 @@ import type {
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -202,6 +215,37 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '居民户统计表',
+    value: 'exportPeasantHousehold'
+  },
+  {
+    name: '人口调查统计表',
+    value: 'exportDemographic'
+  },
+  {
+    name: '房屋调查统计表',
+    value: 'exportHouse'
+  },
+  {
+    name: '附属物调查统计表',
+    value: 'exportAppendage'
+  },
+  {
+    name: '零星林果木调查统计表',
+    value: 'exportTree'
+  },
+  {
+    name: '家庭收入统计表',
+    value: 'exportImmigrantIncome'
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const outsideData = ref<any>([])
@@ -469,15 +513,16 @@ const onDelRow = async (row: LandlordDtoType) => {
     .catch(() => {})
 }
 
-// const onAddRow = () => {
-//   actionType.value = 'add'
-//   tableObject.currentRow = null
-//   dialog.value = true
-// }
-
+const onAddRow = () => {
+  actionType.value = 'add'
+  tableObject.currentRow = null
+  dialog.value = true
+}
+const formRef = ref<any>(null)
 const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
+  formRef.value?.initData(row)
   dialog.value = true
 }
 
@@ -486,6 +531,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     getList()
   }
+  getLandlordHeadInfo()
 }
 
 const findRecursion = (data, code, callback) => {
@@ -565,6 +611,14 @@ const onPrint = async () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
 }
 
 // 数据填报

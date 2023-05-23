@@ -11,11 +11,15 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
-            >修改日志</ElButton
+            保存
+          </ElButton>
+          <ElButton
+            @click="recordClick"
+            v-if="surveyStatus === SurveyStatusEnum.Review && isUpdateShow === 'Landlord'"
           >
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
@@ -122,15 +126,15 @@
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
           <template #default="scope">
-            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
-              >删除</span
-            >
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
+              删除
+            </span>
           </template>
         </ElTableColumn>
       </ElTable>
     </div>
     <RecordListDialog
-      type="果木信息"
+      type="果树信息"
       :recordShow="recordShow"
       @close="recordClose"
       :doorNo="doorNo"
@@ -162,6 +166,9 @@ import {
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const isUpdateShow = router.currentRoute.value?.query?.type
 
 interface PropsType {
   householdId: string

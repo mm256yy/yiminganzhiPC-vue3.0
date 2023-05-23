@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">村集体信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">村集体信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -36,6 +36,7 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增村集体</ElButton>
           <!-- <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton> -->
         </ElSpace>
@@ -119,7 +120,7 @@
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
-
+    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -154,6 +155,7 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Survey from './components/Survey.vue'
+import Export from '../components/Export.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -181,6 +183,11 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
+
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -197,7 +204,44 @@ const headInfo = ref<LandlordHeadInfoType>({
 })
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '村集体统计表',
+    value: 1
+  },
+  {
+    name: '村集体房屋信息统计表',
+    value: 2
+  },
+  {
+    name: '村集体零星林果木调查统计表',
+    value: 3
+  },
+  {
+    name: '村集体附属物调查统计表',
+    value: 4
+  },
+  {
+    name: '村集体小型专项及农副业设施调查统计表',
+    value: 5
+  },
+  {
+    name: '村集体坟墓调查统计表',
+    value: 6
+  }
+])
+const onExport = () => {
+  exportDialog.value = true
+}
 
+const onExportDialogClose = () => {
+  exportDialog.value = false
+}
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi

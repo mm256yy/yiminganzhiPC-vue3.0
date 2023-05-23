@@ -17,6 +17,14 @@
       :label-position="'right'"
       :rules="rules"
     >
+      <ElFormItem label="企业编码" prop="doorNo">
+        <ElInput
+          v-model="form.doorNo"
+          :disabled="actionType === 'edit'"
+          class="!w-350px"
+          placeholder="请输入企业编码"
+        />
+      </ElFormItem>
       <ElFormItem label="企业名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入企业名称" />
       </ElFormItem>
@@ -221,6 +229,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
+  doorNo: [required()],
 
   // phone: [required()],
   parentCode: [required()]

@@ -12,15 +12,7 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">
-          {{
-            type == 'Landlord'
-              ? '居民户信息采集'
-              : type == 'Enterprise'
-              ? '企业信息采集'
-              : type == 'IndividualB'
-              ? '工商个体信息采集'
-              : '村集体信息采集'
-          }}
+          {{ titleMsg(type) }}
         </ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">数据填报</ElBreadcrumbItem>
       </ElBreadcrumb>
@@ -70,6 +62,7 @@
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
+        @refresh="getLandlordInfo"
         @update-info="getLandlordInfo"
       />
       <!-- 房屋信息 -->
@@ -353,6 +346,21 @@ import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
+const titleMsg = (type: string) => {
+  if (type == 'Landlord') {
+    return '居民户信息' + titleStatus
+  } else if (type == 'Enterprise') {
+    return '企业信息' + titleStatus
+  } else if (type == 'IndividualB') {
+    return '个体工商信息' + titleStatus
+  } else {
+    return '村集体信息' + titleStatus
+  }
+}
 const { currentRoute, back } = useRouter()
 const { doorNo, householdId, type, name } = currentRoute.value.query as any
 const baseInfo = ref<any>({})

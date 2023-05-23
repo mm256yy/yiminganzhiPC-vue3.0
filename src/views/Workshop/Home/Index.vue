@@ -593,12 +593,12 @@ const reportResult = ref<any>({
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
 const initNewsData = () => {
-  getNewsList({ size: 9999 }).then((res: any) => {
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'] }).then((res: any) => {
     newsList.value = res.content
     newsList.value.forEach((item: any) => {
       item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
     })
-    console.log('newsList：', newsList.value)
+    // console.log('newsList：', newsList.value)
   })
 }
 
@@ -674,9 +674,11 @@ const handleClick2 = () => {
   console.log(activeName3.value)
 
   if (activeName3.value == '今日') {
+    onAll()
     workOption.value.series[0].name = '累计'
     workOption.value.series[0].data = seriesdata.value
   } else {
+    onToday()
     workOption.value.series[0].data = seriesdata2.value
     workOption.value.series[0].name = '今日'
   }
@@ -951,27 +953,7 @@ const toLink = (type: string) => {
 }
 
 onMounted(async () => {
-  let data: any = []
-  let data2: any = []
-
-  data = await getTopTen('')
-
-  data2 = await getTopTen('today')
-
-  data.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata.value.push(item.number)
-    }
-  })
-  data2.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata2.value.push(item.number)
-    }
-  })
-  workOption.value.series[0].data = seriesdata.value
-  workOption.value.yAxis[0].data = ydataName.value
+  onAll()
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()
@@ -979,6 +961,35 @@ onMounted(async () => {
   initNewsData()
   initPolicyData()
 })
+const onToday = async () => {
+  let data2: any = []
+  ydataName.value = []
+  seriesdata2.value = []
+  data2 = await getTopTen('today')
+  data2.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata2.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata2.value
+  workOption.value.yAxis[0].data = ydataName.value
+}
+const onAll = async () => {
+  let data: any = []
+
+  data = await getTopTen('')
+  ydataName.value = []
+  seriesdata.value = []
+  data.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata.value
+  workOption.value.yAxis[0].data = ydataName.value
+}
 </script>
 <style lang="less" scoped>
 @import './Index.less';
