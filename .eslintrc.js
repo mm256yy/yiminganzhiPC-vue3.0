@@ -24,6 +24,7 @@ module.exports = defineConfig({
     'plugin:prettier/recommended'
   ],
   rules: {
+    'vue/no-dupe-keys': 'error',
     'vue/script-setup-uses-vars': 'error',
     'vue/no-reserved-component-names': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
