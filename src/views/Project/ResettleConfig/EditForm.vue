@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAppStore } from '@/store/modules/app'
+// import { useAppStore } from '@/store/modules/app'
 
 import { computed, reactive, unref, ref, onMounted, watch } from 'vue'
 import { ElButton, ElMessage, ElSelect, ElOption, ElInput } from 'element-plus'
@@ -70,7 +70,7 @@ import { saveResettleConfigApi } from '@/api/project/resettleConfig/service'
 import { useForm } from '@/hooks/web/useForm'
 import { FormSchema } from '@/types/form'
 
-const appStore = useAppStore()
+// const appStore = useAppStore()
 
 interface Props {
   show: boolean
@@ -85,7 +85,6 @@ const emit = defineEmits(['close'])
 const { required } = useValidator()
 const loading = ref(false)
 const currentRow = ref(props.row)
-const projectId = ref<any>(props.projectId)
 const type = ref('')
 const way = ref('')
 
@@ -102,8 +101,8 @@ const title = computed(() => {
 const rules = {
   way: [{ type: String }, { required: true }],
   type: [{ type: String }, { required: true }],
-  area: [required()],
-  projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
+  area: [required()]
+  // projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
 watch(
   () => type.value,
@@ -202,7 +201,7 @@ const onSave = async () => {
 const doSave = async () => {
   loading.value = true
   const resettleConfig = (await methods.getFormData()) || {}
-  resettleConfig.projectId = projectId.value
+  resettleConfig.projectId = props.projectId
   resettleConfig.type = type.value
   resettleConfig.way = way.value
   // 修改
