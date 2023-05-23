@@ -113,7 +113,6 @@
     </div>
 
     <EditForm
-      :districtTree="districtTree"
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
