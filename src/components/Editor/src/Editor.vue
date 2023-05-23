@@ -54,7 +54,7 @@ const handleCreated = (editor: IDomEditor) => {
 }
 
 // 编辑器配置
-const editorConfig = computed((): IEditorConfig => {
+const editorConfigComputed = computed((): IEditorConfig => {
   return Object.assign(
     {
       readOnly: false,
@@ -127,7 +127,7 @@ defineExpose({
     <Editor
       v-model="valueHtml"
       :editorId="editorId"
-      :defaultConfig="editorConfig"
+      :defaultConfig="editorConfigComputed"
       :style="editorStyle"
       @on-change="handleChange"
       @on-created="handleCreated"

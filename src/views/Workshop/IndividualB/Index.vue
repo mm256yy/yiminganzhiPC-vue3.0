@@ -116,7 +116,6 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
-      :districtTree="villageTree"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />

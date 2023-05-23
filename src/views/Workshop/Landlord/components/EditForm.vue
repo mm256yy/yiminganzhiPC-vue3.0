@@ -139,7 +139,7 @@
     </ElForm>
 
     <VillageEditForm
-      :district-tree="districtTree"
+      :district-tree="districtTreeList"
       :show="villageDialog"
       :row="null"
       :hideMap="true"
@@ -221,12 +221,12 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-const districtTree = ref([])
+const districtTreeList = ref([])
 const villageDialog = ref(false)
 
 const getDistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
-  districtTree.value = list || []
+  districtTreeList.value = list || []
 }
 
 getDistrictTree()

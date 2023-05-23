@@ -159,7 +159,6 @@ import { useAppStore } from '@/store/modules/app'
 // import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
@@ -167,7 +166,6 @@ interface PropsType {
   show: any
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
-  districtTree: DistrictNodeType[]
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
