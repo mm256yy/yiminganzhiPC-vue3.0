@@ -48,16 +48,14 @@
           <img src="@/assets/imgs/Icon_workteam.png" width="15" />
           <div class="text">工作组TOP5</div>
         </div>
-        <ElTabs
-          v-model="activeName3"
-          type="card"
-          class="demo-tabs tabs-wrapper top5"
-          @tab-click="handleClick2"
-          :lazy="false"
-        >
-          <ElTabPane label="累计" name="累计" />
-          <ElTabPane label="今日" name="今日" />
-        </ElTabs>
+        <div class="demo-tabs tabs-wrapper top5" style="padding-top: 10px">
+          <ElButton :class="activeName3 === '累计' ? 'is-active' : ''" @click="handleClick2('累计')"
+            >累计</ElButton
+          >
+          <ElButton :class="activeName3 === '今日' ? 'is-active' : ''" @click="handleClick2('今日')"
+            >今日</ElButton
+          >
+        </div>
         <Echart :options="workOption" :height="250" />
       </div>
 
@@ -538,7 +536,7 @@
 </template>
 <script lang="ts" setup>
 // import ScaleBox from './ScaleBox.vue'
-import { ElTabs, ElTabPane } from 'element-plus'
+import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 import { useRouter } from 'vue-router'
 // computed
@@ -670,17 +668,16 @@ const seriesdata = ref<any>([])
 const seriesdata2 = ref<any>([])
 const ydataName = ref<any>([])
 const initTopTenData = async () => {}
-const handleClick2 = () => {
-  console.log(activeName3.value)
-
-  if (activeName3.value == '今日') {
-    onAll()
-    workOption.value.series[0].name = '累计'
+const handleClick2 = (type: string) => {
+  activeName3.value = type
+  if (type == '今日') {
+    onToday()
+    workOption.value.series[0].name = '今日'
     workOption.value.series[0].data = seriesdata.value
   } else {
-    onToday()
+    onAll()
     workOption.value.series[0].data = seriesdata2.value
-    workOption.value.series[0].name = '今日'
+    workOption.value.series[0].name = '累计'
   }
 }
 
@@ -1000,5 +997,11 @@ const onAll = async () => {
 
 :deep(.rounded-8px) {
   border-radius: 0;
+}
+
+.is-active {
+  color: #2f72fe !important;
+  background: #f2f6ff;
+  border: 1px solid #2f72fe !important;
 }
 </style>
