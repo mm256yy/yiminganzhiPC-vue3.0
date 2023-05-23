@@ -11,7 +11,7 @@
   >
     <div>
       <el-checkbox-group v-model="checkList">
-        <div class="collopase-item" v-for="item in list" :key="item.value">
+        <div class="collopase-item" v-for="item in props.list" :key="item.value">
           <div class="collopase-item-head">
             <el-checkbox :label="item.value">{{ item.name }}</el-checkbox>
           </div>
@@ -50,7 +50,6 @@ interface PropsType {
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
-const list = ref(props.list)
 let downloadLoading = ref(false)
 const checkList = ref([])
 
