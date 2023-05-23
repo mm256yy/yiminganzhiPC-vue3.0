@@ -961,7 +961,6 @@ onMounted(async () => {
 const onToday = async () => {
   let data2: any = []
 
-
   data2 = await getTopTen('today')
   ydataName.value = []
   seriesdata2.value = []
