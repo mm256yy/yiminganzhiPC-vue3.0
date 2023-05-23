@@ -972,7 +972,7 @@ const onToday = async () => {
       seriesdata2.value.push(item.number)
     }
   })
-  workOption.value.series[0].data = seriesdata.value
+  workOption.value.series[0].data = seriesdata2.value
   workOption.value.yAxis[0].data = ydataName.value
 }
 const onAll = async () => {
