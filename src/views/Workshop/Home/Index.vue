@@ -960,9 +960,9 @@ onMounted(async () => {
 })
 const onToday = async () => {
   let data2: any = []
+  data2 = await getTopTen('today')
   ydataName.value = []
   seriesdata2.value = []
-  data2 = await getTopTen('today')
   data2.forEach((item: any, index: number) => {
     if (index <= 4) {
       ydataName.value.push(item.name)
