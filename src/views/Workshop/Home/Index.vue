@@ -49,7 +49,10 @@
           <div class="text">工作组TOP5</div>
         </div>
         <div class="demo-tabs tabs-wrapper top5" style="padding-top: 10px">
-          <ElButton :class="activeName3 === '累计' ? 'is-active' : ''" @click="handleClick2('累计')"
+          <ElButton
+            class="mright"
+            :class="activeName3 === '累计' ? 'is-active' : ''"
+            @click="handleClick2('累计')"
             >累计</ElButton
           >
           <ElButton :class="activeName3 === '今日' ? 'is-active' : ''" @click="handleClick2('今日')"
@@ -673,10 +676,8 @@ const handleClick2 = (type: string) => {
   if (type == '今日') {
     onToday()
     workOption.value.series[0].name = '今日'
-    workOption.value.series[0].data = seriesdata.value
   } else {
     onAll()
-    workOption.value.series[0].data = seriesdata2.value
     workOption.value.series[0].name = '累计'
   }
 }
@@ -1004,5 +1005,9 @@ const onAll = async () => {
   color: #2f72fe !important;
   background: #f2f6ff;
   border: 1px solid #2f72fe !important;
+}
+
+.mright {
+  margin-right: -4px;
 }
 </style>
