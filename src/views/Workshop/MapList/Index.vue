@@ -67,6 +67,7 @@ import { ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { splitStr, hideStr } from '@/utils'
+import { transformFromWGSToGCJ } from '@/utils/gcoord'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
 import { getVillageListApi } from '@/api/workshop/village/service'
 import iconPath from './iconPath'
@@ -76,17 +77,20 @@ const projectId = appStore.currentProjectId
 
 // 初始化聚合点坐标
 const initCoordinatesData = (obj: any) => {
-  let arr: any = []
+  let arr1: any = []
+  let arr2: any = []
+  let arr3: any = []
   obj?.features.map((item: any) => {
-    console.log('coordinates:', ...item.geometry?.coordinates[0][0])
-    arr.push(...item.geometry?.coordinates[0][0])
+    arr1.push(...item.geometry?.coordinates[0][0])
+    arr2.push(item.geometry?.coordinates[0][0])
+    arr3.push(item.properties)
   })
-  return arr
+  return [arr1, arr2, arr3]
 }
 
 const mapJson: any = appStore.currentMapJson ? JSON.parse(appStore.currentMapJson) : null
 console.log('mapJson:', mapJson)
-const points = mapJson ? initCoordinatesData(mapJson) : []
+const points = mapJson ? initCoordinatesData(mapJson)[0] : []
 console.log('points:', points)
 const pointsLength = points.length
 
@@ -96,10 +100,12 @@ interface LocationType {
 }
 
 // 初始地图坐标, 如果没有该区域的中心经、纬度，默认杭州经、纬度显示
-const centerLocation = ref<LocationType>({
-  longitude: pointsLength ? points[pointsLength / 2][0] : 120.153576, // 经度
-  latitude: pointsLength ? points[pointsLength / 2][1] : 30.287459 // 纬度
-})
+const centerLocation = ref<LocationType>(
+  transformFromWGSToGCJ(
+    pointsLength ? points[pointsLength / 2][0] : 120.153576, // 经度
+    pointsLength ? points[pointsLength / 2][1] : 30.287459 // 纬度
+  )
+)
 
 let AMap: any = null
 let map: any = null
@@ -126,7 +132,7 @@ const initMap = async () => {
 
   // 设置地图容器id
   map = new AMap.Map('container', {
-    zoom: 15, // 初始化地图层级
+    zoom: 13.5, // 初始化地图层级
     viewMode: '3D', // 是否为3D地图模式
     center: position, // 初始化地图中心点位置 [经度, 纬度]
     layers: [
@@ -182,7 +188,7 @@ const initHouseholdData = async () => {
 
 // 初始化获取自然村相关信息
 const initVillageData = async () => {
-  const res: any = await getVillageListApi({ projectId, size: 99999 })
+  const res: any = await getVillageListApi({ projectId, size: 99999, longitude: 1, latitude: 1 })
   if (res && res.content && res.content.length) {
     let arr: any = []
     let markerArr: any = []
@@ -301,7 +307,7 @@ const initMarker = async () => {
     }
     const lat = alllat / item.clusterData.length
     const lng = alllng / item.clusterData.length
-    // 这里是放大地图，此处写死了每次点击放大的级别，可以根据点的数量和当前大小适应放大，体验更佳
+    // 这里是放大地图，此处写死了每次点击放大的级别，可以根据点的数量和当前大小适当放大，体验更佳
     map.setZoomAndCenter(map.getZoom() + 4, [lng, lat])
   })
 
@@ -311,17 +317,66 @@ const initMarker = async () => {
 
 // 初始化多边形轮廓
 const initPolygon = async () => {
-  // 配置多边形
-  let polygon = new AMap.Polygon({
-    path: points, // 路径
-    strokeColor: '#ff0000', // 轮廓线颜色
-    strokeWeight: 2, // 轮廓线宽度
-    strokeOpacity: 1, // 轮廓线透明度
-    fillOpacity: 0.2, // 矩形内部填充颜色透明度
-    fillColor: 'transparent', // 矩形 内部填充颜色透明度
-    zIndex: 50 // 多边形覆盖物的叠加顺序。地图上存在多个多边形覆盖物叠加时，通过该属性使级别较高的多边形覆盖物在上层显示
-  })
-  map.add(polygon)
+  let pointsArr = mapJson ? initCoordinatesData(mapJson)[1] : []
+  let propertiesArr = mapJson ? initCoordinatesData(mapJson)[2] : []
+  pointsArr &&
+    pointsArr.map((item: any, index: number) => {
+      // 配置多边形
+      let polygon = new AMap.Polygon({
+        path: calibrationCoord(item), // 路径
+        strokeColor: renderColor(propertiesArr[index]), // 轮廓线颜色
+        strokeWeight: 2, // 轮廓线宽度
+        strokeOpacity: 1, // 轮廓线透明度
+        fillOpacity: 0.2, // 矩形内部填充颜色透明度
+        fillColor: 'transparent', // 矩形 内部填充颜色透明度
+        zIndex: 50 // 多边形覆盖物的叠加顺序。地图上存在多个多边形覆盖物叠加时，通过该属性使级别较高的多边形覆盖物在上层显示
+      })
+      map.add(polygon)
+    })
+}
+
+/**
+ * 坐标系进行转换，校准坐标系
+ * @param arr 坐标系数组
+ */
+const calibrationCoord = (arr: any) => {
+  const newArr: any = []
+  if (arr && arr.length) {
+    arr.map((coords: any) => {
+      newArr.push([
+        transformFromWGSToGCJ(coords[0], coords[1])['longitude'],
+        transformFromWGSToGCJ(coords[0], coords[1])['latitude'],
+        coords[2]
+      ])
+    })
+    return newArr
+  }
+  return newArr
+}
+
+/**
+ * 生成对应的颜色
+ * @param {Object} obj
+ * 临时用地范围 BM(4) #0055ff
+ * 浸没影响处理范围 BM(3) #C24BC6
+ * 工程建设区征地处理范围 BM(2) #00aa00
+ * 水库淹没处理范围 BM(1) #FF0000
+ */
+const renderColor = (obj: any) => {
+  if (obj) {
+    if (obj.BM === '1') {
+      return '#FF0000'
+    } else if (obj.BM === '2') {
+      return '#00aa00'
+    } else if (obj.BM === '3') {
+      return '#C24BC6'
+    } else if (obj.BM === '4') {
+      return '#0055ff'
+    } else {
+      return '#FF0000'
+    }
+  }
+  return '#FF0000'
 }
 
 /**

@@ -282,6 +282,8 @@ const endInvestigate = async () => {
         cancelButtonText: '取消',
         showCancelButton: false,
         type: 'warning',
+        closeOnClickModal: false,
+        showClose: false,
         center: true
       }).then(() => {
         // 退出登录的逻辑

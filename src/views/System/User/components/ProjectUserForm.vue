@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="show" title="用户项目" append-to-body @close="onClose" width="720px">
+  <el-dialog v-model="showDialog" title="用户项目" append-to-body @close="onClose" width="720px">
     <el-form ref="form" :model="row" :inline="true" label-width="100px" :rules="rules">
       <el-form-item prop="projectId" label="关联项目">
         <el-select v-model="row.projectId" @change="onProjectChange">
@@ -82,7 +82,7 @@ const rules = {
   orgId: [required()],
   roleIds: [required()]
 }
-const show = ref(props.show)
+const showDialog = ref(props.show)
 const row = ref<ProjectUser>(
   props.projectUser || {
     projectId: undefined,
@@ -107,7 +107,7 @@ const roles = ref<RoleType[]>([])
 watch(
   () => props.show,
   () => {
-    show.value = props.show
+    showDialog.value = props.show
   }
 )
 
@@ -158,7 +158,7 @@ const onSave = () => {
 }
 
 const onClose = () => {
-  show.value = false
+  showDialog.value = false
   emit('close')
 }
 </script>
