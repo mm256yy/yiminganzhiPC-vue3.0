@@ -127,7 +127,12 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
-    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
+    <Export
+      :show="exportDialog"
+      :type="'IndividualHousehold'"
+      :list="exportList"
+      @close="onExportDialogClose"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -221,27 +226,27 @@ interface exportListType {
 const exportList = ref<exportListType[]>([
   {
     name: '个体工商户统计表',
-    value: 1
+    value: 'exportCompanyRegister'
   },
   {
     name: '个体工商基本情况统计表',
-    value: 2
+    value: 'exportCompanyInfo'
   },
   {
     name: '个体工商房屋信息统计表',
-    value: 3
+    value: 'exportCompanyHouse'
   },
   {
     name: '个体工商附属物调查统计表',
-    value: 4
+    value: 'exportCompanyAppendage'
   },
   {
     name: '个体工商零星林果木调查统计表',
-    value: 5
+    value: 'exportCompanyTree'
   },
   {
     name: '个体工商设施设备调查统计表',
-    value: 6
+    value: 'exportCompanyEquipment'
   }
 ])
 const surveyDialog = ref(false)

@@ -54,6 +54,7 @@ let downloadLoading = ref(false)
 const checkList = ref([])
 
 const onClose = () => {
+  checkList.value = []
   emit('close')
 }
 
