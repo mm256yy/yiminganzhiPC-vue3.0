@@ -71,9 +71,9 @@
                 <ElInput v-model="row.insuredName" :placeholder="'请输入'" />
               </template>
             </el-table-column>
-            <el-table-column prop="insuredSex" label="性别" width="230" header-align="center">
+            <el-table-column prop="insuredSex" label="性别" width="130" header-align="center">
               <template #default="{ row }">
-                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.insuredSex">
+                <ElSelect class="w-100" clearable placeholder="请选择" v-model="row.insuredSex">
                   <ElOption
                     v-for="item in dictObj[292]"
                     :key="item.value"
@@ -105,7 +105,13 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="payTime" label="缴费时间" align="center" header-align="center">
+            <el-table-column
+              prop="payTime"
+              label="缴费时间"
+              width="250"
+              align="center"
+              header-align="center"
+            >
               <template #default="{ row }">
                 <el-date-picker v-model="row.payTime" type="date" placeholder="请选择日期" />
               </template>
@@ -301,6 +307,10 @@ onMounted(() => {
 
 .mr-10 {
   margin-right: 10px;
+}
+
+.w-100 {
+  width: 100px;
 }
 
 .w-150 {

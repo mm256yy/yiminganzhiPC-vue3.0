@@ -203,7 +203,7 @@ const defaultRow = {
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
+// 初始化获取数据
 const initData = () => {
   const params: any = {
     doorNo: props.doorNo,
@@ -211,7 +211,6 @@ const initData = () => {
     size: 1000
   }
   getRelocationResettleApi(params).then((res: any) => {
-    console.log('res:', res)
     if (res && res.doorNo) {
       form.value = res
       tableData.value = res.rrHouseBuildCheckList

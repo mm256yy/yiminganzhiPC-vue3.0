@@ -168,7 +168,11 @@ const initData = () => {
 
 // 保存
 const onSave = () => {
-  saveRelocationResettleApi(form.value).then(() => {
+  let params = {
+    ...form.value,
+    type: RelocationResettleTypes.GreenSoar
+  }
+  saveRelocationResettleApi(params).then(() => {
     ElMessage.success('操作成功！')
     initData()
   })
