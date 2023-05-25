@@ -20,7 +20,7 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">房屋腾空：</div>
-              <div class="progress">进度：{{ form.houseVacateStatus }}</div>
+              <div class="progress">进度：{{ form.houseVacateStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.houseVacateRemark" />
@@ -29,7 +29,7 @@
 
             <div class="info-item">
               <div class="tit">青苗腾空：</div>
-              <div class="progress">进度：{{ form.treeVacateStatus }}</div>
+              <div class="progress">进度：{{ form.treeVacateStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.treeVacateRemark" />
@@ -43,7 +43,7 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">择房确认：</div>
-              <div class="progress">进度：{{ form.houseConfirmStatus }}</div>
+              <div class="progress">进度：{{ form.houseConfirmStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.houseConfirmRemark" />
@@ -52,7 +52,7 @@
 
             <div class="info-item">
               <div class="tit">择址确认：</div>
-              <div class="progress">进度：{{ form.addressConfirmStatus }}</div>
+              <div class="progress">进度：{{ form.addressConfirmStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.addressConfirmRemark" />
@@ -61,7 +61,7 @@
 
             <div class="info-item">
               <div class="tit">择房交付：</div>
-              <div class="progress">进度：{{ form.houseDeliveryStatus }}</div>
+              <div class="progress">进度：{{ form.houseDeliveryStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.houseDeliveryRemark" />
@@ -70,7 +70,7 @@
 
             <div class="info-item">
               <div class="tit">建房交付：</div>
-              <div class="progress">进度：{{ form.buildHouseStatus }}</div>
+              <div class="progress">进度：{{ form.buildHouseStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.buildHouseRemark" />
@@ -84,7 +84,7 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">坟墓择址：</div>
-              <div class="progress">进度：{{ form.graveAddressStatus }}</div>
+              <div class="progress">进度：{{ form.graveAddressStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.graveAddressRemark" />
@@ -93,7 +93,7 @@
 
             <div class="info-item">
               <div class="tit">坟墓迁移：</div>
-              <div class="progress">进度：{{ form.graveMigrationStatus }}</div>
+              <div class="progress">进度：{{ form.graveMigrationStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.graveMigrationRemark" />
@@ -107,7 +107,7 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">社保缴费：</div>
-              <div class="progress">进度：{{ form.feePayStatus }}</div>
+              <div class="progress">进度：{{ form.feePayStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.feePayRemark" />
@@ -116,7 +116,7 @@
 
             <div class="info-item">
               <div class="tit">自建房验收：</div>
-              <div class="progress">进度：{{ form.houseAcceptanceStatus }}</div>
+              <div class="progress">进度：{{ form.houseAcceptanceStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.houseAcceptanceRemark" />
@@ -125,7 +125,7 @@
 
             <div class="info-item">
               <div class="tit">生产用地交付：</div>
-              <div class="progress">进度：{{ form.landDeliveryStatus }}</div>
+              <div class="progress">进度：{{ form.landDeliveryStatusText }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
                 <el-input placeholder="请输入备注" v-model="form.landDeliveryRemark" />
@@ -491,8 +491,8 @@ const defaultForm = {
 const form = ref<any>(defaultForm)
 const getList = () => {
   getPlacementProgressApi(props.doorNo).then((res) => {
-    if (res.data) {
-      form.value = res.data
+    if (res?.id) {
+      form.value = res
     }
   })
 }
