@@ -159,7 +159,9 @@
             </div>
           </div>
           <div class="form-item-block">
-            <ElFormItem label="拆迁房屋建筑面积："> {{ form.demolitionHouseArea }} </ElFormItem>
+            <ElFormItem label="拆迁房屋建筑面积：">
+              {{ form.demolitionHouseArea }}
+            </ElFormItem>
             <ElFormItem label="拆迁房屋赔偿金额：">{{ form.demolitionHouseAmount }} </ElFormItem>
             <ElFormItem label="拆迁房其他补偿金额：">
               {{ form.demolitionHouseOtherAmount }}
@@ -447,11 +449,15 @@ let detailInfo = reactive({})
 let selectId = ref<number>(0)
 const getDetail = async () => {
   const res = await getSchemeBaseDetailApi(props.doorNo)
-  selectId.value = res.id
-  form.value = Object.assign({}, form.value, res, { isSelect: true })
-  await getDetailInfo()
-  await handleClickSave('detail')
-  form.value = Object.assign({}, defaultValue, detailInfo)
+  if (res?.id) {
+    selectId.value = res.id
+    form.value = Object.assign({}, form.value, res, { isSelect: true })
+    await getDetailInfo()
+    await handleClickSave('detail')
+    form.value = Object.assign({}, defaultValue, detailInfo)
+  } else {
+    await getDetailInfo()
+  }
 }
 const getDetailInfo = async () => {
   const res = await getSchemeBaseInfoApi(props.doorNo)
@@ -780,6 +786,10 @@ const handleClickSave = (type) => {
 
 :deep(.el-form-item) {
   padding: 0 10px;
+
+  .el-form-item__content {
+    align-items: flex-start;
+  }
 }
 
 .titleBox {

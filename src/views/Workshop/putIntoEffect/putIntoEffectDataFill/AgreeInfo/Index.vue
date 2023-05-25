@@ -21,7 +21,7 @@
           <div class="titleBox">
             <span class="text">基础信息</span>
           </div>
-          <div style="display: flex; align-items: center">
+          <div class="flblock">
             <ElFormItem label="总计建筑面积：" prop="totalArea">
               <ElInput v-model="formData.totalArea" placeholder="输入"
                 ><template #append>亩</template></ElInput
@@ -547,5 +547,10 @@ const onedit = () => {
 .bgcolor {
   padding: 20px;
   background: #edf5ff;
+}
+
+.flblock {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>
