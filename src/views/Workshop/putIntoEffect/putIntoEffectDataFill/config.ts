@@ -90,6 +90,21 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
+  // 方案比选
+  {
+    type: 6,
+    name: '方案比选',
+    id: ReportTabIds[0],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    type: 6,
+    name: '填写协议信息',
+    id: ReportTabIds[1],
+    icon: 'ion:print',
+    active: false
+  },
   // 动迁安置
   {
     type: 5,
@@ -314,6 +329,10 @@ export const FlowTabs = [
   {
     id: 2,
     name: '安置确认'
+  },
+  {
+    id: 6,
+    name: '方案比选'
   },
   {
     id: 3,
