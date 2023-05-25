@@ -20,19 +20,19 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">房屋腾空：</div>
-              <div class="progress">进度：{{ form.houseEmptyStatus }}</div>
+              <div class="progress">进度：{{ form.houseVacateStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.houseEmptyRemark" />
+                <el-input placeholder="请输入备注" v-model="form.houseVacateRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">青苗腾空：</div>
-              <div class="progress">进度：{{ form.greenShootsStatus }}</div>
+              <div class="progress">进度：{{ form.treeVacateStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.greenShootsRemark" />
+                <el-input placeholder="请输入备注" v-model="form.treeVacateRemark" />
               </div>
             </div>
           </div>
@@ -43,37 +43,37 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">择房确认：</div>
-              <div class="progress">进度：{{ form.chooseHouseStatus }}</div>
+              <div class="progress">进度：{{ form.houseConfirmStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.chooseHouseRemark" />
+                <el-input placeholder="请输入备注" v-model="form.houseConfirmRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">择址确认：</div>
-              <div class="progress">进度：{{ form.chooseAddressStatus }}</div>
+              <div class="progress">进度：{{ form.addressConfirmStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.chooseAddressRemark" />
+                <el-input placeholder="请输入备注" v-model="form.addressConfirmRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">择房交付：</div>
-              <div class="progress">进度：{{ form.houseSelectAndDeliveryStatus }}</div>
+              <div class="progress">进度：{{ form.houseDeliveryStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.houseSelectAndDeliveryRemark" />
+                <el-input placeholder="请输入备注" v-model="form.houseDeliveryRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">建房交付：</div>
-              <div class="progress">进度：{{ form.houseBuildAndDeliveryStatus }}</div>
+              <div class="progress">进度：{{ form.buildHouseStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.houseBuildAndDeliveryRemark" />
+                <el-input placeholder="请输入备注" v-model="form.buildHouseRemark" />
               </div>
             </div>
           </div>
@@ -84,19 +84,19 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">坟墓择址：</div>
-              <div class="progress">进度：{{ form.graveChooseAddressStatus }}</div>
+              <div class="progress">进度：{{ form.graveAddressStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.graveChooseAddressRemark" />
+                <el-input placeholder="请输入备注" v-model="form.graveAddressRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">坟墓迁移：</div>
-              <div class="progress">进度：{{ form.graveMoveStatus }}</div>
+              <div class="progress">进度：{{ form.graveMigrationStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.graveMoveRemark" />
+                <el-input placeholder="请输入备注" v-model="form.graveMigrationRemark" />
               </div>
             </div>
           </div>
@@ -107,28 +107,28 @@
           <div class="progress-children">
             <div class="info-item">
               <div class="tit">社保缴费：</div>
-              <div class="progress">进度：{{ form.socialSecurityPayStatus }}</div>
+              <div class="progress">进度：{{ form.feePayStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.socialSecurityPayRemark" />
+                <el-input placeholder="请输入备注" v-model="form.feePayRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">自建房验收：</div>
-              <div class="progress">进度：{{ form.buildHouseCheckStatus }}</div>
+              <div class="progress">进度：{{ form.houseAcceptanceStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.buildHouseCheckRemark" />
+                <el-input placeholder="请输入备注" v-model="form.houseAcceptanceRemark" />
               </div>
             </div>
 
             <div class="info-item">
               <div class="tit">生产用地交付：</div>
-              <div class="progress">进度：{{ form.productionLandDeliveryStatus }}</div>
+              <div class="progress">进度：{{ form.landDeliveryStatus }}</div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.productionLandDeliveryRemark" />
+                <el-input placeholder="请输入备注" v-model="form.landDeliveryRemark" />
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.buildHouseStatus"
+                  v-model="form.buildHouseProgressStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[290]"
@@ -210,7 +210,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.buildHouseRemark" />
+                <el-input placeholder="请输入备注" v-model="form.buildHouseProgressRemark" />
               </div>
             </div>
 
@@ -222,7 +222,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.hydropowerStatus"
+                  v-model="form.networkTransferStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[253]"
@@ -234,7 +234,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.hydropowerRemark" />
+                <el-input placeholder="请输入备注" v-model="form.networkTransferRemark" />
               </div>
             </div>
 
@@ -246,7 +246,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.houseOwnershipStatus"
+                  v-model="form.propertyRightHandleStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -258,7 +258,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.houseOwnershipRemark" />
+                <el-input placeholder="请输入备注" v-model="form.propertyRightHandleRemark" />
               </div>
             </div>
           </div>
@@ -275,7 +275,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.otherResettlementStatus"
+                  v-model="form.otherStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -287,7 +287,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.otherResettlementRemark" />
+                <el-input placeholder="请输入备注" v-model="form.otherRemark" />
               </div>
             </div>
           </div>
@@ -304,7 +304,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.registeredResidenceTransferStatus"
+                  v-model="form.householdRegistrationTransferStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -318,7 +318,7 @@
                 <div class="common-tit">备注：</div>
                 <el-input
                   placeholder="请输入备注"
-                  v-model="form.registeredResidenceTransferRemark"
+                  v-model="form.householdRegistrationTransferRemark"
                 />
               </div>
             </div>
@@ -331,7 +331,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.politicalRelationStatus"
+                  v-model="form.relationshipTransferStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -343,7 +343,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.politicalRelationRemark" />
+                <el-input placeholder="请输入备注" v-model="form.relationshipTransferRemark" />
               </div>
             </div>
 
@@ -355,7 +355,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.daycareStatus"
+                  v-model="form.goSchoolStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -367,7 +367,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.daycareRemark" />
+                <el-input placeholder="请输入备注" v-model="form.goSchoolRemark" />
               </div>
             </div>
 
@@ -379,7 +379,7 @@
                   class="!w-280px"
                   clearable
                   placeholder="请选择"
-                  v-model="form.armymanTransferStatus"
+                  v-model="form.soldierTransferStatus"
                 >
                   <ElOption
                     v-for="item in dictObj[271]"
@@ -391,7 +391,7 @@
               </div>
               <div class="remark">
                 <div class="common-tit">备注：</div>
-                <el-input placeholder="请输入备注" v-model="form.armymanTransferRemark" />
+                <el-input placeholder="请输入备注" v-model="form.soldierTransferRemark" />
               </div>
             </div>
           </div>
@@ -405,47 +405,57 @@
 import { ref, computed } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { ElSpace, ElInput, ElSelect, ElOption, ElButton } from 'element-plus'
+import { ElSpace, ElInput, ElSelect, ElOption, ElButton, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { onMounted } from 'vue'
+import {
+  getPlacementProgressApi,
+  addPlacementProgressApi,
+  editPlacementProgressApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/placementProgress/service'
 
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-
+interface PropsType {
+  doorNo: string
+  householdId: number
+  projectId: number
+  status: string
+}
+const props = defineProps<PropsType>()
 const defaultForm = {
-  houseEmptyStatus: '',
-  houseEmptyRemark: '',
+  houseVacateStatus: '',
+  houseVacateRemark: '',
 
-  greenShootsStatus: '',
-  greenShootsRemark: '',
+  treeVacateStatus: '',
+  treeVacateRemark: '',
 
-  chooseHouseStatus: '',
-  chooseHouseRemark: '',
+  houseConfirmStatus: '',
+  houseConfirmRemark: '',
 
-  chooseAddressStatus: '',
-  chooseAddressRemark: '',
+  addressConfirmStatus: '',
+  addressConfirmRemark: '',
 
-  houseSelectAndDeliveryStatus: '',
-  houseSelectAndDeliveryRemark: '',
+  houseDeliveryStatus: '',
+  houseDeliveryRemark: '',
 
-  houseBuildAndDeliveryStatus: '',
-  houseBuildAndDeliveryRemark: '',
+  buildHouseStatus: '',
+  buildHouseRemark: '',
 
-  graveChooseAddressStatus: '',
-  graveChooseAddressRemark: '',
+  graveAddressStatus: '',
+  graveAddressRemark: '',
 
-  graveMoveStatus: '',
-  graveMoveRemark: '',
+  graveMigrationStatus: '',
+  graveMigrationRemark: '',
 
-  socialSecurityPayStatus: '',
-  socialSecurityPayRemark: '',
+  feePayStatus: '',
+  feePayRemark: '',
 
-  buildHouseCheckStatus: '',
-  buildHouseCheckRemark: '',
+  houseAcceptanceStatus: '',
+  houseAcceptanceRemark: '',
 
-  productionLandDeliveryStatus: '',
-  productionLandDeliveryRemark: '',
+  landDeliveryStatus: '',
+  landDeliveryRemark: '',
 
   relocationTransitionStatus: '',
   relocationTransitionRemark: '',
@@ -453,60 +463,62 @@ const defaultForm = {
   productionTransitionStatus: '',
   productionTransitionRemark: '',
 
-  buildHouseStatus: '',
-  buildHouseRemark: '',
+  buildHouseProgressStatus: '',
+  buildHouseProgressRemark: '',
 
-  hydropowerStatus: '',
-  hydropowerRemark: '',
+  networkTransferStatus: '',
+  networkTransferRemark: '',
 
-  houseOwnershipStatus: '',
-  houseOwnershipRemark: '',
+  propertyRightHandleStatus: '',
+  propertyRightHandleRemark: '',
 
-  otherResettlementStatus: '',
-  otherResettlementRemark: '',
+  otherStatus: '',
+  otherRemark: '',
 
-  registeredResidenceTransferStatus: '',
-  registeredResidenceTransferRemark: '',
+  householdRegistrationTransferStatus: '',
+  householdRegistrationTransferRemark: '',
 
-  politicalRelationStatus: '',
-  politicalRelationRemark: '',
+  relationshipTransferStatus: '',
+  relationshipTransferRemark: '',
 
-  daycareStatus: '',
-  daycareRemark: '',
+  goSchoolStatus: '',
+  goSchoolRemark: '',
 
-  armymanTransferStatus: '',
-  armymanTransferRemark: ''
+  soldierTransferStatus: '',
+  soldierTransferRemark: ''
 }
 
 const form = ref<any>(defaultForm)
-
-onMounted(() => {
-  getList()
-})
-
 const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   form.value = res.content
-  // })
+  getPlacementProgressApi(props.doorNo).then((res) => {
+    if (res.data) {
+      form.value = res.data
+    }
+  })
 }
+getList()
 
 // 保存
 const onSave = () => {
   const params = {
+    projectId: props.projectId,
+    status: props.status,
+    householdId: props.householdId,
+    doorNo: props.doorNo,
     ...form.value
   }
   console.log(params, '参数')
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  if (form.value.id) {
+    editPlacementProgressApi(params).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+    })
+  } else {
+    addPlacementProgressApi(params).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+    })
+  }
 }
 </script>
 
