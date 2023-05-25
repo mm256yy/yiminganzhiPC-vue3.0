@@ -17,6 +17,14 @@
       :label-position="'right'"
       :rules="rules"
     >
+      <ElFormItem label="村集体编码" prop="doorNo">
+        <ElInput
+          v-model="form.doorNo"
+          :disabled="actionType === 'edit'"
+          class="!w-350px"
+          placeholder="请输入村集体编码"
+        />
+      </ElFormItem>
       <ElFormItem label="村集体名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入村集体名称" />
       </ElFormItem>
@@ -165,8 +173,9 @@ watch(
       // 处理行政区划
       form.value = {
         ...val,
-        parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
+        parentCode: [val.areaCode, val.townCode, val.villageCode]
       }
+      val.virutalVillageCode ? form.value.parentCode.push(val.virutalVillageCode) : ''
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
@@ -183,6 +192,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
+  doorNo: [required()],
   householdNumber: [required()],
   // phone: [required()],
   parentCode: [required()]

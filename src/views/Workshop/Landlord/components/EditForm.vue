@@ -35,6 +35,14 @@
         />
         <ElButton type="text" class="ml-10px" @click="onVillageDialogOpen">添加自然村</ElButton>
       </ElFormItem>
+      <!-- <ElFormItem label="户号" prop="doorNo">
+        <ElInput
+          v-model="form.doorNo"
+          :disabled="actionType === 'edit'"
+          class="!w-350px"
+          placeholder="请输入户号"
+        />
+      </ElFormItem> -->
       <ElFormItem label="户主姓名" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入户主姓名" />
       </ElFormItem>
@@ -114,7 +122,7 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="高程" prop="altitude">
+      <!-- <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
@@ -123,7 +131,7 @@
           class="!w-350px"
           v-model="form.altitude"
         />
-      </ElFormItem>
+      </ElFormItem> -->
 
       <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
@@ -131,7 +139,7 @@
     </ElForm>
 
     <VillageEditForm
-      :district-tree="districtTree"
+      :district-tree="districtTreeList"
       :show="villageDialog"
       :row="null"
       :hideMap="true"
@@ -213,12 +221,12 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-const districtTree = ref([])
+const districtTreeList = ref([])
 const villageDialog = ref(false)
 
 const getDistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
-  districtTree.value = list || []
+  districtTreeList.value = list || []
 }
 
 getDistrictTree()
@@ -248,9 +256,30 @@ watch(
   }
 )
 
+const initData = (val) => {
+  btnLoading.value = false
+  if (val) {
+    // 处理行政区划
+    form.value = {
+      ...val,
+      parentCode: [val.areaCode, val.townCode, val.villageCode, val.virutalVillageCode]
+    }
+    position.longitude = form.value.longitude
+    position.latitude = form.value.latitude
+    position.address = form.value.address
+  } else {
+    // console.log(defaultValue)
+
+    form.value = defaultValue
+  }
+}
+
+defineExpose({ initData })
+
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
+  doorNo: [required()],
   householdNumber: [required()],
   // phone: [required()],
   parentCode: [required()],

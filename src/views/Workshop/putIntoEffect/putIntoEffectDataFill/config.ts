@@ -15,7 +15,7 @@ export const ReportTabs = [
     type: 0,
     name: '房屋装修评估',
     id: ReportTabIds[1],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-city',
     active: false
   },
   {
@@ -36,14 +36,14 @@ export const ReportTabs = [
     type: 0,
     name: '土地基本情况评估',
     id: ReportTabIds[4],
-    icon: 'mdi:pine-tree',
+    icon: 'mdi:land-fields',
     active: false
   },
   {
     type: 0,
     name: '土地青苗及附着物评估',
     id: ReportTabIds[5],
-    icon: 'mdi:pine-tree',
+    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
     active: false
   },
   {
@@ -110,42 +110,42 @@ export const ReportTabs = [
     type: 5,
     name: '房屋腾空确认单',
     id: ReportTabIds[0],
-    icon: 'clarity:house-solid',
+    icon: 'material-symbols:emoji-transportation',
     active: false
   },
   {
     type: 5,
     name: '青苗腾空确认单',
     id: ReportTabIds[1],
-    icon: 'mdi:pine-tree',
+    icon: 'icon-park-outline:sapling',
     active: false
   },
   {
     type: 5,
     name: '择房确认单',
     id: ReportTabIds[2],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-clock-outline',
     active: false
   },
   {
     type: 5,
     name: '择址确认单',
     id: ReportTabIds[3],
-    icon: 'pixelarticons:buildings',
+    icon: 'mdi:selection-multiple-marker',
     active: false
   },
   {
     type: 5,
     name: '建房告知单',
     id: ReportTabIds[4],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:notice-board',
     active: false
   },
   {
     type: 5,
     name: '择房交付告知单',
     id: ReportTabIds[5],
-    icon: 'clarity:house-solid',
+    icon: 'mdi:house-city-outline',
     active: false
   },
   {
@@ -166,7 +166,7 @@ export const ReportTabs = [
     type: 5,
     name: '生产用地交付告知单',
     id: ReportTabIds[8],
-    icon: 'mdi:pine-tree',
+    icon: 'mdi:land-fields',
     active: false
   },
   {
@@ -180,7 +180,7 @@ export const ReportTabs = [
     type: 5,
     name: '自建房验收告知单',
     id: ReportTabIds[10],
-    icon: 'clarity:house-solid',
+    icon: 'material-symbols:fact-check-outline-rounded',
     active: false
   },
   {
@@ -414,3 +414,18 @@ export const ProductionPlaceWay = [
     value: '其他安置方式'
   }
 ]
+
+// 动迁安置类型
+export const RelocationResettleTypes = {
+  HouseSoar: 'HouseSoar', // 房屋腾空确认单
+  GreenSoar: 'GreenSoar', // 青苗腾空确认单
+  ChooseHouse: 'ChooseHouse', // 择房确认单
+  ChooseAddress: 'ChooseAddress', // 择址确认单
+  BuildHouse: 'BuildHouse', // 建房告知单
+  ChooseHouseDelive: 'ChooseHouseDelive', // 择房交付告知单
+  ChooseGraveAddress: 'ChooseGraveAddress', // 坟墓择址确认单
+  MigrateGrave: 'MigrateGrave', // 坟墓迁移告知单
+  ProLandDelive: 'ProLandDelive', // 生产用地交付告知单
+  SocialSecurity: 'SocialSecurity', // 社保缴费确认单
+  ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
+}

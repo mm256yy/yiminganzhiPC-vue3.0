@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">企业信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -36,6 +36,7 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增企业</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
@@ -75,7 +76,7 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #status="{ row }">
+        <template #reportStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="[
@@ -112,7 +113,6 @@
     </div>
 
     <EditForm
-      :districtTree="districtTree"
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
@@ -127,9 +127,35 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
+    <Export
+      :show="exportDialog"
+      :type="'Company'"
+      :list="exportList"
+      @close="onExportDialogClose"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { globalData } from '@/config/fill'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
+export default defineComponent({
+  beforeRouteEnter(to, _from, next) {
+    console.log(to, 'to')
+    if (to.path === '/Workshop/Enterprise') {
+      // 实物采集
+      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
+    } else {
+      // 实物复核
+      globalData.currentSurveyStatus = SurveyStatusEnum.Review
+    }
+    next()
+  }
+})
+</script>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
@@ -148,6 +174,7 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { getDistrictTreeApi } from '@/api/district'
@@ -171,7 +198,10 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
-
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -189,6 +219,41 @@ const headInfo = ref<LandlordHeadInfoType>({
 })
 const outsideData = ref<any>([])
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '企业统计表',
+    value: 'exportCompanyRegister'
+  },
+  {
+    name: '企业基本情况统计表',
+    value: 'exportCompanyInfo'
+  },
+  {
+    name: '企业房屋信息统计表',
+    value: 'exportCompanyHouse'
+  },
+  {
+    name: '企业附属物调查统计表',
+    value: 'exportCompanyAppendage'
+  },
+  {
+    name: '企业零星林果木调查统计表',
+    value: 'exportCompanyTree'
+  },
+  {
+    name: '企业设施设备调查统计表',
+    value: 'exportCompanyEquipment'
+  },
+  {
+    name: '企业经营现状统计表',
+    value: 'exportCompanyManagement'
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 
@@ -356,8 +421,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'status',
-    label: '是否填报',
+    field: 'reportStatus',
+    label: '填报状态',
     search: {
       show: false
     }
@@ -431,6 +496,7 @@ const onDelRow = async (row: LandlordDtoType) => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
         // getList()
         setSearchParams({ type: 'Company' })
+        getLandlordHeadInfo()
       })
     })
     .catch(() => {})
@@ -460,6 +526,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     // getList()
     setSearchParams({ type: 'Company' })
+    getLandlordHeadInfo()
   }
 }
 
@@ -506,9 +573,7 @@ const onSearch = (data) => {
   if (!params.hasPropertyAccount) {
     delete params.hasPropertyAccount
   }
-  if (!params.status) {
-    delete params.status
-  }
+
   if (!params.card) {
     delete params.card
   }
@@ -544,10 +609,22 @@ const onPrintDialogClose = () => {
   printDialog.value = false
 }
 
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
+}
+
 // 数据填报
 const fillData = (row) => {
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
   push({
-    name: 'DataFill',
+    name: routerName,
     query: {
       householdId: row.id,
       doorNo: row.doorNo,

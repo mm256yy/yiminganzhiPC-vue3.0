@@ -17,61 +17,55 @@
       <div class="title">生产用地交付告知单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入业主名称" />
+          <input class="input-txt w-200" v-model="form.householder" placeholder="请输入业主名称" />
           业主：
         </div>
         <div class="row">
           <div class="txt-indent-28">你户</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.familyName"
+            v-model="form.familyMember"
             placeholder="请输入"
           />
           （家庭成员姓名）选择有土安置方式，分得的生产用地总计
-
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.productionLandTotal"
-            placeholder="请输入"
-          />
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.landArea" placeholder="请输入" />
           亩，
         </div>
         <div class="row">
           <div class="txt-indent-28">其中耕地</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.cultivatedLand"
+            v-model="form.arableLandArea"
             placeholder="请输入"
           />
           亩，园地
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.fieldLand"
+            v-model="form.woodLandArea"
             placeholder="请输入"
           />
           亩，林地
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.forestLand"
+            v-model="form.woodLandArea"
             placeholder="请输入"
           />
           亩，未利用地
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.otherLand"
+            v-model="form.uselessArea"
             placeholder="请输入"
           />
           亩。
         </div>
 
         <div class="row">
-          <div class="txt-indent-28"
-            >现全部土地均已完成土地调剂和土地整理工作，满足生产用地移交条件，请尽快携带相关材料前往</div
-          >
-
+          <div class="txt-indent-28">
+            现全部土地均已完成土地调剂和土地整理工作，满足生产用地移交条件，请尽快携带相关材料前往
+          </div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.department"
+            v-model="form.landDepart"
             placeholder="请输入"
           />
           部门办理土地交接手续。
@@ -81,7 +75,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入户主名称"
           />
           户号：
@@ -93,7 +87,7 @@
           迁出地址：
           <input
             class="input-txt w-400 ml-10"
-            v-model="form.relocationAddress"
+            v-model="form.landOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -105,7 +99,7 @@
               <el-button type="primary" :icon="addIcon" @click="onAddRow">添加行</el-button>
             </div>
           </div>
-          <el-table :data="tableData" style="width: 100%">
+          <el-table :data="tableData" stripe border style="width: 100%" class="mb-20">
             <el-table-column
               type="index"
               label="序号"
@@ -113,14 +107,14 @@
               align="center"
               header-align="center"
             />
-            <el-table-column prop="name" label="地名" width="180" header-align="center">
+            <el-table-column prop="landName" label="地名" width="180" header-align="center">
               <template #default="{ row }">
-                <ElInput v-model="row.name" :placeholder="'请输入地名'" />
+                <ElInput v-model="row.landNameme" :placeholder="'请输入地名'" />
               </template>
             </el-table-column>
-            <el-table-column prop="area" label="面积" width="180" header-align="center">
+            <el-table-column prop="landArea" label="面积" width="180" header-align="center">
               <template #default="{ row }">
-                <ElInput v-model="row.area" :placeholder="'请输入'" />
+                <ElInput v-model="row.landArea" :placeholder="'请输入'" />
               </template>
             </el-table-column>
             <el-table-column prop="landType" label="地类" width="230" header-align="center">
@@ -148,9 +142,9 @@
               header-align="center"
             >
               <template #default="{ row }">
-                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]"
-                  >删除</el-button
-                >
+                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]">
+                  删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -166,7 +160,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
   ElSpace,
@@ -181,6 +175,12 @@ import {
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteProductLandApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -193,47 +193,51 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
-console.log('props:', props)
-
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const tableData = ref<any[]>([])
 
 const defaultForm = {
-  govName: '', // 业主
-  familyName: '', // 家庭成员姓名
-  productionLandTotal: '', // 生产用地总计
-  cultivatedLand: '', // 耕地
-  fieldLand: '', // 园地
-  forestLand: '', // 林地
-  otherLand: '', // 未利用地
-  department: '', // 部门
-  householdler: '', // 户主（择房人）
-  doorNo: '', // 户号
-  relocationAddress: '' // 迁出地址
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  familyMember: '', // 家庭成员姓名
+  landArea: '', // 生产用地总计
+  arableLandArea: '', // 耕地
+  woodLandArea: '', // 园、林地
+  uselessArea: '', // 未利用地
+  landDepart: '', // 部门
+  householder: '', // 户主
+  doorNo: props.doorNo, // 户号
+  landOutAddress: '' // 迁出地址
 }
 
 const defaultRow = {
-  name: '',
-  area: '',
-  landType: '',
-  remark: ''
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo, // 户号
+  landName: '', // 地名
+  landArea: '', // 面积
+  landType: '', // 地类
+  remark: '' // 备注
 }
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+// 初始化获取数据
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.ProLandDelive,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrLandInfoList
+    }
+  })
 }
 
 // 添加行
@@ -250,8 +254,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteProductLandApi(row.id)
+        initData()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -264,14 +268,18 @@ const onDelRow = (row) => {
 const onSave = () => {
   const params = {
     ...form.value,
-    tableData: tableData.value
+    rrLandInfoList: [...tableData.value],
+    type: RelocationResettleTypes.ProLandDelive
   }
-  console.log(params, '参数')
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>
@@ -311,6 +319,10 @@ const onSave = () => {
   margin-left: 10px;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+}
+
 .mr-10 {
   margin-right: 10px;
 }
@@ -331,20 +343,25 @@ const onSave = () => {
   text-indent: 28px;
 }
 
-.table-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
+.table-area {
+  padding-left: 28px;
 
-  .table-tit {
-    font-weight: bold;
-  }
-
-  .table-action {
+  .table-head {
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: space-between;
+    padding: 20px 0;
+
+    .table-tit {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .table-action {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
   }
 }
 </style>

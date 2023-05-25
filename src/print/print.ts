@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { LandlordType, PrintType } from '@/types/print'
+import { LandlordType, PrintType, MainType, GraveType } from '@/types/print'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 
 // 模版列表
@@ -88,7 +88,7 @@ export const getTemplate = (type: PrintType) => {
 /**
  * 字典回显处理
  * 1、字典的 value 不为空或存在时，取字典表中对应的 text
- * 2、字典的 value 值为控或不存在时，显示 '-'
+ * 2、字典的 value 值为空或不存在时，显示 ''
  * @param(Object) value 字典 value
  * @param(Object) id 对应字典的 id
  */
@@ -99,8 +99,9 @@ const formatDict = (value: any, id: number) => {
   // 获取数据字典
   if (value) {
     const arr: any = dict[id]
-    const arrItem = arr.find((item: any) => String(item.value) === String(value))
-    str = arrItem ? arrItem.text : ''
+    const arrItem =
+      arr && arr.length && arr.find((item: any) => String(item.value) === String(value))
+    str = arrItem ? arrItem.label : ''
     return str
   } else {
     return ''
@@ -108,13 +109,12 @@ const formatDict = (value: any, id: number) => {
 }
 
 // 处理调查对象数据
-export const handleLandlordWithPrint = (landlords: LandlordType[]) => {
+export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: GraveType[]) => {
   if (!landlords || !landlords.length) {
     return []
   }
 
   const realLandlordArr: LandlordType[] = []
-  const images: string[] = []
   landlords.forEach((landlord) => {
     if (landlord.company && landlord.company.id) {
       landlord.company.industryTypeText = formatDict(landlord.company.industryType, 215)
@@ -143,12 +143,26 @@ export const handleLandlordWithPrint = (landlords: LandlordType[]) => {
         item.populationTypeText = formatDict(item.populationType, 244)
       })
     }
+    // 处理坟墓
+    if (graveList && graveList.length) {
+      if (landlord.type === MainType.PeasantHousehold) {
+        landlord.immigrantGraveList = graveList.filter((grave) => {
+          return grave.registrantDoorNo === landlord.doorNo
+        })
+      } else if (landlord.type === MainType.Village) {
+        landlord.immigrantGraveList = graveList.filter((grave) => {
+          return grave.villageDoorNo === landlord.doorNo
+        })
+      }
+    }
+
     if (landlord.immigrantGraveList && landlord.immigrantGraveList.length) {
       landlord.immigrantGraveList.forEach((item) => {
         item.graveTypeText = formatDict(item.graveType, 345)
         item.materialsText = formatDict(item.materials, 295)
       })
     }
+    const images: string[] = []
     if (landlord.immigrantHouseList && landlord.immigrantHouseList.length) {
       landlord.immigrantHouseList.forEach((item) => {
         item.houseTypeText = formatDict(item.houseType, 266)
@@ -177,6 +191,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[]) => {
         }
       })
     }
+    console.log(images, 'images')
 
     if (landlord.immigrantTreeList && landlord.immigrantTreeList.length) {
       landlord.immigrantTreeList.forEach((item) => {
@@ -193,12 +208,6 @@ export const handleLandlordWithPrint = (landlords: LandlordType[]) => {
       })
     }
 
-    // const districtMap = getStorage(StorageKey.DISTRICTMAP) || {}
-    // // 拿到上级行政区划
-    // landlord.virutalVillageCodeText = districtMap[landlord.virutalVillageCode]
-    // landlord.villageCodeText = districtMap[landlord.villageCode]
-    // landlord.townCodeText = districtMap[landlord.townCode]
-    // landlord.areaCodeText = districtMap[landlord.areaCode]
     landlord.locationTypeText = formatDict(landlord.locationType, 326)
     // 调查时间
     landlord.reportDateText = landlord.reportDate

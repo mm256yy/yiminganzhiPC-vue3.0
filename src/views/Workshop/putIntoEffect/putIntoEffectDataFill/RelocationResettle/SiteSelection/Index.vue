@@ -17,7 +17,7 @@
       <div class="title">择址确认单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
+          <input class="input-txt w-200" v-model="form.town" placeholder="请输入政府名称" />
           人民政府：
         </div>
         <div class="row txt-indent-28">
@@ -27,13 +27,13 @@
           <div class="txt-indent-28 mr-10">择址号：</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.landNo"
-            placeholder="请输入政府名称"
+            v-model="form.chooseAddressNum"
+            placeholder="请输入择址号"
           />
           户主（择址人）：
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入户主姓名"
           />
           户号：
@@ -43,7 +43,7 @@
           <div class="txt-indent-28">迁出地址：</div>
           <input
             class="input-txt w-700 ml-10 mr-10"
-            v-model="form.relocationAddress"
+            v-model="form.chooseAddressOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -62,34 +62,39 @@
               align="center"
               header-align="center"
             />
-            <ElTableColumn label="区块" prop="landBlock" align="center" header-align="center">
+            <ElTableColumn label="区块" prop="area" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.landBlock" />
+                <ElInput placeholder="请输入" v-model="scope.row.area" />
               </template>
             </ElTableColumn>
             <ElTableColumn
               label="宅基地编号"
-              prop="homesteadLandNumber"
+              prop="homesteadNum"
               align="center"
               header-align="center"
             >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.homesteadLandNumber" />
+                <ElInput placeholder="请输入" v-model="scope.row.homesteadNum" />
               </template>
             </ElTableColumn>
             <ElTableColumn
               label="宅基地位置"
-              prop="homesteadLandLocation"
+              prop="homesteadAddress"
               align="center"
               header-align="center"
             >
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.homesteadLandLocation" />
+                <ElInput placeholder="请输入" v-model="scope.row.homesteadAddress" />
               </template>
             </ElTableColumn>
-            <ElTableColumn label="面积" prop="area" align="center" header-align="center">
+            <ElTableColumn label="面积" prop="homesteadArea" align="center" header-align="center">
               <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.area" />
+                <ElInputNumber :min="0" v-model="scope.row.homesteadArea" :precision="2" />
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+              <template #default="scope">
+                <ElInput placeholder="请输入" v-model="scope.row.remark" />
               </template>
             </ElTableColumn>
             <ElTableColumn :width="100" label="操作" prop="action">
@@ -114,6 +119,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
   ElInput,
+  ElInputNumber,
   ElSpace,
   ElTable,
   ElTableColumn,
@@ -121,6 +127,13 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteSiteSelectionApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
+import { onMounted } from 'vue'
 
 interface PropsType {
   doorNo: string
@@ -138,11 +151,11 @@ const defaultForm = {
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
-  govName: '', // 政府名称
-  landNo: '', // 择址号
-  householdler: '', // 户主（择址人）
+  town: '', // 政府名称
+  chooseAddressNum: '', // 择址号
+  householder: '', // 户主（择址人）
   doorNo: props.doorNo, // 户号
-  relocationAddress: '' // 迁出地址
+  chooseAddressOutAddress: '' // 迁出地址
 }
 
 const defaultRow = {
@@ -150,26 +163,28 @@ const defaultRow = {
   projectId: props.projectId,
   uid: props.uid,
   doorNo: props.doorNo,
-  landBlock: '', // 区块
-  homesteadLandNumber: '', // 宅基地编号
-  homesteadLandLocation: '', // 宅基地位置
-  area: '' // 面积
+  area: '', // 区块
+  homesteadNum: '', // 宅基地编号
+  homesteadAddress: '', // 宅基地位置
+  homesteadArea: 0, // 面积
+  remark: '' // 备注
 }
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+// 初始化获取数据
+const initDta = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.ChooseAddress,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrHomesteadInfoList
+    }
+  })
 }
 
 // 添加行
@@ -186,8 +201,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteSiteSelectionApi(row.id)
+        initDta()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -198,15 +213,20 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  // let params = {
-  //   ...form.value,
-  //   ...tableData.value
-  // }
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  let params = {
+    ...form.value,
+    rrHomesteadInfoList: [...tableData.value],
+    type: RelocationResettleTypes.ChooseAddress
+  }
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initDta()
+  })
 }
+
+onMounted(() => {
+  initDta()
+})
 </script>
 
 <style lang="less" scoped>

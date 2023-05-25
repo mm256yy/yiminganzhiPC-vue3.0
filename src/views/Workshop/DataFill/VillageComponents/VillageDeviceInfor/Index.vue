@@ -73,8 +73,8 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { standardFormatDate } from '@/utils/index'
 import {
-  getFruitwoodListApi,
-  deleteDevicel
+  getFacilitiesListApi,
+  deleteFacilitiesApi
 } from '@/api/workshop/datafill/immigrantFacilities-service'
 // import { DemographicDtoType } from '@/api/workshop/population/types'
 // import { formatDate } from '@/utils/index'
@@ -82,7 +82,6 @@ import { locationTypes } from '@/views/Workshop/components/config'
 interface PropsType {
   doorNo: string
   householdId
-  tabCurrentId
 }
 
 const props = defineProps<PropsType>()
@@ -91,15 +90,14 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getFruitwoodListApi,
-  delListApi: deleteDevicel
+  getListApi: getFacilitiesListApi,
+  delListApi: deleteFacilitiesApi
 })
 const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.tabCurrentId == 2 ? 'review' : undefined
+  doorNo: props.doorNo
 }
 
 getList()

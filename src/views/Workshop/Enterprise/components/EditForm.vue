@@ -17,6 +17,14 @@
       :label-position="'right'"
       :rules="rules"
     >
+      <ElFormItem label="企业编码" prop="doorNo">
+        <ElInput
+          v-model="form.doorNo"
+          :disabled="actionType === 'edit'"
+          class="!w-350px"
+          placeholder="请输入企业编码"
+        />
+      </ElFormItem>
       <ElFormItem label="企业名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入企业名称" />
       </ElFormItem>
@@ -151,7 +159,6 @@ import { useAppStore } from '@/store/modules/app'
 // import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
@@ -159,7 +166,6 @@ interface PropsType {
   show: any
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
-  districtTree: DistrictNodeType[]
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
@@ -221,6 +227,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
+  doorNo: [required()],
 
   // phone: [required()],
   parentCode: [required()]

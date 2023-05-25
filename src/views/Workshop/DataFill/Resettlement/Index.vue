@@ -12,7 +12,9 @@
             @click="onSave"
             >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
 
@@ -121,12 +123,17 @@
         </div>
       </div>
     </div>
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="安置意愿信息"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, unref, onMounted } from 'vue'
 import { ElButton, ElRadioGroup, ElRadio, ElSpace, ElInput, ElMessage } from 'element-plus'
@@ -139,12 +146,13 @@ import {
 // import { ProductionPlaceWay } from '../config'
 import { useAppStore } from '@/store/modules/app'
 import { ResettlementDtoType } from '@/api/workshop/datafill/resettlement-types'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface PropsType {
   householdId: string
   doorNo: string
-  baseInfo
-  tabCurrentId
+  baseInfo: any
+  surveyStatus: SurveyStatusEnum
 }
 
 const recordShow = ref(false)
@@ -229,8 +237,7 @@ const immigrantWillProductionList = ref<any>([])
 const getResettlement = async () => {
   const params = {
     doorNo: props.doorNo,
-    householdId: +props.householdId,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    householdId: +props.householdId
   }
   const res = await getResettlementListApi(params)
   if (res && res.content && res.content.length) {
@@ -246,6 +253,8 @@ onMounted(async () => {
   form.value.familyNum = props.baseInfo.familyNum
 })
 // 搬迁安置方式
+
+const emit = defineEmits(['refresh'])
 
 // 获取意愿信息
 
@@ -276,6 +285,7 @@ const onSave = () => {
 
   saveResettlementListApi(data).then(() => {
     ElMessage.success('操作成功！')
+    emit('refresh')
   })
 }
 </script>

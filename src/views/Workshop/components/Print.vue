@@ -261,9 +261,12 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
       const data = await getLandlordBatchApi(props.landlordIds).catch(() => {
         reject()
       })
-      const { peasantHouseholdPushDtoList } = data || {}
+      const { peasantHouseholdPushDtoList, immigrantGraveList } = data || {}
       if (peasantHouseholdPushDtoList) {
-        const realLandlords = handleLandlordWithPrint(peasantHouseholdPushDtoList)
+        const realLandlords = handleLandlordWithPrint(
+          peasantHouseholdPushDtoList,
+          immigrantGraveList || []
+        )
         // 缓存
         landlords.value = realLandlords
       } else {

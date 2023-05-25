@@ -10,7 +10,7 @@ export const selfemployedHouseDefinition = {
       margin: [0, 8],
       columns: [
         {
-          text: '分类目录：企业',
+          text: '分类目录：个体工商户',
           width: 170
         },
         {
@@ -123,18 +123,16 @@ const getFooter = () => {
   return [
     {
       fontSize: 10,
-      margin: [20, 0, 20, 0],
+      margin: [20, 0, 20, 15],
       alignment: 'justify',
       columns: [
         {
           text: '权属人签字（盖章）：',
-          margin: [0, 35, 0, 0],
           alignment: 'left'
         },
 
         {
           text: '调查员签字：',
-          margin: [0, 35, 0, 0],
           alignment: 'left'
         },
         {

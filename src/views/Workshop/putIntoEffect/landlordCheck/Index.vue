@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -28,9 +28,9 @@
             <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum }}</span> 人
             <span class="distance"></span>
-            已上报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
+            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
-            未上报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
+            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
             ）
           </div>
         </div>
@@ -151,7 +151,7 @@ import {
   delLandlordByIdApi,
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
-} from '@/api/workshop/landlord/service'
+} from '@/api/putIntoEffect/putIntoEffectDataFill/landlordCheck/landlordCheck-service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, FillStatusEnums, FillStatus } from '../putIntoEffectDataFill/config'
 import { useRouter } from 'vue-router'
@@ -162,6 +162,10 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -368,14 +372,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportUserName',
-    label: '上报人员',
+    label: '填报人员',
     search: {
       show: false
     }
   },
   {
     field: 'reportDate',
-    label: '上报时间',
+    label: '填报时间',
     search: {
       show: false
     },

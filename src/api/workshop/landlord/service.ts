@@ -1,6 +1,7 @@
 import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
-import { LandlordType } from '@/types/print'
+import { GraveType, LandlordType } from '@/types/print'
+import { globalData } from '@/config/fill'
 
 /**
  * 查询居民户信息列表
@@ -15,29 +16,60 @@ export const getLandlordListApi = (
     delete query.virutalVillageCode
   }
 
-  return request.get({ url: '/peasantHousehold', params: { sort: ['createdDate,desc'], ...query } })
+  return request.get({
+    url: '/peasantHousehold',
+    params: {
+      sort: ['createdDate,id,desc'],
+      ...query,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 新增居民户信息
  */
 export const addLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> => {
-  return request.post({ url: '/peasantHousehold/create', data })
+  return request.post({
+    url: '/peasantHousehold/create',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
  * 更新居民户信息
  */
 export const updateLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> => {
-  return request.post({ url: '/peasantHousehold/update', data })
+  return request.post({
+    url: '/peasantHousehold/update',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 export const immigrantGravecreate = (data: any): Promise<any> => {
-  return request.post({ url: '/immigrantGrave/create', data })
+  return request.post({
+    url: '/immigrantGrave/create',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 export const immigrantGraveupdate = (data: any): Promise<any> => {
-  return request.post({ url: '/immigrantGrave/update', data })
+  return request.post({
+    url: '/immigrantGrave/update',
+    data: {
+      ...data,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
@@ -46,8 +78,14 @@ export const immigrantGraveupdate = (data: any): Promise<any> => {
 export const delLandlordByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/peasantHousehold/delete/${id}` })
 }
+
+/**
+ * 删除坟墓信息
+ * @param id 当前行ID
+ * @returns
+ */
 export const immigrantGraveDelete = (id: number): Promise<void> => {
-  return request.post({ url: `/api/immigrantGrave/delete/${id}` })
+  return request.post({ url: `/immigrantGrave/delete/${id}` })
 }
 
 /**
@@ -56,17 +94,23 @@ export const immigrantGraveDelete = (id: number): Promise<void> => {
 export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
   return request.get({ url: `/peasantHousehold/${id}` })
 }
-export const getupdateLog = (doorNo: number | string): Promise<LandlordDtoType> => {
-  return request.get({ url: `/updateLog?doorNo=` + doorNo })
+export const getupdateLog = (params: any): Promise<LandlordDtoType> => {
+  return request.get({
+    url: `/updateLog`,
+    params
+  })
 }
 
 /**
  * 查询多个调查对象信息
  * 打印使用
  */
-export const getLandlordBatchApi = (
-  ids: number[] | string[]
-): Promise<{ peasantHouseholdPushDtoList: LandlordType[] }> => {
+interface LandlordPrintResType {
+  peasantHouseholdPushDtoList: LandlordType[]
+  immigrantGraveList: GraveType[]
+}
+
+export const getLandlordBatchApi = (ids: number[] | string[]): Promise<LandlordPrintResType> => {
   return request.get({
     url: `/pad/printDetails`,
     params: {
@@ -94,11 +138,17 @@ export const getPrintTemplateListApi = (params: Partial<TemplateParamsType>): Pr
  * 查询居民户头部信息
  */
 export const getLandlordHeadApi = (params: any): Promise<any> => {
-  return request.get({ url: `/peasantHousehold/head?type=${params.type}` })
+  return request.get({
+    url: `/peasantHousehold/head`,
+    params: {
+      ...params,
+      status: globalData.currentSurveyStatus
+    }
+  })
 }
 
 /**
- * 上报居民户信息
+ * 填报居民户信息
  */
 export const reportLandlordApi = (id: number, isCheck: boolean, type: string) => {
   return request.post({

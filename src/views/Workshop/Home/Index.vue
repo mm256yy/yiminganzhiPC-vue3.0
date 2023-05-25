@@ -48,16 +48,17 @@
           <img src="@/assets/imgs/Icon_workteam.png" width="15" />
           <div class="text">工作组TOP5</div>
         </div>
-        <ElTabs
-          v-model="activeName3"
-          type="card"
-          class="demo-tabs tabs-wrapper top5"
-          @tab-click="handleClick2"
-          :lazy="false"
-        >
-          <ElTabPane label="累计" name="累计" />
-          <ElTabPane label="今日" name="今日" />
-        </ElTabs>
+        <div class="demo-tabs tabs-wrapper top5" style="padding-top: 10px">
+          <ElButton
+            class="mright"
+            :class="activeName3 === '累计' ? 'is-active' : ''"
+            @click="handleClick2('累计')"
+            >累计</ElButton
+          >
+          <ElButton :class="activeName3 === '今日' ? 'is-active' : ''" @click="handleClick2('今日')"
+            >今日</ElButton
+          >
+        </div>
         <Echart :options="workOption" :height="250" />
       </div>
 
@@ -447,6 +448,36 @@
               </div>
             </div>
           </ElTabPane>
+          <ElTabPane label="实采批复" name="实采批复">
+            <div class="tabs-box">
+              <div class="tabs-box-left">
+                <div
+                  class="tabs-content-box"
+                  @click="
+                    routerJump(
+                      `/workshop/report?type=${ReportTypes.ConfirmPhysicalApproval}&title=实物采集确认批复`
+                    )
+                  "
+                >
+                  <img
+                    v-if="reportResult.ConfirmPhysicalApproval"
+                    src="@/assets/imgs/Icon_Report_abled.png"
+                    width="15"
+                  />
+                  <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
+                  <span>实物采集确认批复</span>
+                  <img
+                    v-if="!reportResult.ConfirmPhysicalApproval"
+                    src="@/assets/imgs/Icon_Upload.png"
+                    width="15"
+                    class="img_r"
+                  />
+                </div>
+              </div>
+              <div class="middle"></div>
+              <div class="tabs-box-right"></div>
+            </div>
+          </ElTabPane>
         </ElTabs>
       </div>
     </div>
@@ -508,7 +539,7 @@
 </template>
 <script lang="ts" setup>
 // import ScaleBox from './ScaleBox.vue'
-import { ElTabs, ElTabPane } from 'element-plus'
+import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 import { useRouter } from 'vue-router'
 // computed
@@ -557,17 +588,18 @@ const reportResult = ref<any>({
   WoodLand: false,
   Other: false,
   ProfessionalProject: false,
-  Clean: false
+  Clean: false,
+  ConfirmPhysicalApproval: false
 })
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
 const initNewsData = () => {
-  getNewsList({ size: 9999 }).then((res: any) => {
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'] }).then((res: any) => {
     newsList.value = res.content
     newsList.value.forEach((item: any) => {
       item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
     })
-    console.log('newsList：', newsList.value)
+    // console.log('newsList：', newsList.value)
   })
 }
 
@@ -639,15 +671,14 @@ const seriesdata = ref<any>([])
 const seriesdata2 = ref<any>([])
 const ydataName = ref<any>([])
 const initTopTenData = async () => {}
-const handleClick2 = () => {
-  console.log(activeName3.value)
-
-  if (activeName3.value == '今日') {
-    workOption.value.series[0].name = '累计'
-    workOption.value.series[0].data = seriesdata.value
-  } else {
-    workOption.value.series[0].data = seriesdata2.value
+const handleClick2 = (type: string) => {
+  activeName3.value = type
+  if (type == '今日') {
+    onToday()
     workOption.value.series[0].name = '今日'
+  } else {
+    onAll()
+    workOption.value.series[0].name = '累计'
   }
 }
 
@@ -920,27 +951,7 @@ const toLink = (type: string) => {
 }
 
 onMounted(async () => {
-  let data: any = []
-  let data2: any = []
-
-  data = await getTopTen('')
-
-  data2 = await getTopTen('today')
-
-  data.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata.value.push(item.number)
-    }
-  })
-  data2.forEach((item: any, index: number) => {
-    if (index <= 4) {
-      ydataName.value.push(item.name)
-      seriesdata2.value.push(item.number)
-    }
-  })
-  workOption.value.series[0].data = seriesdata.value
-  workOption.value.yAxis[0].data = ydataName.value
+  onAll()
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()
@@ -948,6 +959,36 @@ onMounted(async () => {
   initNewsData()
   initPolicyData()
 })
+const onToday = async () => {
+  let data2: any = []
+
+  data2 = await getTopTen('today')
+  ydataName.value = []
+  seriesdata2.value = []
+  data2.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata2.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata2.value
+  workOption.value.yAxis[0].data = ydataName.value
+}
+const onAll = async () => {
+  let data: any = []
+
+  data = await getTopTen('')
+  ydataName.value = []
+  seriesdata.value = []
+  data.forEach((item: any, index: number) => {
+    if (index <= 4) {
+      ydataName.value.push(item.name)
+      seriesdata.value.push(item.number)
+    }
+  })
+  workOption.value.series[0].data = seriesdata.value
+  workOption.value.yAxis[0].data = ydataName.value
+}
 </script>
 <style lang="less" scoped>
 @import './Index.less';
@@ -958,5 +999,15 @@ onMounted(async () => {
 
 :deep(.rounded-8px) {
   border-radius: 0;
+}
+
+.is-active {
+  color: #2f72fe !important;
+  background: #f2f6ff;
+  border: 1px solid #2f72fe !important;
+}
+
+.mright {
+  margin-right: -4px;
 }
 </style>

@@ -5,7 +5,9 @@
         <div> </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -53,9 +55,16 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :doorNo="props.doorNo"
+      :survey-status="surveyStatus"
       @close="onFormPupClose"
     />
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="人口信息"
+      :isReason="true"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
@@ -71,13 +80,16 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
 interface PropsType {
   doorNo: string
-  tabCurrentId
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()
+const emit = defineEmits(['updateInfo'])
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -90,8 +102,7 @@ const { getList } = methods
 // review
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.tabCurrentId == 2 ? 'review' : undefined
+  doorNo: props.doorNo
 }
 
 getList()
@@ -226,8 +237,11 @@ const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
   const selections = await getSelections()
   await delList(
     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
+    multiple,
+    true,
+    props.surveyStatus === SurveyStatusEnum.Review
   )
+  emit('updateInfo')
 }
 
 const onAddRow = () => {
@@ -254,6 +268,7 @@ const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
     getList()
+    emit('updateInfo')
   }
 }
 

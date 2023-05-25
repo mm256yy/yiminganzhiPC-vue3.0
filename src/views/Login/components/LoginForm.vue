@@ -226,6 +226,7 @@ const doRoute = async () => {
       )
       if (project) {
         appStore.setCurrentProjectId(project.projectId!)
+        appStore.setProjectStatus(project.status || '')
       }
     }
     await setPlatform('admin', addRoute)

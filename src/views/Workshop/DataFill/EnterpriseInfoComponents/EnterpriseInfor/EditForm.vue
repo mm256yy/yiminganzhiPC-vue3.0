@@ -500,9 +500,9 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDemographicListApi
+  addCompanyApi,
+  updateCompanyApi,
+  getCompanyListApi
 } from '@/api/workshop/enterprise/service'
 import { validateIdNo, checkTel } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -666,21 +666,21 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add' && actionType2.value != 'edit') {
-    await addDemographicApi({
+    await addCompanyApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
     saveLoading.value = false
   } else {
-    await updateDemographicApi({
+    await updateCompanyApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
     saveLoading.value = false
   }
-  getDemographicListApi({
+  getCompanyListApi({
     doorNo: props.doorNo
   })
     .then((res) => {

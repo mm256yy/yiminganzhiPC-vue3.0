@@ -12,15 +12,7 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">移民实施</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">
-          {{
-            type == 'Landlord'
-              ? '居民户信息采集'
-              : type == 'Enterprise'
-              ? '企业信息采集'
-              : type == 'IndividualB'
-              ? '工商个体信息采集'
-              : '村集体信息采集'
-          }}
+          {{ titleMsg(type) }}
         </ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">数据填报</ElBreadcrumbItem>
       </ElBreadcrumb>
@@ -38,29 +30,17 @@
             {{ item.name }}
           </div>
         </div>
-        <ElSpace>
-          <ElButton
-            :icon="printIcon"
-            v-if="type == 'Landlord' || type == 'Enterprise' || type == 'IndividualB'"
-            type="primary"
-            class="!bg-[#30A952] !border-[#30A952]"
-            @click="onPrint"
-          >
-            打印表格
-          </ElButton>
-          <ElButton
-            v-if="baseInfo.fillStatus === FillStatus.Fill"
-            type="primary"
-            :icon="EscalationIcon"
-            @click="onReportData"
-          >
-            填报完成
-          </ElButton>
-        </ElSpace>
       </div>
 
-      <UserInfo :baseInfo="baseInfo" :type="type" :tabCurrentId="tabCurrentId" />
-      <!-- EnterpriseTabs -->
+      <UserInfo
+        :baseInfo="baseInfo"
+        :householdId="Number(householdId)"
+        :type="type"
+        :tabCurrentId="tabCurrentId"
+        @update-data="getLandlordInfo"
+      />
+
+      <!-- Tabs -->
       <div class="report-tabs">
         <div v-for="item in tabsType" :key="item.id">
           <div
@@ -74,6 +54,7 @@
         </div>
       </div>
     </div>
+
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 方案比选 -- 方案比选 -->
       <scheme-base
@@ -161,6 +142,7 @@
       <populationCheck
         :doorNo="doorNo"
         :baseInfo="baseInfo"
+        @refresh="getLandlordInfo"
         v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
       />
 
@@ -199,7 +181,7 @@
 
       <!-- 动迁安置 -- 房屋腾空确认单 -->
       <house-soar
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[0]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[0]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -208,7 +190,7 @@
 
       <!-- 动迁安置 -- 青苗腾空确认单 -->
       <green-seedlings-soar
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[1]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[1]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -217,7 +199,7 @@
 
       <!-- 动迁安置 -- 择房确认单 -->
       <choose-house
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[2]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -226,7 +208,7 @@
 
       <!-- 动迁安置 -- 择址确认单 -->
       <site-selection
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[3]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[3]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -235,7 +217,7 @@
 
       <!-- 动迁安置 -- 建房告知单 -->
       <build-house
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[4]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -244,7 +226,7 @@
 
       <!-- 动迁安置 -- 择房交付告知单 -->
       <optional-delivery
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[5]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[5]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -253,7 +235,7 @@
 
       <!-- 动迁安置 -- 坟墓择址确认单 -->
       <tomb-address
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[6]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -262,7 +244,7 @@
 
       <!-- 动迁安置 -- 坟墓迁移告知单 -->
       <tomb-migrations
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[7]"
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[7]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -271,57 +253,46 @@
 
       <!-- 动迁安置 生产用地 -->
       <production-land
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
       />
+
       <!-- 动迁安置 社保缴费 -->
       <social-security
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[9]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[9]"
       />
 
       <!-- 动迁安置 自建房 -->
       <build-room
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[10]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[10]"
       />
 
       <!-- 动迁安置 安置进度 -->
       <placement-progress
+        v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[11]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
         :status="baseInfo.status"
-        v-show="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[11]"
       />
     </div>
-
-    <!-- <div class="data-fill-body" v-if="type == 'Enterprise'"> </div>
-
-    <div class="data-fill-body" v-if="type == 'IndividualB'"> </div> -->
-
-    <Print
-      :show="printDialog"
-      :landlordIds="[householdId]"
-      @close="onPrintDialogClose"
-      :baseInfo="baseInfo"
-    />
   </WorkContentWrap>
 </template>
-
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage, ElSpace } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -330,14 +301,10 @@ import {
   ReportTabIds,
   EnterpriseTabs,
   IndividualBTabs,
-  villageInfoCTabs,
-  FillStatus
+  villageInfoCTabs
 } from './config'
 
-import {
-  getLandlordByIdApi,
-  reportLandlordApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/service'
+import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 
 import MainHouse from './AssetEvaluation/MainHouse/Index.vue' // 资产评估 -- 房屋主体评估
 import HouseDecoration from './AssetEvaluation/HouseDecoration/Index.vue' // 资产评估 -- 房屋装修评估
@@ -355,9 +322,10 @@ import produce from './produce/Index.vue' // 安置确认 -- 生产安置
 import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
 import SchemeBase from './SchemeBase/Index.vue' // 方案对比 -- 方案对比
 import AgreeInfo from './AgreeInfo/Index.vue' // 方案对比 -- 填写协议信息
+
 import createCard from './createCard/Index.vue' // 移民建卡
 
-import Agreement from './Agreement/Agreement.vue'
+import Agreement from './Agreement/Agreement.vue' // 协议签订
 
 import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
 import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
@@ -368,27 +336,36 @@ import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' /
 import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
 import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
 
-import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 生产用地
-import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 社保缴费
-import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 自建房
-import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 安置进度
+import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 -- 生产用地
+import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 -- 社保缴费
+import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
+import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
 
 import UserInfo from './components/UserInfo.vue'
-import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
+const titleMsg = (type: string) => {
+  if (type == 'Landlord') {
+    return '居民户信息' + titleStatus
+  } else if (type == 'Enterprise') {
+    return '企业信息' + titleStatus
+  } else if (type == 'IndividualB') {
+    return '个体工商信息' + titleStatus
+  } else {
+    return '村集体信息' + titleStatus
+  }
+}
 const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
 const { doorNo, householdId, type, projectId, uid } = currentRoute.value.query as any
-const reportDialog = ref<boolean>(false)
-const printDialog = ref<boolean>(false)
-const reportResult = ref<string[]>([])
-
-const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -427,29 +404,8 @@ onMounted(() => {
   }
 })
 
-// 填报完成
-const onReportData = async () => {
-  const result = await reportLandlordApi(householdId)
-  if (result && Array.isArray(result)) {
-    reportDialog.value = true
-    reportResult.value = result
-  } else {
-    ElMessage.success('上报成功！')
-    getLandlordInfo()
-    back()
-  }
-}
-
 const onBack = () => {
   back()
-}
-
-const onPrint = () => {
-  printDialog.value = true
-}
-
-const onPrintDialogClose = () => {
-  printDialog.value = false
 }
 </script>
 

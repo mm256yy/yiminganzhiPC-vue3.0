@@ -131,7 +131,7 @@
     </ElForm>
 
     <VillageEditForm
-      :district-tree="districtTree"
+      :district-tree="districtTreeList"
       :show="villageDialog"
       :row="null"
       :hideMap="true"
@@ -168,8 +168,12 @@ import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
 import { yesAndNoEnums } from '@/views/Workshop/components/config'
-import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
+import {
+  addLandlordApi,
+  updateLandlordApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/landlordCheck/landlordCheck-service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 // import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
@@ -213,12 +217,12 @@ const position: {
   latitude: 0,
   longitude: 0
 })
-const districtTree = ref([])
+const districtTreeList = ref([])
 const villageDialog = ref(false)
 
 const getDistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
-  districtTree.value = list || []
+  districtTreeList.value = list || []
 }
 
 getDistrictTree()
@@ -293,7 +297,8 @@ const onSubmit = debounce((formEl) => {
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
-        virutalVillageCode: form.value.parentCode[3] || ''
+        virutalVillageCode: form.value.parentCode[3] || '',
+        status: SurveyStatusEnum.Implementation
       }
 
       delete data.parentCode

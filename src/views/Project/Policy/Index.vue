@@ -74,6 +74,7 @@
       :projects="projects"
       @close="onFormPupClose"
       @submit="onSubmit"
+      ref="customRef"
     />
   </ContentWrap>
 </template>
@@ -105,6 +106,7 @@ const projects = ref<Array<{ label: string; value: number }>>([])
 const formPup = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const customRef = ref()
 
 const { register, tableObject, methods } = useTable({
   getListApi: getPolicyListApi,
@@ -313,6 +315,7 @@ const onDelPolicy = async (row: PolicyDtoType | null, multiple: boolean) => {
 const onAddPolicy = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
+  customRef.value.initData()
   formPup.value = true
 }
 

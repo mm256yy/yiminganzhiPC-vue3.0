@@ -24,6 +24,7 @@ export type ProjectDtoType = {
 export type ProjectQueryType = {
   name?: string | null
   townCode?: string | null
+  sort?: any
 } & PagedQueryType
 
 /**

@@ -28,7 +28,7 @@
         />
       </ElFormItem>
       <ElFormItem label="自然村名称" prop="name" required>
-        <ElInput clearable :maxlength="20" v-model="form.name" />
+        <ElInput clearable :maxlength="20" v-model.trim="form.name" />
       </ElFormItem>
 
       <MapFormItem

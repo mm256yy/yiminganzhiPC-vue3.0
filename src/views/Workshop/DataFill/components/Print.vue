@@ -36,11 +36,12 @@
         class="!bg-[#30A952] !border-[#30A952]"
         :disabled="selectedTableIds.length === 0"
         @click="onDownLoad"
-        >下载</ElButton
       >
-      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint"
-        >打印</ElButton
-      >
+        下载
+      </ElButton>
+      <ElButton type="primary" :disabled="selectedTableIds.length === 0" @click="onPrint">
+        打印
+      </ElButton>
     </template>
   </ElDialog>
 </template>
@@ -193,9 +194,12 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
       const data = await getLandlordBatchApi([props.baseInfo.id]).catch(() => {
         reject()
       })
-      const { peasantHouseholdPushDtoList } = data || {}
+      const { peasantHouseholdPushDtoList, immigrantGraveList } = data || {}
       if (peasantHouseholdPushDtoList) {
-        const realLandlords = handleLandlordWithPrint(peasantHouseholdPushDtoList)
+        const realLandlords = handleLandlordWithPrint(
+          peasantHouseholdPushDtoList,
+          immigrantGraveList || []
+        )
         // 缓存
         landlords.value = realLandlords
       } else {

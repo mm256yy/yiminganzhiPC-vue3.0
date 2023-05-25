@@ -4,31 +4,42 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="type != 'Landlord'"
-            >添加行</ElButton
-          >
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
-            v-if="type != 'Landlord'"
             :icon="saveIcon"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+            保存
+          </ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="穴位" prop="graveTypeText" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              :placeholder="type == 'Landlord' ? '' : '请选择'"
-              v-model="row.graveType"
-              :disabled="type == 'Landlord'"
-            >
+        <ElTableColumn
+          label="坟墓与登记人关系"
+          prop="relation"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.relation">
+              <ElOption
+                v-for="item in dictObj[307]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.graveType">
               <ElOption
                 v-for="item in dictObj[345]"
                 :key="item.value"
@@ -36,27 +47,16 @@
                 :value="item.value"
               />
             </ElSelect>
-          </template> -->
+          </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" prop="number" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElInputNumber
-              :min="0"
-              :placeholder="type == 'Landlord' ? '' : '请输入数量'"
-              v-model="row.number"
-              :disabled="type == 'Landlord'"
-            />
-          </template> -->
+        <ElTableColumn label="数量" width="180" prop="number" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
+          </template>
         </ElTableColumn>
-        <ElTableColumn label="材料" prop="materialsText" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElSelect
-              clearable
-              filterable
-              :placeholder="type == 'Landlord' ? '' : '请选择'"
-              v-model="row.materials"
-              :disabled="type == 'Landlord'"
-            >
+        <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.materials">
               <ElOption
                 v-for="item in dictObj[295]"
                 :key="item.value"
@@ -64,33 +64,18 @@
                 :value="item.value"
               />
             </ElSelect>
-          </template> -->
+          </template>
         </ElTableColumn>
         <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElInput
-              v-model="row.graveYear"
-              :placeholder="type == 'Landlord' ? '' : '请输入年份'"
-              :disabled="type == 'Landlord'"
-            >
+          <template #default="{ row }">
+            <ElInput v-model="row.graveYear" placeholder="请输入年份">
               <template #append>年</template>
             </ElInput>
-          </template> -->
+          </template>
         </ElTableColumn>
         <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
-            <!-- <ElInput
-              v-model="row.gravePosition"
-              :placeholder="type == 'Landlord' ? '' : '请输入所处位置'"
-              :disabled="type == 'Landlord'"
-            /> -->
-            <ElSelect
-              clearable
-              filterable
-              :placeholder="type == 'Landlord' ? '' : '请选择所处位置'"
-              v-model="row.gravePosition"
-              :disabled="type == 'Landlord'"
-            >
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.gravePosition">
               <ElOption
                 v-for="item in dictObj[288]"
                 :key="item.value"
@@ -100,44 +85,80 @@
             </ElSelect>
           </template>
         </ElTableColumn>
+        <ElTableColumn label="所属村集体" prop="villageId" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择"
+              v-model="row.villageId"
+              @change="change"
+            >
+              <ElOption
+                v-for="item in villageList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
-          <!-- <template #default="{ row }">
-            <ElInput
-              :placeholder="type == 'Landlord' ? '' : '请输入'"
-              v-model="row.remark"
-              :disabled="type == 'Landlord'"
-            />
-          </template> -->
+          <template #default="{ row }">
+            <ElInput placeholder="请输入" v-model="row.remark" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" prop="action">
+          <template #default="scope">
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
+              删除
+            </span>
+          </template>
         </ElTableColumn>
       </ElTable>
     </div>
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="坟墓信息"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-// , computed
-import { ref, computed } from 'vue'
-//  ElInputNumber,
-//   ElInput,
-//   ElSelect,
-//   ElOption,
-import recordDialog from '../components/recordDialog.vue'
-import { ElButton, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
+import { ref, computed, onMounted } from 'vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
+import {
+  ElButton,
+  ElSpace,
+  ElTable,
+  ElTableColumn,
+  ElMessage,
+  ElInputNumber,
+  ElInput,
+  ElSelect,
+  ElOption,
+  ElMessageBox
+} from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave-service'
+import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { useRouter } from 'vue-router'
-const dictStore = useDictStoreWithOut()
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+// import { useRouter } from 'vue-router'
 
-const { currentRoute } = useRouter()
+// const { currentRoute } = useRouter()
+// const { type } = currentRoute.value.query as any
+const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-const { type } = currentRoute.value.query as any
+
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  name: string
+  surveyStatus: SurveyStatusEnum
 }
 
 const props = defineProps<PropsType>()
@@ -145,6 +166,7 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const recordShow = ref(false)
+const villageList = ref<any[]>([])
 
 const recordClose = () => {
   recordShow.value = false
@@ -152,27 +174,54 @@ const recordClose = () => {
 const recordClick = () => {
   recordShow.value = true
 }
-// const dictStore = useDictStoreWithOut()
 
-// const dictObj = computed(() => dictStore.getDictObj)
+const defaultRow = {
+  registrantId: props.householdId, // 登记人 ID
+  registrantDoorNo: props.doorNo, // 登记人户号
+  registrantName: props.name, // 登记人姓名
+  villageId: '', // 村集体 ID
+  villageDoorNo: '', // 村集体户号
+  relation: '',
+  graveType: '',
+  materials: '',
+  graveYear: '',
+  gravePosition: '',
+  number: 0,
+  remark: '',
+  isAdd: true
+}
 
-// const defaultRow = {
-//   doorNo: props.doorNo,
-//   householdId: props.householdId,
-//   graveType: '',
-//   materials: '',
-//   graveYear: '',
-//   gravePosition: '',
-//   number: 0,
-//   remark: '',
-//   isAdd: true
-// }
+// 获取村集体列表
+const getVillageList = () => {
+  getLandlordListApi({ name: '', type: 'Village' }).then((res) => {
+    villageList.value = initCollectiveData(res.content)
+  })
+}
+
+/**
+ * 初始化处理村集体数据
+ * @param {Array} data 传入的数组
+ * @returns {Array} newArr 返回的数组
+ */
+const initCollectiveData = (data: any) => {
+  let newArr: any = []
+  if (data && data.length) {
+    data.map((item: any) => {
+      newArr.push({
+        doorNo: item.doorNo,
+        label: item.name,
+        value: item.id
+      })
+    })
+    return newArr
+  }
+  return newArr
+}
 
 const getList = () => {
   const params = {
-    // doorNo: props.doorNo,
-    registrantId: +props.householdId,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    registrantDoorNo: props.doorNo,
+    registrantId: +props.householdId
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
@@ -181,18 +230,56 @@ const getList = () => {
 
 getList()
 
+/**
+ * 选择所属村集体
+ * @param e 当前所选的值
+ */
+const change = (e: any) => {
+  if (e) {
+    let itemData = villageList.value.find((item: any) => item.value === e)
+    tableData.value.map((item: any) => {
+      if (item.villageId === e) {
+        item.villageDoorNo = itemData.doorNo
+      }
+    })
+  }
+}
+
 const onAddRow = () => {
-  tableData.value.push({})
+  tableData.value.push({ ...defaultRow })
+}
+
+/**
+ * 删除
+ * @param row 当前行信息
+ */
+const onDelRow = (row) => {
+  ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
+    type: 'warning',
+    cancelButtonText: '取消',
+    confirmButtonText: '确认'
+  })
+    .then(async () => {
+      if (row.id) {
+        await immigrantGraveDelete(row.id)
+        getList()
+      } else {
+        tableData.value.splice(tableData.value.indexOf(row), 1)
+      }
+
+      ElMessage.success('删除成功')
+    })
+    .catch(() => {})
 }
 
 const onSave = () => {
-  tableData.value.forEach((item) => {
-    item.doorNo = props.doorNo
-    item.householdId = props.householdId
-  })
   saveGraveListApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
   })
 }
+
+onMounted(() => {
+  getVillageList()
+})
 </script>

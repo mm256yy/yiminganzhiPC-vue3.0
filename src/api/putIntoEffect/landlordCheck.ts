@@ -9,9 +9,6 @@ export const delassetHouse = (id: number): Promise<void> => {
 }
 // 新增搬迁安置
 export const addHaeeossstu = (data: any): Promise<any> => {
-  // if (id == '2') {
-  //   data.status = 'review'
-  // }
   return request.post({ url: '/Haeeossstu/create', data })
 }
 export const getHouseByIdApi = (id: number): Promise<any> => {

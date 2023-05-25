@@ -36,10 +36,9 @@
       </div>
 
       <div class="survey-item">
-        <div class="survey-head"
-          >房屋信息：共<span class="num">{{ props.data?.immigrantHouseList.length || 0 }}</span
-          >幢</div
-        >
+        <div class="survey-head">
+          房屋信息：共<span class="num"> {{ props.data?.immigrantHouseList.length || 0 }} </span>幢
+        </div>
         <div class="survey-body">
           <ElTable
             :border="true"
@@ -56,10 +55,8 @@
             <ElTableColumn prop="constructionTypeText" label="结构类型" />
             <ElTableColumn prop="completedTime" label="竣工年月">
               <template #default="scope">
-                {{
-                  scope.row.completedTime ? formatCompletedTime(scope.row.completedTime) : null
-                }}</template
-              >
+                {{ scope.row.completedTime ? formatCompletedTime(scope.row.completedTime) : null }}
+              </template>
             </ElTableColumn>
             <ElTableColumn prop="propertyNo" label="房屋所有权证" />
             <ElTableColumn prop="landNo" label="土地使用权证" />
@@ -68,12 +65,10 @@
       </div>
 
       <div class="survey-item">
-        <div class="survey-head"
-          >附属物信息：共<span class="num">{{
-            props.data?.immigrantAppendantList.length || 0
-          }}</span
-          >件</div
-        >
+        <div class="survey-head">
+          附属物信息：共
+          <span class="num"> {{ props.data?.immigrantAppendantList.length || 0 }} </span>件
+        </div>
         <div class="survey-body">
           <ElTable
             :border="true"
@@ -114,10 +109,10 @@
       </div>
 
       <div class="survey-item">
-        <div class="survey-head"
-          >坟墓信息：共<span class="num">{{ props.data?.immigrantGraveList.length || 0 }}</span
-          >处</div
-        >
+        <div class="survey-head">
+          坟墓信息：共
+          <span class="num"> {{ props.data?.immigrantGraveList.length || 0 }} </span>处
+        </div>
         <div class="survey-body">
           <ElTable
             :border="true"

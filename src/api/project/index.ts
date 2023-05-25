@@ -49,3 +49,28 @@ export const saveProjectConfigApi = (
   const url = projectConfig.id ? '/project/config/update' : '/project/config/create'
   return request.post({ url, data: projectConfig })
 }
+
+/**
+ * 查询单个项目信息
+ */
+export const getProjectInfoApi = (id: string | number) => {
+  return request.get({ url: `/project/${id}` })
+}
+
+/**
+ * 复核
+ */
+export const reviewProjectApi = () => {
+  return request.post({
+    url: '/project/review'
+  })
+}
+
+/**
+ * 项目统计信息
+ */
+export const getProjectStatisticalApi = () => {
+  return request.get({
+    url: '/project/statistical'
+  })
+}

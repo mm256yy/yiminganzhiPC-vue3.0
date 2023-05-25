@@ -17,14 +17,14 @@
       <div class="title">青苗腾空移交确认单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
+          <input class="input-txt w-200" v-model="form.town" placeholder="请输入政府名称" />
           人民政府：
         </div>
         <div class="row">
           <div class="txt-indent-28">我户因水库建设需征收的承保地块</div>
           <input
             class="input-txt w-400 ml-10 mr-10"
-            v-model="form.landName"
+            v-model="form.greenLandName"
             placeholder="请输入地块名称"
           />
           均已完成青苗等地上附着物的腾空。
@@ -33,19 +33,19 @@
           <div class="txt-indent-28 mr-10">总计</div>
           <input
             class="input-txt w-100 ml-10 mr-10"
-            v-model="form.totalArea"
+            v-model="form.landArea"
             placeholder="请输入"
           />亩，
           <div class="ml-10">其中耕地</div>
           <input
             class="input-txt w-100 ml-10 mr-10"
-            v-model="form.cultivatedLandArea"
+            v-model="form.arableLandArea"
             placeholder="请输入"
           />亩，
           <div class="ml-10">园地</div>
           <input
             class="input-txt w-100 ml-10 mr-10"
-            v-model="form.fieldArea"
+            v-model="form.woodLandArea"
             placeholder="请输入"
           />亩，
           <div class="ml-10">林地</div>
@@ -57,13 +57,13 @@
           <div class="ml-10">未利用地</div>
           <input
             class="input-txt w-100 ml-10 mr-10"
-            v-model="form.unusedLandArea"
+            v-model="form.uselessArea"
             placeholder="请输入"
           />亩，
         </div>
         <div class="row">
           <div class="txt-indent-28 mr-10">现将</div>
-          <ElSelect class="w-200" clearable placeholder="请选择" v-model="form.handoverProject">
+          <ElSelect class="w-200" clearable placeholder="请选择" v-model="form.greenTransferType">
             <ElOption
               v-for="item in dictObj[327]"
               :key="item.value"
@@ -74,7 +74,7 @@
           <div class="ml-10">予以移交。未处置青苗或地上附着物视为放弃，并归</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.govName"
+            v-model="form.town"
             placeholder="请输入政府名称"
           />
           人民政府处置。自移交之日起，移交人不再对其主张权利。
@@ -83,7 +83,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdlerName"
+            v-model="form.householder"
             placeholder="请输入户主名称"
           />
           户号：
@@ -95,7 +95,7 @@
           迁出地址：
           <input
             class="input-txt w-500 ml-10"
-            v-model="form.relocationAddress"
+            v-model="form.greenOutAddress"
             placeholder="请输入迁出地址"
           />
         </div>
@@ -109,11 +109,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { ElSpace, ElButton, ElSelect, ElOption } from 'element-plus'
+import { ElSpace, ElButton, ElSelect, ElOption, ElMessage } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -131,28 +136,47 @@ const defaultForm = {
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
-  govName: '', // 政府名称
-  landName: '', // 地块名称
-  totalArea: '', // 总计（亩）
-  cultivatedLandArea: '', // 耕地（亩）
-  fieldArea: '', // 园地（亩）
+  type: RelocationResettleTypes.GreenSoar,
+  town: '', // 政府名称
+  greenLandName: '', // 地块名称
+  landArea: '', // 总计（亩）
+  arableLandArea: '', // 耕地（亩）
+  woodLandArea: '', // 园地（亩）
   woodlandArea: '', // 林地（亩）
-  unusedLandArea: '', // 未利用地（亩）
-  handoverProject: '', // 腾空移交项目
-  hoseholdName: '', // 户主姓名
+  uselessArea: '', // 未利用地（亩）
+  greenTransferType: '', // 腾空移交项目
+  householder: '', // 户主姓名
   doorNo: props.doorNo, // 户号
-  relocationAddress: '' // 迁出地址
+  greenOutAddress: '' // 迁出地址
 }
 
 const form = ref<any>(defaultForm)
 
+// 初始化获取数据
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.GreenSoar,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+    }
+  })
+}
+
 // 保存
 const onSave = () => {
-  // saveMainHouseApi(form.value).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  saveRelocationResettleApi(form.value).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

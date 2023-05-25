@@ -17,14 +17,14 @@
       <div class="title">社保缴费确认单</div>
       <div class="content-wrap">
         <div class="row">
-          <input class="input-txt w-200" v-model="form.govName" placeholder="请输入政府名称" />
+          <input class="input-txt w-200" v-model="form.town" placeholder="请输入政府名称" />
           人民政府：
         </div>
         <div class="row">
           <div class="txt-indent-28">我户</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.familyName"
+            v-model="form.familyMember"
             placeholder="请输入"
           />
           （家庭成员姓名）选择社会保障安置方式，现已完成参保缴费。
@@ -34,7 +34,7 @@
           <div class="txt-indent-28">户主</div>
           <input
             class="input-txt w-200 ml-10 mr-10"
-            v-model="form.householdler"
+            v-model="form.householder"
             placeholder="请输入户主名称"
           />
           户号：
@@ -58,7 +58,7 @@
               <el-button type="primary" :icon="addIcon" @click="onAddRow">添加行</el-button>
             </div>
           </div>
-          <el-table :data="tableData" style="width: 100%">
+          <el-table :data="tableData" stripe border style="width: 100%" class="mb-20">
             <el-table-column
               type="index"
               label="序号"
@@ -66,14 +66,14 @@
               align="center"
               header-align="center"
             />
-            <el-table-column prop="name" label="参保人" width="180" header-align="center">
+            <el-table-column prop="insuredName" label="参保人" width="180" header-align="center">
               <template #default="{ row }">
-                <ElInput v-model="row.name" :placeholder="'请输入'" />
+                <ElInput v-model="row.insuredName" :placeholder="'请输入'" />
               </template>
             </el-table-column>
-            <el-table-column prop="sex" label="性别" width="230" header-align="center">
+            <el-table-column prop="insuredSex" label="性别" width="230" header-align="center">
               <template #default="{ row }">
-                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.sex">
+                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.insuredSex">
                   <ElOption
                     v-for="item in dictObj[292]"
                     :key="item.value"
@@ -83,31 +83,31 @@
                 </ElSelect>
               </template>
             </el-table-column>
-            <el-table-column prop="card" label="身份证号码" width="230" header-align="center">
-              <template #default="{ row }">
-                <ElInput v-model="row.card" :placeholder="'请输入'" />
-              </template>
-            </el-table-column>
-            <el-table-column prop="paymentLevel" label="缴费档次" width="180" header-align="center">
-              <template #default="{ row }">
-                <ElInput v-model="row.paymentLevel" :placeholder="'请输入'" />
-              </template>
-            </el-table-column>
-
-            <el-table-column prop="paymentPrice" label="缴费金额" width="180" header-align="center">
-              <template #default="{ row }">
-                <ElInput v-model="row.paymentPrice" :placeholder="'请输入'" />
-              </template>
-            </el-table-column>
-
             <el-table-column
-              prop="paymentTime"
-              label="缴费时间"
-              align="center"
+              prop="insuredCard"
+              label="身份证号码"
+              width="230"
               header-align="center"
             >
               <template #default="{ row }">
-                <el-date-picker v-model="row.paymentTime" type="date" placeholder="请选择日期" />
+                <ElInput v-model="row.insuredCard" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+            <el-table-column prop="payLevel" label="缴费档次" width="180" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.payLevel" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="payAmount" label="缴费金额" width="180" header-align="center">
+              <template #default="{ row }">
+                <ElInput v-model="row.payAmount" :placeholder="'请输入'" />
+              </template>
+            </el-table-column>
+
+            <el-table-column prop="payTime" label="缴费时间" align="center" header-align="center">
+              <template #default="{ row }">
+                <el-date-picker v-model="row.payTime" type="date" placeholder="请选择日期" />
               </template>
             </el-table-column>
 
@@ -119,9 +119,9 @@
               header-align="center"
             >
               <template #default="{ row }">
-                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]"
-                  >删除</el-button
-                >
+                <el-button @click="onDelRow(row)" type="text" class="!text-[#E43030]">
+                  删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -137,7 +137,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
@@ -153,6 +153,12 @@ import {
   ElMessage
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
+import {
+  getRelocationResettleApi,
+  saveRelocationResettleApi,
+  deleteSocialSecurityApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/RelocationResettle/relocationResettle-service'
+import { RelocationResettleTypes } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -165,43 +171,49 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
-console.log('props:', props)
-
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const tableData = ref<any[]>([])
 
 const defaultForm = {
-  householdler: '', // 户主（择房人）
-  doorNo: '', // 户号
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  householder: '', // 户主
+  doorNo: props.doorNo, // 户号
   relocationAddress: '', // 迁出地址
-  govName: '', // 业主
-  familyName: '' // 家庭成员姓名
+  town: '', // 政府名称
+  familyMember: '' // 家庭成员姓名
 }
 
 const defaultRow = {
-  name: '',
-  sex: '',
-  card: '',
-  paymentLevel: '',
-  paymentPrice: '',
-  paymentTime: ''
+  householdId: props.householdId,
+  projectId: props.projectId,
+  uid: props.uid,
+  doorNo: props.doorNo, // 户号
+  insuredName: '', // 参保人
+  insuredSex: '', // 性别
+  insuredCard: '', // 身份证号码
+  payLevel: '', // 缴费档次
+  payAmount: '', // 缴费金额
+  payTime: '' // 缴费时间
 }
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
-const getList = () => {
-  // const params: any = {
-  //   doorNo: props.doorNo,
-  //   householdId: props.householdId,
-  //   projectId: props.projectId,
-  //   status: 'implementation',
-  //   size: 1000
-  // }
-  // getMainHouseListApi(params).then((res) => {
-  //   tableData.value = res.content
-  // })
+// 初始化获取数据
+const initData = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    type: RelocationResettleTypes.SocialSecurity,
+    size: 1000
+  }
+  getRelocationResettleApi(params).then((res: any) => {
+    if (res && res.doorNo) {
+      form.value = res
+      tableData.value = res.rrInsuredInfoList
+    }
+  })
 }
 
 // 添加行
@@ -218,8 +230,8 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        // await deleteMainHouseApi(row.id)
-        getList()
+        await deleteSocialSecurityApi(row.id)
+        initData()
         ElMessage.success('删除成功')
       })
       .catch(() => {})
@@ -232,14 +244,18 @@ const onDelRow = (row) => {
 const onSave = () => {
   const params = {
     ...form.value,
-    tableData: tableData.value
+    rrInsuredInfoList: [...tableData.value],
+    type: RelocationResettleTypes.SocialSecurity
   }
-  console.log(params, '参数')
-  // saveMainHouseApi(params).then(() => {
-  //   ElMessage.success('操作成功！')
-  //   getList()
-  // })
+  saveRelocationResettleApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    initData()
+  })
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>
@@ -279,6 +295,10 @@ const onSave = () => {
   margin-left: 10px;
 }
 
+.mb-20 {
+  margin-bottom: 20px;
+}
+
 .mr-10 {
   margin-right: 10px;
 }
@@ -299,20 +319,25 @@ const onSave = () => {
   text-indent: 28px;
 }
 
-.table-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
+.table-area {
+  padding-left: 28px;
 
-  .table-tit {
-    font-weight: bold;
-  }
-
-  .table-action {
+  .table-head {
     display: flex;
     align-items: center;
-    justify-content: right;
+    justify-content: space-between;
+    padding: 20px 0;
+
+    .table-tit {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .table-action {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+    }
   }
 }
 </style>

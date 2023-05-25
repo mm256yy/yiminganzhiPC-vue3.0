@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="show" title="用户项目" append-to-body @close="onClose" width="720px">
+  <el-dialog v-model="showDialog" title="用户项目" append-to-body @close="onClose" width="720px">
     <el-form ref="form" :model="row" :inline="true" label-width="100px" :rules="rules">
       <el-form-item prop="projectId" label="关联项目">
         <el-select v-model="row.projectId" @change="onProjectChange">
@@ -64,6 +64,7 @@ import { useValidator } from '@/hooks/web/useValidator'
 interface Props {
   show: boolean
   projectUser?: ProjectUserType
+  title: string
 }
 
 interface ProjectUser extends ProjectUserType {
@@ -81,7 +82,7 @@ const rules = {
   orgId: [required()],
   roleIds: [required()]
 }
-const show = ref(props.show)
+const showDialog = ref(props.show)
 const row = ref<ProjectUser>(
   props.projectUser || {
     projectId: undefined,
@@ -106,7 +107,7 @@ const roles = ref<RoleType[]>([])
 watch(
   () => props.show,
   () => {
-    show.value = props.show
+    showDialog.value = props.show
   }
 )
 
@@ -117,12 +118,13 @@ onMounted(async () => {
     row.value.projectName = projects.value.find((x) => x.id === pId)?.name
     orgs.value = [await getOrgTreeApi(pId)]
     roles.value = await getAllRoleApi(pId)
-
-    const arr: any = row.value.roles
-    row.value.roles = []
-    arr.forEach((item) => {
-      row.value.roleIds?.push(item.id)
-    })
+    if (props.title === '编辑用户') {
+      const arr: any = row.value.roles
+      row.value.roles = []
+      arr.forEach((item) => {
+        row.value.roleIds?.push(item.id)
+      })
+    }
   }
 })
 
@@ -156,7 +158,7 @@ const onSave = () => {
 }
 
 const onClose = () => {
-  show.value = false
+  showDialog.value = false
   emit('close')
 }
 </script>

@@ -30,14 +30,14 @@ export const yesAndNoEnums = [
   }
 ]
 
-// 上报状态
+// 填报状态
 export const ReportStatusEnums = [
   {
-    label: '已上报',
+    label: '已填报',
     value: 'ReportSucceed'
   },
   {
-    label: '未上报',
+    label: '未填报',
     value: 'UnReport'
   }
 ]

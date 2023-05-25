@@ -1,5 +1,5 @@
 // 打印所需的所有数据结构类型定义
-
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 // 项目类型定义
 export type ProjectType = {
   id?: number
@@ -12,7 +12,7 @@ export type ProjectType = {
   townCode?: string
   reservoirName?: string
   districtTree?: string[]
-  status: 'survey' | 'review'
+  status: SurveyStatusEnum
 }
 
 // SURVEY("实物调查","survey"),
@@ -72,7 +72,7 @@ export interface HouseType {
   propertyNo: string
   landNo: string
   landType: string
-  landArea: number
+  landArea: number | string
   storeyHeight: number
   houseHeight: number
   outerWallType: string

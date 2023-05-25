@@ -183,14 +183,14 @@ export const FlowTabs = [
   {
     id: 1,
     name: '实物采集'
-  },
-  {
-    id: 2,
-    name: '实物复核'
   }
+  // {
+  //   id: 2,
+  //   name: '实物复核'
+  // }
 ]
 
-// 上报状态
+// 填报状态
 export const ReportStatus = {
   ReportSucceed: 'ReportSucceed',
   UnReport: 'UnReport'

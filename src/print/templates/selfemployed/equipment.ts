@@ -54,7 +54,7 @@ export const selfemployedEquipmentDefinition = {
     {
       alignment: 'left',
       margin: [0, 10, 0, 0],
-      columns: ['分类目录：企业', '所属阶段：', '']
+      columns: ['分类目录：个体工商户', '所属阶段：', '']
     }
   ],
   footer: function () {
@@ -109,7 +109,7 @@ const getInfo = (landlord: LandlordType) => {
         }
       ],
       [{ text: `所在位置：${landlord.locationTypeText}` }],
-      [{ text: `联系方式：${landlord.phone}` }]
+      [{ text: `联系方式：${landlord.phone || ''}` }]
     ]
   }
 }
@@ -118,23 +118,20 @@ const getFooter = () => {
   return [
     {
       fontSize: 10,
-      margin: [20, 10, 20, 0],
+      margin: [20, 0, 20, 15],
       alignment: 'justify',
       columns: [
         {
           text: '法人代表签字(公章)：',
-          alignment: 'left',
-          margin: [0, 35, 0, 0]
+          alignment: 'left'
         },
         {
           text: '调查员签字：',
-          alignment: 'left',
-          margin: [0, 35, 0, 0]
+          alignment: 'left'
         },
         {
           text: '调查时间：',
-          alignment: 'left',
-          margin: [0, 35, 0, 0]
+          alignment: 'left'
         }
       ]
     }

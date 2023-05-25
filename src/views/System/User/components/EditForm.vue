@@ -123,6 +123,7 @@
       v-if="showProjectUserForm"
       :show="showProjectUserForm"
       :project-user="currentProjectUser"
+      :title="title"
       @close="onCloseProjectUser"
       @save="onSaveProjectUser"
     />
@@ -322,7 +323,7 @@ const onAddProjectUser = () => {
 }
 
 const onEditProjectUser = (row: ProjectUserType) => {
-  currentProjectUser.value = row
+  currentProjectUser.value = JSON.parse(JSON.stringify(row))
   showProjectUserForm.value = true
 }
 

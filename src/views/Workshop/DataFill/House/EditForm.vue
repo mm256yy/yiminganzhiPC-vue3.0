@@ -431,6 +431,17 @@
       <ElFormItem label="备注" prop="remark">
         <ElInput type="textarea" v-model="form.remark" />
       </ElFormItem>
+
+      <ElFormItem
+        v-if="
+          actionType === 'add' && surveyStatus === SurveyStatusEnum.Review && type === 'Landlord'
+        "
+        label="新增原因"
+        prop="addReason"
+        required
+      >
+        <ElInput type="textarea" v-model="form.addReason" />
+      </ElFormItem>
     </ElForm>
 
     <template #footer v-if="actionType !== 'view'">
@@ -466,7 +477,7 @@ import { ref, reactive, watch, nextTick, computed, provide } from 'vue'
 import { MapFormItem } from '@/components/Map'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
-
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 // import { useValidator } from '@/hooks/web/useValidator'
 // import { locationTypes } from '@/views/Workshop/components/config'
 import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
@@ -480,6 +491,8 @@ interface PropsType {
   row?: HouseDtoType | null | undefined
   householdId: string
   doorNo: string
+  surveyStatus: SurveyStatusEnum
+  type?: string
 }
 
 interface FileItemType {

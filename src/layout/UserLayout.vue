@@ -34,18 +34,22 @@ export default defineComponent({
   name: 'UserLayout',
   setup() {
     const { addRoute } = useRouter()
+
     onMounted(async () => {
       appStore.setLayout('top')
       const userInfo = await currentUserApi()
+      console.log('userInfo:', userInfo)
       appStore.setUserInfo(userInfo)
       selectedProjectId.value = appStore.getCurrentProjectId
       setPlatform('workshop', addRoute)
       const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
-      console.log(project, '123')
+      console.log('project:', project)
 
       appStore.setreservoirName(project.reservoirName)
       appStore.setProjectStatus(project.status)
+      appStore.setCurrentMapJson(project.mapJson || '')
     })
+
     const onProjectChange = async (id: number) => {
       await setDefaultProjectApi(id)
 
@@ -55,6 +59,8 @@ export default defineComponent({
       selectedProjectId.value = id
       appStore.setUserDefaultProject(id)
       appStore.setCurrentProjectId(id)
+      appStore.setProjectStatus(project.status || '')
+      appStore.setCurrentMapJson(project.mapJson || '')
       if (project) {
         if (project.projectRole === ProjectRoleEnum.PROJECT_ADMIN) {
           await setPlatform('admin', addRoute)
@@ -69,6 +75,7 @@ export default defineComponent({
       }
       console.log(project, '123456')
     }
+
     return () => (
       <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
         {/* 顶部背景 */}
@@ -124,7 +131,7 @@ export default defineComponent({
 .div {
   :deep(.el-input__wrapper) {
     width: 120px;
-    margin-right: 50px;
+    margin-right: 20px;
     background-color: transparent;
   }
 

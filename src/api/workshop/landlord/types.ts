@@ -17,6 +17,7 @@ export interface LandlordDtoType {
   areaCode: string
   hasPropertyAccount: boolean
   householdNumber: string // 户籍册编号
+  status: string // 移民阶段，如数据采集 survey，实物复核 implementation
   [key: string]: any
 }
 

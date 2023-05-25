@@ -468,10 +468,10 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
-  addDemographicApi,
-  updateDemographicApi,
-  getDemographicListApi
-} from '@/api/workshop/IndividualB/service'
+  addCompanyApi,
+  updateCompanyApi,
+  getCompanyListApi
+} from '@/api/workshop/enterprise/service'
 import { validateIdNo, checkTel } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
 const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
@@ -593,19 +593,19 @@ const onClose = (flag = false) => {
 
 const submit = async (data: DemographicDtoType) => {
   if (props.actionType === 'add' && actionType2.value != 'edit') {
-    await addDemographicApi({
+    await addCompanyApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
   } else {
-    await updateDemographicApi({
+    await updateCompanyApi({
       ...data,
       doorNo: props.doorNo,
       householdId: props.householdId
     })
   }
-  getDemographicListApi({
+  getCompanyListApi({
     doorNo: props.doorNo
   }).then((res) => {
     form.value = res.content[0]

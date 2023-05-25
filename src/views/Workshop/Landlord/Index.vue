@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">信息填报</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户信息采集</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -20,9 +20,6 @@
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">居民户列表</span>
 
-          <!-- <div class="icon">
-            <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
-          </div> -->
           <div class="text">
             （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
             <span class="distance"></span>
@@ -35,6 +32,7 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
@@ -74,7 +72,7 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #status="{ row }">
+        <template #reportStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="[
@@ -92,31 +90,18 @@
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
         <template #action="{ row }">
-          <!-- <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '快速查看',
-                type: 'primary',
-
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-          /> -->
           <span
             @click="onViewRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >快速查看</span
           >
+            快速查看
+          </span>
           <span
             @click="onEditRow(row)"
             :style="{ color: '#3e73ec', cursor: 'pointer', marginRight: '5px' }"
-            >编辑</span
           >
+            编辑
+          </span>
           <span @click="onDelRow(row)" :style="{ color: 'red', cursor: 'pointer' }">删除</span>
         </template>
       </Table>
@@ -127,6 +112,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :districtTree="districtTree"
+      ref="formRef"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -138,9 +124,34 @@
       :outsideData="outsideData"
       @close="onPrintDialogClose"
     />
+    <Export
+      :show="exportDialog"
+      :type="'PeasantHousehold'"
+      :list="exportList"
+      @close="onExportDialogClose"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { globalData } from '@/config/fill'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
+export default defineComponent({
+  beforeRouteEnter(to, _from, next) {
+    if (to.path === '/Workshop/Landlord') {
+      // 实物采集
+      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
+    } else {
+      // 实物复核
+      globalData.currentSurveyStatus = SurveyStatusEnum.Review
+    }
+    next()
+  }
+})
+</script>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
@@ -159,6 +170,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import EditForm from './components/EditForm.vue'
 import Print from '../components/Print.vue'
+import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -181,6 +193,10 @@ import type {
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
+const router = useRouter()
+const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
+  ? router.currentRoute.value?.meta?.title?.split('-')[1]
+  : '采集'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -199,6 +215,37 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const printDialog = ref(false)
+const exportDialog = ref(false)
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '居民户统计表',
+    value: 'exportPeasantHousehold'
+  },
+  {
+    name: '人口调查统计表',
+    value: 'exportDemographic'
+  },
+  {
+    name: '房屋调查统计表',
+    value: 'exportHouse'
+  },
+  {
+    name: '附属物调查统计表',
+    value: 'exportAppendage'
+  },
+  {
+    name: '零星林果木调查统计表',
+    value: 'exportTree'
+  },
+  {
+    name: '家庭收入统计表',
+    value: 'exportImmigrantIncome'
+  }
+])
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const outsideData = ref<any>([])
@@ -363,85 +410,14 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'cityCodeText',
-  //   label: '市县',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'townCodeText',
-  //   label: '街道',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'villageText',
-  //   label: '行政村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'virutalVillageText',
-  //   label: '自然村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'card',
-  //   label: '身份证号',
-  //   width: 180,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'phone',
-  //   label: '联系方式',
-  //   width: 174,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'householdNumber',
-  //   label: '户籍册编号',
-  //   width: 194,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'doorNo',
-  //   label: '所属阶段',
-  //   width: 134,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
-    field: 'status',
+    field: 'reportStatus',
     label: '填报状态',
     width: 100,
     search: {
       show: false
     }
   },
-
-  // {
-  //   field: 'address',
-  //   label: '户籍所在地',
-  //   width: 195,
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'hasPropertyAccount',
     label: '财产户',
@@ -458,7 +434,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'reportUserName',
-    label: '填报人员',
+    label: '填报人',
     search: {
       show: false
     }
@@ -511,14 +487,14 @@ const onDelRow = async (row: LandlordDtoType) => {
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
-    <strong>${row.name}居民户包含:</strong>
-  <div>人口信息: ${result.demographicList.length} 口人信息</div>
-  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
-  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
-  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
-  <div>坟墓信息: ${result.immigrantGraveList.length} 条坟墓信息</div>
-  <strong>是否删除该居户信息</strong>
-</div>
+      <strong>${row.name}居民户包含:</strong>
+      <div>人口信息: ${result.demographicList.length} 口人信息</div>
+      <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+      <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+      <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+      <div>坟墓信息: ${result.immigrantGraveList.length} 条坟墓信息</div>
+      <strong>是否删除该居户信息</strong>
+    </div>
   `,
     '提示',
     {
@@ -535,13 +511,6 @@ const onDelRow = async (row: LandlordDtoType) => {
       })
     })
     .catch(() => {})
-
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
 }
 
 const onAddRow = () => {
@@ -549,10 +518,11 @@ const onAddRow = () => {
   tableObject.currentRow = null
   dialog.value = true
 }
-
+const formRef = ref<any>(null)
 const onEditRow = (row: LandlordDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
+  formRef.value?.initData(row)
   dialog.value = true
 }
 
@@ -561,6 +531,7 @@ const onFormPupClose = (flag: boolean) => {
   if (flag === true) {
     getList()
   }
+  getLandlordHeadInfo()
 }
 
 const findRecursion = (data, code, callback) => {
@@ -605,8 +576,8 @@ const onSearch = (data) => {
   if (!params.hasPropertyAccount) {
     delete params.hasPropertyAccount
   }
-  if (!params.status) {
-    delete params.status
+  if (!params.fillStatus) {
+    delete params.fillStatus
   }
   if (params.code) {
     // 拿到对应的参数key
@@ -642,11 +613,24 @@ const onPrintDialogClose = () => {
   printDialog.value = false
 }
 
+const onExport = () => {
+  exportDialog.value = true
+}
+
+const onExportDialogClose = () => {
+  exportDialog.value = false
+}
+
 // 数据填报
 const fillData = (row) => {
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
   push({
-    name: 'DataFill',
+    name: routerName,
     query: {
+      name: row.name,
       householdId: row.id,
       doorNo: row.doorNo,
       type: 'Landlord'

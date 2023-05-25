@@ -100,6 +100,10 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 
+tableObject.params = {
+  sort: ['releaseTime', 'desc']
+}
+
 getList()
 
 const changTableList = (list) => {

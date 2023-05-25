@@ -16,5 +16,6 @@ export enum ReportTypes {
   Woodland = 'Woodland', // 林地可研
   ProfessionalProject = 'ProfessionalProject', // 专业项目
   Clean = 'Clean', // 库底清理
-  Other = 'Other' // 其他
+  Other = 'Other', // 其他
+  ConfirmPhysicalApproval = 'ConfirmPhysicalApproval' // 实物采集确认批复
 }

@@ -10,7 +10,7 @@ const { t } = useI18n()
 
 interface UseTableConfig<T = any> {
   getListApi: (option: any) => Promise<TableResponse<T>>
-  delListApi?: (option: any) => Promise<void>
+  delListApi?: (option: any, value?: string) => Promise<void>
   // 返回数据格式配置
   response?: {
     list: string
@@ -95,8 +95,8 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     return table
   }
 
-  const delData = async (ids: string[] | number[]) => {
-    const res = await (config?.delListApi && config?.delListApi(ids))
+  const delData = async (ids: string[] | number[], value?: string) => {
+    const res = await (config?.delListApi && config?.delListApi(ids, value))
     if (res) {
       ElMessage.success(t('common.delSuccess'))
 
@@ -150,7 +150,13 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
       methods.getList()
     },
     // 删除数据
-    delList: async (ids: string[] | number[], multiple: boolean, message = true) => {
+    // 增加可选项：删除原因的输入框
+    delList: async (
+      ids: string[] | number[],
+      multiple: boolean,
+      message = true,
+      prompt = false
+    ) => {
       const tableRef = await getTable()
       if (multiple) {
         if (!tableRef?.selections.length) {
@@ -164,13 +170,29 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         }
       }
       if (message) {
-        ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
-          confirmButtonText: t('common.delOk'),
-          cancelButtonText: t('common.delCancel'),
-          type: 'warning'
-        }).then(async () => {
-          await delData(ids)
-        })
+        if (prompt) {
+          await ElMessageBox.prompt(t('common.delMessage'), t('common.delWarning'), {
+            confirmButtonText: t('common.delOk'),
+            cancelButtonText: t('common.delCancel'),
+            type: 'warning',
+            inputValidator: (value) => {
+              if (!value) {
+                return false
+              }
+              return true
+            }
+          }).then(async ({ value }) => {
+            await delData(ids, value)
+          })
+        } else {
+          await ElMessageBox.confirm(t('common.delMessage'), t('common.delWarning'), {
+            confirmButtonText: t('common.delOk'),
+            cancelButtonText: t('common.delCancel'),
+            type: 'warning'
+          }).then(async () => {
+            await delData(ids)
+          })
+        }
       } else {
         await delData(ids)
       }

@@ -12,7 +12,9 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="tabCurrentId == 2">修改日志</ElButton>
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
+            >修改日志</ElButton
+          >
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -82,12 +84,17 @@
       </ElTable>
     </div>
 
-    <recordDialog :recordShow="recordShow" @close="recordClose" :doorNo="doorNo" />
+    <RecordListDialog
+      type="收入信息"
+      :recordShow="recordShow"
+      @close="recordClose"
+      :doorNo="doorNo"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import recordDialog from '../components/recordDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ref, computed } from 'vue'
 import { ElButton, ElInput, ElSpace, ElTable, ElTableColumn, ElMessage } from 'element-plus'
@@ -99,6 +106,7 @@ import {
 } from '@/api/workshop/datafill/family-service'
 import { useAppStore } from '@/store/modules/app'
 import { FamilyIncomeDtoType } from '@/api/workshop/datafill/family-types'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface SpanMethodProps {
   row: FamilyIncomeDtoType
@@ -110,7 +118,7 @@ interface SpanMethodProps {
 interface PropsType {
   householdId: string
   doorNo: string
-  tabCurrentId
+  surveyStatus: SurveyStatusEnum
 }
 
 interface TotalItemType {
@@ -198,8 +206,7 @@ const getList = async () => {
   const params: any = {
     doorNo: props.doorNo,
     householdId: props.householdId,
-    size: 100,
-    status: props.tabCurrentId == 2 ? 'review' : undefined
+    size: 100
   }
   const res = await getFamilyIncomeListApi(params)
 
@@ -247,7 +254,7 @@ const getSubtotal = (type: string) => {
       const result = tableList.reduce((pre, current) => {
         return pre + parseFloat(current.amount)
       }, 0)
-      return result
+      return isNaN(result) ? 0 : result
     }
   }
 }
@@ -256,7 +263,7 @@ const getSubtotal = (type: string) => {
 const total = computed(() => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
   return realTableData.reduce((pre, current) => {
-    return pre + parseFloat(current.amount)
+    return (pre ? pre : 0) + (current.amount ? parseFloat(current.amount) : 0)
   }, 0)
 })
 
