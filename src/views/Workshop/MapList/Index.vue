@@ -67,7 +67,6 @@ import { ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { splitStr, hideStr } from '@/utils'
-import { transformFromWGSToGCJ } from '@/utils/gcoord'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
 import { getVillageListApi } from '@/api/workshop/village/service'
 import iconPath from './iconPath'
@@ -100,12 +99,10 @@ interface LocationType {
 }
 
 // 初始地图坐标, 如果没有该区域的中心经、纬度，默认杭州经、纬度显示
-const centerLocation = ref<LocationType>(
-  transformFromWGSToGCJ(
-    pointsLength ? points[pointsLength / 2][0] : 120.153576, // 经度
-    pointsLength ? points[pointsLength / 2][1] : 30.287459 // 纬度
-  )
-)
+const centerLocation = ref<LocationType>({
+  longitude: pointsLength ? points[pointsLength / 2][0] : 120.153576, // 经度
+  latitude: pointsLength ? points[pointsLength / 2][1] : 30.287459 // 纬度
+})
 
 let AMap: any = null
 let map: any = null
@@ -323,7 +320,7 @@ const initPolygon = async () => {
     pointsArr.map((item: any, index: number) => {
       // 配置多边形
       let polygon = new AMap.Polygon({
-        path: calibrationCoord(item), // 路径
+        path: item, // 路径
         strokeColor: renderColor(propertiesArr[index]), // 轮廓线颜色
         strokeWeight: 2, // 轮廓线宽度
         strokeOpacity: 1, // 轮廓线透明度
@@ -333,25 +330,6 @@ const initPolygon = async () => {
       })
       map.add(polygon)
     })
-}
-
-/**
- * 坐标系进行转换，校准坐标系
- * @param arr 坐标系数组
- */
-const calibrationCoord = (arr: any) => {
-  const newArr: any = []
-  if (arr && arr.length) {
-    arr.map((coords: any) => {
-      newArr.push([
-        transformFromWGSToGCJ(coords[0], coords[1])['longitude'],
-        transformFromWGSToGCJ(coords[0], coords[1])['latitude'],
-        coords[2]
-      ])
-    })
-    return newArr
-  }
-  return newArr
 }
 
 /**

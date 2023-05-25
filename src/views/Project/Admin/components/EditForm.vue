@@ -36,6 +36,7 @@
 </template>
 
 <script setup lang="ts">
+import gcoord from 'gcoord'
 import { computed, reactive, unref, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import type { UploadFile, UploadFiles } from 'element-plus'
@@ -209,8 +210,8 @@ const handleFiles = (files: any) => {
   reader.readAsText(files.raw, 'UTF-8') // 读取文件
   // 读取文件完毕执行此函数
   reader.onload = (evt: any) => {
-    const dataJson = JSON.stringify(JSON.parse(evt.target?.result))
-    mapJson.value = dataJson
+    const dataJson = JSON.parse(evt.target?.result)
+    mapJson.value = JSON.stringify(dataJson)
   }
 }
 
@@ -268,7 +269,7 @@ const doSave = async () => {
   const project = (await methods.getFormData()) || {}
   project.townCode = project.townCode.join(',')
   project.mapPic = JSON.stringify(mapPic.value)
-  project.mapJson = mapJson.value
+  project.mapJson = convertCoordinates(JSON.parse(mapJson.value))
   if (currentRow.value && currentRow.value.id) {
     project.id = currentRow.value.id
   }
@@ -280,6 +281,79 @@ const doSave = async () => {
     .finally(() => {
       loading.value = false
     })
+}
+
+/**
+ * 坐标转换
+ * @param obj 原始坐标数据
+ */
+const convertCoordinates = (obj: any) => {
+  let newObj = {}
+  if (obj) {
+    newObj = {
+      type: obj.type,
+      name: obj.name,
+      crs: { ...obj.crs },
+      features: fmtFeatures(obj.features)
+    }
+    return JSON.stringify(newObj)
+  }
+  return JSON.stringify(newObj)
+}
+
+/**
+ * 格式化 features 数据
+ * @param arr 原始数据
+ */
+const fmtFeatures = (arr: any) => {
+  let newArr: any = []
+  if (arr && arr.length) {
+    arr.map((item) => {
+      newArr.push({
+        type: item.type,
+        properties: { ...item.properties },
+        geometry: {
+          type: item.geometry.type,
+          coordinates: [[fmtCoordinates(item.geometry.coordinates[0][0])]]
+        }
+      })
+    })
+    return newArr
+  }
+  return newArr
+}
+
+/**
+ * 坐标转换, 将WGS-84(国际标准)转为GCJ-02(火星坐标)
+ * @param arr 原始坐标
+ */
+const fmtCoordinates = (arr: any) => {
+  let newArr: any = []
+  if (arr && arr.length) {
+    arr.map((item) => {
+      newArr.push([
+        transformFromWGSToGCJ(item[0], item[1])[0],
+        transformFromWGSToGCJ(item[0], item[1])[1],
+        item[2]
+      ])
+    })
+    return newArr
+  }
+  return newArr
+}
+
+/**
+ * 将WGS-84(国际标准)转为GCJ-02(火星坐标)
+ * @param longitude 精度
+ * @param latitude 纬度
+ */
+const transformFromWGSToGCJ = (longitude: number, latitude: number) => {
+  let coords = gcoord.transform(
+    [longitude, latitude], // 经纬度坐标
+    gcoord.WGS84, // 当前坐标系
+    gcoord.GCJ02 // 目标坐标系
+  )
+  return coords
 }
 
 const onClose = () => {
