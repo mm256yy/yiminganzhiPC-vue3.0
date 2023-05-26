@@ -11,13 +11,15 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
+            保存
+          </ElButton>
           <ElButton
             @click="recordClick"
             v-if="props.surveyStatus === SurveyStatusEnum.Review && isUpdateShow === 'Landlord'"
-            >修改日志</ElButton
           >
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <div style="display: flex">
@@ -117,7 +119,8 @@
         <ElTable :data="tableDataRight" style="width: 50%">
           <ElTableColumn
             label="序号"
-            prop="surveyId"
+            type="index"
+            :index="genIndex"
             align="center"
             header-align="center"
             :width="60"
@@ -328,6 +331,14 @@ const getList = async () => {
 }
 
 getList()
+
+/**
+ * 生成右侧表格序号
+ * @param index 右侧列表序号
+ */
+const genIndex = (index: number) => {
+  return index + tableDataLeft.value.length + 1
+}
 
 // const onAddRow = () => {
 //   tableData.value.push(defaultRow)
