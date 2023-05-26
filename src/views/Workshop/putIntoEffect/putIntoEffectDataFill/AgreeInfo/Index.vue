@@ -77,7 +77,7 @@
               </ElFormItem>
             </div>
             <div style="display: flex; align-items: center">
-              <ElFormItem label="储藏室数量：" prop="accountName">
+              <ElFormItem label="储藏室数量：" prop="storeroomNum">
                 <ElInput v-model.number="formData.storeroomNum" placeholder="输入"
                   ><template #append>间</template></ElInput
                 >
