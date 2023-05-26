@@ -50,7 +50,7 @@ export const getDistrictApi = (name: string | null = null) => {
     params: {
       districtType: 'Village',
       name,
-      size: 9999
+      size: 999
     }
   })
 }

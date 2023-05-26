@@ -238,6 +238,7 @@
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { computed, watch, ref, reactive } from 'vue'
 import {
+  ElSpace,
   ElInput,
   ElFormItem,
   ElForm,

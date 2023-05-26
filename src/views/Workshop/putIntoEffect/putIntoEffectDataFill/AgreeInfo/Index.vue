@@ -240,12 +240,14 @@
                   filterable
                   v-model="formData.villageCode"
                   class="!w-250px"
+                  clearable
+                  placeholder="请先搜索后选择行政村名称"
                 >
                   <ElOption
                     v-for="(item, index) in village"
                     :key="index"
-                    :label="item.code"
-                    :value="item.value"
+                    :label="item.name"
+                    :value="item.code"
                   />
                 </ElSelect>
               </ElFormItem>
@@ -278,7 +280,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed } from 'vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
   ElMessage,
@@ -325,7 +327,8 @@ const defaultValue = {
   storeroomNum: 0,
   trailingNum: 0,
   houseArea: 0,
-  landArea: 0
+  landArea: 0,
+  villageCodeText: ''
 }
 let formData = ref(defaultValue)
 let relocationFee = computed(() => {
@@ -368,28 +371,30 @@ let allFee = computed(() => {
   const sum = tempRelocationFee + tempSubsidiesFeeSum + tempOtherFeeSum
   return isNaN(sum) ? 0 : sum
 })
-const getDetails = async () => {
+const getDetails = async (type: string) => {
   const res = await getAgreeInfoApi(props.doorNo)
   if (res) {
     formData.value = Object.assign({}, formData, res)
     formData.value.trailingNum = res.trailingNum
+  }
+  if (type === 'init') {
+    dictAdministration(formData.value?.villageCodeText)
   }
 }
 const handleSearch = (e) => {
   dictAdministration(e)
 }
 interface VillageType {
-  code: string
-  value: string | number
+  name: string
+  code: string | number
 }
-let village = reactive<VillageType[]>([])
-const dictAdministration = (name?: string) => {
+let village = ref<VillageType[]>([])
+const dictAdministration = async (name?: string) => {
   getDistrictApi(name).then((res) => {
-    village = res.content
+    village.value = res.content
   })
 }
-dictAdministration()
-getDetails()
+getDetails('init')
 const onsave = () => {
   const { projectId, status, id: householdId } = props.baseInfo
   const {
@@ -427,7 +432,7 @@ const onsave = () => {
   }
   addAgreeInfoApi(params).then(() => {
     ElMessage.success('保存成功！')
-    getDetails()
+    getDetails('save')
   })
 }
 
@@ -460,7 +465,7 @@ const onedit = () => {
   updateAgreeInfoApi(params)
     .then(() => {
       ElMessage.success('修改成功！')
-      getDetails()
+      getDetails('update')
     })
     .catch((e) => {
       console.log(e, 'sss')
