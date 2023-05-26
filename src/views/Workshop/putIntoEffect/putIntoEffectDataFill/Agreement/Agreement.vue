@@ -8,9 +8,9 @@
             <div class="agm-tit-1">甲方：镜岭镇人民政府</div>
             <div class="agm-tit-1">
               <span>乙方</span>
-              <span class="common-ipt ml-10px">3</span>
+              <span class="common-ipt ml-10px">{{ form.name }}</span>
               <span class="pl-40px">联系电话</span>
-              <span class="common-ipt ml-10px">3</span>
+              <span class="common-ipt ml-10px">{{ form.phone }}</span>
             </div>
 
             <div class="agm-txt mt-30px">
@@ -23,10 +23,11 @@
             <div class="agm-tit-1 floor-item" id="第一条 基础信息">第一条 基础信息</div>
 
             <div class="agm-bold mt-20px">
-              （一）经认定，乙方有农村移民 5 人，农业随迁 4 人，非农随迁 1 人。具体如下：
+              （一）经认定，乙方有农村移民 {{ form.countryNum }} 人，农业随迁
+              {{ form.trailingNum }} 人，非农随迁 {{ form.unTrailingNum }} 人。具体如下：
             </div>
 
-            <ElTable :data="tableData" class="mt-10px">
+            <ElTable :data="form.countryDemographic" class="mt-10px">
               <ElTableColumn
                 label="姓名"
                 :width="342"
@@ -44,7 +45,7 @@
               <ElTableColumn
                 label="信息"
                 :width="342"
-                prop="info"
+                prop="populationNatureText"
                 align="center"
                 header-align="center"
               />
@@ -52,18 +53,23 @@
 
             <div class="agm-bold">
               （二）经确认，乙方在工程建设征地范围内坐落有房屋，总计建筑面积
+              {{ form.immigrantSign && form.immigrantSign.totalArea }}
             </div>
             <div class="agm-bold">
               （三）经确认，乙方在工程建设征地范围内青苗等地上附着物涉及的土地面积总计
+              {{ form.immigrantSign && form.immigrantSign.landArea }}
             </div>
 
             <div class="agm-tit-1 floor-item" id="第二条 安置方式">第二条 安置方式</div>
-            <div class="agm-tit-2">（一）经认定，乙方选定搬迁安置方式为 集中 安置。</div>
+            <div class="agm-tit-2"
+              >（一）经认定，乙方选定搬迁安置方式为 {{ form.removalType }} 安置。</div
+            >
             <div class="agm-tit-2">
-              （二）经认定，乙方 2 人参加农业安置； 2 参加社会保障安置； 1
+              （二）经认定，乙方 {{ form.agricultureResettlementNum }} 人参加农业安置；
+              {{ form.socialSecurityNum }} 参加社会保障安置； {{ form.workNum }}
               人参加自谋职业安置。具体如下：
             </div>
-            <ElTable :data="tableData2" class="mt-10px">
+            <ElTable :data="form.resettlementList" class="mt-10px">
               <ElTableColumn
                 label="姓名"
                 :width="342"
@@ -81,7 +87,7 @@
               <ElTableColumn
                 label="安置方式"
                 :width="342"
-                prop="resettlementType"
+                prop="populationNatureText"
                 align="center"
                 header-align="center"
               />
@@ -95,21 +101,40 @@
               （一）统一规划的安置点选址在湖镇镇集镇，位于湖镇镇派出所对面。
             </div>
             <div class="agm-tit-2">
-              （二）经确认，乙方安置房选房人数 5 人，其中增计选房人数 0 人，增计依据为： 无 。
+              （二）经确认，乙方安置房选房人数
+              {{ form.immigrantSign && form.immigrantSign.agricultureResettlementNum }}
+              人，其中增计选房人数
+              {{ form.immigrantSign && form.immigrantSign.increasesMeterNum }} 人，增计依据为：
+              {{ form.immigrantSign && form.immigrantSign.increasesMeterRemark }}
+              。
             </div>
-            <div class="agm-tit-2"> （三）乙方选定 联排 房型安置房，具体如下： </div>
+            <div class="agm-tit-2">
+              （三）乙方选定
+              {{ houseTypeText() }} 房型安置房，具体如下：
+            </div>
 
             <div class="detail-box">
               <div>
                 <span class="agm-bold">联排房型：</span
-                ><span class="agm-txt">选定为 大 户型，建筑占地 125 平方米。</span>
+                ><span class="agm-txt"
+                  >选定为 {{ houseAreaTypeText() }}户型，建筑占地
+                  {{ form.immigrantScheme && form.immigrantScheme.demolitionArea }} 平方米。</span
+                >
               </div>
               <div>
                 <span class="agm-bold">公寓房型：</span>
                 <span class="agm-txt"
-                  >选定公寓房 0 套；合计设计建筑面积约 0 平方米；户型组合为75平方米左右户型 0
-                  套；95平方米左右户型 0 套；115 平方米左右户型 0 套；135平方米左右户型 0
-                  套；选定储藏室 0 间（储藏室间数不得超过选定公寓房套数）。</span
+                  >选定公寓房 {{ form.apartmentNum }} 套；合计设计建筑面积约
+                  {{ form.immigrantScheme && form.immigrantScheme.apartmentArea }}
+                  平方米；户型组合为75平方米左右户型
+                  {{ form.immigrantScheme && form.immigrantScheme.typeOneNum }} 套；95平方米左右户型
+                  {{ form.immigrantScheme && form.immigrantScheme.typeTwoNum }}
+                  套；115 平方米左右户型
+                  {{ form.immigrantScheme && form.immigrantScheme.typeThreeNum }}
+                  套；135平方米左右户型
+                  {{ form.immigrantScheme && form.immigrantScheme.typeFourNum }} 套；选定储藏室
+                  {{ form.immigrantScheme && form.immigrantScheme.storeroomNum }}
+                  间（储藏室间数不得超过选定公寓房套数）。</span
                 >
               </div>
             </div>
@@ -118,9 +143,10 @@
 
             <div class="detail-box">
               <div>
-                <span class="agm-bold">自建房型：</span
+                <span class="agm-bold">联排房型：</span
                 ><span class="agm-txt"
-                  >户型设计建筑面积约 260 平方米，结算单价为每平方米 1000 元，暂计 260000 元。</span
+                  >户型设计建筑面积约 {{ form.houseArea }} 平方米，结算单价为每平方米 1000 元，暂计
+                  {{ dataCalculateBase('houseArea', 1000, null) }}元。</span
                 >
               </div>
               <div>
@@ -129,7 +155,8 @@
                   >公寓房合计设计建筑面积约 0 平方米，与自建户型设计建筑面积对等部分为 0
                   平方米，每平方米基准价1000元，暂计 0 元；超出自建户型设计建筑面积为 0
                   平方米，每平方米基准价1980元，暂计 0 元；储藏室结算单价为每平方米1000元，每间暂计
-                  15000元。 共 0 间暂计 0 元。</span
+                  15000元。 共 {{ form.immigrantSign && form.immigrantSign.storeroomNum }} 间暂计
+                  {{ dataCalculateBase('storeroomNum', 15000, 'immigrantSign') }} 元。</span
                 >
               </div>
               <div class="agm-txt"
@@ -147,7 +174,8 @@
             <div class="detail-box">
               <div class="agm-txt"
                 >根据镜岭昌信价格事务有限公司出具的评估报告（附后），乙方房屋及
-                附属建（构）筑物、青苗等地上附着物等补偿费总计 90414 元。</div
+                附属建（构）筑物、青苗等地上附着物等补偿费总计
+                {{ form.immigrantSign && form.immigrantSign.feeSum }} 元。</div
               >
             </div>
 
@@ -156,21 +184,34 @@
               <div>
                 <span class="agm-bold">1、搬迁补助费：</span>
                 <span class="agm-txt">
-                  乙方有农村移民和农业随迁人口 5 人，补助标准为每人1200元，合计 6000 元。
+                  乙方有农村移民和农业随迁人口
+                  {{ form.immigrantSign && form.immigrantSign.trailingNum }}
+                  人，补助标准为每人1200元，合计
+                  {{ form.immigrantSign && form.immigrantSign.relocationFee }}
+                  元。
                 </span>
               </div>
               <div>
                 <span class="agm-bold">2、过渡期补助费：</span>
                 <span class="agm-txt">
-                  乙方有农村移民和农业随迁人口 4 人，补助标准为每人4320元，小计 17280
-                  元；非农随迁人口 1 人，补助标准为每人3000元，小计 3000 元；合计 20280 元。</span
+                  乙方有农村移民和农业随迁人口
+                  {{ form.immigrantSign && form.immigrantSign.trailingNum }}
+                  人，补助标准为每人4320元，小计
+                  {{ dataCalculateBase('trailingNum', 4320, 'immigrantSign') }}
+                  元；非农随迁人口
+                  {{ form.immigrantSign && form.immigrantSign.unTrailingNum }}
+                  人，补助标准为每人3000元，小计 3000 元；合计
+                  {{ dataCalculateBase('unTrailingNum', 3000, 'immigrantSign') }}
+                  元。</span
                 >
               </div>
               <div>
                 <span class="agm-bold">3、临时安置补助费：</span>
                 <span class="agm-txt">
-                  乙方选房人数（不含增计选房人数）为 5
-                  人，补助标准为每人每月450元，小计临时安置补助费每月 2250
+                  乙方选房人数（不含增计选房人数）为
+                  {{ form.immigrantSign && form.immigrantSign.roomSelectionNum }}
+                  人，补助标准为每人每月450元，小计临时安置补助费每月
+                  {{ dataCalculateBase('roomSelectionNum', 450, 'immigrantSign') }}
                   元。补助时间为腾空被拆迁房屋并办理移交手续的当月至安置房选房的当月。首次发放时间为乙方腾空被拆迁房屋并办理移交手续之日起十五日内，每半年发放一次。符合补助条件的，按附件一办理确认手续。</span
                 >
               </div>
@@ -185,12 +226,19 @@
 
               <div class="agm-bold"> 5、其他补助费 </div>
               <div class="agm-txt">
-                ① 自谋出路安置补助费：乙方有 0 人选定自谋出路安置方式，补助标准为每人15000元，小计 0
+                ① 自谋出路安置补助费：乙方有
+                {{ form.immigrantSign && form.immigrantSign.seekWayNum }}
+                人选定自谋出路安置方式，补助标准为每人15000元，小计
+                {{ dataCalculateBase('seekWayNum', 15000, 'immigrantSign') }}
                 元；
               </div>
               <div class="agm-txt">
-                ② 自谋职业安置补助费：乙方有 1 人选定自谋职业安置方式，补助标准为每人3000元，小计
-                3000 元；其他补助费合计 3000 元。
+                ② 自谋职业安置补助费：乙方有
+                {{ form.immigrantSign && form.immigrantSign.workNum }}
+                人选定自谋职业安置方式，补助标准为每人3000元，小计
+                {{ dataCalculateBase('workNum', 3000, 'immigrantSign') }} 元；其他补助费合计
+                {{ form.immigrantSign && form.immigrantSign.otherFeeSum }}
+                元。
               </div>
             </div>
 
@@ -200,8 +248,10 @@
               <div class="agm-txt"
                 >① 网格签约奖：根据 《
                 关于在镜岭水库库区设置移民网格和建立乡村干部联系移民网格的通知 》 （社委 〔 2022 〕
-                36 号）文件规定，乙方划分在 下潘 村第
-                <span class="common-ipt"></span>
+                36 号）文件规定，乙方划分在 {{ villageText }} 村第
+                <span class="common-ipt">{{
+                  form.immigrantSign && form.immigrantSign.gridName
+                }}</span>
                 网格。如乙方所在网格内所有签约对象在2022年12月10日17时前全部完成镜岭水库工程建设征地实物补偿、搬迁安置协议签订，按本协议签约之日乙方农村移民和随迁人口数量，每人奖励3000元。符合奖励条件的，按附件三办理确认手续。</div
               >
               <div class="agm-txt">
@@ -234,7 +284,8 @@
                 3000 元；临时安置补助费按本协议约定的条件、时间支付。
               </div>
               <div class="agm-txt">
-                3、乙方收款账户：户名 程宗月 ， 开户行 建设银行 ，账号 6214671470000130082 。
+                3、乙方收款账户：户名 {{ form.bankName }} ， 开户行 建设银行 ，账号
+                {{ form.bankAccount }} 。
               </div>
             </div>
 
@@ -272,7 +323,11 @@
             </div>
 
             <div class="agm-tit-1 floor-item" id="第十一条">第十一条</div>
-            <div class="agm-txt"> 其他约定：<span class="common-ipt"></span></div>
+            <div class="agm-txt">
+              其他约定：<span class="common-ipt">{{
+                form.immigrantSign && form.immigrantSign.remark
+              }}</span></div
+            >
 
             <div class="agm-tit-2 agm-mt-40">甲方：镜岭镇人民政府（盖章）</div>
 
@@ -321,9 +376,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, computed, reactive } from 'vue'
 import { ElTable, ElTableColumn, ElScrollbar } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import { getAgreementApi } from '@/api/putIntoEffect/putIntoEffectDataFill/agreement/service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getDistrictApi } from '@/api/putIntoEffect/agreeInfo/service'
+import { getSchemeBaseInfoApi } from '@/api/putIntoEffect/schemeBase/service'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 
 interface NavType {
   id: number
@@ -389,41 +450,63 @@ const navList = ref<NavType[]>([
   }
 ])
 
-const tableData = ref([
-  {
-    name: '李财',
-    card: '332621196607161178',
-    info: '农业随迁'
-  },
-  {
-    name: '顾金娥',
-    card: '33262119400831118X',
-    info: '非农随迁'
-  },
-  {
-    name: '程聪颖',
-    card: '331082199109031269',
-    info: '农业随迁'
-  }
-])
-
-const tableData2 = ref([
-  {
-    name: '章三',
-    card: '234222244589976',
-    resettlementType: '集中安置'
-  },
-  {
-    name: '里斯',
-    card: '987433274389923',
-    resettlementType: '分散安置'
-  }
-])
-
 const activeIndex = ref(0)
 const contentLocation = ref<any[]>([])
 const scrollRef = ref()
-
+interface PropsType {
+  doorNo: string
+}
+const props = defineProps<PropsType>()
+let form = ref<any>({})
+const getDetail = async () => {
+  const res = await getAgreementApi(props.doorNo)
+  form.value = res
+  console.log(res, 'ssssss')
+}
+const getDetailInfo = async () => {
+  const res = await getSchemeBaseInfoApi(props.doorNo)
+  if (res) {
+    const { demolitionHouseArea, demolitionHouseAmount, demolitionHouseOtherAmount } = res
+    form.value.demolitionHouseArea = demolitionHouseArea
+    form.value.demolitionHouseAmount = demolitionHouseAmount
+    form.value.demolitionHouseOtherAmount = demolitionHouseOtherAmount
+  }
+}
+getDetailInfo()
+getDetail()
+interface VillageType {
+  code: string
+  value: string | number
+}
+let village = reactive<VillageType[]>([])
+let villageText = ref<any>('')
+const dictAdministration = (name?: string) => {
+  getDistrictApi(name).then((res) => {
+    village = res.content
+  })
+  villageText.value = village.find(
+    (item) => item.code === form.value.immigrantSign?.villageCode
+  )?.code
+}
+dictAdministration()
+const dataCalculateBase = (formProps, baseData, type) => {
+  const tempForm = type ? form.value[type] : form
+  if (tempForm) {
+    const result = tempForm[formProps] * baseData
+    return result ? Number(result).toFixed(2) : 0
+  } else {
+    return ''
+  }
+}
+const houseTypeText = () => {
+  const tempHouseType = form.value.immigrantScheme?.houseType
+  return tempHouseType === 1 ? '联排' : tempHouseType === 2 ? '公寓' : '一次性货币补偿'
+}
+const houseAreaTypeText = () => {
+  const tempHouseAreaType = form.value.immigrantScheme?.houseAreaType
+  const item = dictObj.value[318].find((item) => item.value === tempHouseAreaType)
+  return item ? item.label + (isNaN(Number(item.label)) ? '' : '㎡') : ''
+}
 onMounted(() => {
   const floors = document.querySelectorAll('.floor-item')
   const arr: any[] = []
