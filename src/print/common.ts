@@ -537,10 +537,12 @@ export const getFushuwu = (landlord: LandlordType) => {
   ]
   const { immigrantAppendantList } = landlord
   if (immigrantAppendantList && immigrantAppendantList.length) {
-    immigrantAppendantList.forEach((item, index) => {
+    let dex = 0
+    immigrantAppendantList.forEach((item) => {
       if (item.number || item.remark) {
+        dex += 1
         body.push([
-          { text: index + 1, style: 'td' },
+          { text: dex, style: 'td' },
           { text: item.name || '', style: 'td' },
           { text: item.size || '', style: 'td' },
           { text: item.unit || '', style: 'td' },
