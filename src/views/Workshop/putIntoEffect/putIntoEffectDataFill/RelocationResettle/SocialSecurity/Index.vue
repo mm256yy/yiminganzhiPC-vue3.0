@@ -22,11 +22,7 @@
         </div>
         <div class="row">
           <div class="txt-indent-28">我户</div>
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.familyMember"
-            placeholder="请输入"
-          />
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.familyMember" readonly />
           （家庭成员姓名）选择社会保障安置方式，现已完成参保缴费。
         </div>
 
@@ -42,12 +38,6 @@
             class="input-txt w-200 ml-10 mr-10"
             v-model="form.doorNo"
             placeholder="请输入户号"
-          />
-          迁出地址：
-          <input
-            class="input-txt w-400 ml-10"
-            v-model="form.relocationAddress"
-            placeholder="请输入迁出地址"
           />
         </div>
 
@@ -187,7 +177,6 @@ const defaultForm = {
   uid: props.uid,
   householder: '', // 户主
   doorNo: props.doorNo, // 户号
-  relocationAddress: '', // 迁出地址
   town: '', // 政府名称
   familyMember: '' // 家庭成员姓名
 }

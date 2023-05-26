@@ -28,11 +28,7 @@
             placeholder="请输入自然村名称"
           />
           村
-          <input
-            class="input-txt w-400 ml-10 mr-10"
-            v-model="form.houseNames"
-            placeholder="请输入房屋名称(多幢)"
-          />
+          <input class="input-txt w-400 ml-10 mr-10" v-model="form.houseNames" readonly />
           已完成腾空
         </div>
         <div class="row">

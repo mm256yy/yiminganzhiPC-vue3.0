@@ -81,8 +81,15 @@
               align="center"
               header-align="center"
             >
-              <template #default="scope">
-                <ElInput placeholder="请输入" v-model="scope.row.relation" />
+              <template #default="{ row }">
+                <ElSelect clearable placeholder="请选择" v-model="row.relation">
+                  <ElOption
+                    v-for="item in dictObj[307]"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </ElSelect>
               </template>
             </ElTableColumn>
             <ElTableColumn label="处理方式" prop="handleWay" align="center" header-align="center">
@@ -132,17 +139,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
   ElInput,
+  ElSelect,
+  ElOption,
   ElSpace,
   ElTable,
   ElTableColumn,
   ElMessageBox,
   ElMessage
 } from 'element-plus'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
   getRelocationResettleApi,
@@ -159,6 +169,8 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })

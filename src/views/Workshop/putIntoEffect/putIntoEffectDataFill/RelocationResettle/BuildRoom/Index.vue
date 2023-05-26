@@ -94,13 +94,14 @@
               </template>
             </el-table-column>
             <el-table-column
+              width="180"
               prop="isCheck"
               label="是否通过验收"
               align="center"
               header-align="center"
             >
               <template #default="{ row }">
-                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.isCheck">
+                <ElSelect class="w-150" clearable placeholder="请选择" v-model="row.isCheck">
                   <ElOption
                     v-for="item in dictObj[365]"
                     :key="item.value"
