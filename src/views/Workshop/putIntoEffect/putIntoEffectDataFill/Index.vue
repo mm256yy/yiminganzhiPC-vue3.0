@@ -175,7 +175,7 @@
         v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
       <!-- 移民建卡 -->
-      <createCard :doorNo="doorNo" v-if="tabCurrentId == 3" />
+      <createCard :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 3" />
 
       <Agreement :doorNo="doorNo" v-if="tabCurrentId == 4" />
 

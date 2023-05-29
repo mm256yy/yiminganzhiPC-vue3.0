@@ -87,7 +87,7 @@
               <ElTableColumn
                 label="安置方式"
                 :width="342"
-                prop="populationNatureText"
+                prop="settingWayText"
                 align="center"
                 header-align="center"
               />

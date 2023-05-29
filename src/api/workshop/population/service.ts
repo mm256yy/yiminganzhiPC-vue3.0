@@ -11,8 +11,8 @@ export const getDemographicListApi = (
   return request.get({
     url: '/demographic',
     params: {
-      ...query,
-      status: globalData.currentSurveyStatus
+      status: globalData.currentSurveyStatus,
+      ...query
     }
   })
 }
