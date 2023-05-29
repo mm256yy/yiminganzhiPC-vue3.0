@@ -36,7 +36,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton type="primary" @click="onExport">数据导出</ElButton>
+          <!-- <ElButton type="primary" @click="onExport">数据导出</ElButton> -->
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增村集体</ElButton>
           <!-- <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton> -->
         </ElSpace>
@@ -235,9 +235,9 @@ const exportList = ref<exportListType[]>([
     value: 6
   }
 ])
-const onExport = () => {
-  exportDialog.value = true
-}
+// const onExport = () => {
+//   exportDialog.value = true
+// }
 
 const onExportDialogClose = () => {
   exportDialog.value = false
