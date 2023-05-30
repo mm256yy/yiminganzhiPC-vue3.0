@@ -9,14 +9,6 @@ import {
   getSelfemployedHouseDefinition,
   getSelfemployedInfoDefinition
 } from './templates'
-;(window.pdfMake as any).fonts = {
-  PingFang: {
-    normal: 'PingFang.ttf',
-    bold: 'PingFang.ttf',
-    italics: 'PingFang.ttf',
-    bolditalics: 'PingFang.ttf'
-  }
-}
 
 interface PDFItemType {
   name: string
