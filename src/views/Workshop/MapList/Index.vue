@@ -1,64 +1,6 @@
 <template>
   <div class="map-wrapper">
     <div id="container" class="map"></div>
-    <div class="info-wrapper" v-if="show && dataInfo.type === 'PeasantHousehold'">
-      <div class="name-wrapper">
-        <img class="icon" :src="dataInfo.iconPath" />
-        <div class="name">{{ dataInfo.name }}</div>
-        <img class="close" src="@/assets/imgs/icon_close.png" @click="close" />
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">户号：</div>
-        <div class="content door-no">{{ dataInfo.doorNo }}</div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">身份证号：</div>
-        <div class="content">{{ dataInfo.card }}</div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">家庭总人数：</div>
-        <div class="content">
-          <span class="num">{{ dataInfo.demographicNumber }}</span> 人
-        </div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">房屋总数：</div>
-        <div class="content">
-          <span class="num">{{ dataInfo.houseNumber }}</span> 幢
-        </div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">户籍所在地：</div>
-        <div class="content">{{ dataInfo.address }}</div>
-      </div>
-    </div>
-    <div class="info-wrapper village" v-if="show && dataInfo.type === 'Village'">
-      <div class="name-wrapper">
-        <img class="icon" :src="dataInfo.iconPath" />
-        <div class="name">{{ dataInfo.name }}</div>
-        <img class="close" src="@/assets/imgs/icon_close.png" @click="close" />
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">区县：</div>
-        <div class="content">{{ dataInfo.areaCodeText }}</div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">街道：</div>
-        <div class="content">{{ dataInfo.townCodeText }}</div>
-      </div>
-      <div class="row">
-        <div class="dot"></div>
-        <div class="label">行政村：</div>
-        <div class="content">{{ dataInfo.villageCodeText }}</div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -88,9 +30,9 @@ const initCoordinatesData = (obj: any) => {
 }
 
 const mapJson: any = appStore.currentMapJson ? JSON.parse(appStore.currentMapJson) : null
-console.log('mapJson:', mapJson)
+// console.log('mapJson:', mapJson)
 const points = mapJson ? initCoordinatesData(mapJson)[0] : []
-console.log('points:', points)
+// console.log('points:', points)
 const pointsLength = points.length
 
 interface LocationType {
@@ -112,7 +54,6 @@ const villageList = ref<any>([]) // 自然村列表
 const villageMarkersList = ref<any>([]) // 自然村标记点列表
 const markersList = ref<any>([]) // 标记点集合
 const dataInfo = ref<any>({}) // 单个标记点信息
-const show = ref<boolean>(false) // 是否显示标记点信息弹窗
 
 // 初始化地图
 const initMap = async () => {
@@ -277,8 +218,8 @@ const initMarker = async () => {
         context.marker.setOffset(offset)
 
         // 设置点击标记点事件
-        context.marker.on('click', function () {
-          handlerClickMarker(item.id)
+        context.marker.on('click', function (e: any) {
+          handlerClickMarker(item.id, e)
         })
       })
     }
@@ -361,7 +302,7 @@ const renderColor = (obj: any) => {
  * 点击标记点
  * @param{Object} e
  */
-const handlerClickMarker = (uid: any) => {
+const handlerClickMarker = (uid: any, e: any) => {
   let arr: any = [...householdList.value, ...villageList.value]
   if (arr && arr.length) {
     arr.map((item: any) => {
@@ -391,14 +332,76 @@ const handlerClickMarker = (uid: any) => {
         }
       }
     })
-    show.value = true
-  }
-}
 
-// 关闭信息框
-const close = () => {
-  show.value = false
-  dataInfo.value = {}
+    let content = ''
+    if (dataInfo.value.type === 'PeasantHousehold') {
+      content = `
+        <div class="info-wrapper">
+          <div class="name-wrapper">
+            <img class="icon" src="${dataInfo.value.iconPath}" />
+            <div class="name">${dataInfo.value.name || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">户号：</div>
+            <div class="content door-no">${dataInfo.value.doorNo || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">身份证号：</div>
+            <div class="content">${dataInfo.value.card || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">家庭总人数：</div>
+            <div class="content">
+              <span class="num">${dataInfo.value.demographicNumber}</span> 人
+            </div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">房屋总数：</div>
+            <div class="content">
+              <span class="num">${dataInfo.value.houseNumber}</span> 幢
+            </div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">户籍所在地：</div>
+            <div class="content">${dataInfo.value.address || ''}</div>
+          </div>
+        </div>
+      `
+    } else if (dataInfo.value.type === 'Village') {
+      content = `
+        <div class="info-wrapper village">
+          <div class="name-wrapper">
+            <img class="icon" src="${dataInfo.value.iconPath}" />
+            <div class="name">${dataInfo.value.name || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">区县：</div>
+            <div class="content">${dataInfo.value.areaCodeText || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">街道：</div>
+            <div class="content">${dataInfo.value.townCodeText || ''}</div>
+          </div>
+          <div class="row">
+            <div class="dot"></div>
+            <div class="label">行政村：</div>
+            <div class="content">${dataInfo.value.villageCodeText || ''}</div>
+          </div>
+        </div>
+      `
+    }
+
+    let infoWindow = new AMap.InfoWindow({ offset: new AMap.Pixel(0, -30) })
+    infoWindow.setContent(content)
+    infoWindow.open(map, e.target.getPosition())
+  }
 }
 
 onMounted(async () => {
@@ -450,10 +453,6 @@ onMounted(async () => {
 }
 
 .info-wrapper {
-  position: absolute;
-  top: 145px;
-  right: 101px;
-  z-index: 1;
   width: 344px;
   padding-bottom: 15px;
   background-color: rgba(255, 255, 255, 0.85);
@@ -468,10 +467,11 @@ onMounted(async () => {
 
 .info-wrapper .name-wrapper {
   display: flex;
-  padding: 10px 0 10px 14px;
+  width: 330px;
+  padding: 10px 0;
+  margin-left: 14px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
-  justify-content: space-between;
 }
 
 .info-wrapper .name-wrapper .icon {
@@ -481,23 +481,15 @@ onMounted(async () => {
 }
 
 .info-wrapper .name-wrapper .name {
-  width: calc(100% - 74px);
   margin-top: 3px;
   font-size: 16px;
   font-weight: bold;
   color: #171718;
 }
 
-.info-wrapper .name-wrapper .close {
-  width: 14px;
-  height: 14px;
-  margin: 8px 12px 0 0;
-  cursor: pointer;
-}
-
 .info-wrapper .row {
   display: flex;
-  padding: 0 24px;
+  padding: 0 14px;
   margin-top: 10px;
   box-sizing: border-box;
   align-items: center;
