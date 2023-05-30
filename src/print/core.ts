@@ -1,5 +1,3 @@
-// import '@/assets/js/pdfmake.min.js'
-// import '@/assets/js/vfs_fonts.js'
 import { LandlordType, PrintType, ProjectType } from '@/types/print'
 import { logo } from './config'
 import {
