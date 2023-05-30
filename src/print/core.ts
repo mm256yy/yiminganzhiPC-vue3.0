@@ -1,7 +1,5 @@
-// const pdfMake = require('@/assets/js/pdfmake.min.js')
-import '@/assets/js/pdfmake.min.js'
-// const pdfFonts = require('@/assets/js/vfs_fonts.js')
-import '@/assets/js/vfs_fonts.js'
+// import '@/assets/js/pdfmake.min.js'
+// import '@/assets/js/vfs_fonts.js'
 import { LandlordType, PrintType, ProjectType } from '@/types/print'
 import { logo } from './config'
 import {
@@ -13,20 +11,6 @@ import {
   getSelfemployedHouseDefinition,
   getSelfemployedInfoDefinition
 } from './templates'
-;(window.pdfMake as any).fonts = {
-  // Roboto: {
-  //   normal: 'Roboto-Regular.ttf',
-  //   bold: 'Roboto-Regular.ttf',
-  //   italics: 'Roboto-Regular.ttf',
-  //   bolditalics: 'Roboto-Regular.ttf'
-  // },
-  PingFang: {
-    normal: 'PingFang.ttf',
-    bold: 'PingFang.ttf',
-    italics: 'PingFang.ttf',
-    bolditalics: 'PingFang.ttf'
-  }
-}
 
 interface PDFItemType {
   name: string
@@ -39,6 +23,14 @@ class PrintCore {
   private option: any
 
   constructor() {
+    ;(window.pdfMake as any).fonts = {
+      PingFang: {
+        normal: 'PingFang.ttf',
+        bold: 'PingFang.ttf',
+        italics: 'PingFang.ttf',
+        bolditalics: 'PingFang.ttf'
+      }
+    }
     this.pdfMake = window.pdfMake
     this.baseConfig = {
       pageSize: 'A4',
