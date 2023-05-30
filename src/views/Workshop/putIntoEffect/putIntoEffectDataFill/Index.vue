@@ -60,14 +60,14 @@
       <scheme-base
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-if="reportTabCurrentId === 1 && tabCurrentId == 6"
+        v-if="reportTabCurrentId === 2 && tabCurrentId == 6"
       />
 
       <!-- 方案比选 -- 填写协议信息 -->
       <agree-info
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-if="reportTabCurrentId === 2 && tabCurrentId == 6"
+        v-if="reportTabCurrentId === 1 && tabCurrentId == 6"
       />
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house

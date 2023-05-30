@@ -25,9 +25,15 @@
               {{ getOperationName(row.operationType) }}
             </el-tag>
           </template>
+          <template #action="{ row }">
+            <ElButton type="primary" class="btn--txt" text @click="onShowDetail(row)"
+              >详情</ElButton
+            >
+          </template>
         </Table>
       </ContentWrap>
     </div>
+    <MsgDetail v-if="showDetail" :row="currentRow" :show="showDetail" @close="onCloseDetail" />
   </ContentWrap>
 </template>
 
@@ -44,6 +50,7 @@ import { FormSchema } from '@/types/form'
 import { OperationLogQueryType } from '@/api/audit/operation/types'
 import { listOperationLogApi } from '@/api/audit/operation'
 import { formatDateTime } from '@/utils'
+import MsgDetail from './components/MsgDetail.vue'
 
 const appStore = useAppStore()
 const operationList = ref<any[]>([
@@ -136,6 +143,14 @@ const searchSchema = reactive<FormSchema[]>([
         { label: '否', value: false }
       ]
     }
+  },
+  {
+    field: 'exceptionMessage',
+    component: 'Input',
+    formItemProps: {
+      style: { width: '200px', 'margin-right': '10px' }
+    },
+    componentProps: { placeholder: '异常信息' }
   }
 ])
 
@@ -150,7 +165,9 @@ const columns = reactive<TableColumn[]>([
   { field: 'ip', label: 'IP', width: '150px' },
   { field: 'className', label: '类名', width: '350px' },
   { field: 'requestMethod', label: '请求方法', width: '100px' },
-  { field: 'methodName', label: '方法名称', width: '180px' }
+  { field: 'methodName', label: '方法名称', width: '180px' },
+  { field: 'exceptionMessage', label: '异常信息', width: '180px' },
+  { field: 'action', label: '操作', width: '100px', align: 'center' }
 ])
 
 const { register, tableObject, methods } = useTable({
@@ -161,7 +178,9 @@ const { register, tableObject, methods } = useTable({
 })
 
 tableObject.params = {
-  projectId: null,
+  // projectId: null,
+  sort: ['id', 'desc'],
+  exceptionMessage: null,
   userName: null,
   name: null,
   ip: null,
@@ -171,6 +190,16 @@ tableObject.params = {
   requestMethod: null,
   operationType: null,
   success: null
+}
+
+const showDetail = ref(false)
+const currentRow = ref()
+const onShowDetail = (row) => {
+  currentRow.value = row
+  showDetail.value = true
+}
+const onCloseDetail = () => {
+  showDetail.value = false
 }
 
 const { getList } = methods
@@ -197,7 +226,8 @@ const getOperationName = (type: string) => {
 
 const searchOperationLog = (data: OperationLogQueryType) => {
   tableObject.params = data
-  tableObject.params.projectId = appStore.getCurrentProjectId
+  tableObject.params.sort = ['id', 'desc']
+  // tableObject.params.projectId = appStore.getCurrentProjectId
   getList()
 }
 
@@ -213,3 +243,10 @@ onMounted(() => {
   }
 })
 </script>
+
+<style lang="less" scoped>
+.btn--txt {
+  color: #409eff;
+  cursor: pointer;
+}
+</style>
