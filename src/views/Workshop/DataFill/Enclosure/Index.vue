@@ -13,6 +13,7 @@
       <ElSpace>
         <ElButton
           :icon="saveIcon"
+          :loading="loading"
           type="primary"
           class="!bg-[#30A952] !border-[#30A952]"
           @click="onSave"
@@ -51,6 +52,7 @@ const otherPic = ref<FileItemType[]>([])
 const id = ref<number>()
 const uid = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const loading = ref(false)
 
 const getList = () => {
   const params: any = {
@@ -73,6 +75,7 @@ const fileChange = (list: FileItemType[]) => {
 }
 
 const onSave = () => {
+  loading.value = true
   if (id.value) {
     updateEnclosureListApi({
       id: id.value,
@@ -80,20 +83,32 @@ const onSave = () => {
       householdId: +props.householdId,
       otherPic: JSON.stringify(otherPic.value),
       uid: uid.value
-    }).then(() => {
-      ElMessage.success('操作成功！')
-      getList()
     })
+      .then(() => {
+        ElMessage.success('操作成功！')
+        loading.value = false
+        getList()
+      })
+      .catch(() => {
+        ElMessage.error('操作失败！')
+        loading.value = false
+      })
   } else {
     addEnclosureListApi({
       doorNo: props.doorNo,
       householdId: +props.householdId,
       otherPic: JSON.stringify(otherPic.value),
       uid: uid.value
-    }).then(() => {
-      ElMessage.success('操作成功！')
-      getList()
     })
+      .then(() => {
+        ElMessage.success('操作成功！')
+        loading.value = false
+        getList()
+      })
+      .catch(() => {
+        ElMessage.error('操作失败！')
+        loading.value = false
+      })
   }
 }
 </script>

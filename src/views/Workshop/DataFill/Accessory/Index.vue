@@ -8,6 +8,7 @@
           <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
+            :loading="loading"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
@@ -84,11 +85,7 @@
             :width="180"
           >
             <template #default="scope">
-              <ElInputNumber
-                :min="0"
-                v-model="scope.row.number"
-                :precision="scope.row.number > 0 ? 2 : 0"
-              />
+              <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
             </template>
           </ElTableColumn>
           <!-- <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
@@ -263,6 +260,7 @@ const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 const recordShow = ref(false)
+const loading = ref(false)
 
 const recordClose = () => {
   recordShow.value = false
@@ -346,10 +344,16 @@ const genIndex = (index: number) => {
 
 const onSave = () => {
   let data: any = [...tableDataLeft.value, ...tableDataRight.value]
-
-  saveAccessoryListApi(data).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  loading.value = true
+  saveAccessoryListApi(data)
+    .then(() => {
+      ElMessage.success('操作成功！')
+      loading.value = false
+      getList()
+    })
+    .catch(() => {
+      ElMessage.error('操作失败！')
+      loading.value = false
+    })
 }
 </script>

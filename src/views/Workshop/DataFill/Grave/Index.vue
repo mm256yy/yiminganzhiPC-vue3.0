@@ -7,6 +7,7 @@
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
+            :loading="loading"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
@@ -167,6 +168,7 @@ const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const recordShow = ref(false)
 const villageList = ref<any[]>([])
+const loading = ref(false)
 
 const recordClose = () => {
   recordShow.value = false
@@ -273,10 +275,17 @@ const onDelRow = (row) => {
 }
 
 const onSave = () => {
-  saveGraveListApi(tableData.value).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  loading.value = true
+  saveGraveListApi(tableData.value)
+    .then(() => {
+      ElMessage.success('操作成功！')
+      loading.value = false
+      getList()
+    })
+    .catch(() => {
+      ElMessage.error('操作失败！')
+      loading.value = false
+    })
 }
 
 onMounted(() => {
