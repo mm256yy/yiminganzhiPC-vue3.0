@@ -151,7 +151,7 @@
             <div class="line-block no-border">
               <ElFormItem label="公寓超出联排设计建筑面积标准差价：">
                 {{ exceedArea }} x 房屋单价
-                <ElInput v-model="form.houseSinglePrice" class="!w-250px __txt" placeholder="请输入"
+                <ElInput v-model="form.housePrice" class="!w-250px __txt" placeholder="请输入"
                   ><template #append>元</template></ElInput
                 >
                 = 结算金额 {{ priceDifference }}（元）
@@ -644,7 +644,6 @@ const defaultValue = {
   demolitionHouseArea: null,
   demolitionHouseAmount: null,
   demolitionHouseOtherAmount: null,
-  houseSinglePrice: null,
   isSelect: false
 }
 let form = ref({ ...defaultValue })
@@ -655,7 +654,7 @@ const subsidyArea = computed(() => {
   return Number(tempSubsidyArea) > 0 ? tempSubsidyArea : 0
 })
 const priceDifference = computed(() => {
-  const tempDifference = Number(exceedArea.value || 0) * Number(form.value.houseSinglePrice || 0)
+  const tempDifference = Number(exceedArea.value || 0) * Number(form.value.housePrice || 0)
   return tempDifference.toFixed(2)
 })
 // 公寓房建筑面积合计与公寓房总价
@@ -763,11 +762,12 @@ const handleClickSave = (type) => {
       list.splice(4 + index, 0, insetTableGyNum, insetTableGyPrice)
     }
   })
-  listData.value.unshift({
+  const params = JSON.stringify({
     tableList: [...list],
     wid: listData.value.length + 1,
     isSelect: form.value.isSelect
   })
+  listData.value.unshift(JSON.parse(params))
   handleClickReset()
 }
 </script>
