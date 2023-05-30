@@ -10,7 +10,7 @@ export const getHouseListApi = (
 ): Promise<TableResponse<HouseDtoType>> => {
   return request.get({
     url: '/immigrant_house',
-    params: { ...query, status: globalData.currentSurveyStatus }
+    params: { status: globalData.currentSurveyStatus, ...query }
   })
 }
 

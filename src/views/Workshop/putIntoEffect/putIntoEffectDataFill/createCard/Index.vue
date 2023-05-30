@@ -144,6 +144,7 @@ import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -553,7 +554,8 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo
+  doorNo: props.doorNo,
+  status: props.baseInfo.status
 }
 
 getList()
