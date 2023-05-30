@@ -11,6 +11,14 @@ import {
   getSelfemployedHouseDefinition,
   getSelfemployedInfoDefinition
 } from './templates'
+;(window.pdfMake as any).fonts = {
+  PingFang: {
+    normal: 'PingFang.ttf',
+    bold: 'PingFang.ttf',
+    italics: 'PingFang.ttf',
+    bolditalics: 'PingFang.ttf'
+  }
+}
 
 interface PDFItemType {
   name: string
@@ -23,14 +31,6 @@ class PrintCore {
   private option: any
 
   constructor() {
-    ;(window.pdfMake as any).fonts = {
-      PingFang: {
-        normal: 'PingFang.ttf',
-        bold: 'PingFang.ttf',
-        italics: 'PingFang.ttf',
-        bolditalics: 'PingFang.ttf'
-      }
-    }
     this.pdfMake = window.pdfMake
     this.baseConfig = {
       pageSize: 'A4',
