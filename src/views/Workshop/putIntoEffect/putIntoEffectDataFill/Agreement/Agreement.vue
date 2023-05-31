@@ -139,7 +139,9 @@
               </div>
             </div>
 
-            <div class="agm-tit-2"> （四）应缴安置房房款暂计 26000 元，具体如下： </div>
+            <div class="agm-tit-2">
+              （四）应缴安置房房款暂计 {{ typeTotalPrice }} 元，具体如下：
+            </div>
 
             <div class="detail-box">
               <div>
@@ -152,11 +154,15 @@
               <div>
                 <span class="agm-bold">公寓房型：</span>
                 <span class="agm-txt"
-                  >公寓房合计设计建筑面积约 0 平方米，与自建户型设计建筑面积对等部分为 0
-                  平方米，每平方米基准价1000元，暂计 0 元；超出自建户型设计建筑面积为 0
-                  平方米，每平方米基准价1980元，暂计 0 元；储藏室结算单价为每平方米1000元，每间暂计
-                  15000元。 共 {{ form.immigrantSign && form.immigrantSign.storeroomNum }} 间暂计
-                  {{ dataCalculateBase('storeroomNum', 15000, 'immigrantSign') }} 元。</span
+                  >公寓房合计设计建筑面积约 {{ totalArea }} 平方米，与自建户型设计建筑面积对等部分为
+                  {{ form.immigrantScheme && form.immigrantScheme.houseAreaTypeText }}
+                  平方米，每平方米基准价1000元，暂计
+                  {{ gyTotalPrice }} 元；超出自建户型设计建筑面积为
+                  {{ exceedArea }} 平方米，每平方米基准价1980元，暂计
+                  {{ priceDifference }}
+                  元；储藏室结算单价为每平方米1000元，每间暂计 15000元。 共
+                  {{ form.immigrantSign && form.immigrantSign.storeroomNum }}
+                  间暂计 {{ dataCalculateBase('storeroomNum', 15000, 'immigrantSign') }} 元。</span
                 >
               </div>
               <div class="agm-txt"
@@ -457,11 +463,62 @@ interface PropsType {
   doorNo: string
 }
 const props = defineProps<PropsType>()
+let totalArea = ref(0)
+let gyTotalPrice = ref(0)
+let exceedArea = ref<string | number>(0)
+let priceDifference = ref<string | number>(0)
+let typeTotalPrice = ref<string | number>(0)
 let form = ref<any>({})
 const getDetail = async () => {
   const res = await getAgreementApi(props.doorNo)
   form.value = res
   console.log(res, 'ssssss')
+  calculateData()
+}
+
+const calculateData = () => {
+  const tempGyTotalPrice =
+    (form.value.immigrantScheme?.typeOneNum * 75 * form.value.immigrantScheme?.typeOnePrice
+      ? form.value.immigrantScheme?.typeOneNum * 75 * form.value.immigrantScheme?.typeOnePrice
+      : 0) +
+    (form.value.immigrantScheme?.typeTwoNum * 95 * form.value.immigrantScheme?.typeTwoPrice
+      ? form.value.immigrantScheme?.typeTwoNum * 95 * form.value.immigrantScheme?.typeTwoPrice
+      : 0) +
+    (form.value.immigrantScheme?.typeThreeNum * 115 * form.value.immigrantScheme?.typeThreePrice
+      ? form.value.immigrantScheme?.typeThreeNum * 115 * form.value.immigrantScheme?.typeThreePrice
+      : 0) +
+    (form.value.immigrantScheme?.typeFourNum * 135 * form.value.immigrantScheme?.typeFourPrice
+      ? form.value.immigrantScheme?.typeFourNum * 135 * form.value.immigrantScheme?.typeFourPrice
+      : 0)
+  gyTotalPrice.value = tempGyTotalPrice ? Number(tempGyTotalPrice.toFixed(2)) : 0
+  const tempTotalArea =
+    (form.value.immigrantScheme?.typeOneNum * 75
+      ? form.value.immigrantScheme?.typeOneNum * 75
+      : 0) +
+    (form.value.immigrantScheme?.typeTwoNum * 95
+      ? form.value.immigrantScheme?.typeTwoNum * 95
+      : 0) +
+    (form.value.immigrantScheme?.typeThreeNum * 115
+      ? form.value.immigrantScheme?.typeThreeNum * 115
+      : 0) +
+    (form.value.immigrantScheme?.typeFourNum * 135
+      ? form.value.immigrantScheme?.typeFourNum * 135
+      : 0)
+  totalArea.value = tempTotalArea ? Number(tempTotalArea.toFixed(2)) : 0
+  const tempExceedArea =
+    Number(totalArea.value || 0) - Number(form.value.immigrantScheme?.houseArea || 0)
+  exceedArea.value = tempExceedArea > 0 ? tempExceedArea.toFixed(2) : 0
+  priceDifference.value = (
+    Number(exceedArea.value || 0) * Number(form.value.immigrantScheme?.housePrice || 0)
+  ).toFixed(2)
+  if (form.value.immigrantScheme?.houseType == 2) {
+    typeTotalPrice.value = gyTotalPrice.value
+  } else {
+    typeTotalPrice.value = Number(
+      (form.value.immigrantScheme?.houseArea ? form.value.immigrantScheme?.houseArea : 0) *
+        (form.value.immigrantScheme?.housePrice ? form.value.immigrantScheme?.housePrice : 0)
+    ).toFixed(2)
+  }
 }
 const getDetailInfo = async () => {
   const res = await getSchemeBaseInfoApi(props.doorNo)

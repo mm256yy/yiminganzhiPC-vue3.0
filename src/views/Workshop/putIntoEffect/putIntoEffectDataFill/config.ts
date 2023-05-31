@@ -336,11 +336,11 @@ export const FlowTabs = [
   },
   {
     id: 3,
-    name: '移民建卡'
+    name: '协议签订'
   },
   {
     id: 4,
-    name: '协议签订'
+    name: '移民建卡'
   },
   {
     id: 5,
