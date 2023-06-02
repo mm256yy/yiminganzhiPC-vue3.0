@@ -177,7 +177,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
           const houseImgs = JSON.parse(item.housePic)
           if (houseImgs && houseImgs.length) {
             houseImgs.forEach((item) => {
-              if (/\.(jpg|jpeg|png|JPG|PNG)/.test(item.url)) {
+              if (/\.(jpg|jpeg|png|JPEG|JPG|PNG)/.test(item.url)) {
                 images.push(
                   // 处理图片链接
                   item.url.replace(
