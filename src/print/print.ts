@@ -167,6 +167,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
       landlord.immigrantHouseList.forEach((item) => {
         item.houseTypeText = formatDict(item.houseType, 266)
         item.usageTypeText = formatDict(item.usageType, 265)
+        item.propertyTypeText = formatDict(item.propertyType, 284)
         item.constructionTypeText = formatDict(item.constructionType, 252)
         item.completedTimeText = item.completedTime
           ? dayjs(item.completedTime).format('YYYY-MM')
