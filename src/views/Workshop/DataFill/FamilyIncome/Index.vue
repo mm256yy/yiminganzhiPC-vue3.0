@@ -13,9 +13,9 @@
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
-            >修改日志</ElButton
-          >
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">

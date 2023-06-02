@@ -8,8 +8,9 @@
           <ElButton
             @click="recordClick"
             v-if="surveyStatus === SurveyStatusEnum.Review && type === 'Landlord'"
-            >修改日志</ElButton
           >
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <RecordListDialog
