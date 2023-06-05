@@ -151,6 +151,14 @@ const searchSchema = reactive<FormSchema[]>([
       style: { width: '200px', 'margin-right': '10px' }
     },
     componentProps: { placeholder: '异常信息' }
+  },
+  {
+    field: 'param',
+    component: 'Input',
+    formItemProps: {
+      style: { width: '200px', 'margin-right': '10px' }
+    },
+    componentProps: { placeholder: '字段' }
   }
 ])
 
@@ -181,6 +189,7 @@ tableObject.params = {
   // projectId: null,
   sort: ['id', 'desc'],
   exceptionMessage: null,
+  param: null,
   userName: null,
   name: null,
   ip: null,
