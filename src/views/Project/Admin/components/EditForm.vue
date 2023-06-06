@@ -269,12 +269,13 @@ const doSave = async () => {
   const project = (await methods.getFormData()) || {}
   project.townCode = project.townCode.join(',')
   project.mapPic = JSON.stringify(mapPic.value)
-  project.mapJson = convertCoordinates(JSON.parse(mapJson.value))
+  project.mapJson = mapJson.value ? convertCoordinates(JSON.parse(mapJson.value)) : ''
   if (currentRow.value && currentRow.value.id) {
     project.id = currentRow.value.id
   }
   saveProjectApi(project as ProjectDtoType)
     .then(() => {
+      loading.value = false
       ElMessage.success('保存项目成功')
       onClose()
     })
