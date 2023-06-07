@@ -89,7 +89,6 @@ const emit = defineEmits(['change'])
 
 watch(
   () => props.fileList,
-  // () => {}
   (val) => {
     fileListData.value = val
   },
@@ -203,6 +202,8 @@ defineExpose({ fileListData })
   }
 
   .img-box {
+    display: flex;
+    align-items: center;
     width: 70px;
     height: 70px;
     margin-right: 10px;
@@ -215,6 +216,10 @@ defineExpose({ fileListData })
       display: block;
       width: 100%;
     }
+  }
+
+  .flex-1 {
+    cursor: pointer;
   }
 
   .upload-delete {
