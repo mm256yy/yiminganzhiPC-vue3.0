@@ -27,7 +27,7 @@
                 v-model="file.name"
                 clearable
                 placeholder="修改附件名称"
-                @blur="file.edit = false"
+                @blur=";(file.edit = false), onChangeName(file)"
               />
               <div v-else class="flex items-center justify-between">
                 <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
@@ -70,6 +70,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 interface FileItemType {
   name: string
   url: string
+  uid?: any
 }
 
 interface PropsType {
@@ -94,6 +95,14 @@ watch(
   },
   { immediate: true, deep: true }
 )
+
+const onChangeName = (file) => {
+  fileListData.value.forEach((item) => {
+    if (!item?.uid) {
+      item.name = file.name
+    }
+  })
+}
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -156,6 +165,7 @@ const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
+defineExpose({ fileListData })
 </script>
 
 <style lang="less">
