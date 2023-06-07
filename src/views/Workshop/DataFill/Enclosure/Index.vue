@@ -23,7 +23,7 @@
       </ElSpace>
     </div>
 
-    <UploadItem :fileList="otherPic" ref="updateImg" title="其他附件上传" @change="fileChange" />
+    <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
   </div>
 </template>
 
@@ -51,7 +51,6 @@ const props = defineProps<PropsType>()
 const otherPic = ref<FileItemType[]>([])
 const id = ref<number>()
 const uid = ref<string>('')
-let updateImg = ref<any>(null)
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const loading = ref(false)
 
@@ -76,7 +75,6 @@ const fileChange = (list: FileItemType[]) => {
 }
 
 const onSave = () => {
-  otherPic.value = updateImg.value.fileListData
   loading.value = true
   if (id.value) {
     updateEnclosureListApi({
