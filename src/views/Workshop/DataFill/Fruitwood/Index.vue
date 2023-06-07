@@ -8,6 +8,7 @@
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
+            :loading="loading"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
@@ -183,6 +184,7 @@ const tableData = ref<any[]>([])
 
 const dictStore = useDictStoreWithOut()
 const recordShow = ref(false)
+const loading = ref(false)
 
 const recordClose = () => {
   recordShow.value = false
@@ -261,11 +263,17 @@ const onSave = () => {
         return item
       }
     })
-
-    saveFruitwoodListApi(tableData.value).then(() => {
-      ElMessage.success('操作成功！')
-      getList()
-    })
+    loading.value = true
+    saveFruitwoodListApi(tableData.value)
+      .then(() => {
+        ElMessage.success('操作成功！')
+        loading.value = false
+        getList()
+      })
+      .catch(() => {
+        ElMessage.error('操作失败！')
+        loading.value = false
+      })
   }
 }
 </script>

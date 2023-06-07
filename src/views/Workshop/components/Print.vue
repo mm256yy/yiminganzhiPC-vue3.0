@@ -350,6 +350,10 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
 }
 
 const onDownLoad = async () => {
+  if (!window.pdfMake || !window.pdfMake.fonts) {
+    ElMessage.info('正在加载字体文件，请稍后')
+    return
+  }
   downloadLoading.value = true
   actionType.value = 'download'
   const res = await generatorPdf({
@@ -371,6 +375,10 @@ const onDownLoad = async () => {
 }
 
 const onPrint = async () => {
+  if (!window.pdfMake || !window.pdfMake.fonts) {
+    ElMessage.info('正在加载字体文件，请稍后')
+    return
+  }
   printLoading.value = true
   actionType.value = 'batchPrint'
   const res = await generatorPdf({
@@ -396,6 +404,10 @@ const onPrint = async () => {
 }
 
 const onPreview = async (item) => {
+  if (!window.pdfMake || !window.pdfMake.fonts) {
+    ElMessage.info('正在加载字体文件，请稍后')
+    return
+  }
   actionType.value = 'preview'
   const res = await generatorPdf({
     returndataType: 'blob',

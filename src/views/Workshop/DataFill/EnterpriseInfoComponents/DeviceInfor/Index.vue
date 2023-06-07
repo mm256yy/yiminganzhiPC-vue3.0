@@ -1,5 +1,5 @@
-<!-- 果木 -->
 <template>
+  <!-- 设施设备信息 -->
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
@@ -11,8 +11,9 @@
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
+            保存
+          </ElButton>
         </ElSpace>
       </div>
       <ElTable :data="tableData" style="width: 100%">

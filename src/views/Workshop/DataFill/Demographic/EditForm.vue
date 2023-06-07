@@ -395,7 +395,7 @@
 
     <template #footer v-if="actionType !== 'view'">
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
+      <ElButton type="primary" :loading="loading" @click="onSubmit(formRef)">确认</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -486,6 +486,7 @@ const householdPic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
+const loading = ref(false)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -579,11 +580,23 @@ const submit = async (data: DemographicDtoType) => {
       ...data,
       doorNo: props.doorNo
     })
+      .then(() => {
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   } else {
     await updateDemographicApi({
       ...data,
       doorNo: props.doorNo
     })
+      .then(() => {
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   }
   ElMessage.success('操作成功！')
   onClose(true)
@@ -602,6 +615,7 @@ const onSubmit = debounce((formEl) => {
         householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)
       }
+      loading.value = true
       submit(data)
     } else {
       return false

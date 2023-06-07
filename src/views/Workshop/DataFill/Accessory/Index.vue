@@ -8,16 +8,19 @@
           <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
+            :loading="loading"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
-            >保存</ElButton
           >
+            保存
+          </ElButton>
           <ElButton
             @click="recordClick"
             v-if="props.surveyStatus === SurveyStatusEnum.Review && isUpdateShow === 'Landlord'"
-            >修改日志</ElButton
           >
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <div style="display: flex">
@@ -82,11 +85,7 @@
             :width="180"
           >
             <template #default="scope">
-              <ElInputNumber
-                :min="0"
-                v-model="scope.row.number"
-                :precision="scope.row.number > 0 ? 2 : 0"
-              />
+              <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
             </template>
           </ElTableColumn>
           <!-- <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
@@ -117,7 +116,8 @@
         <ElTable :data="tableDataRight" style="width: 50%">
           <ElTableColumn
             label="序号"
-            prop="surveyId"
+            type="index"
+            :index="genIndex"
             align="center"
             header-align="center"
             :width="60"
@@ -260,6 +260,7 @@ const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 const recordShow = ref(false)
+const loading = ref(false)
 
 const recordClose = () => {
   recordShow.value = false
@@ -329,16 +330,30 @@ const getList = async () => {
 
 getList()
 
+/**
+ * 生成右侧表格序号
+ * @param index 右侧列表序号
+ */
+const genIndex = (index: number) => {
+  return index + tableDataLeft.value.length + 1
+}
+
 // const onAddRow = () => {
 //   tableData.value.push(defaultRow)
 // }
 
 const onSave = () => {
   let data: any = [...tableDataLeft.value, ...tableDataRight.value]
-
-  saveAccessoryListApi(data).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  loading.value = true
+  saveAccessoryListApi(data)
+    .then(() => {
+      ElMessage.success('操作成功！')
+      loading.value = false
+      getList()
+    })
+    .catch(() => {
+      ElMessage.error('操作失败！')
+      loading.value = false
+    })
 }
 </script>

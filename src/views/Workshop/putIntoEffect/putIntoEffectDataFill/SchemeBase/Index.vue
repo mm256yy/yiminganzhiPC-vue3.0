@@ -625,7 +625,7 @@ const selectSchemebase = (type: number, row: any) => {
 }
 const defaultValue = {
   peopleNum: null,
-  houseAreaType: null,
+  houseAreaType: '',
   houseArea: null,
   houseType: 1,
   typeOneNum: null,

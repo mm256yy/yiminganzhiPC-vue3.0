@@ -446,7 +446,7 @@
 
     <template #footer v-if="actionType !== 'view'">
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
+      <ElButton type="primary" :loading="loading" @click="onSubmit(formRef)">确认</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -555,6 +555,7 @@ const homePic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<any>()
 const dialogVisible = ref<boolean>()
+const loading = ref(false)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -642,11 +643,6 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      // if (!position.latitude || !position.longitude) {
-      //   ElMessage.error('请选择位置')
-      //   return
-      // }
-
       const data: any = {
         ...form.value,
         ...position,
@@ -656,7 +652,7 @@ const onSubmit = debounce((formEl) => {
         homePic: JSON.stringify(homePic.value || []),
         otherPic: JSON.stringify(otherPic.value || [])
       }
-
+      loading.value = true
       submit(data)
     } else {
       return false
@@ -666,8 +662,6 @@ const onSubmit = debounce((formEl) => {
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
-  console.log(fileList, 'fileListfileList')
-
   let list: FileItemType[] = []
   if (fileList && fileList.length) {
     list = fileList
@@ -751,12 +745,24 @@ const submit = async (data: HouseDtoType) => {
       doorNo: props.doorNo,
       householdId: +props.householdId
     })
+      .then(() => {
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   } else {
     await updateHouseApi({
       ...data,
       doorNo: props.doorNo,
       householdId: +props.householdId
     })
+      .then(() => {
+        loading.value = false
+      })
+      .catch(() => {
+        loading.value = false
+      })
   }
   ElMessage.success('操作成功！')
   onClose(true)

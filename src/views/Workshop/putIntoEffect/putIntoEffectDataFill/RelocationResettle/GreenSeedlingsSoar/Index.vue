@@ -31,35 +31,13 @@
         </div>
         <div class="row">
           <div class="txt-indent-28 mr-10">总计</div>
-          <input
-            class="input-txt w-100 ml-10 mr-10"
-            v-model="form.landArea"
-            placeholder="请输入"
-          />亩，
+          <input class="input-txt w-100 ml-10 mr-10" v-model="form.landArea" readonly />亩，
           <div class="ml-10">其中耕地</div>
-          <input
-            class="input-txt w-100 ml-10 mr-10"
-            v-model="form.arableLandArea"
-            placeholder="请输入"
-          />亩，
-          <div class="ml-10">园地</div>
-          <input
-            class="input-txt w-100 ml-10 mr-10"
-            v-model="form.woodLandArea"
-            placeholder="请输入"
-          />亩，
-          <div class="ml-10">林地</div>
-          <input
-            class="input-txt w-100 ml-10 mr-10"
-            v-model="form.woodlandArea"
-            placeholder="请输入"
-          />亩，
+          <input class="input-txt w-100 ml-10 mr-10" v-model="form.arableLandArea" readonly />亩，
+          <div class="ml-10">园、林地</div>
+          <input class="input-txt w-100 ml-10 mr-10" v-model="form.woodLandArea" readonly />亩，
           <div class="ml-10">未利用地</div>
-          <input
-            class="input-txt w-100 ml-10 mr-10"
-            v-model="form.uselessArea"
-            placeholder="请输入"
-          />亩，
+          <input class="input-txt w-100 ml-10 mr-10" v-model="form.uselessArea" readonly />亩，
         </div>
         <div class="row">
           <div class="txt-indent-28 mr-10">现将</div>
@@ -141,8 +119,7 @@ const defaultForm = {
   greenLandName: '', // 地块名称
   landArea: '', // 总计（亩）
   arableLandArea: '', // 耕地（亩）
-  woodLandArea: '', // 园地（亩）
-  woodlandArea: '', // 林地（亩）
+  woodLandArea: '', // 园、林地（亩）
   uselessArea: '', // 未利用地（亩）
   greenTransferType: '', // 腾空移交项目
   householder: '', // 户主姓名
@@ -168,7 +145,11 @@ const initData = () => {
 
 // 保存
 const onSave = () => {
-  saveRelocationResettleApi(form.value).then(() => {
+  let params = {
+    ...form.value,
+    type: RelocationResettleTypes.GreenSoar
+  }
+  saveRelocationResettleApi(params).then(() => {
     ElMessage.success('操作成功！')
     initData()
   })

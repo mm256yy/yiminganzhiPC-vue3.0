@@ -167,6 +167,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
       landlord.immigrantHouseList.forEach((item) => {
         item.houseTypeText = formatDict(item.houseType, 266)
         item.usageTypeText = formatDict(item.usageType, 265)
+        item.propertyTypeText = formatDict(item.propertyType, 284)
         item.constructionTypeText = formatDict(item.constructionType, 252)
         item.completedTimeText = item.completedTime
           ? dayjs(item.completedTime).format('YYYY-MM')
@@ -177,7 +178,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
           const houseImgs = JSON.parse(item.housePic)
           if (houseImgs && houseImgs.length) {
             houseImgs.forEach((item) => {
-              if (/\.(jpg|jpeg|png|JPG|PNG)/.test(item.url)) {
+              if (/\.(jpg|jpeg|png|JPEG|JPG|PNG)/.test(item.url)) {
                 images.push(
                   // 处理图片链接
                   item.url.replace(

@@ -153,5 +153,36 @@
       </div>
     </div>
     <script type="module" src="/src/main.ts"></script>
+    <script type="text/javascript" src="/js/pdfmake.min.js" async="async"></script>
+    <script type="text/javascript" src="/js/vfs_fonts.js" async="async"></script>
+    <script type="text/javascript">
+      const onloadHandle = window.onload
+      if (onloadHandle) {
+        onloadHandle()
+        window.onload = () => {
+          console.log('load 1')
+          window.pdfMake.fonts = {
+            PingFang: {
+              normal: 'PingFang.ttf',
+              bold: 'PingFang.ttf',
+              italics: 'PingFang.ttf',
+              bolditalics: 'PingFang.ttf'
+            }
+          }
+        }
+      } else {
+        window.onload = () => {
+          console.log('load 2')
+          window.pdfMake.fonts = {
+            PingFang: {
+              normal: 'PingFang.ttf',
+              bold: 'PingFang.ttf',
+              italics: 'PingFang.ttf',
+              bolditalics: 'PingFang.ttf'
+            }
+          }
+        }
+      }
+    </script>
   </body>
 </html>

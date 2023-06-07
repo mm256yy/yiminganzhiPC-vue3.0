@@ -22,41 +22,17 @@
         </div>
         <div class="row">
           <div class="txt-indent-28">你户</div>
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.familyMember"
-            placeholder="请输入"
-          />
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.familyMember" readonly />
           （家庭成员姓名）选择有土安置方式，分得的生产用地总计
-          <input class="input-txt w-200 ml-10 mr-10" v-model="form.landArea" placeholder="请输入" />
-          亩，
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.landArea" readonly />亩，
         </div>
         <div class="row">
           <div class="txt-indent-28">其中耕地</div>
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.arableLandArea"
-            placeholder="请输入"
-          />
-          亩，园地
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.woodLandArea"
-            placeholder="请输入"
-          />
-          亩，林地
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.woodLandArea"
-            placeholder="请输入"
-          />
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.arableLandArea" readonly />
+          亩，园、林地
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.woodLandArea" readonly />
           亩，未利用地
-          <input
-            class="input-txt w-200 ml-10 mr-10"
-            v-model="form.uselessArea"
-            placeholder="请输入"
-          />
-          亩。
+          <input class="input-txt w-200 ml-10 mr-10" v-model="form.uselessArea" readonly />亩。
         </div>
 
         <div class="row">
@@ -109,12 +85,12 @@
             />
             <el-table-column prop="landName" label="地名" width="180" header-align="center">
               <template #default="{ row }">
-                <ElInput v-model="row.landNameme" :placeholder="'请输入地名'" />
+                <ElInput v-model="row.landName" :placeholder="'请输入地名'" />
               </template>
             </el-table-column>
             <el-table-column prop="landArea" label="面积" width="180" header-align="center">
               <template #default="{ row }">
-                <ElInput v-model="row.landArea" :placeholder="'请输入'" />
+                <ElInput v-model="row.landArea" placeholder="请输入" />
               </template>
             </el-table-column>
             <el-table-column prop="landType" label="地类" width="230" header-align="center">

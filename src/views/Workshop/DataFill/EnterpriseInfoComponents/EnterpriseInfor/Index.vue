@@ -5,12 +5,14 @@
 
       <div class="emptyBox" v-if="emptyShow">
         <img src="@/assets/imgs/empty.png" alt="" width="400" />
-        <span
-          >当前企业未进行数据填报，请<span
+        <span>
+          当前企业未进行数据填报，请
+          <span
             style="color: rgba(62, 115, 236, 1); cursor: pointer; border-bottom: 1px solid"
             @click="onAddRow"
-            >点击填报</span
           >
+            点击填报
+          </span>
         </span>
       </div>
     </div>

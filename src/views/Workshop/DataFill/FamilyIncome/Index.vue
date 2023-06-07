@@ -6,15 +6,16 @@
         <ElSpace>
           <ElButton
             :icon="saveIcon"
+            :loading="loading"
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onSave"
           >
             保存
           </ElButton>
-          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review"
-            >修改日志</ElButton
-          >
+          <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
+            修改日志
+          </ElButton>
         </ElSpace>
       </div>
       <ElTable border :data="tableData" :span-method="spanMethod" style="width: 100%">
@@ -133,6 +134,7 @@ const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const cateTypes = ref<string[]>([])
 const recordShow = ref(false)
+const loading = ref(false)
 
 const recordClose = () => {
   recordShow.value = false
@@ -269,10 +271,17 @@ const total = computed(() => {
 
 const onSave = () => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  saveFamilyIncomeListApi(realTableData).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-  })
+  loading.value = true
+  saveFamilyIncomeListApi(realTableData)
+    .then(() => {
+      ElMessage.success('操作成功！')
+      loading.value = false
+      getList()
+    })
+    .catch(() => {
+      ElMessage.error('操作失败！')
+      loading.value = false
+    })
 }
 </script>
 

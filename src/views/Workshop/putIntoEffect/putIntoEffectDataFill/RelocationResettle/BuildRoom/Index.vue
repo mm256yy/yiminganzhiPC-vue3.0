@@ -94,13 +94,14 @@
               </template>
             </el-table-column>
             <el-table-column
+              width="180"
               prop="isCheck"
               label="是否通过验收"
               align="center"
               header-align="center"
             >
               <template #default="{ row }">
-                <ElSelect class="w-200" clearable placeholder="请选择" v-model="row.isCheck">
+                <ElSelect class="w-150" clearable placeholder="请选择" v-model="row.isCheck">
                   <ElOption
                     v-for="item in dictObj[365]"
                     :key="item.value"
@@ -203,7 +204,7 @@ const defaultRow = {
 
 const form = ref<any>(defaultForm)
 
-// 获取列表数据
+// 初始化获取数据
 const initData = () => {
   const params: any = {
     doorNo: props.doorNo,
@@ -211,7 +212,6 @@ const initData = () => {
     size: 1000
   }
   getRelocationResettleApi(params).then((res: any) => {
-    console.log('res:', res)
     if (res && res.doorNo) {
       form.value = res
       tableData.value = res.rrHouseBuildCheckList

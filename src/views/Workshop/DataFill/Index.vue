@@ -65,6 +65,7 @@
         @refresh="getLandlordInfo"
         @update-info="getLandlordInfo"
       />
+
       <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
@@ -73,6 +74,7 @@
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
+
       <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
@@ -80,20 +82,24 @@
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
-      <!-- 0星果木 -->
+
+      <!-- 零星(林)果木信息 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 家庭收入情况信息 -->
       <FamilyIncome
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
         :surveyStatus="surveyStatus"
       />
-      <!-- 安置 -->
+
+      <!-- 安置意愿调查信息 -->
       <Resettlement
         :doorNo="doorNo"
         :baseInfo="baseInfo"
@@ -101,7 +107,8 @@
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
         :surveyStatus="surveyStatus"
       />
-      <!-- 坟墓 -->
+
+      <!-- 坟墓调查信息 -->
       <Grave
         :name="name"
         :doorNo="doorNo"
@@ -109,6 +116,7 @@
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
+
       <!-- 附件上传 -->
       <Enclosure
         :doorNo="doorNo"
@@ -119,30 +127,39 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'Enterprise'">
+      <!-- 企业基本情况 -->
       <EnterpriseInfor
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
         :householdId="householdId"
       />
+
+      <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 零星(林)果木信息 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 设施设备信息 -->
       <DeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
@@ -150,12 +167,15 @@
         :surveyStatus="surveyStatus"
       />
 
+      <!-- 附件上传 -->
       <BusinessStatus
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 附件上传 -->
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
@@ -165,36 +185,47 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'IndividualB'">
+      <!-- 个体工商户基本情况 -->
       <IndividualBInfor
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
         :householdId="householdId"
       />
+
+      <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 零星(林)果木信息 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 设施设备信息 -->
       <DeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 附件上传 -->
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
@@ -204,6 +235,7 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'villageInfoC'">
+      <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
         :householdId="householdId"
@@ -211,19 +243,23 @@
         :surveyStatus="surveyStatus"
       />
 
+      <!-- 零星(林)果木信息 -->
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
-      <!-- 附属物 -->
+
+      <!-- 附属物信息 -->
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
+
+      <!-- 农村小型专项及农副业设施信息 -->
       <VillageDeviceInfor
         :doorNo="doorNo"
         :householdId="householdId"
@@ -231,16 +267,19 @@
         :surveyStatus="surveyStatus"
       />
 
-      <Enclosure
-        :doorNo="doorNo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[5]"
-        :surveyStatus="surveyStatus"
-      />
+      <!-- 坟墓调查信息 -->
       <VillageGrave
         :doorNo="doorNo"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :surveyStatus="surveyStatus"
+      />
+
+      <!-- 附件上传 -->
+      <Enclosure
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[5]"
         :surveyStatus="surveyStatus"
       />
     </div>
@@ -326,21 +365,21 @@ import {
 import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 
-import Demographic from './Demographic/Index.vue'
-import House from './House/Index.vue'
-import Accessory from './Accessory/Index.vue'
-import Fruitwood from './Fruitwood/Index.vue'
-import Grave from './Grave/Index.vue'
-import Enclosure from './Enclosure/Index.vue'
-import FamilyIncome from './FamilyIncome/Index.vue'
-import VillageGrave from './VillageComponents/Grave/Index.vue'
-import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue'
-import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue'
-import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue'
+import Demographic from './Demographic/Index.vue' // 人口信息
+import House from './House/Index.vue' // 房屋信息
+import Accessory from './Accessory/Index.vue' // 附属物信息
+import Fruitwood from './Fruitwood/Index.vue' // 零星(林)果木信息
+import Grave from './Grave/Index.vue' // 居民户 -- 坟墓信息
+import Enclosure from './Enclosure/Index.vue' // 附件上传
+import FamilyIncome from './FamilyIncome/Index.vue' // 家庭收入
+import VillageGrave from './VillageComponents/Grave/Index.vue' // 村集体 -- 坟墓信息
+import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue' // 企业信息 -- 经营现状
+import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue' // 企业基本情况
+import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue' // 设施设备信息
 
-import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue'
+import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue' // 个体工商户基本情况
 // import villageInfoCInfor from './VillageComponents/villageInfoCInfor/Index.vue'
-import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue'
+import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue' // 农村小型专项及农副业设施信息
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
