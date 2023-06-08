@@ -23,7 +23,7 @@ export const getDemographicListApi = (
 export const addDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
   return request.post({
     url: '/demographic/create',
-    data: { ...data, status: globalData.currentSurveyStatus }
+    data: { status: globalData.currentSurveyStatus, ...data }
   })
 }
 
@@ -33,7 +33,7 @@ export const addDemographicApi = (data: DemographicDtoType): Promise<Demographic
 export const updateDemographicApi = (data: DemographicDtoType): Promise<DemographicDtoType> => {
   return request.post({
     url: '/demographic/update',
-    data: { ...data, status: globalData.currentSurveyStatus }
+    data: { status: globalData.currentSurveyStatus, ...data }
   })
 }
 
