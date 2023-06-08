@@ -264,9 +264,11 @@ const getSubtotal = (type: string) => {
 // 总计
 const total = computed(() => {
   const realTableData = tableData.value.filter((item) => !item.type.includes('total'))
-  return realTableData.reduce((pre, current) => {
-    return (pre ? pre : 0) + (current.amount ? parseFloat(current.amount) : 0)
-  }, 0)
+  return realTableData
+    .reduce((pre, current) => {
+      return (pre ? pre : 0) + (current.amount ? parseFloat(current.amount) : 0)
+    }, 0)
+    .toFixed(2)
 })
 
 const onSave = () => {
