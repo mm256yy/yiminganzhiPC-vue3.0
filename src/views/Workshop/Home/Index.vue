@@ -542,6 +542,8 @@
 import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 import { useRouter } from 'vue-router'
+import { usePermissionStore } from '@/store/modules/permission'
+
 // computed
 import { ref, onMounted } from 'vue'
 import {
@@ -937,17 +939,41 @@ const routerJump = (path: string) => {
   push(path)
 }
 
+let metype = ref('')
+
 // 统计数据页面跳转
 const toLink = (type: string) => {
+  const permissionStore = usePermissionStore()
+  permissionStore.getRouters?.map((item) => {
+    if (item.path === '/WorkshopCheck' || item.path === '/Workshop') {
+      metype.value = item.path
+    }
+  })
   if (type === 'PeasantHousehold') {
-    routerJump('/Workshop/Landlord')
+    if (metype.value === '/Workshop') {
+      routerJump('/Workshop/Landlord')
+    } else {
+      routerJump('/WorkshopCheck/LandlordCheck')
+    }
   } else if (type === 'Company') {
-    routerJump('/Workshop/Enterprise')
+    if (metype.value === '/Workshop') {
+      routerJump('/Workshop/Enterprise')
+    } else {
+      routerJump('/WorkshopCheck/EnterpriceCheck')
+    }
   } else if (type === 'IndividualHousehold') {
-    routerJump('/Workshop/IndividualB')
+    if (metype.value === '/Workshop') {
+      routerJump('/Workshop/IndividualB')
+    } else {
+      routerJump('/WorkshopCheck/IndividualBCheck')
+    }
   } else {
     // routerJump('/Workshop/villageInfoC')
-    routerJump('/Workshop/VillageCollective')
+    if (metype.value === '/Workshop') {
+      routerJump('/Workshop/VillageCollective')
+    } else {
+      routerJump('/WorkshopCheck/VillageCollectiveCheck')
+    }
   }
 }
 
