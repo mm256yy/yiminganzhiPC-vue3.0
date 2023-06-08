@@ -946,7 +946,8 @@ const toLink = (type: string) => {
   } else if (type === 'IndividualHousehold') {
     routerJump('/Workshop/IndividualB')
   } else {
-    routerJump('/Workshop/villageInfoC')
+    // routerJump('/Workshop/villageInfoC')
+    routerJump('/Workshop/VillageCollective')
   }
 }
 
