@@ -7,7 +7,8 @@ import {
   getSelfemployedBaseDefinition,
   getSelfemployedEquipmentDefinition,
   getSelfemployedHouseDefinition,
-  getSelfemployedInfoDefinition
+  getSelfemployedInfoDefinition,
+  getCollectiveInfoDefinition
 } from './templates'
 
 interface PDFItemType {
@@ -196,7 +197,21 @@ class PrintCore {
             })
           }
         }
-        if (templateIds.includes(2)) {
+        if (templateIds.includes(300)) {
+          const definition = getCollectiveInfoDefinition(landlord, projectInfo)
+          const dataUrl = await this.getPdfData(definition).catch(() => {
+            reject('生成村集体信息pdf失败')
+            console.error('生成村集体信息pdf失败')
+            return
+          })
+          if (dataUrl) {
+            stringArray.push({
+              file: dataUrl,
+              name: '村集体信息表打印.pdf'
+            })
+          }
+        }
+        if (templateIds.includes(2) || templateIds.includes(301)) {
           // 处理图片
           const { images: imgs } = landlord
           const images: any = {}
@@ -468,6 +483,9 @@ class PrintCore {
             )
           } else if (type === 'printCompany') {
             promiseArray[landlordIndex] = this.createCompany(templateIds, landlord, projectInfo)
+          } else if (type === 'printVillage') {
+            promiseArray[landlordIndex] = this.createPeople(templateIds, landlord, projectInfo)
+            console.log(templateIds, landlord, projectInfo, 'sssssddd')
           }
         })
         // 并行生成

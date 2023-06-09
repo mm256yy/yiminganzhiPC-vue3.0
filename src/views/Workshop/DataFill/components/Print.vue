@@ -104,6 +104,8 @@ const printType = computed(() => {
     templateType = PrintType.print
   } else if (type == 'IndividualB') {
     templateType = PrintType.printIndividualHousehold
+  } else {
+    templateType = PrintType.village
   }
   return templateType
 })

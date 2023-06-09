@@ -38,7 +38,7 @@
         <ElSpace>
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增村集体</ElButton>
-          <!-- <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton> -->
+          <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
@@ -120,13 +120,13 @@
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
-    <!-- <Print
+    <Print
       :show="printDialog"
       :landlordIds="landlordIds"
       :templateType="PrintType.village"
       @close="onPrintDialogClose"
       :outsideData="outsideData"
-    /> -->
+    />
     <Export
       :show="exportDialog"
       :type="'Village'"
@@ -141,8 +141,8 @@
 import { defineComponent } from 'vue'
 import { globalData } from '@/config/fill'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-// import { PrintType } from '@/types/print'
-// import Print from '../components/Print.vue'
+import { PrintType } from '@/types/print'
+import Print from '../components/Print.vue'
 
 export default defineComponent({
   beforeRouteEnter(to, _from, next) {
@@ -168,8 +168,8 @@ import {
   ElSpace,
   ElBreadcrumb,
   ElBreadcrumbItem,
-  ElMessageBox
-  // ElMessage
+  ElMessageBox,
+  ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -215,7 +215,7 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-// const printIcon = useIcon({ icon: 'ion:print-outline' })
+const printIcon = useIcon({ icon: 'ion:print-outline' })
 const villageTree = ref<any[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
@@ -223,9 +223,9 @@ const headInfo = ref<LandlordHeadInfoType>({
   reportSucceedNum: 0,
   unReportNum: 0
 })
-// const outsideData = ref<any>([])
-// const landlordIds = ref<number[]>([])
-// const printDialog = ref(false)
+const outsideData = ref<any>([])
+const landlordIds = ref<number[]>([])
+const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const exportDialog = ref(false)
@@ -253,11 +253,11 @@ const exportList = ref<exportListType[]>([
   {
     name: '村集体小型专项及农副业设施调查统计表',
     value: 'exportVillageFacilities'
+  },
+  {
+    name: '村集体坟墓调查统计表',
+    value: 'exportVillageGrave'
   }
-  // {
-  //   name: '村集体坟墓调查统计表',
-  //   value: 6
-  // }
 ])
 const onExport = () => {
   exportDialog.value = true
@@ -267,26 +267,26 @@ const onExportDialogClose = () => {
   exportDialog.value = false
 }
 
-// const onPrint = async () => {
-//   const res = await getSelections()
-//   if (res && res.length) {
-//     landlordIds.value = res.map((item) => item.id)
-//     printDialog.value = true
-//     outsideData.value = res.map((item) => item.name)
-//   } else {
-//     ElMessage.warning('请选择需要打印的村集体')
-//   }
-// }
+const onPrint = async () => {
+  const res = await getSelections()
+  if (res && res.length) {
+    landlordIds.value = res.map((item) => item.id)
+    printDialog.value = true
+    outsideData.value = res.map((item) => item.name)
+  } else {
+    ElMessage.warning('请选择需要打印的村集体')
+  }
+}
 
-// const onPrintDialogClose = () => {
-//   printDialog.value = false
-// }
+const onPrintDialogClose = () => {
+  printDialog.value = false
+}
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
 // getList getSelections
-const { setSearchParams } = methods
+const { setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId

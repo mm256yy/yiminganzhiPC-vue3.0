@@ -1,6 +1,7 @@
 export * from './company/base'
 export * from './people/house'
 export * from './people/info'
+export * from './village/info'
 export * from './selfemployed/base'
 export * from './selfemployed/house'
 export * from './selfemployed/info'
