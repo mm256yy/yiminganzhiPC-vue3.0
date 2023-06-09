@@ -789,3 +789,137 @@ export const getEquipment = (landlord: LandlordType) => {
     layout
   }
 }
+
+// 获取 村集体 头部区块
+export const getCollectiveTableHead = (landlord: LandlordType, projectInfo: ProjectType) => {
+  return {
+    table: {
+      widths: [128, 128, 90, 172],
+      body: [
+        [
+          {
+            rowSpan: 3,
+            colSpan: 2,
+            border: [true, true, false, false],
+            stack: [
+              {
+                text: `${projectInfo.name || ''} 工程建设 征地移民实物调查表`,
+                alignment: 'center',
+                fontSize: 16,
+                bold: true,
+                margin: [headMargin, 0, headMargin, 2]
+              },
+              {
+                text: `（村集体 ${landlord.name || ''} ${landlord.doorNo || ''} 号）`,
+                alignment: 'center',
+                margin: [headMargin, 0, headMargin, 0]
+              }
+            ]
+          },
+          '',
+          {
+            text: '基本信息',
+            bold: true,
+            fontSize: 12,
+            colSpan: 2,
+            alignment: 'center',
+            style: 'td'
+          },
+          ''
+        ],
+        [
+          '',
+          '',
+          { text: '地理位置', style: 'td' },
+          {
+            text:
+              `${landlord.areaCodeText ? landlord.areaCodeText : ''}${
+                landlord.townCodeText ? landlord.townCodeText : ''
+              }${landlord.villageCodeText ? landlord.villageCodeText : ''}${
+                landlord.virutalVillageCodeText ? landlord.virutalVillageCodeText : ''
+              }` || '',
+            style: 'td'
+          }
+        ],
+        ['', '', { text: '村集体名称', style: 'td' }, { text: landlord.name || '', style: 'td' }],
+        [
+          {
+            text: `所属区域：${landlord.locationTypeText || ''}`,
+            border: [true, false, false, true],
+            alignment: 'left',
+            style: 'td'
+          },
+          {
+            text: `调查时间：${landlord.reportDateText}`,
+            border: [false, false, false, true],
+            alignment: 'left',
+            style: 'td'
+          },
+          { text: '联系方式', style: 'td' },
+          { text: landlord.phone || '', style: 'td' }
+        ]
+      ]
+    },
+    layout
+  }
+}
+
+// 农村小型专项及农副业设施信息
+export const getVillageEquipment = (landlord: LandlordType) => {
+  const body: any[] = [
+    [
+      { text: '农村小型专项及农副业设施信息', bold: true, colSpan: 8, fontSize: 12, style: 'td' },
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
+    ],
+    [
+      { text: '序号', style: 'td' },
+      { text: '设施名称', style: 'td' },
+      { text: '设施类别', style: 'td' },
+      { text: '所在位置', style: 'td' },
+      { text: '数量', style: 'td' },
+      { text: '单位', style: 'td' },
+      { text: '具体位置', style: 'td' },
+      { text: '备注', style: 'td' }
+    ]
+  ]
+  const { immigrantFacilitiesList } = landlord
+  if (immigrantFacilitiesList && immigrantFacilitiesList.length) {
+    immigrantFacilitiesList.forEach((item, index) => {
+      body.push([
+        { text: index + 1, style: 'td' },
+        { text: item.facilitiesName || '', style: 'td' },
+        { text: item.facilitiesTypeText || '', style: 'td' },
+        { text: item.locationTypeText || '', style: 'td' },
+        { text: item.number || '', style: 'td' },
+        { text: item.unitText || '', style: 'td' },
+        { text: item.specificLocation || '', style: 'td' },
+        { text: item.remark || '', style: 'td' }
+      ])
+    })
+  } else {
+    body.push([
+      { text: '无', colSpan: 8, style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' },
+      { text: '', style: 'td' }
+    ])
+  }
+  return {
+    table: {
+      widths: [20, 80, 50, 50, 50, 50, 100, 82],
+      headerRows: 2,
+      body
+    },
+    layout
+  }
+}
