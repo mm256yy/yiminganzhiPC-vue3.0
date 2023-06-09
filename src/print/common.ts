@@ -22,7 +22,7 @@ export const getHead = (landlord: LandlordType, projectInfo: ProjectType) => {
             ? '企业'
             : landlord.type === MainType.IndividualHousehold
             ? '个体工商户'
-            : ''
+            : '村集体'
         }`,
         width: 170
       },
@@ -51,7 +51,7 @@ export const getBottom = (landlord: LandlordType, projectInfo: ProjectType) => {
           ? '企业'
           : landlord.type === MainType.IndividualHousehold
           ? '个体工商户'
-          : ''
+          : '村集体'
       }`,
       `所属阶段：${
         projectInfo.status && projectInfo.status === SurveyStatusEnum.Review
