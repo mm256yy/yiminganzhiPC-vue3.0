@@ -127,7 +127,12 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     /> -->
-    <Export :show="exportDialog" :list="exportList" @close="onExportDialogClose" />
+    <Export
+      :show="exportDialog"
+      :type="'Village'"
+      :list="exportList"
+      @close="onExportDialogClose"
+    />
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
