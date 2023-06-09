@@ -485,7 +485,6 @@ class PrintCore {
             promiseArray[landlordIndex] = this.createCompany(templateIds, landlord, projectInfo)
           } else if (type === 'printVillage') {
             promiseArray[landlordIndex] = this.createPeople(templateIds, landlord, projectInfo)
-            console.log(templateIds, landlord, projectInfo, 'sssssddd')
           }
         })
         // 并行生成
