@@ -177,6 +177,13 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
         item.materialsText = formatDict(item.materials, 295)
       })
     }
+    if (landlord.immigrantFacilitiesList && landlord.immigrantFacilitiesList.length) {
+      landlord.immigrantFacilitiesList.forEach((item) => {
+        item.facilitiesTypeText = formatDict(item.facilitiesType, 236)
+        item.unitText = formatDict(item.unit, 268)
+        item.locationTypeText = formatDict(item.locationType, 326)
+      })
+    }
     const images: string[] = []
     if (landlord.immigrantHouseList && landlord.immigrantHouseList.length) {
       landlord.immigrantHouseList.forEach((item) => {
