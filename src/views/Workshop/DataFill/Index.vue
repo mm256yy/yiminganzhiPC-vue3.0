@@ -266,6 +266,13 @@
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
+      <!-- 土地信息 -->
+      <LandInfo
+        :doorNo="doorNo"
+        :householdId="householdId"
+        v-else-if="reportTabCurrentId === ReportTabIds[6]"
+        :surveyStatus="surveyStatus"
+      />
 
       <!-- 坟墓调查信息 -->
       <VillageGrave
@@ -380,6 +387,7 @@ import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue' // �
 import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue' // 个体工商户基本情况
 // import villageInfoCInfor from './VillageComponents/villageInfoCInfor/Index.vue'
 import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue' // 农村小型专项及农副业设施信息
+import LandInfo from './LandInfo/Index.vue' // 土地信息
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
