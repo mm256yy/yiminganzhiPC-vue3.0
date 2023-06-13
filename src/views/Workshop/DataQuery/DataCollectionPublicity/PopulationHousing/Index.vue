@@ -234,19 +234,16 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+  if (!params.name) {
+    delete params.name
   }
-  if (!params.fillStatus) {
-    delete params.fillStatus
+  if (!params.doorNo) {
+    delete params.doorNo
   }
   if (params.code) {
     // 拿到对应的参数key

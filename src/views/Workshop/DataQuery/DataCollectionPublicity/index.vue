@@ -139,11 +139,12 @@ watch(
 
 // 初始化导航信息
 const initNavMsg = () => {
-  if (currentStatus.value === SurveyStatusEnum.Survey) {
-    return '实采数据公示'
-  } else if (currentStatus.value === SurveyStatusEnum.Review) {
-    return '复核数据公式'
-  }
+  // if (currentStatus.value === SurveyStatusEnum.Survey) {
+  //   return '实采数据公示'
+  // } else if (currentStatus.value === SurveyStatusEnum.Review) {
+  //   return '复核数据公示'
+  // }
+  return '实采数据公示'
 }
 
 /**

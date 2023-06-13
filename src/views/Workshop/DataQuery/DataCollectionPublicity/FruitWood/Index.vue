@@ -19,7 +19,7 @@
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
         </ElSpace>
       </div>
-
+      <!-- :data="tableObject.tableList" -->
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -170,28 +170,28 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'type',
     label: '品种',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'size',
     label: '规格',
     search: {
       show: false
     }
   },
   {
-    field: 'total',
+    field: 'unit',
     label: '单位',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'number',
     label: '数量',
     search: {
       show: false
@@ -226,9 +226,14 @@ const getParamsKey = (key: string) => {
  * @param{Object} columnInex 当前列下标
  */
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter((item: any) => item.name === row.name).length
+  const num = tableObject.tableList.filter(
+    (item: any) => item.name === row.name && item.doorNo === row.doorNo
+  ).length
+  const index = tableObject.tableList.findIndex(
+    (item: any) => item.name === row.name && item.doorNo === row.doorNo
+  )
   if (columnIndex < 4) {
-    if (rowIndex % num === 0) {
+    if (index === rowIndex) {
       return {
         rowspan: num,
         colspan: 1
@@ -248,19 +253,16 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+  if (!params.name) {
+    delete params.name
   }
-  if (!params.fillStatus) {
-    delete params.fillStatus
+  if (!params.doorNo) {
+    delete params.doorNo
   }
   if (params.code) {
     // 拿到对应的参数key
