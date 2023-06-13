@@ -235,7 +235,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   const index = tableObject.tableList.findIndex(
     (item: any) => item.name === row.name && item.doorNo === row.doorNo
   )
-  if (columnIndex < 4) {
+  if (column && columnIndex < 4) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -248,7 +248,6 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
       }
     }
   }
-  console.log('column:', column)
 }
 
 const onSearch = (data) => {
