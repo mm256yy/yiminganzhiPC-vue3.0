@@ -62,14 +62,17 @@
       :closeOnClickModal="false"
       @close="onClose"
     >
-      <el-tree-select
-        class="village-tree"
-        v-model="code"
-        :data="villageTree"
-        multiple
-        :props="treeProps"
-        :render-after-expand="false"
-      />
+      <div class="tree-wrapper">
+        <div class="label">所属区域</div>
+        <el-tree-select
+          class="village-tree"
+          v-model="code"
+          :data="villageTree"
+          multiple
+          :props="treeProps"
+          :render-after-expand="false"
+        />
+      </div>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onConfirm">确认</ElButton>
@@ -253,7 +256,18 @@ onMounted(() => {
   margin: 8px 0 24px;
 }
 
-.village-tree {
-  width: 360px;
+.tree-wrapper {
+  display: flex;
+  align-items: center;
+
+  .label {
+    margin-right: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .village-tree {
+    width: 280px;
+  }
 }
 </style>

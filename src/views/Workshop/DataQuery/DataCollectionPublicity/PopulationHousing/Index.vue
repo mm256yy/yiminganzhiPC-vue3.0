@@ -144,7 +144,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '户主',
+    label: '户主姓名',
     search: {
       show: false
     }
