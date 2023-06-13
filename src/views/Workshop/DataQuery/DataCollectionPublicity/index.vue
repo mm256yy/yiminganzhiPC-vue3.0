@@ -58,11 +58,18 @@
       appendToBody
       destroy-on-close
       :model-value="visible"
-      :width="710"
+      :width="400"
       :closeOnClickModal="false"
       @close="onClose"
     >
-      <div></div>
+      <el-tree-select
+        class="village-tree"
+        v-model="code"
+        :data="villageTree"
+        multiple
+        :props="treeProps"
+        :render-after-expand="false"
+      />
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onConfirm">确认</ElButton>
@@ -92,7 +99,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog, ElTreeSelect } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { TabDataIds, TabDatas } from './config'
@@ -105,11 +112,18 @@ import VillageCollective from './VillageCollective/Index.vue' // 村集体公示
 import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
 
+const treeProps = {
+  label: 'name',
+  value: 'code'
+}
+
 const { back } = useRouter()
 const currentStatus = ref<SurveyStatusEnum>(SurveyStatusEnum.Survey) // 当前项目状态
 const tabCurrentId = ref<number>(TabDataIds[0])
 
 const visible = ref<boolean>(false)
+const villageTree = ref<any[]>([])
+const code = ref<string>('')
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
@@ -140,8 +154,12 @@ const onTabClick = (tabItem) => {
   tabCurrentId.value = tabItem.id
 }
 
-// 数据导出
-const onExport = () => {
+/**
+ * 数据导出
+ * @param{Object} data 行政村相关数据
+ */
+const onExport = (data: any) => {
+  villageTree.value = data
   visible.value = true
 }
 
@@ -153,6 +171,7 @@ const onConfirm = () => {
 // 取消
 const onClose = () => {
   visible.value = false
+  code.value = ''
 }
 
 // 返回
@@ -232,5 +251,9 @@ onMounted(() => {
 
 .el-divider--horizontal {
   margin: 8px 0 24px;
+}
+
+.village-tree {
+  width: 360px;
 }
 </style>
