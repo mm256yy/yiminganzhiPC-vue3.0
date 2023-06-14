@@ -48,5 +48,5 @@ export const exportTypes = {
   tree: 'tree', // 零星(林)果木公示
   village: 'village', // 村集体公示
   ground: 'ground', // 土地公示
-  grave: '坟墓公示' // 坟墓公示
+  grave: 'grave' // 坟墓公示
 }
