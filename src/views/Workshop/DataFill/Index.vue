@@ -270,6 +270,7 @@
       <LandInfo
         :doorNo="doorNo"
         :householdId="householdId"
+        :status="baseInfo.status"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
         :surveyStatus="surveyStatus"
       />

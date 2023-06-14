@@ -48,15 +48,16 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
 import { screeningTree } from '@/api/workshop/village/service'
+import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
+import { exportTypes } from '../config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getLandInfoApi
 })
 
 const { setSearchParams } = methods
@@ -91,7 +92,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'name',
     label: '村集体名称',
     search: {
       show: true,
@@ -105,14 +106,23 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'type',
     label: '类型',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
         placeholder: '请选择类型',
-        options: []
+        options: [
+          {
+            label: '集体土地',
+            value: 'collectiveness'
+          },
+          {
+            label: '国有土地',
+            value: 'stateOwned'
+          }
+        ]
       }
     },
     table: {
@@ -122,21 +132,21 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'index',
+    field: 'name',
     label: '地类',
     search: {
       show: false
     }
   },
   {
-    field: 'regionText',
+    field: 'plowland',
     label: '耕地',
     search: {
       show: false
     }
   },
   {
-    field: 'doorNo',
+    field: 'gardenPlot',
     label: '园地',
     width: 180,
     search: {
@@ -144,70 +154,70 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'forestLand',
     label: '林地',
     search: {
       show: false
     }
   },
   {
-    field: '',
+    field: 'trafficLand',
     label: '交通运输用地',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'watersLand',
     label: '水域及水利设施用地',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'meadow',
     label: '草地',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'commerceLand',
     label: '商业服务设施用地',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'mineLand',
     label: '工矿用地',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'dwellingLand',
     label: '住宅用地',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'serviceLand',
     label: '公共管理与公共服务用地',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'facilityLand',
     label: '公用设施用地',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'specialLand',
     label: '特殊用地',
     search: {
       show: false
@@ -265,7 +275,7 @@ const onSearch = (data) => {
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.ground)
 }
 
 const getVillageTree = async () => {

@@ -44,7 +44,7 @@
       <VillageCollective v-else-if="tabCurrentId === TabDataIds[3]" />
 
       <!-- 土地公示 -->
-      <Land v-else-if="tabCurrentId === TabDataIds[4]" />
+      <Land v-else-if="tabCurrentId === TabDataIds[4]" @export="onExport" />
 
       <!-- 坟墓公示 -->
       <Grave v-else-if="tabCurrentId === TabDataIds[5]" />
@@ -118,6 +118,7 @@ import Grave from './Grave/Index.vue' // 坟墓公示
 import { exportHouseApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { exportAccessoryApi } from '@/api/workshop/dataQuery/accessory-service'
 import { exportFruitWooddApi } from '@/api/workshop/dataQuery/fruitWood-service'
+import { exportLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
 
 const treeProps = {
   label: 'name',
@@ -182,7 +183,7 @@ const onExport = async (data: any, type: string) => {
     const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
     exportFile(res)
   } else if (type === exportTypes.ground) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
+    const res = await exportLandInfoApi({ villageCode: villageCode.value, type: type })
     exportFile(res)
   } else if (type === exportTypes.grave) {
     const res = await exportHouseApi({ villageCode: villageCode.value, type: type })

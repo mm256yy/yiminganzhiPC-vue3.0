@@ -39,7 +39,7 @@
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增村集体</ElButton>
           <ElUpload
-            action="/api/immigrantGrave/import"
+            action="/api/immigrantGround/import"
             :headers="headers"
             :show-file-list="false"
             accept=".xls,.xlsx"
@@ -679,7 +679,7 @@ const beforeUpload = () => {
 const uploadDone = () => {
   uploadLoading.value = false
   ElMessage({
-    message: '正在导入，请等待导入结果',
+    message: '导入成功',
     type: 'success'
   })
   getList()
@@ -697,15 +697,7 @@ const uploadError = (error) => {
 
 // 下载模板
 const onDownloadTemplate = () => {
-  // exportGraveTemplate().then((res) => {
-  //   let a = document.createElement('a')
-  //   // ArrayBuffer 转为 Blob
-  //   let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })
-  //   let objectUrl = URL.createObjectURL(blob)
-  //   a.setAttribute('href', objectUrl)
-  //   a.setAttribute('download', '模板.xls')
-  //   a.click()
-  // })
+  window.location.href = 'https://oss.zdwp.tech/migrate/files/zdbim/print/土地模板.xlsx'
 }
 </script>
 

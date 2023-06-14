@@ -1,36 +1,28 @@
-import { PagedQueryType } from '@/api/common'
-
-export interface ResettlementDtoType {
-  id?: number
+export interface LandInfoDetailType {
+  status: string
   doorNo: string
-  householdId: number
-  familyNum: number | string
-  countryNum: number | string
-  unCountryNum: number | string
-  opinion: string
-  productionType: string
-  removalType: string
-  [key: string]: any
 }
 
-export interface ResettlementParamsType {
-  doorNo: string
-  householdId: number
-}
-
-export interface ResettlementConfigType {
+export interface LandInfoListType {
   id: number
+  doorNo: string
+  householdId: number
+  uid: string
   projectId: number
+  status: string
   type: string
-  way: string
-  area: string
+  plowland: number
+  gardenPlot: number
+  forestLand: number
+  trafficLand: number
+  watersLand: number
+  meadow: number
+  commerceLand: number
+  mineLand: number
+  dwellingLand: number
+  serviceLand: number
+  facilityLand: number
+  specialLand: number
+  landTypeText: string
+  objprops: string
 }
-
-export interface ConfigParamsType {
-  projectId: number
-  type: string
-  way: string
-  area: string
-}
-
-export type ResettlementConfigParamsType = PagedQueryType & ConfigParamsType
