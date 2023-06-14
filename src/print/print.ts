@@ -228,6 +228,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
       landlord.immigrantEquipmentList.forEach((item) => {
         item.yearText = item.year ? dayjs(item.year).format('YYYY年') : ''
         item.moveTypeText = formatDict(item.moveType, 221)
+        item.unitText = formatDict(item.unit, 268)
       })
     }
 
