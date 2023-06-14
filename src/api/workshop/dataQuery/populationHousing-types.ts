@@ -1,6 +1,6 @@
 export interface PopulationHousingDtoType {
   doorNo: string
-  name: string
+  householdName: string
   inCount: number
   outCount: number
   sumCount: number
@@ -11,4 +11,9 @@ export interface PopulationHousingDtoType {
   locationTypeText: string
   remark: string
   [key: string]: any
+}
+
+export interface ExportType {
+  villageCode?: string
+  type: string
 }

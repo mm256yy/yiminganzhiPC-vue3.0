@@ -51,24 +51,14 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { exportTypes } from '../config'
+import { AccessoryDtoType } from '@/api/workshop/dataQuery/accessory-types'
+import { getAccessoryListApi } from '@/api/workshop/dataQuery/accessory-service'
 import { screeningTree } from '@/api/workshop/village/service'
 
-// interface TablePropsType {
-//   id: string
-//   regionText: string
-//   doorNo: string
-//   name: string
-//   typeText: string
-//   unitText: string
-//   sizeText: string
-//   number: number
-//   remark: string
-// }
-
 interface SpanMethodProps {
-  row: any
-  column: any
+  row: AccessoryDtoType
+  column: AccessoryDtoType
   rowIndex: number
   columnIndex: number
 }
@@ -78,7 +68,7 @@ const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getAccessoryListApi
 })
 
 const { setSearchParams } = methods
@@ -150,13 +140,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
-    label: '所属区域',
-    search: {
-      show: false
-    }
-  },
-  {
     field: 'doorNo',
     label: '户号',
     width: 180,
@@ -165,28 +148,28 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '户主姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'typeText',
+    field: 'name',
     label: '类型',
     search: {
       show: false
     }
   },
   {
-    field: 'unitText',
+    field: 'unit',
     label: '单位',
     search: {
       show: false
     }
   },
   {
-    field: 'sizeText',
+    field: 'size',
     label: '规格',
     width: 100,
     search: {
@@ -235,7 +218,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   const index = tableObject.tableList.findIndex(
     (item: any) => item.name === row.name && item.doorNo === row.doorNo
   )
-  if (column && columnIndex < 4) {
+  if (column && columnIndex < 3) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -271,24 +254,20 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-
-      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
     setSearchParams({ ...params })
   }
 }
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.appendant)
 }
 
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, exportTypes.appendant)
   villageTree.value = list || []
   return list || []
 }
@@ -308,7 +287,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

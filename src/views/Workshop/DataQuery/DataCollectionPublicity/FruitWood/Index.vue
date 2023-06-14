@@ -19,7 +19,6 @@
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
         </ElSpace>
       </div>
-      <!-- :data="tableObject.tableList" -->
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -50,24 +49,14 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { exportTypes } from '../config'
+import { getFruitWoodListApi } from '@/api/workshop/dataQuery/fruitWood-service'
+import { FruitWoodDtoType } from '@/api/workshop/dataQuery/fruitWood-types'
 import { screeningTree } from '@/api/workshop/village/service'
 
-// interface TablePropsType {
-//   id: string
-//   regionText: string
-//   doorNo: string
-//   name: string
-//   typeText: string
-//   unitText: string
-//   sizeText: string
-//   number: number
-//   remark: string
-// }
-
 interface SpanMethodProps {
-  row: any
-  column: any
+  row: FruitWoodDtoType
+  column: FruitWoodDtoType
   rowIndex: number
   columnIndex: number
 }
@@ -77,7 +66,7 @@ const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getFruitWoodListApi
 })
 
 const { setSearchParams } = methods
@@ -126,7 +115,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '户主姓名',
     search: {
       show: true,
@@ -149,13 +138,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
-    label: '所属区域',
-    search: {
-      show: false
-    }
-  },
-  {
     field: 'doorNo',
     label: '户号',
     search: {
@@ -163,14 +145,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '户主姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'type',
+    field: 'name',
     label: '品种',
     search: {
       show: false
@@ -232,7 +214,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   const index = tableObject.tableList.findIndex(
     (item: any) => item.name === row.name && item.doorNo === row.doorNo
   )
-  if (column && columnIndex < 4) {
+  if (column && columnIndex < 3) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -263,30 +245,26 @@ const onSearch = (data) => {
   if (!params.doorNo) {
     delete params.doorNo
   }
-  if (params.code) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.code
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
-
-      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
     setSearchParams({ ...params })
   }
 }
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.tree)
 }
 
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, exportTypes.tree)
   villageTree.value = list || []
   return list || []
 }
@@ -306,7 +284,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

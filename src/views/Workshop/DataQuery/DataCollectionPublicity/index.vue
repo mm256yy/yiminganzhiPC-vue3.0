@@ -66,7 +66,7 @@
         <div class="label">所属区域</div>
         <el-tree-select
           class="village-tree"
-          v-model="code"
+          v-model="villageCode"
           :data="villageTree"
           multiple
           :props="treeProps"
@@ -105,7 +105,7 @@ import { useRouter } from 'vue-router'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog, ElTreeSelect } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
-import { TabDataIds, TabDatas } from './config'
+import { TabDataIds, TabDatas, exportTypes } from './config'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 import PopulationHousing from './PopulationHousing/Index.vue' // 人口房屋公示
@@ -114,6 +114,10 @@ import FruitWood from './FruitWood/Index.vue' // 零星(林)果木公示
 import VillageCollective from './VillageCollective/Index.vue' // 村集体公示
 import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
+
+import { exportHouseApi } from '@/api/workshop/dataQuery/populationHousing-service'
+import { exportAccessoryApi } from '@/api/workshop/dataQuery/accessory-service'
+import { exportFruitWooddApi } from '@/api/workshop/dataQuery/fruitWood-service'
 
 const treeProps = {
   label: 'name',
@@ -126,7 +130,7 @@ const tabCurrentId = ref<number>(TabDataIds[0])
 
 const visible = ref<boolean>(false)
 const villageTree = ref<any[]>([])
-const code = ref<string>('')
+const villageCode = ref<string>('')
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
@@ -162,9 +166,49 @@ const onTabClick = (tabItem) => {
  * 数据导出
  * @param{Object} data 行政村相关数据
  */
-const onExport = (data: any) => {
+const onExport = async (data: any, type: string) => {
   villageTree.value = data
   visible.value = true
+  if (type === exportTypes.house) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  } else if (type === exportTypes.appendant) {
+    const res = await exportAccessoryApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  } else if (type === exportTypes.tree) {
+    const res = await exportFruitWooddApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  } else if (type === exportTypes.village) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  } else if (type === exportTypes.ground) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  } else if (type === exportTypes.grave) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
+    exportFile(res)
+  }
+}
+
+/**
+ * 导出文件
+ * @param{Object} result 文件对象
+ */
+const exportFile = (result: any) => {
+  let filename = result.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([result.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 确认
@@ -175,7 +219,7 @@ const onConfirm = () => {
 // 取消
 const onClose = () => {
   visible.value = false
-  code.value = ''
+  villageCode.value = ''
 }
 
 // 返回

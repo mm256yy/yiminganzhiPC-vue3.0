@@ -261,7 +261,7 @@ const onSearch = (data) => {
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.house)
 }
 
 const getVillageTree = async () => {
