@@ -67,7 +67,7 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
-const tableData = ref(null)
+const tableData = ref<any[]>([])
 const { tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })

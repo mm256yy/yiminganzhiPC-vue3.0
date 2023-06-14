@@ -48,7 +48,8 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { exportTypes } from '../config'
+import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { screeningTree } from '@/api/workshop/village/service'
 
 const appStore = useAppStore()
@@ -56,7 +57,7 @@ const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getPopulationHousingListApi
 })
 
 const { setSearchParams } = methods
@@ -69,7 +70,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -105,7 +106,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '户主姓名',
     search: {
       show: true,
@@ -128,13 +129,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
-    label: '所属区域',
-    search: {
-      show: false
-    }
-  },
-  {
     field: 'doorNo',
     label: '户号',
     width: 180,
@@ -143,7 +137,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '户主姓名',
     search: {
       show: false
@@ -157,14 +151,14 @@ const schema = reactive<CrudSchema[]>([
     },
     children: [
       {
-        field: 'name',
+        field: 'inCount',
         label: '册内人口',
         search: {
           show: false
         }
       },
       {
-        field: 'name',
+        field: 'outCount',
         label: '册外人口',
         search: {
           show: false
@@ -173,7 +167,7 @@ const schema = reactive<CrudSchema[]>([
     ]
   },
   {
-    field: 'total',
+    field: 'sumCount',
     label: '合计',
     width: 100,
     search: {
@@ -181,29 +175,36 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'houseNo',
     label: '幢号',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'storeyNumber',
     label: '层数',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'constructionTypeText',
     label: '结构类型',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
+    field: 'landArea',
     label: '房屋建筑面积(㎡)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'locationTypeText',
+    label: '所在位置',
     search: {
       show: false
     }
@@ -245,19 +246,15 @@ const onSearch = (data) => {
   if (!params.doorNo) {
     delete params.doorNo
   }
-  if (params.code) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.code
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
-
-      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
     setSearchParams({ ...params })
   }
 }
@@ -268,7 +265,7 @@ const onExport = () => {
 }
 
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, exportTypes.house)
   villageTree.value = list || []
   return list || []
 }
@@ -288,7 +285,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>
