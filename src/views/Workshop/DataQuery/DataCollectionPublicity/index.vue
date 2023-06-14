@@ -35,10 +35,10 @@
       <PopulationHousing v-if="tabCurrentId === TabDataIds[0]" @export="onExport" />
 
       <!-- 附属物公示 -->
-      <Accessory v-else-if="tabCurrentId === TabDataIds[1]" />
+      <Accessory v-else-if="tabCurrentId === TabDataIds[1]" @export="onExport" />
 
       <!-- 零星(林)果木公示 -->
-      <FruitWood v-else-if="tabCurrentId === TabDataIds[2]" />
+      <FruitWood v-else-if="tabCurrentId === TabDataIds[2]" @export="onExport" />
 
       <!-- 村集体公示 -->
       <VillageCollective v-else-if="tabCurrentId === TabDataIds[3]" />
@@ -131,6 +131,7 @@ const tabCurrentId = ref<number>(TabDataIds[0])
 const visible = ref<boolean>(false)
 const villageTree = ref<any[]>([])
 const villageCode = ref<string>('')
+const type = ref<string>(exportTypes.house)
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
@@ -166,28 +167,10 @@ const onTabClick = (tabItem) => {
  * 数据导出
  * @param{Object} data 行政村相关数据
  */
-const onExport = async (data: any, type: string) => {
+const onExport = (data: any, exportType: string) => {
   villageTree.value = data
   visible.value = true
-  if (type === exportTypes.house) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  } else if (type === exportTypes.appendant) {
-    const res = await exportAccessoryApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  } else if (type === exportTypes.tree) {
-    const res = await exportFruitWooddApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  } else if (type === exportTypes.village) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  } else if (type === exportTypes.ground) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  } else if (type === exportTypes.grave) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type })
-    exportFile(res)
-  }
+  type.value = exportType
 }
 
 /**
@@ -212,14 +195,34 @@ const exportFile = (result: any) => {
 }
 
 // 确认
-const onConfirm = () => {
+const onConfirm = async () => {
   visible.value = false
+  if (type.value === exportTypes.house) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  } else if (type.value === exportTypes.appendant) {
+    const res = await exportAccessoryApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  } else if (type.value === exportTypes.tree) {
+    const res = await exportFruitWooddApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  } else if (type.value === exportTypes.village) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  } else if (type.value === exportTypes.ground) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  } else if (type.value === exportTypes.grave) {
+    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
+    exportFile(res)
+  }
 }
 
 // 取消
 const onClose = () => {
   visible.value = false
   villageCode.value = ''
+  type.value = exportTypes.house
 }
 
 // 返回

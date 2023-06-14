@@ -16,7 +16,9 @@
       <div class="flex items-center justify-between pb-12px">
         <div></div>
         <ElSpace>
-          <ElButton type="primary" @click="onExport">数据导出</ElButton>
+          <ElButton type="primary" :loading="tableObject.loading" @click="onExport">
+            数据导出
+          </ElButton>
         </ElSpace>
       </div>
 
