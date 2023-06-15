@@ -1,17 +1,12 @@
 import request from '@/config/axios'
-import { PopulationHousingDtoType, ExportType } from './populationHousing-types'
+import { PopulationHousingDtoType } from './populationHousing-types'
 
 // 查询人口房屋公示列表
 export const getPopulationHousingListApi = (
-  query: Partial<PopulationHousingDtoType>
+  params: Partial<PopulationHousingDtoType>
 ): Promise<TableResponse<PopulationHousingDtoType>> => {
   return request.get({
     url: '/query/queryHouse',
-    params: { ...query }
+    params
   })
-}
-
-// 导出人口房屋公示列表
-export const exportHouseApi = (params: ExportType): Promise<any> => {
-  return request.get({ url: '/query/exportHouse', params, responseType: 'blob' })
 }

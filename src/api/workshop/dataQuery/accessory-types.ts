@@ -8,8 +8,3 @@ export interface AccessoryDtoType {
   remark: string
   [key: string]: any
 }
-
-export interface ExportType {
-  villageCode?: string
-  type: string
-}

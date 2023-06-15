@@ -12,8 +12,3 @@ export interface PopulationHousingDtoType {
   remark: string
   [key: string]: any
 }
-
-export interface ExportType {
-  villageCode?: string
-  type: string
-}

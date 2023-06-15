@@ -1,10 +1,9 @@
-export interface FruitWoodDtoType {
+export interface GraveDtoType {
+  villageCode: string
   householdName: string
   doorNo: string
-  name: string
-  size: string
-  unit: string
   number: number
+  materials: string
   remark: string
   [key: string]: any
 }

@@ -12,13 +12,11 @@
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div></div>
         <ElSpace>
-          <ElButton type="primary" :loading="tableObject.loading" @click="onExport">
-            数据导出
-          </ElButton>
+          <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
         </ElSpace>
       </div>
 
@@ -28,7 +26,6 @@
         :pagination="{
           total: tableObject.total
         }"
-        :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         :span-method="objectSpanMethod"
@@ -83,7 +80,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -95,9 +92,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        showCheckbox: false,
+        checkStrictly: false,
+        checkOnClickNode: false
       }
     },
     table: {
@@ -134,13 +131,6 @@ const schema = reactive<CrudSchema[]>([
   },
 
   // table字段 分割
-  {
-    field: 'index',
-    label: '序号',
-    search: {
-      show: false
-    }
-  },
   {
     field: 'doorNo',
     label: '户号',
@@ -215,12 +205,12 @@ const getParamsKey = (key: string) => {
  */
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
   const num = tableObject.tableList.filter(
-    (item: any) => item.name === row.name && item.doorNo === row.doorNo
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   ).length
   const index = tableObject.tableList.findIndex(
-    (item: any) => item.name === row.name && item.doorNo === row.doorNo
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   )
-  if (column && columnIndex < 3) {
+  if (column && columnIndex < 2) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -244,21 +234,22 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (!params.name) {
-    delete params.name
+  if (!params.householdName) {
+    delete params.householdName
   }
   if (!params.doorNo) {
     delete params.doorNo
   }
-  if (params.code) {
+  if (params.villageCOde) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.villageCOde, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.code
+        params[getParamsKey(item.districtType)] = params.villageCOde
       }
       setSearchParams({ ...params })
     })
   } else {
+    delete params.villageCode
     setSearchParams({ ...params })
   }
 }
@@ -268,8 +259,9 @@ const onExport = () => {
   emit('export', villageTree.value, exportTypes.appendant)
 }
 
+// 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, exportTypes.appendant)
+  const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
 }

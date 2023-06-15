@@ -49,7 +49,8 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { exportTypes } from '../config'
+import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
 import { screeningTree } from '@/api/workshop/village/service'
 
 const appStore = useAppStore()
@@ -57,7 +58,7 @@ const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getGraveListApi
 })
 
 const { setSearchParams } = methods
@@ -70,7 +71,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -82,9 +83,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        showCheckbox: false,
+        checkStrictly: false,
+        checkOnClickNode: false
       }
     },
     table: {
@@ -92,19 +93,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
-    label: '村集体名称',
+    field: 'householdName',
+    label: '户主姓名',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入村集体名称'
+        placeholder: '请输入户主姓名'
       }
     },
     table: {
       show: false
     }
   },
+
   // table字段 分割
   {
     field: 'doorNo',
@@ -114,14 +116,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
-    label: '户号姓名',
+    field: 'householdName',
+    label: '户主姓名',
     search: {
       show: false
     }
   },
   {
-    field: 'sx',
+    field: 'number',
     label: '数量（穴）',
     width: 180,
     search: {
@@ -129,7 +131,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'materials',
     label: '材料',
     search: {
       show: false
@@ -156,6 +158,13 @@ const getParamsKey = (key: string) => {
   return map[key]
 }
 
+/**
+ * 合并单元行
+ * @param{Object} row 当前行
+ * @param{Object} column 当前列
+ * @param{Object} rowIndex 当前行下标
+ * @param{Object} columnInex 当前列下标
+ */
 const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
   console.log(column)
   if (columnIndex < 2) {
@@ -175,44 +184,37 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
-  }
-  if (!params.fillStatus) {
-    delete params.fillStatus
-  }
-  if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
 
-      params.type = 'PeasantHousehold'
+  if (!params.householdName) {
+    delete params.householdName
+  }
+  if (params.villageCode) {
+    // 拿到对应的参数key
+    findRecursion(villageTree.value, params.villageCode, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.villageCode
+      }
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
+    delete params.villageCode
     setSearchParams({ ...params })
   }
 }
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.grave)
 }
 
+// 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, 'amdinVillage')
   villageTree.value = list || []
   return list || []
 }
@@ -232,7 +234,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

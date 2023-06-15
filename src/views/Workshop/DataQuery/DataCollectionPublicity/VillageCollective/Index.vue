@@ -21,31 +21,31 @@
       </div>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
-          <el-table-column prop="state" label="幢号" header-align="center" />
-          <el-table-column prop="city" label="结构" header-align="center" />
-          <el-table-column prop="city" label="房屋层数" header-align="center" />
-          <el-table-column prop="address" label="房屋建筑面积（m²）" header-align="center" />
-          <el-table-column prop="address" label="备注" header-align="center" />
+          <el-table-column prop="houseNo" label="幢号" header-align="center" />
+          <el-table-column prop="constructionTypeText" label="结构" header-align="center" />
+          <el-table-column prop="storeyNumber" label="房屋层数" header-align="center" />
+          <el-table-column prop="landArea" label="房屋建筑面积（m²）" header-align="center" />
+          <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
       </el-table>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="附属物" header-align="center">
-          <el-table-column prop="state" label="序号" header-align="center" />
-          <el-table-column prop="city" label="类型" header-align="center" />
-          <el-table-column prop="address" label="单位" header-align="center" />
-          <el-table-column prop="address" label="规格" header-align="center" />
-          <el-table-column prop="address" label="数量" header-align="center" />
-          <el-table-column prop="address" label="备注" header-align="center" />
+          <el-table-column prop="index" label="序号" header-align="center" />
+          <el-table-column prop="type" label="类型" header-align="center" />
+          <el-table-column prop="unit" label="单位" header-align="center" />
+          <el-table-column prop="size" label="规格" header-align="center" />
+          <el-table-column prop="number" label="数量" header-align="center" />
+          <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
       </el-table>
       <el-table :data="tableData" style="width: 100%">
         <el-table-column label="零星林果木" header-align="center">
-          <el-table-column prop="state" label="序号" header-align="center" />
-          <el-table-column prop="city" label="品种" header-align="center" />
-          <el-table-column prop="address" label="单位" header-align="center" />
-          <el-table-column prop="address" label="规格" header-align="center" />
-          <el-table-column prop="address" label="数量" header-align="center" />
-          <el-table-column prop="address" label="备注" header-align="center" />
+          <el-table-column prop="index" label="序号" header-align="center" />
+          <el-table-column prop="name" label="品种" header-align="center" />
+          <el-table-column prop="unit" label="单位" header-align="center" />
+          <el-table-column prop="size" label="规格" header-align="center" />
+          <el-table-column prop="number" label="数量" header-align="center" />
+          <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
       </el-table>
     </div>
@@ -60,8 +60,9 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCollective-service'
 import { screeningTree } from '@/api/workshop/village/service'
+import { exportTypes } from '../config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -69,7 +70,7 @@ const emit = defineEmits(['export'])
 
 const tableData = ref<any[]>([])
 const { tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getVillageCollectiveListApi
 })
 
 const { setSearchParams } = methods
@@ -82,7 +83,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -94,9 +95,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        showCheckbox: false,
+        checkStrictly: false,
+        checkOnClickNode: false
       }
     },
     table: {
@@ -104,7 +105,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '村集体名称',
     search: {
       show: true,
@@ -116,53 +117,53 @@ const schema = reactive<CrudSchema[]>([
     table: {
       show: false
     }
-  },
+  }
 
   // table字段 分割
-  {
-    field: '',
-    label: '房屋',
-    search: {
-      show: false
-    },
-    children: [
-      {
-        field: 'name',
-        label: '幢号',
-        search: {
-          show: false
-        }
-      },
-      {
-        field: 'name',
-        label: '房屋层数',
-        search: {
-          show: false
-        }
-      },
-      {
-        field: 'name',
-        label: '结构',
-        search: {
-          show: false
-        }
-      },
-      {
-        field: 'name',
-        label: '房屋建筑面积',
-        search: {
-          show: false
-        }
-      },
-      {
-        field: 'name',
-        label: '备注',
-        search: {
-          show: false
-        }
-      }
-    ]
-  }
+  // {
+  //   field: '',
+  //   label: '房屋',
+  //   search: {
+  //     show: false
+  //   },
+  //   children: [
+  //     {
+  //       field: 'name',
+  //       label: '幢号',
+  //       search: {
+  //         show: false
+  //       }
+  //     },
+  //     {
+  //       field: 'name',
+  //       label: '房屋层数',
+  //       search: {
+  //         show: false
+  //       }
+  //     },
+  //     {
+  //       field: 'name',
+  //       label: '结构',
+  //       search: {
+  //         show: false
+  //       }
+  //     },
+  //     {
+  //       field: 'name',
+  //       label: '房屋建筑面积',
+  //       search: {
+  //         show: false
+  //       }
+  //     },
+  //     {
+  //       field: 'name',
+  //       label: '备注',
+  //       search: {
+  //         show: false
+  //       }
+  //     }
+  //   ]
+  // }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
@@ -181,42 +182,34 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+  if (!params.householdName) {
+    delete params.householdName
   }
-  if (!params.fillStatus) {
-    delete params.fillStatus
-  }
-  if (params.code) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.code
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
-
-      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
+    delete params.villageCode
     setSearchParams({ ...params })
   }
 }
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value)
+  emit('export', villageTree.value, exportTypes.village)
 }
 
+// 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'village')
   villageTree.value = list || []
@@ -238,7 +231,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

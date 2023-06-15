@@ -70,7 +70,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -82,9 +82,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        showCheckbox: false,
+        checkStrictly: false,
+        checkOnClickNode: false
       }
     },
     table: {
@@ -92,7 +92,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '村集体名称',
     search: {
       show: true,
@@ -132,7 +132,7 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'name',
+    field: 'householdName',
     label: '地类',
     search: {
       show: false
@@ -242,33 +242,27 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+  if (!params.householdName) {
+    delete params.householdName
   }
-  if (!params.fillStatus) {
-    delete params.fillStatus
+  if (!params.doorNo) {
+    delete params.doorNo
   }
-  if (params.code) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.code
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
-
-      params.type = 'PeasantHousehold'
       setSearchParams({ ...params })
     })
   } else {
-    params.type = 'PeasantHousehold'
-
+    delete params.villageCode
     setSearchParams({ ...params })
   }
 }
@@ -278,8 +272,9 @@ const onExport = () => {
   emit('export', villageTree.value, exportTypes.ground)
 }
 
+// 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
 }
@@ -299,7 +294,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({ type: 'PeasantHousehold' })
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

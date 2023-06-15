@@ -115,10 +115,7 @@ import VillageCollective from './VillageCollective/Index.vue' // 村集体公示
 import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
 
-import { exportHouseApi } from '@/api/workshop/dataQuery/populationHousing-service'
-import { exportAccessoryApi } from '@/api/workshop/dataQuery/accessory-service'
-import { exportFruitWooddApi } from '@/api/workshop/dataQuery/fruitWood-service'
-import { exportLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
+import { exportPublicityApi } from '@/api/workshop/dataQuery/common-service'
 
 const treeProps = {
   label: 'name',
@@ -198,25 +195,8 @@ const exportFile = (result: any) => {
 // 确认
 const onConfirm = async () => {
   visible.value = false
-  if (type.value === exportTypes.house) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  } else if (type.value === exportTypes.appendant) {
-    const res = await exportAccessoryApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  } else if (type.value === exportTypes.tree) {
-    const res = await exportFruitWooddApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  } else if (type.value === exportTypes.village) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  } else if (type.value === exportTypes.ground) {
-    const res = await exportLandInfoApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  } else if (type.value === exportTypes.grave) {
-    const res = await exportHouseApi({ villageCode: villageCode.value, type: type.value })
-    exportFile(res)
-  }
+  const res = await exportPublicityApi({ villageCode: villageCode.value, type: type.value })
+  exportFile(res)
 }
 
 // 取消

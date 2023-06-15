@@ -1,11 +1,18 @@
 export interface LandInfoType {
   villageCode: string
   householdName: string
-  doorNo: string
-  projectId: 0
-  status: string
   type: string
-  peasantHouseholdType: string
-  fillStatus: string
-  exportType: string
+  plowland: number
+  gardenPlot: number
+  forestLand: number
+  trafficLand: number
+  watersLand: number
+  meadow: number
+  commerceLand: number
+  mineLand: number
+  dwellingLand: number
+  serviceLand: number
+  facilityLand: number
+  specialLand: number
+  [key: string]: any
 }
