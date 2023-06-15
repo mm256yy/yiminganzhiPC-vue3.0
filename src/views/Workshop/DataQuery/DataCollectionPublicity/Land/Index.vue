@@ -6,13 +6,13 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="resetSearch"
       />
     </div>
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="loading">
       <div class="flex items-center justify-between pb-12px">
         <div></div>
         <ElSpace>
@@ -20,21 +20,21 @@
         </ElSpace>
       </div>
 
-      <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
-        :loading="tableObject.loading"
-        :data="tableObject.tableList"
-        :columns="allSchemas.tableColumns"
-        row-key="id"
-        headerAlign="center"
-        align="center"
-        highlightCurrentRow
-        @register="register"
-      />
+      <el-table :data="tableDataList" border :height="getHeight(tableDataList)" style="width: 100%">
+        <el-table-column prop="householdName" label="地类" header-align="center" />
+        <el-table-column prop="plowland" label="耕地" header-align="center" />
+        <el-table-column prop="gardenPlot" label="园地" header-align="center" />
+        <el-table-column prop="forestLand" label="林地" header-align="center" />
+        <el-table-column prop="trafficLand" label="交通运输用地" header-align="center" />
+        <el-table-column prop="watersLand" label="水域及水利设施用地" header-align="center" />
+        <el-table-column prop="meadow" label="草地" header-align="center" />
+        <el-table-column prop="commerceLand" label="商业服务业设施用地" header-align="center" />
+        <el-table-column prop="mineLand" label="工矿用地" header-align="center" />
+        <el-table-column prop="dwellingLand" label="住宅用地" header-align="center" />
+        <el-table-column prop="serviceLand" label="公共管理与公共服务用地" header-align="center" />
+        <el-table-column prop="facilityLand" label="公共设施用地" header-align="center" />
+        <el-table-column prop="specialLand" label="特殊用地" header-align="center" />
+      </el-table>
     </div>
   </WorkContentWrap>
 </template>
@@ -42,27 +42,26 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSpace } from 'element-plus'
+import { ElButton, ElSpace, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
-import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
 import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
+import { ParamsType } from '@/api/workshop/dataQuery/landInfo-types'
 import { exportTypes } from '../config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const tableDataList = ref<any[]>([])
+const villageTree = ref<any[]>([])
+const loading = ref<boolean>(false)
 const emit = defineEmits(['export'])
 
-const { register, tableObject, methods } = useTable({
+const { tableObject } = useTable({
   getListApi: getLandInfoApi
 })
-
-const { setSearchParams } = methods
-
-const villageTree = ref<any[]>([])
 
 tableObject.params = {
   projectId
@@ -128,104 +127,24 @@ const schema = reactive<CrudSchema[]>([
     table: {
       show: false
     }
-  },
-
-  // table字段 分割
-  {
-    field: 'householdName',
-    label: '地类',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'plowland',
-    label: '耕地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'gardenPlot',
-    label: '园地',
-    width: 180,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'forestLand',
-    label: '林地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'trafficLand',
-    label: '交通运输用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'watersLand',
-    label: '水域及水利设施用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'meadow',
-    label: '草地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'commerceLand',
-    label: '商业服务设施用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'mineLand',
-    label: '工矿用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'dwellingLand',
-    label: '住宅用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'serviceLand',
-    label: '公共管理与公共服务用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'facilityLand',
-    label: '公用设施用地',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'specialLand',
-    label: '特殊用地',
-    search: {
-      show: false
-    }
   }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
+
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
 
 const getParamsKey = (key: string) => {
   const map = {
@@ -235,6 +154,25 @@ const getParamsKey = (key: string) => {
     NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]
+}
+
+/**
+ * 获取表格数据
+ * @param params 查询参数
+ * villageCode 所属区域 code
+ * householdName 村集体名称
+ */
+const getTableList = (params: ParamsType) => {
+  loading.value = true
+  getLandInfoApi(params)
+    .then((res: any) => {
+      if (res) {
+        tableDataList.value = [...res]
+      }
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const onSearch = (data) => {
@@ -250,8 +188,8 @@ const onSearch = (data) => {
   if (!params.householdName) {
     delete params.householdName
   }
-  if (!params.doorNo) {
-    delete params.doorNo
+  if (!params.type) {
+    delete params.type
   }
   if (params.villageCode) {
     // 拿到对应的参数key
@@ -259,12 +197,17 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.villageCode
       }
-      setSearchParams({ ...params })
+      getTableList({ ...params })
     })
   } else {
     delete params.villageCode
-    setSearchParams({ ...params })
+    getTableList({ ...params })
   }
+}
+
+// 重置
+const resetSearch = () => {
+  getTableList({})
 }
 
 // 数据导出
@@ -294,7 +237,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({})
+  getTableList({})
 })
 </script>
 <style lang="less" scoped>

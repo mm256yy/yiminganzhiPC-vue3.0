@@ -1,4 +1,4 @@
 export interface ExportType {
   villageCode?: string
-  type: string
+  exportType: string
 }

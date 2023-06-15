@@ -1,5 +1,5 @@
 <template>
-  <WorkContentWrap>
+  <WorkContentWrap v-loading="exportLoading">
     <div class="flex items-center">
       <ElButton
         @click="onBack"
@@ -41,13 +41,13 @@
       <FruitWood v-else-if="tabCurrentId === TabDataIds[2]" @export="onExport" />
 
       <!-- 村集体公示 -->
-      <VillageCollective v-else-if="tabCurrentId === TabDataIds[3]" />
+      <VillageCollective v-else-if="tabCurrentId === TabDataIds[3]" @export="onExport" />
 
       <!-- 土地公示 -->
       <Land v-else-if="tabCurrentId === TabDataIds[4]" @export="onExport" />
 
       <!-- 坟墓公示 -->
-      <Grave v-else-if="tabCurrentId === TabDataIds[5]" />
+      <Grave v-else-if="tabCurrentId === TabDataIds[5]" @export="onExport" />
     </div>
 
     <!-- 数据导出 -->
@@ -80,33 +80,20 @@
     </ElDialog>
   </WorkContentWrap>
 </template>
-
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { globalData } from '@/config/fill'
-
-export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/DataFill') {
-      // 实物采集
-      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
-    } else {
-      // 实物复核
-      globalData.currentSurveyStatus = SurveyStatusEnum.Review
-    }
-    next()
-  }
-})
-</script>
-
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElDialog, ElTreeSelect } from 'element-plus'
+import {
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElButton,
+  ElDialog,
+  ElMessage,
+  ElTreeSelect
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { TabDataIds, TabDatas, exportTypes } from './config'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 import PopulationHousing from './PopulationHousing/Index.vue' // 人口房屋公示
 import Accessory from './Accessory/Index.vue' // 附属物公示
@@ -116,6 +103,7 @@ import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
 
 import { exportPublicityApi } from '@/api/workshop/dataQuery/common-service'
+import { json } from 'stream/consumers'
 
 const treeProps = {
   label: 'name',
@@ -123,30 +111,18 @@ const treeProps = {
 }
 
 const { back } = useRouter()
-const currentStatus = ref<SurveyStatusEnum>(SurveyStatusEnum.Survey) // 当前项目状态
 const tabCurrentId = ref<number>(TabDataIds[0])
 
 const visible = ref<boolean>(false)
 const villageTree = ref<any[]>([])
 const villageCode = ref<string>('')
-const type = ref<string>(exportTypes.house)
+const type = ref<string>(exportTypes.house) // 导出类型
+const exportLoading = ref<boolean>(false)
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
-watch(
-  () => globalData.currentSurveyStatus,
-  (val) => {
-    currentStatus.value = val
-  }
-)
-
 // 初始化导航信息
 const initNavMsg = () => {
-  // if (currentStatus.value === SurveyStatusEnum.Survey) {
-  //   return '实采数据公示'
-  // } else if (currentStatus.value === SurveyStatusEnum.Review) {
-  //   return '复核数据公示'
-  // }
   return '实采数据公示'
 }
 
@@ -190,12 +166,24 @@ const exportFile = (result: any) => {
   elink.click()
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
+  exportLoading.value = false
 }
 
 // 确认
 const onConfirm = async () => {
   visible.value = false
-  const res = await exportPublicityApi({ villageCode: villageCode.value, type: type.value })
+  exportLoading.value = true
+  if (!villageCode.value || villageCode.value.length === 0) {
+    exportLoading.value = false
+    ElMessage.warning('请选择所属区域')
+    return
+  }
+  const res = await exportPublicityApi({
+    villageCode: villageCode.value,
+    exportType: type.value
+  }).catch(() => {
+    exportLoading.value = false
+  })
   exportFile(res)
 }
 
@@ -210,10 +198,6 @@ const onClose = () => {
 const onBack = () => {
   back()
 }
-
-onMounted(() => {
-  currentStatus.value = globalData.currentSurveyStatus
-})
 </script>
 
 <style lang="less" scoped>

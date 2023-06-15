@@ -231,8 +231,8 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (!params.name) {
-    delete params.name
+  if (!params.householdName) {
+    delete params.householdName
   }
   if (!params.doorNo) {
     delete params.doorNo

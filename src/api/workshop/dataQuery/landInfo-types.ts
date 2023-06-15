@@ -16,3 +16,9 @@ export interface LandInfoType {
   specialLand: number
   [key: string]: any
 }
+
+export interface ParamsType {
+  villageCode?: string
+  householdName?: string
+  type?: string
+}

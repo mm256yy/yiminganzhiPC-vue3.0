@@ -6,20 +6,20 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="resetSearch"
       />
     </div>
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="loading">
       <div class="flex items-center justify-between pb-12px">
         <div></div>
         <ElSpace>
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
         </ElSpace>
       </div>
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
           <el-table-column prop="houseNo" label="幢号" header-align="center" />
           <el-table-column prop="constructionTypeText" label="结构" header-align="center" />
@@ -28,22 +28,22 @@
           <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
       </el-table>
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="appendantList" :height="getHeight(appendantList)" style="width: 100%">
         <el-table-column label="附属物" header-align="center">
           <el-table-column prop="index" label="序号" header-align="center" />
-          <el-table-column prop="type" label="类型" header-align="center" />
+          <el-table-column prop="name" label="类型" header-align="center" />
           <el-table-column prop="unit" label="单位" header-align="center" />
           <el-table-column prop="size" label="规格" header-align="center" />
           <el-table-column prop="number" label="数量" header-align="center" />
           <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
       </el-table>
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="treeList" :height="getHeight(treeList)" style="width: 100%">
         <el-table-column label="零星林果木" header-align="center">
           <el-table-column prop="index" label="序号" header-align="center" />
           <el-table-column prop="name" label="品种" header-align="center" />
-          <el-table-column prop="unit" label="单位" header-align="center" />
-          <el-table-column prop="size" label="规格" header-align="center" />
+          <el-table-column prop="unitText" label="单位" header-align="center" />
+          <el-table-column prop="sizeText" label="规格" header-align="center" />
           <el-table-column prop="number" label="数量" header-align="center" />
           <el-table-column prop="remark" label="备注" header-align="center" />
         </el-table-column>
@@ -61,6 +61,7 @@ import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCollective-service'
+import { ParamsType } from '@/api/workshop/dataQuery/villageCollective-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../config'
 
@@ -68,14 +69,15 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
-const tableData = ref<any[]>([])
-const { tableObject, methods } = useTable({
+const houseList = ref<any[]>([])
+const appendantList = ref<any[]>([])
+const treeList = ref<any[]>([])
+const villageTree = ref<any[]>([])
+const loading = ref<boolean>(false)
+
+const { tableObject } = useTable({
   getListApi: getVillageCollectiveListApi
 })
-
-const { setSearchParams } = methods
-
-const villageTree = ref<any[]>([])
 
 tableObject.params = {
   projectId
@@ -118,52 +120,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   }
-
-  // table字段 分割
-  // {
-  //   field: '',
-  //   label: '房屋',
-  //   search: {
-  //     show: false
-  //   },
-  //   children: [
-  //     {
-  //       field: 'name',
-  //       label: '幢号',
-  //       search: {
-  //         show: false
-  //       }
-  //     },
-  //     {
-  //       field: 'name',
-  //       label: '房屋层数',
-  //       search: {
-  //         show: false
-  //       }
-  //     },
-  //     {
-  //       field: 'name',
-  //       label: '结构',
-  //       search: {
-  //         show: false
-  //       }
-  //     },
-  //     {
-  //       field: 'name',
-  //       label: '房屋建筑面积',
-  //       search: {
-  //         show: false
-  //       }
-  //     },
-  //     {
-  //       field: 'name',
-  //       label: '备注',
-  //       search: {
-  //         show: false
-  //       }
-  //     }
-  //   ]
-  // }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
@@ -175,6 +131,41 @@ const getParamsKey = (key: string) => {
     NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]
+}
+
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
+
+/**
+ * 获取表格数据
+ * @param params 查询参数
+ * villageCode 所属区域 code
+ * householdName 村集体名称
+ */
+const getTableList = (params: ParamsType) => {
+  loading.value = true
+  getVillageCollectiveListApi(params)
+    .then((res: any) => {
+      if (res) {
+        houseList.value = res.houseList
+        appendantList.value = res.appendantList
+        treeList.value = res.treeList
+      }
+    })
+    .finally(() => {
+      loading.value = false
+    })
 }
 
 const onSearch = (data) => {
@@ -196,12 +187,17 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.villageCode
       }
-      setSearchParams({ ...params })
+      getTableList({ ...params })
     })
   } else {
     delete params.villageCode
-    setSearchParams({ ...params })
+    getTableList({ ...params })
   }
+}
+
+// 重置
+const resetSearch = () => {
+  getTableList({})
 }
 
 // 数据导出
@@ -231,7 +227,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({})
+  getTableList({})
 })
 </script>
 <style lang="less" scoped>
