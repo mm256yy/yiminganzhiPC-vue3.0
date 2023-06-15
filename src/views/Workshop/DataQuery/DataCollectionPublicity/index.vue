@@ -103,7 +103,6 @@ import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
 
 import { exportPublicityApi } from '@/api/workshop/dataQuery/common-service'
-import { json } from 'stream/consumers'
 
 const treeProps = {
   label: 'name',
