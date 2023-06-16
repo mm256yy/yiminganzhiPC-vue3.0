@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ElBreadcrumbItem } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 </script>
 
