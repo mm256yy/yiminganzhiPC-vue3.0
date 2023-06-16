@@ -20,6 +20,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
   justify-content: center;
   width: 100%;
   height: 500px;
+  margin-top: 10px;
   font-size: 30px;
   background-color: #fff;
   border-radius: 5px;
