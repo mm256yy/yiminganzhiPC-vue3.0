@@ -101,7 +101,7 @@ import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 // , getDictByName
-import { addHouseApi, updateHouseApi } from '@/api/workshop/datafill/house-service'
+import { addFwHouseApi, updateFwHouseApi } from '@/api/workshop/datafill/house-service'
 // import { standardFormatDate } from '@/utils/index'
 // import {  } from '@/api/putIntoEffect/landlordCheck'
 interface PropsType {
@@ -236,7 +236,7 @@ const onClose = (flag = false) => {
 const submit = async (data: any) => {
   const { status, projectId, id } = props.baseInfo
   if (props.actionType === 'add') {
-    await addHouseApi({
+    await addFwHouseApi({
       ...data,
       doorNo: props.doorNo,
       status,
@@ -244,7 +244,7 @@ const submit = async (data: any) => {
       householdId: id
     })
   } else {
-    await updateHouseApi({
+    await updateFwHouseApi({
       ...data,
       doorNo: props.doorNo,
       status,

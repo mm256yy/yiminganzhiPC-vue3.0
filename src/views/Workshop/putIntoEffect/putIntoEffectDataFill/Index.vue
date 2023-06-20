@@ -165,6 +165,7 @@
       <produce
         :doorNo="doorNo"
         :baseInfo="baseInfo"
+        @refresh="getLandlordInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 2"
       />
 

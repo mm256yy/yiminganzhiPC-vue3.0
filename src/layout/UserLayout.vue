@@ -67,7 +67,7 @@ export default defineComponent({
           // window.location.href = '/admin.html#/dashboard/home'
         } else {
           await setPlatform('workshop', addRoute)
-          // window.location.href = '/#/workshop/home'
+          window.location.href = '/#/workshop/home'
         }
         setTimeout(() => {
           window.location.reload()
