@@ -4,9 +4,9 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" :loading="loading" @click="onSave"
-            >保存</ElButton
-          >
+          <ElButton :icon="addIcon" type="primary" :loading="loading" @click="onSave">
+            保存
+          </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -16,19 +16,7 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
-      >
-        <template #gylandArea="{ row }">
-          <span v-if="row.type === 'stateOwned'">{{ row[row.props] }}</span>
-          <span v-else></span>
-        </template>
-        <template #jtlandArea="{ row }">
-          <span v-if="row.type === 'collectiveness'">{{ row[row.props] }}</span>
-          <span v-else></span>
-        </template>
-        <template #total="{ row }">
-          <span>{{ row[row.props] }}</span>
-        </template>
-      </Table>
+      />
     </div>
   </WorkContentWrap>
 </template>
@@ -54,6 +42,39 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const tableList = ref<LandInfoListType[]>([])
+const loading = ref<boolean>(false)
+
+const schema = reactive([
+  {
+    field: 'landTypeText',
+    label: '地类(单位)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'gylandArea',
+    label: '国有土地面积',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'jtlandArea',
+    label: '集体土地面积',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'total',
+    label: '合计',
+    search: {
+      show: false
+    }
+  }
+])
+
 const landType = [
   {
     label: '耕地（亩）',
@@ -104,48 +125,48 @@ const landType = [
     props: 'specialLand'
   }
 ]
+
 const getList = () => {
   getLandInfoDetailtApi({ doorNo: props.doorNo, status: props.status }).then((res) => {
-    tableList.value = res
-    tableList.value?.forEach((item, index) => {
-      item.landTypeText = landType[index].label
-      item.objprops = landType[index].props
-    })
+    genNewArr(res)
   })
 }
-getList()
-const schema = reactive([
-  {
-    field: 'landTypeText',
-    label: '地类(单位)',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'gylandArea',
-    label: '国有土地面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'jtlandArea',
-    label: '集体土地面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'total',
-    label: '合计',
-    search: {
-      show: false
-    }
-  }
-])
 
-let loading = ref(false)
+getList()
+
+/**
+ * 生成一个新的数组
+ * @param arr 原数组
+ */
+const genNewArr = (arr: any) => {
+  let newArr: any = []
+  landType.map((item: any, index: number) => {
+    arr?.map((data: any) => {
+      for (let key in data) {
+        if (item.props === key) {
+          if (data.type === 'collectiveness') {
+            newArr[index] = {
+              id: data.id,
+              doorNo: data.doorNo,
+              uid: data.uid,
+              status: data.status,
+              type: data.type,
+              landTypeText: item.label,
+              jtlandArea: data[key]
+            }
+          } else if (data.type === 'stateOwned') {
+            newArr[index] = {
+              ...newArr[index],
+              gylandArea: data[key],
+              total: Number(newArr[index].jtlandArea) + Number(data[key])
+            }
+          }
+        }
+      }
+    })
+  })
+  tableList.value = [...newArr]
+}
 
 const onSave = async () => {
   loading.value = true
