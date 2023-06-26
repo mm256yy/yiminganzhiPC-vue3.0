@@ -9,23 +9,37 @@
           </ElButton>
         </ElSpace>
       </div>
-      <Table
-        :data="tableList"
-        :columns="schema"
-        row-key="id"
-        headerAlign="center"
-        align="center"
-        highlightCurrentRow
-      />
+      <ElTable :data="tableList" headerAlign="center" align="center" highlightCurrentRow>
+        <ElTableColumn
+          label="地类(单位)"
+          prop="landTypeText"
+          align="center"
+          header-align="center"
+        />
+        <ElTableColumn label="国有土地面积" prop="gylandArea" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.gylandArea" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="集体土地面积" prop="jtlandArea" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.jtlandArea" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="合计" prop="" align="center" header-align="center">
+          <template #default="scope">
+            <span>{{ Number(scope.row.gylandArea) + Number(scope.row.jtlandArea) }}</span>
+          </template>
+        </ElTableColumn>
+      </ElTable>
     </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
-import { ElButton, ElSpace, ElMessage } from 'element-plus'
-import { Table } from '@/components/Table'
+import { ref } from 'vue'
+import { ElTable, ElTableColumn, ElInputNumber, ElButton, ElSpace, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   getLandInfoDetailtApi,
@@ -43,37 +57,6 @@ const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const tableList = ref<LandInfoListType[]>([])
 const loading = ref<boolean>(false)
-
-const schema = reactive([
-  {
-    field: 'landTypeText',
-    label: '地类(单位)',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'gylandArea',
-    label: '国有土地面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'jtlandArea',
-    label: '集体土地面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'total',
-    label: '合计',
-    search: {
-      show: false
-    }
-  }
-])
 
 const landType = [
   {
@@ -146,19 +129,21 @@ const genNewArr = (arr: any) => {
         if (item.props === key) {
           if (data.type === 'collectiveness') {
             newArr[index] = {
-              id: data.id,
+              collectiveId: data.id,
+              projectId: data.projectId,
+              householdId: data.householdId,
               doorNo: data.doorNo,
-              uid: data.uid,
+              collectiveUid: data.uid,
               status: data.status,
-              type: data.type,
               landTypeText: item.label,
               jtlandArea: data[key]
             }
           } else if (data.type === 'stateOwned') {
             newArr[index] = {
               ...newArr[index],
-              gylandArea: data[key],
-              total: Number(newArr[index].jtlandArea) + Number(data[key])
+              ownedId: data.id,
+              ownedUid: data.uid,
+              gylandArea: data[key]
             }
           }
         }
@@ -168,7 +153,38 @@ const genNewArr = (arr: any) => {
   tableList.value = [...newArr]
 }
 
+// 生成需要提交的参数
+const genSubmitParams = async () => {
+  let obj1: any = {}
+  let obj2: any = {}
+  let arr: any = []
+  tableList.value?.map((item: any, index: number) => {
+    if (item.landTypeText === landType[index].label) {
+      obj1[landType[index].props] = item.jtlandArea
+      obj1.id = item.collectiveId
+      obj1.doorNo = item.doorNo
+      obj1.uid = item.collectiveUid
+      obj1.status = item.status
+      obj1.type = 'collectiveness'
+      obj1.projectId = item.projectId
+      obj1.householdId = item.householdId
+
+      obj2[landType[index].props] = item.gylandArea
+      obj2.id = item.ownedId
+      obj2.doorNo = item.doorNo
+      obj2.uid = item.ownedUid
+      obj2.status = item.status
+      obj2.type = 'stateOwned'
+      obj2.projectId = item.projectId
+      obj2.householdId = item.householdId
+    }
+  })
+  arr.push(obj1, obj2)
+  tableList.value = [...arr]
+}
+
 const onSave = async () => {
+  await genSubmitParams()
   loading.value = true
   saveLandInfoListApi(tableList.value)
     .then(() => {
