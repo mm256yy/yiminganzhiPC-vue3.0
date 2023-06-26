@@ -21,19 +21,65 @@
       </div>
 
       <el-table :data="tableDataList" border :height="getHeight(tableDataList)" style="width: 100%">
-        <el-table-column prop="householdName" label="地类" header-align="center" />
-        <el-table-column prop="plowland" label="耕地" header-align="center" />
-        <el-table-column prop="gardenPlot" label="园地" header-align="center" />
-        <el-table-column prop="forestLand" label="林地" header-align="center" />
-        <el-table-column prop="trafficLand" label="交通运输用地" header-align="center" />
-        <el-table-column prop="watersLand" label="水域及水利设施用地" header-align="center" />
-        <el-table-column prop="meadow" label="草地" header-align="center" />
-        <el-table-column prop="commerceLand" label="商业服务业设施用地" header-align="center" />
-        <el-table-column prop="mineLand" label="工矿用地" header-align="center" />
-        <el-table-column prop="dwellingLand" label="住宅用地" header-align="center" />
-        <el-table-column prop="serviceLand" label="公共管理与公共服务用地" header-align="center" />
-        <el-table-column prop="facilityLand" label="公共设施用地" header-align="center" />
-        <el-table-column prop="specialLand" label="特殊用地" header-align="center" />
+        <el-table-column
+          prop="householdName"
+          label="村集体名称"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column prop="type" label="类型" align="center" header-align="center" />
+        <el-table-column prop="plowland" label="耕地(亩)" align="center" header-align="center" />
+        <el-table-column prop="gardenPlot" label="园地(亩)" align="center" header-align="center" />
+        <el-table-column prop="forestLand" label="林地(亩)" align="center" header-align="center" />
+        <el-table-column
+          prop="trafficLand"
+          label="交通运输用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="watersLand"
+          label="水域及水利设施用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column prop="meadow" label="草地(亩)" align="center" header-align="center" />
+        <el-table-column
+          prop="commerceLand"
+          label="商业服务业设施用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="mineLand"
+          label="工矿用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="dwellingLand"
+          label="住宅用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="serviceLand"
+          label="公共管理与公共服务用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="facilityLand"
+          label="公共设施用地(亩)"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="specialLand"
+          label="特殊用地(亩)"
+          align="center"
+          header-align="center"
+        />
       </el-table>
     </div>
   </WorkContentWrap>

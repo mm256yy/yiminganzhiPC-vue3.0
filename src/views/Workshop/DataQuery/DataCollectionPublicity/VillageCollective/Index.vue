@@ -21,31 +21,46 @@
       </div>
       <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
-          <el-table-column prop="houseNo" label="幢号" header-align="center" />
-          <el-table-column prop="constructionTypeText" label="结构" header-align="center" />
-          <el-table-column prop="storeyNumber" label="房屋层数" header-align="center" />
-          <el-table-column prop="landArea" label="房屋建筑面积（m²）" header-align="center" />
-          <el-table-column prop="remark" label="备注" header-align="center" />
+          <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
+          <el-table-column
+            prop="constructionTypeText"
+            label="结构"
+            align="center"
+            header-align="center"
+          />
+          <el-table-column
+            prop="storeyNumber"
+            label="房屋层数"
+            align="center"
+            header-align="center"
+          />
+          <el-table-column
+            prop="landArea"
+            label="房屋建筑面积（m²）"
+            align="center"
+            header-align="center"
+          />
+          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
         </el-table-column>
       </el-table>
       <el-table :data="appendantList" :height="getHeight(appendantList)" style="width: 100%">
         <el-table-column label="附属物" header-align="center">
-          <el-table-column prop="index" label="序号" header-align="center" />
-          <el-table-column prop="name" label="类型" header-align="center" />
-          <el-table-column prop="unit" label="单位" header-align="center" />
-          <el-table-column prop="size" label="规格" header-align="center" />
-          <el-table-column prop="number" label="数量" header-align="center" />
-          <el-table-column prop="remark" label="备注" header-align="center" />
+          <el-table-column prop="index" label="序号" align="center" header-align="center" />
+          <el-table-column prop="name" label="类型" align="center" header-align="center" />
+          <el-table-column prop="unit" label="单位" align="center" header-align="center" />
+          <el-table-column prop="size" label="规格" align="center" header-align="center" />
+          <el-table-column prop="number" label="数量" align="center" header-align="center" />
+          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
         </el-table-column>
       </el-table>
       <el-table :data="treeList" :height="getHeight(treeList)" style="width: 100%">
         <el-table-column label="零星林果木" header-align="center">
-          <el-table-column prop="index" label="序号" header-align="center" />
-          <el-table-column prop="name" label="品种" header-align="center" />
-          <el-table-column prop="unitText" label="单位" header-align="center" />
-          <el-table-column prop="sizeText" label="规格" header-align="center" />
-          <el-table-column prop="number" label="数量" header-align="center" />
-          <el-table-column prop="remark" label="备注" header-align="center" />
+          <el-table-column prop="index" label="序号" align="center" header-align="center" />
+          <el-table-column prop="name" label="品种" align="center" header-align="center" />
+          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
+          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
+          <el-table-column prop="number" label="数量" align="center" header-align="center" />
+          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
         </el-table-column>
       </el-table>
     </div>
