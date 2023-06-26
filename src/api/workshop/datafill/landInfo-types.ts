@@ -24,5 +24,7 @@ export interface LandInfoListType {
   facilityLand: number
   specialLand: number
   landTypeText: string
-  objprops: string
+  gylandArea: number
+  jtlandArea: number
+  [key: string]: any
 }

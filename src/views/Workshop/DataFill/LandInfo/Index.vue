@@ -9,7 +9,7 @@
           </ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableList" headerAlign="center" align="center" highlightCurrentRow>
+      <ElTable :data="tableList" highlightCurrentRow>
         <ElTableColumn
           label="地类(单位)"
           prop="landTypeText"
@@ -17,18 +17,18 @@
           header-align="center"
         />
         <ElTableColumn label="国有土地面积" prop="gylandArea" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.gylandArea" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.gylandArea" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="集体土地面积" prop="jtlandArea" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.jtlandArea" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.jtlandArea" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="合计" prop="" align="center" header-align="center">
-          <template #default="scope">
-            <span>{{ Number(scope.row.gylandArea) + Number(scope.row.jtlandArea) }}</span>
+          <template #default="{ row }">
+            <span>{{ computedTotal(row.gylandArea, row.jtlandArea) }}</span>
           </template>
         </ElTableColumn>
       </ElTable>
@@ -111,7 +111,9 @@ const landType = [
 
 const getList = () => {
   getLandInfoDetailtApi({ doorNo: props.doorNo, status: props.status }).then((res) => {
-    genNewArr(res)
+    if (res && res.length) {
+      genNewArr(res)
+    }
   })
 }
 
@@ -153,6 +155,17 @@ const genNewArr = (arr: any) => {
   tableList.value = [...newArr]
 }
 
+/**
+ * 土地面积合计
+ * @param gylandArea 国有土地面积
+ * @param jtlandArea 集体土地面积
+ */
+const computedTotal = (gylandArea: number, jtlandArea: number) => {
+  gylandArea = gylandArea ? gylandArea : 0
+  jtlandArea = jtlandArea ? jtlandArea : 0
+  return Number(gylandArea) + Number(jtlandArea)
+}
+
 // 生成需要提交的参数
 const genSubmitParams = async () => {
   let obj1: any = {}
@@ -183,9 +196,10 @@ const genSubmitParams = async () => {
   tableList.value = [...arr]
 }
 
+// 保存
 const onSave = async () => {
-  await genSubmitParams()
   loading.value = true
+  await genSubmitParams()
   saveLandInfoListApi(tableList.value)
     .then(() => {
       loading.value = false
