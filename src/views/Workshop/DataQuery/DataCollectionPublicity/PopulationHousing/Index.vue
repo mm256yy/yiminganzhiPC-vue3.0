@@ -164,16 +164,15 @@ const schema = reactive<CrudSchema[]>([
         search: {
           show: false
         }
+      },
+      {
+        field: 'sumCount',
+        label: '合计',
+        search: {
+          show: false
+        }
       }
     ]
-  },
-  {
-    field: 'sumCount',
-    label: '合计',
-    width: 100,
-    search: {
-      show: false
-    }
   },
   {
     field: 'houseNo',
@@ -245,7 +244,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   const index = tableObject.tableList.findIndex(
     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   )
-  if (column && columnIndex < 4) {
+  if (column && columnIndex < 5) {
     if (index === rowIndex) {
       return {
         rowspan: num,
