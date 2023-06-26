@@ -4,7 +4,7 @@
     :title="title"
     :fullscreen="false"
     style="width: 500px"
-    :max-height="145"
+    :max-height="200"
     @close="onClose"
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="false" />

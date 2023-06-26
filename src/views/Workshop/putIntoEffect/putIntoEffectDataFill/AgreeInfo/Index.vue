@@ -411,12 +411,14 @@ const onsave = () => {
     houseArea,
     landArea
   } = formData.value
+  const data = JSON.parse(JSON.stringify(formData.value))
+  delete data.id
   const params = {
     projectId,
     status,
     householdId,
     doorNo: props.doorNo,
-    ...formData.value,
+    ...data,
     arableLandArea: Number(arableLandArea),
     storeroomAmount: Number(storeroomAmount),
     totalArea: Number(totalArea),

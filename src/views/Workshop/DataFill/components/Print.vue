@@ -20,10 +20,9 @@
             <div class="name">{{ item.name }}</div>
           </ElTooltip>
         </div>
-        <div class="print-rt" @click="onPreview(item)">
+        <div v-loading.fullscreen.lock="loading" class="print-rt" @click="onPreview(item)">
           <Icon icon="fontisto:preview" color="var(--el-color-primary)" />
         </div>
-
         <div class="select-icon">
           <Icon class="icon" icon="ant-design:check-outlined" :size="12" color="#ffffff" />
         </div>
@@ -85,6 +84,7 @@ const downName = ref('')
 const landlords = ref<LandlordType[] | null>()
 // 操作类型
 const actionType = ref<'preview' | 'download' | 'batchPrint'>('preview')
+const loading = ref<boolean>(false)
 
 const projectInfo = computed(() => {
   const projects = appStore.getUserInfo?.projectUsers
@@ -104,6 +104,8 @@ const printType = computed(() => {
     templateType = PrintType.print
   } else if (type == 'IndividualB') {
     templateType = PrintType.printIndividualHousehold
+  } else {
+    templateType = PrintType.village
   }
   return templateType
 })
@@ -327,14 +329,20 @@ const onPreview = async (item) => {
     ElMessage.info('正在加载字体文件，请稍后')
     return
   }
+  loading.value = true
   actionType.value = 'preview'
   const res = await generatorPdf({
     returndataType: 'blob',
     templateId: item.uid
-  }).catch(() => {
-    ElMessage.error('生成pdf失败')
   })
+    .catch(() => {
+      ElMessage.error('生成pdf失败')
+    })
+    .finally(() => {
+      loading.value = false
+    })
   if (res) {
+    loading.value = false
     const url = window.URL.createObjectURL(res)
     url && window.open(url)
   }

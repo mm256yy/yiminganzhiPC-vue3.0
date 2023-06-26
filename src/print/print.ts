@@ -6,6 +6,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 // 0-99居民户相关模版id
 // 100-199 企业相关
 // 200-299 个体户相关
+// 300-399 村集体相关
 const templates = [
   {
     uid: 1,
@@ -77,6 +78,20 @@ const templates = [
     templateModule: '实物采集',
     templateName: '个体户设施设备打印',
     templateType: 'printIndividualHousehold'
+  },
+  {
+    uid: 300,
+    id: 300,
+    templateModule: '实物采集',
+    templateName: '村集体信息表打印',
+    templateType: 'printVillage'
+  },
+  {
+    uid: 301,
+    id: 301,
+    templateModule: '实物采集',
+    templateName: '房屋示意图信息',
+    templateType: 'printVillage'
   }
 ]
 
@@ -162,6 +177,13 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
         item.materialsText = formatDict(item.materials, 295)
       })
     }
+    if (landlord.immigrantFacilitiesList && landlord.immigrantFacilitiesList.length) {
+      landlord.immigrantFacilitiesList.forEach((item) => {
+        item.facilitiesTypeText = formatDict(item.facilitiesType, 236)
+        item.unitText = formatDict(item.unit, 268)
+        item.locationTypeText = formatDict(item.locationType, 326)
+      })
+    }
     const images: string[] = []
     if (landlord.immigrantHouseList && landlord.immigrantHouseList.length) {
       landlord.immigrantHouseList.forEach((item) => {
@@ -206,6 +228,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
       landlord.immigrantEquipmentList.forEach((item) => {
         item.yearText = item.year ? dayjs(item.year).format('YYYY年') : ''
         item.moveTypeText = formatDict(item.moveType, 221)
+        item.unitText = formatDict(item.unit, 268)
       })
     }
 

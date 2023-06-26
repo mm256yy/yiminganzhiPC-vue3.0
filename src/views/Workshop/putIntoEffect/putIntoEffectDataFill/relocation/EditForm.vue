@@ -29,7 +29,7 @@
       <ElFormItem label="户型/套型" prop="doorModel">
         <ElSelect clearable doorModel v-model="form.doorModel" class="!w-full">
           <ElOption
-            v-for="item in dictObj[363]"
+            v-for="item in dictObj[318]"
             :key="item.value"
             :label="item.label"
             :value="item.value"

@@ -317,7 +317,8 @@ export enum MainType {
 export enum PrintType {
   print = 'print',
   printCompany = 'printCompany',
-  printIndividualHousehold = 'printIndividualHousehold'
+  printIndividualHousehold = 'printIndividualHousehold',
+  village = 'printVillage'
 }
 
 // 调查对象列表

@@ -201,7 +201,7 @@
                       : 'title-3'
                   "
                 >
-                  方案{{ numList[index] }}
+                  方案{{ toChineseNumber(index + 1) }}
                 </div>
               </div>
               <div v-if="item && item.tableList">
@@ -443,30 +443,38 @@ const defaultSchemeThree = [
   }
 ]
 
-// 方案中文计数
-const numList = [
-  '一',
-  '二',
-  '三',
-  '四',
-  '五',
-  '六',
-  '七',
-  '八',
-  '九',
-  '十',
-  '十一',
-  '十二',
-  '十三',
-  '十四',
-  '十五',
-  '十六',
-  '十七',
-  '十八',
-  '十九',
-  '二十'
-]
+const toChineseNumber = (number) => {
+  const CHINESE_NUMBERS = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+  const CHINESE_UNITS = ['', '十', '百', '千']
+  if (number === 0) return '零'
+  let [integer, decimal] = number.toString().split('.')
+  let integerPart = ''
+  let decimalPart = ''
+  if (integer !== '0') {
+    integerPart = integer
+      .split('')
+      .reverse()
+      .map((value, index) => {
+        return CHINESE_NUMBERS[value] + (value === '0' ? '' : CHINESE_UNITS[index % 4])
+      })
+      .reverse()
+      .join('')
+      .replace(/零+/g, '零')
+      .replace(/零$/g, '')
+  }
 
+  if (decimal) {
+    decimalPart = decimal
+
+      .split('')
+
+      .map((value) => CHINESE_NUMBERS[value])
+
+      .join('')
+  }
+
+  return integerPart + (decimalPart ? '点' + decimalPart : '') || '零'
+}
 let listData = ref<any>([])
 let detailInfo = reactive({})
 let selectId = ref<number>(0)

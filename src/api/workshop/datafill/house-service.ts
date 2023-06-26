@@ -25,12 +25,32 @@ export const addHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
 }
 
 /**
+ * 新增房屋信息(房屋确权)
+ */
+export const addFwHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
+  return request.post({
+    url: '/immigrant_house/create',
+    data: { ...data }
+  })
+}
+
+/**
  * 更新房屋信息
  */
 export const updateHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
   return request.post({
     url: '/immigrant_house/update',
     data: { ...data, status: globalData.currentSurveyStatus }
+  })
+}
+
+/**
+ * 更新房屋信息
+ */
+export const updateFwHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
+  return request.post({
+    url: '/immigrant_house/update',
+    data: { ...data }
   })
 }
 
