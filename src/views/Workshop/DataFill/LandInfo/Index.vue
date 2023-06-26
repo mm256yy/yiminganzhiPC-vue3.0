@@ -209,9 +209,3 @@ const onSave = async () => {
     })
 }
 </script>
-
-<style lang="less" scoped>
-:deep(.el-pagination) {
-  display: none;
-}
-</style>
