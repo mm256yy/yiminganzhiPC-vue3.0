@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div class="table-wrap !py-12px !mt-0px">
+    <div class="table-wrap !py-12px !mt-0px" v-loading="loading">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
