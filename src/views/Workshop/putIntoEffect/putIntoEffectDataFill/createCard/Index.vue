@@ -104,53 +104,25 @@
         </div>
       </div>
     </div>
-    <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
-      <div style="display: flex; margin-bottom: 10px">
-        <el-icon><InfoFilled /></el-icon>是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
-      </div>
-      <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
-      <ElFormItem label="删除原因" prop="name">
-        <ElInput v-model="cause" class="!w-full" placeholder="请输入" type="textarea" row="3" />
-      </ElFormItem>
-      <template #footer>
-        <ElButton @click="onClose">取消</ElButton>
-        <ElButton type="primary" @click="onSubmit">确认</ElButton>
-      </template>
-    </el-dialog>
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      :doorNo="props.doorNo"
-      @close="onFormPupClose"
-    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
-import { ElButton, ElDialog, ElFormItem, ElInput, ElTable, ElTableColumn } from 'element-plus'
+import { reactive } from 'vue'
+import { ElTable, ElTableColumn } from 'element-plus'
 import { Table } from '@/components/Table'
-import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-// import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
-// import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-// import {  } from '@/api/putIntoEffect/landlordCheck'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
 
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
-const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -632,19 +604,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   }
-
-  // {
-  //   field: 'action',
-  //   label: '操作',
-  //   fixed: 'right',
-  //   width: 130,
-  //   search: {
-  //     show: false
-  //   },
-  //   form: {
-  //     show: false
-  //   }
-  // }
 ])
 
 const tableRowClassName = ({ row }: any) => {
@@ -660,62 +619,6 @@ const tableRowClassName = ({ row }: any) => {
   }
 }
 const { allSchemas } = useCrudSchemas(schema)
-const dialogVisible = ref(false)
-const cause = ref()
-// const multipleV = ref()
-const onClose = () => {
-  cause.value = ''
-  dialogVisible.value = false
-}
-const onSubmit = () => {
-  dialogVisible.value = false
-}
-// const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-//   dialogVisible.value = true
-//   tableObject.currentRow = row
-//   multipleV.value = multiple
-//   // const { delList, getSelections } = methods
-//   // const selections = await getSelections()
-//   // await delList(
-//   //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//   //   multiple
-//   // )
-//   // ElMessage.success('删除成功')
-//   // getList()
-// }
-
-// const onAddRow = () => {
-//   actionType.value = 'add'
-//   tableObject.currentRow = null
-//   dialog.value = true
-// }
-
-// const onEditRow = (row: DemographicDtoType) => {
-//   actionType.value = 'edit'
-//   tableObject.currentRow = {
-//     ...row,
-//     occupation: row.occupation ? JSON.parse(row.occupation) : '',
-//     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-//   }
-//   dialog.value = true
-// }
-
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    getList()
-  }
-}
-
-// const onViewRow = (row: DemographicDtoType) => {
-//   actionType.value = 'view'
-//   tableObject.currentRow = {
-//     ...row,
-//     occupation: row.occupation ? JSON.parse(row.occupation) : '',
-//     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-//   }
-//   dialog.value = true
-// }
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {

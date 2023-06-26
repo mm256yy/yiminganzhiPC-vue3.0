@@ -23,34 +23,34 @@
           </div>
           <div class="flblock">
             <ElFormItem label="总计建筑面积：" prop="totalArea">
-              <ElInput v-model="formData.totalArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.totalArea" placeholder="输入">
+                <template #append>㎡</template>
+              </ElInput>
             </ElFormItem>
             <ElFormItem label="住宅建筑面积：" prop="houseArea">
-              <ElInput v-model="formData.houseArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.houseArea" placeholder="输入">
+                <template #append>㎡</template>
+              </ElInput>
             </ElFormItem>
             <ElFormItem label="土地面积总计：" prop="landArea">
-              <ElInput v-model="formData.landArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.landArea" placeholder="输入">
+                <template #append>亩</template>
+              </ElInput>
             </ElFormItem>
             <ElFormItem label="耕地面积：" prop="arableLandArea">
-              <ElInput v-model="formData.arableLandArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.arableLandArea" placeholder="输入">
+                <template #append>亩</template>
+              </ElInput>
             </ElFormItem>
             <ElFormItem label="园地、林地面积：" prop="woodLandArea">
-              <ElInput v-model="formData.woodLandArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.woodLandArea" placeholder="输入">
+                <template #append>亩</template>
+              </ElInput>
             </ElFormItem>
             <ElFormItem label="未利用土地面积：" prop="uselessArea">
-              <ElInput v-model="formData.uselessArea" placeholder="输入"
-                ><template #append>亩</template></ElInput
-              >
+              <ElInput v-model="formData.uselessArea" placeholder="输入">
+                <template #append>亩</template>
+              </ElInput>
             </ElFormItem>
           </div>
           <div class="titleBox">
@@ -59,14 +59,14 @@
           <div>
             <div style="display: flex; align-items: center">
               <ElFormItem label="安置房人数：" prop="agricultureResettlementNum">
-                <ElInput v-model.number="formData.agricultureResettlementNum" placeholder="输入"
-                  ><template #append>人</template></ElInput
-                >
+                <ElInput v-model.number="formData.agricultureResettlementNum" placeholder="输入">
+                  <template #append>人</template>
+                </ElInput>
               </ElFormItem>
               <ElFormItem label="增计选房人数：" prop="increasesMeterNum">
-                <ElInput v-model.number="formData.increasesMeterNum" placeholder="输入"
-                  ><template #append>人</template></ElInput
-                >
+                <ElInput v-model.number="formData.increasesMeterNum" placeholder="输入">
+                  <template #append>人</template>
+                </ElInput>
               </ElFormItem>
               <ElFormItem label="增计依据：" prop="increasesMeterRemark">
                 <ElInput
@@ -78,14 +78,14 @@
             </div>
             <div style="display: flex; align-items: center">
               <ElFormItem label="储藏室数量：" prop="storeroomNum">
-                <ElInput v-model.number="formData.storeroomNum" placeholder="输入"
-                  ><template #append>间</template></ElInput
-                >
+                <ElInput v-model.number="formData.storeroomNum" placeholder="输入">
+                  <template #append>间</template>
+                </ElInput>
               </ElFormItem>
               <ElFormItem label="储藏室金额：" prop="storeroomAmount">
-                <ElInput v-model="formData.storeroomAmount" placeholder="输入"
-                  ><template #append>元</template></ElInput
-                >
+                <ElInput v-model="formData.storeroomAmount" placeholder="输入">
+                  <template #append>元</template>
+                </ElInput>
               </ElFormItem>
             </div>
           </div>
@@ -96,9 +96,9 @@
             <div class="sub_title">（一）补偿费</div>
             <div>
               <ElFormItem label="偿费总计：" prop="feeSum" label-width="194px">
-                <ElInput v-model.number="formData.feeSum" placeholder="输入" class="!w-250px"
-                  ><template #append>元</template></ElInput
-                >
+                <ElInput v-model.number="formData.feeSum" placeholder="输入" class="!w-250px">
+                  <template #append>元</template>
+                </ElInput>
               </ElFormItem>
             </div>
           </div>
@@ -108,22 +108,26 @@
             <div class="item">
               <ElFormItem label="农村移民和农业随迁人口：" label-width="194px" prop="accountName">
                 <ElInput v-model="formData.trailingNum" placeholder="输入" class="!w-250px">
-                  <template #append>人</template></ElInput
-                >
+                  <template #append>人</template>
+                </ElInput>
               </ElFormItem>
               <ElFormItem label="补助费合计：" prop="accountName" label-width="194px">
                 <ElInput disabled v-model="relocationFee" placeholder="输入" class="!w-250px">
-                  <template #append>元</template></ElInput
-                >
+                  <template #append>元</template>
+                </ElInput>
               </ElFormItem>
             </div>
             <div class="label item-label">2、过渡期补助费：</div>
             <div class="item item--noflex">
               <div class="item-right">
                 <ElFormItem label="农村移民和农业随迁人口：" label-width="194px" prop="accountName">
-                  <ElInput v-model.number="formData.trailingNum" placeholder="输入" class="!w-250px"
-                    ><template #append>人</template></ElInput
+                  <ElInput
+                    v-model.number="formData.trailingNum"
+                    placeholder="输入"
+                    class="!w-250px"
                   >
+                    <template #append>人</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="小计：" label-width="194px" prop="transitionRuralFee">
                   <ElInput
@@ -132,8 +136,8 @@
                     class="!w-250px"
                     disabled
                   >
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="非农随迁人口：" label-width="194px" prop="unTrailingNum">
                   <ElInput
@@ -141,8 +145,8 @@
                     placeholder="输入"
                     class="!w-250px"
                   >
-                    <template #append>人</template></ElInput
-                  >
+                    <template #append>人</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="小计：" label-width="194px" prop="transitionUnRuralFee">
                   <ElInput
@@ -151,8 +155,8 @@
                     class="!w-250px"
                     disabled
                   >
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="过渡期补助费合计：" label-width="194px" prop="subsidiesFeeSum">
                   <ElInput
@@ -161,8 +165,8 @@
                     class="!w-250px"
                     disabled
                   >
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
               </div>
             </div>
@@ -179,8 +183,8 @@
                     placeholder="输入"
                     class="!w-250px"
                   >
-                    <template #append>人</template></ElInput
-                  >
+                    <template #append>人</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="每月临时补助费小计：" label-width="170px" prop="resettlementFee">
                   <ElInput
@@ -189,8 +193,8 @@
                     class="!w-250px"
                     disabled
                   >
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
               </div>
             </div>
@@ -199,23 +203,23 @@
               <div class="item-right">
                 <ElFormItem label="自谋出路安置人数：" label-width="194px" prop="seekWayNum">
                   <ElInput v-model.number="formData.seekWayNum" placeholder="输入" class="!w-250px">
-                    <template #append>人</template></ElInput
-                  >
+                    <template #append>人</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="自谋出路安置补助费小计：" label-width="194px" prop="accountName">
                   <ElInput v-model="seekWayFree" disabled placeholder="输入" class="!w-250px">
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="自谋职业安置人数：" label-width="194px" prop="workNum">
                   <ElInput v-model.number="formData.workNum" placeholder="输入" class="!w-250px">
-                    <template #append>人</template></ElInput
-                  >
+                    <template #append>人</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="自谋职业安置补助费小计：" label-width="194px" prop="accountName">
                   <ElInput disabled v-model="workFree" placeholder="输入" class="!w-250px">
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
                 <ElFormItem label="其他补助费合计：" label-width="194px" prop="otherFeeSum">
                   <ElInput
@@ -224,8 +228,8 @@
                     placeholder="输入"
                     class="!w-250px"
                   >
-                    <template #append>元</template></ElInput
-                  >
+                    <template #append>元</template>
+                  </ElInput>
                 </ElFormItem>
               </div>
             </div>
@@ -262,8 +266,8 @@
                 prop="otherFeeSum"
               >
                 <ElInput v-model="allFee" disabled placeholder="输入" class="!w-250px">
-                  <template #append>元</template></ElInput
-                >
+                  <template #append>元</template>
+                </ElInput>
               </ElFormItem>
             </div>
           </div>
