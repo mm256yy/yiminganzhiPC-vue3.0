@@ -1,4 +1,7 @@
 import type { Plugin } from 'vue'
+import { useCache } from '@/hooks/web/useCache'
+
+const { wsCache } = useCache()
 
 /**
  *
@@ -266,3 +269,34 @@ export const urlReg =
   /^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*([\?&]\w+=\w*)*/
 
 export const versionReg = /^[1-9]\.(\d{1,2})\.(\d{1,2})$/
+
+// 户号后四位之前的显示
+export const filterViewDoorNoWithBefore = (doorNo: string) => {
+  if (!doorNo) {
+    return ''
+  }
+  return `${doorNo[5]}${doorNo[7]}${doorNo[8]}`
+}
+
+// 显示doorNo
+export const filterViewDoorNo = (data: any): string => {
+  const { doorNo, type } = data || {}
+  if (!doorNo) {
+    return ''
+  }
+
+  const currentProjectId = wsCache.get('ymCurrentProjectId') || 0
+  const userProjectInfo = wsCache.get('ymUserInfo') || {}
+  const project = userProjectInfo.projectUsers.find((item) => item.projectId === currentProjectId)
+  const isFxsk = project && project.reservoirCode === 'fxsk'
+  if (isFxsk) {
+    return doorNo
+  }
+  // 6、8、9、11、12、13、14、15、16
+  if (type && type === 'PeasantHousehold') {
+    const before = filterViewDoorNoWithBefore(doorNo)
+    const lastSix = doorNo.slice(doorNo.length - 6 < 0 ? 0 : doorNo.length - 6, doorNo.length)
+    return `${before}${lastSix}`
+  }
+  return doorNo
+}

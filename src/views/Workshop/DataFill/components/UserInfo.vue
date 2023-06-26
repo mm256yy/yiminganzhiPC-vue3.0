@@ -4,7 +4,9 @@
       <div class="user">
         <Icon :icon="infoData.icon" color="#3E73EC" />
         <span class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</span>
-        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</span>
+        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          filterViewDoorNo(props.baseInfo)
+        }}</span>
       </div>
       <div
         :class="{
@@ -100,6 +102,8 @@
 <script lang="ts" setup>
 import { ReportStatus } from '../config'
 import { ref, onMounted } from 'vue'
+import { filterViewDoorNo } from '@/utils'
+
 interface PropsType {
   baseInfo: any
   type: any
