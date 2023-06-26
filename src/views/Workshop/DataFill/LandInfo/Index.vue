@@ -127,27 +127,25 @@ const genNewArr = (arr: any) => {
   let newArr: any = []
   landType.map((item: any, index: number) => {
     arr?.map((data: any) => {
-      for (let key in data) {
-        if (item.props === key) {
-          if (data.type === 'collectiveness') {
-            newArr[index] = {
-              collectiveId: data.id,
-              projectId: data.projectId,
-              householdId: data.householdId,
-              doorNo: data.doorNo,
-              collectiveUid: data.uid,
-              status: data.status,
-              landTypeText: item.label,
-              jtlandArea: data[key]
-            }
-          } else if (data.type === 'stateOwned') {
-            newArr[index] = {
-              ...newArr[index],
-              ownedId: data.id,
-              ownedUid: data.uid,
-              gylandArea: data[key]
-            }
-          }
+      if (data.type === 'collectiveness') {
+        newArr[index] = {
+          collectiveId: data.id,
+          collectiveUid: data.uid,
+          collectiveType: data.type,
+          doorNo: data.doorNo,
+          householdId: data.householdId,
+          projectId: data.projectId,
+          status: data.status,
+          landTypeText: item.label,
+          jtlandArea: data[item.props]
+        }
+      } else if (data.type === 'stateOwned') {
+        newArr[index] = {
+          ...newArr[index],
+          ownedId: data.id,
+          ownedUid: data.uid,
+          ownedType: data.type,
+          gylandArea: data[item.props]
         }
       }
     })
@@ -178,7 +176,7 @@ const genSubmitParams = async () => {
       obj1.doorNo = item.doorNo
       obj1.uid = item.collectiveUid
       obj1.status = item.status
-      obj1.type = 'collectiveness'
+      obj1.type = item.collectiveType
       obj1.projectId = item.projectId
       obj1.householdId = item.householdId
 
@@ -187,7 +185,7 @@ const genSubmitParams = async () => {
       obj2.doorNo = item.doorNo
       obj2.uid = item.ownedUid
       obj2.status = item.status
-      obj2.type = 'stateOwned'
+      obj2.type = item.ownedType
       obj2.projectId = item.projectId
       obj2.householdId = item.householdId
     }
