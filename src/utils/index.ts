@@ -1,7 +1,4 @@
 import type { Plugin } from 'vue'
-import { useCache } from '@/hooks/web/useCache'
-
-const { wsCache } = useCache()
 
 /**
  *
@@ -284,16 +281,8 @@ export const filterViewDoorNo = (data: any): string => {
   if (!doorNo) {
     return ''
   }
-
-  const currentProjectId = wsCache.get('ymCurrentProjectId') || 0
-  const userProjectInfo = wsCache.get('ymUserInfo') || {}
-  const project = userProjectInfo.projectUsers.find((item) => item.projectId === currentProjectId)
-  const isFxsk = project && project.reservoirCode === 'fxsk'
-  if (isFxsk) {
-    return doorNo
-  }
   // 6、8、9、11、12、13、14、15、16
-  if (type && type === 'PeasantHousehold') {
+  if (type && type === 'PeasantHousehold' && doorNo.length === 16) {
     const before = filterViewDoorNoWithBefore(doorNo)
     const lastSix = doorNo.slice(doorNo.length - 6 < 0 ? 0 : doorNo.length - 6, doorNo.length)
     return `${before}${lastSix}`
