@@ -53,6 +53,9 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #doorNo="{ row }">
+          {{ filterViewDoorNo(row) }}
+        </template>
         <template #regionText="{ row }">
           <div>
             {{
@@ -190,7 +193,7 @@ import type {
   LandlordHeadInfoType,
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
-import { formatDate } from '@/utils/index'
+import { filterViewDoorNo, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
 const router = useRouter()

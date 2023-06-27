@@ -1,6 +1,8 @@
 import { LandlordType, ProjectType, MainType } from '@/types/print'
 import { imgHeight, layout } from './config'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { filterViewDoorNo } from '@/utils'
+
 /**
  * 公共模块
  */
@@ -100,7 +102,7 @@ export const getCompanyTableHead = (landlord: LandlordType, projectInfo: Project
                     : landlord.type === MainType.IndividualHousehold
                     ? '个体工商户'
                     : ''
-                } ${landlord.name} ${landlord.doorNo} 号）`,
+                } ${landlord.name || ''} ${filterViewDoorNo(landlord) || ''} 号）`,
                 alignment: 'center',
                 margin: [headMargin, 0, headMargin, 0]
               }
@@ -230,7 +232,7 @@ export const getCompanyBaseTableHead = (landlord: LandlordType, projectInfo: Pro
             }编码`,
             style: 'td'
           },
-          { text: landlord.doorNo || '', style: 'td' }
+          { text: filterViewDoorNo(landlord) || '', style: 'td' }
         ],
         [
           {
@@ -274,7 +276,7 @@ export const getPeopleTableHead = (landlord: LandlordType, projectInfo: ProjectT
                 margin: [headMargin, 0, headMargin, 2]
               },
               {
-                text: `（居民户 ${landlord.name || ''} ${landlord.doorNo || ''} 号）`,
+                text: `（居民户 ${landlord.name || ''} ${filterViewDoorNo(landlord) || ''} 号）`,
                 alignment: 'center',
                 margin: [headMargin, 0, headMargin, 0]
               }

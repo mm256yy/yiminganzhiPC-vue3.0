@@ -4,7 +4,9 @@
       <div class="user">
         <Icon :icon="infoData.icon" color="#3E73EC" />
         <div class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</div>
-        <div class="pl-8px text-size-14px text-[#1C5DF1]">{{ props.baseInfo.doorNo }}</div>
+        <div class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          filterViewDoorNo(props.baseInfo)
+        }}</div>
       </div>
       <ElSpace>
         <ElButton
@@ -234,7 +236,7 @@
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol, ElMessage, ElSpace, ElButton } from 'element-plus'
 import { FillStatus } from '../config'
-import { fmtStr } from '@/utils/index'
+import { filterViewDoorNo, fmtStr } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
 import Print from './Print.vue'
 import { reportLandlordApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
