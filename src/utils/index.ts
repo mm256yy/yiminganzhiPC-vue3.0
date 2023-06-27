@@ -262,6 +262,41 @@ export const fmtStr = (str: any, unit?: string) => {
   }
 }
 
+/**
+ * 将数组中拥有相同值的部分放在一起重新排序
+ * @param arr 原数组
+ * @param key 相同值的 key
+ * @returns newArr 返回新数组
+ */
+export const sortSameArr = (arr: any, key: any) => {
+  // sameArr 数组中的每一个值是一个数组，数组中的每一个元素是数组中相同 doorNo 的下标
+  // 如：[[0, 1, 2, 3, 4], [5, 7], [6, 8]]
+  const indexArr: any = []
+
+  // obj 存储的是键值为 doorNo 在 sameArr 数组中的下标 index，如：{ 张三: 0 }
+  const obj: any = {}
+
+  arr.map((item: any, index: number) => {
+    const doorNo = item[key]
+    const sIndex = obj[doorNo]
+    if (sIndex !== undefined) {
+      indexArr[sIndex].push(index)
+    } else {
+      obj[doorNo] = indexArr.length
+      indexArr.push([index])
+    }
+  })
+
+  // newArr 是排序后最终返回的新数组
+  const newArr: any = []
+  indexArr.map((item: any) => {
+    item.map((index: number) => {
+      newArr.push(arr[index])
+    })
+  })
+  return newArr
+}
+
 export const urlReg =
   /^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*([\?&]\w+=\w*)*/
 

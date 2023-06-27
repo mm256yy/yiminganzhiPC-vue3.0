@@ -38,6 +38,24 @@
         <ElSpace>
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增村集体</ElButton>
+          <ElUpload
+            action="/api/immigrantGround/import"
+            :headers="headers"
+            :show-file-list="false"
+            accept=".xls,.xlsx"
+            :before-upload="beforeUpload"
+            :on-success="uploadDone"
+            :on-error="uploadError"
+          >
+            <template #trigger>
+              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading">
+                批量导入土地
+              </ElButton>
+            </template>
+          </ElUpload>
+          <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
+            土地模版下载
+          </ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
@@ -169,7 +187,8 @@ import {
   ElBreadcrumb,
   ElBreadcrumbItem,
   ElMessageBox,
-  ElMessage
+  ElMessage,
+  ElUpload
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -216,6 +235,8 @@ const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
+const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
+const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const villageTree = ref<any[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
@@ -229,6 +250,12 @@ const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const exportDialog = ref(false)
+const uploadLoading = ref(false)
+const headers = ref({
+  'Project-Id': projectId,
+  Authorization: appStore.getToken
+})
+
 interface exportListType {
   name: string
   value: string | number
@@ -259,6 +286,7 @@ const exportList = ref<exportListType[]>([
     value: 'exportVillageGrave'
   }
 ])
+
 const onExport = () => {
   exportDialog.value = true
 }
@@ -286,7 +314,7 @@ const { register, tableObject, methods } = useTable({
   delListApi: delLandlordByIdApi
 })
 // getList getSelections
-const { setSearchParams, getSelections } = methods
+const { setSearchParams, getSelections, getList } = methods
 
 tableObject.params = {
   projectId
@@ -642,6 +670,34 @@ const onViewRow = async (row) => {
   actionType.value = 'view'
   tableObject.currentRow = row
   dialog.value = true
+}
+
+const beforeUpload = () => {
+  uploadLoading.value = true
+}
+
+const uploadDone = () => {
+  uploadLoading.value = false
+  ElMessage({
+    message: '导入成功',
+    type: 'success'
+  })
+  getList()
+}
+
+const uploadError = (error) => {
+  try {
+    const response = JSON.parse(error.message)
+    ElMessage.error(response.message)
+    uploadLoading.value = false
+  } catch (err) {
+    console.log('导入报错信息:', err)
+  }
+}
+
+// 下载模板
+const onDownloadTemplate = () => {
+  window.location.href = 'https://oss.zdwp.tech/migrate/files/zdbim/print/土地模板.xlsx'
 }
 </script>
 
