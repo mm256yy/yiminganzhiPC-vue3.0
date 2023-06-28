@@ -39,6 +39,15 @@
           >
             填报完成
           </ElButton>
+
+          <ElButton
+            v-if="baseInfo.signStatus === SignStatus.UnSign"
+            type="primary"
+            :icon="SignIcon"
+            @click="onSignData"
+          >
+            表单签字
+          </ElButton>
         </ElSpace>
       </div>
 
@@ -362,8 +371,12 @@ import {
   villageInfoCTabs
 } from './config'
 
-import { getLandlordByIdApi, reportLandlordApi } from '@/api/workshop/landlord/service'
-import { ReportStatus } from '@/views/Workshop/DataFill/config'
+import {
+  getLandlordByIdApi,
+  reportLandlordApi,
+  signLandlordApi
+} from '@/api/workshop/landlord/service'
+import { ReportStatus, SignStatus } from '@/views/Workshop/DataFill/config'
 
 import Demographic from './Demographic/Index.vue' // 人口信息
 import House from './House/Index.vue' // 房屋信息
@@ -414,6 +427,7 @@ const reportResult = ref<string[]>([])
 const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
+const SignIcon = useIcon({ icon: 'typcn:edit' })
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -511,6 +525,14 @@ const onPrint = () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+// 签字
+const onSignData = () => {
+  signLandlordApi(householdId).then(() => {
+    ElMessage.success('签字成功!')
+    getLandlordInfo()
+  })
 }
 </script>
 
