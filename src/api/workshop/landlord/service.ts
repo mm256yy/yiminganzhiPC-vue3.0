@@ -206,3 +206,12 @@ export const downloadPrintPdfApi = (data: any[]): Promise<any> => {
     data
   })
 }
+
+/**
+ * 报表签字
+ */
+export const signLandlordApi = (id: number): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/sginComplete/${id}`
+  })
+}

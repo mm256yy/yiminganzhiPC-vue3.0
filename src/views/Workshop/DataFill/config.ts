@@ -202,6 +202,12 @@ export const ReportStatus = {
   UnReport: 'UnReport'
 }
 
+// 签字状态
+export const SignStatus = {
+  SignSucceed: 'SignSucceed',
+  UnSign: 'UnSign'
+}
+
 // 生产安置方式
 // 农业安置、社保安置、一次性补偿、有土安置、基本生活保障安置、其他安置方式
 export const ProductionPlaceWay = [
