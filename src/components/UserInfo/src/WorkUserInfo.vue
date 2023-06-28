@@ -35,7 +35,7 @@ const loginOut = () => {
 
 <template>
   <ElDropdown :class="prefixCls" trigger="click">
-    <div class="flex items-center">
+    <div class="flex items-center cursor-pointer">
       <img src="@/assets/imgs/avatar.jpg" alt="" class="w-20px h-20px rounded-[50%]" />
       <span class="<lg:hidden text-14px pl-[8px] text-[#fff]">{{ nickName }}</span>
     </div>
