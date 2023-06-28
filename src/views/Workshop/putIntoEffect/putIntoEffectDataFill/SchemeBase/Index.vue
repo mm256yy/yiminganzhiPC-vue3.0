@@ -214,10 +214,14 @@
                 <ElButton class="tabel-btn">已选择该方案</ElButton>
               </div>
               <div class="flex items-center space-between pb-12px" v-else>
-                <ElButton class="tabel-btn" @click="handleClickDel(index, item.wid)">
+                <ElButton class="tabel-btn" @click="handleClickDel(index + 1, item.wid)">
                   删除
                 </ElButton>
-                <ElButton class="tabel-btn" type="primary" @click="selectSchemebase(index, item)">
+                <ElButton
+                  class="tabel-btn"
+                  type="primary"
+                  @click="selectSchemebase(index + 1, item)"
+                >
                   选择该方案
                 </ElButton>
               </div>
@@ -588,7 +592,7 @@ const dataCalculate = (operArr: any, oper: string) => {
 getDetail()
 
 const handleClickDel = (index: number, wid: number) => {
-  const version = numList[index]
+  const version = toChineseNumber(index)
   ElMessageBox.confirm(`删除第${version}种方案`, '', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
@@ -604,7 +608,7 @@ const handleClickDel = (index: number, wid: number) => {
 }
 
 const selectSchemebase = (index: number, row: any) => {
-  const version = numList[index]
+  const version = toChineseNumber(index)
   ElMessageBox.confirm(`是否选择方案${version}`, '', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',

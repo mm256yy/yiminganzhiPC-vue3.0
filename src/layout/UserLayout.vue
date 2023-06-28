@@ -38,12 +38,10 @@ export default defineComponent({
     onMounted(async () => {
       appStore.setLayout('top')
       const userInfo = await currentUserApi()
-      console.log('userInfo:', userInfo)
       appStore.setUserInfo(userInfo)
       selectedProjectId.value = appStore.getCurrentProjectId
       setPlatform('workshop', addRoute)
       const project: any = projects.value?.find((x) => x.projectId === selectedProjectId.value)
-      console.log('project:', project)
 
       appStore.setreservoirName(project.reservoirName)
       appStore.setProjectStatus(project.status)
@@ -73,7 +71,6 @@ export default defineComponent({
           window.location.reload()
         }, 500)
       }
-      console.log(project, '123456')
     }
 
     return () => (
