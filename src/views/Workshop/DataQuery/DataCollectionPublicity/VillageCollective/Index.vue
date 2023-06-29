@@ -23,14 +23,14 @@
         <el-table-column label="房屋" header-align="center">
           <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
           <el-table-column
-            prop="constructionTypeText"
-            label="结构"
+            prop="storeyNumber"
+            label="房屋层数"
             align="center"
             header-align="center"
           />
           <el-table-column
-            prop="storeyNumber"
-            label="房屋层数"
+            prop="constructionTypeText"
+            label="结构"
             align="center"
             header-align="center"
           />
