@@ -8,7 +8,7 @@
         style="width: 200px"
       />
       <ElButton type="primary" @click="searchAppendant">查询</ElButton>
-      <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddAppendant">新增</ElButton>
+      <ElButton type="primary" @click="onAddAppendant">新增</ElButton>
     </div>
     <div>
       <ContentWrap>
@@ -37,7 +37,6 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 // 公共组件
 import { ElButton, ElMessageBox, ElMessage, ElInput } from 'element-plus'
@@ -51,7 +50,6 @@ import { listAppendantApi, deleteAppendantApi } from '@/api/sys/appendant/servic
 // 页面组件
 import EditForm from './EditForm.vue'
 
-const appStore = useAppStore()
 const showEdit = ref(false)
 const currentRow = ref<AppendantInfoType>()
 const name = ref<string>()
