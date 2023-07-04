@@ -8,17 +8,12 @@
         @search="onSearch"
         @reset="resetSearch"
       />
+      <ElButton type="primary" @click="onExport">数据导出</ElButton>
     </div>
 
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="loading">
-      <div class="flex items-center justify-between pb-12px">
-        <div></div>
-        <ElSpace>
-          <ElButton type="primary" @click="onExport">数据导出</ElButton>
-        </ElSpace>
-      </div>
       <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
           <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
@@ -70,7 +65,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSpace, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
@@ -246,6 +241,15 @@ onMounted(() => {
 })
 </script>
 <style lang="less" scoped>
+.search-form-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-wrap {
+  margin-top: 0;
+}
+
 .line {
   width: 100%;
   height: 10px;
