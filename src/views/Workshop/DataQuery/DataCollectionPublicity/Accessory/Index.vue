@@ -240,11 +240,11 @@ const onSearch = (data) => {
   if (!params.doorNo) {
     delete params.doorNo
   }
-  if (params.villageCOde) {
+  if (params.villageCode) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCOde, (item) => {
+    findRecursion(villageTree.value, params.villageCode, (item) => {
       if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCOde
+        params[getParamsKey(item.districtType)] = params.villageCode
       }
       setSearchParams({ ...params })
     })
