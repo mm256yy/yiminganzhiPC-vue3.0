@@ -26,7 +26,6 @@
         row-key="id"
         headerAlign="center"
         align="center"
-        highlightCurrentRow
         @register="register"
       />
     </div>

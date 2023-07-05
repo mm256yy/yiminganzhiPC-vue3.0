@@ -27,7 +27,6 @@
         headerAlign="center"
         align="center"
         border
-        highlightCurrentRow
         @register="register"
         :span-method="arraySpanMethod"
       />
