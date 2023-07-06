@@ -119,7 +119,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'number',
     label: '数量（穴）',
-    width: 180,
     search: {
       show: false
     }
@@ -160,14 +159,18 @@ const getParamsKey = (key: string) => {
  * @param{Object} columnInex 当前列下标
  */
 const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
-  console.log(column)
-  if (columnIndex < 2) {
+  if (column && columnIndex < 2) {
     const num = tableObject.tableList.filter((item) => item.doorNo === row.doorNo)?.length
     const index = tableObject.tableList.findIndex((item) => item.doorNo === row.doorNo)
     if (index === rowIndex) {
       return {
         rowspan: num,
         colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
       }
     }
   }
