@@ -15,8 +15,22 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="角色代码" prop="code">
-            <ElInput :maxlength="20" v-model.trim="form.code" />
+          <ElFormItem label="角色代码" prop="code" required>
+            <ElSelect
+              class="!w-full"
+              clearable
+              filterable
+              v-model="form.code"
+              :disabled="actionType === 'edit'"
+            >
+              <ElOption
+                v-for="item in dictObj[366]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+            <!-- <ElInput :maxlength="20" v-model.trim="form.code" :disabled="actionType === 'edit'" /> -->
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -57,13 +71,16 @@ import {
   ElRadioGroup,
   ElRadioButton,
   FormInstance,
-  FormRules
+  FormRules,
+  ElSelect,
+  ElOption
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
 import type { RoleType } from '@/api/sys/role/types'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -76,6 +93,10 @@ const emit = defineEmits(['close', 'submit'])
 const appStore = useAppStore()
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
+
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<RoleType, 'id'> = {
   name: '',
@@ -107,12 +128,7 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
   projectId: [required()],
-  code: [
-    {
-      pattern: /^[0-9a-zA-Z_]+$/,
-      message: '支持字母数字下划线'
-    }
-  ]
+  code: [required()]
 })
 
 // 关闭弹窗
