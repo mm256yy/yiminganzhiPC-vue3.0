@@ -327,12 +327,12 @@ export const FlowTabs = [
     name: '资格认定'
   },
   {
-    id: 2,
-    name: '安置确认'
+    id: 6,
+    name: '模拟安置'
   },
   {
-    id: 6,
-    name: '方案比选'
+    id: 2,
+    name: '安置确认'
   },
   {
     id: 3,
