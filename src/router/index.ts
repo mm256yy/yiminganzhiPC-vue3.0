@@ -112,6 +112,26 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'adminSecondHome',
+        name: 'adminSecondHome',
+        component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
+        meta: {
+          title: '工作台', // 领导端二级首页
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'adminThirdHome',
+        name: 'adminThirdHome',
+        component: () => import('@/views/Workshop/Home/AdminThirdIndex.vue'),
+        meta: {
+          title: '工作台', // 领导端三级首页
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
         path: 'newDetail',
         name: 'newDetail',
         component: () => import('@/views/Workshop/Home/components/newDetail.vue'),
