@@ -89,7 +89,10 @@
 
       <div class="col">
         <div class="row row-5">
-          <div class="title"> <div class="line"></div>进度雷达 </div>
+          <div class="radar-title">
+            <div class="left"> <div class="line"></div>进度雷达 </div>
+            <div class="right" @click="radarMoreClick">更多&gt;</div>
+          </div>
           <Echart :options="scheduleOption" :height="276" />
         </div>
 
@@ -401,6 +404,9 @@ const scheduleOption = ref({
   ]
 })
 
+// 点击雷达图更多按钮跳转至二级页面
+const radarMoreClick = () => {}
+
 const newsTabVal = ref<number>(1) // 新闻&法规 tab 选中值
 const migrateTabVal = ref<number>(1) // 移民一张图 tab 选中值
 const rankTabVal = ref<number>(1) // 工作组比拼晾晒图 tab 选中值
@@ -513,6 +519,36 @@ const appearanceList = [
             height: 14px;
             margin-right: 8px;
             background: #3e73ec;
+          }
+        }
+
+        .radar-title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+          height: 46px;
+
+          .left {
+            display: flex;
+            font-size: 16px;
+            font-weight: bold;
+            color: #171718;
+            align-items: center;
+
+            .line {
+              width: 4px;
+              height: 14px;
+              margin-right: 8px;
+              background: #3e73ec;
+            }
+          }
+
+          .right {
+            font-size: 14px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
           }
         }
 
