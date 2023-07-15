@@ -103,6 +103,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'adminHome',
+        name: 'adminHome',
+        component: () => import('@/views/Workshop/Home/AdminIndex.vue'),
+        meta: {
+          title: '工作台', // 用于领导端
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
         path: 'newDetail',
         name: 'newDetail',
         component: () => import('@/views/Workshop/Home/components/newDetail.vue'),
