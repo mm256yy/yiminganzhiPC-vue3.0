@@ -3,9 +3,7 @@
     <div class="home-main">
       <div class="col">
         <div class="row row-1">
-          <div class="title">
-            <div class="line"></div>>移民概况
-          </div>
+          <div class="title"> <div class="line"></div>>移民概况 </div>
           <div class="list">
             <div class="item">
               <img src="@/assets/imgs/home/icon_jmh.png" class="icon" />
@@ -61,19 +59,18 @@
         </div>
 
         <div class="row row-3">
-          <div class="title">
-            <div class="line"></div>实施进度
-          </div>
+          <div class="title"> <div class="line"></div>实施进度 </div>
           <Echart :options="impProgressOption" :height="260" />
         </div>
 
         <div class="row row-4">
-          <div class="title">
-            <div class="line"></div>新闻&法规
-          </div>
+          <div class="title"> <div class="line"></div>新闻&法规 </div>
           <div class="tab-list">
-            <div v-for="item in newsTabList" :key="item.value"
-              :class="['tab-item', newsTabVal === item.value ? 'active' : '']">
+            <div
+              v-for="item in newsTabList"
+              :key="item.value"
+              :class="['tab-item', newsTabVal === item.value ? 'active' : '']"
+            >
               {{ item.title }}
             </div>
           </div>
@@ -93,33 +90,30 @@
       <div class="col">
         <div class="row row-5">
           <div class="radar-title">
-            <div class="left">
-              <div class="line"></div>进度雷达
-            </div>
+            <div class="left"> <div class="line"></div>进度雷达 </div>
             <div class="right" @click="radarMoreClick">更多&gt;</div>
           </div>
           <Echart :options="scheduleOption" :height="276" />
         </div>
 
         <div class="row row-6">
-          <div class="title">
-            <div class="line"></div>移民一张图
-          </div>
+          <div class="title"> <div class="line"></div>移民一张图 </div>
           <div class="content">
             <el-image class="img" :src="img_ymyzt" fit="cover" />
           </div>
           <div class="tab-list">
-            <div :class="['item', migrateTabVal === item.value ? 'active' : '']" v-for="item in migrateTabsList"
-              :key="item.value">
+            <div
+              :class="['item', migrateTabVal === item.value ? 'active' : '']"
+              v-for="item in migrateTabsList"
+              :key="item.value"
+            >
               {{ item.title }}
             </div>
           </div>
         </div>
 
         <div class="row row-7">
-          <div class="title">
-            <div class="line"></div>问题反馈
-          </div>
+          <div class="title"> <div class="line"></div>问题反馈 </div>
           <div class="th-title">
             <div>问题内容</div>
             <div>提交时间</div>
@@ -135,9 +129,7 @@
 
       <div class="col right">
         <div class="row row-8">
-          <div class="title">
-            <div class="line"></div>资金管理
-          </div>
+          <div class="title"> <div class="line"></div>资金管理 </div>
           <div class="content-1">
             <div class="item">
               <img class="img" src="@/assets/imgs/home/icon_gszj.png" />
@@ -175,12 +167,13 @@
         </div>
 
         <div class="row row-9">
-          <div class="title">
-            <div class="line"></div>工作组比拼晾晒
-          </div>
+          <div class="title"> <div class="line"></div>工作组比拼晾晒 </div>
           <div class="tab-list">
-            <div v-for="item in rankTabList" :class="['tab-item', rankTabVal === item.value ? 'active' : '']"
-              :key="item.value">
+            <div
+              v-for="item in rankTabList"
+              :class="['tab-item', rankTabVal === item.value ? 'active' : '']"
+              :key="item.value"
+            >
               {{ item.name }}
             </div>
           </div>
@@ -203,9 +196,7 @@
         </div>
 
         <div class="row row-10">
-          <div class="title">
-            <div class="line"></div>形象面貌
-          </div>
+          <div class="title"> <div class="line"></div>形象面貌 </div>
           <div class="list">
             <div class="item" v-for="item in appearanceList" :key="item.id">
               <el-image class="img" :src="item.url" fit="cover" />
@@ -1040,4 +1031,5 @@ const appearanceList = [
       }
     }
   }
-}</style>
+}
+</style>
