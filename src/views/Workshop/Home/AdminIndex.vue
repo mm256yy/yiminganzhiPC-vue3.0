@@ -3,7 +3,7 @@
     <div class="home-main">
       <div class="col">
         <div class="row row-1">
-          <div class="title"> <div class="line"></div>>移民概况 </div>
+          <div class="title"> <div class="line"></div>移民概况 </div>
           <div class="list">
             <div class="item">
               <img src="@/assets/imgs/home/icon_jmh.png" class="icon" />
@@ -15,7 +15,7 @@
             <div class="item">
               <img src="@/assets/imgs/home/icon_ymrk.png" class="icon" />
               <div class="content">
-                <div class="num">12,528<span class="unit">人</span></div>
+                <div class="num">12065<span class="unit">人</span></div>
                 <div class="sub-title">移民人口</div>
               </div>
             </div>
@@ -36,14 +36,14 @@
             <div class="item">
               <img src="@/assets/imgs/home/icon_jmh.png" class="icon" />
               <div class="content">
-                <div class="num">25<span class="unit">个</span></div>
+                <div class="num">10<span class="unit">个</span></div>
                 <div class="sub-title">村集体</div>
               </div>
             </div>
             <div class="item">
               <img src="@/assets/imgs/home/icon_jmh.png" class="icon" />
               <div class="content">
-                <div class="num">65<span class="unit">项</span></div>
+                <div class="num">7<span class="unit">项</span></div>
                 <div class="sub-title">专业项目</div>
               </div>
             </div>
@@ -135,7 +135,7 @@
               <img class="img" src="@/assets/imgs/home/icon_gszj.png" />
               <div class="content">
                 <div class="sub-title">概算资金(万元)</div>
-                <div class="amount">500,000</div>
+                <div class="amount">642,103</div>
               </div>
             </div>
             <div class="item">
@@ -158,10 +158,10 @@
             </div>
             <div class="chart-3">
               <div class="sub-title">概算内(万元)</div>
-              <div class="amount">78,000</div>
+              <div class="amount">642,103</div>
               <div class="line"></div>
               <div class="sub-title">概算外(万元)</div>
-              <div class="amount">20,000</div>
+              <div class="amount">80,000</div>
             </div>
           </div>
         </div>
@@ -196,11 +196,26 @@
         </div>
 
         <div class="row row-10">
-          <div class="title"> <div class="line"></div>形象面貌 </div>
-          <div class="list">
+          <div class="title"> <div class="line"></div> {{ appearanceTab.name }} </div>
+          <div class="list" v-if="appearanceTab.id === 1">
             <div class="item" v-for="item in appearanceList" :key="item.id">
               <el-image class="img" :src="item.url" fit="cover" />
             </div>
+          </div>
+          <div class="list" v-else-if="appearanceTab.id === 2">
+            <div class="item" v-for="item in appearanceList2" :key="item.id">
+              <el-image class="img" :src="item.url" fit="cover" />
+            </div>
+          </div>
+          <div class="tab-wrap">
+            <div
+              class="tab-item"
+              :class="{ active: item.id === appearanceTab.id }"
+              @click="appearanceTabChange(item)"
+              v-for="item in appearanceTabList"
+              :key="item.id"
+              >{{ item.name }}</div
+            >
           </div>
         </div>
       </div>
@@ -475,10 +490,33 @@ const workGroupOptions = [
 ]
 
 // 形象面貌数据列表
-const appearanceList = [
+const appearanceList = ref([
   { id: 1, url: img_sk_1 },
   { id: 2, url: img_sk_2 }
-]
+])
+
+const appearanceList2 = ref([
+  { id: 1, url: img_sk_2 },
+  { id: 2, url: img_sk_1 }
+])
+// 形象面貌 tabs
+const appearanceTabList = ref([
+  {
+    id: 1,
+    name: '我的乡愁'
+  },
+  {
+    id: 2,
+    name: '形象面貌'
+  }
+])
+
+const appearanceTab = ref(appearanceTabList.value[0])
+
+// 形象面貌 tab 切换
+const appearanceTabChange = (item: any) => {
+  appearanceTab.value = item
+}
 </script>
 <style lang="less">
 .home-wrapper {
@@ -1014,16 +1052,52 @@ const appearanceList = [
             box-sizing: border-box;
 
             .item {
+              display: flex;
+              align-items: center;
+              justify-content: center;
               width: 192px;
-              height: 250px;
+              height: 214px;
               background: linear-gradient(360deg, #ffffff 0%, rgba(255, 255, 255, 0.73) 100%);
               border: 1px solid #ebebeb;
               border-radius: 4px;
 
               .img {
                 width: 188px;
-                height: 246px;
+                height: 210px;
                 border-radius: 2px;
+              }
+            }
+          }
+
+          .tab-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px 20px;
+
+            .tab-item {
+              display: flex;
+              height: 30px;
+              padding: 0 10px;
+              margin-right: 10px;
+              font-size: 14px;
+              font-weight: 500;
+              color: #3e73ec;
+              cursor: pointer;
+              border: 1px solid #3e73ec;
+              border-radius: 4px 4px 4px 4px;
+              opacity: 1;
+              user-select: none;
+              align-items: center;
+              justify-content: center;
+
+              &:last-child {
+                margin-right: 0;
+              }
+
+              &.active {
+                color: #ffffff;
+                background: #3e73ec;
               }
             }
           }
