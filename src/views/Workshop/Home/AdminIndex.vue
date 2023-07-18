@@ -1028,7 +1028,7 @@ const appearanceTabChange = (item: any) => {
                 .progress {
                   height: 9px;
                   background: linear-gradient(90deg, rgba(255, 197, 61, 0.3) 0%, #faad14 100%);
-                  transform: skewX(-15deg);
+                  transform: skewX(-30deg);
                   transform-origin: 0% 0%;
                 }
               }
