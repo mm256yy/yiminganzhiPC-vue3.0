@@ -95,3 +95,9 @@ pnpm run build:pro
 类型命名：大驼峰 + `Type`后缀 例如：UserInfoType
 
 接口命名：动词 + 大驼峰 + `Api`后缀 例如：GetUserInfoApi / AddUserItemApi
+
+#### 文件夹
+
+页面文件不要嵌套过深，尽量都放在第一层 例如 居民户列表 Workshop/Landlord/Index.vue
+
+不要添加过多的无用文件夹，影响路由的添加
