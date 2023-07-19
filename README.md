@@ -100,4 +100,8 @@ pnpm run build:pro
 
 页面文件不要嵌套过深，尽量都放在第一层 例如 居民户列表 Workshop/Landlord/Index.vue
 
-不要添加过多的无用文件夹，影响路由的添加
+不要添加过多的无用文件夹，影响后面路由的配置
+
+错误示例：
+
+Workshop/Landlord/LandlordList/Index.vue
