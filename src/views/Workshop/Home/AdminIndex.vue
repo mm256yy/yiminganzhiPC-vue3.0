@@ -214,8 +214,9 @@
               @click="appearanceTabChange(item)"
               v-for="item in appearanceTabList"
               :key="item.id"
-              >{{ item.name }}</div
             >
+              {{ item.name }}
+            </div>
           </div>
         </div>
       </div>
