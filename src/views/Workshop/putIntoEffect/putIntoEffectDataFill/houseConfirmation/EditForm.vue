@@ -449,6 +449,7 @@ watch(
     // 处理表单数据
     form.value = {
       ...props.row,
+      demographicId: String(props.row?.demographicId),
       ownersSituation: props.row?.ownersSituation ? props.row?.ownersSituation.split(',') : []
     }
 
