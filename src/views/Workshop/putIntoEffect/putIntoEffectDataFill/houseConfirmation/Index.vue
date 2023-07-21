@@ -28,21 +28,9 @@
           </div>
         </template>
         <template #action="{ row }">
-          <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '详情',
-                type: 'primary',
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-          />
-          <!-- :delete="row.relation == 1 ? false : true" -->
+          <el-button type="primary" link @click="onViewRow(row)">详情</el-button>
+          <el-button type="primary" link @click="onEditRow(row)">核定</el-button>
+          <el-button type="danger" link @click="onDelRow(row)">删除</el-button>
         </template>
       </Table>
     </div>
@@ -53,8 +41,15 @@
         的信息
       </div>
       <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
-      <ElFormItem label="删除原因" prop="name">
-        <ElInput v-model="cause" class="!w-full" placeholder="请输入" type="textarea" row="3" />
+      <ElFormItem label="删除原因" prop="reason">
+        <ElSelect clearable filterable v-model="reason" class="!w-full">
+          <ElOption
+            v-for="item in dictObj[367]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
@@ -74,17 +69,29 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
-import { ElButton, ElSpace, ElDialog, ElFormItem, ElInput } from 'element-plus'
-import { Table, TableEditColumn } from '@/components/Table'
+import { reactive, ref, computed } from 'vue'
+import {
+  ElButton,
+  ElSpace,
+  ElDialog,
+  ElFormItem,
+  ElSelect,
+  ElOption,
+  ElMessage
+} from 'element-plus'
+import { Table } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getHouseListApi, delHouseByIdApi } from '@/api/workshop/datafill/house-service'
-// import { DemographicDtoType } from '@/api/workshop/population/types'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
+import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
+import { delHouseConfirmationApi } from '@/api/putIntoEffect/putIntoEffectDataFill/houseConfirmation/service'
+import { DelHouseDtoType } from '@/api/putIntoEffect/putIntoEffectDataFill/houseConfirmation/types'
+
 import { standardFormatDate } from '@/utils/index'
-// import {  } from '@/api/putIntoEffect/landlordCheck'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -95,9 +102,11 @@ const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+
 const { register, tableObject, methods } = useTable({
-  getListApi: getHouseListApi,
-  delListApi: delHouseByIdApi
+  getListApi: getHouseListApi
 })
 const { getList } = methods
 
@@ -183,8 +192,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'addReason',
+    field: 'addReasonText',
     label: '新增原因',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'deleteReasonText',
+    label: '删除原因',
     search: {
       show: false
     }
@@ -205,27 +221,29 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
-const cause = ref()
-const multipleV = ref()
+const reason = ref()
 const onClose = () => {
-  cause.value = ''
+  reason.value = ''
   dialogVisible.value = false
 }
 const onSubmit = () => {
+  if (!reason.value) {
+    ElMessage.warning('请选择删除原因')
+    return
+  }
+  const params: DelHouseDtoType = {
+    id: tableObject.currentRow?.id as number,
+    reason: reason.value
+  }
+  delHouseConfirmationApi(params).then(() => {
+    ElMessage.success('操作成功')
+    getList()
+  })
   dialogVisible.value = false
 }
-const onDelRow = async (row: any, multiple: boolean) => {
-  // dialogVisible.value = true
+const onDelRow = (row: HouseDtoType) => {
+  dialogVisible.value = true
   tableObject.currentRow = row
-  multipleV.value = multiple
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
-  )
-  // ElMessage.success('删除成功')
-  // getList()
 }
 
 const onAddRow = () => {
