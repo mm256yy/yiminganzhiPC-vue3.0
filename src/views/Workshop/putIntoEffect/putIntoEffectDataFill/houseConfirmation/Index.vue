@@ -44,7 +44,7 @@
       <ElFormItem label="删除原因" prop="reason">
         <ElSelect clearable filterable v-model="reason" class="!w-full">
           <ElOption
-            v-for="item in dictObj[367]"
+            v-for="item in dictObj[368]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -178,7 +178,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'demographicId',
+    field: 'demographicIdText',
     label: '房屋产权人',
     search: {
       show: false

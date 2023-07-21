@@ -20,7 +20,14 @@
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="新增原因" prop="addReason">
-            <ElInput v-model="form.addReason" class="!w-full" placeholder="请输入" />
+            <ElSelect clearable filterable v-model="form.addReason" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[369]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
@@ -413,7 +420,7 @@ const defaultValue: Omit<HouseDtoType, 'id'> = {
   landArea: '', // 建筑面积
   constructionType: '', // 房屋结构
   houseNature: '', // 房屋性质
-  demographicId: '', // 房屋产权人
+  demographicId: '', // 房屋产权人 id
   ownersSituation: [], // 共有人情况
   housePic: '', // 房屋照片
   CADfile: '', // 房屋 CAD 图
