@@ -1,997 +1,367 @@
 <template>
-  <WorkContentWrap>
-    <div class="table-wrap !py-12px !mt-0px">
-      <div class="!pt-40px">
-        <ElForm
-          class="form-block"
-          ref="formRef"
-          :model="form"
-          label-width="156px"
-          :label-position="'left'"
-        >
-          <div class="titleBox">
-            <span class="text">新建方案</span>
-          </div>
-          <div class="form-item-block">
-            <ElFormItem label="安置房人数：" prop="peopleNum">
-              <ElInput v-model.number="form.peopleNum" class="!w-150px" placeholder="输入">
-                <template #append>人</template>
-              </ElInput>
-            </ElFormItem>
-            <ElFormItem label="户型类型：" prop="houseAreaType">
-              <ElRadioGroup v-model="form.houseAreaType">
-                <ElRadio v-for="item in dictObj[318]" :key="item.value" :label="`${item.value}`">
-                  {{ item.label }} {{ isNaN(Number(item.label)) ? '' : '㎡' }}
-                </ElRadio>
-              </ElRadioGroup>
-            </ElFormItem>
-            <ElFormItem label="安置房面积：" prop="houseArea">
-              <ElInput v-model="form.houseArea" class="!w-150px" placeholder="输入">
-                <template #append>㎡</template>
-              </ElInput>
-            </ElFormItem>
-          </div>
-          <div class="line"></div>
-          <ElFormItem label="住宅类型：">
-            <ElRadioGroup v-model="form.houseType">
-              <ElRadio :label="1">联排</ElRadio>
-              <ElRadio :label="2">公寓</ElRadio>
-              <ElRadio :label="3">一次性货币补偿</ElRadio>
-            </ElRadioGroup>
-          </ElFormItem>
-          <div class="line"></div>
-          <!-- 一次性货币补偿 -->
-          <div class="line-block" v-if="form.houseType === 3">
-            <ElFormItem label="一次性货币补偿：" prop="accountName">
-              面积
-              <ElInput v-model="form.houseArea" class="!w-250px __txt" placeholder="请输入">
-                <template #append>㎡</template>
-              </ElInput>
-              x 房屋单价
-              <ElInput v-model="form.housePrice" class="!w-250px __txt" placeholder="请输入">
-                <template #append>元</template>
-              </ElInput>
-              = 结算金额
-              {{ disposeMoney }}（元）
-            </ElFormItem>
+  <div>
+    <div class="imitate-step-tab">
+      <div
+        class="step-item"
+        :class="{ active: stepIndex === item.id }"
+        v-for="item in stepArray"
+        :key="item.id"
+        @click="stepClick(item.id)"
+      >
+        <div class="number" v-if="!item.done">{{ item.id }}</div>
+
+        <div class="done" v-else>
+          <img class="icon" src="@/assets/imgs/done_icon.png" alt="✅" />
+        </div>
+        <div class="name">{{ item.name }}</div>
+        <div class="next" v-if="stepArray.length - 1 >= item.id"></div>
+      </div>
+    </div>
+
+    <div class="imitate-step-cont">
+      <!-- 生产安置 step -->
+      <div class="step-cont-production" v-if="stepIndex === 1">
+        <el-table :data="tableData" style="width: 100%">
+          <el-table-column prop="name" label="姓名" width="100" />
+          <el-table-column prop="relationText" label="与户主关系" width="100" />
+          <el-table-column prop="sexText" label="性别" width="100" />
+          <el-table-column prop="card" label="身份证" width="200" />
+          <el-table-column prop="censusTypeText" label="户籍类别" width="160" />
+          <el-table-column prop="populationNature" label="人口性质" width="160" />
+          <el-table-column prop="settingWay" label="安置方式" width="268">
+            <template #default="scope">
+              <el-select v-model="scope.row.settingWay" placeholder="请选择">
+                <el-option
+                  v-for="item in productionResettleWay"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                  :disabled="item.disabled"
+                />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="settingRemark" label="备注" width="288">
+            <template #default="scope">
+              <el-input v-model="scope.row.settingRemark" placeholder="请输入" />
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <div class="btn-wrap">
+          <div class="btn" @click="stepNext">确定，进入下一步</div>
+        </div>
+      </div>
+
+      <!-- 搬迁安置 step -->
+      <div class="step-cont-move" v-else-if="stepIndex === 2">
+        <div class="common-wrap">
+          <div class="common-head">
+            <div class="icon"></div>
+            <div class="tit">搬迁安置方式</div>
           </div>
 
-          <!-- 联排 -->
-          <div class="line-block" v-if="form.houseType === 1">
-            <ElFormItem v-show="labelName" :label="`${labelName}:`" prop="accountName">
-              安置房面积({{ form.houseArea }}) x 房屋单价
-              <ElInput v-model="form.housePrice" class="!w-250px __txt" placeholder="请输入">
-                <template #append>元</template>
-              </ElInput>
-              = 结算金额{{ tandemMoney }}（元）
-            </ElFormItem>
-            <div v-show="labelName" class="line"></div>
-            <div class="form-item-block">
-              <ElFormItem label="联排少于拆迁房面积：" prop="subsidyArea">
-                {{ subsidyArea }}
-              </ElFormItem>
-              <ElFormItem label="联排少于拆迁房补贴：" prop="subsidy">
-                <ElInput v-model="form.subsidy" class="!w-150px" placeholder="请输入">
-                  <template #append>元</template>
-                </ElInput>
-              </ElFormItem>
-              <ElFormItem label="" prop="accountName" />
+          <div class="common-cont">
+            <div class="common-form-item">
+              <div class="common-label">户型类型：</div>
+              <div class="common-value">
+                <el-radio-group v-model="houseType">
+                  <el-radio
+                    size="large"
+                    v-for="item in resettleHouseType"
+                    :key="item.id"
+                    :label="item.id"
+                    >{{ item.name }}</el-radio
+                  >
+                </el-radio-group>
+              </div>
             </div>
+
+            <template v-if="houseType === 1">
+              <Homestead />
+            </template>
+
+            <template v-if="houseType === 2">
+              <Apartment />
+            </template>
+
+            <template v-if="houseType === 3">
+              <FindSelf view-type="default" />
+            </template>
+
+            <template v-if="houseType === 4">
+              <CenterSupport />
+            </template>
           </div>
-          <!-- 公寓 -->
-          <div class="line-block" v-if="form.houseType === 2">
-            <ElFormItem label="公寓房面积：" prop="accountName">
-              <ElCheckboxGroup v-model="apartmentArea">
-                <ElCheckbox label="75">
-                  <div class="check-block">
-                    <span>75㎡</span>
-                    <ElInput v-model.number="form.typeOneNum" class="!w-150px" placeholder="请输入">
-                      <template #append>间</template>
-                    </ElInput>
-                  </div>
-                </ElCheckbox>
-                <ElCheckbox label="95">
-                  <div class="check-block">
-                    <span>95㎡</span>
-                    <ElInput v-model.number="form.typeTwoNum" class="!w-150px" placeholder="请输入">
-                      <template #append>间</template>
-                    </ElInput>
-                  </div>
-                </ElCheckbox>
-                <ElCheckbox label="115">
-                  <div class="check-block">
-                    <span>115㎡</span>
-                    <ElInput
-                      v-model.number="form.typeThreeNum"
-                      class="!w-150px"
-                      placeholder="请输入"
-                    >
-                      <template #append>间</template>
-                    </ElInput>
-                  </div>
-                </ElCheckbox>
-                <ElCheckbox label="135">
-                  <div class="check-block">
-                    <span>135㎡</span>
-                    <ElInput
-                      v-model.number="form.typeFourNum"
-                      class="!w-150px"
-                      placeholder="请输入"
-                    >
-                      <template #append>间</template>
-                    </ElInput>
-                  </div>
-                </ElCheckbox>
-              </ElCheckboxGroup>
-            </ElFormItem>
-            <div class="line"></div>
-            <div class="form-item-block line-block">
-              <ElFormItem label="公寓超出联排设计建筑面积标准："> {{ exceedArea }}㎡ </ElFormItem>
-              <ElFormItem label="公寓房建筑面积合计："> {{ totalArea }}㎡ </ElFormItem>
-              <ElFormItem label="公寓房总价："> {{ gyTotalPrice }}元 </ElFormItem>
-            </div>
-            <div v-for="(items, indexs) in apartmentAreaList" :key="indexs">
-              <ElFormItem :label="`${items.props}㎡公寓房价格：`">
-                数量{{ form[items.num] }} x {{ items.props }} x 房屋单价
-                <ElInput v-model="form[items.price]" class="!w-250px __txt" placeholder="请输入">
-                  <template #append>元</template>
-                </ElInput>
-                = 结算金额{{
-                  isNaN(form[items.num] * form[items.price])
-                    ? 0
-                    : Number(form[items.num] * form[items.price] * items.props).toFixed(2)
-                }}（元）
-              </ElFormItem>
-              <div class="line"></div>
-            </div>
-            <div class="form-item-block">
-              <ElFormItem label="公寓少于拆迁房面积："> {{ lessArea }}㎡ </ElFormItem>
-              <ElFormItem label="公寓少于拆迁房补贴：">
-                <ElInput v-model="form.subsidy" class="!w-250px __txt" placeholder="请输入">
-                  <template #append>元</template>
-                </ElInput>
-              </ElFormItem>
-              <ElFormItem label="" />
-            </div>
-            <div class="line"></div>
-            <div class="line-block no-border">
-              <ElFormItem label="公寓超出联排设计建筑面积标准差价：">
-                {{ exceedArea }} x 房屋单价
-                <ElInput v-model="form.housePrice" class="!w-250px __txt" placeholder="请输入">
-                  <template #append>元</template>
-                </ElInput>
-                = 结算金额 {{ priceDifference }}（元）
-              </ElFormItem>
-            </div>
-          </div>
-          <div class="form-item-block">
-            <ElFormItem label="拆迁房屋建筑面积：">
-              {{ form.demolitionHouseArea }}
-            </ElFormItem>
-            <ElFormItem label="拆迁房屋赔偿金额：">{{ form.demolitionHouseAmount }} </ElFormItem>
-            <ElFormItem label="拆迁房其他补偿金额：">
-              {{ form.demolitionHouseOtherAmount }}
-            </ElFormItem>
-            <ElFormItem label="拆迁房屋补偿总金额：" prop="totalPrice">{{ totalPrice }}</ElFormItem>
-          </div>
-          <div class="line"></div>
-          <div class="flex items-center justify-center pb-12px">
-            <ElSpace>
-              <ElButton @click="handleClickReset">重置条件</ElButton>
-              <ElButton type="primary" @click="handleClickSave('save')">生成方案</ElButton>
-            </ElSpace>
-          </div>
-        </ElForm>
-      </div>
-      <div class="lookscheme-wrap">
-        <div class="titleBox">
-          <span class="text">查看方案</span>
         </div>
-        <div class="lookscheme-main">
-          <div class="table">
-            <div class="table-item" v-for="(item, index) in listData" :key="index">
-              <div v-if="item && item.tableList">
-                <div
-                  class="tableitem-title"
-                  :class="
-                    item.tableList[3].name === '联排'
-                      ? 'title-1'
-                      : item.tableList[3].name === '公寓'
-                      ? 'title-2'
-                      : 'title-3'
-                  "
-                >
-                  方案{{ toChineseNumber(index + 1) }}
-                </div>
-              </div>
-              <div v-if="item && item.tableList">
-                <div class="tableitem-body" v-for="(items, indexs) in item.tableList" :key="indexs">
-                  <div class="label">{{ items.label }}</div>
-                  <div class="value">{{ items.name ? items.name : items.value }}</div>
-                </div>
-              </div>
-              <div class="flex items-center justify-bett pb-12px" v-if="item.isSelect">
-                <ElButton class="tabel-btn">已选择该方案</ElButton>
-              </div>
-              <div class="flex items-center space-between pb-12px" v-else>
-                <ElButton class="tabel-btn" @click="handleClickDel(index + 1, item.wid)">
-                  删除
-                </ElButton>
-                <ElButton
-                  class="tabel-btn"
-                  type="primary"
-                  @click="selectSchemebase(index + 1, item)"
-                >
-                  选择该方案
-                </ElButton>
-              </div>
-            </div>
-          </div>
+
+        <div class="btn-wrap">
+          <div class="btn" @click="stepNext">确认</div>
         </div>
       </div>
     </div>
-  </WorkContentWrap>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { WorkContentWrap } from '@/components/ContentWrap'
-import { computed, watch, ref, reactive } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
-  ElSpace,
+  ElTable,
+  ElTableColumn,
   ElInput,
-  ElFormItem,
-  ElForm,
-  ElButton,
-  ElRadio,
-  ElCheckboxGroup,
-  ElCheckbox,
-  ElMessageBox,
+  ElSelect,
+  ElOption,
   ElMessage,
-  ElRadioGroup
+  ElRadioGroup,
+  ElRadio
 } from 'element-plus'
-import {
-  getSchemeBaseDetailApi,
-  addSchemeBaseApi,
-  getSchemeBaseInfoApi
-} from '@/api/putIntoEffect/schemeBase/service'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getDemographicListApi } from '@/api/workshop/population/service'
+import { DemographicDtoType } from '@/api/workshop/population/types'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { resettleHouseType } from './components/config'
 
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
+import Homestead from './components/Homestead.vue'
+import Apartment from './components/Apartment.vue'
+import FindSelf from './components/FindSelf.vue'
+import CenterSupport from './components/CenterSupport.vue'
+
+dayjs.extend(relativeTime)
+
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
 
 const props = defineProps<PropsType>()
-let labelName = ref<string>('')
-const defaultSchemeOne = [
+
+// 步骤条
+const stepArray = ref([
   {
-    label: '安置房人数（人）',
-    props: 'peopleNum',
-    value: ''
+    id: 1,
+    name: '选择生产安置方式',
+    done: false
   },
   {
-    label: '户型类型',
-    props: 'houseAreaType',
-    value: '',
-    name: ''
-  },
-  {
-    label: '安置房屋面积（㎡）',
-    props: 'houseArea',
-    value: ''
-  },
-  {
-    label: '住宅类型',
-    props: 'houseType',
-    value: null,
-    name: ''
-  },
-  {
-    label: `${labelName.value}户型价格（元）`,
-    props: 'tandemMoney',
-    value: ''
-  },
-  {
-    label: '联排少于拆迁房面积（㎡）',
-    props: 'subsidyArea',
-    value: ''
-  },
-  {
-    label: '联排少于拆迁房补贴（元）',
-    props: 'subsidy',
-    value: ''
-  },
-  {
-    label: '拆迁房屋建筑面积（㎡）',
-    props: 'demolitionHouseArea',
-    value: ''
-  },
-  {
-    label: '拆迁房屋赔偿金额（元）',
-    props: 'demolitionHouseAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋其他补偿金额（元）',
-    props: 'demolitionHouseOtherAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋补偿总金额（元）',
-    props: 'totalPrice',
-    value: ''
+    id: 2,
+    name: '选择搬迁安置方式',
+    done: false
   }
-]
+])
+// 步骤条选中
+const stepIndex = ref(1)
 
-const defaultSchemeTwo = [
+// 属实
+const productionResettleWay = ref([
   {
-    label: '安置房人数（人）',
-    props: 'peopleNum',
-    value: ''
+    id: 1,
+    name: '农业安置',
+    disabled: false
   },
   {
-    label: '户型类型',
-    props: 'houseAreaType',
-    value: ''
+    id: 2,
+    name: '养老保险',
+    disabled: false
   },
   {
-    label: '安置房屋面积（㎡）',
-    props: 'houseArea',
-    value: ''
-  },
-  {
-    label: '住宅类型',
-    props: 'houseType',
-    value: ''
-  },
-  {
-    label: '公寓房建筑面积合计（㎡）',
-    props: 'totalArea',
-    value: ''
-  },
-  {
-    label: '公寓房总价（元）',
-    props: 'gyTotalPrice',
-    value: ''
-  },
-  {
-    label: '公寓少于拆迁房面积（㎡）',
-    props: 'lessArea',
-    value: ''
-  },
-  {
-    label: '公寓少于拆迁房补贴（元）',
-    props: 'subsidy',
-    value: ''
-  },
-  {
-    label: '公寓超出拆迁房面积（㎡）',
-    props: 'exceedArea',
-    value: ''
-  },
-  {
-    label: '公寓超出拆迁房差价（元）',
-    props: 'priceDifference',
-    value: ''
-  },
-  {
-    label: '拆迁房屋建筑面积（㎡）',
-    props: 'demolitionHouseArea',
-    value: ''
-  },
-  {
-    label: '拆迁房屋赔偿金额（元）',
-    props: 'demolitionHouseAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋其他补偿金额（元）',
-    props: 'demolitionHouseOtherAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋补偿总金额（元）',
-    props: 'totalPrice',
-    value: ''
+    id: 3,
+    name: '自谋职业',
+    disabled: false
   }
-]
+])
 
-const defaultSchemeThree = [
-  {
-    label: '安置房人数（人）',
-    props: 'peopleNum',
-    value: ''
-  },
-  {
-    label: '户型类型',
-    props: 'houseAreaType',
-    value: ''
-  },
-  {
-    label: '安置房屋面积（㎡）',
-    props: 'houseArea',
-    value: ''
-  },
-  {
-    label: '住宅类型',
-    props: 'houseType',
-    value: ''
-  },
-  {
-    label: '一次性货币补偿（元）',
-    props: 'disposeMoney',
-    isCalculate: true,
-    value: ''
-  },
-  {
-    label: '拆迁房屋建筑面积（㎡）',
-    props: 'demolitionHouseArea',
-    value: ''
-  },
-  {
-    label: '拆迁房屋赔偿金额（元）',
-    props: 'demolitionHouseAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋其他补偿金额（元）',
-    props: 'demolitionHouseOtherAmount',
-    value: ''
-  },
-  {
-    label: '拆迁房屋补偿总金额（元）',
-    props: 'totalPrice',
-    value: ''
-  }
-]
+// 表格数据
+const tableData = ref<DemographicDtoType[]>([])
 
-const toChineseNumber = (number) => {
-  const CHINESE_NUMBERS = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九']
-  const CHINESE_UNITS = ['', '十', '百', '千']
-  if (number === 0) return '零'
-  let [integer, decimal] = number.toString().split('.')
-  let integerPart = ''
-  let decimalPart = ''
-  if (integer !== '0') {
-    integerPart = integer
-      .split('')
-      .reverse()
-      .map((value, index) => {
-        return CHINESE_NUMBERS[value] + (value === '0' ? '' : CHINESE_UNITS[index % 4])
-      })
-      .reverse()
-      .join('')
-      .replace(/零+/g, '零')
-      .replace(/零$/g, '')
-  }
+const houseType = ref(1)
 
-  if (decimal) {
-    decimalPart = decimal
-
-      .split('')
-
-      .map((value) => CHINESE_NUMBERS[value])
-
-      .join('')
-  }
-
-  return integerPart + (decimalPart ? '点' + decimalPart : '') || '零'
-}
-let listData = ref<any>([])
-let detailInfo = reactive({})
-let selectId = ref<number>(0)
-const getDetail = async () => {
-  const res = await getSchemeBaseDetailApi(props.doorNo)
-  if (res?.id) {
-    selectId.value = res.id
-    form.value = Object.assign({}, form.value, res, { isSelect: true })
-    await getDetailInfo()
-    await handleClickSave('detail')
-    form.value = Object.assign({}, defaultValue, detailInfo)
-  } else {
-    await getDetailInfo()
-  }
-}
-
-const getDetailInfo = async () => {
-  const res = await getSchemeBaseInfoApi(props.doorNo)
-  if (res) {
-    const { demolitionHouseArea, demolitionHouseAmount, demolitionHouseOtherAmount } = res
-    form.value.demolitionHouseArea = demolitionHouseArea
-    form.value.demolitionHouseAmount = demolitionHouseAmount
-    form.value.demolitionHouseOtherAmount = demolitionHouseOtherAmount
-    detailInfo = res
-  }
-}
-
-let disposeMoney = computed(() => {
-  return dataCalculate(['houseArea', 'housePrice'], '*')
-})
-
-let tandemMoney = computed(() => {
-  return dataCalculate(['houseArea', 'housePrice'], '*')
-})
-
-const totalPrice = computed(() => {
-  if (form.value.houseType === 3) {
-    return (
-      dataCalculate(['demolitionHouseAmount', 'demolitionHouseOtherAmount'], '+') +
-      disposeMoney.value
-    ).toFixed(2)
-  } else {
-    return dataCalculate(['demolitionHouseAmount', 'demolitionHouseOtherAmount', 'subsidy'], '+')
-  }
-})
-
-let apartmentAreaList = ref<any>([])
-const exceedArea = computed(() => {
-  const tempExceedArea = Number(totalArea.value || 0) - Number(form.value.houseArea || 0)
-  return tempExceedArea > 0 ? tempExceedArea.toFixed(2) : 0
-})
-
-const lessArea = computed(() => {
-  const tempExceedArea = Number(form.value.demolitionHouseArea || 0) - Number(totalArea.value || 0)
-  return tempExceedArea > 0 ? tempExceedArea.toFixed(2) : 0
-})
-
-const apartmentArea = ref([])
-const apartmentAreaListDefault = [
-  {
-    num: 'typeOneNum',
-    price: 'typeOnePrice',
-    props: 75
-  },
-  {
-    num: 'typeTwoNum',
-    price: 'typeTwoPrice',
-    props: 95
-  },
-  {
-    num: 'typeThreeNum',
-    price: 'typeThreePrice',
-    props: 115
-  },
-  {
-    num: 'typeFourNum',
-    price: 'typeFourPrice',
-    props: 135
-  }
-]
-
-watch(apartmentArea, (val) => {
-  apartmentAreaList.value.length = 0
-  const list = [...apartmentAreaListDefault]
-  val.forEach((item) => {
-    list.forEach((items) => {
-      if (item == items.props) {
-        apartmentAreaList.value.push(items)
-      }
+const getPeopleList = async () => {
+  const res = await getDemographicListApi({
+    doorNo: props.doorNo,
+    status: props.baseInfo.status
+  })
+  if (res && res.content) {
+    tableData.value = res.content.map((item) => {
+      item.age = item.birthday ? parseInt(dayjs(item.birthday).fromNow().replace(/\D+/, '')) : ''
+      return item
     })
-  })
+  }
+}
+
+onMounted(() => {
+  getPeopleList()
 })
 
-const dataCalculate = (operArr: any, oper: string) => {
-  return Number(
-    operArr
-      .reduce(
-        (pre, item) => {
-          if (oper === '+') {
-            return (pre || 0) + (Number(form.value[item]) || 0)
-          } else if (oper === '*') {
-            return pre * (Number(form.value[item]) || 0)
-          }
-        },
-        oper === '*' ? 1 : 0
-      )
-      .toFixed(2)
-  )
+const stepClick = (id) => {
+  stepIndex.value = id
 }
+/**
+ * 生产安置确认
+ */
 
-getDetail()
-
-const handleClickDel = (index: number, wid: number) => {
-  const version = toChineseNumber(index)
-  ElMessageBox.confirm(`删除第${version}种方案`, '', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  })
-    .then(() => {
-      listData.value = listData.value.filter((item) => item.wid !== wid)
-      listData.value.forEach((item, index) => {
-        item.wid = index + 1
-      })
-    })
-    .catch(() => {})
-}
-
-const selectSchemebase = (index: number, row: any) => {
-  const version = toChineseNumber(index)
-  ElMessageBox.confirm(`是否选择方案${version}`, '', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'info'
-  })
-    .then(() => {
-      const { projectId, status, id: householdId } = props.baseInfo
-      let data = {
-        houseArea: 0,
-        housePrice: 0,
-        subsidy: 0,
-        typeOnePrice: 0,
-        typeTwoPrice: 0,
-        typeThreePrice: 0,
-        typeFourPrice: 0,
-        demolitionHouseArea: 0
-      }
-      row.tableList.map((item) => {
-        data[item.props] = item.value
-      })
-      let params = {
-        projectId,
-        status,
-        householdId,
-        doorNo: props.doorNo,
-        ...data,
-        houseArea: data.houseArea ? Number(data.houseArea) : 0,
-        housePrice: data.housePrice ? Number(data.housePrice) : 0,
-        subsidy: Number(data.subsidy),
-        typeOnePrice: data.typeOnePrice ? Number(data.typeOnePrice) : 0,
-        typeTwoPrice: data.typeTwoPrice ? Number(data.typeTwoPrice) : 0,
-        typeThreePrice: data.typeThreePrice ? Number(data.typeThreePrice) : 0,
-        typeFourPrice: data.typeFourPrice ? Number(data.typeFourPrice) : 0,
-        demolitionArea: data.demolitionHouseArea
-      }
-      for (const i in params) {
-        if (!params[i] && params[i] !== 0) {
-          delete params[i]
-        }
-      }
-      addSchemeBaseApi(params).then(() => {
-        ElMessage.success('方案选择成功！')
-        getDetail()
-        const listDataIndex = listData.value.findIndex(
-          (item) => item.isSelect && row.wid !== item.wid
-        )
-        listData.value[listDataIndex].isSelect = false
-        listData.value = listData.value.filter((items) => row.wid !== items.wid)
-        listData.value.forEach((item, index) => {
-          item.wid = index + 1
-        })
-      })
-    })
-    .catch((e) => {
-      console.log(e)
-    })
-}
-
-const defaultValue = {
-  peopleNum: null,
-  houseAreaType: '',
-  houseArea: null,
-  houseType: 1,
-  typeOneNum: null,
-  typeTwoNum: null,
-  typeThreeNum: null,
-  typeFourNum: null,
-  housePrice: null,
-  subsidy: null,
-  demolitionArea: null,
-  typeOnePrice: null,
-  typeTwoPrice: null,
-  typeThreePrice: null,
-  typeFourPrice: null,
-  apartmentArea: null,
-  typePrice: 0,
-  demolitionHouseArea: null,
-  demolitionHouseAmount: null,
-  demolitionHouseOtherAmount: null,
-  isSelect: false
-}
-
-let form = ref({ ...defaultValue })
-const subsidyArea = computed(() => {
-  const tempSubsidyArea = (
-    (form.value.demolitionHouseArea || 0) - Number(form.value.houseArea)
-  ).toFixed(2)
-  return Number(tempSubsidyArea) > 0 ? tempSubsidyArea : 0
-})
-
-const priceDifference = computed(() => {
-  const tempDifference = Number(exceedArea.value || 0) * Number(form.value.housePrice || 0)
-  return tempDifference.toFixed(2)
-})
-
-// 公寓房建筑面积合计与公寓房总价
-const totalArea = ref(0)
-const gyTotalPrice = ref(0)
-watch(
-  [
-    apartmentAreaList,
-    () => form.value.typeOneNum,
-    () => form.value.typeTwoNum,
-    () => form.value.typeThreeNum,
-    () => form.value.typeFourNum,
-    () => form.value.typeOnePrice,
-    () => form.value.typeTwoPrice,
-    () => form.value.typeThreePrice,
-    () => form.value.typeFourPrice
-  ],
-  () => {
-    let tempTotalArea = 0
-    let tempgyTotalArea = 0
-    apartmentAreaList.value?.forEach((item) => {
-      tempTotalArea += Number(form.value[item.num] || 0) * item.props
-      tempgyTotalArea +=
-        Number(form.value[item.num] || 0) * item.props * Number(form.value[item.price] || 0)
-    })
-    totalArea.value = tempTotalArea ? Number(tempTotalArea.toFixed(2)) : 0
-    gyTotalPrice.value = tempgyTotalArea ? Number(tempgyTotalArea.toFixed(2)) : 0
+const stepNext = () => {
+  // 校验数据
+  const notFillArray = tableData.value.filter((item) => !item.settingWay)
+  if (notFillArray && notFillArray.length) {
+    ElMessage.info('请选择安置方式')
+    return
   }
-)
-
-watch(
-  () => form.value.houseAreaType,
-  (val) => {
-    const tempVal = dictObj.value[318].find((item) => item.value == val)?.label
-    labelName.value = val ? tempVal + (isNaN(Number(tempVal)) ? '价格' : '㎡价格') : ''
-  }
-)
-
-interface SchemeType {
-  label: string
-  props?: string
-  value: any
-  name?: string
-}
-
-const handleClickReset = () => {
-  apartmentArea.value = []
-  apartmentAreaList.value.length = []
-  form.value = { ...defaultValue, ...detailInfo }
-}
-
-const handleClickSave = (type) => {
-  const tempData = {
-    disposeMoney,
-    totalPrice,
-    tandemMoney,
-    totalArea,
-    gyTotalPrice,
-    lessArea,
-    exceedArea,
-    priceDifference,
-    subsidyArea
-  }
-  form.value = Object.assign({}, form.value, tempData, detailInfo)
-  const schemeModel =
-    form.value.houseType === 1
-      ? defaultSchemeOne
-      : form.value.houseType === 2
-      ? defaultSchemeTwo
-      : defaultSchemeThree
-  const list = schemeModel.map((item: SchemeType) => {
-    for (let i in form.value) {
-      if (i === item?.props) {
-        item.value = form.value[i]
-      }
-    }
-    if (item?.props === 'houseType') {
-      item.name =
-        form.value.houseType === 1 ? '联排' : form.value.houseType === 2 ? '公寓' : '一次性货币补偿'
-    }
-    if (item?.props === 'houseAreaType') {
-      const tempHouseAreaVal = dictObj.value[318].find(
-        (item) => item.value == form.value.houseAreaType
-      )?.label
-      item.name = tempHouseAreaVal
-        ? isNaN(Number(tempHouseAreaVal))
-          ? tempHouseAreaVal
-          : tempHouseAreaVal + '㎡'
-        : ''
-    }
-    return item
-  })
-  let temApartmentAreaList = apartmentAreaList.value?.length > 0 ? [...apartmentAreaList.value] : []
-  if (type === 'detail') {
-    temApartmentAreaList = [...apartmentAreaListDefault]
-  }
-  temApartmentAreaList?.forEach((item, index) => {
-    if (form.value[item.num] && form.value[item.price]) {
-      const insetTableGyNum = {
-        label: item.props + '㎡公寓房(间)',
-        props: item.num,
-        value: form.value[item.num]
-      }
-      const insetTableGyPrice = {
-        label: item.props + '㎡公寓价格(元)',
-        props: item.price,
-        value: form.value[item.price]
-      }
-      list.splice(4 + index, 0, insetTableGyNum, insetTableGyPrice)
-    }
-  })
-  const params = JSON.stringify({
-    tableList: [...list],
-    wid: listData.value.length + 1,
-    isSelect: form.value.isSelect
-  })
-  listData.value.push(JSON.parse(params))
-  handleClickReset()
+  console.log(9999, tableData.value)
+  stepIndex.value += 1
 }
 </script>
+
 <style lang="less" scoped>
-:deep(.el-dialog__body) {
-  padding-right: 60px;
-  padding-left: 60px;
-}
-
-.form-block {
-  width: 100%;
-}
-
-.main {
-  padding: 14px 16px;
-}
-
-:deep(.el-form-item) {
-  padding: 0 10px;
-
-  .el-form-item__content {
-    align-items: flex-start;
-  }
-}
-
-.titleBox {
-  height: 32px;
-  padding-left: 15px;
-  margin: 0px 0 16px;
-  line-height: 32px;
-  background: #f5f7fa;
-  box-shadow: 0px 1px 0px 0px rgba(235, 235, 235, 1);
-
-  .text {
-    padding-left: 15px;
-    font-family: PingFangSC-Semibold, PingFang SC;
-    font-size: 17px;
-    font-weight: 600;
-    color: #171718;
-
-    border-left: 4px solid rgba(62, 115, 236, 1) !important;
-  }
-}
-
-.form-item-block {
-  display: flex;
-  justify-content: space-between;
-}
-
-.__txt {
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.line {
-  height: 20px;
-  border-top: 1px dashed #ebebeb;
-}
-
-.line-block {
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px dashed #ebebeb;
-}
-
-.check-block {
+.flex-center-center {
   display: flex;
   align-items: center;
+  justify-content: center;
+}
 
-  span {
-    padding-right: 10px;
+.imitate-step-tab {
+  display: flex;
+  width: 1200px;
+  height: 56px;
+  padding: 0 100px;
+  margin: 16px auto;
+  background: #fff;
+  align-items: center;
+  justify-content: center;
+
+  .step-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    cursor: pointer;
+
+    .number {
+      .flex-center-center();
+
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #666666;
+      background: #fff;
+      border: 1px solid #ebebeb;
+      border-radius: 50%;
+    }
+
+    .done {
+      width: 36px;
+      height: 36px;
+
+      .icon {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    .name {
+      .flex-center-center();
+      margin: 0 16px;
+      font-size: 16px;
+      color: #666666;
+      word-wrap: none;
+      white-space: nowrap;
+    }
+
+    .next {
+      width: 614px;
+      height: 1px;
+      background-color: #ebebeb;
+    }
+
+    &.active {
+      .number {
+        color: #fff;
+        background: #3e73ec;
+        border: 1px solid #3e73ec;
+        border-radius: 50%;
+      }
+
+      .name {
+        color: #171718;
+      }
+    }
   }
 }
 
-.lookscheme-main {
-  .table {
-    display: flex;
-    overflow-x: auto;
-  }
+.imitate-step-cont {
+  padding: 0 16px 16px;
 
-  .table-item {
-    width: 400px;
-    padding-top: 16px;
-    margin-right: 16px;
-    margin-bottom: 16px;
-    background: #f5f7fa;
-    flex-basis: 400px;
-    flex-shrink: 0;
+  .btn-wrap {
+    .flex-center-center();
+    padding: 16px;
 
-    .tableitem-title {
-      width: 368px;
+    .btn {
+      .flex-center-center();
       height: 40px;
-      margin: 0 auto;
-      font-weight: bold;
-      line-height: 40px;
+      padding: 0 26px;
+      font-size: 16px;
+      font-weight: 500;
       color: #ffffff;
-      text-align: center;
-      border-radius: 4px 4px 0px 0px;
+      cursor: pointer;
+      background: #3e73ec;
+      border-radius: 4px 4px 4px 4px;
+      user-select: none;
+    }
+  }
+}
+
+.common-wrap {
+  background-color: #fff;
+  border: 1px solid #ebebeb;
+
+  .common-head {
+    display: flex;
+    width: 100%;
+    height: 32px;
+    padding: 0 16px;
+    background: #f6f6f6;
+    border-bottom: 1px solid #ebebeb;
+    border-radius: 4px 4px 0px 0px;
+    opacity: 1;
+    align-items: center;
+
+    .icon {
+      width: 4px;
+      height: 16px;
+      margin-right: 8px;
+      background: linear-gradient(90deg, #3e73ec 0%, #ffffff 100%);
+      border-radius: 3px 3px 3px 3px;
     }
 
-    .title-1 {
-      background: #3e73ec !important;
-    }
-
-    .title-2 {
-      background: #fec44c !important;
-    }
-
-    .title-3 {
-      background: #30a952 !important;
-    }
-
-    .tableitem-body {
-      display: flex;
-      width: 368px;
-      margin: 0 auto;
+    .tit {
       font-size: 14px;
-      background: #fff;
-
-      div {
-        flex: 1;
-        height: 40px;
-        padding-left: 16px;
-        line-height: 40px;
-        border-bottom: 1px solid #ebebeb;
-      }
-
-      .label {
-        flex-basis: 68px;
-        border-right: 1px solid #ebebeb;
-      }
-    }
-
-    .tableitem-body:last-of-type {
-      padding-bottom: 0;
-      margin-bottom: 16px;
-    }
-
-    .table-item-add {
-      margin-top: 20%;
-      margin-left: 48%;
+      font-weight: 500;
       color: #131313;
     }
+  }
 
-    .tabel-btn {
-      height: 32px;
-      margin: 0 16px;
-      line-height: 32px;
-      text-align: center;
-      border-radius: 4px;
-      flex: 1;
-    }
+  .common-cont {
+    padding: 0 28px;
   }
 }
 
-.lookscheme-main::-webkit-scrollbar {
-  width: 4px;
-}
+.common-form-item {
+  display: flex;
+  align-items: center;
+  padding: 22px 0;
+  border-bottom: 1px dotted #ebebeb;
 
-.lookscheme-main::-webkit-scrollbar-thumb {
-  background: red;
-  border-radius: 10px;
-  opacity: 0.2;
-  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-}
+  .common-label {
+    width: 140px;
+    font-size: 14px;
+    line-height: 32px;
+    color: #131313;
+    text-align: right;
+  }
 
-.lookscheme-main::-webkit-scrollbar-track {
-  background: blue;
-  border-radius: 0;
-  -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.no-border {
-  border-bottom: none;
+  .common-value {
+    flex: 1;
+    font-size: 14px;
+    color: #131313;
+  }
 }
 </style>

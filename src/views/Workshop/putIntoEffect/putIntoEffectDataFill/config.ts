@@ -91,20 +91,6 @@ export const ReportTabs = [
     active: false
   },
   // 方案比选
-  {
-    type: 6,
-    name: '填写协议信息',
-    id: ReportTabIds[0],
-    icon: 'ion:print',
-    active: false
-  },
-  {
-    type: 6,
-    name: '方案比选',
-    id: ReportTabIds[1],
-    icon: 'tabler:grave-2',
-    active: false
-  },
   // 动迁安置
   {
     type: 5,
