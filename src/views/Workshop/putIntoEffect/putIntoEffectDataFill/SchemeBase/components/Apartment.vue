@@ -2,34 +2,49 @@
   <div class="apartment-wrap">
     <div class="common-form-item">
       <div class="common-label flex-center">公寓房安置人数：</div>
-      <div class="common-value"> 5人，其中该户农村移民 ：2 人，随迁人口：3人 </div>
-    </div>
-
-    <div class="common-form-item">
-      <div class="common-label">可选安置点：</div>
       <div class="common-value">
-        <el-radio-group v-model="radio1">
-          <el-radio :label="item.id" size="large" v-for="item in apartmentArea" :key="item.id">
-            {{ item.name }}
-          </el-radio>
-        </el-radio-group>
-        <div class="blue-row">
-          <div class="blue-view" v-for="item in apartmentArea" :key="item.id">地块详情</div>
+        <div class="value-center">
+          {{ resettlePeopleInfo.total }}人，其中该户农村移民 ：{{
+            resettlePeopleInfo.farmer
+          }}
+          人，随迁人口：{{ resettlePeopleInfo.trailing }}人
         </div>
       </div>
     </div>
 
     <div class="common-form-item">
+      <div class="common-label">可选安置点：</div>
+      <div class="common-value">
+        <el-radio-group v-model="settleAddress">
+          <el-radio :label="item.id" size="large" v-for="item in apartmentArea" :key="item.id">
+            {{ item.name }}
+          </el-radio>
+        </el-radio-group>
+        <div class="blue-row">
+          <div
+            class="blue-view"
+            v-for="item in apartmentArea"
+            :key="item.id"
+            @click="viewAreaDetail(item.id)"
+            >地块详情</div
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="common-form-item" v-if="!props.fromResettleConfirm">
       <div class="common-label">推荐方案：</div>
       <div class="common-value">
-        <view class="plan-table-wrap">
+        <div class="plan-table-wrap">
           <table>
             <!-- 第一行 -->
             <tr class="head-tr">
               <td colspan="2" class="column-w1 bold">搬迁安置</td>
 
-              <td class="column-w3 plan-tit" v-for="(item, index) in tableData" :key="item.id">
-                方案{{ index + 1 }}
+              <td class="column-w3" v-for="(item, index) in tableData" :key="item.id">
+                <div class="plan-tit" :class="{ active: item.isSelected }">
+                  方案{{ index + 1 }}
+                </div>
               </td>
             </tr>
 
@@ -37,35 +52,35 @@
               <td rowspan="4" class="column-w1 bold">套数</td>
               <td class="column-w2">65</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ filterArea(item, 1) }}
+                {{ item.typeOneNum }}
               </td>
             </tr>
 
             <tr>
               <td class="column-w2">85</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ filterArea(item, 2) }}
+                {{ item.typeTwoNum }}
               </td>
             </tr>
 
             <tr>
               <td class="column-w2">110</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ filterArea(item, 3) }}
+                {{ item.typeThreeNum }}
               </td>
             </tr>
 
             <tr>
               <td class="column-w2">140</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ filterArea(item, 4) }}
+                {{ item.typeFourNum }}
               </td>
             </tr>
 
             <tr>
               <td class="column-w1 bold" colspan="2">购房总面积</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ item.homesteadBuildPrice + item.apartmentBuyPrice }}
+                {{ item.areaTotal }}
               </td>
             </tr>
 
@@ -73,39 +88,46 @@
               <td class="column-w1" rowspan="3">金额</td>
               <td class="column-w2">购房金额估算</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ item.subsidyCompensatePrice }}
+                <div class="flex-center-center pointer" @click="viewBuyHouseClick(item.id)">
+                  {{ item.preorderAmount }}
+                  <Icon icon="ant-design:question-circle-filled" color="#DCDFE6" />
+                </div>
               </td>
             </tr>
 
             <tr>
               <td class="column-w2">补偿补助估算</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ item.cropsCompensatePrice }}
+                <div class="flex-center-center pointer" @click="viewSubsidyClick(item.id)">
+                  {{ item.compensationAmount }}
+                  <Icon icon="ant-design:question-circle-filled" color="#DCDFE6" />
+                </div>
               </td>
             </tr>
 
             <tr>
               <td class="column-w2">差额</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
-                {{ item.homesteadCompensatePrice }}
+                {{ item.differenceAmount }}
               </td>
             </tr>
 
             <tr>
               <td class="column-w1 bold" colspan="2">确定方案</td>
-              <td
-                class="column-w3"
-                v-for="item in tableData"
-                :key="item.id"
-                @click="selectPlan(item.id)"
-              >
-                <view class="select-btn" :class="{ active: item.isSelected }">
-                  <el-radio label="选择该方案" />
-                </view>
+              <td class="column-w3" v-for="item in tableData" :key="item.type">
+                <div
+                  class="select-btn"
+                  :class="{ active: item.isSelected }"
+                  @click="selectPlan(item.type)"
+                >
+                  <div class="icon" v-if="!item.isSelected"></div>
+                  <Icon v-else icon="ant-design:check-circle-filled" size="16" color="#3E73EC" />
+                  <div class="txt">选择该方案</div>
+                </div>
               </td>
             </tr>
           </table>
-        </view>
+        </div>
       </div>
     </div>
 
@@ -113,12 +135,12 @@
       <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <div class="area-size">
-          <div class="area-size-item" v-for="item in apartmentAreaSize" :key="item.id">
+          <div class="area-size-item" v-for="item in areaSize" :key="item.id">
             <div class="name"> {{ item.name }}{{ item.unit }} </div>
             <div class="ipt-wrap">
-              <el-input-number v-model="item.num" :min="1" :max="10" />&nbsp;间
+              <el-input-number v-model="item.num" :min="0" :max="100" />&nbsp;间
             </div>
-            <div class="blue-row">
+            <div class="blue-row" @click="viewHousePicClick(item.id)">
               <div class="blue-view">户型介绍</div>
             </div>
           </div>
@@ -130,23 +152,33 @@
       <div class="common-label">选定户型及数量：</div>
       <div class="common-value">
         <div class="info-item">
-          根据您输入的安置人数： <span class="red">5</span> 人，选购总面积为：
-          <span class="red">5</span>m²
+          根据您输入的安置人数：
+          <span class="red">{{ resettlePeopleInfo.total }}</span> 人，选购总面积为：
+          <span class="red">{{ totalArea }}</span
+          >m²
         </div>
 
         <div class="info-item">
-          选择选定户型为： <span class="red">65</span> m²<span class="red">2</span>套，<span
-            class="red"
-            >65</span
-          >
-          m²<span class="red">2</span>套
+          选择选定户型为：
+          <template v-for="item in areaSize" :key="item.id">
+            <template v-if="item.num > 0">
+              <span class="red">{{ item.name }}</span> {{ item.unit
+              }}<span class="red">{{ item.num }}</span
+              >套
+              <span>，</span>
+            </template>
+          </template>
         </div>
 
         <div class="info-item">
-          剩余面积： <span class="red">2</span> ㎡ 超出面积： <span class="red">5</span>m²
+          剩余面积： <span class="red">{{ residueArea }}</span> ㎡ 超出面积：
+          <span class="red">{{ exceedArea }}</span
+          >m²
         </div>
 
-        <div class="info-item"> 购房金额估算： <span class="red">2</span> 元 </div>
+        <div class="info-item">
+          购房金额估算： <span class="red">{{ exceedArea * 1500 }}</span> 元
+        </div>
 
         <div class="info-item"> 购房总金额=选购总面积“成本价+超出面积"市场优惠价 </div>
       </div>
@@ -171,6 +203,10 @@
       </div>
     </div>
 
+    <div class="btn-wrap">
+      <div class="btn" @click="submitResettle">确定，进入下一步</div>
+    </div>
+
     <el-dialog v-model="areaDetailPup" title="安置点详情" width="900">
       <AreaDetail />
     </el-dialog>
@@ -190,70 +226,212 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { ElRadioGroup, ElRadio, ElInputNumber, ElDialog } from 'element-plus'
-import { apartmentArea, apartmentAreaSize } from './config'
+import { ref, computed, onMounted, watch } from 'vue'
+import { ElRadioGroup, ElRadio, ElInputNumber, ElDialog, ElMessage } from 'element-plus'
+import { getBestResettlePlanApi } from '@/api/workshop/datafill/mockResettle-service'
+
+import { apartmentArea, apartmentAreaSize, HouseType } from './config'
 import AreaDetail from './AreaDetail.vue'
 import HousePic from './HousePic.vue'
 import FindSelf from './FindSelf.vue'
 import BuyHousePrice from './BuyHousePrice.vue'
 
+interface PropsType {
+  data: any
+  doorNo: string
+  immigrantSettle: any
+  fromResettleConfirm?: boolean
+}
+
+const emit = defineEmits(['submit'])
+const props = defineProps<PropsType>()
+const settleAddress = ref('1')
+const areaSize = ref(apartmentAreaSize)
+
 const areaDetailPup = ref(false)
 const housePicPup = ref(false)
 const pricePup = ref(false)
-const buyHousePup = ref(true)
+const buyHousePup = ref(false)
 
 // 方案数据
-const tableData = ref<any>([
-  {
-    isSelected: false,
+const tableData = ref<any>([])
 
-    homesteadResettleNum: null, // 宅基地安置人数
-    homesteadResettleRegion: null, // 宅基地安置地块
-    homesteadResettleArea: null, // 宅基地安置面积
-    homesteadResettleLayersCount: null, // 宅基地建房层数
-    homesteadResettlePrice: null, // 宅基地建房预估单价
-
-    apartmentResettleNum: null, // 公寓安置人数
-    apartmentResettleRegion: null, // 公寓安置地块
-    apartmentResettleArea: [], // 公寓安置面积
-
-    noResettleNum: null, // 无需搬迁安置人数
-
-    homesteadBuildPrice: 185000, // 宅基地建安费
-    apartmentBuyPrice: 100000, // 公寓购房金
-    subsidyCompensatePrice: 1500, // 补偿补助
-    cropsCompensatePrice: 1200, // 土地青苗补助
-    homesteadCompensatePrice: 1000, // 宅基地补偿
-
-    buildHouseSubsidyPrice: 1500, // 建房补助费
-    relocateSubsidyPrice: 1200, // 搬迁补助费
-    lifeSubsidyPrice: 1000, // 生活补助费
-
-    signAgreementRewardPrice: 1500, // 签协议奖励费
-    houseEmptyRewardPrice: 1200, // 房屋腾空奖励费
-    startBuildHouseRewardPrice: 1000, // 启动建房奖励费
-    endBuildHouseRewardPrice: 2400, // 结束建房奖励费
-    moveInHouseRewardPrice: 3600 // 房屋腾空奖励费
+const getPlans = async () => {
+  const res = await getBestResettlePlanApi(props.doorNo)
+  console.log(res, 'res')
+  if (res) {
+    tableData.value = res.map((item) => {
+      item.isSelected = false
+      return item
+    })
   }
-])
-const radio1 = ref(1)
-
-const filterArea = (item: any, id: number) => {
-  const current = item.apartmentResettleArea.find((x: any) => x.id === id)
-  return current ? current.num || 0 : 0
 }
 
+onMounted(() => {
+  if (!props.fromResettleConfirm) {
+    getPlans()
+  }
+})
+
+watch(
+  () => props.immigrantSettle,
+  (val) => {
+    if (val) {
+      console.log(val, 'val')
+      const { settleAddress: settleArea, typeOneNum, typeTwoNum, typeThreeNum, typeFourNum } = val
+
+      settleAddress.value = settleArea
+      areaSize.value = areaSize.value.map((item, index) => {
+        if (index === 0) {
+          item.num = typeOneNum
+        } else if (index === 1) {
+          item.num = typeTwoNum
+        } else if (index === 2) {
+          item.num = typeThreeNum
+        } else if (index === 3) {
+          item.num = typeFourNum
+        }
+        return item
+      })
+    }
+  },
+  {
+    deep: true,
+    immediate: true
+  }
+)
+
+const resettlePeopleInfo = computed(() => {
+  let farmer = 0
+  let trailing = 0
+  if (props.data && props.data.length) {
+    props.data.forEach((item) => {
+      // 农村移民
+      if (item.populationNature === '1') {
+        farmer++
+      }
+      // 农业随迁
+      if (item.populationNature === '3') {
+        trailing++
+      }
+    })
+  }
+
+  return {
+    total: props.data.length,
+    farmer,
+    trailing
+  }
+})
+
+// 总面积
+const totalArea = computed(() => {
+  let sum = 0
+  areaSize.value.forEach((item) => {
+    if (item.num > 0) {
+      sum += item.name * item.num
+    }
+  })
+  return sum
+})
+
+// 剩余面积
+const residueArea = computed(() => {
+  const residue = props.data.length * 40 - totalArea.value
+  return residue < 0 ? 0 : residue
+})
+
+// 超出面积
+const exceedArea = computed(() => {
+  const exceed = totalArea.value - props.data.length * 40
+  return exceed < 0 ? 0 : exceed
+})
+
 // 选择该方案
-const selectPlan = (id: string) => {
-  tableData.value = tableData.value.map((item: any) => {
-    if (item.id === id) {
-      item.isSelected = true
+const selectPlan = (type: string) => {
+  const real = tableData.value.map((item: any) => {
+    if (item.type === type) {
+      item.isSelected = !item.isSelected
     } else {
       item.isSelected = false
     }
     return item
   })
+  console.log(real)
+  tableData.value = [...real]
+}
+
+const viewAreaDetail = (id: string) => {
+  console.log(id, 'id')
+  areaDetailPup.value = true
+}
+
+// 补偿补助明细
+const viewSubsidyClick = (id: number) => {
+  console.log(id, 'id')
+  pricePup.value = true
+}
+
+// 购房金额明细
+const viewBuyHouseClick = (id: number) => {
+  console.log(id, 'id')
+  buyHousePup.value = true
+}
+
+// 户型图
+const viewHousePicClick = (id: string) => {
+  console.log(id, 'id')
+  housePicPup.value = true
+}
+
+// 提交
+const submitResettle = async () => {
+  let typeOneNum = 0
+  let typeTwoNum = 0
+  let typeThreeNum = 0
+  let typeFourNum = 0
+
+  const selectedPlanItem = tableData.value.find((item) => item.isSelected)
+  if (selectedPlanItem) {
+    typeOneNum = selectedPlanItem.typeOneNum
+    typeTwoNum = selectedPlanItem.typeTwoNum
+    typeThreeNum = selectedPlanItem.typeThreeNum
+    typeFourNum = selectedPlanItem.typeFourNum
+  } else {
+    const areaItem = areaSize.value.find((item) => item.num > 0)
+    if (!areaItem) {
+      ElMessage.error('请选择公寓面积')
+      return
+    }
+    areaSize.value.forEach((item, index) => {
+      if (index === 0) {
+        typeOneNum = item.num
+      }
+      if (index === 1) {
+        typeTwoNum = item.num
+      }
+      if (index === 2) {
+        typeThreeNum = item.num
+      }
+      if (index === 3) {
+        typeFourNum = item.num
+      }
+    })
+  }
+
+  const params: any = {
+    houseAreaType: HouseType.flat,
+    doorNo: props.doorNo,
+    settleAddress: settleAddress.value,
+    typeOneNum,
+    typeTwoNum,
+    typeThreeNum,
+    typeFourNum
+  }
+  if (props.immigrantSettle && props.immigrantSettle.id) {
+    params.id = props.immigrantSettle.id
+  }
+  emit('submit', params)
 }
 </script>
 
@@ -282,6 +460,17 @@ const selectPlan = (id: string) => {
     font-size: 14px;
     color: #131313;
   }
+}
+
+.flex-center-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pointer {
+  cursor: pointer;
+  user-select: none;
 }
 
 .area-size {
@@ -359,39 +548,91 @@ const selectPlan = (id: string) => {
     border-top: 1px solid #ebebeb;
     border-right: 1px solid #ebebeb;
     border-left: 1px solid #ebebeb;
+  }
 
-    &.column-w1 {
-      width: 153px;
-      background: #f6f6f6;
-    }
+  .column-w1 {
+    width: 153px;
+    background: #f6f6f6;
+  }
 
-    &.column-w2 {
-      width: 160px;
-    }
+  .column-w2 {
+    width: 160px;
+  }
 
-    &.column-w3 {
-      width: 273px;
-    }
+  .column-w3 {
+    width: 273px;
+  }
 
-    &.bold {
-      font-weight: 500;
-    }
+  .bold {
+    font-weight: 500;
+  }
 
-    .blue {
-      color: #3e73ec;
-    }
+  .blue {
+    color: #3e73ec;
+  }
 
-    &.plan-tit {
-      color: #3e73ec;
-      background: #f2f6ff;
-    }
+  .plan-tit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #3e73ec;
+    background: #f2f6ff;
 
-    .select-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    &.active {
+      color: #fff;
+      background: #3e73ec;
     }
   }
+
+  .select-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon {
+      width: 16px;
+      height: 16px;
+      background: #ffffff;
+      border: 1px solid #dcdde6;
+      border-radius: 50%;
+    }
+
+    .txt {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #171718;
+    }
+  }
+}
+
+.btn-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 26px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    cursor: pointer;
+    background: #3e73ec;
+    border-radius: 4px 4px 4px 4px;
+    user-select: none;
+  }
+}
+
+.value-center {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 :deep(.el-dialog__body) {

@@ -15,3 +15,21 @@ export const addRelocationApi = (data: any): Promise<any> => {
 export const getRelocationListApi = (data: any): Promise<any> => {
   return request.get({ url: '/assetHouse', params: data })
 }
+
+// 获取搬迁安置
+export const getRelocationInfoApi = (doorNo: string) => {
+  return request.get({
+    url: '/immigrantSettle/findByDoorNo',
+    params: {
+      doorNo
+    }
+  })
+}
+
+// 保存搬迁安置
+export const saveRelocationInfoApi = (data: any) => {
+  return request.post({
+    url: '/immigrantSettle/save',
+    data
+  })
+}

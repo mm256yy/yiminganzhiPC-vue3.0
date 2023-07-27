@@ -33,33 +33,27 @@
             :icons="[
               {
                 icon: '',
-                tooltip: '详情',
+                tooltip: '确认',
                 type: 'primary',
-                action: () => onViewRow(row)
+                action: () => onEditRow(row)
               }
             ]"
             :row="row"
-            @edit="onEditRow(row)"
             @delete="onDelRow"
             :delete="true"
+            :edit="false"
           />
         </template>
         <template #relation="{ row }">
           {{ dictFmt(row.relation, 307) }}
         </template>
+
+        <template #settingGrave="{ row }">
+          {{ row.settingGrave || row.settingAddress }}
+        </template>
       </Table>
     </div>
-    <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
-      <div style="display: flex; margin-bottom: 10px">
-        <el-icon><InfoFilled /></el-icon>是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
-      </div>
-      <template #footer>
-        <ElButton @click="onClose">取消</ElButton>
-        <ElButton type="primary" @click="onSubmit">确认</ElButton>
-      </template>
-    </el-dialog>
+
     <EditForm
       :show="dialog"
       :actionType="actionType"
@@ -74,14 +68,13 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref, computed } from 'vue'
-import { ElButton, ElSpace, ElDialog } from 'element-plus'
+import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getGaveArrageListApi, delGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
-// import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 
@@ -119,29 +112,27 @@ const schema = reactive<CrudSchema[]>([
     field: 'index',
     label: '序号'
   },
-  // {
-  //   field: 'name',
-  //   label: '登记权属人',
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'relation',
-    label: '坟墓与登记权属人关系',
-    slot: 'relation',
+    label: '坟墓与登记人关系',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'graveTypeText',
+    label: '穴位',
     search: {
       show: false
     }
   },
   {
     field: 'number',
-    label: '穴数(穴)',
+    label: '数量',
     search: {
       show: false
     }
   },
-
   {
     field: 'handleWayText',
     label: '处理方式',
@@ -151,15 +142,8 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 180,
-    field: 'settingGrave',
-    label: '安置公墓',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'settingAddress',
-    label: '详细地址',
+    field: 'settingGrave', // settingAddress
+    label: '安置公墓/详细地址',
     search: {
       show: false
     }
@@ -187,16 +171,7 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-const dialogVisible = ref(false)
-const cause = ref()
-// const multipleV = ref()
-const onClose = () => {
-  cause.value = ''
-  dialogVisible.value = false
-}
-const onSubmit = () => {
-  dialogVisible.value = false
-}
+
 const onDelRow = async (row: any | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
@@ -219,16 +194,6 @@ const onAddRow = () => {
   dialog.value = true
 }
 
-const onEditRow = (row: any) => {
-  actionType.value = 'edit'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  }
-  dialog.value = true
-}
-
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
@@ -236,12 +201,10 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 
-const onViewRow = (row: any) => {
-  actionType.value = 'view'
+const onEditRow = (row: any) => {
+  actionType.value = 'edit'
   tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+    ...row
   }
   dialog.value = true
 }

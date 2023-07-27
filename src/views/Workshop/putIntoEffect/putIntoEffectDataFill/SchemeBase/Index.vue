@@ -20,7 +20,7 @@
 
     <div class="imitate-step-cont">
       <!-- 生产安置 step -->
-      <div class="step-cont-production" v-if="stepIndex === 1">
+      <div class="step-cont-production" v-if="stepIndex === 2">
         <el-table :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="姓名" width="100" />
           <el-table-column prop="relationText" label="与户主关系" width="100" />
@@ -32,7 +32,7 @@
             <template #default="scope">
               <el-select v-model="scope.row.settingWay" placeholder="请选择">
                 <el-option
-                  v-for="item in productionResettleWay"
+                  v-for="item in filterWay(scope.row)"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -49,12 +49,12 @@
         </el-table>
 
         <div class="btn-wrap">
-          <div class="btn" @click="stepNext">确定，进入下一步</div>
+          <div class="btn" @click="stepNext"> 确认 </div>
         </div>
       </div>
 
       <!-- 搬迁安置 step -->
-      <div class="step-cont-move" v-else-if="stepIndex === 2">
+      <div class="step-cont-move" v-else-if="stepIndex === 1">
         <div class="common-wrap">
           <div class="common-head">
             <div class="icon"></div>
@@ -68,7 +68,7 @@
                 <el-radio-group v-model="houseType">
                   <el-radio
                     size="large"
-                    v-for="item in resettleHouseType"
+                    v-for="item in filterHouseType()"
                     :key="item.id"
                     :label="item.id"
                     >{{ item.name }}</el-radio
@@ -77,26 +77,43 @@
               </div>
             </div>
 
-            <template v-if="houseType === 1">
-              <Homestead />
+            <template v-if="houseType === HouseType.homestead">
+              <Homestead
+                :data="tableData"
+                :immigrantSettle="immigrantSettle"
+                :doorNo="props.doorNo"
+                @submit="immigrantSettleSubmit"
+              />
             </template>
 
-            <template v-if="houseType === 2">
-              <Apartment />
+            <template v-if="houseType === HouseType.flat">
+              <Apartment
+                :data="tableData"
+                :immigrantSettle="immigrantSettle"
+                :doorNo="props.doorNo"
+                @submit="immigrantSettleSubmit"
+              />
             </template>
 
-            <template v-if="houseType === 3">
-              <FindSelf view-type="default" />
+            <template v-if="houseType === HouseType.oneself">
+              <FindSelf
+                view-type="default"
+                :immigrantSettle="immigrantSettle"
+                :data="tableData"
+                :doorNo="props.doorNo"
+                @submit="immigrantSettleSubmit"
+              />
             </template>
 
-            <template v-if="houseType === 4">
-              <CenterSupport />
+            <template v-if="houseType === HouseType.concentrate">
+              <CenterSupport
+                :data="tableData"
+                :immigrantSettle="immigrantSettle"
+                :doorNo="props.doorNo"
+                @submit="immigrantSettleSubmit"
+              />
             </template>
           </div>
-        </div>
-
-        <div class="btn-wrap">
-          <div class="btn" @click="stepNext">确认</div>
         </div>
       </div>
     </div>
@@ -115,11 +132,18 @@ import {
   ElRadioGroup,
   ElRadio
 } from 'element-plus'
-import { getDemographicListApi } from '@/api/workshop/population/service'
+import {
+  getSimulateDemographicApi,
+  saveSimulateDemographicApi,
+  getSimulateImmigrantSettleApi,
+  saveSimulateImmigrantSettleApi
+} from '@/api/workshop/datafill/mockResettle-service'
+
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { resettleHouseType } from './components/config'
+import { resettleHouseType, HouseType, apartmentArea } from './components/config'
+import { ProductionResettleWay } from '../config'
 
 import Homestead from './components/Homestead.vue'
 import Apartment from './components/Apartment.vue'
@@ -139,48 +163,37 @@ const props = defineProps<PropsType>()
 const stepArray = ref([
   {
     id: 1,
-    name: '选择生产安置方式',
+    name: '选择搬迁安置方式',
     done: false
   },
   {
     id: 2,
-    name: '选择搬迁安置方式',
+    name: '选择生产安置方式',
     done: false
   }
 ])
 // 步骤条选中
 const stepIndex = ref(1)
 
-// 属实
-const productionResettleWay = ref([
-  {
-    id: 1,
-    name: '农业安置',
-    disabled: false
-  },
-  {
-    id: 2,
-    name: '养老保险',
-    disabled: false
-  },
-  {
-    id: 3,
-    name: '自谋职业',
-    disabled: false
-  }
-])
+// 安置方式
+const productionResettleWay = ref(ProductionResettleWay)
 
 // 表格数据
 const tableData = ref<DemographicDtoType[]>([])
+const immigrantSettle = ref<any>()
+const houseType = ref<HouseType>(HouseType.homestead)
 
-const houseType = ref(1)
-
+// 查询人口列表
 const getPeopleList = async () => {
-  const res = await getDemographicListApi({
+  const res = await getSimulateDemographicApi({
     doorNo: props.doorNo,
     status: props.baseInfo.status
   })
   if (res && res.content) {
+    const notFill = res.content.filter((item) => !item.settingWay)
+    if (!notFill) {
+      stepArray.value[1].done = true
+    }
     tableData.value = res.content.map((item) => {
       item.age = item.birthday ? parseInt(dayjs(item.birthday).fromNow().replace(/\D+/, '')) : ''
       return item
@@ -188,26 +201,101 @@ const getPeopleList = async () => {
   }
 }
 
+// 查询安置信息
+const getSimulateImmigrantSettle = async () => {
+  const res = await getSimulateImmigrantSettleApi(props.doorNo)
+  console.log(res, '搬迁安置信息')
+  if (res) {
+    houseType.value = res.houseAreaType
+    immigrantSettle.value = res
+    stepArray.value[0].done = true
+  }
+}
+
 onMounted(() => {
   getPeopleList()
+  getSimulateImmigrantSettle()
 })
+
+/**
+ * 根据户主人口性质过滤安置类型
+ */
+const filterHouseType = () => {
+  const population = tableData.value.find((item) => item.relation === '1')
+  // 农村移民
+  if (population && population.populationNature !== '1') {
+    return resettleHouseType.map((item) => {
+      if (item.id === HouseType.homestead) {
+        item.disabled = true
+      }
+      return item
+    })
+  }
+  return resettleHouseType
+}
+
+/**
+ * 安置方式过滤
+ */
+const filterWay = (data) => {
+  const arr = productionResettleWay.value.map((item) => {
+    // 农村移民的 其他性质
+    const notFarmer = data.populationNature !== '1'
+    if (
+      notFarmer &&
+      item.name === '农业安置' &&
+      immigrantSettle.value &&
+      immigrantSettle.value.settingAddress !== apartmentArea[2].id
+    ) {
+      item.disabled = true
+    }
+    if (data.age < 14 && item.name !== '自谋职业') {
+      item.disabled = true
+    }
+    return item
+  })
+  return arr
+}
 
 const stepClick = (id) => {
   stepIndex.value = id
 }
+
 /**
  * 生产安置确认
  */
 
-const stepNext = () => {
+const stepNext = async () => {
   // 校验数据
   const notFillArray = tableData.value.filter((item) => !item.settingWay)
   if (notFillArray && notFillArray.length) {
     ElMessage.info('请选择安置方式')
     return
   }
-  console.log(9999, tableData.value)
-  stepIndex.value += 1
+  const data = tableData.value.map((item) => {
+    return {
+      demographicId: item.demographicId,
+      settingWay: item.settingWay,
+      settingRemark: item.settingRemark
+    }
+  })
+  const res = await saveSimulateDemographicApi(data)
+  console.log('安置方式更新结果', res)
+  if (res) {
+    ElMessage.success('生产安置保存成功!')
+  }
+}
+
+/**
+ * 搬迁安置确认
+ */
+const immigrantSettleSubmit = async (params: any) => {
+  const res = await saveSimulateImmigrantSettleApi(params)
+  console.log('搬迁安置确认结果', res)
+  if (res) {
+    ElMessage.success('搬迁安置保存成功!')
+    stepIndex.value += 1
+  }
 }
 </script>
 

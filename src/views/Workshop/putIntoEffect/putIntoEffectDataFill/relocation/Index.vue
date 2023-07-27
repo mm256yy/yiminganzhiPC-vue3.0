@@ -1,13 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div> </div>
     <div class="table-wrap !py-12px !mt-0px">
-      <div class="flex items-center justify-between pb-12px">
-        <div> </div>
-        <ElSpace>
-          <ElButton :icon="saveIcon" type="primary" @click="onsave">保存</ElButton>
-        </ElSpace>
-      </div>
       <div class="formBox">
         <ElForm
           :disabled="actionType === 'view'"
@@ -18,45 +11,6 @@
           :label-position="'right'"
           :rules="rules"
         >
-          <div class="titleBox">
-            <span class="text">居民户基础信息:</span>
-          </div>
-          <div style="display: flex; align-items: center">
-            <ElFormItem label="安置方式" prop="settingWay">
-              <ElSelect clearable filterable v-model="form.settingWay" class="!w-250px">
-                <ElOption
-                  v-for="item in dictObj[321]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </ElSelect>
-            </ElFormItem>
-            <ElFormItem label="建房形式" prop="buildingForm">
-              <ElSelect clearable v-model="form.buildingForm" class="!w-250px">
-                <ElOption
-                  v-for="item in dictObj[310]"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </ElSelect>
-            </ElFormItem>
-            <ElFormItem label="开户名" prop="accountName">
-              <ElInput v-model="form.accountName" class="!w-250px" />
-            </ElFormItem>
-          </div>
-          <div style="display: flex">
-            <ElFormItem label="开户行" prop="bankName">
-              <ElInput v-model="form.bankName" class="!w-250px" />
-            </ElFormItem>
-            <ElFormItem label="银行账户" prop="bankAccount">
-              <ElInput v-model="form.bankAccount" class="!w-250px" />
-            </ElFormItem>
-            <ElFormItem label="备注" prop="accountRemark">
-              <ElInput v-model="form.accountRemark" class="!w-250px" />
-            </ElFormItem>
-          </div>
           <div class="titleBox">
             <span class="text">搬迁安置人数统计：</span>
           </div>
@@ -70,15 +24,19 @@
             <ElFormItem label="非农村移民">
               <div class="!w-150px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="财产户" prop="hasPropertyAccount">
-              <ElSelect class="!w-150px" clearable v-model="form.hasPropertyAccount" disabled>
-                <ElOption
-                  v-for="item in yesAndNoEnums"
-                  :key="item.label"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </ElSelect>
+            <ElFormItem label="农业随迁" prop="familyNum">
+              <div class="!w-150px">{{ form.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="非农业随迁" prop="familyNum">
+              <div class="!w-150px">{{ form.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+          </div>
+          <div style="display: flex">
+            <ElFormItem label="其他人口" prop="familyNum">
+              <div class="!w-150px">{{ form.otherPopulationNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="安置总人数" prop="familyNum">
+              <div class="!w-150px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
         </ElForm>
@@ -87,80 +45,109 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow" style="margin-top: 17px"
-            >添加</ElButton
+          <ElButton
+            :icon="addIcon"
+            type="primary"
+            @click="onImportDataPre"
+            style="margin-top: 17px"
           >
+            导入模拟数据
+          </ElButton>
+          <ElButton
+            :icon="editIcon"
+            type="primary"
+            @click="onEditResettle"
+            style="margin-top: 17px"
+          >
+            {{ immigrantSettle ? '修改' : '新增' }}
+          </ElButton>
         </ElSpace>
       </div>
-      <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :loading="tableObject.loading"
-        :data="tableObject.tableList"
-        :columns="allSchemas.tableColumns"
-        row-key="id"
-        headerAlign="center"
-        align="center"
-        :pagination="{
-          total: tableObject.total
-        }"
-        highlightCurrentRow
-        @register="register"
-      >
-        <template #birthday="{ row }">
-          <div>
-            {{ standardFormatDate(row.birthday) }}
-          </div>
-        </template>
-        <template #action="{ row }">
-          <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '详情',
-                type: 'primary',
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-            :delete="row.relation == 1 ? false : true"
-          />
-        </template>
-      </Table>
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column type="index" label="序号" width="100" align="center" />
+        <el-table-column prop="settleAddressText" label="安置区" align="center" />
+        <el-table-column prop="area" label="户型/套型" align="center" />
+        <el-table-column prop="num" label="数量" align="center" />
+        <el-table-column prop="houseAreaTypeText" label="类型" align="center" />
+      </el-table>
     </div>
-    <el-dialog title="删除搬迁安置信息" v-model="dialogVisible" width="500">
+    <el-dialog title="提示" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
-        <el-icon><InfoFilled /></el-icon>是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
+        导入模拟数据后，原搬迁安置数据将被覆盖，请确认是否导入？
       </div>
-      <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
-      <ElFormItem label="删除原因" prop="name">
-        <ElInput v-model="cause" class="!w-full" placeholder="请输入" type="textarea" row="3" />
-      </ElFormItem>
+
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
       </template>
     </el-dialog>
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      :doorNo="props.doorNo"
-      :baseInfo="baseInfo"
-      @close="onFormPupClose"
-    />
+
+    <el-dialog title="搬迁安置" v-model="editDialogVisible" width="900" @close="onEditClose">
+      <div class="common-cont">
+        <div class="common-form-item">
+          <div class="common-label">户型类型：</div>
+          <div class="common-value">
+            <el-radio-group v-model="houseType">
+              <el-radio
+                size="large"
+                v-for="item in filterHouseType()"
+                :key="item.id"
+                :label="item.id"
+                >{{ item.name }}</el-radio
+              >
+            </el-radio-group>
+          </div>
+        </div>
+
+        <template v-if="houseType === HouseType.homestead">
+          <Homestead
+            :data="peopleList"
+            :immigrantSettle="immigrantSettle"
+            :doorNo="props.doorNo"
+            fromResettleConfirm
+            @submit="onEditSubmit"
+          />
+        </template>
+
+        <template v-if="houseType === HouseType.flat">
+          <Apartment
+            :data="peopleList"
+            :immigrantSettle="immigrantSettle"
+            :doorNo="props.doorNo"
+            fromResettleConfirm
+            @submit="onEditSubmit"
+          />
+        </template>
+
+        <template v-if="houseType === HouseType.oneself">
+          <FindSelf
+            view-type="default"
+            :immigrantSettle="immigrantSettle"
+            :data="peopleList"
+            :doorNo="props.doorNo"
+            fromResettleConfirm
+            @submit="onEditSubmit"
+          />
+        </template>
+
+        <template v-if="houseType === HouseType.concentrate">
+          <CenterSupport
+            :data="peopleList"
+            :immigrantSettle="immigrantSettle"
+            :doorNo="props.doorNo"
+            fromResettleConfirm
+            @submit="onEditSubmit"
+          />
+        </template>
+      </div>
+    </el-dialog>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 //
-import { reactive, ref, computed, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 // ElMessageBox,
 //
 import {
@@ -169,180 +156,219 @@ import {
   ElSpace,
   ElDialog,
   ElFormItem,
-  ElInput,
-  ElSelect,
-  ElOption,
-  ElForm
+  ElRadioGroup,
+  ElRadio,
+  ElForm,
+  ElTable,
+  ElTableColumn
 } from 'element-plus'
-import { Table, TableEditColumn } from '@/components/Table'
-import EditForm from './EditForm.vue'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
+// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getRelocationInfoApi, saveRelocationInfoApi } from '@/api/putIntoEffect/relocation'
+import { getSimulateImmigrantSettleApi } from '@/api/workshop/datafill/mockResettle-service'
+import {
+  HouseType,
+  resettleHouseType,
+  homesteadAreaSize,
+  apartmentAreaSize,
+  resettleArea,
+  apartmentArea
+} from '../SchemeBase/components/config'
+import { getProduceListApi } from '@/api/putIntoEffect/produce'
+import Homestead from '../SchemeBase/components/Homestead.vue'
+import Apartment from '../SchemeBase/components/Apartment.vue'
+import FindSelf from '../SchemeBase/components/FindSelf.vue'
+import CenterSupport from '../SchemeBase/components/CenterSupport.vue'
 
-import { DemographicDtoType } from '@/api/workshop/population/types'
-import { standardFormatDate } from '@/utils/index'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getRelocationListApi, delRelocationApi } from '@/api/putIntoEffect/relocation'
-import { updateLandlordApi } from '@/api/workshop/landlord/service'
-const dictStore = useDictStoreWithOut()
+// const dictStore = useDictStoreWithOut()
 
-const dictObj = computed(() => dictStore.getDictObj)
+// const dictObj = computed(() => dictStore.getDictObj)
 
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
-const yesAndNoEnums = [
-  {
-    label: '是',
-    value: true
-  },
-  {
-    label: '否',
-    value: false
-  }
-]
+
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const { register, tableObject, methods } = useTable({
-  getListApi: getRelocationListApi,
-  delListApi: delRelocationApi
-})
-const { getList } = methods
+const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
 
-// 根据户号来做筛选
-tableObject.params = {
-  doorNo: props.doorNo,
-  status: props.baseInfo.status
-}
-// console.log(props.baseInfo, 'baseInfobaseInfo')
+const houseType = ref<HouseType>(HouseType.homestead)
+const immigrantSettle = ref<any>(null)
+const mockImmigrantSettle = ref<any>(null)
+const editDialogVisible = ref<boolean>(false)
+const peopleList = ref<any[]>([])
 
-getList()
 const form = ref<any>({})
+
 onMounted(() => {
   form.value = props.baseInfo
+
+  getMockData()
+  getRelocationInfo()
+  getPeopleList()
 })
 
 const rules = ref()
-const schema = reactive<CrudSchema[]>([
-  {
-    width: 80,
-    type: 'index',
-    field: 'index',
-    label: '序号'
-  },
-  {
-    field: 'relocationArea',
-    label: '安置区',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'address',
-    label: '安置住址',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'doorModelText',
-    label: '户型/套型',
-    search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'modelAreaText',
-    label: '套型面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'remark',
-    label: '备注',
-    search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 130,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  }
-])
-const onsave = () => {
-  updateLandlordApi(form.value).then(() => {
-    ElMessage.success('操作成功！')
-  })
-}
-const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
-const cause = ref()
+const tableData = ref<any>([])
+
+// 7.26
+
+const getPeopleList = async () => {
+  const res = await getProduceListApi({
+    doorNo: props.doorNo,
+    projectId: props.baseInfo.projectId,
+    status: props.baseInfo.status
+  })
+  peopleList.value = res.content
+}
+/**
+ * 根据户主人口性质过滤安置类型
+ */
+const filterHouseType = () => {
+  const population = peopleList.value.find((item) => item.relation === '1')
+  // 农村移民
+  if (population && population.populationNature !== '1') {
+    return resettleHouseType.map((item) => {
+      if (item.id === HouseType.homestead) {
+        item.disabled = true
+      }
+      return item
+    })
+  }
+  return resettleHouseType
+}
+
+/**
+ * 获取搬迁安置方式信息
+ */
+const getRelocationInfo = async () => {
+  const res = await getRelocationInfoApi(props.doorNo)
+  if (res) {
+    houseType.value = res.houseAreaType
+    immigrantSettle.value = res
+  }
+}
+
+watch(
+  () => immigrantSettle.value,
+  (res) => {
+    // 整成数组
+    if (!res) return
+    if (res.houseAreaType === HouseType.homestead || res.houseAreaType === HouseType.flat) {
+      const houseAreaTypeText = resettleHouseType.find(
+        (item) => item.id === res.houseAreaType
+      )?.name
+      if (res.houseAreaType === HouseType.homestead) {
+        tableData.value = [
+          {
+            houseAreaTypeText,
+            settleAddressText: resettleArea.find((item) => item.id === res.settleAddress)?.name,
+            area: homesteadAreaSize.find((item) => item.id === res.areaType)?.name,
+            num: 1
+          }
+        ]
+      } else {
+        const array: any = []
+        if (res.typeOneNum) {
+          array.push({
+            houseAreaTypeText,
+            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            area: apartmentAreaSize[0].name,
+            num: res.typeOneNum
+          })
+        }
+        if (res.typeTwoNum) {
+          array.push({
+            houseAreaTypeText,
+            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            area: apartmentAreaSize[1].name,
+            num: res.typeTwoNum
+          })
+        }
+        if (res.typeThreeNum) {
+          array.push({
+            houseAreaTypeText,
+            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            area: apartmentAreaSize[2].name,
+            num: res.typeThreeNum
+          })
+        }
+        if (res.typeFourNum) {
+          array.push({
+            houseAreaTypeText,
+            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            area: apartmentAreaSize[3].name,
+            num: res.typeFourNum
+          })
+        }
+        tableData.value = array
+      }
+    } else {
+      tableData.value = []
+    }
+  },
+  {
+    deep: true,
+    immediate: true
+  }
+)
+// 获取模拟数据
+const getMockData = async () => {
+  const res = await getSimulateImmigrantSettleApi(props.doorNo)
+  if (res) {
+    mockImmigrantSettle.value = res
+  }
+}
+
+// 导入
+const onImportDataPre = async () => {
+  dialogVisible.value = true
+}
+
+// 导入数据
+const onImportData = async () => {
+  // 拿到模拟安置的配置
+  immigrantSettle.value = { ...mockImmigrantSettle.value }
+  houseType.value = mockImmigrantSettle.value.houseAreaType
+  ElMessage.success('导入成功！')
+}
+
 const onClose = () => {
-  cause.value = ''
   dialogVisible.value = false
 }
+
 const onSubmit = () => {
   dialogVisible.value = false
-}
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-  tableObject.currentRow = row
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
-  )
+  onImportData()
 }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
-  dialog.value = true
+// 新增 搬迁安置信息
+const onEditResettle = () => {
+  onEditOpen()
 }
 
-const onEditRow = (row: DemographicDtoType) => {
-  actionType.value = 'edit'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+const onEditOpen = () => {
+  editDialogVisible.value = true
+}
+
+const onEditClose = () => {
+  editDialogVisible.value = false
+}
+
+const onEditSubmit = async (params: any) => {
+  const res = await saveRelocationInfoApi(params)
+  console.log(res, '保存结果')
+  if (res) {
+    editDialogVisible.value = false
+    immigrantSettle.value = res
+    ElMessage.success('保存成功！')
   }
-  dialog.value = true
-}
-
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    getList()
-  }
-}
-
-const onViewRow = (row: DemographicDtoType) => {
-  actionType.value = 'view'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  }
-  dialog.value = true
 }
 </script>
+
 <style lang="less" scoped>
 :deep(.el-dialog__body) {
   padding-right: 60px;

@@ -36,6 +36,9 @@ export interface DemographicDtoType {
   villageText: string
   virutalVillageText: string
   insured: boolean
+  settingWay: any
+  settingWayText: string
+  settingRemark: string
   [key: string]: any
 }
 

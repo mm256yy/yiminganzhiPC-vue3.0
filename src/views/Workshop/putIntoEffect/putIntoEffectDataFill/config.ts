@@ -69,6 +69,7 @@ export const ReportTabs = [
     active: false
   },
   // 安置确认
+
   {
     type: 2,
     name: '搬迁安置',
@@ -415,3 +416,22 @@ export const RelocationResettleTypes = {
   SocialSecurity: 'SocialSecurity', // 社保缴费确认单
   ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
 }
+
+// 生产安置方式
+export const ProductionResettleWay = [
+  {
+    id: '1',
+    name: '农业安置',
+    disabled: false
+  },
+  {
+    id: '2',
+    name: '养老保险',
+    disabled: false
+  },
+  {
+    id: '3',
+    name: '自谋职业',
+    disabled: false
+  }
+]

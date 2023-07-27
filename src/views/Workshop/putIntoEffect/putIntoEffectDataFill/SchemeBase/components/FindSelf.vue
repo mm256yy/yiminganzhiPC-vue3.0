@@ -33,6 +33,10 @@
         :width="props.viewType === 'default' ? 260 : 131"
       />
     </el-table>
+
+    <div class="btn-wrap">
+      <div class="btn" @click="submitResettle">确定，进入下一步</div>
+    </div>
   </div>
 </template>
 
@@ -40,11 +44,16 @@
 import { ref } from 'vue'
 import { ElTable, ElTableColumn } from 'element-plus'
 import { selfResettleData } from './config'
-
+import { HouseType } from './config'
 interface PropsType {
+  data?: any
+  doorNo?: string
   viewType: 'pup' | 'default'
+  immigrantSettle?: any
+  fromResettleConfirm?: boolean
 }
 
+const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
 const tableData = ref(selfResettleData)
 
@@ -100,6 +109,17 @@ const getSummaries = (param: any) => {
 
   return sums
 }
+
+const submitResettle = async () => {
+  const params: any = {
+    houseAreaType: HouseType.oneself,
+    doorNo: props.doorNo
+  }
+  if (props.immigrantSettle && props.immigrantSettle.id) {
+    params.id = props.immigrantSettle.id
+  }
+  emit('submit', params)
+}
 </script>
 
 <style lang="less" scoped>
@@ -126,6 +146,28 @@ const getSummaries = (param: any) => {
     flex: 1;
     font-size: 14px;
     color: #131313;
+  }
+}
+
+.btn-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 26px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+    cursor: pointer;
+    background: #3e73ec;
+    border-radius: 4px 4px 4px 4px;
+    user-select: none;
   }
 }
 </style>

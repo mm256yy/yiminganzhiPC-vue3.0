@@ -1,11 +1,11 @@
 // 宅基地安置区块
 export const resettleArea = [
   {
-    id: 1,
+    id: '1',
     name: '曙光安置区'
   },
   {
-    id: 2,
+    id: '2',
     name: '镜岭集镇安置区'
   }
 ]
@@ -13,74 +13,97 @@ export const resettleArea = [
 // 公寓安置地块
 export const apartmentArea = [
   {
-    id: 1,
+    id: '1',
     name: '棠村安置区'
   },
   {
-    id: 2,
+    id: '2',
     name: '麻家田安置区'
   },
   {
-    id: 3,
+    id: '3',
     name: '东坪安置区'
   }
 ]
 
+export enum HouseType {
+  homestead = 'homestead',
+  flat = 'flat',
+  oneself = 'oneself',
+  concentrate = 'concentrate'
+}
+
 export const resettleHouseType = [
   {
-    id: 1,
-    name: '宅基地'
+    id: 'homestead',
+    name: '宅基地',
+    disabled: false
   },
   {
-    id: 2,
-    name: '公寓房'
+    id: 'flat',
+    name: '公寓房',
+    disabled: false
   },
   {
-    id: 3,
-    name: '自谋出路'
+    id: 'oneself',
+    name: '自谋出路',
+    disabled: false
   },
   {
-    id: 4,
-    name: '集中供养'
+    id: 'concentrate',
+    name: '集中供养',
+    disabled: false
   }
 ]
 
 // 宅基地面积
 export const homesteadAreaSize = [
   {
-    id: 1,
+    id: '1',
     name: 48,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 1,
     isSelected: false
   },
   {
-    id: 2,
+    id: '2',
     name: 72,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 3,
     isSelected: false
   },
   {
-    id: 3,
+    id: '3',
     name: 96,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 5,
     isSelected: false
   },
   {
-    id: 4,
+    id: '4',
     name: 120,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 7,
     isSelected: false
   },
   {
-    id: 5,
+    id: '5',
     name: 144,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 9,
     isSelected: false
   },
   {
-    id: 6,
+    id: '6',
     name: 168,
     unit: 'm²',
+    disabled: false,
+    needPeopleNumber: 11,
     isSelected: false
   }
 ]
@@ -89,28 +112,28 @@ export const homesteadAreaSize = [
 
 export const apartmentAreaSize = [
   {
-    id: 1,
+    id: '1',
     name: 70,
     unit: 'm²',
     isSelected: false,
     num: 0
   },
   {
-    id: 2,
+    id: '2',
     name: 90,
     unit: 'm²',
     isSelected: false,
     num: 0
   },
   {
-    id: 3,
+    id: '3',
     name: 110,
     unit: 'm²',
     isSelected: false,
     num: 0
   },
   {
-    id: 4,
+    id: '4',
     name: 130,
     unit: 'm²',
     isSelected: false,
