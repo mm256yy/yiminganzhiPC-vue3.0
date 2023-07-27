@@ -57,18 +57,8 @@
 
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 方案比选 -- 方案比选 -->
-      <scheme-base
-        :doorNo="doorNo"
-        :baseInfo="baseInfo"
-        v-if="reportTabCurrentId === 2 && tabCurrentId == 6"
-      />
+      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 6" />
 
-      <!-- 方案比选 -- 填写协议信息 -->
-      <agree-info
-        :doorNo="doorNo"
-        :baseInfo="baseInfo"
-        v-if="reportTabCurrentId === 1 && tabCurrentId == 6"
-      />
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
         v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
@@ -322,7 +312,7 @@ import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
 import produce from './produce/Index.vue' // 安置确认 -- 生产安置
 import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
 import SchemeBase from './SchemeBase/Index.vue' // 方案对比 -- 方案对比
-import AgreeInfo from './AgreeInfo/Index.vue' // 方案对比 -- 填写协议信息
+// import AgreeInfo from './AgreeInfo/Index.vue' // 方案对比 -- 填写协议信息
 
 import createCard from './createCard/Index.vue' // 移民建卡
 
