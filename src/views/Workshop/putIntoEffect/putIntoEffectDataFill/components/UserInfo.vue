@@ -141,28 +141,55 @@
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">开户名：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt">{{ props.baseInfo.accountName || '-' }}</div>
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">开户行：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt">{{ props.baseInfo.bankName || '-' }}</div>
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">银行账户：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt">{{ props.baseInfo.bankAccount || '-' }}</div>
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">迁前地址：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt"></div>
+          </div>
+        </el-col>
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">安置住址：</div>
-            <div class="txt"></div> </div
-        ></el-col>
+            <div class="txt"></div>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+
+    <!-- 腾空过渡、搬迁安置、生产安置、相关手续 -->
+    <div
+      class="other"
+      v-if="tabCurrentId == 8 || tabCurrentId == 9 || tabCurrentId == 10 || tabCurrentId == 11"
+      style="display: block"
+    >
+      <el-row>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">迁前地址：</div>
+            <div class="txt"></div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">安置住址：</div>
+            <div class="txt"></div>
+          </div>
+        </el-col>
       </el-row>
     </div>
 

@@ -189,6 +189,98 @@ export const ReportTabs = [
     id: ReportTabIds[11],
     icon: 'pixelarticons:buildings',
     active: false
+  },
+
+  // 择址确认
+  {
+    type: 7,
+    name: '生产用地',
+    id: ReportTabIds[0],
+    icon: 'mdi:land-fields',
+    active: false
+  },
+  {
+    type: 7,
+    name: '选房择址',
+    id: ReportTabIds[1],
+    icon: 'mdi:house-clock-outline',
+    active: false
+  },
+  {
+    type: 7,
+    name: '坟墓择址',
+    id: ReportTabIds[2],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+
+  // 腾空过渡
+  {
+    type: 8,
+    name: '房屋腾空',
+    id: ReportTabIds[0],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 8,
+    name: '土地腾让',
+    id: ReportTabIds[1],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 8,
+    name: '过渡安置',
+    id: ReportTabIds[2],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+
+  // 搬迁安置
+  {
+    type: 9,
+    name: '自建房',
+    id: ReportTabIds[0],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 9,
+    name: '公寓房',
+    id: ReportTabIds[1],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 9,
+    name: '集中供养',
+    id: ReportTabIds[2],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+
+  // 生产安置
+  {
+    type: 10,
+    name: '农业安置',
+    id: ReportTabIds[0],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 10,
+    name: '养老保险',
+    id: ReportTabIds[1],
+    icon: 'mdi:house-city-outline',
+    active: false
+  },
+  {
+    type: 10,
+    name: '集中供养',
+    id: ReportTabIds[2],
+    icon: 'mdi:house-city-outline',
+    active: false
   }
 ]
 
@@ -335,6 +427,10 @@ export const FlowTabs = [
     name: '安置确认'
   },
   {
+    id: 7,
+    name: '择址确认'
+  },
+  {
     id: 3,
     name: '协议签订'
   },
@@ -343,8 +439,20 @@ export const FlowTabs = [
     name: '移民建卡'
   },
   {
-    id: 5,
-    name: '动迁安置'
+    id: 8,
+    name: '腾空过渡'
+  },
+  {
+    id: 9,
+    name: '搬迁安置'
+  },
+  {
+    id: 10,
+    name: '生产安置'
+  },
+  {
+    id: 11,
+    name: '相关手续'
   }
 ]
 

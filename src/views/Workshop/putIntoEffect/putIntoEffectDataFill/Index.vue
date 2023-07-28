@@ -69,6 +69,7 @@
         :baseInfo="baseInfo"
         v-if="reportTabCurrentId === 1 && tabCurrentId == 6"
       />
+
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
         v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
@@ -118,6 +119,7 @@
         :uid="uid"
         @update-data="getLandlordInfo"
       />
+
       <!-- 资产评估 -- 土地青苗及附着物评估 -->
       <land-green-seedlings
         v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
@@ -175,119 +177,177 @@
         :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
+
+      <!-- 择址确认 -- 生产用地 -->
+      <prod-land
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[0]"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
+
+      <!-- 择址确认 -- 择房择址 -->
+      <site-sel
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[1]"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
+
+      <!-- 择址确认 -- 坟墓择址 -->
+      <tomb-site-sel
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[2]"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
+
+      <!-- 协议签订 -->
+      <Agreement :doorNo="doorNo" v-if="tabCurrentId == 3" />
+
       <!-- 移民建卡 -->
       <createCard :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 4" />
 
-      <Agreement :doorNo="doorNo" v-if="tabCurrentId == 3" />
+      <!-- 腾空过渡 -- 房屋腾空 -->
+      <VacateHouse v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[0]" />
+
+      <!-- 腾空过渡 -- 土地腾让 -->
+      <VacateLand v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[1]" />
+
+      <!-- 腾空过渡 -- 过渡安置 -->
+      <TransitionalResettlement
+        v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[2]"
+      />
+
+      <!-- 搬迁安置 -- 自建房 -->
+      <SelfBuildHouse v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[0]" />
+
+      <!-- 搬迁安置 -- 公寓房 -->
+      <Apartment v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[1]" />
+
+      <!-- 搬迁安置 -- 集中供养 -->
+      <CentralizedSupport v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[2]" />
+
+      <!-- 生产安置 -- 农业安置 -->
+      <AgriculturePlacement v-if="tabCurrentId == 10 && reportTabCurrentId === ReportTabIds[0]" />
+
+      <!-- 生产安置 -- 养老保险 -->
+      <EndowmentInsurance v-if="tabCurrentId == 10 && reportTabCurrentId === ReportTabIds[1]" />
+
+      <!-- 生产安置 -- 集中供养 -->
+      <CentralizeSupport v-if="tabCurrentId == 10 && reportTabCurrentId === ReportTabIds[2]" />
+
+      <!-- 相关手续 -->
+      <Formalities v-if="tabCurrentId == 11" />
 
       <!-- 动迁安置 -- 房屋腾空确认单 -->
-      <house-soar
+      <!-- <house-soar
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[0]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 青苗腾空确认单 -->
-      <green-seedlings-soar
+      <!-- <green-seedlings-soar
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[1]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 择房确认单 -->
-      <choose-house
+      <!-- <choose-house
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 择址确认单 -->
-      <site-selection
+      <!-- <site-selection
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[3]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 建房告知单 -->
-      <build-house
+      <!-- <build-house
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 择房交付告知单 -->
-      <optional-delivery
+      <!-- <optional-delivery
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[5]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 坟墓择址确认单 -->
-      <tomb-address
+      <!-- <tomb-address
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 -- 坟墓迁移告知单 -->
-      <tomb-migrations
+      <!-- <tomb-migrations
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[7]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 生产用地 -->
-      <production-land
+      <!-- <production-land
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[8]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 社保缴费 -->
-      <social-security
+      <!-- <social-security
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[9]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 自建房 -->
-      <build-room
+      <!-- <build-room
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[10]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
-      />
+      /> -->
 
       <!-- 动迁安置 安置进度 -->
-      <placement-progress
+      <!-- <placement-progress
         v-if="tabCurrentId == 5 && reportTabCurrentId === ReportTabIds[11]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
         :uid="uid"
         :status="baseInfo.status"
-      />
+      /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -324,23 +384,40 @@ import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安�
 import SchemeBase from './SchemeBase/Index.vue' // 方案对比 -- 方案对比
 import AgreeInfo from './AgreeInfo/Index.vue' // 方案对比 -- 填写协议信息
 
-import createCard from './createCard/Index.vue' // 移民建卡
+import ProdLand from './SiteConfirmation/ProdLand/Index.vue' // 择址确认 -- 生产用地
+import SiteSel from './SiteConfirmation/SiteSel/Index.vue' // 择址确认 -- 择房择址
+import TombSiteSel from './SiteConfirmation/TombSiteSel/Index.vue' // 择址确认 -- 坟墓择址
 
 import Agreement from './Agreement/Agreement.vue' // 协议签订
 
-import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
-import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
-import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
-import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
-import BuildHouse from './RelocationResettle/BuildHouse/Index.vue' // 动迁安置 -- 建房告知单
-import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' // 动迁安置 -- 择房交付告知单
-import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
-import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
+import createCard from './createCard/Index.vue' // 移民建卡
 
-import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 -- 生产用地
-import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 -- 社保缴费
-import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
-import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
+import VacateHouse from './VacateTransition/VacateHouse/Index.vue' // 腾空过渡 -- 房屋腾空
+import VacateLand from './VacateTransition/VacateLand/Index.vue' // 腾空过渡 -- 土地腾让
+import TransitionalResettlement from './VacateTransition/TransitionalResettlement/Index.vue' // 腾空过渡 -- 过渡安置
+
+import SelfBuildHouse from './RelocatePlacement/SelfBuildHouse/Index.vue' // 搬迁安置 -- 自建房
+import Apartment from './RelocatePlacement/Apartment/Index.vue' // 搬迁安置 -- 公寓房
+import CentralizedSupport from './RelocatePlacement/CentralizedSupport/Index.vue' // 搬迁安置 -- 集中供养
+
+import AgriculturePlacement from './ProductionPlacement/AgriculturePlacement/Index.vue' // 生产安置 -- 农业安置
+import EndowmentInsurance from './ProductionPlacement/EndowmentInsurance/Index.vue' // 生产安置 -- 养老保险
+import CentralizeSupport from './ProductionPlacement/CentralizeSupport/Index.vue' // 生产安置 -- 集中供养
+
+import Formalities from './Formalities/Index.vue' // 相关手续
+
+// import HouseSoar from './RelocationResettle/HouseSoar/Index.vue' // 动迁安置 -- 房屋腾空确认单
+// import GreenSeedlingsSoar from './RelocationResettle/GreenSeedlingsSoar/Index.vue' // 动迁安置 -- 青苗腾空确认单
+// import ChooseHouse from './RelocationResettle/ChooseHouse/Index.vue' // 动迁安置 -- 择房确认单
+// import SiteSelection from './RelocationResettle/SiteSelection/Index.vue' // 动迁安置 -- 择址确认单
+// import BuildHouse from './RelocationResettle/BuildHouse/Index.vue' // 动迁安置 -- 建房告知单
+// import OptionalDelivery from './RelocationResettle/OptionalDelivery/Index.vue' // 动迁安置 -- 择房交付告知单
+// import TombAddress from './RelocationResettle/TombAddress/Index.vue' // 动迁安置 -- 坟墓择址确认单
+// import TombMigrations from './RelocationResettle/TombMigrations/Index.vue' // 动迁安置 -- 坟墓迁移告知单
+// import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // 动迁安置 -- 生产用地
+// import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 -- 社保缴费
+// import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
+// import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
 
 import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'

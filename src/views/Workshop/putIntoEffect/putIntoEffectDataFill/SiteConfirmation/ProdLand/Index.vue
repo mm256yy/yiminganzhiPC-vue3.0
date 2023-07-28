@@ -1,0 +1,306 @@
+<template>
+  <WorkContentWrap>
+    <!-- 安置方式 settingWay: 1 农业安置 -->
+    <div class="table-wrap !py-12px !mt-0px" v-if="baseInfo.settingWay === '1'">
+      <div class="flex items-center justify-between pb-12px">
+        <div> </div>
+        <ElSpace>
+          <ElButton
+            class="!bg-[#30A952] !border-[#30A952]"
+            type="primary"
+            :icon="saveIcon"
+            @click="onSave"
+          >
+            保存
+          </ElButton>
+        </ElSpace>
+      </div>
+      <div class="formBox">
+        <ElForm
+          class="form"
+          ref="formRef"
+          :model="form"
+          label-width="120px"
+          :label-position="'right'"
+          :rules="rules"
+        >
+          <div class="titleBox">
+            <span class="text">生产用地区块</span>
+          </div>
+
+          <ElRow>
+            <ElCol :span="24">
+              <ElFormItem label="区块：">{{ form.settleAddress }}</ElFormItem>
+            </ElCol>
+          </ElRow>
+
+          <div class="titleBox">
+            <span class="text">择地结果录入</span>
+          </div>
+
+          <ElRow>
+            <ElCol :span="12">
+              <ElFormItem label="地块编号：" prop="landNo">
+                <ElSelect
+                  class="!w-250px"
+                  v-model="form.landNo"
+                  multiple
+                  filterable
+                  placeholder="请选择"
+                >
+                  <ElOption
+                    v-for="item in options"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.name"
+                    :disabled="item.isOccupy === '1'"
+                  />
+                </ElSelect>
+              </ElFormItem>
+            </ElCol>
+            <ElCol :span="12">
+              <ElFormItem label="土地面积(亩)：" prop="landArea">
+                <ElInputNumber
+                  placeholder="请输入"
+                  :min="0"
+                  :precision="2"
+                  v-model="form.landArea"
+                />
+              </ElFormItem>
+            </ElCol>
+          </ElRow>
+
+          <div class="titleBox">
+            <span class="text">相关附件</span>
+          </div>
+
+          <ElRow>
+            <ElCol :span="24">
+              <ElFormItem label="附件上传：">
+                <div class="card-img-list">
+                  <ElUpload
+                    action="/api/file/type"
+                    :data="{
+                      type: 'image'
+                    }"
+                    :on-error="onError"
+                    :list-type="'picture-card'"
+                    accept=".jpg,.jpeg,.png"
+                    :multiple="true"
+                    :file-list="landPic"
+                    :headers="headers"
+                    :on-success="uploadFileChange"
+                    :before-remove="beforeRemove"
+                    :on-remove="removeFile"
+                    :on-preview="imgPreview"
+                  >
+                    <template #trigger>
+                      <div class="card-img-box">
+                        <div class="card-img-custom">
+                          <Icon icon="ant-design:plus-outlined" :size="22" />
+                        </div>
+                        <div class="card-txt">点击上传</div>
+                      </div>
+                    </template>
+                  </ElUpload>
+                </div>
+              </ElFormItem>
+            </ElCol>
+          </ElRow>
+        </ElForm>
+      </div>
+    </div>
+    <div class="table-wrap !py-12px !mt-0px no-data" v-else>
+      该户未选择农业安置，无需办理生产用地
+    </div>
+    <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
+      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+    </ElDialog>
+  </WorkContentWrap>
+</template>
+
+<script lang="ts" setup>
+import { WorkContentWrap } from '@/components/ContentWrap'
+import { ref, onMounted } from 'vue'
+import {
+  ElMessage,
+  ElMessageBox,
+  ElButton,
+  ElSpace,
+  ElFormItem,
+  ElSelect,
+  ElOption,
+  ElForm,
+  ElRow,
+  ElCol,
+  ElInputNumber,
+  ElUpload,
+  ElDialog
+} from 'element-plus'
+import type { UploadFile, UploadFiles } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
+// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useAppStore } from '@/store/modules/app'
+import {
+  getImmigrantLandApi,
+  saveImmigrantLandApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/SiteConfirmation/prodLand-service'
+import { getChooseConfigApi } from '@/api/putIntoEffect/putIntoEffectDataFill/SiteConfirmation/common-service'
+
+// const dictStore = useDictStoreWithOut()
+// const dictObj = computed(() => dictStore.getDictObj)
+
+interface PropsType {
+  doorNo: string
+  baseInfo: any
+}
+
+interface FileItemType {
+  name: string
+  url: string
+}
+
+const props = defineProps<PropsType>()
+const appStore = useAppStore()
+const rules = ref()
+// const printIcon = useIcon({ icon: 'ion:print-outline' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+
+const form = ref<any>({})
+const landPic = ref<FileItemType[]>([])
+const imgUrl = ref<string>('')
+const dialogVisible = ref(false)
+
+const emit = defineEmits(['updateData'])
+
+const options = ref<any[]>([])
+
+const headers = {
+  'Project-Id': appStore.getCurrentProjectId,
+  Authorization: appStore.getToken
+}
+
+// 初始化页面数据
+const initData = () => {
+  getImmigrantLandApi(props.doorNo).then((res: any) => {
+    form.value = {
+      ...res,
+      landNo: res.landNo ? res.landNo.split(',') : []
+    }
+    if (form.value.landPic) {
+      landPic.value = JSON.parse(form.value.landPic)
+    }
+  })
+}
+
+// 获取地块编号配置数据
+const getChooseConfig = (name?: string) => {
+  getChooseConfigApi(props.baseInfo.projectId, 1, name).then((res: any) => {
+    options.value = res.content
+  })
+}
+
+// 处理函数
+const handleFileList = (fileList: UploadFiles) => {
+  let list: FileItemType[] = []
+  if (fileList && fileList.length) {
+    list = fileList
+      .filter((fileItem) => fileItem.status === 'success')
+      .map((fileItem) => {
+        return {
+          name: fileItem.name,
+          url: (fileItem.response as any)?.data || fileItem.url
+        }
+      })
+  }
+
+  landPic.value = list
+}
+
+// 文件上传
+const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+}
+
+// 文件移除
+const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+}
+
+// 移除之前
+const beforeRemove = (uploadFile: UploadFile) => {
+  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
+    () => true,
+    () => false
+  )
+}
+
+// 预览
+const imgPreview = (uploadFile: UploadFile) => {
+  imgUrl.value = uploadFile.url!
+  dialogVisible.value = true
+}
+
+const onError = () => {
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+}
+
+// 保存
+const onSave = () => {
+  let params = {
+    ...form.value,
+    landNo: form.value.landNo ? form.value.landNo.toString() : '',
+    landPic: landPic.value ? JSON.stringify(landPic.value) : ''
+  }
+  saveImmigrantLandApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    emit('updateData')
+  })
+}
+
+onMounted(() => {
+  initData()
+  getChooseConfig()
+})
+</script>
+<style lang="less" scoped>
+.formBox {
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  opacity: 1;
+
+  .titleBox {
+    height: 32px;
+    padding-left: 15px;
+    margin: 0px 0 16px;
+    line-height: 32px;
+    background: #f5f7fa;
+    box-shadow: 0px 1px 0px 0px rgba(235, 235, 235, 1);
+
+    .text {
+      padding-left: 15px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-size: 17px;
+      font-weight: 600;
+      color: #171718;
+
+      border-left: 4px solid rgba(62, 115, 236, 1) !important;
+    }
+  }
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: 15px;
+}
+
+.upload {
+  .el-upload--picture-card {
+    display: none;
+  }
+}
+</style>
