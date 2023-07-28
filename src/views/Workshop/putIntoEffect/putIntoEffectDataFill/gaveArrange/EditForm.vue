@@ -17,12 +17,11 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <!-- <ElFormItem label="新增原因" prop="name" v-if="actionType === 'add'">
-        <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
-      </ElFormItem> -->
-
       <ElFormItem label="坟墓与登记权属人关系" prop="relation">
-        <ElSelect clearable filterable v-model="form.relation" class="!w-full">
+        <div v-if="actionType === 'edit'">
+          {{ dictFmt(form.relation, 307) }}
+        </div>
+        <ElSelect v-else clearable filterable v-model="form.relation" class="!w-full">
           <ElOption
             v-for="item in dictObj[307]"
             :key="item.value"
@@ -31,12 +30,37 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="穴数" prop="number">
-        <ElInput type="number" v-model="form.number" class="!w-150px">
-          <template #append> 穴 </template>
-        </ElInput>
+
+      <ElFormItem label="材料" prop="materials">
+        <div v-if="actionType === 'edit'">{{ dictFmt(form.materials, 295) }}</div>
+        <ElSelect v-else clearable filterable placeholder="请选择" v-model="form.materials">
+          <ElOption
+            v-for="item in dictObj[295]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
-      <ElFormItem label="处理方式" prop="handleWay">
+
+      <ElFormItem label="穴位" prop="graveType">
+        <div v-if="actionType === 'edit'">{{ dictFmt(form.graveType, 345) }}</div>
+        <ElSelect v-else clearable filterable placeholder="请选择" v-model="form.graveType">
+          <ElOption
+            v-for="item in dictObj[345]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
+
+      <ElFormItem label="数量" prop="number">
+        <div v-if="actionType === 'edit'">{{ form.number }}</div>
+        <ElInputNumber v-else :min="1" placeholder="请输入数量" v-model="form.number" />
+      </ElFormItem>
+
+      <ElFormItem required label="处理方式" prop="handleWay">
         <ElSelect clearable filterable v-model="form.handleWay" class="!w-full">
           <ElOption
             v-for="item in dictObj[238]"
@@ -46,11 +70,18 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="安置公墓" prop="settingGrave">
-        <ElInput v-model="form.settingGrave" placeholder="请输入" />
+      <ElFormItem v-if="form.handleWay === '2'" label="安置公墓" prop="settingGrave">
+        <ElSelect clearable filterable v-model="form.settingGrave" class="!w-full">
+          <ElOption
+            v-for="item in CemeteryAddress"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="详细地址" prop="settingAddress">
+      <ElFormItem v-else-if="form.handleWay === '1'" label="详细地址" prop="settingAddress">
         <ElInput v-model="form.settingAddress" placeholder="请输入" />
       </ElFormItem>
 
@@ -63,9 +94,6 @@
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
-    <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
-      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
-    </el-dialog>
   </ElDialog>
 </template>
 
@@ -80,17 +108,18 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElInputNumber
 } from 'element-plus'
-import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 // import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
-import type { DemographicDtoType } from '@/api/workshop/population/types'
-import { useAppStore } from '@/store/modules/app'
+import type { GraveDtoType } from '@/api/workshop/datafill/grave-types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {} from '@/api/workshop/population/service'
 import { addGaveArrageApi, updateGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
+import { CemeteryAddress } from './config'
 
 interface PropsType {
   show: boolean
@@ -100,104 +129,31 @@ interface PropsType {
   baseInfo: any
 }
 
-interface FileItemType {
-  name: string
-  url: string
-}
-
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
-// const { required } = useValidator()
+
 const formRef = ref<FormInstance>()
-const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 
-const defaultValue: Omit<DemographicDtoType, 'id'> = {
+const defaultValue: Omit<GraveDtoType, 'id'> = {
   relation: '',
-  name: '',
-  card: '',
-  sex: '',
-  birthday: '',
-  nation: '',
-  populationType: '',
-  censusRegister: '',
-  education: '',
   marital: '',
-  censusType: '',
-  occupation: '',
-  company: '',
-  insuranceType: '',
-  populationSort: ''
+  number: 1,
+  graveType: '',
+  settingRemark: '',
+  settingGrave: '',
+  handleWay: '',
+  settingAddress: ''
 }
-const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-// const occupationOptions = ref<any>([]) // 职业选项
-// const placeholderList = ref<string[]>([])
-const cardFront = ref<FileItemType[]>([])
-const cardEnd = ref<FileItemType[]>([])
-const householdPic = ref<FileItemType[]>([])
-const otherPic = ref<FileItemType[]>([])
-const imgUrl = ref<string>('')
-const dialogVisible = ref<boolean>(false)
+const form = ref<Omit<GraveDtoType, 'id'>>(defaultValue)
 
-const headers = {
-  'Project-Id': appStore.getCurrentProjectId,
-  Authorization: appStore.getToken
-}
-console.log(headers)
-
-//处理表单不同状态下的placeholder
-// watch(
-//   () => props.actionType,
-//   (newValue) => {
-//     // if (newValue == 'view') {
-//     //   placeholderList.value = ['', '', '', '', '', ' ']
-//     // } else {
-//     //   placeholderList.value = [
-//     //     '请输入姓名',
-//     //     '请输入身份证号',
-//     //     '请选择日期',
-//     //     '请输入工作单位',
-//     //     '请输入户籍所在地',
-//     //     '请选择'
-//     //   ]
-//     // }
-//   },
-//   //可选immediate: true马上执行
-//   { deep: true, immediate: true }
-// )
 watch(
   () => props.show,
   () => {
-    // if (val) {
-    //   // 处理表单数据
     form.value = {
       ...props.row
-    }
-    // } else {
-    //   form.value = { ...defaultValue }
-    cardFront.value = []
-    cardEnd.value = []
-    householdPic.value = []
-    otherPic.value = []
-    // }
-    try {
-      if (form.value.cardPic) {
-        const pics = JSON.parse(form.value.cardPic)
-        cardFront.value = pics.slice(0, 1)
-        cardEnd.value = pics.slice(1)
-      }
-
-      if (form.value.householdPic) {
-        householdPic.value = JSON.parse(form.value.householdPic)
-      }
-
-      if (form.value.otherPic) {
-        otherPic.value = JSON.parse(form.value.otherPic)
-      }
-    } catch (error) {
-      console.log(error)
     }
   },
   {
@@ -208,19 +164,27 @@ watch(
 const { required } = useValidator()
 // 规则校验
 const rules = reactive<FormRules>({
-  name: [required()]
+  relation: [required()],
+  handleWay: [required()]
 })
+
+const dictFmt = (value, index) => {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
+    const item = dictObj.value[index].find((item: any) => item?.value === value)
+    return item ? item.label : value
+  }
+  return value
+}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
-    cardFront.value = []
     formRef.value?.resetFields()
   })
 }
 
-const submit = async (data: DemographicDtoType) => {
+const submit = async (data: GraveDtoType) => {
   const { id, projectId, status } = props.baseInfo
   data.number = Number(data.number)
   const baseInfo = {
@@ -248,7 +212,6 @@ const submit = async (data: DemographicDtoType) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
         ...form.value
       }
@@ -258,17 +221,6 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
-
-// 获取职业列表
-const getOccupationOptions = () => {
-  // getDictByName('职业').then((res: any) => {
-  //   occupationOptions.value = res
-  // })
-}
-
-onMounted(() => {
-  getOccupationOptions()
-})
 </script>
 
 <style lang="less">

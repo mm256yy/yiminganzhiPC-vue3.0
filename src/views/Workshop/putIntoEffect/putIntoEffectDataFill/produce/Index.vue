@@ -38,7 +38,7 @@
               <div class="!w-150px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
-          <div style="display: flex">
+          <!-- <div style="display: flex">
             <ElFormItem label="增计人口" prop="familyNum">
               <div class="!w-150px">{{ baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
@@ -48,15 +48,18 @@
             <ElFormItem label="安置总人数" prop="familyNum">
               <div class="!w-150px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-          </div>
+          </div> -->
         </ElForm>
       </div>
 
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow" style="margin-top: 17px"
-            >添加</ElButton
+          <ElButton :icon="addIcon" type="primary" @click="onImportDataPre" style="margin-top: 17px"
+            >导入模拟数据</ElButton
+          >
+          <ElButton :icon="saveIcon" type="primary" @click="onSave" style="margin-top: 17px"
+            >保存</ElButton
           >
         </ElSpace>
       </div>
@@ -75,98 +78,79 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #birthday="{ row }">
-          <div>
-            {{ standardFormatDate(row.birthday) }}
-          </div>
+        <template #settingWay="{ row }">
+          <el-select v-model="row.settingWay" placeholder="请选择">
+            <el-option
+              v-for="item in filterWay(row)"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+              :disabled="item.disabled"
+            />
+          </el-select>
         </template>
-        <template #action="{ row }">
-          <!-- :delete="row.relation == 1 ? false : true" -->
-          <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '详情',
-                type: 'primary',
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-            :delete="true"
-          />
+        <template #settingRemark="{ row }">
+          <el-input v-model="row.settingRemark" placeholder="请输入" />
         </template>
       </Table>
     </div>
-    <el-dialog title="删除生产安置信息" v-model="dialogVisible" width="500">
+
+    <el-dialog title="提示" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
-        <el-icon><InfoFilled /></el-icon>是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
+        导入模拟数据后，列表中的安置方式将被覆盖，请确认是否导入？
       </div>
-      <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
-      <ElFormItem label="删除原因" prop="name">
-        <ElInput v-model="cause" class="!w-full" placeholder="请输入" type="textarea" row="3" />
-      </ElFormItem>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
       </template>
     </el-dialog>
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      :doorNo="props.doorNo"
-      :baseInfo="baseInfo"
-      @close="onFormPupClose"
-    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-// , computed
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import {
   ElButton,
   ElSpace,
   ElDialog,
   ElFormItem,
   ElInput,
-  // ElSelect,
-  // ElOption,
-  ElForm
+  ElSelect,
+  ElOption,
+  ElForm,
+  ElMessage
 } from 'element-plus'
-import { Table, TableEditColumn } from '@/components/Table'
-import EditForm from './EditForm.vue'
+import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getProduceListApi, delProduceApi } from '@/api/putIntoEffect/produce'
-import { DemographicDtoType } from '@/api/workshop/population/types'
-import { standardFormatDate } from '@/utils/index'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getProduceListApi, saveProduceListApi } from '@/api/putIntoEffect/produce'
+import { ProductionResettleWay } from '../config'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-service'
 // const dictStore = useDictStoreWithOut()
 
 // const dictObj = computed(() => dictStore.getDictObj)
-// import {  } from '@/api/putIntoEffect/landlordCheck'
+dayjs.extend(relativeTime)
+
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
 
-const emit = defineEmits(['refresh'])
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+
+// 属实
+const productionResettleWay = ref(ProductionResettleWay)
+const mockList = ref<any>([])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getProduceListApi,
-  delListApi: delProduceApi
+  getListApi: getProduceListApi
 })
 const { getList } = methods
 
@@ -225,29 +209,16 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settingWayText',
+    field: 'settingWay',
     label: '安置方式',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'settingRemark',
     label: '备注',
     search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 130,
-    search: {
-      show: false
-    },
-    form: {
       show: false
     }
   }
@@ -255,58 +226,91 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
-const cause = ref()
+
+onMounted(() => {
+  getMockList()
+})
+
+/**
+ * 安置方式过滤
+ */
+const filterWay = (data) => {
+  const arr = productionResettleWay.value.map((item) => {
+    // 农村移民的 其他性质
+    const notFarmer = data.populationNature !== '1'
+    if (notFarmer && item.name === '农业安置') {
+      item.disabled = true
+    }
+    data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : ''
+    if (data.age < 14 && item.name !== '自谋职业') {
+      item.disabled = true
+    }
+    return item
+  })
+  return arr
+}
+
+// 获取模拟数据
+const getMockList = async () => {
+  const res = await getSimulateDemographicApi({
+    doorNo: props.doorNo,
+    projectId: props.baseInfo.projectId,
+    status: props.baseInfo.status
+  })
+  if (res && res.content && res.content.length) {
+    mockList.value = res.content
+  }
+}
+
+// 导入
+const onImportDataPre = async () => {
+  dialogVisible.value = true
+}
+
+// 导入数据
+const onImportData = async () => {
+  // 拿到模拟安置的配置
+  if (mockList.value && mockList.value.length) {
+    console.log(mockList.value, '导入的内容')
+    // 模拟数据和当前数据做融合
+    tableObject.tableList = tableObject.tableList.map((item) => {
+      const current = mockList.value.find((mockItem) => mockItem.demographicId === item.id)
+      if (current) {
+        item.settingWay = current.settingWay
+        item.settingRemark = current.settingRemark
+      }
+      return item
+    })
+  }
+}
 
 const onClose = () => {
-  cause.value = ''
   dialogVisible.value = false
 }
+
 const onSubmit = () => {
   dialogVisible.value = false
-}
-const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-  tableObject.currentRow = row
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
-  )
-  emit('refresh')
+  onImportData()
 }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
-  dialog.value = true
-}
-
-const onEditRow = (row: DemographicDtoType) => {
-  actionType.value = 'edit'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
+const onSave = async () => {
+  const item = tableObject.tableList.find((item) => !item.settingWay)
+  if (item) {
+    ElMessage.info('请选择安置方式')
+    return
   }
-  dialog.value = true
-}
+  const params = tableObject.tableList.map((item) => {
+    return {
+      ...item,
+      settingWay: item.settingWay,
+      settingRemark: item.settingRemark
+    }
+  })
 
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    getList()
-    emit('refresh')
+  const res = await saveProduceListApi(params)
+  if (res) {
+    ElMessage.success('保存成功！')
   }
-}
-
-const onViewRow = (row: DemographicDtoType) => {
-  actionType.value = 'view'
-  tableObject.currentRow = {
-    ...row,
-    occupation: row.occupation ? JSON.parse(row.occupation) : '',
-    insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  }
-  dialog.value = true
 }
 </script>
 <style lang="less" scoped>
