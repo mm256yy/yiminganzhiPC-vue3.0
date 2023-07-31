@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <!-- 择址确认 —— 选房择址 -->
     <!-- houseAreaType 安置方式：homestead 宅基地，flat 公寓房，oneself 自谋出路，concentrate 集中供养 -->
     <div
       class="table-wrap !py-12px !mt-0px"

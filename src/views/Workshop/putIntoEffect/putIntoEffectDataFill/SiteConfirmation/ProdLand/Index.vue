@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <!-- 择址确认 —— 生产用地 -->
     <!-- 安置方式 settingWay: 1 农业安置 -->
     <div class="table-wrap !py-12px !mt-0px" v-if="baseInfo.settingWay === '1'">
       <div class="flex items-center justify-between pb-12px">

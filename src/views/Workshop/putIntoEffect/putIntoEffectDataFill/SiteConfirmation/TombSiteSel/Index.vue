@@ -1,5 +1,7 @@
 <template>
   <WorkContentWrap>
+    <!-- 择址确认 —— 坟墓择址 -->
+    <!-- graveNumber 坟墓数量，当坟墓数量大于0时显示坟墓列表 -->
     <div class="table-wrap !py-12px !mt-0px" v-if="baseInfo.graveNumber">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
