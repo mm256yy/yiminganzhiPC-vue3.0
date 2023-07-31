@@ -65,7 +65,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 const mapPic = ref<FileItemType[]>([]) // 上传的地图JSON文件
 const mapJson = ref<string>('') // 地图JSON文件解析后的JSON数据字符串
 const appStore = useAppStore()

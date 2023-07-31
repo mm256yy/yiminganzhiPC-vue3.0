@@ -58,7 +58,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 // const projectId = ref(props.projectId)
 
 const title = computed(() => {

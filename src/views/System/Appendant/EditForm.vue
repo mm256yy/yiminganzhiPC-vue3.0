@@ -36,7 +36,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 
 const title = computed(() => {
   return props.row ? '编辑附属物' : '新增附属物'
