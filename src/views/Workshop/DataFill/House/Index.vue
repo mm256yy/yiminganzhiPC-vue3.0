@@ -107,11 +107,14 @@ const { register, tableObject, methods } = useTable({
   getListApi: getHouseListApi,
   delListApi: delHouseByIdApi
 })
-const { getList } = methods
 
+tableObject.size = 50
 tableObject.params = {
   doorNo: props.doorNo
 }
+
+const { getList } = methods
+
 const recordShow = ref(false)
 
 const recordClose = () => {
