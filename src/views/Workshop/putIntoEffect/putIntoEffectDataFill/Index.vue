@@ -58,6 +58,26 @@
     <div class="data-fill-body" v-if="type == 'Landlord'">
       <!-- 方案比选 -- 方案比选 -->
       <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 6" />
+      <!-- 房屋腾空 -->
+      <HouseEmpty
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[12]"
+      />
+
+      <!-- 土地腾空过渡 -->
+      <LandEmpty
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[13]"
+      />
+
+      <!-- 过渡安置 -->
+      <TransitionResettle
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[14]"
+      />
 
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
@@ -165,6 +185,7 @@
         :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
+
       <!-- 移民建卡 -->
       <createCard :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 4" />
 
@@ -331,6 +352,10 @@ import ProductionLand from './RelocationResettle/ProductionLand/Index.vue' // �
 import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // 动迁安置 -- 社保缴费
 import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
 import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
+
+import HouseEmpty from './Empty/house.vue'
+import LandEmpty from './Empty/land.vue'
+import TransitionResettle from './Empty/transition.vue'
 
 import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'

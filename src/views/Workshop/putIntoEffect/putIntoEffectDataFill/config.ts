@@ -1,5 +1,5 @@
 // tab 唯一标识
-export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
@@ -91,7 +91,6 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
-  // 方案比选
   // 动迁安置
   {
     type: 5,
@@ -175,6 +174,31 @@ export const ReportTabs = [
     name: '安置进度管理',
     id: ReportTabIds[11],
     icon: 'pixelarticons:buildings',
+    active: false
+  },
+
+  // 过渡腾空
+  {
+    type: 7,
+    name: '房屋腾空',
+    id: ReportTabIds[12],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  // 过渡腾空
+  {
+    type: 7,
+    name: '土地腾空',
+    id: ReportTabIds[13],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  // 过渡腾空
+  {
+    type: 7,
+    name: '过渡安置',
+    id: ReportTabIds[14],
+    icon: 'tabler:grave-2',
     active: false
   }
 ]
@@ -314,10 +338,6 @@ export const FlowTabs = [
     name: '资格认定'
   },
   {
-    id: 6,
-    name: '模拟安置'
-  },
-  {
     id: 2,
     name: '安置确认'
   },
@@ -332,6 +352,14 @@ export const FlowTabs = [
   {
     id: 5,
     name: '动迁安置'
+  },
+  {
+    id: 6,
+    name: '模拟安置'
+  },
+  {
+    id: 7,
+    name: '过渡安置'
   }
 ]
 
