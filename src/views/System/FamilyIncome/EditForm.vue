@@ -59,7 +59,6 @@ const emit = defineEmits(['close'])
 const { required } = useValidator()
 const loading = ref(false)
 const currentRow = computed(() => props.row)
-// const projectId = ref(props.projectId)
 
 const title = computed(() => {
   return props.row ? '编辑家庭收入项' : '新增家庭收入项'
