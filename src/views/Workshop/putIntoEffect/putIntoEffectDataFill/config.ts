@@ -181,7 +181,7 @@ export const ReportTabs = [
   {
     type: 7,
     name: '房屋腾空',
-    id: ReportTabIds[12],
+    id: ReportTabIds[0],
     icon: 'tabler:grave-2',
     active: false
   },
@@ -189,7 +189,7 @@ export const ReportTabs = [
   {
     type: 7,
     name: '土地腾空',
-    id: ReportTabIds[13],
+    id: ReportTabIds[1],
     icon: 'tabler:grave-2',
     active: false
   },
@@ -197,7 +197,30 @@ export const ReportTabs = [
   {
     type: 7,
     name: '过渡安置',
-    id: ReportTabIds[14],
+    id: ReportTabIds[2],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+
+  // 生产安置
+  {
+    type: 8,
+    name: '农业安置',
+    id: ReportTabIds[0],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    type: 8,
+    name: '养老保险',
+    id: ReportTabIds[1],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  {
+    type: 8,
+    name: '自谋职业',
+    id: ReportTabIds[2],
     icon: 'tabler:grave-2',
     active: false
   }
@@ -360,6 +383,10 @@ export const FlowTabs = [
   {
     id: 7,
     name: '过渡安置'
+  },
+  {
+    id: 8,
+    name: '生产安置'
   }
 ]
 
@@ -444,22 +471,3 @@ export const RelocationResettleTypes = {
   SocialSecurity: 'SocialSecurity', // 社保缴费确认单
   ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
 }
-
-// 生产安置方式
-export const ProductionResettleWay = [
-  {
-    id: '1',
-    name: '农业安置',
-    disabled: false
-  },
-  {
-    id: '2',
-    name: '养老保险',
-    disabled: false
-  },
-  {
-    id: '3',
-    name: '自谋职业',
-    disabled: false
-  }
-]

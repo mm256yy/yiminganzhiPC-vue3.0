@@ -33,9 +33,9 @@
               <el-select v-model="scope.row.settingWay" placeholder="请选择">
                 <el-option
                   v-for="item in filterWay(scope.row)"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
                   :disabled="item.disabled"
                 />
               </el-select>
@@ -121,7 +121,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import {
   ElTable,
   ElTableColumn,
@@ -143,12 +143,16 @@ import { DemographicDtoType } from '@/api/workshop/population/types'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { resettleHouseType, HouseType, apartmentArea } from './components/config'
-import { ProductionResettleWay } from '../config'
 
 import Homestead from './components/Homestead.vue'
 import Apartment from './components/Apartment.vue'
 import FindSelf from './components/FindSelf.vue'
 import CenterSupport from './components/CenterSupport.vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 
 dayjs.extend(relativeTime)
 
@@ -176,7 +180,7 @@ const stepArray = ref([
 const stepIndex = ref(1)
 
 // 安置方式
-const productionResettleWay = ref(ProductionResettleWay)
+const productionResettleWay = ref<any>(dictObj.value[375])
 
 // 表格数据
 const tableData = ref<DemographicDtoType[]>([])
@@ -243,13 +247,13 @@ const filterWay = (data) => {
     const notFarmer = data.populationNature !== '1'
     if (
       notFarmer &&
-      item.name === '农业安置' &&
+      item.value === '1' &&
       immigrantSettle.value &&
       immigrantSettle.value.settingAddress !== apartmentArea[2].id
     ) {
       item.disabled = true
     }
-    if (data.age < 14 && item.name !== '自谋职业') {
+    if (data.age < 14 && item.value !== '3') {
       item.disabled = true
     }
     return item

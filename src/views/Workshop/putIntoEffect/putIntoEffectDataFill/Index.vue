@@ -62,21 +62,39 @@
       <HouseEmpty
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[12]"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[0]"
       />
 
       <!-- 土地腾空过渡 -->
       <LandEmpty
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[13]"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[1]"
       />
 
       <!-- 过渡安置 -->
       <TransitionResettle
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[14]"
+        v-if="tabCurrentId == 7 && reportTabCurrentId === ReportTabIds[2]"
+      />
+      <!-- 生产安置 农业安置 -->
+      <FarmingResettle
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[0]"
+      />
+      <!-- 生产安置 养老保险 -->
+      <InsureResettle
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[1]"
+      />
+      <!-- 生产安置 自谋职业 -->
+      <SelfResettle
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[2]"
       />
 
       <!-- 资产评估 -- 房屋主体评估 -->
@@ -356,6 +374,10 @@ import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue'
 import HouseEmpty from './Empty/house.vue'
 import LandEmpty from './Empty/land.vue'
 import TransitionResettle from './Empty/transition.vue'
+
+import FarmingResettle from './ProductionResettle/farming.vue'
+import InsureResettle from './ProductionResettle/insure.vue'
+import SelfResettle from './ProductionResettle/findSelf.vue'
 
 import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'
