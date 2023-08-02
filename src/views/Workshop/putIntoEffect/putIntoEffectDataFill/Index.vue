@@ -185,14 +185,14 @@
       />
 
       <!-- 安置确认 -- 搬迁安置 -->
-      <relocation
+      <Relocation
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 2"
       />
 
       <!-- 安置确认 -- 生产安置 -->
-      <produce
+      <Produce
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         @refresh="getLandlordInfo"
@@ -200,7 +200,7 @@
       />
 
       <!-- 安置确认 -- 坟墓安置 -->
-      <gaveArrange
+      <GaveArrange
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
@@ -349,9 +349,9 @@ import Grave from './AssetEvaluation/Grave/Index.vue' // 资产评估 -- 坟墓�
 import populationCheck from './populationCheck/Index.vue' // 资格认定 -- 人口核定
 import houseConfirmation from './houseConfirmation/Index.vue' // 资格认证 -- 房屋确权
 
-import relocation from './relocation/Index.vue' // 安置确认 -- 搬迁安置
-import produce from './produce/Index.vue' // 安置确认 -- 生产安置
-import gaveArrange from './gaveArrange/Index.vue' // 安置确认 -- 坟墓安置
+import Relocation from './ResettleConfirm/relocation.vue' // 安置确认 -- 搬迁安置
+import Produce from './ResettleConfirm/produce.vue' // 安置确认 -- 生产安置
+import GaveArrange from './ResettleConfirm/gave.vue' // 安置确认 -- 坟墓安置
 import SchemeBase from './SchemeBase/Index.vue' // 方案对比 -- 方案对比
 // import AgreeInfo from './AgreeInfo/Index.vue' // 方案对比 -- 填写协议信息
 
@@ -373,15 +373,15 @@ import SocialSecurity from './RelocationResettle/SocialSecurity/Index.vue' // �
 import BuildRoom from './RelocationResettle/BuildRoom/Index.vue' // 动迁安置 -- 自建房
 import PlacementProgress from './RelocationResettle/PlacementProgress/Index.vue' // 动迁安置 -- 安置进度
 
-import HouseEmpty from './Empty/house.vue'
-import LandEmpty from './Empty/land.vue'
-import TransitionResettle from './Empty/transition.vue'
+import HouseEmpty from './Empty/house.vue' // 房屋腾空
+import LandEmpty from './Empty/land.vue' // 土地腾空
+import TransitionResettle from './Empty/transition.vue' // 过渡安置
 
-import FarmingResettle from './ProductionResettle/farming.vue'
-import InsureResettle from './ProductionResettle/insure.vue'
-import SelfResettle from './ProductionResettle/findSelf.vue'
+import FarmingResettle from './ProductionResettle/farming.vue' // 生产安置 农业安置
+import InsureResettle from './ProductionResettle/insure.vue' // 生产安置 养老保险
+import SelfResettle from './ProductionResettle/findSelf.vue' // 生产安置 自谋职业
 
-import Procedures from './Procedures/index.vue'
+import Procedures from './Procedures/index.vue' // 相关手续
 
 import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'
