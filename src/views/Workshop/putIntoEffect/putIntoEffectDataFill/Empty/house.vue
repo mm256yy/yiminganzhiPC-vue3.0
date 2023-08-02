@@ -4,30 +4,28 @@
       <div class="title">房屋腾空办理情况</div>
       <div>
         <ElSpace v-if="!isHouseEmpty">
-          <ElButton type="primary" @click="onHandle">办理</ElButton>
-          <ElButton type="primary" @click="onNoHandle">无须办理</ElButton>
+          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle">无须办理</ElButton>
+          <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
         </ElSpace>
 
-        <ElSpace v-else>
-          <ElButton type="primary" @click="onSortSave">归档</ElButton>
-          <ElButton type="primary" @click="onPrintTable">打印报表</ElButton>
+        <ElSpace v-else-if="isHouseEmpty && isHouseEmpty === '1'">
+          <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
+          <ElButton :icon="archivesIcon" type="default" @click="onSortSave">档案上传</ElButton>
         </ElSpace>
       </div>
     </div>
 
     <div class="empty-cont">
       <div class="flex-center" v-if="!isHouseEmpty">
-        <Icon icon="gis:flag-start" color="#999999" :size="20" />
+        <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
 
         <div class="txt"> 该户房屋腾空未办理。 </div>
       </div>
       <div class="flex-center" v-else-if="isHouseEmpty === '0'">
-        <Icon icon="gis:flag-start" color="#3E73EC" :size="20" />
-
         <div class="txt"> 该户无须房屋腾空。 </div>
       </div>
       <div class="flex-center" v-else-if="isHouseEmpty === '1'">
-        <Icon icon="gis:flag-start" color="#3E73EC" :size="20" />
+        <Icon icon="ant-design:check-circle-filled" color="#30A952" :size="20" />
 
         <div class="txt">该户房屋腾空已完成，腾空时间：{{ time }}。</div>
       </div>
@@ -84,7 +82,7 @@ import {
 } from 'element-plus'
 import dayjs from 'dayjs'
 import { useValidator } from '@/hooks/web/useValidator'
-// import { useIcon } from '@/hooks/web/useIcon'
+import { useIcon } from '@/hooks/web/useIcon'
 import HouseArchives from './houseArchives.vue'
 import { submitHouseEmptyInfoApi, getHouseEmptyInfoApi } from '@/api/putIntoEffect/empty'
 
@@ -94,7 +92,10 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+const notHandleIcon = useIcon({ icon: 'ant-design:stop-outlined' })
+const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
+const printIcon = useIcon({ icon: 'ant-design:printer-outlined' })
+const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 const isHouseEmpty = ref<null | '0' | '1'>(null) //0 无须办理 1确认办理 -1默认状态
 const time = ref<string>('')
 const form = ref<any>({

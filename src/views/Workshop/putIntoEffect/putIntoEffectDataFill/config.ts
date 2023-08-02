@@ -387,6 +387,10 @@ export const FlowTabs = [
   {
     id: 8,
     name: '生产安置'
+  },
+  {
+    id: 9,
+    name: '相关手续'
   }
 ]
 

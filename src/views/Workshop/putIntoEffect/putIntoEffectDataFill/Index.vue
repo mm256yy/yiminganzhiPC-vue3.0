@@ -96,6 +96,8 @@
         :baseInfo="baseInfo"
         v-if="tabCurrentId == 8 && reportTabCurrentId === ReportTabIds[2]"
       />
+      <!-- 相关手续 -->
+      <Procedures :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 9" />
 
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
@@ -378,6 +380,8 @@ import TransitionResettle from './Empty/transition.vue'
 import FarmingResettle from './ProductionResettle/farming.vue'
 import InsureResettle from './ProductionResettle/insure.vue'
 import SelfResettle from './ProductionResettle/findSelf.vue'
+
+import Procedures from './Procedures/index.vue'
 
 import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'

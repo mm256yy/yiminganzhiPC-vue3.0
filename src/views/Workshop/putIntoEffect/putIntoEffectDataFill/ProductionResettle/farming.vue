@@ -3,7 +3,9 @@
     <div class="farming-head">
       <div class="title">农业安置</div>
       <ElSpace>
-        <ElButton v-if="hasFarmingResettle" type="primary" @click="onSortSave">档案上传</ElButton>
+        <ElButton v-if="hasFarmingResettle" :icon="archivesIcon" type="default" @click="onSortSave"
+          >档案上传</ElButton
+        >
       </ElSpace>
     </div>
 
@@ -42,11 +44,11 @@
           <div class="txt">该户无农业安置</div>
         </div>
         <div class="flex-center" v-else-if="hasFarmingResettle && farmingResettleStatus === '0'">
-          <Icon icon="gis:flag-start" color="#999999" :size="20" />
+          <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
           <div class="txt">该户农业安置办理未完成</div>
         </div>
         <div class="flex-center" v-else-if="hasFarmingResettle && farmingResettleStatus === '1'">
-          <Icon icon="gis:flag-start" color="#3E73EC" :size="20" />
+          <Icon icon="ant-design:check-circle-filled" color="#30A952" :size="20" />
           <div class="txt">该户农业安置办理已完成</div>
         </div>
       </div>
@@ -67,6 +69,7 @@ import { getProduceLandInfoApi } from '@/api/putIntoEffect/produce'
 import FarmingArchives from './farmingArchives.vue'
 import { getDocumentApi } from '@/api/putIntoEffect/empty'
 import { getDemographicListApi } from '@/api/workshop/population/service'
+import { useIcon } from '@/hooks/web/useIcon'
 
 interface PropsType {
   doorNo: string
@@ -78,6 +81,7 @@ const farmingArchivesPup = ref<boolean>(false)
 const productionLandInfo = ref<any>(null)
 const hasFarmingResettle = ref<boolean>(false) // 是否存在 农业安置的人
 const farmingResettleStatus = ref<'0' | '1'>('0')
+const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 
 // 获取档案数据
 const getFarming = () => {
