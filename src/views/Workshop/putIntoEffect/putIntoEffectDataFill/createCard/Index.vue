@@ -2,10 +2,42 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
+        <div class="title"> 居民户账户信息 </div>
+      </div>
+      <ElForm
+        class="form"
+        ref="formRef"
+        :model="form"
+        label-width="70px"
+        :label-position="'right'"
+        :rules="rules"
+      >
+        <ElRow>
+          <ElCol :span="6">
+            <ElFormItem label="开户名" prop="relation">
+              <ElInput v-model="form.accountName" placeholder="请输入" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="6">
+            <ElFormItem label="开户行" prop="relation">
+              <ElInput v-model="form.bankName" placeholder="请输入" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="6">
+            <ElFormItem label="开户账号" prop="relation">
+              <ElInput v-model="form.bankAccount" placeholder="请输入" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="6">
+            <ElButton type="primary" @click="onDocumentation">归档</ElButton>
+            <ElButton type="primary" @click="onPrint">打印报表</ElButton>
+            <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
+          </ElCol>
+        </ElRow>
+      </ElForm>
+
+      <div class="flex items-center justify-between pb-12px">
         <div class="title"> 家庭基本情况列表</div>
-        <!-- <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
-        </ElSpace> -->
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -27,30 +59,17 @@
             {{ standardFormatDate(row.birthday) }}
           </div>
         </template>
-        <!-- <template #action="{ row }">
-          <TableEditColumn
-            :view-type="'link'"
-            :icons="[
-              {
-                icon: '',
-                tooltip: '详情',
-                type: 'primary',
-                action: () => onViewRow(row)
-              }
-            ]"
-            :row="row"
-            @edit="onEditRow(row)"
-            @delete="onDelRow"
-            :delete="row.relation == 1 ? false : true"
-          />
-        </template> -->
       </Table>
+
       <div class="flex items-center justify-between pb-12px mt-20px">
         <div class="title"> 费用补偿情况列表</div>
+        <ElSpace>
+          <ElButton type="primary" @click="confirmReward">奖励费确认</ElButton>
+        </ElSpace>
       </div>
       <div class="fylist">
         <ElTable
-          :data="fyTableObject"
+          :data="feeTableData"
           :span-method="objectSpanMethod"
           style="width: 100%"
           class="mb-20"
@@ -58,39 +77,46 @@
           :border="true"
         >
           <ElTableColumn label="类型" align="center" prop="type" header-align="center">
-            <template #default="scope">
-              <b>{{ scope.row.type }}</b>
+            <template #default="{ row }">
+              <b>{{ getTypeStr(row.type) }}</b>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="指标名称" prop="name" align="center" header-align="center" />
+          <ElTableColumn label="单位" width="100" prop="unit" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.unit ? row.unit : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
             </template>
           </ElTableColumn>
           <ElTableColumn
-            label="指标名称"
-            class-name="name-row"
-            align="left"
-            :width="200"
-            prop="name"
-            header-align="right"
+            label="补偿金额"
+            width="100"
+            prop="totalPrice"
+            align="center"
+            header-align="center"
           >
-            <template #default="scope">
-              <b
-                v-if="
-                  scope.row.name &&
-                  (scope.row.name.includes('小计') || scope.row.name.includes('合计')) &&
-                  scope.row.name !== '其他费用/专项费小计'
-                "
-              >
-                {{ scope.row.name }}
-              </b>
-              <div v-else>
-                <span>{{ scope.row.name }}</span>
-              </div>
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
+              <div v-else-if="row.isUpdate === '1'">{{ computedTotalPrice(row) }}</div>
+              <div v-else-if="row.isUpdate === '2'"> {{ getSummaries(row) }} </div>
             </template>
           </ElTableColumn>
-          <ElTableColumn label="" align="center" prop="subname" header-align="center" />
-          <ElTableColumn label="单位" align="center" prop="unit" header-align="center" />
-          <ElTableColumn label="数量" align="center" prop="num" header-align="center" />
-          <ElTableColumn label="补偿单价" align="center" prop="price" header-align="center" />
-          <ElTableColumn label="补偿金额（元）" align="center" prop="money" header-align="center" />
-          <ElTableColumn label="备注" align="left" prop="center" header-align="center" />
+          <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+            </template>
+          </ElTableColumn>
         </ElTable>
       </div>
       <div class="pb-12px mt-20px">
@@ -104,18 +130,49 @@
         </div>
       </div>
     </div>
+
+    <!-- 档案上传 -->
+    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="close('documentation')" />
+
+    <!-- 奖励费确认 -->
+    <ConfirmReward
+      :show="rewardConfirmDialog"
+      :door-no="props.doorNo"
+      @close="close('rewardConfirm')"
+    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
+import { ref, reactive } from 'vue'
+import {
+  ElTable,
+  ElTableColumn,
+  FormInstance,
+  ElForm,
+  ElFormItem,
+  FormRules,
+  ElRow,
+  ElCol,
+  ElButton,
+  ElInput,
+  ElMessage
+} from 'element-plus'
+import { debounce } from 'lodash-es'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { standardFormatDate } from '@/utils/index'
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
+import {
+  updatePeasantHouseholdInfo,
+  getCompensationCardList
+} from '@/api/putIntoEffect/putIntoEffectDataFill/CreateCard/service'
+
+import { WorkContentWrap } from '@/components/ContentWrap'
+import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
+import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
+import { onMounted } from 'vue'
 
 interface PropsType {
   doorNo: string
@@ -123,337 +180,16 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
+const dialog = ref<boolean>(false)
+const rewardConfirmDialog = ref<boolean>(false)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
   delListApi: delDemographicByIdApi
 })
 const { getList } = methods
-const fyTableObject = [
-  {
-    type: '补偿费',
-    name: '房屋主体补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '136435',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '房屋装修补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '21882',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '附属物补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '2918',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '零星果木补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '地上青苗及附着物补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '65210',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '土地补偿费（到户）',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '坟墓迁移补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '农副业设施设备补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '其他补偿费',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '7837.5',
-    remark: ''
-  },
-  {
-    type: '补偿费',
-    name: '补偿小计',
-    unit: '',
-    num: '',
-    price: '',
-    money: '234282.5',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '建房补助费',
-    unit: '项',
-    num: '1',
-    price: '29205.6',
-    money: '29205.6',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '搬迁补助费',
-    unit: '项',
-    num: '1',
-    price: '24000',
-    money: '24000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '过渡期补助费',
-    unit: '项',
-    num: '1',
-    price: '28800',
-    money: '28800',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '临时安置补助费',
-    unit: '项',
-    num: '1',
-    price: '45405.6',
-    money: '45405.6',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '分散安置移民基础设施费',
-    unit: '项',
-    num: '1',
-    price: '0',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '其他补助费',
-    unit: '——',
-    num: '1',
-    price: '0',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '补助费小计',
-    unit: '',
-    num: '',
-    price: '',
-    money: '127411.2',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '签约奖',
-    subname: '网格签约奖',
-    unit: '项',
-    num: '0',
-    price: '0',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '签约奖',
-    subname: '按时签约奖',
-    unit: '项',
-    num: '1',
-    price: '48000',
-    money: '48000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '签约奖',
-    subname: '其他签约奖',
-    unit: '项',
-    num: '1',
-    price: '33000',
-    money: '33000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '腾空奖',
-    subname: '房屋提前腾空奖',
-    unit: '项',
-    num: '1',
-    price: '21000',
-    money: '21000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '腾空奖',
-    subname: '青苗提前腾空奖',
-    unit: '项',
-    num: '0',
-    price: '0',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '建房奖',
-    subname: '启动建房奖励',
-    unit: '项',
-    num: '1',
-    price: '18000',
-    money: '18000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '建房奖',
-    subname: '完成建房奖励',
-    unit: '项',
-    num: '1',
-    price: '18000',
-    money: '18000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '建房奖',
-    subname: '搬迁入住奖励',
-    unit: '项',
-    num: '1',
-    price: '12000',
-    money: '12000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '其他奖励费',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '6000',
-    remark: ''
-  },
-  {
-    type: '奖励费',
-    name: '奖励费小计',
-    subname: '',
-    unit: '',
-    num: '',
-    price: '',
-    money: '156000',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '集体资产处理款',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '生态公益林补偿金',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '工商企业补偿补助费',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '其他',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '其他费用/专项费小计',
-    subname: '',
-    unit: '',
-    num: '',
-    price: '',
-    money: '0',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '合计',
-    subname: '',
-    unit: '',
-    num: '',
-    price: '',
-    money: '517693.7',
-    remark: ''
-  },
-  {
-    type: '其他费用',
-    name: '估算安置房价格',
-    subname: '',
-    unit: '——',
-    num: '——',
-    price: '——',
-    money: '',
-    remark: ''
-  }
-]
+
+const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   console.log(row, column)
@@ -612,13 +348,133 @@ const tableRowClassName = ({ row }: any) => {
     (row.name.includes('小计') || row.name.includes('合计')) &&
     row.name !== '其他费用/专项费小计'
   ) {
-    console.log('1111111')
     return 'gray-row'
   } else {
     return ''
   }
 }
 const { allSchemas } = useCrudSchemas(schema)
+
+const formRef = ref<FormInstance>()
+const form = ref<any>({ ...props.baseInfo })
+const rules = reactive<FormRules>({})
+
+// 获取费用补偿情况列表
+const getRewardFeeList = () => {
+  getCompensationCardList(props.doorNo).then((res: any) => {
+    feeTableData.value = res
+  })
+}
+
+/**
+ * 获取金额类型
+ * @param type 类型 1 补偿, 2 补助, 3 奖励, 4 其他
+ */
+const getTypeStr = (type: string) => {
+  switch (type) {
+    case '1':
+      return '补偿费'
+      break
+    case '2':
+      return '补助费'
+      break
+    case '3':
+      return '奖励费'
+      break
+    case '4':
+      return '其他费用'
+      break
+    default:
+      return ''
+  }
+}
+
+/**
+ * 计算补偿金额
+ * 补偿金额 = 数量 * 单价
+ * @param row 当前行数据
+ */
+const computedTotalPrice = (row: any) => {
+  if (row.totalPrice) {
+    return Number(row.totalPrice)
+  } else {
+    if (row.number && row.price) {
+      return Number(row.number) * Number(row.price)
+    } else {
+      return 0
+    }
+  }
+}
+
+/**
+ * 获取奖励小计
+ * @param row 当前行信息
+ */
+const getSummaries = (row: any) => {
+  let sums = 0
+  let sumIndex = 0
+  feeTableData.value.forEach((column, index) => {
+    if (column.name === row.name) {
+      sumIndex = index
+    }
+  })
+  const arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
+  sums = arr.reduce((totalPrice, currentItem) => {
+    return totalPrice + computedTotalPrice(currentItem)
+  }, 0)
+  return sums
+}
+
+// 归档
+const onDocumentation = () => {
+  dialog.value = true
+}
+
+// 打印报表
+const onPrint = () => {
+  console.log('打印报表')
+}
+
+// 奖励费确认
+const confirmReward = () => {
+  rewardConfirmDialog.value = true
+}
+
+// 关闭弹窗
+const close = (type: string) => {
+  if (type === 'documentation') {
+    dialog.value = false
+  } else if (type === 'rewardConfirm') {
+    rewardConfirmDialog.value = false
+  }
+}
+
+// 表单提交
+const submit = (data: any) => {
+  updatePeasantHouseholdInfo(data).then((res: any) => {
+    if (res) {
+      ElMessage.success('操作成功')
+    }
+  })
+}
+
+// 保存
+const onSubmit = debounce((formEl) => {
+  formEl?.validate((valid: any) => {
+    if (valid) {
+      const data: any = {
+        ...form.value
+      }
+      submit(data)
+    } else {
+      return false
+    }
+  })
+}, 600)
+
+onMounted(() => {
+  getRewardFeeList()
+})
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {

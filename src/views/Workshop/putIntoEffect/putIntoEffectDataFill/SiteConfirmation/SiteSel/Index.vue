@@ -81,7 +81,7 @@
           header-align="center"
         />
         <ElTableColumn
-          label="幢号-室号"
+          label="房号"
           width="140"
           prop="roomNo"
           align="center"
@@ -147,9 +147,9 @@
             <ElInputNumber placeholder="请输入" :min="0" v-model="row.placeOrder" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" width="220" align="center" header-align="center" fixed="right">
+        <ElTableColumn label="操作" width="200" align="center" header-align="center" fixed="right">
           <template #default="{ row }">
-            <ElButton type="primary" @click="enterRoomNo(row)">录入幢/室号</ElButton>
+            <ElButton type="primary" @click="enterRoomNo(row)">录入房号</ElButton>
             <ElButton type="primary" @click="onSave(row)"> 保存 </ElButton>
           </template>
         </ElTableColumn>

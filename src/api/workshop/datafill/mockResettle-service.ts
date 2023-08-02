@@ -36,7 +36,7 @@ export const getSimulateDemographicApi = (params: any) => {
     url: '/simulateDemographic',
     params: {
       ...params,
-      status: 'Implementation'
+      status: 'implementation'
     }
   })
 }
@@ -49,7 +49,7 @@ export const getSimulateImmigrantSettleApi = (doorNo: string) => {
     url: '/simulateImmigrantSettle/findByDoorNo',
     params: {
       doorNo,
-      status: 'Implementation'
+      status: 'implementation'
     }
   })
 }

@@ -72,9 +72,9 @@
                   :list-type="'picture-card'"
                   action="/api/file/type"
                   :data="{
-                    type: 'image'
+                    type: 'archives'
                   }"
-                  accept=".jpg,.jpeg,.png"
+                  accept=".*"
                   :multiple="false"
                   :file-list="item.lotteryOrderPic"
                   :headers="headers"
@@ -103,11 +103,11 @@
                 <ElUpload
                   action="/api/file/type"
                   :data="{
-                    type: 'image'
+                    type: 'archives'
                   }"
                   :on-error="onError"
                   :list-type="'picture-card'"
-                  accept=".jpg,.jpeg,.png"
+                  accept=".*"
                   :multiple="true"
                   :file-list="item.placeOrderPic"
                   :headers="headers"
@@ -140,11 +140,11 @@
                 <ElUpload
                   action="/api/file/type"
                   :data="{
-                    type: 'image'
+                    type: 'archives'
                   }"
                   :on-error="onError"
                   :list-type="'picture-card'"
-                  accept=".jpg,.jpeg,.png"
+                  accept=".*"
                   :multiple="true"
                   :file-list="item.chooseHousePic"
                   :headers="headers"
@@ -174,11 +174,11 @@
                 <ElUpload
                   action="/api/file/type"
                   :data="{
-                    type: 'image'
+                    type: 'archives'
                   }"
                   :on-error="onError"
                   :list-type="'picture-card'"
-                  accept=".jpg,.jpeg,.png"
+                  accept=".*"
                   :multiple="true"
                   :file-list="item.otherPic"
                   :headers="headers"

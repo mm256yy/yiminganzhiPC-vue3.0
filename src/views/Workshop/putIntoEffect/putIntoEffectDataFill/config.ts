@@ -3,73 +3,74 @@ export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
-  // 资产评估
-  {
-    type: 0,
-    name: '房屋主体评估',
-    id: ReportTabIds[0],
-    icon: 'clarity:house-solid',
-    active: false
-  },
-  {
-    type: 0,
-    name: '房屋装修评估',
-    id: ReportTabIds[1],
-    icon: 'mdi:house-city',
-    active: false
-  },
-  {
-    type: 0,
-    name: '房屋附属设施评估',
-    id: ReportTabIds[2],
-    icon: 'bi:device-hdd-fill',
-    active: false
-  },
-  {
-    type: 0,
-    name: '零星林（果）木评估',
-    id: ReportTabIds[3],
-    icon: 'mdi:pine-tree',
-    active: false
-  },
-  {
-    type: 0,
-    name: '土地基本情况评估',
-    id: ReportTabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    type: 0,
-    name: '土地青苗及附着物评估',
-    id: ReportTabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
-  },
-  {
-    type: 0,
-    name: '坟墓评估',
-    id: ReportTabIds[6],
-    icon: 'tabler:grave-2',
-    active: false
-  },
   // 资格认定
   {
-    type: 1,
+    type: 0,
     name: '人口核定',
     id: ReportTabIds[0],
     icon: 'mdi:user-details',
     active: false
   },
   {
-    type: 1,
+    type: 0,
     name: '房屋确权',
     id: ReportTabIds[1],
     icon: 'clarity:house-solid',
     active: false
   },
-  // 安置确认
 
+  // 资产评估
+  {
+    type: 1,
+    name: '房屋主体评估',
+    id: ReportTabIds[0],
+    icon: 'clarity:house-solid',
+    active: false
+  },
+  {
+    type: 1,
+    name: '房屋装修评估',
+    id: ReportTabIds[1],
+    icon: 'mdi:house-city',
+    active: false
+  },
+  {
+    type: 1,
+    name: '房屋附属设施评估',
+    id: ReportTabIds[2],
+    icon: 'bi:device-hdd-fill',
+    active: false
+  },
+  {
+    type: 1,
+    name: '零星林（果）木评估',
+    id: ReportTabIds[3],
+    icon: 'mdi:pine-tree',
+    active: false
+  },
+  {
+    type: 1,
+    name: '土地基本情况评估',
+    id: ReportTabIds[4],
+    icon: 'mdi:land-fields',
+    active: false
+  },
+  {
+    type: 1,
+    name: '土地青苗及附着物评估',
+    id: ReportTabIds[5],
+    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
+    active: false
+  },
+  {
+    type: 1,
+    name: '坟墓评估',
+    id: ReportTabIds[6],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+
+  // 安置确认
   {
     type: 2,
     name: '搬迁安置',
@@ -91,7 +92,7 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
-  // 方案比选
+
   // 动迁安置
   {
     type: 5,
@@ -219,29 +220,6 @@ export const ReportTabs = [
   {
     type: 8,
     name: '过渡安置',
-    id: ReportTabIds[2],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-
-  // 搬迁安置
-  {
-    type: 9,
-    name: '自建房',
-    id: ReportTabIds[0],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-  {
-    type: 9,
-    name: '公寓房',
-    id: ReportTabIds[1],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-  {
-    type: 9,
-    name: '集中供养',
     id: ReportTabIds[2],
     icon: 'mdi:house-city-outline',
     active: false
@@ -399,11 +377,11 @@ export const villageInfoCTabs = [
 export const FlowTabs = [
   {
     id: 0,
-    name: '资产评估'
+    name: '资格认定'
   },
   {
     id: 1,
-    name: '资格认定'
+    name: '资产评估'
   },
   {
     id: 6,

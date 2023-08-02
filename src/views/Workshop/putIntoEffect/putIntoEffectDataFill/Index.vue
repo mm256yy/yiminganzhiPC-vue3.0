@@ -59,9 +59,25 @@
       <!-- 方案比选 -- 方案比选 -->
       <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 6" />
 
+      <!-- 资格认定 -- 人口核定 -->
+      <populationCheck
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @refresh="getLandlordInfo"
+        v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 0"
+      />
+
+      <!-- 资格认定 -- 房屋确权 -->
+      <houseConfirmation
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        :householdId="householdId"
+        v-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 0"
+      />
+
       <!-- 资产评估 -- 房屋主体评估 -->
       <main-house
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[0]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[0]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -71,7 +87,7 @@
 
       <!-- 资产评估 -- 房屋装修评估 -->
       <house-decoration
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[1]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[1]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -81,7 +97,7 @@
 
       <!-- 资产评估 -- 房屋附属设施评估 -->
       <house-accessory
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[2]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -91,7 +107,7 @@
 
       <!-- 资产评估 -- 零星林（果）木评估 -->
       <fruit-tree
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[3]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[3]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -101,7 +117,7 @@
 
       <!-- 资产评估 -- 土地基本情况评估 -->
       <land-basic-info
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[4]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -111,7 +127,7 @@
 
       <!-- 资产评估 -- 土地青苗及附着物评估 -->
       <land-green-seedlings
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[5]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[5]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -121,7 +137,7 @@
 
       <!-- 资产评估 -- 坟墓评估 -->
       <grave
-        v-show="tabCurrentId == 0 && reportTabCurrentId === ReportTabIds[6]"
+        v-show="tabCurrentId == 1 && reportTabCurrentId === ReportTabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -129,27 +145,11 @@
         @update-data="getLandlordInfo"
       />
 
-      <!-- 资格认定 -- 人口核定 -->
-      <populationCheck
-        :doorNo="doorNo"
-        :baseInfo="baseInfo"
-        @refresh="getLandlordInfo"
-        v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 1"
-      />
-
-      <!-- 资格认定 -- 房屋确权 -->
-      <houseConfirmation
-        :doorNo="doorNo"
-        :baseInfo="baseInfo"
-        :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 1"
-      />
-
       <!-- 安置确认 -- 搬迁安置 -->
       <relocation
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 2"
+        v-if="reportTabCurrentId === ReportTabIds[0] && tabCurrentId == 2"
       />
 
       <!-- 安置确认 -- 生产安置 -->
@@ -157,14 +157,14 @@
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         @refresh="getLandlordInfo"
-        v-else-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 2"
+        v-if="reportTabCurrentId === ReportTabIds[1] && tabCurrentId == 2"
       />
 
       <!-- 安置确认 -- 坟墓安置 -->
       <gaveArrange
         :doorNo="doorNo"
         :baseInfo="baseInfo"
-        v-else-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
+        v-if="reportTabCurrentId === ReportTabIds[2] && tabCurrentId == 2"
       />
 
       <!-- 择址确认 -- 生产用地 -->
@@ -209,13 +209,26 @@
       />
 
       <!-- 搬迁安置 -- 自建房 -->
-      <SelfBuildHouse v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[0]" />
+      <SelfBuildHouse
+        v-if="tabCurrentId == 9 && baseInfo.houseAreaType === 'homestead'"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+      />
 
       <!-- 搬迁安置 -- 公寓房 -->
-      <Apartment v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[1]" />
+      <Apartment
+        v-if="tabCurrentId == 9 && baseInfo.houseAreaType === 'flat'"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 搬迁安置 -- 集中供养 -->
-      <CentralizedSupport v-if="tabCurrentId == 9 && reportTabCurrentId === ReportTabIds[2]" />
+      <CentralizedSupport
+        v-if="tabCurrentId == 9 && baseInfo.houseAreaType === 'concentrate'"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+      />
 
       <!-- 生产安置 -- 农业安置 -->
       <AgriculturePlacement v-if="tabCurrentId == 10 && reportTabCurrentId === ReportTabIds[0]" />

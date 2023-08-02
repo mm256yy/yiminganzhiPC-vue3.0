@@ -18,21 +18,3 @@ export const getGraveListApi = (doorNo: string) => {
 export const saveGraveApi = (data: any): Promise<TableResponse<GraveType>> => {
   return request.post({ url: '/immigrantGrave/createAll', data })
 }
-
-/**
- * 获取坟墓择址档案数据
- * @param doorNo 户号
- * @returns
- */
-export const getGraveDocumentationApi = (doorNo: string) => {
-  return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
-}
-
-/**
- * 档案上传
- * @param data 表单提交数据
- * @returns
- */
-export const saveGraveDocumentationApi = (data: any): Promise<TableResponse<GraveType>> => {
-  return request.post({ url: '/immigrantDocumentation/save', data })
-}

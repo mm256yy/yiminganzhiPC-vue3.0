@@ -1,8 +1,8 @@
 <template>
   <ElDialog
-    title="档案上传"
+    title="归档"
     :model-value="props.show"
-    :width="1000"
+    :width="800"
     @close="onClose"
     alignCenter
     appendToBody
@@ -12,26 +12,26 @@
       class="form"
       ref="formRef"
       :model="form"
-      label-width="110px"
+      label-width="150px"
       :label-position="'right'"
       :rules="rules"
     >
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label">坟墓确认单：</div>
+            <div class="col-label-required"> 安置补偿登记卡照片： </div>
             <div class="card-img-list">
               <ElUpload
+                :list-type="'picture-card'"
                 action="/api/file/type"
                 :data="{
                   type: 'archives'
                 }"
-                :on-error="onError"
-                :list-type="'picture-card'"
                 accept=".jpg,.png,jpeg,.pdf"
-                :multiple="true"
-                :file-list="graveChoosePic"
+                :multiple="false"
+                :file-list="compensationCardPic"
                 :headers="headers"
+                :on-error="onError"
                 :on-success="uploadFileChange1"
                 :before-remove="beforeRemove"
                 :on-remove="removeFile1"
@@ -39,10 +39,8 @@
               >
                 <template #trigger>
                   <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
-                    </div>
-                    <div class="card-txt"> 点击上传 </div>
+                    <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                    <div class="card-txt">点击上传</div>
                   </div>
                 </template>
               </ElUpload>
@@ -64,7 +62,7 @@
                 :list-type="'picture-card'"
                 accept=".jpg,.png,jpeg,.pdf"
                 :multiple="true"
-                :file-list="graveChooseOtherPic"
+                :file-list="compensationCardOtherPic"
                 :headers="headers"
                 :on-success="uploadFileChange2"
                 :before-remove="beforeRemove"
@@ -110,20 +108,18 @@ import {
   ElMessage,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, nextTick, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
-
 import { useAppStore } from '@/store/modules/app'
 import {
   getDocumentationApi,
   saveDocumentationApi
 } from '@/api/putIntoEffect/putIntoEffectDataFill/SiteConfirmation/common-service'
-import type { GraveType } from '@/api/putIntoEffect/putIntoEffectDataFill/SiteConfirmation/tombSiteSel-types'
 
 interface PropsType {
   show: boolean
-  doorNo: any
+  doorNo: string
 }
 
 interface FileItemType {
@@ -136,16 +132,11 @@ const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 
-const defaultValue: Omit<GraveType, 'id'> = {
-  tombConfirmPic: '', // 坟墓确认单
-  graveChooseOtherPic: '' // 其他附件
-}
-const form = ref<Omit<GraveType, 'id'>>(defaultValue)
-const graveChoosePic = ref<FileItemType[]>([])
-const graveChooseOtherPic = ref<FileItemType[]>([])
-
+const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
+const compensationCardPic = ref<FileItemType[]>([]) // 安置补偿登记卡照片文件列表
+const compensationCardOtherPic = ref<FileItemType[]>([]) // 其他附件列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -157,53 +148,55 @@ const rules = reactive<FormRules>({})
 
 const initData = () => {
   getDocumentationApi(props.doorNo).then((res: any) => {
-    form.value = res
-    if (form.value.graveChoosePic) {
-      graveChoosePic.value = JSON.parse(form.value.graveChoosePic)
-    }
+    if (res) {
+      form.value = { ...res }
+      if (form.value.compensationCardPic) {
+        compensationCardPic.value = JSON.parse(form.value.compensationCardPic)
+      }
 
-    if (form.value.otherPic) {
-      graveChooseOtherPic.value = JSON.parse(form.value.graveChooseOtherPic)
+      if (form.value.compensationCardOtherPic) {
+        compensationCardOtherPic.value = JSON.parse(form.value.compensationCardOtherPic)
+      }
     }
   })
 }
 
 // 关闭弹窗
-const onClose = (flag = false) => {
-  emit('close', flag)
+const onClose = () => {
+  emit('close')
   nextTick(() => {
     formRef.value?.resetFields()
   })
 }
 
-const submit = async (data: any) => {
-  await saveDocumentationApi({
-    ...data
+const submit = (data: any) => {
+  saveDocumentationApi(data).then(() => {
+    ElMessage.success('操作成功！')
   })
-  console.log('data:', data)
-  ElMessage.success('操作成功！')
-  onClose(true)
+  onClose()
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!graveChoosePic.value || !graveChoosePic.value.length) {
-        ElMessage.error('请上传坟墓确认单')
+      if (!compensationCardPic.value.length) {
+        ElMessage.error('请上传安置补偿登记卡照片')
         return
+      } else {
+        let params: any = {
+          ...form.value,
+          doorNo: props.doorNo,
+          compensationCardPic: JSON.stringify(compensationCardPic.value || []), // 安置补偿登记卡照片
+          compensationCardOtherPic: JSON.stringify(compensationCardOtherPic.value || []) // 其他附件
+        }
+        submit(params)
       }
-      const data: any = {
-        ...form.value,
-        graveChoosePic: JSON.stringify(graveChoosePic.value || []),
-        graveChooseOtherPic: JSON.stringify(graveChooseOtherPic.value || [])
-      }
-      submit(data)
     } else {
       return false
     }
   })
-}, 600)
+})
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
@@ -219,29 +212,29 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
 
-  if (type === 'tombConfirm') {
-    graveChoosePic.value = list
-  } else if (type === 'other') {
-    graveChooseOtherPic.value = list
+  if (type === 'compensationCard') {
+    compensationCardPic.value = list
+  } else if (type === 'compensationCardOther') {
+    compensationCardOtherPic.value = list
   }
 }
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'tombConfirm')
+  handleFileList(fileList, 'compensationCard')
 }
 
 const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'other')
+  handleFileList(fileList, 'compensationCardOther')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'tombConfirm')
+  handleFileList(fileList, 'compensationCard')
 }
 
 const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'other')
+  handleFileList(fileList, 'compensationCardOther')
 }
 
 // 移除之前
@@ -251,6 +244,7 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => false
   )
 }
+
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
@@ -272,9 +266,9 @@ onMounted(() => {
   align-items: center;
   margin: 0 16px 16px 0;
 
-  .col-label {
+  .col-label-required {
     display: inline-flex;
-    width: 110px;
+    width: 150px;
     height: 32px;
     padding: 0 12px 0 0;
     font-size: 14px;

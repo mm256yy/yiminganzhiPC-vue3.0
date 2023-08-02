@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="录入幢号室号"
+    title="录入房号"
     :model-value="props.show"
     :width="500"
     @close="onClose"

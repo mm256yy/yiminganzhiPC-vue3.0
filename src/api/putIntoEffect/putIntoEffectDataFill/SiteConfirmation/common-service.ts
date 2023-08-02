@@ -1,4 +1,5 @@
 import request from '@/config/axios'
+import type { DocumentationType } from './common-types'
 
 /**
  * 获取择址确认配置信息
@@ -17,4 +18,31 @@ export const getChooseConfigApi = (projectId: number, type: string | number, nam
       size: 1000
     }
   })
+}
+
+/**
+ * 获取档案数据
+ * @param doorNo 户号
+ * @returns
+ */
+export const getDocumentationApi = (doorNo: string) => {
+  return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
+}
+
+/**
+ * 档案上传
+ * @param data 表单提交数据
+ * @returns
+ */
+export const saveDocumentationApi = (data: any): Promise<DocumentationType> => {
+  return request.post({ url: '/immigrantDocumentation/save', data })
+}
+
+/**
+ * 检验是否归档
+ * @param data
+ * @returns
+ */
+export const documentationCheckApi = (doorNo: string, type: string) => {
+  return request.get({ url: '/immigrantDocumentation/check', params: { doorNo, type } })
 }
