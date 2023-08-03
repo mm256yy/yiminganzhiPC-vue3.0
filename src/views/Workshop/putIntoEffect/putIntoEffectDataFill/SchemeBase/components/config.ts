@@ -143,22 +143,6 @@ export const apartmentAreaSize = [
 
 // 自谋出路
 export const selfResettleData = [
-  // {
-  //   subsidyCompensatePrice: 1500, // 补偿补助
-  //   cropsCompensatePrice: 1200, // 土地青苗补助
-  //   homesteadCompensatePrice: 1000, // 宅基地补偿
-
-  //   buildHouseSubsidyPrice: 1500, // 建房补助费
-  //   relocateSubsidyPrice: 1200, // 搬迁补助费
-  //   lifeSubsidyPrice: 1000, // 生活补助费
-
-  //   signAgreementRewardPrice: 1500, // 签协议奖励费
-  //   houseEmptyRewardPrice: 1200, // 房屋腾空奖励费
-  //   startBuildHouseRewardPrice: 1000, // 启动建房奖励费
-  //   endBuildHouseRewardPrice: 2400, // 结束建房奖励费
-  //   moveInHouseRewardPrice: 3600 // 房屋腾空奖励费
-  // },
-
   {
     type: 'compensate',
     title: '补偿费',

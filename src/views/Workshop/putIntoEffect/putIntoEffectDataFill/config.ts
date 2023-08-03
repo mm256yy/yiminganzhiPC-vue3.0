@@ -1,5 +1,5 @@
 // tab 唯一标识
-export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
 // 实物采集 tab 数组
 export const ReportTabs = [
@@ -72,179 +72,179 @@ export const ReportTabs = [
 
   // 安置确认
   {
-    type: 2,
+    type: 3,
     name: '搬迁安置',
     id: ReportTabIds[0],
     icon: 'mdi:lorry',
     active: false
   },
   {
-    type: 2,
+    type: 3,
     name: '生产安置',
     id: ReportTabIds[1],
     icon: 'pixelarticons:buildings',
     active: false
   },
   {
-    type: 2,
+    type: 3,
     name: '坟墓安置',
     id: ReportTabIds[2],
     icon: 'tabler:grave-2',
     active: false
   },
-
   // 动迁安置
-  {
-    type: 5,
-    name: '房屋腾空确认单',
-    id: ReportTabIds[0],
-    icon: 'material-symbols:emoji-transportation',
-    active: false
-  },
-  {
-    type: 5,
-    name: '青苗腾空确认单',
-    id: ReportTabIds[1],
-    icon: 'icon-park-outline:sapling',
-    active: false
-  },
-  {
-    type: 5,
-    name: '择房确认单',
-    id: ReportTabIds[2],
-    icon: 'mdi:house-clock-outline',
-    active: false
-  },
-  {
-    type: 5,
-    name: '择址确认单',
-    id: ReportTabIds[3],
-    icon: 'mdi:selection-multiple-marker',
-    active: false
-  },
-  {
-    type: 5,
-    name: '建房告知单',
-    id: ReportTabIds[4],
-    icon: 'mdi:notice-board',
-    active: false
-  },
-  {
-    type: 5,
-    name: '择房交付告知单',
-    id: ReportTabIds[5],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-  {
-    type: 5,
-    name: '坟墓择址确认单',
-    id: ReportTabIds[6],
-    icon: 'tabler:grave-2',
-    active: false
-  },
-  {
-    type: 5,
-    name: '坟墓迁移告知单',
-    id: ReportTabIds[7],
-    icon: 'tabler:grave-2',
-    active: false
-  },
-  {
-    type: 5,
-    name: '生产用地交付告知单',
-    id: ReportTabIds[8],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    type: 5,
-    name: '社保缴费确认单',
-    id: ReportTabIds[9],
-    icon: 'mdi:user-details',
-    active: false
-  },
-  {
-    type: 5,
-    name: '自建房验收告知单',
-    id: ReportTabIds[10],
-    icon: 'material-symbols:fact-check-outline-rounded',
-    active: false
-  },
-  {
-    type: 5,
-    name: '安置进度管理',
-    id: ReportTabIds[11],
-    icon: 'pixelarticons:buildings',
-    active: false
-  },
+  // {
+  //   type: 5,
+  //   name: '房屋腾空确认单',
+  //   id: ReportTabIds[0],
+  //   icon: 'material-symbols:emoji-transportation',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '青苗腾空确认单',
+  //   id: ReportTabIds[1],
+  //   icon: 'icon-park-outline:sapling',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '择房确认单',
+  //   id: ReportTabIds[2],
+  //   icon: 'mdi:house-clock-outline',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '择址确认单',
+  //   id: ReportTabIds[3],
+  //   icon: 'mdi:selection-multiple-marker',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '建房告知单',
+  //   id: ReportTabIds[4],
+  //   icon: 'mdi:notice-board',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '择房交付告知单',
+  //   id: ReportTabIds[5],
+  //   icon: 'mdi:house-city-outline',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '坟墓择址确认单',
+  //   id: ReportTabIds[6],
+  //   icon: 'tabler:grave-2',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '坟墓迁移告知单',
+  //   id: ReportTabIds[7],
+  //   icon: 'tabler:grave-2',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '生产用地交付告知单',
+  //   id: ReportTabIds[8],
+  //   icon: 'mdi:land-fields',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '社保缴费确认单',
+  //   id: ReportTabIds[9],
+  //   icon: 'mdi:user-details',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '自建房验收告知单',
+  //   id: ReportTabIds[10],
+  //   icon: 'material-symbols:fact-check-outline-rounded',
+  //   active: false
+  // },
+  // {
+  //   type: 5,
+  //   name: '安置进度管理',
+  //   id: ReportTabIds[11],
+  //   icon: 'pixelarticons:buildings',
+  //   active: false
+  // },
 
   // 择址确认
   {
-    type: 7,
+    type: 4,
     name: '生产用地',
     id: ReportTabIds[0],
     icon: 'mdi:land-fields',
     active: false
   },
   {
-    type: 7,
+    type: 4,
     name: '选房择址',
     id: ReportTabIds[1],
     icon: 'mdi:house-clock-outline',
     active: false
   },
   {
-    type: 7,
+    type: 4,
     name: '坟墓择址',
+    id: ReportTabIds[2],
+    icon: 'mdi:house-clock-outline',
+    active: false
+  },
+  // 过渡腾空
+  {
+    type: 7,
+    name: '房屋腾空',
+    id: ReportTabIds[0],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  // 过渡腾空
+  {
+    type: 7,
+    name: '土地腾让',
+    id: ReportTabIds[1],
+    icon: 'tabler:grave-2',
+    active: false
+  },
+  // 过渡腾空
+  {
+    type: 7,
+    name: '过渡安置',
     id: ReportTabIds[2],
     icon: 'tabler:grave-2',
     active: false
   },
 
-  // 腾空过渡
-  {
-    type: 8,
-    name: '房屋腾空',
-    id: ReportTabIds[0],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-  {
-    type: 8,
-    name: '土地腾让',
-    id: ReportTabIds[1],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-  {
-    type: 8,
-    name: '过渡安置',
-    id: ReportTabIds[2],
-    icon: 'mdi:house-city-outline',
-    active: false
-  },
-
   // 生产安置
   {
-    type: 10,
+    type: 9,
     name: '农业安置',
     id: ReportTabIds[0],
-    icon: 'mdi:house-city-outline',
+    icon: 'tabler:grave-2',
     active: false
   },
   {
-    type: 10,
+    type: 9,
     name: '养老保险',
     id: ReportTabIds[1],
-    icon: 'mdi:house-city-outline',
+    icon: 'tabler:grave-2',
     active: false
   },
   {
-    type: 10,
-    name: '集中供养',
+    type: 9,
+    name: '自谋职业',
     id: ReportTabIds[2],
-    icon: 'mdi:house-city-outline',
+    icon: 'tabler:grave-2',
     active: false
   }
 ]
@@ -384,39 +384,39 @@ export const FlowTabs = [
     name: '资产评估'
   },
   {
-    id: 6,
+    id: 2,
     name: '模拟安置'
   },
   {
-    id: 2,
+    id: 3,
     name: '安置确认'
   },
   {
-    id: 7,
+    id: 4,
     name: '择址确认'
   },
   {
-    id: 3,
+    id: 5,
     name: '协议签订'
   },
   {
-    id: 4,
+    id: 6,
     name: '移民建卡'
   },
   {
-    id: 8,
+    id: 7,
     name: '腾空过渡'
   },
   {
-    id: 9,
+    id: 8,
     name: '搬迁安置'
   },
   {
-    id: 10,
+    id: 9,
     name: '生产安置'
   },
   {
-    id: 11,
+    id: 10,
     name: '相关手续'
   }
 ]
@@ -502,22 +502,3 @@ export const RelocationResettleTypes = {
   SocialSecurity: 'SocialSecurity', // 社保缴费确认单
   ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
 }
-
-// 生产安置方式
-export const ProductionResettleWay = [
-  {
-    id: '1',
-    name: '农业安置',
-    disabled: false
-  },
-  {
-    id: '2',
-    name: '养老保险',
-    disabled: false
-  },
-  {
-    id: '3',
-    name: '自谋职业',
-    disabled: false
-  }
-]

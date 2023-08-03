@@ -4,24 +4,24 @@
       <div class="common-form-item">
         <div class="common-label">户主：</div>
         <div class="common-value">
-          {{ resettlePeopleInfo.householder ? resettlePeopleInfo.householder.name : '' }}
+          {{ baseInfo.name || '' }}
         </div>
       </div>
 
       <div class="common-form-item">
         <div class="common-label">户内人口：</div>
-        <div class="common-value"> {{ resettlePeopleInfo.total }} </div>
+        <div class="common-value"> {{ baseInfo.familyNum }} </div>
       </div>
 
       <div class="common-form-item">
         <div class="common-label">迁出地：</div>
-        <div class="common-value"> fdsadsa </div>
+        <div class="common-value"> {{ baseInfo.address || '' }} </div>
       </div>
 
       <div class="common-form-item">
         <div class="common-label">联系方式：</div>
         <div class="common-value">
-          {{ resettlePeopleInfo.householder ? resettlePeopleInfo.householder.phone : '' }}
+          {{ baseInfo.phone || '' }}
         </div>
       </div>
     </div>
@@ -32,16 +32,18 @@
     </div>
 
     <div class="btn-wrap">
-      <div class="btn" @click="submitResettle">确定，进入下一步</div>
+      <div class="btn" @click="submitResettle">
+        {{ fromResettleConfirm ? '确定' : '确定，进入下一步' }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { HouseType } from './config'
+
 interface PropsType {
-  data: any
+  baseInfo: any
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
@@ -49,18 +51,6 @@ interface PropsType {
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
-
-const resettlePeopleInfo = computed(() => {
-  let householder: any = null
-  if (props.data && props.data.length) {
-    householder = props.data.find((item) => item.relation === '1')
-  }
-
-  return {
-    total: props.data.length,
-    householder
-  }
-})
 
 const submitResettle = async () => {
   const params: any = {

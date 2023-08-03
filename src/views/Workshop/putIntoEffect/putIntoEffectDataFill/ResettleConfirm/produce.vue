@@ -82,9 +82,9 @@
           <el-select v-model="row.settingWay" placeholder="请选择">
             <el-option
               v-for="item in filterWay(row)"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
               :disabled="item.disabled"
             />
           </el-select>
@@ -109,7 +109,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import {
   ElButton,
   ElSpace,
@@ -126,13 +126,15 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getProduceListApi, saveProduceListApi } from '@/api/putIntoEffect/produce'
-import { ProductionResettleWay } from '../config'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-service'
-// const dictStore = useDictStoreWithOut()
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
-// const dictObj = computed(() => dictStore.getDictObj)
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
+
 dayjs.extend(relativeTime)
 
 interface PropsType {
@@ -146,7 +148,7 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 // 属实
-const productionResettleWay = ref(ProductionResettleWay)
+const productionResettleWay = ref<any>(dictObj.value[375])
 const mockList = ref<any>([])
 
 const { register, tableObject, methods } = useTable({
@@ -238,11 +240,11 @@ const filterWay = (data) => {
   const arr = productionResettleWay.value.map((item) => {
     // 农村移民的 其他性质
     const notFarmer = data.populationNature !== '1'
-    if (notFarmer && item.name === '农业安置') {
+    if (notFarmer && item.value === '1') {
       item.disabled = true
     }
     data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : ''
-    if (data.age < 14 && item.name !== '自谋职业') {
+    if (data.age < 14 && item.value !== '3') {
       item.disabled = true
     }
     return item
