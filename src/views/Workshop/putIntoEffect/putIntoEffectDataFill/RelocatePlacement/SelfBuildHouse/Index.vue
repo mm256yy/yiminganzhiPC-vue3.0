@@ -40,6 +40,7 @@
                 </el-button>
                 <el-button
                   type="primary"
+                  :disabled="item.isComplete === '0'"
                   v-if="item.type !== '1' && item.isComplete !== '1'"
                   @click="onFill(item)"
                 >
@@ -64,10 +65,19 @@
     </div>
 
     <!-- 档案上传 -->
-    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="close('documentation')" />
+    <OnDocumentation
+      :show="dialog"
+      :door-no="props.doorNo"
+      @close="(...event) => close(event, 'documentation')"
+    />
 
     <!-- 填写/查看 -->
-    <Fill :show="fillDialog" :door-no="props.doorNo" :row="currentRow" @close="close('fill')" />
+    <Fill
+      :show="fillDialog"
+      :door-no="props.doorNo"
+      :row="currentRow"
+      @close="(...event) => close(event, 'fill')"
+    />
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
@@ -106,13 +116,15 @@ const onDocumentation = () => {
 }
 
 // 关闭弹窗
-const close = (type: string) => {
+const close = (params: any[], type: string) => {
   if (type === 'documentation') {
     dialog.value = false
   } else if (type === 'fill') {
     fillDialog.value = false
   }
-  initData()
+  if (params[0] === true) {
+    initData()
+  }
 }
 
 /**

@@ -52,6 +52,11 @@
             <ElInputNumber placeholder="请输入" :min="0" v-model="row.placeOrder" />
           </template>
         </ElTableColumn>
+        <ElTableColumn label="操作" align="center" header-align="center" fixed="right">
+          <template #default="{ row }">
+            <ElButton type="primary" @click="onSave(row)"> 保存 </ElButton>
+          </template>
+        </ElTableColumn>
       </ElTable>
       <ElTable v-if="baseInfo.houseAreaType === 'flat'" :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
@@ -156,6 +161,10 @@
       </ElTable>
     </div>
 
+    <div class="table-wrap !py-12px !mt-0px no-data" v-if="!baseInfo.houseAreaType">
+      该户未选择搬迁安置方式，请前往模拟安置中选择搬迁安置方式
+    </div>
+
     <div class="table-wrap !py-12px !mt-0px no-data" v-if="baseInfo.houseAreaType === 'oneself'">
       该户安置方式为自谋出路，无需选房择址
     </div>
@@ -173,7 +182,7 @@
       :door-no="props.doorNo"
       :data-list="tableData"
       :base-info="props.baseInfo"
-      @close="close"
+      @close="(...event) => close(event, 'documentation')"
     />
 
     <!-- 录入幢号室号 -->
@@ -181,7 +190,7 @@
       :show="roomNoDialog"
       :row="currentRow"
       :baseInfo="baseInfo"
-      @close="closeRoomNoDialog"
+      @close="(...event) => close(event, 'roomNo')"
     />
   </WorkContentWrap>
 </template>
@@ -281,23 +290,24 @@ const onSave = (row: any) => {
 }
 
 /**
- * 关闭归档弹窗
+ * 关闭归档/幢号室号弹窗
  * @param flag
  */
-const close = (flag: boolean) => {
-  console.log('flag:', flag)
-  dialog.value = false
-  getList()
-}
-
-/**
- * 关闭幢号室号弹窗
- * @param flag
- */
-const closeRoomNoDialog = (flag: boolean) => {
-  console.log('flag:', flag)
-  roomNoDialog.value = false
-  getList()
+const close = (params: any[], type: string) => {
+  console.log('params:', params)
+  if (type === 'documentation') {
+    dialog.value = false
+  } else if (type === 'roomNo') {
+    roomNoDialog.value = false
+    if (params[0] === true) {
+      getlandNoList()
+      getStoreroomNoList()
+      getcarNoList()
+    }
+  }
+  if (params[0] === true) {
+    getList()
+  }
 }
 
 onMounted(() => {

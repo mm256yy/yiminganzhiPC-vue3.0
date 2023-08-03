@@ -446,6 +446,7 @@ const close = (type: string) => {
     dialog.value = false
   } else if (type === 'rewardConfirm') {
     rewardConfirmDialog.value = false
+    getRewardFeeList()
   }
 }
 

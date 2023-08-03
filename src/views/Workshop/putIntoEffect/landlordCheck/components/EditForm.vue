@@ -268,6 +268,7 @@ const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
+  btnLoading.value = false
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
@@ -315,12 +316,16 @@ const submit = async (data: LandlordDtoType) => {
       ...data,
       type: 'PeasantHousehold',
       projectId
+    }).catch(() => {
+      btnLoading.value = false
     })
   } else {
     await updateLandlordApi({
       ...data,
       type: 'PeasantHousehold',
       projectId
+    }).catch(() => {
+      btnLoading.value = false
     })
   }
   btnLoading.value = false
