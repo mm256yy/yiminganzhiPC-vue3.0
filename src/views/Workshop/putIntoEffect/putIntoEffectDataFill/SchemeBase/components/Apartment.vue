@@ -4,10 +4,10 @@
       <div class="common-label flex-center">公寓房安置人数：</div>
       <div class="common-value">
         <div class="value-center">
-          {{ resettlePeopleInfo.total }}人，其中该户农村移民 ：{{
-            resettlePeopleInfo.farmer
+          {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
+            baseInfo.ruralMigrantNum
           }}
-          人，随迁人口：{{ resettlePeopleInfo.trailing }}人
+          人，随迁人口：{{ baseInfo.farmingMigrantNum }}人
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@
       <div class="common-value">
         <div class="info-item">
           根据您输入的安置人数：
-          <span class="red">{{ resettlePeopleInfo.total }}</span> 人，选购总面积为：
+          <span class="red">{{ baseInfo.familyNum }}</span> 人，选购总面积为：
           <span class="red">{{ totalArea }}</span
           >m²
         </div>
@@ -204,10 +204,12 @@
     </div>
 
     <div class="btn-wrap">
-      <div class="btn" @click="submitResettle">确定，进入下一步</div>
+      <div class="btn" @click="submitResettle">
+        {{ fromResettleConfirm ? '确定' : '确定，进入下一步' }}
+      </div>
     </div>
 
-    <el-dialog v-model="areaDetailPup" title="安置点详情" width="900">
+    <el-dialog class="detail-pup" v-model="areaDetailPup" title="安置点详情" width="900">
       <AreaDetail />
     </el-dialog>
 
@@ -237,8 +239,8 @@ import FindSelf from './FindSelf.vue'
 import BuyHousePrice from './BuyHousePrice.vue'
 
 interface PropsType {
-  data: any
   doorNo: string
+  baseInfo: any
   immigrantSettle: any
   fromResettleConfirm?: boolean
 }
@@ -301,29 +303,6 @@ watch(
   }
 )
 
-const resettlePeopleInfo = computed(() => {
-  let farmer = 0
-  let trailing = 0
-  if (props.data && props.data.length) {
-    props.data.forEach((item) => {
-      // 农村移民
-      if (item.populationNature === '1') {
-        farmer++
-      }
-      // 农业随迁
-      if (item.populationNature === '3') {
-        trailing++
-      }
-    })
-  }
-
-  return {
-    total: props.data.length,
-    farmer,
-    trailing
-  }
-})
-
 // 总面积
 const totalArea = computed(() => {
   let sum = 0
@@ -337,13 +316,13 @@ const totalArea = computed(() => {
 
 // 剩余面积
 const residueArea = computed(() => {
-  const residue = props.data.length * 40 - totalArea.value
+  const residue = props.baseInfo.familyNum * 40 - totalArea.value
   return residue < 0 ? 0 : residue
 })
 
 // 超出面积
 const exceedArea = computed(() => {
-  const exceed = totalArea.value - props.data.length * 40
+  const exceed = totalArea.value - props.baseInfo.familyNum * 40
   return exceed < 0 ? 0 : exceed
 })
 

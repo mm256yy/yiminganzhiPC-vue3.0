@@ -3,16 +3,16 @@
     <div class="common-form-item">
       <div class="common-label">宅基地安置人数：</div>
       <div class="common-value">
-        {{ resettlePeopleInfo.total }}人，其中该户农村移民 ：{{
-          resettlePeopleInfo.farmer
+        {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
+          baseInfo.ruralMigrantNum
         }}
-        人，随迁人口：{{ resettlePeopleInfo.trailing }}人
+        人，随迁人口：{{ baseInfo.farmingMigrantNum }}人
       </div>
     </div>
 
     <div class="common-form-item">
       <div class="common-label">可安置建筑面积：</div>
-      <div class="common-value"> {{ resettlePeopleInfo.total * 40 }}㎡ </div>
+      <div class="common-value"> {{ baseInfo.familyNum * 40 }}㎡ </div>
     </div>
 
     <div class="common-form-item">
@@ -52,7 +52,9 @@
     </div>
 
     <div class="btn-wrap">
-      <div class="btn" @click="submitResettle">确定，进入下一步</div>
+      <div class="btn" @click="submitResettle">
+        {{ fromResettleConfirm ? '确定' : '确定，进入下一步' }}
+      </div>
     </div>
 
     <el-dialog v-model="areaDetailPup" title="安置点详情" width="900">
@@ -68,7 +70,7 @@ import { resettleArea, homesteadAreaSize, HouseType } from './config'
 import AreaDetail from './AreaDetail.vue'
 
 interface PropsType {
-  data: any
+  baseInfo: any
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
@@ -95,31 +97,8 @@ watch(
   }
 )
 
-const resettlePeopleInfo = computed(() => {
-  let farmer = 0
-  let trailing = 0
-  if (props.data && props.data.length) {
-    props.data.forEach((item) => {
-      // 农村移民
-      if (item.populationNature === '1') {
-        farmer++
-      }
-      // 农业随迁
-      if (item.populationNature === '3') {
-        trailing++
-      }
-    })
-  }
-
-  return {
-    total: props.data.length,
-    farmer,
-    trailing
-  }
-})
-
 const areaSizeArray = computed(() => {
-  const len = props.data.length
+  const len = props.baseInfo.familyNum
   const sizeArray = homesteadAreaSize.map((item) => {
     if (len >= item.needPeopleNumber) {
       item.disabled = false

@@ -82,6 +82,7 @@
                 :data="tableData"
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
+                :baseInfo="props.baseInfo"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -91,6 +92,7 @@
                 :data="tableData"
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
+                :baseInfo="props.baseInfo"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -101,6 +103,7 @@
                 :immigrantSettle="immigrantSettle"
                 :data="tableData"
                 :doorNo="props.doorNo"
+                :baseInfo="props.baseInfo"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -110,6 +113,7 @@
                 :data="tableData"
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
+                :baseInfo="props.baseInfo"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -455,5 +459,9 @@ const immigrantSettleSubmit = async (params: any) => {
     font-size: 14px;
     color: #131313;
   }
+}
+
+:deep(.el-dialog__body) {
+  padding: 0 0 35px;
 }
 </style>

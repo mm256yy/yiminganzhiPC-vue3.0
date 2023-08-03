@@ -77,7 +77,7 @@
         <div class="common-head"> 地图 </div>
 
         <div class="map-cont">
-          <div class="map"></div>
+          <div class="map" id="map"></div>
           <!-- <map class="map" longitude="120.17327222279103" latitude="30.235643678475068"></map> -->
         </div>
       </div>
@@ -86,7 +86,41 @@
 </template>
 
 <script setup lang="ts">
-// import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import AMapLoader from '@amap/amap-jsapi-loader'
+
+const map = ref<any>(null)
+const AMap = ref<any>(null)
+const longitude = 120.148775
+const latitude = 30.245799
+
+const init = async () => {
+  AMap.value = await AMapLoader.load({
+    key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
+    version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
+
+    // plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder', 'AMap.Geolocation'] // 需要使用的的插件列表，如比例尺'AMap.Scale'等
+    plugins: ['AMap.AutoComplete', 'AMap.PlaceSearch', 'AMap.Geocoder']
+  })
+
+  map.value = new AMap.value.Map('map', {
+    //设置地图容器id
+    zoom: 13, //初始化地图层级
+    viewMode: '3D', //是否为3D地图模式
+    //初始化地图中心点位置
+
+    center: [longitude, latitude],
+    dragEnable: true, //禁止鼠标拖拽
+    scrollWheel: true, //鼠标滚轮放大缩小
+    doubleClickZoom: true, //双击放大缩小
+    keyboardEnable: true //键盘控制放大缩小移动旋转
+  })
+  map.value.setDefaultCursor('pointer')
+}
+
+onMounted(() => {
+  init()
+})
 </script>
 
 <style lang="less" scoped>
@@ -176,12 +210,20 @@
   }
 
   .map-cont {
-    padding: 0 30px;
+    position: relative;
+    width: 840px;
+    height: 190px;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: #f8f8f8;
     border-radius: 12px;
 
     .map {
-      height: 190px;
-      background-color: #f8f8f8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 }

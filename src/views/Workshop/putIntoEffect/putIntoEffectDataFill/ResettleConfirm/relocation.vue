@@ -101,7 +101,7 @@
 
         <template v-if="houseType === HouseType.homestead">
           <Homestead
-            :data="peopleList"
+            :baseInfo="props.baseInfo"
             :immigrantSettle="immigrantSettle"
             :doorNo="props.doorNo"
             fromResettleConfirm
@@ -111,7 +111,7 @@
 
         <template v-if="houseType === HouseType.flat">
           <Apartment
-            :data="peopleList"
+            :baseInfo="props.baseInfo"
             :immigrantSettle="immigrantSettle"
             :doorNo="props.doorNo"
             fromResettleConfirm
@@ -123,7 +123,7 @@
           <FindSelf
             view-type="default"
             :immigrantSettle="immigrantSettle"
-            :data="peopleList"
+            :baseInfo="props.baseInfo"
             :doorNo="props.doorNo"
             fromResettleConfirm
             @submit="onEditSubmit"
@@ -132,7 +132,7 @@
 
         <template v-if="houseType === HouseType.concentrate">
           <CenterSupport
-            :data="peopleList"
+            :baseInfo="props.baseInfo"
             :immigrantSettle="immigrantSettle"
             :doorNo="props.doorNo"
             fromResettleConfirm

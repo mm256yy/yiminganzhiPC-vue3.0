@@ -1,7 +1,7 @@
 <template>
   <div class="table-wrap !py-12px !mt-0px empty-wrap">
     <div class="empty-head">
-      <div class="title">房屋腾空办理情况</div>
+      <div class="title">过渡安置办理情况</div>
       <div>
         <ElSpace v-if="!isExcess">
           <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle">无须办理</ElButton>
