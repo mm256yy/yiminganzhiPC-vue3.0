@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 模拟安置 -->
     <div class="imitate-step-tab">
       <div
         class="step-item"

@@ -92,91 +92,6 @@ export const ReportTabs = [
     icon: 'tabler:grave-2',
     active: false
   },
-  // 动迁安置
-  // {
-  //   type: 5,
-  //   name: '房屋腾空确认单',
-  //   id: ReportTabIds[0],
-  //   icon: 'material-symbols:emoji-transportation',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '青苗腾空确认单',
-  //   id: ReportTabIds[1],
-  //   icon: 'icon-park-outline:sapling',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '择房确认单',
-  //   id: ReportTabIds[2],
-  //   icon: 'mdi:house-clock-outline',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '择址确认单',
-  //   id: ReportTabIds[3],
-  //   icon: 'mdi:selection-multiple-marker',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '建房告知单',
-  //   id: ReportTabIds[4],
-  //   icon: 'mdi:notice-board',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '择房交付告知单',
-  //   id: ReportTabIds[5],
-  //   icon: 'mdi:house-city-outline',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '坟墓择址确认单',
-  //   id: ReportTabIds[6],
-  //   icon: 'tabler:grave-2',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '坟墓迁移告知单',
-  //   id: ReportTabIds[7],
-  //   icon: 'tabler:grave-2',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '生产用地交付告知单',
-  //   id: ReportTabIds[8],
-  //   icon: 'mdi:land-fields',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '社保缴费确认单',
-  //   id: ReportTabIds[9],
-  //   icon: 'mdi:user-details',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '自建房验收告知单',
-  //   id: ReportTabIds[10],
-  //   icon: 'material-symbols:fact-check-outline-rounded',
-  //   active: false
-  // },
-  // {
-  //   type: 5,
-  //   name: '安置进度管理',
-  //   id: ReportTabIds[11],
-  //   icon: 'pixelarticons:buildings',
-  //   active: false
-  // },
 
   // 择址确认
   {
@@ -197,31 +112,30 @@ export const ReportTabs = [
     type: 4,
     name: '坟墓择址',
     id: ReportTabIds[2],
-    icon: 'mdi:house-clock-outline',
+    icon: 'tabler:grave-2',
     active: false
   },
-  // 过渡腾空
+
+  // 腾空过渡
   {
     type: 7,
     name: '房屋腾空',
     id: ReportTabIds[0],
-    icon: 'tabler:grave-2',
+    icon: 'material-symbols:emoji-transportation',
     active: false
   },
-  // 过渡腾空
   {
     type: 7,
     name: '土地腾让',
     id: ReportTabIds[1],
-    icon: 'tabler:grave-2',
+    icon: 'mdi:land-fields',
     active: false
   },
-  // 过渡腾空
   {
     type: 7,
     name: '过渡安置',
     id: ReportTabIds[2],
-    icon: 'tabler:grave-2',
+    icon: 'ic:baseline-cabin',
     active: false
   },
 
@@ -230,23 +144,109 @@ export const ReportTabs = [
     type: 9,
     name: '农业安置',
     id: ReportTabIds[0],
-    icon: 'tabler:grave-2',
+    icon: 'maki:wetland',
     active: false
   },
   {
     type: 9,
     name: '养老保险',
     id: ReportTabIds[1],
-    icon: 'tabler:grave-2',
+    icon: 'fa6-solid:hospital-user',
     active: false
   },
   {
     type: 9,
     name: '自谋职业',
     id: ReportTabIds[2],
-    icon: 'tabler:grave-2',
+    icon: 'pepicons-print:people-off',
     active: false
   }
+
+  // 动迁安置
+  // {
+  //   type: 11,
+  //   name: '房屋腾空确认单',
+  //   id: ReportTabIds[0],
+  //   icon: 'material-symbols:emoji-transportation',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '青苗腾空确认单',
+  //   id: ReportTabIds[1],
+  //   icon: 'icon-park-outline:sapling',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '择房确认单',
+  //   id: ReportTabIds[2],
+  //   icon: 'mdi:house-clock-outline',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '择址确认单',
+  //   id: ReportTabIds[3],
+  //   icon: 'mdi:selection-multiple-marker',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '建房告知单',
+  //   id: ReportTabIds[4],
+  //   icon: 'mdi:notice-board',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '择房交付告知单',
+  //   id: ReportTabIds[5],
+  //   icon: 'mdi:house-city-outline',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '坟墓择址确认单',
+  //   id: ReportTabIds[6],
+  //   icon: 'tabler:grave-2',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '坟墓迁移告知单',
+  //   id: ReportTabIds[7],
+  //   icon: 'tabler:grave-2',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '生产用地交付告知单',
+  //   id: ReportTabIds[8],
+  //   icon: 'mdi:land-fields',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '社保缴费确认单',
+  //   id: ReportTabIds[9],
+  //   icon: 'mdi:user-details',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '自建房验收告知单',
+  //   id: ReportTabIds[10],
+  //   icon: 'material-symbols:fact-check-outline-rounded',
+  //   active: false
+  // },
+  // {
+  //   type: 11,
+  //   name: '安置进度管理',
+  //   id: ReportTabIds[11],
+  //   icon: 'pixelarticons:buildings',
+  //   active: false
+  // },
 ]
 
 export const EnterpriseTabs = [

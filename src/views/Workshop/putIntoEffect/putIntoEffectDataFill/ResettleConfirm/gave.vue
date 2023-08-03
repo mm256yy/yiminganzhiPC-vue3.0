@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <!-- 安置确认 —— 坟墓安置 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>

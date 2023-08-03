@@ -1,11 +1,12 @@
 <template>
   <div class="farming-wrap">
+    <!-- 生产安置 —— 农业安置 -->
     <div class="farming-head">
       <div class="title">农业安置</div>
       <ElSpace>
-        <ElButton v-if="hasFarmingResettle" :icon="archivesIcon" type="default" @click="onSortSave"
-          >档案上传</ElButton
-        >
+        <ElButton v-if="hasFarmingResettle" :icon="archivesIcon" type="default" @click="onSortSave">
+          档案上传
+        </ElButton>
       </ElSpace>
     </div>
 

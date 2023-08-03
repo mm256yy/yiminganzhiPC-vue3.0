@@ -1,14 +1,8 @@
 <template>
   <WorkContentWrap>
-    <div> </div>
+    <!-- 安置确认 —— 生产安置 -->
     <div class="table-wrap !py-12px !mt-0px">
-      <div class="flex items-center justify-between pb-12px">
-        <div> </div>
-        <!-- <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">保存</ElButton>
-        </ElSpace> -->
-      </div>
-      <div class="formBox">
+      <div class="formBox mt-5">
         <ElForm
           :disabled="actionType === 'view'"
           class="form"
@@ -23,19 +17,19 @@
           </div>
           <div style="display: flex">
             <ElFormItem label="家庭总人数" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-120px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农村移民" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-120px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农村移民" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-120px">{{ baseInfo.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农业随迁" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-120px">{{ baseInfo.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农业随迁" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-120px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
           <!-- <div style="display: flex">
@@ -55,12 +49,17 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onImportDataPre" style="margin-top: 17px"
-            >导入模拟数据</ElButton
+          <ElButton
+            :icon="addIcon"
+            type="primary"
+            @click="onImportDataPre"
+            style="margin-top: 17px"
           >
-          <ElButton :icon="saveIcon" type="primary" @click="onSave" style="margin-top: 17px"
-            >保存</ElButton
-          >
+            导入模拟数据
+          </ElButton>
+          <ElButton :icon="saveIcon" type="primary" @click="onSave" style="margin-top: 17px">
+            保存
+          </ElButton>
         </ElSpace>
       </div>
       <Table

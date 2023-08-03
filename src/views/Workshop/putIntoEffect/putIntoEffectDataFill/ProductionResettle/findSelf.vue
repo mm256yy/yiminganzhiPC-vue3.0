@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <!-- 搬迁安置 —— 自谋职业 -->
+    <!-- 生产安置 —— 自谋职业 -->
     <div class="table-wrap !py-12px !mt-0px">
       <ElTable :data="tableData" style="width: 100%" empty-text="该户无自谋职业安置">
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />

@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <!-- 搬迁安置 —— 养老保险 -->
+    <!-- 生产安置 —— 养老保险 -->
     <div class="table-wrap !py-12px !mt-0px">
       <ElTable :data="tableData" style="width: 100%" empty-text="该户无养老保险安置">
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
