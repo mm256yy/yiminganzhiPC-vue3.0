@@ -42,6 +42,18 @@ export const ReportStatusEnums = [
   }
 ]
 
+// 实施阶段填报状态
+export const ImplementFillStatusEnums = [
+  {
+    label: '已填报',
+    value: '1'
+  },
+  {
+    label: '未填报',
+    value: '0'
+  }
+]
+
 export enum SurveyStatusEnum {
   Survey = 'survey', // 实物调查
   Review = 'review', // 实物复核
