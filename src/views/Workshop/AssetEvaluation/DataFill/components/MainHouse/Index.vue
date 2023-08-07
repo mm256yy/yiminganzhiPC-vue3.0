@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <!-- 房屋主体评估 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
@@ -8,6 +9,9 @@
           （元）
         </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -257,7 +261,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>
@@ -288,13 +292,15 @@ import {
   getMainHouseListApi,
   saveMainHouseApi,
   deleteMainHouseApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/mainHouse-service'
+} from '@/api/AssetEvaluation/mainHouse-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -303,7 +309,10 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
@@ -329,6 +338,22 @@ const defaultRow = {
   valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    houseMainStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行

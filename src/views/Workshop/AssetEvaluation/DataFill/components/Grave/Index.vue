@@ -3,11 +3,14 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
-          土地基本情况评估合计：
+          坟墓评估合计：
           <span class="text-[#1C5DF1]"> {{ total() }}</span>
           （元）
         </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -21,42 +24,28 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <!-- 字段未定 -->
         <ElTableColumn
-          label="组别"
+          label="坟墓名称"
           :width="150"
-          prop="groupName"
+          prop="graveName"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.groupName" />
+            <ElInput placeholder="请输入" v-model="scope.row.graveName" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
-          label="地块名称"
-          :width="150"
-          prop="landName"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landName" />
-          </template>
-        </ElTableColumn>
-        <!-- 字段未定 -->
-        <ElTableColumn
-          label="所在位置"
+          label="是否需要评估"
           :width="120"
-          prop="locationType"
+          prop="hasEstimate"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.locationType">
+            <ElSelect clearable placeholder="请选择" v-model="row.hasEstimate">
               <ElOption
-                v-for="item in dictObj[326]"
+                v-for="item in dictObj[362]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -65,38 +54,16 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="种植户"
+          label="坟墓与登记人关系"
           :width="150"
-          prop="growers"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.growers" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="地块面积(㎡)"
-          :width="180"
-          prop="landArea"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.landArea" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="地类"
-          :width="200"
-          prop="landType"
+          prop="relation"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.landType">
+            <ElSelect clearable placeholder="请选择" v-model="row.relation">
               <ElOption
-                v-for="item in dictObj[233]"
+                v-for="item in dictObj[307]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -105,47 +72,44 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="土地权属"
-          :width="180"
-          prop="landOwner"
+          label="立墓年份"
+          :width="120"
+          prop="graveYear"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landOwner" />
+            <ElInput placeholder="请输入" v-model="scope.row.graveYear" />
+          </template>
+        </ElTableColumn>
+        <!-- 字段未定? 字段是字典选择还是输入数字存疑 -->
+        <ElTableColumn
+          label="穴数(座)"
+          :width="180"
+          prop="number"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="0" />
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="获得方式"
+          label="地方分类"
           :width="160"
-          prop="getType"
+          prop="localClassify"
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.getType" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="地块位置"
-          :width="180"
-          prop="landSea"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landSea" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="评估单价(元/㎡)"
-          :width="180"
-          prop="valuationPrice"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationPrice" :precision="2" />
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.localClassify">
+              <ElOption
+                v-for="item in dictObj[361]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -160,7 +124,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="补偿金额(元)"
+          label="坟墓补偿费(元)"
           :width="180"
           prop="compensationAmount"
           align="center"
@@ -170,12 +134,39 @@
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
+        <ElTableColumn
+          label="坟墓迁移费(元)"
+          :width="180"
+          prop="migrationFee"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.migrationFee" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="其他奖励费(元)"
+          :width="180"
+          prop="otherIncentiveFees"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.otherIncentiveFees" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="小计(元)" :width="180" prop="" align="center" header-align="center">
+          <template #default="{ row }">
+            <div>{{ subTotal(row) }}</div>
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>
@@ -201,17 +192,15 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import {
-  getLandBasicInfoListApi,
-  saveLandBasicInfoApi,
-  deleteLandBasicInfoApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/landBasicInfo-service'
+import { getGraveListApi, saveGraveApi, deleteGraveApi } from '@/api/AssetEvaluation/grave-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -220,28 +209,47 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
+  registrantId: props.doorNo,
   doorNo: props.doorNo,
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
+  registrantDoorNo: props.doorNo,
   status: 'implementation',
-  groupName: '',
-  landName: '',
-  locationType: '',
-  growers: '',
-  landArea: 0,
-  landType: '',
-  landOwner: '',
-  getType: '',
-  landSea: '',
-  valuationPrice: 0,
+  graveName: '',
+  hasEstimate: '',
+  relation: '',
+  graveYear: '',
+  number: 0,
+  localClassify: '',
   valuationAmount: 0,
   compensationAmount: 0,
+  migrationFee: 0,
+  otherIncentiveFees: 0,
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    graveStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行
@@ -252,25 +260,32 @@ const onAddRow = () => {
 // 获取列表数据
 const getList = () => {
   const params: any = {
+    registrantId: props.doorNo,
     doorNo: props.doorNo,
     householdId: props.householdId,
     projectId: props.projectId,
+    registrantDoorNo: props.doorNo,
     status: 'implementation',
     size: 1000
   }
-  getLandBasicInfoListApi(params).then((res) => {
+  getGraveListApi(params).then((res) => {
     tableData.value = res.content
   })
 }
 
-// 房屋主体评估合计
+// 小计
+const subTotal = (row: any) => {
+  let sum = 0
+  sum = row.compensationAmount + row.migrationFee + row.otherIncentiveFees
+  return sum.toFixed(2)
+}
+
+// 坟墓评估合计
 const total = () => {
   let sum = 0
   if (tableData.value && tableData.value.length) {
     tableData.value.map((item: any) => {
-      if (item.compensationAmount > 0) {
-        sum += item.compensationAmount
-      }
+      sum += Number(subTotal(item))
     })
   }
   return sum.toFixed(2)
@@ -285,7 +300,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        await deleteLandBasicInfoApi(row.id)
+        await deleteGraveApi(row.id)
         getList()
         emit('updateData')
         ElMessage.success('删除成功')
@@ -298,7 +313,14 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  saveLandBasicInfoApi(tableData.value).then(() => {
+  let data: any = []
+  tableData.value.map((item: any) => {
+    data.push({
+      ...item,
+      subtotal: subTotal(item)
+    })
+  })
+  saveGraveApi(data).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')

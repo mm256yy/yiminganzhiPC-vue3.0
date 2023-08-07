@@ -1,13 +1,17 @@
 <template>
   <WorkContentWrap>
+    <!-- 房屋装修评估 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
-          坟墓评估合计：
+          房屋装修评估合计：
           <span class="text-[#1C5DF1]"> {{ total() }}</span>
           （元）
         </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -22,27 +26,27 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="坟墓名称"
-          :width="150"
-          prop="graveName"
+          label="幢号"
+          :width="100"
+          prop="houseNo"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.graveName" />
+            <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="是否需要评估"
+          label="类别"
           :width="120"
-          prop="hasEstimate"
+          prop="fitUpType"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.hasEstimate">
+            <ElSelect clearable placeholder="请选择" v-model="row.fitUpType">
               <ElOption
-                v-for="item in dictObj[362]"
+                v-for="item in dictObj[323]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -51,16 +55,21 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="坟墓与登记人关系"
+          label="名称"
           :width="150"
-          prop="relation"
+          prop="fitUpName"
           align="center"
           header-align="center"
         >
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.fitUpName" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.relation">
+            <ElSelect clearable placeholder="请选择" v-model="row.unit">
               <ElOption
-                v-for="item in dictObj[307]"
+                v-for="item in dictObj[268]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -68,45 +77,25 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="立墓年份"
-          :width="120"
-          prop="graveYear"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.graveYear" />
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定? 字段是字典选择还是输入数字存疑 -->
+        <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+          </template>
+        </ElTableColumn>
         <ElTableColumn
-          label="穴数(座)"
+          label="折率"
           :width="180"
-          prop="number"
+          prop="discountRate"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="0" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="地方分类"
-          :width="160"
-          prop="localClassify"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.localClassify">
-              <ElOption
-                v-for="item in dictObj[361]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+            <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -121,7 +110,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="坟墓补偿费(元)"
+          label="补偿金额(元)"
           :width="180"
           prop="compensationAmount"
           align="center"
@@ -131,39 +120,12 @@
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="坟墓迁移费(元)"
-          :width="180"
-          prop="migrationFee"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.migrationFee" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="其他奖励费(元)"
-          :width="180"
-          prop="otherIncentiveFees"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.otherIncentiveFees" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="小计(元)" :width="180" prop="" align="center" header-align="center">
-          <template #default="{ row }">
-            <div>{{ subTotal(row) }}</div>
-          </template>
-        </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>
@@ -190,16 +152,18 @@ import {
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
-  getGraveListApi,
-  saveGraveApi,
-  deleteGraveApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/grave-service'
+  getHouseDecorationListApi,
+  saveHouseDecorationApi,
+  deleteHouseDecorationApi
+} from '@/api/AssetEvaluation/houseDecoration-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -208,28 +172,44 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
-  registrantId: props.doorNo,
   doorNo: props.doorNo,
   householdId: props.householdId,
   projectId: props.projectId,
   uid: props.uid,
-  registrantDoorNo: props.doorNo,
   status: 'implementation',
-  graveName: '',
-  hasEstimate: '',
-  relation: '',
-  graveYear: '',
+  houseNo: '',
+  fitUpType: '',
+  fitUpName: '',
+  unit: '',
   number: 0,
-  localClassify: '',
+  price: 0,
+  discountRate: 0,
   valuationAmount: 0,
   compensationAmount: 0,
-  migrationFee: 0,
-  otherIncentiveFees: 0,
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    houseRenovationStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行
@@ -240,32 +220,25 @@ const onAddRow = () => {
 // 获取列表数据
 const getList = () => {
   const params: any = {
-    registrantId: props.doorNo,
     doorNo: props.doorNo,
     householdId: props.householdId,
     projectId: props.projectId,
-    registrantDoorNo: props.doorNo,
     status: 'implementation',
     size: 1000
   }
-  getGraveListApi(params).then((res) => {
+  getHouseDecorationListApi(params).then((res) => {
     tableData.value = res.content
   })
 }
 
-// 小计
-const subTotal = (row: any) => {
-  let sum = 0
-  sum = row.compensationAmount + row.migrationFee + row.otherIncentiveFees
-  return sum.toFixed(2)
-}
-
-// 坟墓评估合计
+// 房屋主体评估合计
 const total = () => {
   let sum = 0
   if (tableData.value && tableData.value.length) {
     tableData.value.map((item: any) => {
-      sum += Number(subTotal(item))
+      if (item.compensationAmount > 0) {
+        sum += item.compensationAmount
+      }
     })
   }
   return sum.toFixed(2)
@@ -280,7 +253,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        await deleteGraveApi(row.id)
+        await deleteHouseDecorationApi(row.id)
         getList()
         emit('updateData')
         ElMessage.success('删除成功')
@@ -293,14 +266,7 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  let data: any = []
-  tableData.value.map((item: any) => {
-    data.push({
-      ...item,
-      subtotal: subTotal(item)
-    })
-  })
-  saveGraveApi(data).then(() => {
+  saveHouseDecorationApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')

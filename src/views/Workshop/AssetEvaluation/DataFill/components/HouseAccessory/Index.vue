@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <!-- 房屋附属设施评估 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
@@ -8,6 +9,9 @@
           （元）
         </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -55,13 +59,11 @@
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="折率"
           :width="180"
@@ -73,7 +75,6 @@
             <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
@@ -85,7 +86,6 @@
             <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <!-- 字段未定 -->180
         <ElTableColumn
           label="补偿金额(元)"
           :width="180"
@@ -102,7 +102,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>
@@ -132,13 +132,15 @@ import {
   getHouseAccessoryListApi,
   saveHouseAccessoryApi,
   deleteHouseAccessoryApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/houseAccessory-service'
+} from '@/api/AssetEvaluation/houseAccessory-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -147,7 +149,10 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
@@ -165,6 +170,22 @@ const defaultRow = {
   valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    appendageStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行

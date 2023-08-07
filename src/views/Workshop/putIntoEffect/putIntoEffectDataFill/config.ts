@@ -5,14 +5,14 @@ export const ReportTabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 export const ReportTabs = [
   // 资格认定
   {
-    type: 0,
+    type: 1,
     name: '人口核定',
     id: ReportTabIds[0],
     icon: 'mdi:user-details',
     active: false
   },
   {
-    type: 0,
+    type: 1,
     name: '房屋确权',
     id: ReportTabIds[1],
     icon: 'clarity:house-solid',
@@ -21,72 +21,37 @@ export const ReportTabs = [
 
   // 资产评估
   {
-    type: 1,
-    name: '房屋主体评估',
+    type: 2,
+    name: '房屋附属物评估报告',
     id: ReportTabIds[0],
     icon: 'clarity:house-solid',
     active: false
   },
   {
-    type: 1,
-    name: '房屋装修评估',
+    type: 2,
+    name: '土地附着物评估报告',
     id: ReportTabIds[1],
     icon: 'mdi:house-city',
-    active: false
-  },
-  {
-    type: 1,
-    name: '房屋附属设施评估',
-    id: ReportTabIds[2],
-    icon: 'bi:device-hdd-fill',
-    active: false
-  },
-  {
-    type: 1,
-    name: '零星林（果）木评估',
-    id: ReportTabIds[3],
-    icon: 'mdi:pine-tree',
-    active: false
-  },
-  {
-    type: 1,
-    name: '土地基本情况评估',
-    id: ReportTabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    type: 1,
-    name: '土地青苗及附着物评估',
-    id: ReportTabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
-  },
-  {
-    type: 1,
-    name: '坟墓评估',
-    id: ReportTabIds[6],
-    icon: 'tabler:grave-2',
     active: false
   },
 
   // 安置确认
   {
-    type: 3,
+    type: 4,
     name: '搬迁安置',
     id: ReportTabIds[0],
     icon: 'mdi:lorry',
     active: false
   },
   {
-    type: 3,
+    type: 4,
     name: '生产安置',
     id: ReportTabIds[1],
     icon: 'pixelarticons:buildings',
     active: false
   },
   {
-    type: 3,
+    type: 4,
     name: '坟墓安置',
     id: ReportTabIds[2],
     icon: 'tabler:grave-2',
@@ -95,21 +60,21 @@ export const ReportTabs = [
 
   // 择址确认
   {
-    type: 4,
+    type: 5,
     name: '生产用地',
     id: ReportTabIds[0],
     icon: 'mdi:land-fields',
     active: false
   },
   {
-    type: 4,
+    type: 5,
     name: '选房择址',
     id: ReportTabIds[1],
     icon: 'mdi:house-clock-outline',
     active: false
   },
   {
-    type: 4,
+    type: 5,
     name: '坟墓择址',
     id: ReportTabIds[2],
     icon: 'tabler:grave-2',
@@ -118,21 +83,21 @@ export const ReportTabs = [
 
   // 腾空过渡
   {
-    type: 7,
+    type: 8,
     name: '房屋腾空',
     id: ReportTabIds[0],
     icon: 'material-symbols:emoji-transportation',
     active: false
   },
   {
-    type: 7,
+    type: 8,
     name: '土地腾让',
     id: ReportTabIds[1],
     icon: 'mdi:land-fields',
     active: false
   },
   {
-    type: 7,
+    type: 8,
     name: '过渡安置',
     id: ReportTabIds[2],
     icon: 'ic:baseline-cabin',
@@ -141,21 +106,21 @@ export const ReportTabs = [
 
   // 生产安置
   {
-    type: 9,
+    type: 10,
     name: '农业安置',
     id: ReportTabIds[0],
     icon: 'maki:wetland',
     active: false
   },
   {
-    type: 9,
+    type: 10,
     name: '养老保险',
     id: ReportTabIds[1],
     icon: 'fa6-solid:hospital-user',
     active: false
   },
   {
-    type: 9,
+    type: 10,
     name: '自谋职业',
     id: ReportTabIds[2],
     icon: 'pepicons-print:people-off',
@@ -164,84 +129,84 @@ export const ReportTabs = [
 
   // 动迁安置
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '房屋腾空确认单',
   //   id: ReportTabIds[0],
   //   icon: 'material-symbols:emoji-transportation',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '青苗腾空确认单',
   //   id: ReportTabIds[1],
   //   icon: 'icon-park-outline:sapling',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '择房确认单',
   //   id: ReportTabIds[2],
   //   icon: 'mdi:house-clock-outline',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '择址确认单',
   //   id: ReportTabIds[3],
   //   icon: 'mdi:selection-multiple-marker',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '建房告知单',
   //   id: ReportTabIds[4],
   //   icon: 'mdi:notice-board',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '择房交付告知单',
   //   id: ReportTabIds[5],
   //   icon: 'mdi:house-city-outline',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '坟墓择址确认单',
   //   id: ReportTabIds[6],
   //   icon: 'tabler:grave-2',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '坟墓迁移告知单',
   //   id: ReportTabIds[7],
   //   icon: 'tabler:grave-2',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '生产用地交付告知单',
   //   id: ReportTabIds[8],
   //   icon: 'mdi:land-fields',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '社保缴费确认单',
   //   id: ReportTabIds[9],
   //   icon: 'mdi:user-details',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '自建房验收告知单',
   //   id: ReportTabIds[10],
   //   icon: 'material-symbols:fact-check-outline-rounded',
   //   active: false
   // },
   // {
-  //   type: 11,
+  //   type: 12,
   //   name: '安置进度管理',
   //   id: ReportTabIds[11],
   //   icon: 'pixelarticons:buildings',
@@ -377,46 +342,50 @@ export const villageInfoCTabs = [
 export const FlowTabs = [
   {
     id: 0,
-    name: '资格认定'
+    name: '居民户信息'
   },
   {
     id: 1,
-    name: '资产评估'
+    name: '资格认定'
   },
   {
     id: 2,
-    name: '模拟安置'
+    name: '资产评估'
   },
   {
     id: 3,
-    name: '安置确认'
+    name: '模拟安置'
   },
   {
     id: 4,
-    name: '择址确认'
+    name: '安置确认'
   },
   {
     id: 5,
-    name: '协议签订'
+    name: '择址确认'
   },
   {
     id: 6,
-    name: '移民建卡'
+    name: '协议签订'
   },
   {
     id: 7,
-    name: '腾空过渡'
+    name: '移民建卡'
   },
   {
     id: 8,
-    name: '搬迁安置'
+    name: '腾空过渡'
   },
   {
     id: 9,
-    name: '生产安置'
+    name: '搬迁安置'
   },
   {
     id: 10,
+    name: '生产安置'
+  },
+  {
+    id: 11,
     name: '相关手续'
   }
 ]

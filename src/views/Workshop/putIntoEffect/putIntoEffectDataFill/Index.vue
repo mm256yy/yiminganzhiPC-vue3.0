@@ -56,8 +56,11 @@
     </div>
 
     <div class="data-fill-body" v-if="type == 'Landlord'">
+      <!-- 居民户信息 -->
+      <household-info :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 0" />
+
       <!-- 资格认定 -->
-      <template v-if="tabCurrentId == 0">
+      <template v-if="tabCurrentId == 1">
         <!-- 人口核定 -->
         <populationCheck
           :doorNo="doorNo"
@@ -76,83 +79,27 @@
       </template>
 
       <!-- 资产评估 -->
-      <template v-if="tabCurrentId == 1">
-        <!-- 房屋主体评估 -->
-        <main-house
+      <template v-if="tabCurrentId == 2">
+        <!-- 房屋附属物评估报告 -->
+        <house-accessory-eva-report
           v-show="reportTabCurrentId === ReportTabIds[0]"
           :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
           @update-data="getLandlordInfo"
         />
 
-        <!-- 房屋装修评估 -->
-        <house-decoration
+        <!-- 土地附着物评估报告 -->
+        <land-accessory-eva-report
           v-show="reportTabCurrentId === ReportTabIds[1]"
           :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          @update-data="getLandlordInfo"
-        />
-
-        <!-- 房屋附属设施评估 -->
-        <house-accessory
-          v-show="reportTabCurrentId === ReportTabIds[2]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          @update-data="getLandlordInfo"
-        />
-
-        <!-- 零星林（果）木评估 -->
-        <fruit-tree
-          v-show="reportTabCurrentId === ReportTabIds[3]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          @update-data="getLandlordInfo"
-        />
-
-        <!-- 土地基本情况评估 -->
-        <land-basic-info
-          v-show="reportTabCurrentId === ReportTabIds[4]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          @update-data="getLandlordInfo"
-        />
-
-        <!-- 土地青苗及附着物评估 -->
-        <land-green-seedlings
-          v-show="reportTabCurrentId === ReportTabIds[5]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          @update-data="getLandlordInfo"
-        />
-
-        <!-- 坟墓评估 -->
-        <grave
-          v-show="reportTabCurrentId === ReportTabIds[6]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
           @update-data="getLandlordInfo"
         />
       </template>
 
       <!-- 模拟安置 -->
-      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 2" />
+      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 3" />
 
       <!-- 安置确认 -->
-      <template v-if="tabCurrentId == 3">
+      <template v-if="tabCurrentId == 4">
         <!-- 搬迁安置 -->
         <Relocation
           :doorNo="doorNo"
@@ -177,7 +124,7 @@
       </template>
 
       <!-- 择址确认 -->
-      <template v-if="tabCurrentId === 4">
+      <template v-if="tabCurrentId === 5">
         <!-- 生产用地 -->
         <prod-land
           v-if="reportTabCurrentId === ReportTabIds[0]"
@@ -204,13 +151,13 @@
       </template>
 
       <!-- 协议签订 -->
-      <Agreement :doorNo="doorNo" v-if="tabCurrentId === 5" />
+      <Agreement :doorNo="doorNo" v-if="tabCurrentId === 6" />
 
       <!-- 移民建卡 -->
-      <createCard :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 6" />
+      <createCard :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 7" />
 
       <!-- 腾空过渡 -->
-      <template v-if="tabCurrentId == 7">
+      <template v-if="tabCurrentId == 8">
         <!-- 房屋腾空 -->
         <HouseEmpty
           :doorNo="doorNo"
@@ -234,7 +181,7 @@
       </template>
 
       <!-- 搬迁安置 -->
-      <template v-if="tabCurrentId == 8">
+      <template v-if="tabCurrentId == 9">
         <!-- 自建房 -->
         <SelfBuildHouse
           v-if="baseInfo.houseAreaType === 'homestead'"
@@ -259,7 +206,7 @@
       </template>
 
       <!-- 生产安置 -->
-      <template v-if="tabCurrentId === 9">
+      <template v-if="tabCurrentId === 10">
         <!-- 农业安置 -->
         <FarmingResettle
           :doorNo="doorNo"
@@ -281,11 +228,11 @@
       </template>
 
       <!-- 相关手续 -->
-      <Procedures :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 10" />
+      <Procedures :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 11" />
 
       <!-- 动迁安置 -- 房屋腾空确认单 -->
       <!-- <house-soar
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[0]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[0]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -294,7 +241,7 @@
 
       <!-- 动迁安置 -- 青苗腾空确认单 -->
       <!-- <green-seedlings-soar
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[1]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[1]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -303,7 +250,7 @@
 
       <!-- 动迁安置 -- 择房确认单 -->
       <!-- <choose-house
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[2]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -312,7 +259,7 @@
 
       <!-- 动迁安置 -- 择址确认单 -->
       <!-- <site-selection
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[3]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[3]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -321,7 +268,7 @@
 
       <!-- 动迁安置 -- 建房告知单 -->
       <!-- <build-house
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[4]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -330,7 +277,7 @@
 
       <!-- 动迁安置 -- 择房交付告知单 -->
       <!-- <optional-delivery
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[5]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[5]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -339,7 +286,7 @@
 
       <!-- 动迁安置 -- 坟墓择址确认单 -->
       <!-- <tomb-address
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[6]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -348,7 +295,7 @@
 
       <!-- 动迁安置 -- 坟墓迁移告知单 -->
       <!-- <tomb-migrations
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[7]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[7]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -357,7 +304,7 @@
 
       <!-- 动迁安置 生产用地 -->
       <!-- <production-land
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[8]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[8]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -366,7 +313,7 @@
 
       <!-- 动迁安置 社保缴费 -->
       <!-- <social-security
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[9]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[9]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -375,7 +322,7 @@
 
       <!-- 动迁安置 自建房 -->
       <!-- <build-room
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[10]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[10]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -384,7 +331,7 @@
 
       <!-- 动迁安置 安置进度 -->
       <!-- <placement-progress
-        v-if="tabCurrentId == 11 && reportTabCurrentId === ReportTabIds[11]"
+        v-if="tabCurrentId == 12 && reportTabCurrentId === ReportTabIds[11]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -410,16 +357,13 @@ import {
 
 import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 
+import HouseholdInfo from './HouseholdInfo/Index.vue' // 居民户信息
+
 import populationCheck from './populationCheck/Index.vue' // 资格认定 -- 人口核定
 import houseConfirmation from './houseConfirmation/Index.vue' // 资格认证 -- 房屋确权
 
-import MainHouse from './AssetEvaluation/MainHouse/Index.vue' // 资产评估 -- 房屋主体评估
-import HouseDecoration from './AssetEvaluation/HouseDecoration/Index.vue' // 资产评估 -- 房屋装修评估
-import HouseAccessory from './AssetEvaluation/HouseAccessory/Index.vue' // 资产评估 -- 房屋附属设施评估
-import FruitTree from './AssetEvaluation/FruitTree/Index.vue' // 资产评估 -- 零星林（果）木评估
-import LandBasicInfo from './AssetEvaluation/LandBasicInfo/Index.vue' // 资产评估 -- 土地基本情况评估
-import LandGreenSeedlings from './AssetEvaluation/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
-import Grave from './AssetEvaluation/Grave/Index.vue' // 资产评估 -- 坟墓评估
+import HouseAccessoryEvaReport from './AssetEvaluation/HouseAccessoryEvaReport/Index.vue' // 资产评估 -- 房屋附属物评估报告
+import LandAccessoryEvaReport from './AssetEvaluation/LandAccessoryEvaReport/Index.vue' // 资产评估 -- 土地附着物评估报告
 
 import SchemeBase from './SchemeBase/Index.vue' // 模拟安置
 
@@ -487,7 +431,7 @@ const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const reportTabCurrentId = ref<number>(ReportTabIds[0])
-const { doorNo, householdId, type, projectId, uid } = currentRoute.value.query as any
+const { doorNo, householdId, type } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 // 农户详情
@@ -554,7 +498,7 @@ const onBack = () => {
     .tab-item {
       display: flex;
       height: 32px;
-      padding: 0 21px;
+      padding: 0 20px;
       margin-right: 4px;
       font-size: 14px;
       color: #000;

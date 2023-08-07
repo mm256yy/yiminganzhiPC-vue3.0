@@ -1,13 +1,17 @@
 <template>
   <WorkContentWrap>
+    <!-- 土地青苗及附着物评估 (填报状态字段未定) -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
-          房屋装修评估合计：
+          土地青苗及附着物评估合计：
           <span class="text-[#1C5DF1]"> {{ total() }}</span>
           （元）
         </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -22,76 +26,51 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="幢号"
-          :width="100"
-          prop="houseNo"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="类别"
-          :width="120"
-          prop="fitUpType"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.fitUpType">
-              <ElOption
-                v-for="item in dictObj[323]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="名称"
+          label="地块编号"
           :width="150"
-          prop="fitUpName"
+          prop="landNumber"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.fitUpName" />
+            <ElInput placeholder="请输入" v-model="scope.row.landNumber" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
-          <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.unit">
-              <ElOption
-                v-for="item in dictObj[268]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+        <ElTableColumn label="名称" :width="150" prop="name" align="center" header-align="center">
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.name" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
+        <ElTableColumn label="规格" :width="150" prop="size" align="center" header-align="center">
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.size" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="数量(㎡)"
+          :width="180"
+          prop="number"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
-          </template>
-        </ElTableColumn>
         <ElTableColumn
-          label="折率"
+          label="单价(元/㎡)"
           :width="180"
-          prop="discountRate"
+          prop="price"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="费率" :width="180" prop="rate" align="center" header-align="center">
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.rate" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -121,7 +100,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>
@@ -131,8 +110,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -141,32 +119,33 @@ import {
   ElSpace,
   ElTable,
   ElTableColumn,
-  ElSelect,
-  ElOption,
   ElMessageBox,
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
-  getHouseDecorationListApi,
-  saveHouseDecorationApi,
-  deleteHouseDecorationApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/houseDecoration-service'
+  getLandGreenSeedlingsListApi,
+  saveLandGreenSeedlingsApi,
+  deleteLandGreenSeedlingsApi
+} from '@/api/AssetEvaluation/landGreenSeedlings-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
@@ -175,16 +154,31 @@ const defaultRow = {
   projectId: props.projectId,
   uid: props.uid,
   status: 'implementation',
-  houseNo: '',
-  fitUpType: '',
-  fitUpName: '',
-  unit: '',
+  landNumber: '',
+  name: '',
+  size: '',
   number: 0,
   price: 0,
-  discountRate: 0,
+  rate: 0,
   valuationAmount: 0,
   compensationAmount: 0,
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    landStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行
@@ -201,7 +195,7 @@ const getList = () => {
     status: 'implementation',
     size: 1000
   }
-  getHouseDecorationListApi(params).then((res) => {
+  getLandGreenSeedlingsListApi(params).then((res) => {
     tableData.value = res.content
   })
 }
@@ -228,7 +222,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        await deleteHouseDecorationApi(row.id)
+        await deleteLandGreenSeedlingsApi(row.id)
         getList()
         emit('updateData')
         ElMessage.success('删除成功')
@@ -241,7 +235,7 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  saveHouseDecorationApi(tableData.value).then(() => {
+  saveLandGreenSeedlingsApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')

@@ -1,13 +1,12 @@
 <template>
   <WorkContentWrap>
+    <!-- 企业/个体工商户 设备设施评估 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div>
-          零星（林）果木评估合计：
-          <span class="text-[#1C5DF1]"> {{ total() }}</span>
-          （元）
-        </div>
         <ElSpace>
+          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+            填报完成
+          </ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -21,53 +20,16 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn
-          label="品种名称"
-          :width="180"
-          prop="name"
-          align="center"
-          header-align="center"
-        >
+        <ElTableColumn label="项目" :width="150" prop="name" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect
-              clearable
-              allow-create
-              placeholder="请输入品种名称"
-              v-model="row.name"
-              filterable
-            >
-              <ElOption
-                v-for="item in dictObj[250]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.label"
-              />
-            </ElSelect>
+            <ElInput placeholder="请输入" v-model="row.name" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="用途"
-          :width="180"
-          prop="usageType"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.usageType">
-              <ElOption
-                v-for="item in dictObj[325]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="规格" :width="160" prop="size" align="center" header-align="center">
+        <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.size">
               <ElOption
-                v-for="item in dictObj[269]"
+                v-for="item in dictObj[267]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -79,7 +41,7 @@
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.unit">
               <ElOption
-                v-for="item in dictObj[264]"
+                v-for="item in dictObj[268]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -88,24 +50,70 @@
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.number" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="折率"
+          label="用途"
+          :width="160"
+          prop="purpose"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.purpose">
+              <ElOption
+                v-for="item in dictObj[265]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="建造/购置年月" prop="year" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElDatePicker v-model="row.year" type="month" placeholder="请选择" class="!w-full" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="原值(万元)" prop="amount" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.amount" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="搬迁方式" prop="moveType" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.purpose">
+              <ElOption
+                v-for="item in dictObj[221]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="评估单价"
+          :width="180"
+          prop="valuationPrice"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.valuationPrice" :precision="2" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="成新率"
           :width="180"
           prop="discountRate"
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.discountRate" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -115,8 +123,8 @@
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -126,18 +134,18 @@
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
+          <template #default="{ row }">
+            <ElInputNumber :min="0" v-model="row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.remark" />
+          <template #default="{ row }">
+            <ElInput placeholder="请输入" v-model="row.remark" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
-          <template #default="scope">
-            <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
+          <template #default="{ row }">
+            <span class="btn-txt" @click="onDelRow(row)"> 删除 </span>
           </template>
         </ElTableColumn>
       </ElTable>
@@ -145,13 +153,14 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
   ElInputNumber,
   ElInput,
+  ElDatePicker,
   ElSpace,
   ElTable,
   ElTableColumn,
@@ -161,18 +170,19 @@ import {
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { onMounted } from 'vue'
 import {
-  getFruitTreeListApi,
-  saveFruitTreeApi,
-  deleteFruitTreeApi
-} from '@/api/putIntoEffect/putIntoEffectDataFill/AssetEvaluation/fruitTree-service'
+  getEquipmentListApi,
+  saveEquipmentApi,
+  deleteEquipmentApi
+} from '@/api/AssetEvaluation/equipment-service'
+import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
   doorNo: string
   householdId: number
   projectId: number
   uid: string
+  baseInfo: any
 }
 
 const props = defineProps<PropsType>()
@@ -181,7 +191,10 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
+const reportDialog = ref<boolean>(false)
+const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
 const defaultRow = {
@@ -190,16 +203,35 @@ const defaultRow = {
   projectId: props.projectId,
   uid: props.uid,
   status: 'implementation',
-  name: '',
-  usageType: '',
-  size: '',
-  unit: '',
-  number: 0,
-  price: 0,
-  discountRate: 0,
-  valuationAmount: 0,
-  compensationAmount: 0,
+  name: '', // 项目名称
+  size: '', // 规格
+  unit: '', // 单位
+  number: 0, // 数量
+  purpose: '', // 用途
+  year: '', // 建造/购置年月
+  amount: 0, // 原值
+  moveType: '', // 搬迁方式
+  valuationPrice: 0, // 评估单价(万元)
+  discountRate: 0, // 成新率
+  valuationAmount: 0, // 评估金额
+  compensationAmount: 0, // 补偿金额(万元)
   remark: ''
+}
+
+// 填报完成
+const onReportData = async () => {
+  const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
+    doorNo: props.doorNo,
+    equipmentStatus: '1'
+  })
+  if (result && Array.isArray(result)) {
+    reportDialog.value = true
+    reportResult.value = result
+  } else {
+    ElMessage.success('填报成功！')
+    emit('updateData')
+  }
 }
 
 // 添加行
@@ -216,22 +248,9 @@ const getList = () => {
     status: 'implementation',
     size: 1000
   }
-  getFruitTreeListApi(params).then((res) => {
+  getEquipmentListApi(params).then((res) => {
     tableData.value = res.content
   })
-}
-
-// 房屋主体评估合计
-const total = () => {
-  let sum = 0
-  if (tableData.value && tableData.value.length) {
-    tableData.value.map((item: any) => {
-      if (item.compensationAmount > 0) {
-        sum += item.compensationAmount
-      }
-    })
-  }
-  return sum.toFixed(2)
 }
 
 // 删除
@@ -243,7 +262,7 @@ const onDelRow = (row) => {
       confirmButtonText: '确认'
     })
       .then(async () => {
-        await deleteFruitTreeApi(row.id)
+        await deleteEquipmentApi(row.id)
         getList()
         emit('updateData')
         ElMessage.success('删除成功')
@@ -256,7 +275,7 @@ const onDelRow = (row) => {
 
 // 保存
 const onSave = () => {
-  saveFruitTreeApi(tableData.value).then(() => {
+  saveEquipmentApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')
