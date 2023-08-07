@@ -154,6 +154,7 @@ import Apartment from './components/Apartment.vue'
 import FindSelf from './components/FindSelf.vue'
 import CenterSupport from './components/CenterSupport.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { cloneDeep } from 'lodash-es'
 
 const dictStore = useDictStoreWithOut()
 
@@ -183,9 +184,6 @@ const stepArray = ref([
 ])
 // 步骤条选中
 const stepIndex = ref(1)
-
-// 安置方式
-const productionResettleWay = ref<any>(dictObj.value[375])
 
 // 表格数据
 const tableData = ref<DemographicDtoType[]>([])
@@ -247,7 +245,7 @@ const filterHouseType = () => {
  * 安置方式过滤
  */
 const filterWay = (data) => {
-  const arr = productionResettleWay.value.map((item) => {
+  const arr = cloneDeep(dictObj.value[375]).map((item) => {
     // 农村移民的 其他性质
     const notFarmer = data.populationNature !== '1'
     if (

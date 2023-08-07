@@ -78,10 +78,10 @@
         @register="register"
       >
         <template #settingWay="{ row }">
-          <el-select v-model="row.settingWay" placeholder="请选择">
+          <el-select v-model="row.settingWay" placeholder="请选择" :key="row.id">
             <el-option
               v-for="item in filterWay(row)"
-              :key="item.value"
+              :key="`${item.value}${row.id}`"
               :label="item.label"
               :value="item.value"
               :disabled="item.disabled"
@@ -129,6 +129,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { cloneDeep } from 'lodash-es'
 
 const dictStore = useDictStoreWithOut()
 
@@ -147,7 +148,6 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 // 属实
-const productionResettleWay = ref<any>(dictObj.value[375])
 const mockList = ref<any>([])
 
 const { register, tableObject, methods } = useTable({
@@ -236,14 +236,14 @@ onMounted(() => {
  * 安置方式过滤
  */
 const filterWay = (data) => {
-  const arr = productionResettleWay.value.map((item) => {
+  const arr = cloneDeep(dictObj.value[375]).map((item) => {
     // 农村移民的 其他性质
     const notFarmer = data.populationNature !== '1'
     if (notFarmer && item.value === '1') {
       item.disabled = true
     }
-    data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : ''
-    if (data.age < 14 && item.value !== '3') {
+    data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : 0
+    if (+data.age < 14 && item.value !== '3') {
       item.disabled = true
     }
     return item
