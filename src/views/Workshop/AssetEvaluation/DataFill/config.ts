@@ -205,12 +205,6 @@ export const locationTypes = [
   }
 ]
 
-// 填报状态
-export const FillStatus = {
-  Fill: 'Fill',
-  UnFill: 'UnFill'
-}
-
 // 填报状态枚举
 export const FillStatusEnums = [
   {

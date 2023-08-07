@@ -166,7 +166,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
           </template>

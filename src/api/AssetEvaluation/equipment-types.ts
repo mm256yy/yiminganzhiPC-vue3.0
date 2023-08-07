@@ -1,16 +1,20 @@
-export interface LandGreenSeedlingsDtoType {
+export interface EquipmentDtoType {
   id?: number
+  uid: string
   doorNo: string
   householdId: number
   projectId: number
-  uid: string
   status: string
-  landNumber: string
   name: string
   size: string
+  unit: string
   number: number
-  price: number
-  rate: number
+  purpose: string
+  year: string
+  amount: number
+  moveType: string
+  valuationPrice: number
+  discountRate: number
   valuationAmount: number
   compensationAmount: number
   remark: string
