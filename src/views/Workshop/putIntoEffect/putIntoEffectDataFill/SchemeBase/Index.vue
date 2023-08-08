@@ -281,6 +281,7 @@ const stepNext = async () => {
   }
   const data = tableData.value.map((item) => {
     return {
+      id: item.id,
       demographicId: item.demographicId,
       settingWay: item.settingWay,
       settingRemark: item.settingRemark
