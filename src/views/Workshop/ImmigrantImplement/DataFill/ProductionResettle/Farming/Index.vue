@@ -55,7 +55,7 @@
       </div>
     </div>
 
-    <FarmingArchives
+    <OnDocumentation
       :door-no="props.doorNo"
       :show="farmingArchivesPup"
       @close="farmingArchivesClose"
@@ -67,7 +67,7 @@
 import { ref, onMounted } from 'vue'
 import { ElSpace, ElButton } from 'element-plus'
 import { getProduceLandInfoApi } from '@/api/putIntoEffect/produce'
-import FarmingArchives from './farmingArchives.vue'
+import OnDocumentation from './OnDocumentation.vue'
 import { getDocumentationApi } from '@/api/immigrantImplement/common-service'
 import { getDemographicListApi } from '@/api/workshop/population/service'
 import { useIcon } from '@/hooks/web/useIcon'

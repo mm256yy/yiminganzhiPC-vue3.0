@@ -382,7 +382,7 @@ import TombSiteSel from './SiteConfirmation/TombSiteSel/Index.vue' // 择址确�
 
 import HouseholdAgreementSign from './Agreement/HouseholdAgreementSign.vue' // 居民户 -- 协议签订
 import EntRelocationAgreement from './Agreement/EntRelocationAgreement.vue' // 企业 -- 动迁协议
-import IndividualRelocationAgreement from './IndividualRelocationAgreement.vue' // 个体户 -- 动迁协议
+import IndividualRelocationAgreement from './Agreement/IndividualRelocationAgreement.vue' // 个体户 -- 动迁协议
 import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁安置协议
 import VillageTransitionAgreement from './Agreement/VillageTransitionAgreement.vue' // 村集体 -- 过渡安置协议
 

@@ -72,7 +72,7 @@ import { ref, onMounted } from 'vue'
 import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import Handle from './handlePup.vue'
+import Handle from './Handle.vue'
 import { getDemographicListApi } from '@/api/workshop/population/service'
 
 interface PropsType {

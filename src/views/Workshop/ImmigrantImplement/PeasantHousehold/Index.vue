@@ -417,7 +417,7 @@ const onSearch = (data) => {
 // 数据填报
 const fillData = (row) => {
   push({
-    name: 'immigrantImpDataFill',
+    name: 'ImmigrantImpDataFill',
     query: {
       householdId: row.id,
       doorNo: row.doorNo,

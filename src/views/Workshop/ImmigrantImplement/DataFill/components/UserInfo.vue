@@ -11,7 +11,7 @@
       <ElSpace>
         <ElButton
           :icon="printIcon"
-          v-if="type == 'Landlord' || type == 'Enterprise' || type == 'IndividualB'"
+          v-if="type == 'PeasantHousehold' || type == 'Enterprise' || type == 'IndividualB'"
           type="primary"
           class="!bg-[#30A952] !border-[#30A952]"
           @click="onPrint"
@@ -39,7 +39,7 @@
     </div>
 
     <!-- 居民户基础信息 -->
-    <div class="other mt-15px" v-if="type == 'Landlord'" style="display: block">
+    <div class="other mt-15px" v-if="type == 'PeasantHousehold'" style="display: block">
       <el-row>
         <el-col :span="6">
           <div class="info-item">
@@ -81,7 +81,11 @@
     </div>
 
     <!-- 资产评估 -->
-    <div class="other" v-if="type == 'Landlord' && tabCurrentId == 0" style="display: block">
+    <div
+      class="other"
+      v-if="type == 'PeasantHousehold' && tabCurrentId == 0"
+      style="display: block"
+    >
       <el-row>
         <el-col :span="6">
           <div class="info-item">
@@ -136,7 +140,11 @@
       </el-row>
     </div>
 
-    <div class="other" v-if="type == 'Landlord' && tabCurrentId == 3" style="display: block">
+    <div
+      class="other"
+      v-if="type == 'PeasantHousehold' && tabCurrentId == 3"
+      style="display: block"
+    >
       <el-row>
         <el-col :span="6">
           <div class="info-item">
@@ -231,7 +239,7 @@
       </div>
     </div>
 
-    <div class="other" v-if="type == 'villageInfoC'">
+    <div class="other" v-if="type == 'village'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -307,13 +315,13 @@ const onPrintDialogClose = () => {
 }
 
 onMounted(() => {
-  if (props.type == 'Landlord') {
+  if (props.type == 'PeasantHousehold') {
     infoData.value = { icon: 'mdi:user-circle' }
   } else if (props.type == 'Enterprise') {
     infoData.value = { icon: 'carbon:enterprise' }
   } else if (props.type == 'IndividualB') {
     infoData.value = { icon: 'material-symbols:add-business' }
-  } else if (props.type == 'villageInfoC') {
+  } else if (props.type == 'village') {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })

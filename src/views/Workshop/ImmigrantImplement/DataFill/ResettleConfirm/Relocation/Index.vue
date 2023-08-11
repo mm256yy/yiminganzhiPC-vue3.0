@@ -17,27 +17,27 @@
           </div>
           <div style="display: flex">
             <ElFormItem label="家庭总人数" prop="familyNum">
-              <div class="!w-150px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农村移民">
-              <div class="!w-150px">{{ form.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农村移民">
-              <div class="!w-150px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农业随迁" prop="familyNum">
-              <div class="!w-150px">{{ form.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="非农业随迁" prop="familyNum">
-              <div class="!w-150px">{{ form.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
           <div style="display: flex">
             <ElFormItem label="其他人口" prop="familyNum">
-              <div class="!w-150px">{{ form.otherPopulationNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.otherPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="安置总人数" prop="familyNum">
-              <div class="!w-150px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
         </ElForm>
@@ -172,10 +172,10 @@ import {
   apartmentArea
 } from '../../config'
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
-import Homestead from '../SchemeBase/components/Homestead.vue'
-import Apartment from '../SchemeBase/components/Apartment.vue'
-import FindSelf from '../SchemeBase/components/FindSelf.vue'
-import CenterSupport from '../SchemeBase/components/CenterSupport.vue'
+import Homestead from '../../SchemeBase/components/Homestead.vue'
+import Apartment from '../../SchemeBase/components/Apartment.vue'
+import FindSelf from '../../SchemeBase/components/FindSelf.vue'
+import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 
 interface PropsType {
   doorNo: string
