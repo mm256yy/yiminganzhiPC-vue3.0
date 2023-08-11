@@ -15,6 +15,7 @@ export interface EquipmentDtoType {
   moveType: string
   valuationPrice: number
   discountRate: number
+  newnessRate: number
   valuationAmount: number
   compensationAmount: number
   remark: string

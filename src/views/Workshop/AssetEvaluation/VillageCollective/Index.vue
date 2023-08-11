@@ -120,7 +120,8 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi } from '@/api/AssetEvaluation/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '@/views/Workshop/components/config'
@@ -149,7 +150,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: 'implementation'
 }
 
 setSearchParams({ type: 'Village' })

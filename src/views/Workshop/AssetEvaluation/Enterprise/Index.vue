@@ -32,7 +32,7 @@
             家
           </div>
         </div>
-        <div> </div>
+        <div></div>
       </div>
       <Table
         selection
@@ -57,9 +57,9 @@
               ${row.cityCodeText ? row.cityCodeText + '/' : ''}
               ${row.areaCodeText ? row.areaCodeText : ''}
               ${row.townCodeText ? '/' + row.townCodeText : ''}
-              ${row.villageText ? '/' + row.villageText : ''}
-              ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
-              `
+             ${row.villageText ? '/' + row.villageText : ''}
+             ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
+            `
             }}
           </div>
         </template>
@@ -116,7 +116,8 @@ import { useAppStore } from '@/store/modules/app'
 import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi } from '@/api/AssetEvaluation/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
@@ -144,7 +145,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: 'implementation'
 }
 
 setSearchParams({ type: 'Company' })
