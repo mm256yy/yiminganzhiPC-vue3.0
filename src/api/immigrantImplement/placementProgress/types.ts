@@ -1,0 +1,39 @@
+export interface PlacementProgressType {
+  id?: number
+  projectId: number
+  status: string
+  householdId: number
+  doorNo: string
+  houseVacateRemark: string
+  treeVacateRemark: string
+  houseConfirmRemark: string
+  addressConfirmRemark: string
+  houseDeliveryRemark: string
+  buildHouseRemark: string
+  graveAddressRemark: string
+  graveMigrationRemark: string
+  feePayRemark: string
+  houseAcceptanceRemark: string
+  landDeliveryRemark: string
+  relocationTransitionRemark: string
+  productionTransitionRemark: string
+  buildHouseProgressRemark: string
+  networkTransferRemark: string
+  relationshipTransferRemark: string
+  propertyRightHandleRemark: string
+  otherRemark: string
+  householdRegistrationTransferRemark: string
+  goSchoolRemark: string
+  soldierTransferRemark: string
+  relocationTransitionStatus: string
+  productionTransitionStatus: string
+  buildHouseProgressStatus: string
+  networkTransferStatus: string
+  propertyRightHandleStatus: string
+  otherStatus: string
+  householdRegistrationTransferStatus: string
+  relationshipTransferStatus: string
+  goSchoolStatus: string
+  soldierTransferStatus: string
+  [key: string]: any
+}
