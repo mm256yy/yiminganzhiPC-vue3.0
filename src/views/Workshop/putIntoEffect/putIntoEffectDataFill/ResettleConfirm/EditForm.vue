@@ -73,7 +73,7 @@
       <ElFormItem v-if="form.handleWay === '2'" label="安置公墓" prop="settingGrave">
         <ElSelect clearable filterable v-model="form.settingGrave" class="!w-full">
           <ElOption
-            v-for="item in CemeteryAddress"
+            v-for="item in dictObj[377]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -119,7 +119,6 @@ import type { GraveDtoType } from '@/api/workshop/datafill/grave-types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import {} from '@/api/workshop/population/service'
 import { addGaveArrageApi, updateGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
-import { CemeteryAddress } from './config'
 
 interface PropsType {
   show: boolean

@@ -5,9 +5,11 @@
       <div class="common-value">
         <div class="value-center">
           {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
-            baseInfo.ruralMigrantNum
+            baseInfo.ruralMigrantNum + baseInfo.unruralMigrantNum
           }}
-          人，随迁人口：{{ baseInfo.farmingMigrantNum }}人
+          人，随迁人口：{{
+            baseInfo.familyNum - baseInfo.ruralMigrantNum - baseInfo.unruralMigrantNum
+          }}人
         </div>
       </div>
     </div>

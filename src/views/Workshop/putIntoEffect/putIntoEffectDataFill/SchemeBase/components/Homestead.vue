@@ -6,7 +6,7 @@
         {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
           baseInfo.ruralMigrantNum
         }}
-        人，随迁人口：{{ baseInfo.farmingMigrantNum }}人
+        人，随迁人口：{{ baseInfo.familyNum - baseInfo.ruralMigrantNum }}人
       </div>
     </div>
 

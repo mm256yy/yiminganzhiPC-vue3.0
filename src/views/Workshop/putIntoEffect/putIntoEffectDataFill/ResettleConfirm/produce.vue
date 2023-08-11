@@ -272,7 +272,6 @@ const onImportDataPre = async () => {
 const onImportData = async () => {
   // 拿到模拟安置的配置
   if (mockList.value && mockList.value.length) {
-    console.log(mockList.value, '导入的内容')
     // 模拟数据和当前数据做融合
     tableObject.tableList = tableObject.tableList.map((item) => {
       const current = mockList.value.find((mockItem) => mockItem.demographicId === item.id)
