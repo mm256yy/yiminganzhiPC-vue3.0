@@ -50,7 +50,7 @@
         </template>
 
         <template #settingGrave="{ row }">
-          {{ row.settingGrave || row.settingAddress }}
+          {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
         </template>
       </Table>
     </div>
@@ -184,7 +184,7 @@ const onDelRow = async (row: any | null, multiple: boolean) => {
 }
 
 const dictFmt = (value, index) => {
-  if (value && dictObj.value[index] && dictObj.value[307].length > 0) {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
     const item = dictObj.value[index].find((item: any) => item?.value === value)
     return item ? item.label : value
   }
