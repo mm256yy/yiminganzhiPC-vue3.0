@@ -46,6 +46,9 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
+            档案上传
+          </ElButton>
           <ElButton
             :icon="addIcon"
             type="primary"
@@ -142,6 +145,9 @@
         </template>
       </div>
     </el-dialog>
+
+    <!-- 档案上传 -->
+    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
   </WorkContentWrap>
 </template>
 
@@ -176,6 +182,7 @@ import Homestead from '../../SchemeBase/components/Homestead.vue'
 import Apartment from '../../SchemeBase/components/Apartment.vue'
 import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
+import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 
 interface PropsType {
   doorNo: string
@@ -190,6 +197,7 @@ const editIcon = useIcon({ icon: 'ant-design:edit-outlined' })
 const houseType = ref<HouseType>(HouseType.homestead)
 const immigrantSettle = ref<any>(null)
 const mockImmigrantSettle = ref<any>(null)
+const dialog = ref<boolean>(false)
 const editDialogVisible = ref<boolean>(false)
 const peopleList = ref<any[]>([])
 
@@ -312,6 +320,16 @@ const getMockData = async () => {
   if (res) {
     mockImmigrantSettle.value = res
   }
+}
+
+// 打开档案上传弹窗
+const onDocumentation = () => {
+  dialog.value = true
+}
+
+// 关闭档案上传弹窗
+const closeDocumentation = () => {
+  dialog.value = false
 }
 
 // 导入

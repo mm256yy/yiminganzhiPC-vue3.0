@@ -17,7 +17,7 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElRow>
+      <ElRow v-if="actionType === 'add'">
         <ElCol :span="12">
           <ElFormItem label="新增原因" prop="addReason">
             <ElSelect clearable filterable v-model="form.addReason" class="!w-full">
@@ -30,14 +30,14 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
+      </ElRow>
+
+      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="姓名" prop="name">
             <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="性别" prop="sex">
             <ElSelect clearable filterable v-model="form.sex" class="!w-full">
@@ -50,6 +50,9 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
+      </ElRow>
+
+      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="身份证号" prop="card">
             <ElInput
@@ -62,9 +65,6 @@
             />
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="与户主关系" prop="relation">
             <ElSelect clearable filterable v-model="form.relation" class="!w-full">
@@ -77,6 +77,9 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
+      </ElRow>
+
+      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="婚姻状况" prop="marital">
             <ElSelect clearable filterable v-model="form.marital" class="!w-full">
@@ -89,9 +92,6 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="户籍册类别" prop="censusType">
             <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
@@ -400,7 +400,7 @@ const { required } = useValidator()
 
 // 规则校验
 const rules = reactive<FormRules>({
-  addReason: [required()],
+  addReason: props.actionType === 'add' ? [required()] : [],
   name: [required()],
   sex: [required()],
   card: [required()],

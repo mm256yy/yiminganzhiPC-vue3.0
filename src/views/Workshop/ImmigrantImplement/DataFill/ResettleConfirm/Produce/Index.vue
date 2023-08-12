@@ -49,6 +49,9 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
+            档案上传
+          </ElButton>
           <ElButton
             :icon="addIcon"
             type="primary"
@@ -103,6 +106,9 @@
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
       </template>
     </el-dialog>
+
+    <!-- 档案上传 -->
+    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
   </WorkContentWrap>
 </template>
 
@@ -133,6 +139,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { cloneDeep } from 'lodash-es'
+import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 
 const dictStore = useDictStoreWithOut()
 
@@ -149,6 +156,7 @@ const props = defineProps<PropsType>()
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const dialog = ref<boolean>(false)
 
 // 属实
 const mockList = ref<any>([])
@@ -166,6 +174,7 @@ tableObject.params = {
 }
 
 getList()
+
 const form = ref<any>({})
 const rules = ref<any>({})
 const schema = reactive<CrudSchema[]>([
@@ -286,6 +295,16 @@ const onImportData = async () => {
       return item
     })
   }
+}
+
+// 打开档案上传弹窗
+const onDocumentation = () => {
+  dialog.value = true
+}
+
+// 关闭档案上传弹窗
+const closeDocumentation = () => {
+  dialog.value = false
 }
 
 const onClose = () => {

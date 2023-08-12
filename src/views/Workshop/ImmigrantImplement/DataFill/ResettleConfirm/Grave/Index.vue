@@ -6,6 +6,7 @@
         <div> </div>
         <ElSpace>
           <ElButton type="primary" @click="onFilling">填报完成</ElButton>
+          <ElButton type="primary" @click="onDocumentation">档案上传</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
         </ElSpace>
       </div>
@@ -56,6 +57,9 @@
       </Table>
     </div>
 
+    <!-- 档案上传 -->
+    <OnDocumentation :show="documentDialog" :door-no="props.doorNo" @close="closeDocumentation" />
+
     <EditForm
       :show="dialog"
       :actionType="actionType"
@@ -83,6 +87,7 @@ import {
 } from '@/api/immigrantImplement/resettleConfirm/grave-service'
 import { standardFormatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 
 interface PropsType {
   doorNo: string
@@ -90,7 +95,8 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-const dialog = ref(false) // 弹窗标识
+const dialog = ref(false) // 编辑弹窗标识
+const documentDialog = ref(false) // 档案上传弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const dictStore = useDictStoreWithOut()
@@ -178,6 +184,16 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
+// 打开档案上传弹窗
+const onDocumentation = () => {
+  documentDialog.value = true
+}
+
+// 关闭档案上传弹窗
+const closeDocumentation = () => {
+  documentDialog.value = false
+}
+
 const onDelRow = async (row: any | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
@@ -194,6 +210,7 @@ const dictFmt = (value, index) => {
     return item ? item.label : value
   }
 }
+
 const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = null

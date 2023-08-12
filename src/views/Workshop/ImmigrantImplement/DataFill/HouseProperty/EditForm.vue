@@ -510,7 +510,6 @@ const rules = reactive<FormRules>({
   constructionType: [required()],
   houseNature: [required()],
   demographicId: [required()],
-  ownersSituation: [required()],
   isCompliance: [required()],
   landNo: [required()],
   propertyNo: [required()]
