@@ -73,7 +73,7 @@
       <ElFormItem v-if="form.handleWay === '2'" label="安置公墓" prop="settingGrave">
         <ElSelect clearable filterable v-model="form.settingGrave" class="!w-full">
           <ElOption
-            v-for="item in CemeteryAddress"
+            v-for="item in dictObj[377]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -113,13 +113,12 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
+// import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
 import type { GraveDtoType } from '@/api/workshop/datafill/grave-types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import {
-  addGraveArrageApi,
-  updateGraveArrageApi
-} from '@/api/immigrantImplement/resettleConfirm/grave-service'
+import {} from '@/api/workshop/population/service'
+import { addGaveArrageApi, updateGaveArrageApi } from '@/api/putIntoEffect/gaveArrange'
 
 interface PropsType {
   show: boolean
@@ -148,25 +147,6 @@ const defaultValue: Omit<GraveDtoType, 'id'> = {
   settingAddress: ''
 }
 const form = ref<Omit<GraveDtoType, 'id'>>(defaultValue)
-
-const CemeteryAddress = [
-  {
-    label: '一号公墓',
-    value: '1'
-  },
-  {
-    label: '二号公墓',
-    value: '2'
-  },
-  {
-    label: '三号公墓',
-    value: '3'
-  },
-  {
-    label: '四号公墓',
-    value: '4'
-  }
-]
 
 watch(
   () => props.show,
@@ -212,13 +192,13 @@ const submit = async (data: GraveDtoType) => {
     status
   }
   if (props.actionType === 'add') {
-    await addGraveArrageApi({
+    await addGaveArrageApi({
       ...data,
       doorNo: props.doorNo,
       ...baseInfo
     })
   } else {
-    await updateGraveArrageApi({
+    await updateGaveArrageApi({
       ...data,
       doorNo: props.doorNo
     })

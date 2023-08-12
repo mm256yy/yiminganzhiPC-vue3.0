@@ -51,7 +51,7 @@
         </template>
 
         <template #settingGrave="{ row }">
-          {{ row.settingGrave || row.settingAddress }}
+          {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
         </template>
       </Table>
     </div>
@@ -96,14 +96,14 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const { register, tableObject, methods } = useTable({
-  getListApi: getGraveArrageListApi,
-  delListApi: delGraveArrageApi
+  getListApi: getGaveArrageListApi,
+  delListApi: delGaveArrageApi
 })
 const { getList } = methods
 
 // 根据户号来做筛选
 tableObject.params = {
-  doorNo: props.doorNo,
+  registrantDoorNo: props.doorNo,
   householdId: props.baseInfo.id,
   projectId: props.baseInfo.projectId,
   status: props.baseInfo.status
@@ -189,7 +189,7 @@ const onDelRow = async (row: any | null, multiple: boolean) => {
 }
 
 const dictFmt = (value, index) => {
-  if (value && dictObj.value[index] && dictObj.value[307].length > 0) {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
     const item = dictObj.value[index].find((item: any) => item?.value === value)
     return item ? item.label : value
   }

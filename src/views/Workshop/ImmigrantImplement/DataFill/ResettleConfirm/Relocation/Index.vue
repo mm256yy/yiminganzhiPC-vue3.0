@@ -322,9 +322,28 @@ const onImportDataPre = async () => {
 // 导入数据
 const onImportData = async () => {
   // 拿到模拟安置的配置
-  immigrantSettle.value = { ...mockImmigrantSettle.value }
-  houseType.value = mockImmigrantSettle.value.houseAreaType
-  ElMessage.success('导入成功！')
+  const {
+    houseAreaType,
+    typeOneNum,
+    typeTwoNum,
+    typeThreeNum,
+    typeFourNum,
+    settleAddress,
+    doorNo,
+    areaType
+  } = mockImmigrantSettle.value
+  immigrantSettle.value = {
+    houseAreaType,
+    typeOneNum,
+    typeTwoNum,
+    typeThreeNum,
+    typeFourNum,
+    settleAddress,
+    doorNo,
+    areaType
+  }
+  houseType.value = houseAreaType
+  onEditSubmit(immigrantSettle.value)
 }
 
 const onClose = () => {
