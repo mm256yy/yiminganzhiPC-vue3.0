@@ -249,7 +249,6 @@
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol, ElSpace } from 'element-plus'
 import { filterViewDoorNo, fmtStr } from '@/utils/index'
-import { getFillingStatusApi } from '@/api/immigrantImplement/common-service'
 
 interface PropsType {
   baseInfo: any
@@ -257,88 +256,13 @@ interface PropsType {
   doorNo: string
   tabCurrentId
   householdId: number
+  fillingStatus: string
 }
 
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
-const fillingStatus = ref<string>('')
-
-// 获取填报状态
-const getFillingStatus = () => {
-  getFillingStatusApi(props.doorNo).then((res: any) => {
-    getStatus(res)
-  })
-}
-
-/**
- * 填报状态判断
- * @param data 状态集合
- */
-const getStatus = (data: any) => {
-  const { type, tabCurrentId } = props
-  if (type === 'PeasantHousehold') {
-    if (tabCurrentId === 0) {
-      fillingStatus.value = data.householdPicStatus // 居民户信息总状态
-    } else if (tabCurrentId === 1) {
-      fillingStatus.value = data.qualificationStatus // 资格认定总状态
-    } else if (tabCurrentId === 2) {
-      fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId === 4) {
-      fillingStatus.value = data.arrangementStatus // 安置确认总状态
-    } else if (tabCurrentId === 5) {
-      fillingStatus.value = data.chooseStatus // 择址确认总状态
-    } else if (tabCurrentId === 6) {
-      fillingStatus.value = data.agreementStatus // 协议签订总状态
-    } else if (tabCurrentId === 7) {
-      fillingStatus.value = data.cardStatus // 移民建卡总状态
-    } else if (tabCurrentId === 8) {
-      fillingStatus.value = data.excessSoarStatus // 腾空过渡总状态
-    } else if (tabCurrentId === 9) {
-      fillingStatus.value = data.relocateArrangementAllStatus // 搬迁安置总状态
-    } else if (tabCurrentId === 10) {
-      fillingStatus.value = data.productionArrangementAllStatus // 生产安置总状态
-    } else if (tabCurrentId === 11) {
-      fillingStatus.value = data.proceduresStatus // 相关手续总状态
-    }
-  } else if (type === 'Enterprise') {
-    if (tabCurrentId === 0) {
-      fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId === 1) {
-      fillingStatus.value = data.cardStatus // 企业建卡总状态
-    } else if (tabCurrentId === 2) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
-    } else if (tabCurrentId === 4) {
-      fillingStatus.value = data.agreementStatus // 动迁协议总状态
-    } else if (tabCurrentId === 4) {
-      fillingStatus.value = data.proceduresStatus // 相关手续总状态
-    }
-  } else if (type === 'IndividualB') {
-    if (tabCurrentId === 0) {
-      fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId === 1) {
-      fillingStatus.value = data.cardStatus // 企业建卡总状态
-    } else if (tabCurrentId === 2) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
-    } else if (tabCurrentId === 4) {
-      fillingStatus.value = data.agreementStatus // 动迁协议总状态
-    } else if (tabCurrentId === 4) {
-      fillingStatus.value = data.proceduresStatus // 相关手续总状态
-    }
-  } else if (type === 'Village') {
-    if (tabCurrentId === 0) {
-      fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId === 1) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
-    } else if (tabCurrentId === 2) {
-      fillingStatus.value = data.agreementStatus // 协议签订总状态
-    } else if (tabCurrentId === 3) {
-      fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
-    }
-  }
-}
 
 onMounted(() => {
-  getFillingStatus()
   if (props.type === 'PeasantHousehold') {
     infoData.value = { icon: 'mdi:user-circle' }
   } else if (props.type === 'Enterprise') {

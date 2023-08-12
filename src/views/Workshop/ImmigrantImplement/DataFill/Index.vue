@@ -40,6 +40,7 @@
         :doorNo="doorNo"
         :type="type"
         :tabCurrentId="tabCurrentId"
+        :fillingStatus="fillingStatus"
         @update-data="getLandlordInfo"
       />
 
@@ -338,7 +339,7 @@
       </template>
 
       <!-- 集体资产处置方法 -->
-      <collective-asset-disposal v-if="tabCurrentId === 3" />
+      <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>
   </WorkContentWrap>
 </template>
@@ -359,7 +360,7 @@ import {
   VillageSubTabs
 } from './config'
 
-import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
+import { getLandlordByIdApi, getFillingStatusApi } from '@/api/immigrantImplement/common-service'
 
 import HouseholdInfo from './HouseholdInfo/Index.vue' // 居民户信息
 
@@ -444,6 +445,77 @@ const tabCurrentId = ref<number>(0)
 const subTabCurrentId = ref<number>(TabIds[0])
 const { doorNo, householdId, type } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const fillingStatus = ref<string>('')
+
+// 获取填报状态
+const getFillingStatus = () => {
+  getFillingStatusApi(doorNo).then((res: any) => {
+    getStatus(res)
+  })
+}
+
+// 填报状态判断
+const getStatus = (data: any) => {
+  if (type === 'PeasantHousehold') {
+    if (tabCurrentId.value === 0) {
+      fillingStatus.value = data.householdPicStatus // 居民户信息总状态
+    } else if (tabCurrentId.value === 1) {
+      fillingStatus.value = data.qualificationStatus // 资格认定总状态
+    } else if (tabCurrentId.value === 2) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId.value === 4) {
+      fillingStatus.value = data.arrangementStatus // 安置确认总状态
+    } else if (tabCurrentId.value === 5) {
+      fillingStatus.value = data.chooseStatus // 择址确认总状态
+    } else if (tabCurrentId.value === 6) {
+      fillingStatus.value = data.agreementStatus // 协议签订总状态
+    } else if (tabCurrentId.value === 7) {
+      fillingStatus.value = data.cardStatus // 移民建卡总状态
+    } else if (tabCurrentId.value === 8) {
+      fillingStatus.value = data.excessSoarStatus // 腾空过渡总状态
+    } else if (tabCurrentId.value === 9) {
+      fillingStatus.value = data.relocateArrangementAllStatus // 搬迁安置总状态
+    } else if (tabCurrentId.value === 10) {
+      fillingStatus.value = data.productionArrangementAllStatus // 生产安置总状态
+    } else if (tabCurrentId.value === 11) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'Enterprise') {
+    if (tabCurrentId.value === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId.value === 1) {
+      fillingStatus.value = data.cardStatus // 企业建卡总状态
+    } else if (tabCurrentId.value === 2) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId.value === 4) {
+      fillingStatus.value = data.agreementStatus // 动迁协议总状态
+    } else if (tabCurrentId.value === 4) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'IndividualB') {
+    if (tabCurrentId.value === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId.value === 1) {
+      fillingStatus.value = data.cardStatus // 企业建卡总状态
+    } else if (tabCurrentId.value === 2) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId.value === 4) {
+      fillingStatus.value = data.agreementStatus // 动迁协议总状态
+    } else if (tabCurrentId.value === 4) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'Village') {
+    if (tabCurrentId.value === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId.value === 1) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId.value === 2) {
+      fillingStatus.value = data.agreementStatus // 协议签订总状态
+    } else if (tabCurrentId.value === 3) {
+      fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
+    }
+  }
+}
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -451,6 +523,7 @@ const getLandlordInfo = () => {
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = res
   })
+  getFillingStatus()
 }
 
 getLandlordInfo()
@@ -461,6 +534,7 @@ const onTabClick = (tabItem) => {
   }
   tabCurrentId.value = tabItem.id
   subTabCurrentId.value = 1
+  getFillingStatus()
 }
 
 const onSubTabClick = (tabItem) => {

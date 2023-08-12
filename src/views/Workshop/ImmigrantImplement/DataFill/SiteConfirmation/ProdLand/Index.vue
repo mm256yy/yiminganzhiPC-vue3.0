@@ -246,6 +246,7 @@ const onError = () => {
 const onSave = () => {
   let params = {
     ...form.value,
+    doorNo: props.doorNo,
     landNo: form.value.landNo ? form.value.landNo.toString() : '',
     landPic: landPic.value ? JSON.stringify(landPic.value) : ''
   }

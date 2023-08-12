@@ -47,6 +47,13 @@ export const addLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> 
 }
 
 /**
+ * 查询单个居民户信息
+ */
+export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType> => {
+  return request.get({ url: `/peasantHousehold/${id}` })
+}
+
+/**
  * 更新居民户信息
  */
 export const updateLandlordApi = (data: LandlordDtoType): Promise<LandlordDtoType> => {
