@@ -19,15 +19,15 @@
       <div class="flex-center" v-if="!isLandEmpty">
         <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
 
-        <div class="txt"> 该户土地腾让未办理。 </div>
+        <div class="txt"> 土地腾让未办理。 </div>
       </div>
       <div class="flex-center" v-else-if="isLandEmpty === '0'">
-        <div class="txt"> 该户无须土地腾让。 </div>
+        <div class="txt"> 无须土地腾让。 </div>
       </div>
       <div class="flex-center" v-else-if="isLandEmpty === '1'">
         <Icon icon="ant-design:check-circle-filled" color="#30A952" :size="20" />
 
-        <div class="txt">该户土地腾让已完成，腾让时间：{{ time }}。</div>
+        <div class="txt">土地腾让已完成，腾让时间：{{ time }}。</div>
       </div>
     </div>
 
@@ -48,7 +48,7 @@
             placeholder="请选择日期"
           />
         </ElFormItem>
-        <ElFormItem label="移民户主意见" prop="landEmptyOpinion">
+        <ElFormItem label="意见" prop="landEmptyOpinion">
           <ElInput
             type="textarea"
             v-model="form.landEmptyOpinion"
@@ -102,7 +102,7 @@ const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 const isLandEmpty = ref<null | '0' | '1'>(null) //0 无须办理 1确认办理 -1默认状态
 const time = ref<string>('')
 const form = ref<any>({
-  landEmptyOpinion: '本户土地已腾让完毕，同意交付给工程建设指挥部处理。',
+  landEmptyOpinion: '',
   landEmptyDate: ''
 })
 const dialogVisible = ref<boolean>(false)

@@ -9,37 +9,22 @@
         </div>
       </div>
       <ElSpace>
-        <ElButton
-          :icon="printIcon"
-          v-if="type == 'PeasantHousehold' || type == 'Enterprise' || type == 'IndividualB'"
-          type="primary"
-          class="!bg-[#30A952] !border-[#30A952]"
-          @click="onPrint"
-        >
-          打印
-        </ElButton>
-        <ElButton
-          v-if="baseInfo.fillStatus === FillStatus.Fill"
-          type="primary"
-          :icon="EscalationIcon"
-          @click="onReportData"
-        >
-          填报完成
-        </ElButton>
+        <!-- 居民户信息中的模拟安置没有完成状态 -->
         <div
+          v-if="!(type === 'PeasantHousehold' && tabCurrentId === 3)"
           :class="{
             status: true,
-            success: props.baseInfo.fillStatus === FillStatus.Fill
+            success: fillingStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.baseInfo.fillStatus === FillStatus.Fill ? '已填报' : '未填报' }}
+          {{ fillingStatus === '1' ? '已完成' : '未完成' }}
         </div>
       </ElSpace>
     </div>
 
     <!-- 居民户基础信息 -->
-    <div class="other mt-15px" v-if="type == 'PeasantHousehold'" style="display: block">
+    <div class="other mt-15px" v-if="type === 'PeasantHousehold'" style="display: block">
       <el-row>
         <el-col :span="6">
           <div class="info-item">
@@ -83,7 +68,7 @@
     <!-- 资产评估 -->
     <div
       class="other"
-      v-if="type == 'PeasantHousehold' && tabCurrentId == 0"
+      v-if="type === 'PeasantHousehold' && tabCurrentId === 0"
       style="display: block"
     >
       <el-row>
@@ -142,7 +127,7 @@
 
     <div
       class="other"
-      v-if="type == 'PeasantHousehold' && tabCurrentId == 3"
+      v-if="type === 'PeasantHousehold' && tabCurrentId === 3"
       style="display: block"
     >
       <el-row>
@@ -182,7 +167,7 @@
     <!-- 腾空过渡、搬迁安置、生产安置、相关手续 -->
     <div
       class="other"
-      v-if="tabCurrentId == 8 || tabCurrentId == 9 || tabCurrentId == 10 || tabCurrentId == 11"
+      v-if="tabCurrentId === 8 || tabCurrentId === 9 || tabCurrentId === 10 || tabCurrentId === 11"
       style="display: block"
     >
       <el-row>
@@ -201,7 +186,7 @@
       </el-row>
     </div>
 
-    <div class="other" v-if="type == 'Enterprise'">
+    <div class="other" v-if="type === 'Enterprise'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -220,7 +205,7 @@
       </div>
     </div>
 
-    <div class="other" v-if="type == 'IndividualB'">
+    <div class="other" v-if="type === 'IndividualB'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -239,7 +224,7 @@
       </div>
     </div>
 
-    <div class="other" v-if="type == 'village'">
+    <div class="other" v-if="type === 'Village'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -257,71 +242,110 @@
         <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
       </div>
     </div>
-
-    <Print
-      :show="printDialog"
-      :landlordIds="[householdId]"
-      @close="onPrintDialogClose"
-      :baseInfo="baseInfo"
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElRow, ElCol, ElMessage, ElSpace, ElButton } from 'element-plus'
-import { FillStatus } from '../config'
+import { ElRow, ElCol, ElSpace } from 'element-plus'
 import { filterViewDoorNo, fmtStr } from '@/utils/index'
-import { useIcon } from '@/hooks/web/useIcon'
-import Print from './Print.vue'
-import { reportLandlordApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
+import { getFillingStatusApi } from '@/api/immigrantImplement/common-service'
 
 interface PropsType {
   baseInfo: any
   type: any
+  doorNo: string
   tabCurrentId
   householdId: number
 }
 
 const props = defineProps<PropsType>()
-const reportDialog = ref<boolean>(false)
-const printDialog = ref<boolean>(false)
-const reportResult = ref<string[]>([])
-
-const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
-const printIcon = useIcon({ icon: 'ion:print-outline' })
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
+const fillingStatus = ref<string>('')
 
-const emit = defineEmits(['updateData'])
+// 获取填报状态
+const getFillingStatus = () => {
+  getFillingStatusApi(props.doorNo).then((res: any) => {
+    getStatus(res)
+  })
+}
 
-// 填报完成
-const onReportData = async () => {
-  const result = await reportLandlordApi(props.householdId)
-  if (result && Array.isArray(result)) {
-    reportDialog.value = true
-    reportResult.value = result
-  } else {
-    ElMessage.success('填报成功！')
-    emit('updateData')
+/**
+ * 填报状态判断
+ * @param data 状态集合
+ */
+const getStatus = (data: any) => {
+  const { type, tabCurrentId } = props
+  if (type === 'PeasantHousehold') {
+    if (tabCurrentId === 0) {
+      fillingStatus.value = data.householdPicStatus // 居民户信息总状态
+    } else if (tabCurrentId === 1) {
+      fillingStatus.value = data.qualificationStatus // 资格认定总状态
+    } else if (tabCurrentId === 2) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId === 4) {
+      fillingStatus.value = data.arrangementStatus // 安置确认总状态
+    } else if (tabCurrentId === 5) {
+      fillingStatus.value = data.chooseStatus // 择址确认总状态
+    } else if (tabCurrentId === 6) {
+      fillingStatus.value = data.agreementStatus // 协议签订总状态
+    } else if (tabCurrentId === 7) {
+      fillingStatus.value = data.cardStatus // 移民建卡总状态
+    } else if (tabCurrentId === 8) {
+      fillingStatus.value = data.excessSoarStatus // 腾空过渡总状态
+    } else if (tabCurrentId === 9) {
+      fillingStatus.value = data.relocateArrangementAllStatus // 搬迁安置总状态
+    } else if (tabCurrentId === 10) {
+      fillingStatus.value = data.productionArrangementAllStatus // 生产安置总状态
+    } else if (tabCurrentId === 11) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'Enterprise') {
+    if (tabCurrentId === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId === 1) {
+      fillingStatus.value = data.cardStatus // 企业建卡总状态
+    } else if (tabCurrentId === 2) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId === 4) {
+      fillingStatus.value = data.agreementStatus // 动迁协议总状态
+    } else if (tabCurrentId === 4) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'IndividualB') {
+    if (tabCurrentId === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId === 1) {
+      fillingStatus.value = data.cardStatus // 企业建卡总状态
+    } else if (tabCurrentId === 2) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId === 4) {
+      fillingStatus.value = data.agreementStatus // 动迁协议总状态
+    } else if (tabCurrentId === 4) {
+      fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+  } else if (type === 'Village') {
+    if (tabCurrentId === 0) {
+      fillingStatus.value = data.estimateeStatus // 资产评估总状态
+    } else if (tabCurrentId === 1) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId === 2) {
+      fillingStatus.value = data.agreementStatus // 协议签订总状态
+    } else if (tabCurrentId === 3) {
+      fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
+    }
   }
 }
 
-const onPrint = () => {
-  printDialog.value = true
-}
-
-const onPrintDialogClose = () => {
-  printDialog.value = false
-}
-
 onMounted(() => {
-  if (props.type == 'PeasantHousehold') {
+  getFillingStatus()
+  if (props.type === 'PeasantHousehold') {
     infoData.value = { icon: 'mdi:user-circle' }
-  } else if (props.type == 'Enterprise') {
+  } else if (props.type === 'Enterprise') {
     infoData.value = { icon: 'carbon:enterprise' }
-  } else if (props.type == 'IndividualB') {
+  } else if (props.type === 'IndividualB') {
     infoData.value = { icon: 'material-symbols:add-business' }
-  } else if (props.type == 'village') {
+  } else if (props.type === 'Village') {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })

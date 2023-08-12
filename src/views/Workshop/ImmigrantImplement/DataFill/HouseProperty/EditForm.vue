@@ -18,7 +18,7 @@
       :rules="rules"
     >
       <ElRow>
-        <ElCol :span="12">
+        <!-- <ElCol :span="12">
           <ElFormItem label="新增原因" prop="addReason">
             <ElSelect clearable filterable v-model="form.addReason" class="!w-full">
               <ElOption
@@ -29,7 +29,7 @@
               />
             </ElSelect>
           </ElFormItem>
-        </ElCol>
+        </ElCol> -->
         <ElCol :span="12">
           <ElFormItem label="房屋编号" prop="houseNo">
             <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
@@ -414,7 +414,7 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<HouseDtoType, 'id'> = {
-  addReason: '', // 新增原因
+  // addReason: '', // 新增原因
   houseNo: '', // 房屋编号
   storeyNumber: '', // 层数
   landArea: '', // 建筑面积
@@ -503,7 +503,7 @@ watch(
 const { required } = useValidator()
 // 规则校验
 const rules = reactive<FormRules>({
-  addReason: [required()],
+  // addReason: [required()],
   houseNo: [required()],
   storeyNumber: [required()],
   landArea: [required()],

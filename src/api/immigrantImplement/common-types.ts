@@ -52,3 +52,51 @@ export interface DocumentationType {
   agricultureOtherPic: string
   [key: string]: any
 }
+
+// 填报类型
+export interface FillingType {
+  id: number
+  doorNo: string
+  uid: string
+  projectId: number
+  status: string
+  householdPicStatus: string
+  houseMainStatus: string
+  houseRenovationStatus: string
+  appendageStatus: string
+  treeStatus: string
+  landStatus: string
+  graveStatus: string
+  estimateeStatus: string
+  populationStatus: string
+  propertyStatus: string
+  qualificationStatus: string
+  productionArrangementStatus: string
+  relocateArrangementStatus: string
+  graveArrangementStatus: string
+  arrangementStatus: string
+  landUseStatus: string
+  chooseHouseStatus: string
+  chooseGraveStatus: string
+  chooseStatus: string
+  cardStatus: string
+  houseSoarStatus: string
+  landSoarStatus: string
+  excessStatus: string
+  excessSoarStatus: string
+  buildOneselfStatus: string
+  flatsStatus: string
+  centralizedSupportStatus: string
+  relocateArrangementAllStatus: string
+  agricultureArrangementStatus: string
+  retirementStatus: string
+  selfEmploymentStatus: string
+  productionArrangementAllStatus: string
+  proceduresStatus: string
+  agreementStatus: string
+  deviceStatus: string
+  specialStatus: string
+  disposalMeasuresStatus: string
+  isUpdate: string
+  [key: string]: any
+}

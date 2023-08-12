@@ -37,6 +37,7 @@
       <UserInfo
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
+        :doorNo="doorNo"
         :type="type"
         :tabCurrentId="tabCurrentId"
         @update-data="getLandlordInfo"
@@ -58,12 +59,12 @@
     </div>
 
     <!-- 居民户 -->
-    <div class="data-fill-body" v-if="type == 'PeasantHousehold'">
+    <div class="data-fill-body" v-if="type === 'PeasantHousehold'">
       <!-- 居民户信息 -->
-      <household-info :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 0" />
+      <household-info :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 0" />
 
       <!-- 资格认定 -->
-      <template v-if="tabCurrentId == 1">
+      <template v-if="tabCurrentId === 1">
         <!-- 人口核定 -->
         <population-check
           :doorNo="doorNo"
@@ -82,7 +83,7 @@
       </template>
 
       <!-- 资产评估 -->
-      <template v-if="tabCurrentId == 2">
+      <template v-if="tabCurrentId === 2">
         <!-- 房屋附属物评估报告 -->
         <house-accessory-eva-report
           v-show="subTabCurrentId === TabIds[0]"
@@ -99,10 +100,10 @@
       </template>
 
       <!-- 模拟安置 -->
-      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 3" />
+      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 3" />
 
       <!-- 安置确认 -->
-      <template v-if="tabCurrentId == 4">
+      <template v-if="tabCurrentId === 4">
         <!-- 搬迁安置 -->
         <relocation-arrange
           :doorNo="doorNo"
@@ -172,7 +173,7 @@
       </template>
 
       <!-- 搬迁安置 -->
-      <template v-if="tabCurrentId == 9">
+      <template v-if="tabCurrentId === 9">
         <!-- 自建房 -->
         <SelfBuildHouse
           v-if="baseInfo.houseAreaType === 'homestead'"
@@ -221,7 +222,7 @@
     </div>
 
     <!-- 企业 -->
-    <div class="data-fill-body" v-if="type == 'Enterprise'">
+    <div class="data-fill-body" v-if="type === 'Enterprise'">
       <!-- 资产评估 -->
       <template v-if="tabCurrentId == 0">
         <!-- 房屋附属物评估报告 -->
@@ -239,14 +240,14 @@
         />
 
         <!-- 设施设备评估报告 -->
-        <equipment-eva-report v-if="subTabCurrentId == TabIds[2]" />
+        <equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId === TabIds[2]" />
       </template>
 
       <!-- 企业建卡 -->
-      <ent-card-establishment v-if="tabCurrentId == 1" />
+      <ent-card-establishment v-if="tabCurrentId === 1" />
 
       <!-- 腾空 -->
-      <template v-if="tabCurrentId == 2">
+      <template v-if="tabCurrentId === 2">
         <!-- 房屋腾空 -->
         <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[0]" />
 
@@ -255,16 +256,16 @@
       </template>
 
       <!-- 动迁协议 -->
-      <ent-relocation-agreement v-if="tabCurrentId == 3" />
+      <ent-relocation-agreement v-if="tabCurrentId === 3" />
 
       <!-- 相关手续 -->
-      <ent-procedures v-if="tabCurrentId == 4" />
+      <ent-procedures v-if="tabCurrentId === 4" />
     </div>
 
     <!-- 个体工商户 -->
-    <div class="data-fill-body" v-if="type == 'IndividualB'">
+    <div class="data-fill-body" v-if="type === 'IndividualB'">
       <!-- 资产评估 -->
-      <template v-if="tabCurrentId == 0">
+      <template v-if="tabCurrentId === 0">
         <!-- 房屋附属物评估报告 -->
         <house-accessory-eva-report
           v-if="subTabCurrentId === TabIds[0]"
@@ -280,14 +281,14 @@
         />
 
         <!-- 设施设备评估报告 -->
-        <equipment-eva-report v-if="subTabCurrentId == TabIds[2]" />
+        <equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId == TabIds[2]" />
       </template>
 
       <!-- 个体户建卡 -->
-      <individual-card-establishment v-if="tabCurrentId == 1" />
+      <individual-card-establishment v-if="tabCurrentId === 1" />
 
       <!-- 腾空 -->
-      <template v-if="tabCurrentId == 2">
+      <template v-if="tabCurrentId === 2">
         <!-- 房屋腾空 -->
         <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[0]" />
 
@@ -296,16 +297,16 @@
       </template>
 
       <!-- 动迁协议 -->
-      <individual-relocation-agreement v-if="tabCurrentId == 3" />
+      <individual-relocation-agreement v-if="tabCurrentId === 3" />
 
       <!-- 相关手续 -->
-      <individual-procedures v-if="tabCurrentId == 4" />
+      <individual-procedures v-if="tabCurrentId === 4" />
     </div>
 
     <!-- 村集体 -->
-    <div class="data-fill-body" v-if="type == 'village'">
+    <div class="data-fill-body" v-if="type === 'Village'">
       <!-- 资产评估 -->
-      <template v-if="tabCurrentId == 0">
+      <template v-if="tabCurrentId === 0">
         <!-- 房屋附属物评估报告 -->
         <house-accessory-eva-report
           v-if="subTabCurrentId === TabIds[0]"
@@ -321,23 +322,23 @@
         />
 
         <!-- 农村小型专项设施评估报告 -->
-        <special-equipment-eva-report v-if="subTabCurrentId == TabIds[2]" />
+        <special-equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId === TabIds[2]" />
       </template>
 
       <!-- 腾空(村集体只有房屋腾空) -->
       <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
 
       <!-- 协议签订 -->
-      <template v-if="tabCurrentId == 2">
+      <template v-if="tabCurrentId === 2">
         <!-- 动迁安置协议 -->
-        <village-relocation-agreement v-if="subTabCurrentId == TabIds[0]" />
+        <village-relocation-agreement v-if="subTabCurrentId === TabIds[0]" />
 
         <!-- 过渡安置协议 -->
-        <village-transition-agreement v-if="subTabCurrentId == TabIds[1]" />
+        <village-transition-agreement v-if="subTabCurrentId === TabIds[1]" />
       </template>
 
       <!-- 集体资产处置方法 -->
-      <collective-asset-disposal v-if="tabCurrentId == 3" />
+      <collective-asset-disposal v-if="tabCurrentId === 3" />
     </div>
   </WorkContentWrap>
 </template>
@@ -412,7 +413,7 @@ import UserInfo from './components/UserInfo.vue'
 import { useRouter } from 'vue-router'
 
 const titleMsg = (type: string, index: number) => {
-  if (type == 'Landlord') {
+  if (type == 'PeasantHousehold') {
     if (index === 1) {
       return '居民户信息'
     }

@@ -5,6 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="onFilling">填报完成</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
         </ElSpace>
       </div>
@@ -69,12 +70,13 @@
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref, computed } from 'vue'
-import { ElButton, ElSpace } from 'element-plus'
+import { ElButton, ElSpace, ElMessage } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
+import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import {
   getGraveArrageListApi,
   delGraveArrageApi
@@ -211,6 +213,18 @@ const onEditRow = (row: any) => {
     ...row
   }
   dialog.value = true
+}
+
+// 填报完成
+const onFilling = () => {
+  saveFillingCompleteApi({
+    doorNo: props.doorNo,
+    graveArrangementStatus: '1'
+  }).then((res: any) => {
+    if (res) {
+      ElMessage.success('操作成功')
+    }
+  })
 }
 </script>
 <style lang="less" scoped>

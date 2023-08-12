@@ -65,7 +65,7 @@ export const HouseholdSubTabs = [
   },
   {
     type: 1,
-    name: '房屋确权',
+    name: '房屋产权',
     id: TabIds[1],
     icon: 'clarity:house-solid',
     active: false

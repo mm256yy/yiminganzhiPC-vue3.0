@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import type { LandlordDtoType, DocumentationType } from './common-types'
+import type { LandlordDtoType, DocumentationType, FillingType } from './common-types'
 
 /**
  * 查询居民户信息列表
@@ -75,4 +75,22 @@ export const getDocumentationApi = (doorNo: string) => {
  */
 export const saveDocumentationApi = (data: any): Promise<DocumentationType> => {
   return request.post({ url: '/immigrantDocumentation/save', data })
+}
+
+/**
+ * 填报完成
+ * @param data 表单提交数据
+ * @returns
+ */
+export const saveFillingCompleteApi = (data: any): Promise<FillingType> => {
+  return request.post({ url: '/immigrantFilling/save', data })
+}
+
+/**
+ * 获取填报状态
+ * @param doorNo 户号
+ * @returns
+ */
+export const getFillingStatusApi = (doorNo: string) => {
+  return request.get({ url: '/immigrantFilling/findByDoorNo', params: { doorNo } })
 }

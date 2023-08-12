@@ -25,7 +25,7 @@
       </ElCol>
     </ElRow>
     <div class="table-wrap !py-12px !mt-0px no-data" v-else>
-      该户资产评估还未完成，无法查看评估报告
+      资产评估还未完成，无法查看评估报告
     </div>
     <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />

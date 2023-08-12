@@ -1,9 +1,11 @@
 <template>
   <WorkContentWrap>
+    <!-- 资格认定 -- 人口核定 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="onFilling">填报完成</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
         </ElSpace>
       </div>
@@ -90,6 +92,7 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getDemographicListApi } from '@/api/workshop/population/service'
 import { delDemographicApi } from '@/api/immigrantImplement/populationCheck/service'
 import { DelDemographicDtoType } from '@/api/immigrantImplement/populationCheck/types'
@@ -281,6 +284,18 @@ const onViewRow = (row: DemographicDtoType) => {
     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
   }
   dialog.value = true
+}
+
+// 填报完成
+const onFilling = () => {
+  saveFillingCompleteApi({
+    doorNo: props.doorNo,
+    populationStatus: '1'
+  }).then((res: any) => {
+    if (res) {
+      ElMessage.success('操作成功')
+    }
+  })
 }
 </script>
 <style lang="less" scoped>

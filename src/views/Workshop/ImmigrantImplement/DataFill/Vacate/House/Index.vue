@@ -18,16 +18,14 @@
     <div class="empty-cont">
       <div class="flex-center" v-if="!isHouseEmpty">
         <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
-
-        <div class="txt"> 该户房屋腾空未办理。 </div>
+        <div class="txt"> 房屋腾空未办理。 </div>
       </div>
       <div class="flex-center" v-else-if="isHouseEmpty === '0'">
-        <div class="txt"> 该户无须房屋腾空。 </div>
+        <div class="txt">无须房屋腾空。 </div>
       </div>
       <div class="flex-center" v-else-if="isHouseEmpty === '1'">
         <Icon icon="ant-design:check-circle-filled" color="#30A952" :size="20" />
-
-        <div class="txt">该户房屋腾空已完成，腾空时间：{{ time }}。</div>
+        <div class="txt"> 房屋腾空已完成，腾空时间：{{ time }}。</div>
       </div>
     </div>
 
@@ -48,7 +46,7 @@
             placeholder="请选择日期"
           />
         </ElFormItem>
-        <ElFormItem label="移民户主意见" prop="houseEmptyOpinion">
+        <ElFormItem label="意见" prop="houseEmptyOpinion">
           <ElInput
             type="textarea"
             v-model="form.houseEmptyOpinion"
@@ -102,7 +100,7 @@ const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 const isHouseEmpty = ref<null | '0' | '1'>(null) //0 无须办理 1确认办理 -1默认状态
 const time = ref<string>('')
 const form = ref<any>({
-  houseEmptyOpinion: '本户房屋已腾空完毕，同意交付给工程建设指挥部处理。',
+  houseEmptyOpinion: '',
   houseEmptyDate: ''
 })
 const dialogVisible = ref<boolean>(false)
@@ -122,7 +120,6 @@ onMounted(() => {
 
 const init = async () => {
   const res = await getHouseVacateInfoApi(props.doorNo)
-  console.log(res, 'res')
   if (res) {
     form.value = {
       houseEmptyOpinion: res.houseEmptyOpinion,
