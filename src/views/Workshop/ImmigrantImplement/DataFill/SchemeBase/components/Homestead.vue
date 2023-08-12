@@ -6,13 +6,8 @@
         {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
           baseInfo.ruralMigrantNum
         }}
-        人，随迁人口：{{ baseInfo.farmingMigrantNum }}人
+        人，随迁人口：{{ baseInfo.familyNum - baseInfo.ruralMigrantNum }}人
       </div>
-    </div>
-
-    <div class="common-form-item">
-      <div class="common-label">可安置建筑面积：</div>
-      <div class="common-value"> {{ baseInfo.familyNum * 40 }}㎡ </div>
     </div>
 
     <div class="common-form-item">
