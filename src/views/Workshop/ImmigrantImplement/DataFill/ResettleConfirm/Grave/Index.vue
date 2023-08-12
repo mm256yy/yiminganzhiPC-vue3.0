@@ -96,8 +96,8 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const { register, tableObject, methods } = useTable({
-  getListApi: getGaveArrageListApi,
-  delListApi: delGaveArrageApi
+  getListApi: getGraveArrageListApi,
+  delListApi: delGraveArrageApi
 })
 const { getList } = methods
 
