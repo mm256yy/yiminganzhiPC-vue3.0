@@ -198,9 +198,8 @@ const defaultRow = {
 // 填报完成
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
-    id: props.baseInfo.id,
     doorNo: props.doorNo,
-    landStatus: '1'
+    specialStatus: '1'
   })
   if (result && Array.isArray(result)) {
     reportDialog.value = true
