@@ -108,12 +108,12 @@
         <ElTableColumn
           label="成新率"
           :width="180"
-          prop="discountRate"
+          prop="newnessRate"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber :min="0" v-model="row.discountRate" :precision="2" />
+            <ElInputNumber :min="0" v-model="row.newnessRate" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -138,9 +138,15 @@
             <ElInputNumber :min="0" v-model="row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
+        <ElTableColumn
+          label="备注"
+          :width="180"
+          prop="valuationRemark"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
-            <ElInput placeholder="请输入" v-model="row.remark" />
+            <ElInput placeholder="请输入" v-model="row.valuationRemark" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
@@ -212,16 +218,15 @@ const defaultRow = {
   amount: 0, // 原值
   moveType: '', // 搬迁方式
   valuationPrice: 0, // 评估单价(万元)
-  discountRate: 0, // 成新率
+  newnessRate: 0, // 成新率
   valuationAmount: 0, // 评估金额
   compensationAmount: 0, // 补偿金额(万元)
-  remark: ''
+  valuationRemark: '' // 评估备注
 }
 
 // 填报完成
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
-    id: props.baseInfo.id,
     doorNo: props.doorNo,
     equipmentStatus: '1'
   })

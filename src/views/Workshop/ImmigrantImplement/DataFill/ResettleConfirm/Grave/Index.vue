@@ -161,7 +161,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settingRemark',
+    field: 'remark',
     label: '备注',
     search: {
       show: false

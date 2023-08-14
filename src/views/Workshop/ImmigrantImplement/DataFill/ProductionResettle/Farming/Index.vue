@@ -99,6 +99,7 @@ const getFarming = () => {
 const getList = () => {
   getDemographicListApi({
     projectId: props.baseInfo.projectId,
+    status: props.baseInfo.status,
     page: 0,
     size: 50,
     doorNo: props.doorNo,

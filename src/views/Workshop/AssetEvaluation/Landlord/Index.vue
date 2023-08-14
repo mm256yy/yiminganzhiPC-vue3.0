@@ -136,7 +136,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: 'implementation'
 }
 
 setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
@@ -273,7 +274,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {

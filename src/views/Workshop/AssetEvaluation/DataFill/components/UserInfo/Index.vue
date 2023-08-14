@@ -5,7 +5,7 @@
         <Icon :icon="infoData.icon" color="#3E73EC" />
         <div class="pl-12px text-size-16px text-[#000]">{{ props.baseInfo.name }}</div>
         <div class="pl-8px text-size-14px text-[#1C5DF1]">
-          {{ filterViewDoorNo(props.baseInfo) }}
+          {{ props.baseInfo.showDoorNo }}
         </div>
       </div>
       <ElSpace>
@@ -191,7 +191,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
-import { filterViewDoorNo, fmtStr } from '@/utils/index'
+import { fmtStr } from '@/utils/index'
 
 interface PropsType {
   baseInfo: any

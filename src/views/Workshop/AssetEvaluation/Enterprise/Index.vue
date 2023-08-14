@@ -32,7 +32,7 @@
             家
           </div>
         </div>
-        <div> </div>
+        <div></div>
       </div>
       <Table
         selection
@@ -57,9 +57,9 @@
               ${row.cityCodeText ? row.cityCodeText + '/' : ''}
               ${row.areaCodeText ? row.areaCodeText : ''}
               ${row.townCodeText ? '/' + row.townCodeText : ''}
-              ${row.villageText ? '/' + row.villageText : ''}
-              ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
-              `
+             ${row.villageText ? '/' + row.villageText : ''}
+             ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
+            `
             }}
           </div>
         </template>
@@ -128,7 +128,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: 'implementation'
 }
 
 setSearchParams({ type: 'Company', status: SurveyStatusEnum.Implementation })
@@ -250,7 +251,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '企业编码',
     width: 100,
     search: {
