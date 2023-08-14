@@ -162,7 +162,7 @@
     </div>
 
     <div class="table-wrap !py-12px !mt-0px no-data" v-if="!baseInfo.houseAreaType">
-      该户未选择搬迁安置方式，请前往模拟安置中选择搬迁安置方式
+      该户未选择搬迁安置方式，请前往安置确认中选择搬迁安置方式
     </div>
 
     <div class="table-wrap !py-12px !mt-0px no-data" v-if="baseInfo.houseAreaType === 'oneself'">

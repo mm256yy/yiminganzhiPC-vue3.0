@@ -10,9 +10,9 @@
   >
     <div style="text-align: right">
       <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-if="false">编辑</ElButton>
-      <ElButton :icon="saveIcon" :loading="saveloading" type="primary" @click="onSubmit(formRef)"
-        >保存</ElButton
-      >
+      <ElButton :icon="saveIcon" :loading="saveloading" type="primary" @click="onSubmit(formRef)">
+        保存
+      </ElButton>
     </div>
 
     <ElForm
@@ -130,8 +130,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="经济性质" prop="economicNature">
             <ElInput v-model="form.economicNature" placeholder="请输入" class="!w-full" />
@@ -154,8 +155,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="成立日期" prop="establishDate">
             <el-date-picker v-model="form.establishDate" type="date" placeholder="请选择成立日期" />
@@ -173,8 +175,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="注册资金" prop="registeredAmount">
             <ElInput
@@ -183,8 +186,8 @@
               v-model="form.registeredAmount"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
 
@@ -194,8 +197,9 @@
       <ElRow justify="center">
         <ElCol :span="14">
           <ElFormItem label="经营范围" prop="natureBusiness">
-            <ElInput type="textarea" v-model="form.natureBusiness" /> </ElFormItem
-        ></ElCol>
+            <ElInput type="textarea" v-model="form.natureBusiness" />
+          </ElFormItem>
+        </ElCol>
 
         <ElCol :span="7" />
       </ElRow>
@@ -212,8 +216,8 @@
               v-model="form.fixedAssetsOriginalValue"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
@@ -224,8 +228,8 @@
               v-model="form.fixedAssetsNetValue"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7" />
@@ -239,8 +243,8 @@
               v-model.number="form.regularWorkerNum"
               oninput="value=value.replace(/[^\d]/g,'')"
             >
-              <template #append>人</template></ElInput
-            >
+              <template #append>人</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
@@ -251,8 +255,8 @@
               v-model.number="form.temporaryWorkerNum"
               oninput="value=value.replace(/[^\d]/g,'')"
             >
-              <template #append>人</template></ElInput
-            >
+              <template #append>人</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
@@ -263,8 +267,8 @@
               v-model="form.annualPayroll"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -277,8 +281,8 @@
               v-model="form.averageAnnualOutputValue"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
@@ -289,8 +293,8 @@
               v-model="form.averageAnnualProfit"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
@@ -301,8 +305,8 @@
               v-model="form.averageAnnualTaxPaid"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             >
-              <template #append>万元</template></ElInput
-            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -320,8 +324,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="主要产品种类" prop="productCategory">
             <ElInput :min="0" v-model="form.productCategory" />
@@ -340,8 +345,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
 
         <ElCol :span="7" />
         <ElCol :span="7" />
@@ -356,8 +362,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
 
         <ElCol :span="7" />
         <ElCol :span="7" />
@@ -416,9 +423,9 @@
           :multiple="true"
           :file-list="otherPic"
           :headers="headers"
-          :on-success="uploadFileChange4"
+          :on-success="uploadFileChange2"
           :before-remove="beforeRemove"
-          :on-remove="removeFile4"
+          :on-remove="removeFile2"
           :on-preview="imgPreview"
         >
           <template #trigger>
@@ -441,6 +448,11 @@
       </ElFormItem>
     </ElForm>
   </div>
+
+  <!-- 查看图片 -->
+  <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
+    <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+  </ElDialog>
 </template>
 
 <script setup lang="ts">
@@ -458,7 +470,8 @@ import {
   ElRow,
   ElCol,
   ElMessageBox,
-  ElMessage
+  ElMessage,
+  ElDialog
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
@@ -474,10 +487,7 @@ import {
 } from '@/api/workshop/enterprise/service'
 import { validateIdNo, checkTel } from '@/utils/index'
 import { useIcon } from '@/hooks/web/useIcon'
-const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
-const saveIcon = useIcon({ icon: 'mingcute:save-line' })
-const actionType2 = ref('')
-const { required } = useValidator()
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -485,29 +495,29 @@ interface PropsType {
   doorNo: string
   householdId
 }
-const saveloading = ref(false)
+
 interface FileItemType {
   name: string
   url: string
 }
 
+const addIcon = useIcon({ icon: 'ant-design:edit-filled' })
+const saveIcon = useIcon({ icon: 'mingcute:save-line' })
+const saveloading = ref(false)
+const { required } = useValidator()
+
 const onAddRow = () => {}
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
-// const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
-
 const dictObj = computed(() => dictStore.getDictObj)
 
 const defaultValue: Omit<DemographicDtoType, 'id'> = {}
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
-// const placeholderList = ref<string[]>([])
 const licensePic = ref<FileItemType[]>([])
-const cardEnd = ref<FileItemType[]>([])
-const householdPic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -516,27 +526,6 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
-// //处理表单不同状态下的placeholder
-// watch(
-//   () => props.actionType,
-//   (newValue) => {
-//     if (newValue == 'view') {
-//       placeholderList.value = ['', '', '', '', '', ' ']
-//     } else {
-//       placeholderList.value = [
-//         '请输入姓名',
-//         '请输入身份证号',
-//         '请选择日期',
-//         '请输入工作单位',
-//         '请输入户籍所在地',
-//         '请选择'
-//       ]
-//     }
-//   },
-//   //可选immediate: true马上执行
-//   { deep: true, immediate: true }
-// )
 
 watch(
   () => props.rowdata,
@@ -549,17 +538,11 @@ watch(
     } else {
       form.value = { ...defaultValue }
       licensePic.value = []
-      cardEnd.value = []
-      householdPic.value = []
       otherPic.value = []
     }
     try {
       if (form.value.licensePic) {
         licensePic.value = JSON.parse(form.value.licensePic)
-      }
-
-      if (form.value.householdPic) {
-        householdPic.value = JSON.parse(form.value.householdPic)
       }
 
       if (form.value.otherPic) {
@@ -578,7 +561,6 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   legalPersonName: [required()],
-
   legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
   legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()]
 })
@@ -592,7 +574,7 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: DemographicDtoType) => {
-  if (props.actionType === 'add' && actionType2.value != 'edit') {
+  if (props.actionType === 'add') {
     await addCompanyApi({
       ...data,
       doorNo: props.doorNo,
@@ -609,15 +591,16 @@ const submit = async (data: DemographicDtoType) => {
     doorNo: props.doorNo
   }).then((res) => {
     form.value = res.content[0]
-    actionType2.value = 'edit'
   })
   ElMessage.success('操作成功！')
   saveloading.value = false
   onClose(true)
 }
+
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
@@ -626,19 +609,19 @@ const onSubmit = debounce((formEl) => {
       const data: any = {
         ...form.value,
         licensePic: JSON.stringify(licensePic.value),
-        householdPic: JSON.stringify(householdPic.value),
         otherPic: JSON.stringify(otherPic.value)
       }
-
       submit(data)
     } else {
       return false
     }
   })
 }, 0)
+
 defineExpose({
   onSubmit
 })
+
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
   let list: FileItemType[] = []
@@ -652,12 +635,9 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
         }
       })
   }
-  if (type === 'card-front') {
+
+  if (type === 'license') {
     licensePic.value = list
-  } else if (type === 'card-end') {
-    cardEnd.value = list
-  } else if (type === 'householdPic') {
-    householdPic.value = list
   } else if (type === 'other') {
     otherPic.value = list
   }
@@ -665,20 +645,17 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: any, fileList: UploadFiles) => {
-  console.log(fileList)
-  licensePic.value.push({ name: _file.name, url: _file.response.data })
+  handleFileList(fileList, 'license')
 }
-const uploadFileChange4 = (_response: any, _file: any, fileList: UploadFiles) => {
-  console.log(fileList)
-  // handleFileList(fileList, 'other')
-  otherPic.value.push({ name: _file.name, url: _file.response.data })
+const uploadFileChange2 = (_response: any, _file: any, fileList: UploadFiles) => {
+  handleFileList(fileList, 'other')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'card-front')
+  handleFileList(fileList, 'license')
 }
-const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
+const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'other')
 }
 
@@ -689,6 +666,7 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => false
   )
 }
+
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!

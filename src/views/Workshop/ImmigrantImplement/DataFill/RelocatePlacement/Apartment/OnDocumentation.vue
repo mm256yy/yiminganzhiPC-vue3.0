@@ -226,6 +226,7 @@ const onSubmit = debounce((formEl) => {
       } else {
         let params: any = {
           ...form.value,
+          doorNo: props.doorNo,
           flatAgreementPic: JSON.stringify(flatAgreementPic.value || []), // 交房协议
           flatMeasurementPic: JSON.stringify(flatMeasurementPic.value || []), // 购房测算表
           flatOtherPic: JSON.stringify(flatOtherPic.value || []) // 其他附件

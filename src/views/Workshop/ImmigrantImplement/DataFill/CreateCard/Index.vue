@@ -334,7 +334,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'addReason',
+    field: 'addReasonText',
     label: '新增原因',
     search: {
       show: false
