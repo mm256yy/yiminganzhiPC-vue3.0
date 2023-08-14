@@ -94,22 +94,6 @@
   </WorkContentWrap>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { globalData } from '@/config/fill'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-
-export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/Landlord') {
-      // 移民实施 -- 居民户资产评估
-      globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
-    }
-    next()
-  }
-})
-</script>
-
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -119,11 +103,15 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
-import { locationTypes, ImplementFillStatusEnums } from '@/views/Workshop/components/config'
+import {
+  locationTypes,
+  ImplementFillStatusEnums,
+  SurveyStatusEnum
+} from '@/views/Workshop/components/config'
 import { filterViewDoorNo, formatDate } from '@/utils/index'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -151,7 +139,7 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'PeasantHousehold' })
+setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
@@ -166,7 +154,10 @@ const getdistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'PeasantHousehold' })
+  const info = await getLandlordHeadApi({
+    type: 'PeasantHousehold',
+    status: SurveyStatusEnum.Implementation
+  })
   headInfo.value = info
 }
 
@@ -404,10 +395,12 @@ const onSearch = (data) => {
         params[getParamsKey(item.districtType)] = params.code
       }
       params.type = 'PeasantHousehold'
+      params.status = SurveyStatusEnum.Implementation
       setSearchParams({ ...params })
     })
   } else {
     params.type = 'PeasantHousehold'
+    params.status = SurveyStatusEnum.Implementation
     setSearchParams({ ...params })
   }
 }

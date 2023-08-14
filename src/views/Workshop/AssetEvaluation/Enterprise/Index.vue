@@ -93,22 +93,6 @@
   </WorkContentWrap>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { globalData } from '@/config/fill'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-
-export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/Enterprise') {
-      // 移民实施 -- 企业资产评估
-      globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
-    }
-    next()
-  }
-})
-</script>
-
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -116,14 +100,14 @@ import { useAppStore } from '@/store/modules/app'
 import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
-import { locationTypes } from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
@@ -147,7 +131,7 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'Company' })
+setSearchParams({ type: 'Company', status: SurveyStatusEnum.Implementation })
 
 const districtTree = ref<any>([])
 const getDistrictTree = async () => {
@@ -157,7 +141,10 @@ const getDistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
+  const info = await getLandlordHeadApi({
+    type: 'Company',
+    status: SurveyStatusEnum.Implementation
+  })
   headInfo.value = info
 }
 
@@ -380,11 +367,12 @@ const onSearch = (data) => {
       }
 
       params.type = 'Company'
+      params.status = SurveyStatusEnum.Implementation
       setSearchParams({ ...params })
     })
   } else {
     params.type = 'Company'
-
+    params.status = SurveyStatusEnum.Implementation
     setSearchParams({ ...params })
   }
 }

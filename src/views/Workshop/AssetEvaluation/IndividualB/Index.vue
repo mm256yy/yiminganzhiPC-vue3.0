@@ -92,22 +92,6 @@
   </WorkContentWrap>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { globalData } from '@/config/fill'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-
-export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/IndividualB') {
-      // 移民实施 -- 个体工商户资产评估
-      globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
-    }
-    next()
-  }
-})
-</script>
-
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -117,10 +101,10 @@ import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { locationTypes } from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { formatDate } from '@/utils/index'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -146,7 +130,7 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'IndividualHousehold' })
+setSearchParams({ type: 'IndividualHousehold', status: SurveyStatusEnum.Implementation })
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'IndividualHousehold')
@@ -155,7 +139,10 @@ const getVillageTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'IndividualHousehold' })
+  const info = await getLandlordHeadApi({
+    type: 'IndividualHousehold',
+    status: SurveyStatusEnum.Implementation
+  })
   headInfo.value = info
 }
 
@@ -375,10 +362,12 @@ const onSearch = (data) => {
       }
 
       params.type = 'IndividualHousehold'
+      params.status = SurveyStatusEnum.Implementation
       setSearchParams({ ...params })
     })
   } else {
     params.type = 'IndividualHousehold'
+    params.status = SurveyStatusEnum.Implementation
     setSearchParams({ ...params })
   }
 }

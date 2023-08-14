@@ -93,22 +93,6 @@
   </WorkContentWrap>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { globalData } from '@/config/fill'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-
-export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/VillageCollective') {
-      // 移民实施 -- 村集体资产评估
-      globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
-    }
-    next()
-  }
-})
-</script>
-
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
@@ -120,10 +104,10 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/workshop/landlord/service'
+import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { locationTypes } from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { formatDate } from '@/utils/index'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -152,7 +136,7 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'Village' })
+setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'Village')
@@ -161,7 +145,10 @@ const getVillageTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Village' })
+  const info = await getLandlordHeadApi({
+    type: 'Village',
+    status: SurveyStatusEnum.Implementation
+  })
   headInfo.value = info
 }
 
@@ -397,10 +384,12 @@ const onSearch = (data) => {
       }
 
       params.type = 'Village'
+      params.status = SurveyStatusEnum.Implementation
       setSearchParams({ ...params })
     })
   } else {
     params.type = 'Village'
+    params.status = SurveyStatusEnum.Implementation
     setSearchParams({ ...params })
   }
 }
