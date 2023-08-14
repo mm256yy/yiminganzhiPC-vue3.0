@@ -261,7 +261,7 @@
       <ent-relocation-agreement v-if="tabCurrentId === 3" />
 
       <!-- 相关手续 -->
-      <ent-procedures v-if="tabCurrentId === 4" />
+      <ent-procedures :doorNo="doorNo" v-if="tabCurrentId === 4" />
     </div>
 
     <!-- 个体工商户 -->
