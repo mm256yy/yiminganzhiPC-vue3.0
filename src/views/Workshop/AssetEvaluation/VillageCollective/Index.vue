@@ -149,7 +149,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: 'implementation'
 }
 
 setSearchParams({ type: 'Village' })
