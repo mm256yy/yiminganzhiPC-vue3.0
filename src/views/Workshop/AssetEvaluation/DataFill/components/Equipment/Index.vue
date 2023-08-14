@@ -221,6 +221,7 @@ const defaultRow = {
 // 填报完成
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
+    id: props.baseInfo.id,
     doorNo: props.doorNo,
     equipmentStatus: '1'
   })
