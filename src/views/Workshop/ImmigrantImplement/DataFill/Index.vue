@@ -379,7 +379,7 @@ import ProduceArrange from './ResettleConfirm/Produce/Index.vue' // 安置确认
 import GraveArrange from './ResettleConfirm/Grave/Index.vue' // 安置确认 -- 坟墓安置
 
 import ProdLand from './SiteConfirmation/ProdLand/Index.vue' // 择址确认 -- 生产用地
-import SiteSel from './SiteConfirmation/SiteSel/Index.vue' // 择址确认 -- 择房择址
+import SiteSel from './SiteConfirmation/SiteSel/Index.vue' // 择址确认 -- 选房择址
 import TombSiteSel from './SiteConfirmation/TombSiteSel/Index.vue' // 择址确认 -- 坟墓择址
 
 import HouseholdAgreementSign from './Agreement/HouseholdAgreementSign.vue' // 居民户 -- 协议签订

@@ -62,6 +62,18 @@
             <div class="txt">{{ fmtStr(props.baseInfo.familyNum, '人') }}</div>
           </div>
         </el-col>
+        <el-col :span="12">
+          <div class="info-item">
+            <div class="tit">户籍所在地：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.address) }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">所属网格：</div>
+            <div class="txt"> - </div>
+          </div>
+        </el-col>
       </el-row>
     </div>
 

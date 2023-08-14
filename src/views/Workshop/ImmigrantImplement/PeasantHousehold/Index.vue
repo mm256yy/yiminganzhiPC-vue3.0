@@ -25,9 +25,9 @@
             <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum }}</span> 人
             <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
+            已完成<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> ）
+            未完成<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> ）
           </div>
         </div>
       </div>
@@ -381,6 +381,7 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
+  console.log('data:', data)
   // 处理参数
   let params = {
     ...data
