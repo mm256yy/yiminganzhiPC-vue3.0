@@ -31,7 +31,9 @@
 
           <ElRow>
             <ElCol :span="24">
-              <ElFormItem label="区块：">{{ form.settleAddress }}</ElFormItem>
+              <ElFormItem label="区块：">
+                {{ getSettleAddress(form.settleAddress) }}
+              </ElFormItem>
             </ElCol>
           </ElRow>
 
@@ -146,6 +148,7 @@ import {
   saveImmigrantLandApi
 } from '@/api/immigrantImplement/siteConfirmation/prodLand-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
+import { resettleArea, apartmentArea } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -188,6 +191,35 @@ const initData = () => {
       landPic.value = JSON.parse(form.value.landPic)
     }
   })
+}
+
+/**
+ * 获取安置区块
+ * @param data
+ */
+const getSettleAddress = (data: string) => {
+  if (data) {
+    // 选择了公寓房的安置方式
+    if (props.baseInfo.houseAreaType === 'flat') {
+      let str = ''
+      apartmentArea.map((item: any) => {
+        if (item.id === data) {
+          str = item.name
+        }
+      })
+      return str
+    } else {
+      let str = ''
+      resettleArea.map((item: any) => {
+        if (item.id === data) {
+          str = item.name
+        }
+      })
+      return str
+    }
+  } else {
+    return ''
+  }
 }
 
 // 获取地块编号配置数据
