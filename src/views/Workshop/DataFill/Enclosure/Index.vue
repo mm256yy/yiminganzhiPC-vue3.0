@@ -37,11 +37,12 @@ import {
   updateEnclosureListApi,
   addEnclosureListApi
 } from '@/api/workshop/datafill/enclosure-service'
-// import { EnclosureDtoType } from '@/api/workshop/datafill/enclosure-types'
+
 interface FileItemType {
   name: string
   url: string
 }
+
 interface PropsType {
   householdId: string
   doorNo: string

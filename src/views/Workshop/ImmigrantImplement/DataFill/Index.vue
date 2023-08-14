@@ -54,6 +54,7 @@
           >
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
+            <Icon v-if="item.active" class="active-icon" icon="gg:check-o" color="#67c23a" />
           </div>
         </div>
       </div>
@@ -260,7 +261,7 @@
       <ent-relocation-agreement v-if="tabCurrentId === 3" />
 
       <!-- 相关手续 -->
-      <ent-procedures v-if="tabCurrentId === 4" />
+      <ent-procedures :doorNo="doorNo" v-if="tabCurrentId === 4" />
     </div>
 
     <!-- 个体工商户 -->
@@ -465,8 +466,26 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.arrangementStatus // 安置确认总状态
+      if (data.relocateArrangementStatus === '1') {
+        subTabsList.value[4].active = true
+      }
+      if (data.productionArrangementStatus === '1') {
+        subTabsList.value[5].active = true
+      }
+      if (data.graveArrangementStatus === '1') {
+        subTabsList.value[6].active = true
+      }
     } else if (tabCurrentId.value === 5) {
       fillingStatus.value = data.chooseStatus // 择址确认总状态
+      if (data.landUseStatus === '1') {
+        subTabsList.value[7].active = true
+      }
+      if (data.chooseHouseStatus === '1') {
+        subTabsList.value[8].active = true
+      }
+      if (data.chooseGraveStatus === '1') {
+        subTabsList.value[9].active = true
+      }
     } else if (tabCurrentId.value === 6) {
       fillingStatus.value = data.agreementStatus // 协议签订总状态
     } else if (tabCurrentId.value === 7) {
@@ -624,6 +643,10 @@ const onBack = () => {
     .tit {
       margin-left: 6px;
       // user-select: none;
+    }
+
+    .active-icon {
+      margin-left: 6px;
     }
 
     &.active {
