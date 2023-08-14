@@ -80,7 +80,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import { DemographicDtoType } from '@/api/workshop/population/types'
 import { standardFormatDate } from '@/utils/index'
-import RecordListDialog from '../../components/RecordListDialog.vue'
+import RecordListDialog from '../components/RecordListDialog.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface PropsType {
