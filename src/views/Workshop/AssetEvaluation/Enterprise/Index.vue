@@ -99,11 +99,9 @@ import { globalData } from '@/config/fill'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 export default defineComponent({
-  beforeRouteEnter(to, _from, next) {
-    if (to.path === '/Workshop/Enterprise') {
-      // 移民实施 -- 企业资产评估
-      globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
-    }
+  beforeRouteEnter(_to, _from, next) {
+    // 移民实施 -- 企业资产评估
+    globalData.currentSurveyStatus = SurveyStatusEnum.Implementation
     next()
   }
 })
