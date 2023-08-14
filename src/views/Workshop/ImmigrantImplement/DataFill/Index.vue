@@ -302,7 +302,7 @@
       <individual-relocation-agreement v-if="tabCurrentId === 3" />
 
       <!-- 相关手续 -->
-      <individual-procedures v-if="tabCurrentId === 4" />
+      <individual-procedures :doorNo="doorNo" v-if="tabCurrentId === 4" />
     </div>
 
     <!-- 村集体 -->
