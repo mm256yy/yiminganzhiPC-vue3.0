@@ -199,8 +199,8 @@ const initData = () => {
 }
 
 // 关闭弹窗
-const onClose = () => {
-  emit('close')
+const onClose = (flag = false) => {
+  emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
   })
@@ -210,7 +210,7 @@ const submit = (data: any) => {
   saveDocumentationApi(data).then(() => {
     ElMessage.success('操作成功！')
   })
-  onClose()
+  onClose(true)
 }
 
 // 提交表单

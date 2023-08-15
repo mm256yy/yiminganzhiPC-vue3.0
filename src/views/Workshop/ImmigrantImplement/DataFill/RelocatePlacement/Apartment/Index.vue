@@ -66,7 +66,7 @@ const props = defineProps<PropsType>()
 const tableData = ref<any[]>([])
 const dialog = ref<boolean>(false)
 const isHandled = ref<boolean>(false)
-// const emit = defineEmits(['updateData'])
+const emit = defineEmits(['updateData'])
 
 // 获取列表数据
 const getList = () => {
@@ -78,7 +78,8 @@ const getList = () => {
 // 获取交房协议是否办理的结果
 const getDocumentationCheckResult = () => {
   documentationCheckApi(props.doorNo, 'flatAgreementPic').then((res: any) => {
-    isHandled.value = res.data
+    console.log('res:', res)
+    isHandled.value = res
   })
 }
 
@@ -99,10 +100,13 @@ const onDocumentation = () => {
  * 关闭归档弹窗
  * @param flag
  */
-const close = () => {
+const close = (flag: boolean) => {
   dialog.value = false
-  getList()
-  getDocumentationCheckResult()
+  if (flag == true) {
+    emit('updateData')
+    getList()
+    getDocumentationCheckResult()
+  }
 }
 
 onMounted(() => {

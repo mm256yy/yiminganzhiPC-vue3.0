@@ -63,7 +63,12 @@
     <!-- 居民户 -->
     <div class="data-fill-body" v-if="type === 'PeasantHousehold'">
       <!-- 居民户信息 -->
-      <household-info :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 0" />
+      <household-info
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+        v-if="tabCurrentId === 0"
+      />
 
       <!-- 资格认定 -->
       <template v-if="tabCurrentId === 1">
@@ -110,6 +115,7 @@
         <relocation-arrange
           :doorNo="doorNo"
           :baseInfo="baseInfo"
+          @update-data="getLandlordInfo"
           v-if="subTabCurrentId === TabIds[0]"
         />
 
@@ -156,7 +162,12 @@
       <household-agreement-sign :doorNo="doorNo" v-if="tabCurrentId === 6" />
 
       <!-- 居民户 -- 移民建卡 -->
-      <create-card :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 7" />
+      <create-card
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+        v-if="tabCurrentId === 7"
+      />
 
       <!-- 腾空过渡 -->
       <template v-if="tabCurrentId == 8">

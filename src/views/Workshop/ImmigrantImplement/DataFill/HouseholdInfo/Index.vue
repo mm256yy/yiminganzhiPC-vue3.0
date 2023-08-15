@@ -344,7 +344,7 @@ const onSave = () => {
   let params = {
     ...form.value,
     doorNo: props.doorNo,
-    householdPic: householdPic.value ? JSON.stringify(familyPic.value) : '',
+    householdPic: householdPic.value ? JSON.stringify(householdPic.value) : '',
     familyPic: familyPic.value ? JSON.stringify(familyPic.value) : '',
     housePic: housePic.value ? JSON.stringify(housePic.value) : '',
     resettlePic: resettlePic.value ? JSON.stringify(resettlePic.value) : ''

@@ -137,7 +137,8 @@
       </el-row>
     </div>
 
-    <div
+    <!-- 居民户 -- 安置确认 tab 页头部信息 -->
+    <!-- <div
       class="other"
       v-if="type === 'PeasantHousehold' && tabCurrentId === 3"
       style="display: block"
@@ -174,7 +175,7 @@
           </div>
         </el-col>
       </el-row>
-    </div>
+    </div> -->
 
     <!-- 腾空过渡、搬迁安置、生产安置、相关手续 -->
     <div

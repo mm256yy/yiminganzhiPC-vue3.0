@@ -214,6 +214,7 @@ onMounted(() => {
 const rules = ref()
 const dialogVisible = ref(false)
 const tableData = ref<any>([])
+const emit = defineEmits(['updateData'])
 
 const getPeopleList = async () => {
   const res = await getProduceListApi({
@@ -328,8 +329,11 @@ const onDocumentation = () => {
 }
 
 // 关闭档案上传弹窗
-const closeDocumentation = () => {
+const closeDocumentation = (flag: boolean) => {
   dialog.value = false
+  if (flag == true) {
+    emit('updateData')
+  }
 }
 
 // 导入

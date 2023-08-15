@@ -23,11 +23,11 @@
           <div class="text">
             （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum }}</span> 人
-            <span class="distance"></span>
+            <span class="num">{{ headInfo.demographicNum }}</span> 人）
+            <!-- <span class="distance"></span>
             已完成<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
-            未完成<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> ）
+            未完成<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> ） -->
           </div>
         </div>
       </div>

@@ -22,7 +22,11 @@
       </div>
       <ElTable v-if="baseInfo.houseAreaType === 'homestead'" :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
-        <ElTableColumn label="安置区" prop="settleAddress" align="center" header-align="center" />
+        <ElTableColumn label="安置区" prop="settleAddress" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ getSettleAddress(row) }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
           <template #default="{ row }">
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
@@ -216,6 +220,7 @@ import {
   saveImmigrantChooseHouseApi
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
+import { resettleArea, apartmentArea } from '../../config'
 
 interface PropsType {
   doorNo: string
@@ -242,6 +247,31 @@ const getList = () => {
   getImmigrantChooseHouseApi(props.doorNo).then((res) => {
     tableData.value = res.content
   })
+}
+
+/**
+ * 获取当前行安置区
+ * @param data 当前行信息
+ */
+const getSettleAddress = (data: any) => {
+  // 选择了公寓房的安置方式
+  if (data.houseAreaType === 'flat') {
+    let str = ''
+    apartmentArea.map((item: any) => {
+      if (item.id === data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+  } else {
+    let str = ''
+    resettleArea.map((item: any) => {
+      if (item.id === data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+  }
 }
 
 // 获取宅基地地块编号选项列表

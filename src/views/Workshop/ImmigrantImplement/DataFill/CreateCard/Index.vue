@@ -182,6 +182,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const dialog = ref<boolean>(false)
 const rewardConfirmDialog = ref<boolean>(false)
+const emit = defineEmits(['updateData'])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
@@ -455,6 +456,7 @@ const submit = (data: any) => {
   updatePeasantHouseholdInfo(data).then((res: any) => {
     if (res) {
       ElMessage.success('操作成功')
+      emit('updateData')
     }
   })
 }
