@@ -201,7 +201,7 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
-    baseInfo.value = res
+    baseInfo.value = { ...res }
   })
 }
 

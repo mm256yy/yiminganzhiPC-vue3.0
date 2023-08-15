@@ -207,6 +207,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const showDialog = ref(false)
+const emit = defineEmits(['updateData'])
 
 // 档案上传
 const onDocumentation = () => {
@@ -214,8 +215,11 @@ const onDocumentation = () => {
 }
 
 // 关闭档案弹窗
-const close = () => {
+const close = (flag: boolean) => {
   showDialog.value = false
+  if (flag == true) {
+    emit('updateData')
+  }
 }
 
 onMounted(() => {
