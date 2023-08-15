@@ -160,7 +160,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'typeText',
     label: '专项类别',
     width: 180,
     search: {
@@ -241,12 +241,6 @@ const onEditRow = async (row: ProfessionalProjectDtoType) => {
   actionType.value = 'edit'
   tableObject.currentRow = { ...row }
   dialog.value = true
-  // const res = await getProfessionalProjectByIdApi(Number(row.id))
-  // if (res) {
-  //   actionType.value = 'edit'
-  //   tableObject.currentRow = res
-  //   dialog.value = true
-  // }
 }
 
 const onFormPupClose = (flag: boolean) => {

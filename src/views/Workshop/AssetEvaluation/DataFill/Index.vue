@@ -22,6 +22,7 @@
 
     <div class="data-fill-head">
       <UserInfo
+        :doorNo="doorNo"
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
         :type="type"
@@ -42,7 +43,7 @@
       </div>
     </div>
 
-    <div class="data-fill-body" v-if="type == 'Landlord'">
+    <div class="data-fill-body">
       <!-- 房屋主体评估 -->
       <main-house
         v-show="tabCurrentId === TabIds[0]"

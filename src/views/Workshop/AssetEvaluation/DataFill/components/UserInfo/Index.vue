@@ -186,14 +186,19 @@
       </div>
     </div>
   </div>
+
+  <!-- 档案上传 -->
+  <OnDocumentation :show="showDialog" :door-no="props.doorNo" @close="close" />
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
 import { fmtStr } from '@/utils/index'
+import OnDocumentation from '../OnDocumentation/Index.vue'
 
 interface PropsType {
+  doorNo: string
   baseInfo: any
   type: any
   householdId: number
@@ -201,9 +206,17 @@ interface PropsType {
 
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
+const showDialog = ref(false)
 
 // 档案上传
-const onDocumentation = () => {}
+const onDocumentation = () => {
+  showDialog.value = true
+}
+
+// 关闭档案弹窗
+const close = () => {
+  showDialog.value = false
+}
 
 onMounted(() => {
   if (props.type == 'Landlord') {

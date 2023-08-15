@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import type { FillTypes, LandlordDtoType } from './types'
+import type { FillTypes, LandlordDtoType, DocumentationType } from './types'
 
 /**
  * 查询居民户信息列表
@@ -40,4 +40,22 @@ export const getLandlordHeadApi = (params: any): Promise<any> => {
     url: `/peasantHousehold/head`,
     params
   })
+}
+
+/**
+ * 获取档案数据
+ * @param doorNo 户号
+ * @returns
+ */
+export const getDocumentationApi = (doorNo: string) => {
+  return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
+}
+
+/**
+ * 档案上传
+ * @param data 表单提交数据
+ * @returns
+ */
+export const saveDocumentationApi = (data: any): Promise<DocumentationType> => {
+  return request.post({ url: '/immigrantDocumentation/save', data })
 }
