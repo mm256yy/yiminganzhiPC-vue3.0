@@ -73,44 +73,71 @@ export default defineComponent({
       }
     }
 
-    return () => (
-      <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
-        {/* 顶部背景 */}
+    if (projects.value && projects.value.length > 1) {
+      return () => (
+        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
+          {/* 顶部背景 */}
 
-        <img class="bg" src={bgImg} />
+          <img class="bg" src={bgImg} />
 
-        <div class="flex items-center justify-between px-16px h-64px relative z-1">
-          <WorkLogo></WorkLogo>
-          <WorkMenu class="flex-1 pl-24px"></WorkMenu>
-          <div class="div">
-            <ElSelect
-              modelValue={selectedProjectId.value}
-              placeholder="选择切换项目"
-              onChange={onProjectChange}
-            >
-              {{
-                default: () => {
-                  return projects.value?.map((x) => (
-                    <ElOption label={x.projectName} value={x.projectId || 0} />
-                  ))
-                }
-              }}
-            </ElSelect>
+          <div class="flex items-center justify-between px-16px h-64px relative z-1">
+            <WorkLogo></WorkLogo>
+            <WorkMenu class="flex-1 pl-24px"></WorkMenu>
+            <div class="div">
+              <ElSelect
+                modelValue={selectedProjectId.value}
+                placeholder="选择切换项目"
+                onChange={onProjectChange}
+              >
+                {{
+                  default: () => {
+                    return projects.value?.map((x) => (
+                      <ElOption label={x.projectName} value={x.projectId || 0} />
+                    ))
+                  }
+                }}
+              </ElSelect>
+            </div>
+
+            <WorkUserInfo></WorkUserInfo>
+          </div>
+          <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-64px)] relative z-1']}>
+            <ElScrollbar v-loading={pageLoading.value} class={[`${prefixCls}-content-scrollbar`]}>
+              <UserAppView></UserAppView>
+            </ElScrollbar>
           </div>
 
-          <WorkUserInfo></WorkUserInfo>
-        </div>
-        <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-64px)] relative z-1']}>
-          <ElScrollbar v-loading={pageLoading.value} class={[`${prefixCls}-content-scrollbar`]}>
-            <UserAppView></UserAppView>
-          </ElScrollbar>
-        </div>
+          <Backtop></Backtop>
 
-        <Backtop></Backtop>
+          {/* <Setting></Setting> */}
+        </section>
+      )
+    } else {
+      return () => (
+        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
+          {/* 顶部背景 */}
 
-        {/* <Setting></Setting> */}
-      </section>
-    )
+          <img class="bg" src={bgImg} />
+
+          <div class="flex items-center justify-between px-16px h-64px relative z-1">
+            <WorkLogo></WorkLogo>
+            <WorkMenu class="flex-1 pl-24px"></WorkMenu>
+            <div class="div"></div>
+
+            <WorkUserInfo></WorkUserInfo>
+          </div>
+          <div class={[`${prefixCls}-content`, 'w-full h-[calc(100%-64px)] relative z-1']}>
+            <ElScrollbar v-loading={pageLoading.value} class={[`${prefixCls}-content-scrollbar`]}>
+              <UserAppView></UserAppView>
+            </ElScrollbar>
+          </div>
+
+          <Backtop></Backtop>
+
+          {/* <Setting></Setting> */}
+        </section>
+      )
+    }
   }
 })
 </script>

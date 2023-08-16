@@ -30,6 +30,9 @@
             未完成<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> ） -->
           </div>
         </div>
+        <ElSpace>
+          <ElButton type="primary">导出列表</ElButton>
+        </ElSpace>
       </div>
       <Table
         selection
@@ -66,11 +69,14 @@
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template>
-        <template #hasPropertyAccount="{ row }">
+        <!-- <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
+        </template> -->
+        <template #currentStage="">
+          <div>资格认定</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
@@ -94,7 +100,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElSpace, ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -106,7 +112,7 @@ import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service
 import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
 import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
-import { filterViewDoorNo, formatDate } from '@/utils/index'
+import { filterViewDoorNo } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
@@ -293,20 +299,34 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+  // {
+  //   field: 'reportUserName',
+  //   label: '填报人员',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'reportDate',
+  //   label: '填报时间',
+  //   search: {
+  //     show: false
+  //   },
+  //   showOverflowTooltip: false
+  // },
   {
-    field: 'reportUserName',
-    label: '填报人员',
+    field: 'grid',
+    label: '所属网格',
     search: {
       show: false
     }
   },
   {
-    field: 'reportDate',
-    label: '填报时间',
+    field: 'currentStage',
+    label: '当前阶段',
     search: {
       show: false
-    },
-    showOverflowTooltip: false
+    }
   },
   {
     field: 'filling',
@@ -327,7 +347,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 200,
+    width: 80,
     search: {
       show: false
     },

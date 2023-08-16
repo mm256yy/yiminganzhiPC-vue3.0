@@ -26,6 +26,9 @@
             共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家村集体
           </div>
         </div>
+        <ElSpace>
+          <ElButton type="primary">导出列表</ElButton>
+        </ElSpace>
       </div>
       <Table
         selection
@@ -87,7 +90,7 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElSpace, ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -311,7 +314,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 150,
+    width: 80,
     search: {
       show: false
     },

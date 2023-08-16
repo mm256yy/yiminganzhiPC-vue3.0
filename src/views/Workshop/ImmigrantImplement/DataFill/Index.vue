@@ -30,11 +30,19 @@
             @click="onTabClick(item)"
           >
             {{ item.name }}
+            <Icon
+              v-if="item.active"
+              class="ml-2px"
+              icon="gg:check-o"
+              :color="tabCurrentId === item.id ? '#fff' : '#3e73ec'"
+            />
           </div>
         </div>
       </div>
 
+      <!-- 用户信息 -->
       <UserInfo
+        v-if="type !== 'PeasantHousehold'"
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
         :doorNo="doorNo"
@@ -54,7 +62,7 @@
           >
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
-            <Icon v-if="item.active" class="active-icon" icon="gg:check-o" color="#67c23a" />
+            <Icon v-if="item.active" class="active-icon" icon="gg:check-o" color="#3e73ec" />
           </div>
         </div>
       </div>
@@ -422,7 +430,7 @@ import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户
 
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
 
-import UserInfo from './components/UserInfo.vue'
+import UserInfo from './components/UserInfo.vue' // 用户基本信息
 import { useRouter } from 'vue-router'
 
 const titleMsg = (type: string, index: number) => {
@@ -477,26 +485,8 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.arrangementStatus // 安置确认总状态
-      if (data.relocateArrangementStatus === '1') {
-        subTabsList.value[4].active = true
-      }
-      if (data.productionArrangementStatus === '1') {
-        subTabsList.value[5].active = true
-      }
-      if (data.graveArrangementStatus === '1') {
-        subTabsList.value[6].active = true
-      }
     } else if (tabCurrentId.value === 5) {
       fillingStatus.value = data.chooseStatus // 择址确认总状态
-      if (data.landUseStatus === '1') {
-        subTabsList.value[7].active = true
-      }
-      if (data.chooseHouseStatus === '1') {
-        subTabsList.value[8].active = true
-      }
-      if (data.chooseGraveStatus === '1') {
-        subTabsList.value[9].active = true
-      }
     } else if (tabCurrentId.value === 6) {
       fillingStatus.value = data.agreementStatus // 协议签订总状态
     } else if (tabCurrentId.value === 7) {
@@ -510,6 +500,91 @@ const getStatus = (data: any) => {
     } else if (tabCurrentId.value === 11) {
       fillingStatus.value = data.proceduresStatus // 相关手续总状态
     }
+
+    // 第一层 Tab
+    if (data.householdPicStatus === '1') {
+      tabsList.value[0].active = true // 居民户信息
+    }
+    if (data.qualificationStatus === '1') {
+      tabsList.value[1].active = true // 资格认定
+    }
+    if (data.estimateeStatus === '1') {
+      tabsList.value[2].active = true // 资产评估
+    }
+    if (data.arrangementStatus === '1') {
+      tabsList.value[4].active = true // 安置确认
+    }
+    if (data.chooseStatus === '1') {
+      tabsList.value[5].active = true // 择址确认
+    }
+    if (data.agreementStatus === '1') {
+      tabsList.value[6].active = true // 协议签订
+    }
+    if (data.cardStatus === '1') {
+      tabsList.value[7].active = true // 移民建卡
+    }
+    if (data.excessSoarStatus === '1') {
+      tabsList.value[8].active = true // 腾空过渡
+    }
+    if (data.relocateArrangementAllStatus === '1') {
+      tabsList.value[9].active = true // 搬迁安置
+    }
+    if (data.productionArrangementAllStatus === '1') {
+      tabsList.value[10].active = true // 生产安置
+    }
+    if (data.proceduresStatus === '1') {
+      tabsList.value[11].active = true // 相关手续
+    }
+
+    // 第二层 Tab
+    if (data.populationStatus === '1') {
+      subTabsList.value[0].active = true // 人口核定
+    }
+    if (data.propertyStatus === '1') {
+      subTabsList.value[1].active = true // 房屋产权
+    }
+    if (data.appendageStatus === '1') {
+      subTabsList.value[2].active = true // 房屋附属物评估报告
+    }
+    if (data.landStatus === '1') {
+      subTabsList.value[3].active = true // 土地附着物评估报告
+    }
+    if (data.relocateArrangementStatus === '1') {
+      subTabsList.value[4].active = true // 搬迁安置
+    }
+    if (data.productionArrangementStatus === '1') {
+      subTabsList.value[5].active = true // 生产安置
+    }
+    if (data.graveArrangementStatus === '1') {
+      subTabsList.value[6].active = true // 坟墓安置
+    }
+    if (data.landUseStatus === '1') {
+      subTabsList.value[7].active = true // 生产用地
+    }
+    if (data.chooseHouseStatus === '1') {
+      subTabsList.value[8].active = true // 选房择址
+    }
+    if (data.chooseGraveStatus === '1') {
+      subTabsList.value[9].active = true // 坟墓择址
+    }
+    if (data.houseSoarStatus === '1') {
+      subTabsList.value[10].active = true // 房屋腾空
+    }
+    if (data.landSoarStatus === '1') {
+      subTabsList.value[11].active = true // 土地腾让
+    }
+    if (data.excessStatus === '1') {
+      subTabsList.value[12].active = true // 过渡安置
+    }
+    if (data.agricultureArrangementStatus === '1') {
+      subTabsList.value[13].active = true // 农业安置
+    }
+    if (data.retirementStatus === '1') {
+      subTabsList.value[14].active = true // 养老保险
+    }
+    if (data.selfEmploymentStatus === '1') {
+      subTabsList.value[15].active = true // 自谋职业
+    }
   } else if (type === 'Enterprise') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
@@ -517,22 +592,90 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.cardStatus // 企业建卡总状态
     } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.excessSoarStatus // 腾空总状态
-    } else if (tabCurrentId.value === 4) {
+    } else if (tabCurrentId.value === 3) {
       fillingStatus.value = data.agreementStatus // 动迁协议总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+
+    // 第一层 Tab
+    if (data.estimateeStatus === '1') {
+      tabsList.value[0].active = true // 资产评估
+    }
+    if (data.cardStatus === '1') {
+      tabsList.value[1].active = true // 企业建卡
+    }
+    if (data.excessSoarStatus === '1') {
+      tabsList.value[2].active = true // 腾空
+    }
+    if (data.agreementStatus === '1') {
+      tabsList.value[3].active = true // 动迁协议
+    }
+    if (data.proceduresStatus === '1') {
+      tabsList.value[4].active = true // 相关手续
+    }
+
+    // 第二层 Tab
+    if (data.appendageStatus === '1') {
+      subTabsList.value[0].active = true // 房屋附属物评估报告
+    }
+    if (data.landStatus === '1') {
+      subTabsList.value[1].active = true // 土地附着物评估报告
+    }
+    if (data.deviceStatus === '1') {
+      subTabsList.value[2].active = true // 设施设备评估报告
+    }
+    if (data.houseSoarStatus === '1') {
+      subTabsList.value[3].active = true // 房屋腾空
+    }
+    if (data.landSoarStatus === '1') {
+      subTabsList.value[4].active = true // 土地腾让
     }
   } else if (type === 'IndividualB') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 1) {
-      fillingStatus.value = data.cardStatus // 企业建卡总状态
+      fillingStatus.value = data.cardStatus // 个体户建卡总状态
     } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.excessSoarStatus // 腾空总状态
-    } else if (tabCurrentId.value === 4) {
+    } else if (tabCurrentId.value === 3) {
       fillingStatus.value = data.agreementStatus // 动迁协议总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.proceduresStatus // 相关手续总状态
+    }
+
+    // 第一层 Tab
+    if (data.estimateeStatus === '1') {
+      tabsList.value[0].active = true
+    }
+    if (data.cardStatus === '1') {
+      tabsList.value[1].active = true
+    }
+    if (data.excessSoarStatus === '1') {
+      tabsList.value[2].active = true
+    }
+    if (data.agreementStatus === '1') {
+      tabsList.value[3].active = true
+    }
+    if (data.proceduresStatus === '1') {
+      tabsList.value[4].active = true
+    }
+
+    // 第二层 Tab
+    if (data.appendageStatus === '1') {
+      subTabsList.value[0].active = true // 房屋附属物评估报告
+    }
+    if (data.landStatus === '1') {
+      subTabsList.value[1].active = true // 土地附着物评估报告
+    }
+    if (data.deviceStatus === '1') {
+      subTabsList.value[2].active = true // 设施设备评估报告
+    }
+    if (data.houseSoarStatus === '1') {
+      subTabsList.value[3].active = true // 房屋腾空
+    }
+    if (data.landSoarStatus === '1') {
+      subTabsList.value[4].active = true // 土地腾让
     }
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
@@ -543,6 +686,37 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.agreementStatus // 协议签订总状态
     } else if (tabCurrentId.value === 3) {
       fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
+    }
+
+    // 第一层 Tab
+    if (data.estimateeStatus === '1') {
+      tabsList.value[0].active = true // 资产评估
+    }
+    if (data.excessSoarStatus === '1') {
+      tabsList.value[1].active = true // 腾空
+    }
+    if (data.excessSoarStatus === '1') {
+      tabsList.value[2].active = true // 协议签订
+    }
+    if (data.disposalMeasuresStatus === '1') {
+      tabsList.value[3].active = true // 集体资产处置方法
+    }
+
+    // 第二层 Tab
+    if (data.appendageStatus === '1') {
+      subTabsList.value[0].active = true // 房屋附属物评估报告
+    }
+    if (data.landStatus === '1') {
+      subTabsList.value[1].active = true // 土地附着物评估报告
+    }
+    if (data.specialStatus === '1') {
+      subTabsList.value[2].active = true // 小型专项及农副业设施评估报告
+    }
+    if (data.houseSoarStatus === '1') {
+      subTabsList.value[3].active = true // 动迁安置
+    }
+    if (data.landSoarStatus === '1') {
+      subTabsList.value[4].active = true // 过渡安置
     }
   }
 }
@@ -617,7 +791,7 @@ const onBack = () => {
     .tab-item {
       display: flex;
       height: 32px;
-      padding: 0 20px;
+      padding: 0 10px;
       margin-right: 4px;
       font-size: 14px;
       color: #000;
