@@ -103,11 +103,29 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
-        path: 'adminHome',
-        name: 'adminHome',
-        component: () => import('@/views/Workshop/Home/AdminIndex.vue'),
+        path: 'leaderSide',
+        name: 'LeaderSide',
+        component: () => import('@/views/Workshop/ExternalLink/LeaderSide.vue'),
         meta: {
-          title: '工作台', // 用于领导端
+          title: '领导工作台', // 外链
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'padSide',
+        name: 'PadSide',
+        component: () => import('@/views/Workshop/ExternalLink/PadSide.vue'),
+        meta: {
+          title: 'PAD端', // 外链
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'migrateSide',
+        name: 'MigrateSide',
+        component: () => import('@/views/Workshop/ExternalLink/MigrateSide.vue'),
+        meta: {
+          title: '移民端', // 外链
           icon: 'ant-design:home-outlined'
         }
       },
