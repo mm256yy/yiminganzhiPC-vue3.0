@@ -12,7 +12,7 @@
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
             填报完成
           </ElButton>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
+          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
             type="primary"
@@ -307,7 +307,7 @@ const props = defineProps<PropsType>()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
+// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const tableData = ref<any[]>([])
@@ -315,30 +315,30 @@ const reportDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 
-const defaultRow = {
-  doorNo: props.doorNo,
-  householdId: props.householdId,
-  projectId: props.projectId,
-  uid: props.uid,
-  status: 'implementation',
-  houseNo: '',
-  hasEstimate: '',
-  situated: '',
-  houseType: '',
-  constructionType: '',
-  completedTime: '',
-  houseHeight: 0,
-  landArea: 0,
-  propertyNo: '',
-  landNo: '',
-  constructionLevel: '',
-  buildingHeight: 0,
-  newnessRate: 0,
-  valuationPrice: 0,
-  valuationAmount: 0,
-  compensationAmount: 0,
-  remark: ''
-}
+// const defaultRow = {
+//   doorNo: props.doorNo,
+//   householdId: props.householdId,
+//   projectId: props.projectId,
+//   uid: props.uid,
+//   status: 'implementation',
+//   houseNo: '',
+//   hasEstimate: '',
+//   situated: '',
+//   houseType: '',
+//   constructionType: '',
+//   completedTime: '',
+//   houseHeight: 0,
+//   landArea: 0,
+//   propertyNo: '',
+//   landNo: '',
+//   constructionLevel: '',
+//   buildingHeight: 0,
+//   newnessRate: 0,
+//   valuationPrice: 0,
+//   valuationAmount: 0,
+//   compensationAmount: 0,
+//   remark: ''
+// }
 
 // 填报完成
 const onReportData = async () => {
@@ -356,9 +356,9 @@ const onReportData = async () => {
 }
 
 // 添加行
-const onAddRow = () => {
-  tableData.value.push({ ...defaultRow })
-}
+// const onAddRow = () => {
+//   tableData.value.push({ ...defaultRow })
+// }
 
 // 获取列表数据
 const getList = () => {

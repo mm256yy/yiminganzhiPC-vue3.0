@@ -161,6 +161,17 @@
             <div>{{ subTotal(row) }}</div>
           </template>
         </ElTableColumn>
+        <ElTableColumn
+          label="新增原因"
+          :width="180"
+          prop="addReason"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElInput placeholder="请输入" v-model="row.addReason" />
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
@@ -233,6 +244,7 @@ const defaultRow = {
   compensationAmount: 0,
   migrationFee: 0,
   otherIncentiveFees: 0,
+  addReason: '',
   remark: ''
 }
 

@@ -107,17 +107,6 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="备注"
-          :width="180"
-          prop="valuationRemark"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.valuationRemark" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
           label="新增原因"
           :width="180"
           prop="addReason"
@@ -126,6 +115,17 @@
         >
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.addReason" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="备注"
+          :width="180"
+          prop="valuationRemark"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.valuationRemark" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action" fixed="right">

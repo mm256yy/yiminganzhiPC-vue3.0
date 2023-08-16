@@ -286,7 +286,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'hasPropertyAccount',
+    field: 'hasPropertyAccountText',
     label: '财产户',
     search: {
       show: false

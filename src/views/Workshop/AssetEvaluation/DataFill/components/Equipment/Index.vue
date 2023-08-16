@@ -139,6 +139,17 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
+          label="新增原因"
+          :width="180"
+          prop="addReason"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElInput placeholder="请输入" v-model="row.addReason" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
           label="备注"
           :width="180"
           prop="valuationRemark"
@@ -221,6 +232,7 @@ const defaultRow = {
   newnessRate: 0, // 成新率
   valuationAmount: 0, // 评估金额
   compensationAmount: 0, // 补偿金额(万元)
+  addReason: '', // 新增原因
   valuationRemark: '' // 评估备注
 }
 
