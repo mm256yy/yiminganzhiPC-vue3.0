@@ -16,10 +16,10 @@ const { push } = useRouter()
 
 const handleClickItem = (type: number) => {
   const pathMap = {
-    0: 'LanlordEva', // 居民户
-    1: 'EnterpriseEva', // 企业
-    2: 'IndividualEva', // 个体户
-    3: 'VillageCollectiveEva' // 村集体
+    0: 'PeasantHouseholdImp', // 居民户
+    1: 'EnterpriseImp', // 企业
+    2: 'IndividualImp', // 个体户
+    3: 'VillageImp' // 村集体
   }
 
   push({ name: pathMap[type] })
