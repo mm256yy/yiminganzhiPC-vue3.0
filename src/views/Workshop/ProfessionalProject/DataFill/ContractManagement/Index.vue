@@ -89,6 +89,7 @@ const projectId = appStore.currentProjectId
 
 tableObject.params = {
   projectId,
+  professionalId: props.professionalId,
   status: 'implementation'
 }
 
