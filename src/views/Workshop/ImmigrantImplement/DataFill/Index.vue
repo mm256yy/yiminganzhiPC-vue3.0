@@ -42,7 +42,6 @@
 
       <!-- 用户信息 -->
       <UserInfo
-        v-if="type !== 'PeasantHousehold'"
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
         :doorNo="doorNo"

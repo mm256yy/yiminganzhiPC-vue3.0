@@ -1,5 +1,13 @@
 <template>
-  <div class="user-info">
+  <div
+    class="user-info"
+    v-if="
+      (type === 'PeasantHousehold' && tabCurrentId === 0) ||
+      type === 'Enterprise' ||
+      type === 'IndividualB' ||
+      type === 'Village'
+    "
+  >
     <div class="base">
       <div class="user">
         <Icon :icon="infoData.icon" color="#3E73EC" />
@@ -23,8 +31,12 @@
       </ElSpace>
     </div>
 
-    <!-- 居民户基础信息 -->
-    <div class="other mt-15px" v-if="type === 'PeasantHousehold'" style="display: block">
+    <!-- 居民户基础信息（居民户实施阶段只显示第一个tab的居民户基础信息） -->
+    <div
+      class="other mt-15px"
+      v-if="type === 'PeasantHousehold' && tabCurrentId === 0"
+      style="display: block"
+    >
       <el-row>
         <el-col :span="6">
           <div class="info-item">
