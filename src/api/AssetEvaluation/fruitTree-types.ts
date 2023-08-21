@@ -15,5 +15,6 @@ export interface FruitTreeDtoType {
   valuationAmount: number
   compensationAmount: number
   remark: string
+  deleteReason: string
   [key: string]: any
 }

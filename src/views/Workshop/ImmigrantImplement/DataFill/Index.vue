@@ -732,9 +732,10 @@ const getLandlordInfo = () => {
 getLandlordInfo()
 
 const onTabClick = (tabItem) => {
-  if (tabCurrentId.value === tabItem.id) {
-    return
-  }
+  // if (tabCurrentId.value === tabItem.id) {
+  //   return
+  // }
+  console.log('ty', tabItem)
   tabCurrentId.value = tabItem.id
   subTabCurrentId.value = 1
   getFillingStatus()

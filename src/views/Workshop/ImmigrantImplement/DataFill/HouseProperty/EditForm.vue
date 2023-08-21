@@ -510,9 +510,7 @@ const rules = reactive<FormRules>({
   constructionType: [required()],
   houseNature: [required()],
   demographicId: [required()],
-  isCompliance: [required()],
-  landNo: [required()],
-  propertyNo: [required()]
+  isCompliance: [required()]
 })
 
 // 获取房屋产权人列表
