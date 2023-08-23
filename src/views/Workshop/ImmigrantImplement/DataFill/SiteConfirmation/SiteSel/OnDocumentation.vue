@@ -53,14 +53,11 @@
           <ElCol :span="4">
             <ElFormItem label="择房顺序号："> {{ item.placeOrder }} </ElFormItem>
           </ElCol>
-          <ElCol :span="4">
+          <ElCol :span="6">
             <ElFormItem label="户型："> {{ item.area }} </ElFormItem>
           </ElCol>
-          <ElCol :span="4">
-            <ElFormItem label="幢号："> {{ item.houseNo }} </ElFormItem>
-          </ElCol>
-          <ElCol :span="4">
-            <ElFormItem label="室号："> {{ item.roomNo }} </ElFormItem>
+          <ElCol :span="6">
+            <ElFormItem label="幢号-室号："> {{ item.roomNo }} </ElFormItem>
           </ElCol>
         </ElRow>
 

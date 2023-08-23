@@ -123,8 +123,11 @@ const onSave = () => {
  * @param flag
  */
 const closeDocumentationDialog = (flag: boolean) => {
-  console.log('flag:', flag)
   dialog.value = false
+  if (flag == true) {
+    getList()
+    emit('updateData')
+  }
 }
 
 onMounted(() => {
