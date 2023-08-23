@@ -54,7 +54,7 @@
             <ElFormItem label="择房顺序号："> {{ item.placeOrder }} </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="户型："> {{ item.area }} </ElFormItem>
+            <ElFormItem label="套型："> {{ item.area }} </ElFormItem>
           </ElCol>
           <ElCol :span="6">
             <ElFormItem label="幢号-室号："> {{ item.roomNo }} </ElFormItem>
@@ -311,7 +311,11 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!isNullChooseHousePic()) {
-        ElMessage.error('请上传择房/择址确认单')
+        ElMessage.error(
+          `${
+            props.baseInfo?.houseAreaType === 'homestead' ? '请上传择址确认单' : '请上传择房确认单'
+          }`
+        )
         return
       }
       let params: any = []
