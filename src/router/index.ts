@@ -154,7 +154,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         name: 'newDetail',
         component: () => import('@/views/Workshop/Home/components/newDetail.vue'),
         meta: {
-          title: '新闻详情',
+          title: '文章详情',
           hidden: true
         }
       },

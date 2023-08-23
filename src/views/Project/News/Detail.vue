@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap title="新闻详情">
+  <ContentWrap title="文章详情">
     <Form @register="register" :schema="schema" :rules="rules">
       <template #coverPic>
         <span style="position: absolute; top: 0; left: -78px; color: red">*</span>
@@ -169,7 +169,7 @@ onMounted(() => {
 const schema = reactive<FormSchema[]>([
   {
     field: 'type',
-    label: '新闻类型',
+    label: '文章类型',
     component: 'Select',
     componentProps: {
       options: newsTypes as any
@@ -182,16 +182,16 @@ const schema = reactive<FormSchema[]>([
   },
   {
     field: 'title',
-    label: '新闻标题',
+    label: '文章标题',
     component: 'Input'
   },
   {
     field: 'coverPic',
-    label: '新闻封面'
+    label: '文章封面'
   },
   {
     field: 'content',
-    label: '新闻内容',
+    label: '文章内容',
     component: 'Editor',
     componentProps: {
       editorConfig,

@@ -493,7 +493,7 @@
       <div class="right bg-white">
         <div class="echart-title w-613">
           <img src="@/assets/imgs/Icon_news.png" width="15" />
-          <span class="text">新闻通知</span>
+          <span class="text">文章通知</span>
         </div>
         <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
           <ElTabPane name="水库要闻" label="水库要闻">
@@ -594,9 +594,9 @@ const reportResult = ref<any>({
   ConfirmPhysicalApproval: false
 })
 
-// 初始化获取新闻通知 -- 水库要闻列表数据
+// 初始化获取文章通知 -- 水库要闻列表数据
 const initNewsData = () => {
-  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'] }).then((res: any) => {
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' }).then((res: any) => {
     newsList.value = res.content
     newsList.value.forEach((item: any) => {
       item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
@@ -605,7 +605,7 @@ const initNewsData = () => {
   })
 }
 
-// 初始化获取新闻通知 -- 政策法规列表数据
+// 初始化获取文章通知 -- 政策法规列表数据
 const initPolicyData = () => {
   getPolicyListApi({ size: 9999 }).then((res: any) => {
     policyList.value = res.content
@@ -662,7 +662,7 @@ const residentOption = ref({
     }
   ]
 })
-// 点击新闻跳转
+// 点击文章跳转
 const newsHandleClick = () => {}
 
 const statisticsData = ref<any>([])

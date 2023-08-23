@@ -64,7 +64,7 @@
         </div>
 
         <div class="row row-4">
-          <div class="title"> <div class="line"></div>新闻&法规 </div>
+          <div class="title"> <div class="line"></div>文章&法规 </div>
           <div class="tab-list">
             <div
               v-for="item in newsTabList"
@@ -227,7 +227,7 @@
 import { ref } from 'vue'
 import { ElImage } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
-import newsDef from '@/assets/imgs/home/news_def.png' // 引入新闻&法规默认图
+import newsDef from '@/assets/imgs/home/news_def.png' // 引入文章&法规默认图
 import img_sk_1 from '@/assets/imgs/home/img_sk_1.png' // 引入形象面貌图片1
 import img_sk_2 from '@/assets/imgs/home/img_sk_2.png' // 引入形象面貌图片2
 import img_ymyzt from '@/assets/imgs/home/img_ymyzt.png' // 引入移民一张图
@@ -328,7 +328,7 @@ const impProgressOption = ref({
   ]
 })
 
-// 新闻&法规 tab切换数据列表
+// 文章&法规 tab切换数据列表
 const newsTabList = [
   { title: '水库要闻', value: 1 },
   { title: '水库概况', value: 2 },
@@ -338,7 +338,7 @@ const newsTabList = [
   { title: '水库风采', value: 6 }
 ]
 
-// 新闻&法规数据列表
+// 文章&法规数据列表
 const newsList = [
   {
     id: 1,
@@ -428,7 +428,7 @@ const radarMoreClick = () => {
   push({ path: 'adminSecondHome' })
 }
 
-const newsTabVal = ref<number>(1) // 新闻&法规 tab 选中值
+const newsTabVal = ref<number>(1) // 文章&法规 tab 选中值
 const migrateTabVal = ref<number>(1) // 移民一张图 tab 选中值
 const rankTabVal = ref<number>(1) // 工作组比拼晾晒图 tab 选中值
 
