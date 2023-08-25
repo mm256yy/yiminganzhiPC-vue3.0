@@ -184,6 +184,26 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '专业项目/库底清理报告上传',
           hidden: true
         }
+      },
+      {
+        path: '/feedback',
+        component: () => import('@/views/Workshop/Feedback/Index.vue'),
+        name: 'feedback',
+        meta: {
+          hidden: false,
+          title: '问题反馈',
+          noTagsView: true
+        }
+      },
+      {
+        path: '/feedbackdetail',
+        component: () => import('@/views/Workshop/Feedback/Detail.vue'),
+        name: 'feedbackdetail',
+        meta: {
+          hidden: false,
+          title: '问题反馈详情',
+          noTagsView: true
+        }
       }
     ]
   }
