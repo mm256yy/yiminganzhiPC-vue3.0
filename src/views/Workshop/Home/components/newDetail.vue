@@ -2,7 +2,7 @@
   <div style="position: relative; width: 1000px; margin: 10px auto">
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">首页</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">新闻详情</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">文章详情</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="box">
       <div class="back" @click="goback"> <img src="./icon_fh.png" alt="" /> 返回上一页</div>
