@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import { ExportType } from './types'
+import { ExportType, LandlordDtoType } from './types'
 
 /**
  * 导出
@@ -7,4 +7,8 @@ import { ExportType } from './types'
 
 export const getExportApi = (params: ExportType): Promise<any> => {
   return request.get({ url: '/peasantHousehold/export', params, responseType: 'blob' })
+}
+
+export const getGridExportApi = (params: LandlordDtoType): Promise<any> => {
+  return request.get({ url: '/grid/exportGrid', params, responseType: 'blob' })
 }

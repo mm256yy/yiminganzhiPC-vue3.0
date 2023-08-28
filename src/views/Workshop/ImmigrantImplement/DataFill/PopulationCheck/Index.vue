@@ -112,7 +112,7 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-
+console.log(dictObj.value[367], '123')
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi
 })
