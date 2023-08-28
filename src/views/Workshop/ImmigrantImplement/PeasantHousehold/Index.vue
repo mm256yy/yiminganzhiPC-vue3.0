@@ -75,7 +75,7 @@
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template> -->
-        <template>
+        <template #currentStage>
           <div>资格认定</div>
         </template>
         <template #filling="{ row }">
