@@ -111,19 +111,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ElBreadcrumb,
-  ElBreadcrumbItem,
-  ElMessage,
-  ElDialog,
-  ElFormItem,
-  ElSelect,
-  ElOption,
-  ElButton,
-  ElSpace
-} from 'element-plus'
+import { ElMessage, ElDialog, ElFormItem, ElButton, ElSpace } from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -133,11 +122,7 @@ import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/se
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { updateLandlordApi } from '@/api/AssetEvaluation/gird-service'
-import {
-  locationTypes,
-  ImplementFillStatusEnums,
-  SurveyStatusEnum
-} from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { filterViewDoorNo, formatDate } from '@/utils/index'
 import Export from '../../components/Export.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -174,7 +159,6 @@ const exportList = ref<exportListType[]>([
   }
 ])
 const appStore = useAppStore()
-const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -211,9 +195,9 @@ const setAllocationStatus = (targ) => {
   })
 }
 defineExpose({ setAllocationStatus })
-const onExport = () => {
-  exportDialog.value = true
-}
+// const onExport = () => {
+//   exportDialog.value = true
+// }
 const onExportDialogClose = () => {
   exportDialog.value = false
 }

@@ -112,7 +112,6 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElDialog,
@@ -133,11 +132,7 @@ import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service
 import { getGridExportApi } from '@/api/workshop/export/service'
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
-import {
-  locationTypes,
-  ImplementFillStatusEnums,
-  SurveyStatusEnum
-} from '@/views/Workshop/components/config'
+import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { filterViewDoorNo, formatDate } from '@/utils/index'
 import Export from '../../components/Export.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -175,7 +170,6 @@ const exportList = ref<exportListType[]>([
   }
 ])
 const appStore = useAppStore()
-const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])

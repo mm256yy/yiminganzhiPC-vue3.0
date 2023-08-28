@@ -48,7 +48,6 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { ElDialog, ElButton } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
@@ -57,7 +56,6 @@ import { Table } from '@/components/Table'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getLandlordListApi } from '@/api/AssetEvaluation/gird-service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
-import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -73,16 +71,9 @@ const onClose = (flag = false) => {
   emit('close', flag)
 }
 const appStore = useAppStore()
-const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })

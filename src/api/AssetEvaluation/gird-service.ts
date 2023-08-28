@@ -1,5 +1,5 @@
 import request from '@/config/axios'
-import type { LandlordDtoType } from './gird-types'
+import type { LandlordDtoType } from './gird-type'
 
 /**
  * 查询居民户信息列表
