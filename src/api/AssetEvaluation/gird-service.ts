@@ -4,7 +4,7 @@ import type { LandlordDtoType } from './gird-type'
 /**
  * 查询居民户信息列表
  */
-export const getLandlordListApi = (
+export const getLandlordListApiGird = (
   query: Partial<LandlordDtoType>
 ): Promise<TableResponse<LandlordDtoType>> => {
   return request.get({

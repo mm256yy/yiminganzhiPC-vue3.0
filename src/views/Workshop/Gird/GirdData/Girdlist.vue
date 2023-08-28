@@ -54,7 +54,7 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getLandlordListApi } from '@/api/AssetEvaluation/gird-service'
+import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
@@ -75,25 +75,34 @@ const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi
+  getListApi: getLandlordListApiGird
 })
 const { setSearchParams } = methods
 tableObject.params = {
   projectId,
   status: 'implementation'
 }
-
+// interface girdList {
+//   [x: string]: any
+//   id: number
+//   nickName: string
+//   phone: string
+//   peasantHouseholdNumber: number
+//   companyNumber: number
+//   individualHouseholdNumber: number
+//   villageNumber: number
+// }
+// const girdList = ref([] as girdList[])
+// girdList.value = tableObject.tableList
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 console.log(dictObj, '123')
-// setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
-setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []
   return list || []
 }
-
+setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
 const getdistrictTree = async () => {
   const list = await getVillageTreeApi(projectId)
   districtTree.value = list || []

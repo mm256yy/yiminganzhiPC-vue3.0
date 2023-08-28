@@ -17,7 +17,20 @@
         <div> </div>
         <ElSpace>
           <ElButton type="primary" @click="girdList">网格员列表</ElButton>
-          <ElButton type="primary">上传网格分配</ElButton>
+          <ElUpload
+            action="/api/grid/importGrid"
+            :headers="headers"
+            :data="{ projectId }"
+            :show-file-list="false"
+            accept=".xls,.xlsx"
+            :before-upload="beforeUpload"
+            :on-success="uploadDone"
+            :on-error="uploadError"
+          >
+            <template #trigger>
+              <ElButton type="primary" :loading="uploadLoading">上传网格分配</ElButton>
+            </template>
+          </ElUpload>
           <ElButton type="primary" @click="onDownLoad">下载模板</ElButton>
         </ElSpace>
       </div>
@@ -53,25 +66,6 @@
             }}
           </div>
         </template>
-        <template #locationType="{ row }">
-          <div>{{ getLocationText(row.locationType) }}</div>
-        </template>
-        <template #hasPropertyAccount="{ row }">
-          <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
-        </template>
-        <template #implementFillStatus="{ row }">
-          <div class="flex items-center justify-center">
-            <span
-              :class="['status', row.implementFillStatus === '1' ? 'status-suc' : 'status-err']"
-            ></span>
-            <span :class="[row.implementFillStatus === '0' ? 'red' : '']">
-              {{ row.implementFillStatus === '0' ? '未填报' : '已填报' }}
-            </span>
-            <span :class="['ml-5', row.implementEscalationStatus === '0' ? 'red' : '']">
-              {{ row.implementEscalationStatus === '0' ? '未上传报告' : '已上传报告' }}
-            </span>
-          </div>
-        </template>
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template>
@@ -86,14 +80,14 @@
         tableObject.currentRow?.gridmanName
       }}</ElFormItem>
       <ElFormItem label="调整网格员" prop="reason">
-        <!-- <ElSelect clearable filterable v-model="reason" class="!w-full">
+        <ElSelect clearable filterable v-model="reason" class="!w-full">
           <ElOption
-            v-for="item in dictObj[367]"
+            v-for="item in girdLists"
             :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            :label="item.nickName"
+            :value="item.id"
           />
-        </ElSelect> -->
+        </ElSelect>
       </ElFormItem>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
@@ -101,76 +95,44 @@
       </template>
     </el-dialog>
   </WorkContentWrap>
-  <Export
-    :show="exportDialog"
-    :type="'PeasantHousehold'"
-    :list="exportList"
-    @close="onExportDialogClose"
-  />
   <GirdList :show="girdDialog" @close="onFormPupClose" />
 </template>
 
 <script setup lang="ts">
-import { ElMessage, ElDialog, ElFormItem, ElButton, ElSpace } from 'element-plus'
+import {
+  ElDialog,
+  ElFormItem,
+  ElSelect,
+  ElOption,
+  ElButton,
+  ElSpace,
+  ElMessage,
+  ElUpload
+} from 'element-plus'
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
 import { updateLandlordApi } from '@/api/AssetEvaluation/gird-service'
-import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
+import { getLandlordListApi } from '@/api/AssetEvaluation/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
-import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+// import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
 import { getGridExportApi } from '@/api/workshop/export/service'
-import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { filterViewDoorNo, formatDate } from '@/utils/index'
-import Export from '../../components/Export.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import GirdList from './Girdlist.vue'
-interface exportListType {
-  name: string
-  value: string | number
-}
-const exportList = ref<exportListType[]>([
-  {
-    name: '居民户统计表',
-    value: 'exportPeasantHousehold'
-  },
-  {
-    name: '人口调查统计表',
-    value: 'exportDemographic'
-  },
-  {
-    name: '房屋调查统计表',
-    value: 'exportHouse'
-  },
-  {
-    name: '附属物调查统计表',
-    value: 'exportAppendage'
-  },
-  {
-    name: '零星林果木调查统计表',
-    value: 'exportTree'
-  },
-  {
-    name: '家庭收入统计表',
-    value: 'exportImmigrantIncome'
-  }
-])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 const dialogVisible = ref(false)
-const exportDialog = ref(false)
 const girdDialog = ref(false)
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
+const reason = ref()
+const uploadLoading = ref(false)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
@@ -184,12 +146,6 @@ tableObject.params = {
 
 // setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
 setSearchParams({ type: 'IndividualHousehold', status: 'implementation' })
-// const onExport = () => {
-//   exportDialog.value = true
-// }
-const onExportDialogClose = () => {
-  exportDialog.value = false
-}
 const girdList = () => {
   girdDialog.value = true
 }
@@ -213,18 +169,19 @@ const getdistrictTree = async () => {
   return list || []
 }
 
-const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({
-    type: 'PeasantHousehold',
-    status: SurveyStatusEnum.Implementation
-  })
-  headInfo.value = info
-}
+const girdLists = ref<any>({})
 
+const getList = async () => {
+  const list = await getLandlordListApiGird({
+    projectId,
+    status: 'implementation'
+  })
+  girdLists.value = list.content
+}
 onMounted(() => {
   getVillageTree()
   getdistrictTree()
-  getLandlordHeadInfo()
+  getList()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -394,10 +351,6 @@ const getParamsKey = (key: string) => {
   return map[key]
 }
 
-const getLocationText = (key: string) => {
-  return locationTypes.find((item) => item.value === key)?.label
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
@@ -463,11 +416,11 @@ const onSubmit = () => {
   // }
   const params: any = {
     householdId: tableObject.currentRow?.id,
-    gridmanId: 138
+    gridmanId: reason.value
   }
   updateLandlordApi(params).then(() => {
     ElMessage.success('操作成功')
-    setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+    setSearchParams({ type: 'IndividualHousehold', status: SurveyStatusEnum.Implementation })
   })
   dialogVisible.value = false
 }
@@ -477,7 +430,9 @@ const onFormPupClose = () => {
 const onDownLoad = async () => {
   const res = await getGridExportApi({
     type: 'IndividualHousehold',
-    status: SurveyStatusEnum.Implementation
+    status: SurveyStatusEnum.Implementation,
+    sort: ['lastModifiedDate,id,desc'],
+    projectId: projectId
   })
   let filename = res.headers
   filename = filename['content-disposition']
@@ -493,6 +448,32 @@ const onDownLoad = async () => {
   elink.click()
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
+}
+const headers = ref({
+  'Project-Id': projectId,
+  Authorization: appStore.getToken
+})
+const beforeUpload = () => {
+  uploadLoading.value = true
+}
+
+const uploadDone = () => {
+  uploadLoading.value = false
+  ElMessage({
+    message: '正在导入，请等待批量导入结果',
+    type: 'success'
+  })
+  setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
+}
+
+const uploadError = (error) => {
+  try {
+    const response = JSON.parse(error.message)
+    ElMessage.error(response.message)
+    uploadLoading.value = false
+  } catch (err) {
+    console.log('导入报错信息:', err)
+  }
 }
 </script>
 
