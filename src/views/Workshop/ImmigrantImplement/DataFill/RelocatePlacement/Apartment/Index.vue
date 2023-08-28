@@ -33,7 +33,7 @@
           公寓房
         </ElTableColumn>
         <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center" />
-        <ElTableColumn label="房号" prop="roomNo" align="center" header-align="center" />
+        <ElTableColumn label="幢号-室号" prop="roomNo" align="center" header-align="center" />
         <ElTableColumn label="储藏室编号" prop="storeroomNo" align="center" header-align="center" />
         <ElTableColumn label="车位编号" prop="carNo" align="center" header-align="center" />
       </ElTable>
@@ -78,7 +78,6 @@ const getList = () => {
 // 获取交房协议是否办理的结果
 const getDocumentationCheckResult = () => {
   documentationCheckApi(props.doorNo, 'flatAgreementPic').then((res: any) => {
-    console.log('res:', res)
     isHandled.value = res
   })
 }

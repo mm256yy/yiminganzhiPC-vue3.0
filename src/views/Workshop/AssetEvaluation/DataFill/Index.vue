@@ -112,7 +112,7 @@
 
       <!-- 坟墓评估 -->
       <grave
-        v-show="tabCurrentId === TabIds[6]"
+        v-show="type == 'Landlord' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"

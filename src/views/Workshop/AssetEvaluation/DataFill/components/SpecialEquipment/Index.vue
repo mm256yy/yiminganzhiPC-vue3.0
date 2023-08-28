@@ -134,11 +134,21 @@
           </template>
         </ElTableColumn>
       </ElTable>
+      <ElDialog title="提示" :width="500" v-model="dialogVisible">
+        <div class="title-hint"> 是否删除该条记录 </div>
+        <ElFormItem label="删除原因" prop="reason">
+          <ElInput v-model="deleteReason" placeholder="请输入删除原因" />
+        </ElFormItem>
+        <template #footer>
+          <ElButton @click="handleClose">取消</ElButton>
+          <ElButton type="primary" :loading="btnLoading" @click="onDeleteSubmit">确认</ElButton>
+        </template>
+      </ElDialog>
     </div>
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -148,7 +158,9 @@ import {
   ElTable,
   ElTableColumn,
   ElMessageBox,
-  ElMessage
+  ElMessage,
+  ElDialog,
+  ElFormItem
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
@@ -175,6 +187,10 @@ const tableData = ref<any[]>([])
 const reportDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
+const dialogVisible = ref<boolean>(false)
+const btnLoading = ref<boolean>(false)
+const deleteReason = ref('') // 删除原因
+let rowItem = reactive({ id: '' }) // 行信息
 
 const defaultRow = {
   doorNo: props.doorNo,
@@ -242,6 +258,30 @@ const total = () => {
   return sum.toFixed(2)
 }
 
+const onDeleteSubmit = async () => {
+  if (!deleteReason.value) {
+    ElMessage.error('删除原因不能为空')
+    return
+  }
+
+  const params = {
+    ...rowItem,
+    deleteReason: deleteReason.value
+  }
+
+  btnLoading.value = true
+  try {
+    await deleteSpecialEquipmentApi(params.id)
+    btnLoading.value = false
+    getList()
+    emit('updateData')
+    ElMessage.success('删除成功')
+    dialogVisible.value = false
+  } catch (error) {
+    btnLoading.value = false
+  }
+}
+
 // 删除
 const onDelRow = (row) => {
   if (row.id) {
@@ -269,6 +309,11 @@ const onSave = () => {
     getList()
     emit('updateData')
   })
+}
+
+const handleClose = () => {
+  deleteReason.value = ''
+  dialogVisible.value = false
 }
 
 onMounted(() => {

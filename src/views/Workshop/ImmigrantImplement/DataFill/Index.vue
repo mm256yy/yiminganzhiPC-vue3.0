@@ -196,14 +196,14 @@
       <template v-if="tabCurrentId === 9">
         <!-- 自建房 -->
         <SelfBuildHouse
-          v-if="baseInfo.houseAreaType === 'homestead'"
+          v-if="baseInfo.houseAreaType === HouseType.homestead"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
         />
 
         <!-- 公寓房 -->
         <Apartment
-          v-if="baseInfo.houseAreaType === 'flat'"
+          v-if="baseInfo.houseAreaType === HouseType.flat"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
           @update-data="getLandlordInfo"
@@ -211,7 +211,14 @@
 
         <!-- 集中供养 -->
         <CentralizedSupport
-          v-if="baseInfo.houseAreaType === 'concentrate'"
+          v-if="baseInfo.houseAreaType === HouseType.concentrate"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+        />
+
+        <!-- 自谋出路 -->
+        <SelfFindWay
+          v-if="baseInfo.houseAreaType === HouseType.oneself"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
         />
@@ -378,6 +385,7 @@ import {
   IndividualSubTabs,
   VillageSubTabs
 } from './config'
+import { HouseType } from './config'
 
 import { getLandlordByIdApi, getFillingStatusApi } from '@/api/immigrantImplement/common-service'
 
@@ -418,6 +426,7 @@ import TransitionResettle from './Vacate/Transition/Index.vue' // 腾空过渡 �
 import SelfBuildHouse from './RelocatePlacement/SelfBuildHouse/Index.vue' // 搬迁安置 -- 自建房
 import Apartment from './RelocatePlacement/Apartment/Index.vue' // 搬迁安置 -- 公寓房
 import CentralizedSupport from './RelocatePlacement/CentralizedSupport/Index.vue' // 搬迁安置 -- 集中供养
+import SelfFindWay from './RelocatePlacement/SelfFindWay/Index.vue' // 搬迁安置 -- 自谋出路
 
 import FarmingResettle from './ProductionResettle/Farming/Index.vue' // 生产安置 农业安置
 import InsureResettle from './ProductionResettle/Insure/Index.vue' // 生产安置 养老保险
@@ -732,9 +741,10 @@ const getLandlordInfo = () => {
 getLandlordInfo()
 
 const onTabClick = (tabItem) => {
-  if (tabCurrentId.value === tabItem.id) {
-    return
-  }
+  // if (tabCurrentId.value === tabItem.id) {
+  //   return
+  // }
+  console.log('ty', tabItem)
   tabCurrentId.value = tabItem.id
   subTabCurrentId.value = 1
   getFillingStatus()

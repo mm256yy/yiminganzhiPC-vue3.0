@@ -33,7 +33,14 @@
 
       <ElFormItem label="材料" prop="materials">
         <div v-if="actionType === 'edit'">{{ dictFmt(form.materials, 295) }}</div>
-        <ElSelect v-else clearable filterable placeholder="请选择" v-model="form.materials">
+        <ElSelect
+          v-else
+          clearable
+          filterable
+          placeholder="请选择"
+          v-model="form.materials"
+          class="!w-full"
+        >
           <ElOption
             v-for="item in dictObj[295]"
             :key="item.value"
@@ -45,7 +52,14 @@
 
       <ElFormItem label="穴位" prop="graveType">
         <div v-if="actionType === 'edit'">{{ dictFmt(form.graveType, 345) }}</div>
-        <ElSelect v-else clearable filterable placeholder="请选择" v-model="form.graveType">
+        <ElSelect
+          v-else
+          clearable
+          filterable
+          placeholder="请选择"
+          v-model="form.graveType"
+          class="!w-full"
+        >
           <ElOption
             v-for="item in dictObj[345]"
             :key="item.value"
@@ -57,7 +71,13 @@
 
       <ElFormItem label="数量" prop="number">
         <div v-if="actionType === 'edit'">{{ form.number }}</div>
-        <ElInputNumber v-else :min="1" placeholder="请输入数量" v-model="form.number" />
+        <ElInputNumber
+          v-else
+          :min="1"
+          placeholder="请输入数量"
+          v-model="form.number"
+          class="!w-full"
+        />
       </ElFormItem>
 
       <ElFormItem required label="处理方式" prop="handleWay">
@@ -139,7 +159,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 const defaultValue: Omit<GraveDtoType, 'id'> = {
   relation: '',
   marital: '',
-  number: 1,
+  number: 0,
   graveType: '',
   settingRemark: '',
   settingGrave: '',
@@ -184,23 +204,23 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: GraveDtoType) => {
-  const { id, projectId, status } = props.baseInfo
+  const { id, doorNo, projectId, status } = props.baseInfo
   data.number = Number(data.number)
-  const baseInfo = {
-    householdId: id,
+  const params = {
     projectId,
-    status
+    status,
+    registrantDoorNo: doorNo,
+    registrantId: id
   }
   if (props.actionType === 'add') {
     await addGaveArrageApi({
       ...data,
-      doorNo: props.doorNo,
-      ...baseInfo
+      ...params
     })
   } else {
     await updateGaveArrageApi({
       ...data,
-      doorNo: props.doorNo
+      registrantDoorNo: doorNo
     })
   }
   ElMessage.success('操作成功！')

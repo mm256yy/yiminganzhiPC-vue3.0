@@ -192,11 +192,21 @@
           </template>
         </ElTableColumn>
       </ElTable>
+      <ElDialog title="提示" :width="500" v-model="dialogVisible">
+        <div class="title-hint"> 是否删除该条记录 </div>
+        <ElFormItem label="删除原因" prop="reason">
+          <ElInput v-model="deleteReason" placeholder="请输入删除原因" />
+        </ElFormItem>
+        <template #footer>
+          <ElButton @click="handleClose">取消</ElButton>
+          <ElButton type="primary" :loading="btnLoading" @click="onDeleteSubmit">确认</ElButton>
+        </template>
+      </ElDialog>
     </div>
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -208,7 +218,8 @@ import {
   ElTableColumn,
   ElSelect,
   ElOption,
-  ElMessageBox,
+  ElDialog,
+  ElFormItem,
   ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -238,6 +249,10 @@ const tableData = ref<any[]>([])
 const reportDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
+const dialogVisible = ref<boolean>(false)
+const btnLoading = ref<boolean>(false)
+const deleteReason = ref('') // 删除原因
+let rowItem = reactive({ id: '' }) // 行信息
 
 const defaultRow = {
   doorNo: props.doorNo,
@@ -308,24 +323,43 @@ const total = () => {
   return sum.toFixed(2)
 }
 
+const onDeleteSubmit = async () => {
+  if (!deleteReason.value) {
+    ElMessage.error('删除原因不能为空')
+    return
+  }
+
+  const params = {
+    ...rowItem,
+    deleteReason: deleteReason.value
+  }
+
+  btnLoading.value = true
+  try {
+    await deleteLandBasicInfoApi(params.id)
+    btnLoading.value = false
+    getList()
+    emit('updateData')
+    ElMessage.success('删除成功')
+    handleClose()
+  } catch (error) {
+    btnLoading.value = false
+  }
+}
+
 // 删除
 const onDelRow = (row) => {
   if (row.id) {
-    ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
-      type: 'warning',
-      cancelButtonText: '取消',
-      confirmButtonText: '确认'
-    })
-      .then(async () => {
-        await deleteLandBasicInfoApi(row.id)
-        getList()
-        emit('updateData')
-        ElMessage.success('删除成功')
-      })
-      .catch(() => {})
+    rowItem = row
+    dialogVisible.value = true
   } else {
     tableData.value.splice(tableData.value.indexOf(row), 1)
   }
+}
+
+const handleClose = () => {
+  deleteReason.value = ''
+  dialogVisible.value = false
 }
 
 // 保存
@@ -345,5 +379,12 @@ onMounted(() => {
 .btn-txt {
   color: red;
   cursor: pointer;
+}
+
+.title-hint {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
 }
 </style>
