@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">移民实施</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业信息</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">企（事）业单位</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -70,16 +70,11 @@
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template>
-        <template #filling="{ row }">
-          <div class="filling-btn" @click="fillData(row)">数据填报</div>
-        </template>
         <template #action="{ row }">
-          <ElButton type="primary" link @click="onEditRow(row)">编辑</ElButton>
+          <ElButton link type="primary" @click="onCheckRow(row)">查看档案</ElButton>
         </template>
       </Table>
     </div>
-
-    <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" />
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
@@ -89,20 +84,18 @@ import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
-import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getLandlordListApi, getLandlordHeadApi } from '@/api/immigrantImplement/common-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
-const dialog = ref(false) // 弹窗标识
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -279,25 +272,10 @@ const schema = reactive<CrudSchema[]>([
     showOverflowTooltip: false
   },
   {
-    field: 'filling',
-    label: '填报',
-    fixed: 'right',
-    width: 115,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 80,
+    width: 120,
     search: {
       show: false
     },
@@ -311,19 +289,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onEditRow = (row: LandlordDtoType) => {
-  tableObject.currentRow = row
-  dialog.value = true
-}
-
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    setSearchParams({ type: 'Company', status: 'implementation' })
-    getLandlordHeadInfo()
-  }
-}
 
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
@@ -389,33 +354,20 @@ const onSearch = (data) => {
   }
 }
 
-// 数据填报
-const fillData = (row) => {
+// 查看档案
+const onCheckRow = (row) => {
   push({
-    name: 'ImmigrantImpDataFill',
+    name: 'FileMngCheck',
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Enterprise'
+      type: 1
     }
   })
 }
 </script>
 
 <style lang="less" scoped>
-.filling-btn {
-  display: flex;
-  width: 80px;
-  height: 28px;
-  font-size: 14px;
-  color: var(--el-color-primary);
-  cursor: pointer;
-  background: #e9f3ff;
-  border-radius: 4px;
-  align-items: center;
-  justify-content: center;
-}
-
 .status {
   width: 6px;
   height: 6px;

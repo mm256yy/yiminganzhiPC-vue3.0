@@ -1,8 +1,8 @@
 <template>
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">移民实施</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业信息</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">档案管理</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">个体户</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search
@@ -18,17 +18,12 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">企业列表</span>
-
+          <span style="margin: 0 10px; font-size: 16px; font-weight: 600">个体户列表</span>
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
-            <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家水电站
-            <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家矿业权
+            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家个体工商
           </div>
         </div>
       </div>
@@ -70,18 +65,14 @@
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template>
-        <template #filling="{ row }">
-          <div class="filling-btn" @click="fillData(row)">数据填报</div>
-        </template>
         <template #action="{ row }">
-          <ElButton type="primary" link @click="onEditRow(row)">编辑</ElButton>
+          <ElButton type="primary" link @click="onCheckRow(row)">查看档案</ElButton>
         </template>
       </Table>
     </div>
-
-    <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" />
   </WorkContentWrap>
 </template>
+
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
@@ -89,20 +80,20 @@ import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
-import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getLandlordListApi, getLandlordHeadApi } from '@/api/immigrantImplement/common-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
-const dialog = ref(false) // 弹窗标识
+const villageTree = ref<any[]>([])
+
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -120,22 +111,22 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'Company', status: 'implementation' })
+setSearchParams({ type: 'IndividualHousehold', status: 'implementation' })
 
-const districtTree = ref<any>([])
-const getDistrictTree = async () => {
-  const list = await screeningTree(projectId, 'Company')
-  districtTree.value = list || []
+const getVillageTree = async () => {
+  const list = await screeningTree(projectId, 'IndividualHousehold')
+  villageTree.value = list || []
+
   return list || []
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
+  const info = await getLandlordHeadApi({ type: 'IndividualHousehold' })
   headInfo.value = info
 }
 
 onMounted(() => {
-  getDistrictTree()
+  getVillageTree()
   getLandlordHeadInfo()
 })
 
@@ -147,7 +138,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'TreeSelect',
       componentProps: {
-        data: districtTree,
+        data: villageTree,
         nodeKey: 'code',
         props: {
           value: 'code',
@@ -164,12 +155,12 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '企业名称',
+    label: '个体户名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入姓名'
+        placeholder: '个体户名称'
       }
     },
     table: {
@@ -178,7 +169,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'doorNo',
-    label: '企业编码',
+    label: '个体工商编码',
     search: {
       show: true,
       component: 'Input',
@@ -190,34 +181,7 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'legalPersonName',
-    label: '法人姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入法人姓名'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'legalPersonCard',
-    label: '法人身份证号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入身份证号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
+
   // table字段 分割
   {
     field: 'index',
@@ -229,15 +193,15 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '企业名称',
+    label: '个体户名称',
     search: {
       show: false
     }
   },
   {
     field: 'showDoorNo',
-    label: '企业编码',
-    width: 100,
+    label: '编码',
+
     search: {
       show: false
     }
@@ -252,44 +216,8 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'regionText',
     label: '所属区域',
+    width: 180,
     search: {
-      show: false
-    }
-  },
-  {
-    field: 'reportUserName',
-    label: '填报人',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'schedule',
-    label: '完成进度',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'reportDate',
-    label: '填报时间',
-    search: {
-      show: false
-    },
-    showOverflowTooltip: false
-  },
-  {
-    field: 'filling',
-    label: '填报',
-    fixed: 'right',
-    width: 115,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
       show: false
     }
   },
@@ -297,7 +225,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: 80,
+    width: 120,
     search: {
       show: false
     },
@@ -311,19 +239,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onEditRow = (row: LandlordDtoType) => {
-  tableObject.currentRow = row
-  dialog.value = true
-}
-
-const onFormPupClose = (flag: boolean) => {
-  dialog.value = false
-  if (flag === true) {
-    setSearchParams({ type: 'Company', status: 'implementation' })
-    getLandlordHeadInfo()
-  }
-}
 
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
@@ -354,8 +269,7 @@ const getLocationText = (key: string) => {
 const onSearch = (data) => {
   // 处理参数
   let params = {
-    ...data,
-    type: 'Company'
+    ...data
   }
   if (!data.fillStatus) {
     Reflect.deleteProperty(params, 'fillStatus')
@@ -369,34 +283,30 @@ const onSearch = (data) => {
     delete params.hasPropertyAccount
   }
 
-  if (!params.card) {
-    delete params.card
-  }
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(districtTree.value, params.code, (item) => {
+    findRecursion(villageTree.value, params.code, (item) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
 
-      params.type = 'Company'
+      params.type = 'IndividualHousehold'
       setSearchParams({ ...params, status: 'implementation' })
     })
   } else {
-    params.type = 'Company'
-
+    params.type = 'IndividualHousehold'
     setSearchParams({ ...params, status: 'implementation' })
   }
 }
 
-// 数据填报
-const fillData = (row) => {
+// 查看档案
+const onCheckRow = (row) => {
   push({
-    name: 'ImmigrantImpDataFill',
+    name: 'FileMngCheck',
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Enterprise'
+      type: 2
     }
   })
 }

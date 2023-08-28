@@ -1,13 +1,12 @@
 <template>
-  <ContentWrap title="新闻管理">
+  <ContentWrap title="文章管理">
     <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
 
     <div class="flex items-center justify-between pb-18px">
-      <div class="text-size-14px"> 新闻列表 </div>
+      <div class="text-size-14px"> 文章列表 </div>
       <ElSpace>
-        <ElButton :icon="addIcon" type="primary" @click="onAddRow" v-hasPermi="['news:add']"
-          >新增新闻</ElButton
-        >
+        <!-- v-hasPermi="['news:add']" -->
+        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增文章</ElButton>
       </ElSpace>
     </div>
     <Table
@@ -44,18 +43,12 @@
       </template>
       <!-- v-hasPermi="['news:delete']" -->
       <template #action="{ row }">
-        <TableEditColumn
-          :row="row"
-          @edit="onEditRow(row)"
-          @delete="onDelRow"
-          :delete="deletBtn"
-          :edit="editBtn"
-        />
+        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
       </template>
     </Table>
 
     <ElDialog
-      title="新闻内容查看"
+      title="文章内容查看"
       :model-value="dialog"
       :width="800"
       @close="dialog = false"
@@ -68,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElDialog, ElSpace } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
@@ -81,10 +74,10 @@ import { getNewsListApi, delNewsByIdApi } from '@/api/project/news/service'
 import type { NewsDtoType } from '@/api/project/news/types'
 import { useRouter } from 'vue-router'
 import { listDictDetailApi } from '@/api/sys/index'
-import { useAppStoreWithOut } from '@/store/modules/app'
+// import { useAppStoreWithOut } from '@/store/modules/app'
 
-const appStore2 = useAppStoreWithOut()
-const permissions = appStore2.getPermissions
+// const appStore2 = useAppStoreWithOut()
+// const permissions = appStore2.getPermissions
 const appStore = useAppStore()
 const { push } = useRouter()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -124,6 +117,7 @@ const getNewsDict = async () => {
   })
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
+    console.log(res, 'res')
   }
 }
 
@@ -220,29 +214,29 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-const deletBtn = ref()
-const editBtn = ref()
-onMounted(() => {
-  if (
-    permissions.find((item) => {
-      return item == 'news:delete'
-    })
-  ) {
-    deletBtn.value = true
-  } else {
-    deletBtn.value = false
-  }
+// const deletBtn = ref()
+// const editBtn = ref()
+// onMounted(() => {
+//   if (
+//     permissions.find((item) => {
+//       return item == 'news:delete'
+//     })
+//   ) {
+//     deletBtn.value = true
+//   } else {
+//     deletBtn.value = false
+//   }
 
-  if (
-    permissions.find((item) => {
-      return item == 'news:update'
-    })
-  ) {
-    editBtn.value = true
-  } else {
-    editBtn.value = false
-  }
-})
+//   if (
+//     permissions.find((item) => {
+//       return item == 'news:update'
+//     })
+//   ) {
+//     editBtn.value = true
+//   } else {
+//     editBtn.value = false
+//   }
+// })
 const onDelRow = async (row: NewsDtoType | null, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
