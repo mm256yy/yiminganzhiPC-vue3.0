@@ -47,13 +47,12 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElDialog, ElButton } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
-import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 
@@ -82,21 +81,6 @@ tableObject.params = {
   projectId,
   status: 'implementation'
 }
-// interface girdList {
-//   [x: string]: any
-//   id: number
-//   nickName: string
-//   phone: string
-//   peasantHouseholdNumber: number
-//   companyNumber: number
-//   individualHouseholdNumber: number
-//   villageNumber: number
-// }
-// const girdList = ref([] as girdList[])
-// girdList.value = tableObject.tableList
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
-console.log(dictObj, '123')
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []

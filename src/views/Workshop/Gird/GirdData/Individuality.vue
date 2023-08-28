@@ -386,34 +386,14 @@ const onSearch = (data) => {
     setSearchParams({ ...params })
   }
 }
-
-// 数据填报
-// const fillData = (row) => {
-//   push({
-//     name: 'AssetEvaDataFill',
-//     query: {
-//       projectId,
-//       name: row.name,
-//       householdId: row.id,
-//       doorNo: row.doorNo,
-//       type: 'Landlord'
-//     }
-//   })
-// }
 const adjust = (row) => {
-  console.log('11111111')
   dialogVisible.value = true
   tableObject.currentRow = row
 }
 const onClose = () => {
-  // reason.value = ''
   dialogVisible.value = false
 }
 const onSubmit = () => {
-  // if (!reason.value) {
-  //   ElMessage.warning('请选择删除原因')
-  //   return
-  // }
   const params: any = {
     householdId: tableObject.currentRow?.id,
     gridmanId: reason.value

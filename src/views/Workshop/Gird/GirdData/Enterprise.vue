@@ -288,13 +288,13 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'regionText',
-    label: '分类',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'regionText',
+  //   label: '分类',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'legalPersonName',
     label: '法人姓名',
