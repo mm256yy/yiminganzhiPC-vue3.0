@@ -126,5 +126,3 @@ onMounted(() => {
   getRoomNoList()
 })
 </script>
-
-<style lang="less" scoped></style>

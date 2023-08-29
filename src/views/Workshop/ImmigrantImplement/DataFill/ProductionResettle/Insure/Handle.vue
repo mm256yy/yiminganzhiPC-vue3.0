@@ -291,7 +291,7 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .sub-title {
   margin-bottom: 10px;
   font-size: 14px;

@@ -113,9 +113,11 @@
         </ElForm>
       </div>
     </div>
+
     <div class="table-wrap !py-12px !mt-0px no-data" v-else>
       该户未选择农业安置，无需办理生产用地
     </div>
+
     <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
     </ElDialog>

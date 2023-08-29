@@ -20,9 +20,9 @@
         <div class="base-info">
           <div class="base-item">
             <div class="label">区块：</div>
-            <div class="value">{{
-              productionLandInfo ? productionLandInfo.settleAddress : ''
-            }}</div>
+            <div class="value">
+              {{ productionLandInfo ? productionLandInfo.settleAddress : '' }}
+            </div>
           </div>
           <div class="base-item">
             <div class="label">地块编号：</div>
@@ -87,7 +87,6 @@ const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 // 获取档案数据
 const getFarming = () => {
   getDocumentationApi(props.doorNo).then((res: any) => {
-    // console.log(res, '档案数据')
     if (res && res.agriculturePic) {
       // 有安置凭证 则为已经安置
       farmingResettleStatus.value = '1'
@@ -110,9 +109,9 @@ const getList = () => {
   })
 }
 
+// 初始化获取生产用地详情
 const init = async () => {
   const res = await getProduceLandInfoApi(props.doorNo)
-  // console.log(res, '生产用地详情')
   if (res) {
     productionLandInfo.value = res
   }

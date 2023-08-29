@@ -3,10 +3,9 @@
     <div class="common-form-item">
       <div class="common-label">宅基地安置人数：</div>
       <div class="common-value">
-        {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{
-          baseInfo.ruralMigrantNum
-        }}
-        人，随迁人口：{{ baseInfo.familyNum - baseInfo.ruralMigrantNum }}人
+        {{ baseInfo.familyNum }}人，其中该户农村移民 ：
+        {{ baseInfo.ruralMigrantNum }} 人，随迁人口：
+        {{ baseInfo.familyNum - baseInfo.ruralMigrantNum }} 人
       </div>
     </div>
 
@@ -24,8 +23,9 @@
             v-for="item in resettleArea"
             :key="item.id"
             @click="viewAreaDetail(item.id)"
-            >地块详情</div
           >
+            地块详情
+          </div>
         </div>
       </div>
     </div>
