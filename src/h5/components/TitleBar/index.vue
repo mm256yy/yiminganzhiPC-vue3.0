@@ -36,9 +36,6 @@ const goBack = () => {
 
 <style lang="less" scoped>
 .header-wrapper {
-  position: fixed;
-  top: 0;
-  z-index: 999;
   background: #fff;
 
   .center-title {

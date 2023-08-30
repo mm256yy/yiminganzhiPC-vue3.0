@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TitleBar class="titleBar" :title="(route.meta.name as string)" />
+    <TitleBar :title="(route.meta.name as string)" />
     <RouterView class="routerView" />
   </div>
 </template>
@@ -13,14 +13,6 @@ const route = useRoute()
 </script>
 
 <style scoped lang="less">
-.titleBar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  z-index: 999;
-}
-
 .routerView {
   margin-top: 75px;
 }
