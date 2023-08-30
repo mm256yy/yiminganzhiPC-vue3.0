@@ -134,7 +134,7 @@
           v-if="subTabCurrentId === TabIds[1]"
         />
 
-        <!-- 坟墓安置 -->
+        <!-- 坟墓确认 -->
         <grave-arrange :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[2]" />
       </template>
 
@@ -355,14 +355,8 @@
       <!-- 腾空(村集体只有房屋腾空) -->
       <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
 
-      <!-- 协议签订 -->
-      <template v-if="tabCurrentId === 2">
-        <!-- 动迁安置协议 -->
-        <village-relocation-agreement v-if="subTabCurrentId === TabIds[0]" />
-
-        <!-- 过渡安置协议 -->
-        <village-transition-agreement v-if="subTabCurrentId === TabIds[1]" />
-      </template>
+      <!-- 动迁协议 -->
+      <village-relocation-agreement v-if="tabCurrentId === 2" />
 
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
@@ -403,7 +397,7 @@ import SchemeBase from './SchemeBase/Index.vue' // 模拟安置
 
 import RelocationArrange from './ResettleConfirm/Relocation/Index.vue' // 安置确认 -- 搬迁安置
 import ProduceArrange from './ResettleConfirm/Produce/Index.vue' // 安置确认 -- 生产安置
-import GraveArrange from './ResettleConfirm/Grave/Index.vue' // 安置确认 -- 坟墓安置
+import GraveArrange from './ResettleConfirm/Grave/Index.vue' // 安置确认 -- 坟墓确认
 
 import ProdLand from './SiteConfirmation/ProdLand/Index.vue' // 择址确认 -- 生产用地
 import SiteSel from './SiteConfirmation/SiteSel/Index.vue' // 择址确认 -- 选房择址
@@ -412,8 +406,7 @@ import TombSiteSel from './SiteConfirmation/TombSiteSel/Index.vue' // 择址确�
 import HouseholdAgreementSign from './Agreement/HouseholdAgreementSign.vue' // 居民户 -- 协议签订
 import EntRelocationAgreement from './Agreement/EntRelocationAgreement.vue' // 企业 -- 动迁协议
 import IndividualRelocationAgreement from './Agreement/IndividualRelocationAgreement.vue' // 个体户 -- 动迁协议
-import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁安置协议
-import VillageTransitionAgreement from './Agreement/VillageTransitionAgreement.vue' // 村集体 -- 过渡安置协议
+import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁协议
 
 import CreateCard from './CreateCard/Index.vue' // 居民户移民建卡
 import EntCardEstablishment from './EntCardEstablishment/Index.vue' // 企业建卡
@@ -564,7 +557,7 @@ const getStatus = (data: any) => {
       subTabsList.value[5].active = true // 生产安置
     }
     if (data.graveArrangementStatus === '1') {
-      subTabsList.value[6].active = true // 坟墓安置
+      subTabsList.value[6].active = true // 坟墓确认
     }
     if (data.landUseStatus === '1') {
       subTabsList.value[7].active = true // 生产用地
