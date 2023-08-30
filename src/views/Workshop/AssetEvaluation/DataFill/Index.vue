@@ -111,7 +111,7 @@
       />
 
       <!-- 坟墓评估 -->
-      <grave
+      <!-- <grave
         v-show="type == 'Landlord' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
@@ -119,7 +119,7 @@
         :uid="uid"
         :baseInfo="baseInfo"
         @update-data="getLandlordInfo"
-      />
+      /> -->
 
       <!-- 企业、个体工商户 设施设备评估 -->
       <Equipment
@@ -162,7 +162,7 @@ import HouseAccessory from './components/HouseAccessory/Index.vue' // 资产评�
 import FruitTree from './components/FruitTree/Index.vue' // 资产评估 -- 零星林（果）木评估
 import LandBasicInfo from './components/LandBasicInfo/Index.vue' // 资产评估 -- 土地基本情况评估
 import LandGreenSeedlings from './components/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
-import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
+// import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
 import Equipment from './components/Equipment/Index.vue' // 资产评估 -- (企业/个体工商户)设施设备评估
 import SpecialEquipment from './components/SpecialEquipment/Index.vue' // 资产评估 -- (村集体)小型专项及农副业设施评估
 
