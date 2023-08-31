@@ -18,7 +18,7 @@
         <div></div>
       </div>
 
-      <el-tabs v-model="tabId" class="demo-tabs" @tab-click="onTableClick">
+      <el-tabs v-model="tabId" class="demo-tabs" @tab-change="onTableClick">
         <el-tab-pane label="全部" name="-1" />
         <el-tab-pane label="待解决" name="0" />
         <el-tab-pane label="未解决" name="1" />
@@ -78,20 +78,20 @@ import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
+import { getFeedBackListApi } from '@/api/workshop/feedback/service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const tabId = ref<'-1' | '0' | '1'>('-1')
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getVillageListApi,
-  delListApi: delVillageByIdApi
+  getListApi: getFeedBackListApi
 })
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: tabId.value
 }
 
 getList()
@@ -269,21 +269,14 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-// const onDelRow = async (row: any | null, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
-
 const onViewRow = (row: any) => {
   console.log(row, 'row')
 }
 
 const onTableClick = (tab: any) => {
   console.log(tab, 'tab')
+  tabId.value = tab
+  tableObject.params.status = tab
+  getList()
 }
 </script>
