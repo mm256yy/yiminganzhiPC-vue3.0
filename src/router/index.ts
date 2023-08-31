@@ -186,6 +186,25 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/fund',
+    component: UserLayout,
+    name: 'RootFund',
+    meta: {
+      title: '资金管理'
+    },
+    children: [
+      {
+        path: 'entry',
+        name: 'fundEntry',
+        component: () => import('@/views/Workshop/FundManage/FundEntry/Index.vue'),
+        meta: {
+          title: '资金入账',
+          hidden: false
+        }
+      }
+    ]
   }
 ]
 
