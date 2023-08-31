@@ -186,6 +186,61 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       }
     ]
+  },
+  {
+    path: '/fund',
+    component: UserLayout,
+    name: 'RootFund',
+    meta: {
+      title: '资金管理'
+    },
+    children: [
+      {
+        path: 'entrydetail',
+        name: 'entrydetail',
+        component: () => import('@/views/Workshop/FundManage/FundEntry/Detail.vue'),
+        meta: {
+          title: '入账详情',
+          hidden: false
+        }
+      },
+      {
+        path: 'entry',
+        name: 'fundEntry',
+        component: () => import('@/views/Workshop/FundManage/FundEntry/Index.vue'),
+        meta: {
+          title: '资金入账',
+          hidden: false
+        }
+      },
+      {
+        path: 'capitalPool',
+        name: 'capitalPool',
+        component: () => import('@/views/Workshop/FundManage/CapitalPool/Index.vue'),
+        meta: {
+          title: '资金池',
+          hidden: false
+        }
+      },
+      {
+        path: 'budgetAdjustment',
+        name: 'budgetAdjustment',
+        component: () => import('@/views/Workshop/FundManage/BudgetAdjustment/Index.vue'),
+        meta: {
+          title: '概算调整',
+          hidden: false
+        }
+      },
+      {
+        path: 'estimateFilling',
+        name: 'estimateFilling',
+        component: () => import('@/views/Workshop/FundManage/EstimateFilling/Index.vue'),
+        meta: {
+          title: '概算填报',
+          hidden: false
+        }
+      }
+    ]
   }
 ]
 
