@@ -1,8 +1,8 @@
 <template>
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">人口信息预导入</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
@@ -11,81 +11,15 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">人口预导入表</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金入账记录</span>
 
-          <!-- <div class="icon">
-            <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
-          </div> -->
           <div class="text">
-            （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
-            <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum }}</span> 人）
+            合计金额： <span class="num">{{ 1000 }}</span> 元
           </div>
         </div>
         <ElSpace>
-          <ElPopover v-if="excelList && excelList.length" :width="1000" trigger="click">
-            <template #reference>
-              <div class="view-upload">
-                <span class="pr-10px">批量导入记录</span>
-                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
-              </div>
-            </template>
-            <div class="file-list">
-              <div class="file-item" v-for="item in excelList" :key="item.id">
-                <div class="file-name flex items-center flex-none w-272px">
-                  <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-250px ml-5px">
-                    {{ item.name }}
-                  </div>
-                </div>
-                <div class="flex-none w-150px">{{
-                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
-                }}</div>
-                <div class="flex-none w-398px m-lr-20px">
-                  {{ item.remark }}
-                </div>
-                <div class="status flex-shrink-0">
-                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
-                    <span class="pr-10px">
-                      ( 共导入 <span class="number">{{ item.demographicNum }}</span> 人，
-                      <span class="number">{{ item.peasantHouseholdNum }}</span> 户 )
-                    </span>
-                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
-                  </div>
-
-                  <div
-                    class="flex items-center text-[#F93F3F]"
-                    v-else-if="item.status === FileReportStatus.failure"
-                  >
-                    <span class="pr-10px">上传失败</span>
-                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
-                  </div>
-
-                  <div v-else>导入中</div>
-                </div>
-              </div>
-            </div>
-          </ElPopover>
-
-          <ElUpload
-            action="/api/peasantHousehold/import"
-            :headers="headers"
-            :data="{ projectId }"
-            :show-file-list="false"
-            accept=".xls,.xlsx"
-            :before-upload="beforeUpload"
-            :on-success="uploadDone"
-            :on-error="uploadError"
-          >
-            <template #trigger>
-              <ElButton :icon="importIcon" type="primary" :loading="uploadLoading">
-                批量导入
-              </ElButton>
-            </template>
-          </ElUpload>
-          <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
-            模版下载
-          </ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 添加 </ElButton>
+          <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -103,10 +37,6 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #longitude="{ row }">
-          <div>{{ row.longitude || '-' }}</div>
-          <div>{{ row.latitude || '-' }}</div>
-        </template>
         <template #createdDate="{ row }">
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
@@ -115,37 +45,29 @@
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
 
-        <!-- <template #action="{ row }">
+        <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
             :disabled="row.relation === '1'"
             :row="row"
-            :edit="false"
-            :delete="false"
             @delete="onDelRow"
+            @edit="onEditRow"
           />
-        </template> -->
+        </template>
       </Table>
     </div>
+
+    <EditForm :show="dialog" @close="onEditFormClose" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import {
-  ElButton,
-  ElSpace,
-  ElUpload,
-  ElBreadcrumb,
-  ElBreadcrumbItem,
-  ElPopover,
-  ElMessage
-} from 'element-plus'
+import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
-// TableEditColumn
-import { Table } from '@/components/Table'
+import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -155,35 +77,30 @@ import {
   getDemographicHeadApi,
   getExcelList
 } from '@/api/workshop/population/service'
-import { downLandlordTemplateApi } from '@/api/workshop/landlord/service'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
 // import type {
 //   DemographicDtoType,
 //   DemographicHeadType,
 //   ExcelListType
 // } from '@/api/workshop/population/types'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-import dayjs from 'dayjs'
-import { Icon } from '@/components/Icon'
+// import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
-
-enum FileReportStatus {
-  success = 'Succeed',
-  failure = 'Failure',
-  importing = 'Importing'
-}
+import EditForm from './EditForm.vue'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
+const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const villageTree = ref<any[]>([])
 const headInfo = ref<DemographicHeadType>({
   demographicNum: 0,
   peasantHouseholdNum: 0
 })
-const uploadLoading = ref(false)
+
 const excelList = ref<ExcelListType[]>([])
+const actionType = ref<'view' | 'add' | 'edit'>('add')
+const dialog = ref<boolean>(false)
+
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
@@ -192,22 +109,11 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 
-const headers = ref({
-  'Project-Id': projectId,
-  Authorization: appStore.getToken
-})
-
 tableObject.params = {
   projectId
 }
 
 getList()
-
-const getVillageTree = async () => {
-  const list = await getVillageTreeApi(projectId)
-  villageTree.value = list || []
-  return list || []
-}
 
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()
@@ -222,12 +128,8 @@ const getExcelUploadList = async () => {
 }
 
 onMounted(() => {
-  getVillageTree()
   getDemographicHeadInfo()
   getExcelUploadList()
-  timer = window.setInterval(() => {
-    getExcelUploadList()
-  }, 3000)
 })
 
 onBeforeUnmount(() => {
@@ -235,7 +137,139 @@ onBeforeUnmount(() => {
   timer = 0
 })
 
+const onDelRow = async (row: any, multiple: boolean) => {
+  tableObject.currentRow = row
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
+}
+
+const onAddRow = () => {
+  actionType.value = 'add'
+  tableObject.currentRow = null
+  dialog.value = true
+}
+
+const onEditRow = (row: any) => {
+  actionType.value = 'edit'
+  tableObject.currentRow = row
+  dialog.value = true
+}
+
+const onExport = () => {
+  console.log('导出')
+}
+
 const schema = reactive<CrudSchema[]>([
+  {
+    field: 'name',
+    label: '资金名称',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'relationText',
+    label: '资金来源',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '1',
+            value: 1
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'price',
+    label: '金额(元)',
+    search: {
+      show: true,
+      component: 'InputRange'
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'sexText',
+    label: '入账时间',
+    search: {
+      show: true,
+      component: 'DatePicker',
+      componentProps: {
+        type: 'daterange'
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'relationText',
+    label: '状态',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '1',
+            value: 1
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+
+  // table
   {
     width: 80,
     field: 'index',
@@ -243,226 +277,73 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
-    width: 100,
+    width: 160,
     field: 'name',
-    label: '姓名',
+    label: '资金名称',
     search: {
       show: false
     }
   },
   {
-    width: 100,
+    width: 160,
     field: 'relationText',
-    label: '与户主关系',
+    label: '资金来源',
     search: {
       show: false
     }
   },
   {
-    width: 80,
+    width: 160,
     field: 'sexText',
-    label: '性别',
+    label: '金额(元)',
     search: {
       show: false
     }
   },
   {
-    width: 80,
+    width: 200,
     field: 'age',
-    label: '年龄',
+    label: '入账时间',
     search: {
       show: false
     }
   },
   {
-    width: 180,
+    width: 160,
     field: 'card',
-    label: '身份证号',
+    label: '创建时间',
     search: {
       show: false
     }
   },
   {
     field: 'nationText',
-    label: '民族',
+    label: '操作人',
     search: {
       show: false
     }
   },
 
   {
-    width: 250,
+    width: 100,
     field: 'censusRegister',
-    label: '户籍所在地',
+    label: '状态',
     search: {
       show: false
     }
   },
-  // {
-  //   field: 'censusTypeText',
-  //   label: '户籍类型',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'maritalText',
-  //   label: '婚姻状况',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'populationTypeText',
-  //   label: '人口类型',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'insuranceTypeText',
-  //   label: '参保情况',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'householdNumber',
-  //   label: '户籍册编号',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'relationText',
-  //   label: '与户主关系',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'townCodeText',
-  //   label: '街道/乡镇',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'villageText',
-  //   label: '行政村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'virutalVillageText',
-  //   label: '自然村',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'phone',
-  //   label: '联系方式',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-
-  // {
-  //   field: 'createdDate',
-  //   label: '导入时间',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'action',
-  //   label: '操作',
-  //   fixed: 'right',
-  //   search: {
-  //     show: false
-  //   },
-  //   form: {
-  //     show: false
-  //   },
-  //   detail: {
-  //     show: false
-  //   }
-  // },
   {
-    field: 'relation',
-    label: '是否户主',
+    width: 200,
+    field: 'action',
+    label: '操作',
+    fixed: 'right',
     search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        placeholder: '请选择',
-        options: [
-          {
-            label: '是',
-            value: '1'
-          },
-          {
-            label: '否',
-            value: '0'
-          }
-        ]
-      }
-    },
-    table: {
       show: false
-    }
-  },
-  {
-    field: 'code',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        placeholder: '请选择县\街道\行政村\自然村',
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
-      }
     },
-    table: {
+    form: {
       show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入姓名'
-      }
     },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'card',
-    label: '身份证号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入身份证号'
-      }
-    },
-    table: {
+    detail: {
       show: false
     }
   }
@@ -537,31 +418,11 @@ const onSearch = (data) => {
   }
 }
 
-const onDownloadTemplate = () => {
-  downLandlordTemplateApi('demographic').then((res) => {
-    if (res && res.templateUrl) {
-      window.open(res.templateUrl)
-    }
-  })
-}
-
-const beforeUpload = () => {
-  uploadLoading.value = true
-}
-
-const uploadDone = () => {
-  uploadLoading.value = false
-  ElMessage.warning('正在导入，请等待批量导入结果')
-}
-
-const uploadError = (error) => {
-  try {
-    const response = JSON.parse(error.message)
-    ElMessage.error(response.message)
-    uploadLoading.value = false
-  } catch (err) {
-    // err
+const onEditFormClose = (flag: boolean) => {
+  if (flag) {
+    getList()
   }
+  dialog.value = false
 }
 </script>
 
