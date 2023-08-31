@@ -1,79 +1,519 @@
 <template>
   <div class="box-wrapper">
-    <img :src="adminHomeSrc" alt="背景图" />
-    <div class="household" @click="handleClickItem(0)"></div>
-    <div class="enterprise" @click="handleClickItem(1)"></div>
-    <div class="individual" @click="handleClickItem(2)"></div>
-    <div class="village" @click="handleClickItem(3)"></div>
+    <div class="search">
+      <div class="search-input">
+        <input type="span" placeholder="请输入户号、联系方式" />
+      </div>
+      <div class="search-btn">
+        <img class="search-icon" src="@/assets/imgs/icon_search_white.png" mode="aspectFit" />
+        <span class="search-txt">查询</span>
+      </div>
+    </div>
+    <!-- 具体内容 -->
+    <div class="main-enter">
+      <!--居民区-->
+      <div class="enter-item">
+        <div class="title-field" @click="toLink('householdList')">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">居民户</span>
+            <div class="flex">
+              <span class="count-num"> 20 </span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
+        </div>
+        <div class="row-field">
+          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 0 })">
+            <div class="line-1">5</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">滞后</div>
+            </div>
+          </div>
+          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 1 })">
+            <div class="line-1">5</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">预警</div>
+            </div>
+          </div>
+          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 2 })">
+            <div class="line-1">10</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">正常</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--企业-->
+      <div class="enter-item" @click="toLink('householdList')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">企业</span>
+            <div class="flex">
+              <span class="count-num"> 5 </span>
+              <span class="count-unit"> 家 </span>
+            </div>
+          </div>
+        </div>
+        <div class="row-field">
+          <div class="field-box">
+            <div class="line-1">1</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2 red">滞后</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">2</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">预警</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">2</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">正常</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--个体户-->
+      <div class="enter-item" @click="toLink('householdList')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_gth.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">个体户</span>
+            <div class="flex">
+              <span class="count-num">5</span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
+        </div>
+        <div class="row-field">
+          <div class="field-box">
+            <div class="line-1">1</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2 red">滞后</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">2</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">预警</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">2</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">正常</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--村集体-->
+      <div class="enter-item" @click="toLink('householdList')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_village.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">村集体</span>
+            <div class="flex">
+              <span class="count-num">2</span>
+              <span class="count-unit">户</span>
+            </div>
+          </div>
+        </div>
+        <div class="row-field">
+          <div class="field-box">
+            <div class="line-1">0</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2 red">滞后</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">1</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">预警</div>
+            </div>
+          </div>
+          <div class="field-box">
+            <div class="line-1">1</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">正常</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="work">
+        <Echart />
+      </div>
+      <div class="message">
+        <MessageNotice />
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import adminHomeSrc from '@/assets/imgs/admin-home.png'
-import { useRouter } from 'vue-router'
+// import { ref } from 'vue'
+import Echart from './components/WorkGroupChart.vue'
+import MessageNotice from './components/MessageNotice.vue'
 
-const { push } = useRouter()
+const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
+// import headerbg from '@/assets/imgs/headerbg.png'
 
-const handleClickItem = (type: number) => {
-  const pathMap = {
-    0: 'PeasantHouseholdImp', // 居民户
-    1: 'EnterpriseImp', // 企业
-    2: 'IndividualImp', // 个体户
-    3: 'VillageImp' // 村集体
-  }
+// const userInfo = ref<any>(null)
+// const projectInfo = ref<any>(null)
 
-  push({ name: pathMap[type] })
+const toLink = (name: string) => {
+  emit('toLink', name)
+}
+
+const toLinkParams = (name: string, params: any) => {
+  emit('toParamsLink', {
+    name,
+    ...params
+  })
 }
 </script>
 
 <style lang="less" scoped>
 .box-wrapper {
-  position: relative;
-  width: 100%;
+  display: flex;
+  padding-top: 40px;
+  margin: -30px -20px;
+  background: linear-gradient(to bottom, #2856c7, #e6edfa);
+  background-size: 100% auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  img {
-    width: 100%;
-    height: 100%;
+  .search {
+    display: flex;
+    width: 1040px;
+    height: 46px;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 8px;
+    justify-content: center;
+
+    .search-input {
+      width: 940px;
+      height: 46px;
+      line-height: 46px;
+      text-align: left;
+      border-radius: 8px 0 0 8px;
+
+      input {
+        width: 940px;
+        height: 46px;
+        padding-left: 20px;
+        font-size: 14px;
+        line-height: 46px;
+        color: rgba(19, 19, 19, 0.4);
+        border-bottom-left-radius: 8px;
+        border-top-left-radius: 8px;
+        outline: none;
+      }
+    }
+
+    .search-btn {
+      display: flex;
+      width: 100px;
+      height: 48px;
+      overflow: hidden;
+      background: linear-gradient(270deg, #ffb11a 0%, #ff9432 100%);
+      border-radius: 0 8px 8px 0;
+      justify-content: center;
+      align-items: center;
+
+      .search-icon {
+        width: 14px;
+        height: 14px;
+      }
+
+      .search-txt {
+        margin-left: 5px;
+        font-size: 14px;
+        font-weight: 400;
+        color: #f7f8fa;
+      }
+    }
   }
 
-  // 居民户
-  .household {
-    position: absolute;
-    top: 110px;
-    left: 20px;
-    width: 450px;
-    height: 220px;
-    cursor: pointer;
+  .main-enter {
+    display: flex;
+    width: 1440px;
+    padding: 12px;
+    justify-content: center;
+
+    .enter-item {
+      width: 362px;
+      height: 163px;
+      padding: 20px;
+      margin-right: 60px;
+      background: linear-gradient(180deg, #deebf6 0%, #ffffff 100%);
+      border-radius: 18px;
+
+      .title-field {
+        display: flex;
+
+        .enter-icon {
+          width: 84px;
+          height: 84px;
+
+          .img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .enter-title {
+          // margin-top: -21px;
+          margin-left: 8px;
+
+          .title-txt {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333333;
+          }
+
+          .count-num {
+            margin-bottom: 5px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #171718;
+          }
+
+          .count-unit {
+            margin-top: 6px;
+            margin-left: 6px;
+            font-size: 16px;
+            color: #131313;
+          }
+        }
+      }
+
+      .row-field {
+        display: flex;
+        font-size: 8px;
+        justify-content: space-between;
+
+        .field-box {
+          display: flex;
+          width: 87px;
+          height: 34px;
+          background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
+          border-radius: 8px;
+          flex-direction: column;
+          align-items: center;
+
+          .line-1 {
+            font-size: 20px;
+            font-weight: 400;
+            color: #171718;
+          }
+
+          .flex {
+            display: flex;
+
+            .dot-red {
+              width: 8px;
+              height: 8px;
+              background-color: #e43030;
+              border-radius: 50%;
+            }
+
+            .dot-yellow {
+              width: 8px;
+              height: 8px;
+              background-color: #fec44c;
+            }
+
+            .dot-green {
+              width: 8px;
+              height: 8px;
+              background-color: #30a952;
+            }
+          }
+
+          .line-2 {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(23, 23, 24, 0.6);
+          }
+        }
+      }
+
+      .top {
+        display: flex;
+        flex-direction: column;
+      }
+
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
   }
 
-  // 企业
-  .enterprise {
-    position: absolute;
-    top: 110px;
-    left: 485px;
-    width: 450px;
-    height: 220px;
-    cursor: pointer;
+  .group {
+    display: flex;
+
+    .work {
+      width: 945px;
+      padding-top: 20px;
+    }
+
+    .message {
+      width: 460px;
+      margin-left: 10px;
+    }
   }
 
-  // 个体户
-  .individual {
-    position: absolute;
-    top: 110px;
-    right: 485px;
-    width: 450px;
-    height: 220px;
-    cursor: pointer;
+  .other-enter {
+    display: flex;
+    justify-content: center;
+    width: 750px;
+    margin-top: 26px;
+
+    &.self {
+      // display: none;
+      margin-top: 10px;
+    }
   }
 
-  // 村集体
-  .village {
-    position: absolute;
-    top: 110px;
-    right: 20px;
-    width: 450px;
-    height: 220px;
-    cursor: pointer;
+  .flex {
+    display: flex;
   }
 }
 </style>
