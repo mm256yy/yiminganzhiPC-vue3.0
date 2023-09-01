@@ -22,14 +22,27 @@
       <ElFormItem label="资金来源:" required>
         <ElInput type="text" />
       </ElFormItem>
+      <ElFormItem label="收款方:" required>
+        <ElSelect class="w-350px" v-model="form.locationType">
+          <ElOption
+            v-for="item in dictObj[326]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
       <ElFormItem label="金额(元):" required>
         <ElInput type="text" />
       </ElFormItem>
-      <ElFormItem label="入账时间:" required>
+      <ElFormItem label="付款日期:" required>
         <ElDatePicker type="date" />
       </ElFormItem>
+      <ElFormItem label="说明:">
+        <ElInput type="text" />
+      </ElFormItem>
       <div class="col-wrapper">
-        <div class="col-label-required"> 搬迁安置确认单： </div>
+        <div class="col-label-required"> 凭证： </div>
         <div class="card-img-list">
           <ElUpload
             :list-type="'picture-card'"
@@ -56,9 +69,6 @@
           </ElUpload>
         </div>
       </div>
-      <ElFormItem label="说明:">
-        <ElInput type="text" />
-      </ElFormItem>
     </ElForm>
 
     <template #footer>
@@ -86,13 +96,16 @@ import {
   ElMessage,
   ElMessageBox,
   ElInput,
-  ElDatePicker
+  ElDatePicker,
+  ElSelect,
+  ElOption
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -107,6 +120,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')

@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">资金支付</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
@@ -11,15 +11,14 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金入账记录</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金支付记录</span>
 
           <div class="text">
             合计金额： <span class="num">{{ 1000 }}</span> 元
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 添加 </ElButton>
-          <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 资金登记 </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -84,7 +83,6 @@ import EditForm from './EditForm.vue'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const villageTree = ref<any[]>([])
 const headInfo = ref<DemographicHeadType>({
   demographicNum: 0,
@@ -153,14 +151,10 @@ const onEditRow = (row: any) => {
   dialog.value = true
 }
 
-const onExport = () => {
-  console.log('导出')
-}
-
 const schema = reactive<CrudSchema[]>([
   {
     field: 'name',
-    label: '资金名称',
+    label: '资金支付名称',
     search: {
       show: true,
       component: 'Input'
@@ -177,7 +171,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'relationText',
-    label: '资金来源',
+    label: '概算科目',
     search: {
       show: true,
       component: 'Select',
@@ -201,11 +195,19 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
-    label: '金额(元)',
+    field: 'relationText',
+    label: '资金科目',
     search: {
       show: true,
-      component: 'InputRange'
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '1',
+            value: 1
+          }
+        ]
+      }
     },
     table: {
       show: false
@@ -218,8 +220,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sexText',
-    label: '入账时间',
+    field: 'relationText',
+    label: '资金科目',
     search: {
       show: true,
       component: 'DatePicker',
@@ -238,8 +240,25 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'price',
+    label: '付款金额',
+    search: {
+      show: true,
+      component: 'InputRange'
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
     field: 'relationText',
-    label: '状态',
+    label: '付款类别',
     search: {
       show: true,
       component: 'Select',
@@ -251,6 +270,48 @@ const schema = reactive<CrudSchema[]>([
           }
         ]
       }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'relationText',
+    label: '登记人',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '1',
+            value: 1
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'name',
+    label: '收款单位',
+    search: {
+      show: true,
+      component: 'Input'
     },
     table: {
       show: false
@@ -273,7 +334,7 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 160,
     field: 'name',
-    label: '资金名称',
+    label: '资金支付名称',
     search: {
       show: false
     }
@@ -281,7 +342,7 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 160,
     field: 'relationText',
-    label: '资金来源',
+    label: '概算科目',
     search: {
       show: false
     }
@@ -289,7 +350,7 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 160,
     field: 'sexText',
-    label: '金额(元)',
+    label: '资金科目',
     search: {
       show: false
     }
@@ -297,7 +358,7 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 200,
     field: 'age',
-    label: '入账时间',
+    label: '付款日期',
     search: {
       show: false
     }
@@ -305,6 +366,34 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 160,
     field: 'card',
+    label: '资金金额（元)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'nationText',
+    label: '资金类别',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'nationText',
+    label: '收款单位',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'nationText',
+    label: '付款日期',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'nationText',
     label: '创建时间',
     search: {
       show: false
@@ -344,16 +433,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-// const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
 
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null

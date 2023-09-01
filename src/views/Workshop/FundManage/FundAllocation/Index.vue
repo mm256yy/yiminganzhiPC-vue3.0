@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">资金预拨</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
@@ -11,15 +11,14 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金入账记录</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金预拨记录</span>
 
           <div class="text">
             合计金额： <span class="num">{{ 1000 }}</span> 元
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 添加 </ElButton>
-          <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton>
+          <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 预拨 </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -56,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -65,18 +64,12 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
+import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 // import type {
 //   DemographicDtoType,
 //   DemographicHeadType,
 //   ExcelListType
 // } from '@/api/workshop/population/types'
-import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
 // import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 import EditForm from './EditForm.vue'
@@ -84,14 +77,6 @@ import EditForm from './EditForm.vue'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
-const villageTree = ref<any[]>([])
-const headInfo = ref<DemographicHeadType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0
-})
-
-const excelList = ref<ExcelListType[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 
@@ -108,23 +93,6 @@ tableObject.params = {
 }
 
 getList()
-
-const getDemographicHeadInfo = async () => {
-  const info = await getDemographicHeadApi()
-  headInfo.value = info
-}
-
-const getExcelUploadList = async () => {
-  const res = await getExcelList()
-  if (res && res.content) {
-    excelList.value = res.content
-  }
-}
-
-onMounted(() => {
-  getDemographicHeadInfo()
-  getExcelUploadList()
-})
 
 onBeforeUnmount(() => {
   clearInterval(timer)
@@ -151,10 +119,6 @@ const onEditRow = (row: any) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
-}
-
-const onExport = () => {
-  console.log('导出')
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -237,31 +201,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'relationText',
-    label: '状态',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
 
   // table
   {
@@ -297,7 +236,7 @@ const schema = reactive<CrudSchema[]>([
   {
     width: 200,
     field: 'age',
-    label: '入账时间',
+    label: '付款日期',
     search: {
       show: false
     }
@@ -345,16 +284,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-// const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
-
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
   data.forEach((item, index, arr) => {
@@ -365,16 +294,6 @@ const findRecursion = (data, code, callback) => {
       return findRecursion(item.children, code, callback)
     }
   })
-}
-
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
 }
 
 const onSearch = (data) => {
@@ -398,14 +317,6 @@ const onSearch = (data) => {
     projectId
   }
   if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
-      delete params.code
-      setSearchParams({ ...params })
-    })
   } else {
     delete params.code
     setSearchParams({ ...params })

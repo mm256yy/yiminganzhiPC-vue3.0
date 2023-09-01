@@ -196,6 +196,42 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
     },
     children: [
       {
+        path: 'paymentdetail',
+        name: 'paymentdetail',
+        component: () => import('@/views/Workshop/FundManage/FundPayment/Detail.vue'),
+        meta: {
+          title: '资金支付详情',
+          hidden: false
+        }
+      },
+      {
+        path: 'fundpayment',
+        name: 'fundpayment',
+        component: () => import('@/views/Workshop/FundManage/FundPayment/Index.vue'),
+        meta: {
+          title: '资金支付',
+          hidden: false
+        }
+      },
+      {
+        path: 'allocationdetail',
+        name: 'allocationdetail',
+        component: () => import('@/views/Workshop/FundManage/FundAllocation/Detail.vue'),
+        meta: {
+          title: '资金预拨详情',
+          hidden: false
+        }
+      },
+      {
+        path: 'allocation',
+        name: 'allocation',
+        component: () => import('@/views/Workshop/FundManage/FundAllocation/Index.vue'),
+        meta: {
+          title: '资金预拨',
+          hidden: false
+        }
+      },
+      {
         path: 'entrydetail',
         name: 'entrydetail',
         component: () => import('@/views/Workshop/FundManage/FundEntry/Detail.vue'),

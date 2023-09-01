@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="资金入账"
+    title="资金支付"
     :model-value="props.show"
     :width="800"
     @close="onClose"
@@ -16,20 +16,41 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="资金名称:" required>
+      <ElFormItem label="申请类型:" required>
+        <el-radio-group class="ml-4">
+          <el-radio label="1" size="large">Option 1</el-radio>
+          <el-radio label="2" size="large">Option 2</el-radio>
+        </el-radio-group>
+      </ElFormItem>
+      <ElFormItem label="申请名称:" required>
         <ElInput type="text" />
       </ElFormItem>
-      <ElFormItem label="资金来源:" required>
+      <ElFormItem label="概算科目:" required>
+        <el-radio-group class="ml-4">
+          <el-radio label="1" size="large">Option 1</el-radio>
+          <el-radio label="2" size="large">Option 2</el-radio>
+        </el-radio-group>
+      </ElFormItem>
+
+      <ElFormItem label="资金科目:" required>
+        <ElTreeSelect class="!w-full" v-model="form.parentCode" :data="[]" node-key="code" />
+      </ElFormItem>
+
+      <ElFormItem label="付款说明:" required>
         <ElInput type="text" />
       </ElFormItem>
-      <ElFormItem label="金额(元):" required>
+
+      <ElFormItem label="收款单位:" required>
         <ElInput type="text" />
       </ElFormItem>
-      <ElFormItem label="入账时间:" required>
+      <ElFormItem label="付款时间:" required>
         <ElDatePicker type="date" />
       </ElFormItem>
+      <ElFormItem label="申请金额:">
+        <ElInput type="text" />
+      </ElFormItem>
       <div class="col-wrapper">
-        <div class="col-label-required"> 搬迁安置确认单： </div>
+        <div class="col-label-required"> 申请凭证： </div>
         <div class="card-img-list">
           <ElUpload
             :list-type="'picture-card'"
@@ -56,9 +77,6 @@
           </ElUpload>
         </div>
       </div>
-      <ElFormItem label="说明:">
-        <ElInput type="text" />
-      </ElFormItem>
     </ElForm>
 
     <template #footer>
@@ -86,13 +104,19 @@ import {
   ElMessage,
   ElMessageBox,
   ElInput,
-  ElDatePicker
+  ElDatePicker,
+  // ElSelect,
+  // ElOption,
+  ElRadioGroup,
+  ElRadio,
+  ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: boolean
@@ -107,6 +131,10 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+
+console.log(dictObj)
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')
