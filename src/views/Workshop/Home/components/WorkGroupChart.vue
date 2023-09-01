@@ -309,6 +309,7 @@ onMounted(() => {
       height: 36px;
       line-height: 36px;
       text-align: center;
+      cursor: pointer;
       background-color: #ffffff;
       border: 1px solid #2f72fe;
 
@@ -348,6 +349,7 @@ onMounted(() => {
         font-size: 14px;
         line-height: 32px;
         color: #666666;
+        cursor: pointer;
         background-color: #ffffff;
         border-radius: 4px;
         align-items: center;
@@ -364,7 +366,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       width: 930px;
-      height: 560px;
+      height: 546px;
       box-sizing: border-box;
 
       .echart-item {
@@ -399,7 +401,6 @@ onMounted(() => {
           display: flex;
           align-items: center;
           width: 719px;
-          //   margin-left: 8px;
 
           .progress {
             height: 10px;

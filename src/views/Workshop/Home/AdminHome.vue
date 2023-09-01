@@ -281,6 +281,12 @@
         <MessageNotice />
       </div>
     </div>
+    <footer>
+      <span> Copyright ©2015 zdwp All Rights Reserved. &nbsp;&nbsp;</span>
+      <span> 浙ICP备10000403号-1.;</span>
+      <img class="icon-emblem" :src="iconNationalEmblemSrc" alt="国徽图标" />
+      <span> 浙公网安备 33010202000111号 </span>
+    </footer>
   </div>
 </template>
 
@@ -288,12 +294,9 @@
 // import { ref } from 'vue'
 import Echart from './components/WorkGroupChart.vue'
 import MessageNotice from './components/MessageNotice.vue'
+import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 
 const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
-// import headerbg from '@/assets/imgs/headerbg.png'
-
-// const userInfo = ref<any>(null)
-// const projectInfo = ref<any>(null)
 
 const toLink = (name: string) => {
   emit('toLink', name)
@@ -312,7 +315,7 @@ const toLinkParams = (name: string, params: any) => {
   display: flex;
   padding-top: 40px;
   margin: -30px -20px;
-  background: linear-gradient(to bottom, #2856c7, #e6edfa);
+  background-image: url('../../../assets/imgs/home/home_bg.png');
   background-size: 100% auto;
   flex-direction: column;
   align-items: center;
@@ -389,8 +392,8 @@ const toLinkParams = (name: string, params: any) => {
         display: flex;
 
         .enter-icon {
-          width: 84px;
-          height: 84px;
+          width: 78px;
+          height: 78px;
 
           .img {
             width: 100%;
@@ -399,7 +402,6 @@ const toLinkParams = (name: string, params: any) => {
         }
 
         .enter-title {
-          // margin-top: -21px;
           margin-left: 8px;
 
           .title-txt {
@@ -514,6 +516,21 @@ const toLinkParams = (name: string, params: any) => {
 
   .flex {
     display: flex;
+  }
+
+  footer {
+    display: flex;
+    height: 44px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 44px;
+    color: rgba(19, 19, 19, 0.4);
+
+    .icon-emblem {
+      width: 20px;
+      height: 20px;
+      margin: 10px 10px 0 10px;
+    }
   }
 }
 </style>
