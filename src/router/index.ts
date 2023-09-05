@@ -284,6 +284,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '概算填报',
           hidden: false
         }
+      },
+      {
+        path: 'townshipFundEntry',
+        name: 'townshipFundEntry',
+        component: () => import('@/views/Workshop/FundManage/TownshipFundEntry/Index.vue'),
+        meta: {
+          title: '乡镇资金入账',
+          hidden: false
+        }
+      },
+      {
+        path: 'townshipFundEntryCheck',
+        name: 'townshipFundEntryCheck',
+        component: () => import('@/views/Workshop/FundManage/TownshipFundEntry/DataFill/Index.vue'),
+        meta: {
+          title: '乡镇资金入账',
+          hidden: true
+        }
       }
     ]
   }
