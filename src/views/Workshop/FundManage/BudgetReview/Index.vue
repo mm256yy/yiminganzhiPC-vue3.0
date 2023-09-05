@@ -11,17 +11,12 @@
     </div>
 
     <div class="table-wrap">
-      <div class="row">
-        <div class="col left">
-          <div class="data-box"> 合计金额： <span class="green">10,000</span> 元 </div>
-        </div>
-        <div class="col right">
-          <ElButton type="primary" @click="onAdjust"> 调整概算 </ElButton>
-        </div>
-      </div>
+      <el-radio-group class="mb-5" v-model="tabVal" @change="tabChange">
+        <el-radio-button label="1">待办</el-radio-button>
+        <el-radio-button label="2">已办</el-radio-button>
+      </el-radio-group>
 
       <Table
-        selection
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -37,45 +32,36 @@
         @register="register"
       >
         <template #action="{ row }">
-          <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
+          <ElButton type="primary" @click="onReviewRow(row)"> 审核 </ElButton>
         </template>
       </Table>
     </div>
 
-    <!-- 查看 -->
-    <ViewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseView" />
-
-    <!-- 概算调整 -->
-    <AdjustForm
-      :show="adjustDialog"
-      :row="tableObject.currentRow"
-      :selectionIds="getSelections"
-      @close="onCloseAdjust"
-    />
+    <!-- 审核 -->
+    <ReviewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseReview" />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { ElBreadcrumb, ElBreadcrumbItem, ElRadioGroup, ElRadioButton, ElButton } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+// import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getLandlordListApi, delLandlordByIdApi } from '@/api/workshop/landlord/service'
-import ViewForm from './ViewForm.vue'
-import AdjustForm from './AdjustForm.vue'
+import ReviewForm from './ReviewForm.vue'
 import { MainType } from '@/types/print'
 
+// const dictStore = useDictStoreWithOut()
+// const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
-const dictStore = useDictStoreWithOut()
 const projectId = appStore.currentProjectId
-const dictObj = computed(() => dictStore.getDictObj)
-const dialog = ref(false) // 查看弹窗标识
-const adjustDialog = ref(false) // 调整概算弹窗标识
+const dialog = ref(false) // 审核弹窗标识
+const tabVal = ref<string>('1')
 
 // 资金科目
 const fundAccountList = ref<any[]>([
@@ -154,54 +140,36 @@ const { register, tableObject, methods } = useTable({
   delListApi: delLandlordByIdApi
 })
 
-const { setSearchParams, getSelections } = methods
+const { setSearchParams } = methods
 
 setSearchParams({ type: MainType.PeasantHousehold })
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'type',
-    label: '申请类别',
+    field: 'fundAccount',
+    label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
-        options: dictObj.value[381]
+        data: fundAccountList,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
       show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
     }
   },
   {
-    field: 'status',
-    label: '状态',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: dictObj.value[386]
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '申请名称',
+    field: 'applyUser',
+    label: '申请人',
     search: {
       show: true,
       component: 'Input',
@@ -236,65 +204,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     },
     form: {
-      show: false
-    }
-  },
-  {
-    field: 'price',
-    label: '申请金额',
-    search: {
-      show: true,
-      component: 'InputRange'
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'classify',
-    label: '概算科目',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: dictObj.value[382]
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'fundAccount',
-    label: '资金科目',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: fundAccountList,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
-      }
-    },
-    table: {
       show: false
     }
   },
@@ -367,6 +276,19 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'estimateSubjectAfter',
+    label: '调整后概算科目',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
     field: 'fundSubject',
     label: '资金科目',
     search: {
@@ -406,8 +328,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
-    label: '创建时间',
+    field: 'applyUser',
+    label: '申请人',
     search: {
       show: false
     },
@@ -419,8 +341,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
-    label: '申请人',
+    field: 'applyDate',
+    label: '申请时间',
     search: {
       show: false
     },
@@ -488,27 +410,23 @@ const onSearch = (data) => {
   setSearchParams({ ...params, type: MainType.PeasantHousehold })
 }
 
-const onViewRow = async (row) => {
+/**
+ * tab 切换
+ * @param data tab 值
+ */
+const tabChange = (data: string) => {
+  tabVal.value = data
+  setSearchParams({ type: MainType.PeasantHousehold, status: tabVal.value })
+}
+
+const onReviewRow = async (row) => {
   tableObject.currentRow = row
   dialog.value = true
 }
 
-// 调整概算
-const onAdjust = () => {
-  adjustDialog.value = true
-}
-
-// 关闭查看弹窗
-const onCloseView = () => {
+// 关闭审核弹窗
+const onCloseReview = () => {
   dialog.value = false
-}
-
-// 关闭概算调整弹窗
-const onCloseAdjust = (flag: boolean) => {
-  adjustDialog.value = false
-  if (flag === true) {
-    setSearchParams({ type: MainType.PeasantHousehold })
-  }
 }
 </script>
 

@@ -268,6 +268,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'budgetReview',
+        name: 'budgetReview',
+        component: () => import('@/views/Workshop/FundManage/BudgetReview/Index.vue'),
+        meta: {
+          title: '概算审核',
+          hidden: false
+        }
+      },
+      {
         path: 'estimateFilling',
         name: 'estimateFilling',
         component: () => import('@/views/Workshop/FundManage/EstimateFilling/Index.vue'),
