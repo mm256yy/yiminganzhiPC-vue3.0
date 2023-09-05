@@ -26,14 +26,14 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
-            <ElFormItem>
+            <div class="btn-wrap">
               <ElButton type="primary" @click="search">
                 <Icon icon="ep:search" class="mr-5px" /> 查询
               </ElButton>
               <ElButton @click="reset">
                 <Icon icon="ep:refresh-right" class="mr-5px" /> 重置
               </ElButton>
-            </ElFormItem>
+            </div>
           </ElCol>
         </ElRow>
       </ElForm>
