@@ -9,15 +9,27 @@
       <div class="item">
         <div class="title">预付款</div>
         <div class="content-wrapper">
-          <div class="content">入账金额：30000.00元</div>
-          <div class="content">发放金额：20000.00元</div>
-          <div class="content">余额：10000.00元</div>
+          <div class="content">
+            <div class="sub-title">入账金额</div>
+            <div class="amount">30000.00元</div>
+          </div>
+          <div class="content">
+            <div class="sub-title">发放金额</div>
+            <div class="amount">2000.00元</div>
+          </div>
+          <div class="content">
+            <div class="sub-title">余额</div>
+            <div class="amount">1000.00元</div>
+          </div>
         </div>
       </div>
       <div class="item">
         <div class="title">支付款</div>
         <div class="content-wrapper">
-          <div class="content">入账金额：30000.00元</div>
+          <div class="content">
+            <div class="sub-title">入账金额</div>
+            <div class="amount">1000.00元</div>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +60,7 @@
       </div>
       <Table
         border
+        selection
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -63,15 +76,6 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #coverPic="{ row }">
-          <img :src="row.coverPic" alt="封面" style="height: 80px" />
-        </template>
-        <template #hasTop="{ row }">
-          <div> {{ row.hasTop ? '是' : '否' }} </div>
-        </template>
-        <template #hasShow="{ row }">
-          <div> {{ row.hasShow ? '是' : '否' }} </div>
-        </template>
         <template #action="{ row }">
           <ElButton link type="primary" @click="onCheckRow(row)">查看</ElButton>
         </template>
@@ -352,24 +356,34 @@ const onCheckRow = (row) => {
 
     .title {
       padding-top: 10px;
+      padding-left: 20px;
       font-size: 16px;
       font-weight: bold;
       color: #333333;
-      text-align: center;
+      text-align: left;
     }
 
     .content-wrapper {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 16px;
 
       .content {
+        display: flex;
         width: 33.3%;
-        padding: 0 20px;
-        font-size: 16px;
-        font-weight: 400;
-        color: #333333;
+        flex-direction: column;
+        align-items: center;
+
+        .sub-title {
+          padding-bottom: 5px;
+          font-size: 16px;
+          font-weight: 400;
+          color: #333333;
+        }
+
+        .amount {
+          font-size: 18px;
+          font-weight: bold;
+          color: #333333;
+        }
       }
     }
   }
