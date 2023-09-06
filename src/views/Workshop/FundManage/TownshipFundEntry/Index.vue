@@ -348,6 +348,8 @@ const onCheckRow = (row) => {
   justify-content: space-between;
 
   .item {
+    display: flex;
+    justify-content: space-between;
     width: 50%;
     height: 112px;
     margin: 0 20px;
@@ -355,16 +357,20 @@ const onCheckRow = (row) => {
     border-radius: 4px;
 
     .title {
-      padding-top: 10px;
-      padding-left: 20px;
+      display: flex;
+      width: 100px;
       font-size: 16px;
       font-weight: bold;
-      color: #333333;
-      text-align: left;
+      color: #fff;
+      background: rgba(59, 130, 246, 0.9);
+      justify-content: center;
+      align-items: center;
     }
 
     .content-wrapper {
       display: flex;
+      align-items: center;
+      width: calc(100% - 100px);
 
       .content {
         display: flex;
