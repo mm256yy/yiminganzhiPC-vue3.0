@@ -1,7 +1,7 @@
 <template>
   <div class="itemWarp" @click="changePage">
     <img :src="active ? props.activeImg : normalImg" />
-    <span :style="{ color: props.activeImg ? '#3E73EC' : '#131313' }">{{ props.txt }}</span>
+    <span :style="{ color: active ? '#3E73EC' : '#13131366' }">{{ props.txt }}</span>
   </div>
 </template>
 

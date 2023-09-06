@@ -12,8 +12,4 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 </script>
 
-<style scoped lang="less">
-.routerView {
-  margin-top: 75px;
-}
-</style>
+<style scoped lang="less"></style>

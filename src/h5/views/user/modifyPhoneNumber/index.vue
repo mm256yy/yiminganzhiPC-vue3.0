@@ -62,7 +62,6 @@ onBeforeUnmount(() => {
 })
 
 const onConfirm = () => {
-  console.log('confirm')
   if (!isTicked.value) {
     const msg = '请先勾选相关协议'
     ElMessage.error(msg)
