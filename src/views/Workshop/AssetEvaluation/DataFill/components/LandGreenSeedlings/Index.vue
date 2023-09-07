@@ -195,7 +195,7 @@ const defaultRow = {
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
     doorNo: props.doorNo,
-    landStatus: '1'
+    landSeedlingStatus: '1'
   })
   if (result && Array.isArray(result)) {
     reportDialog.value = true

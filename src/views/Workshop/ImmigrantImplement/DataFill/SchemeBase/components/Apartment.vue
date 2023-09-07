@@ -138,7 +138,7 @@
     </div>
 
     <div class="common-form-item">
-      <div class="common-label">可选安置点：</div>
+      <div class="common-label">可选户型：</div>
       <div class="common-value">
         <div class="area-size">
           <div class="area-size-item" v-for="item in areaSize" :key="item.id">

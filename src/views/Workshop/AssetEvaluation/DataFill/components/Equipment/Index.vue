@@ -56,7 +56,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="用途"
-          :width="160"
+          :width="180"
           prop="purpose"
           align="center"
           header-align="center"
@@ -72,17 +72,35 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="建造/购置年月" prop="year" align="center" header-align="center">
+        <ElTableColumn
+          label="建造/购置年月"
+          :width="180"
+          prop="year"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElDatePicker v-model="row.year" type="month" placeholder="请选择" class="!w-full" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="原值(万元)" prop="amount" align="center" header-align="center">
+        <ElTableColumn
+          label="原值(万元)"
+          :width="180"
+          prop="amount"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInputNumber :min="0" v-model="row.amount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="搬迁方式" prop="moveType" align="center" header-align="center">
+        <ElTableColumn
+          label="搬迁方式"
+          :width="160"
+          prop="moveType"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.purpose">
               <ElOption
