@@ -7,6 +7,7 @@ import { onMounted } from 'vue'
 const goLink = () => {
   let url = 'https://lanhuapp.com/link/#/invite?sid=lxetfKaa'
   window.open(url)
+  console.log(1)
 }
 
 onMounted(() => {
