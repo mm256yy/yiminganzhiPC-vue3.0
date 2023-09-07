@@ -19,9 +19,9 @@
       </div>
 
       <el-tabs v-model="tabId" class="demo-tabs" @tab-change="onTableClick">
-        <el-tab-pane label="全部" name="-1" />
         <el-tab-pane label="待解决" name="0" />
-        <el-tab-pane label="未解决" name="1" />
+        <el-tab-pane label="已解决" name="1" />
+        <el-tab-pane label="全部" name="-1" />
       </el-tabs>
 
       <Table
@@ -82,7 +82,8 @@ import { getFeedBackListApi } from '@/api/workshop/feedback/service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const tabId = ref<'-1' | '0' | '1'>('-1')
+// 处理结果 0未处理 1已完成 2未完成
+const tabId = ref<'-1' | '0' | '1' | '2'>('-1')
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFeedBackListApi
@@ -91,7 +92,7 @@ const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId,
-  status: tabId.value
+  status: tabId.value === '-1' ? '' : tabId.value
 }
 
 getList()
@@ -276,7 +277,7 @@ const onViewRow = (row: any) => {
 const onTableClick = (tab: any) => {
   console.log(tab, 'tab')
   tabId.value = tab
-  tableObject.params.status = tab
+  tableObject.params.status = tab === '-1' ? '' : tab
   getList()
 }
 </script>
