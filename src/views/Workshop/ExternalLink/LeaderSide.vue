@@ -55,18 +55,20 @@
             <div class="data-left-header-tab-c">
               <div class="data-left-header-tab-c" style="width: 100%">
                 <div class="data-left-header-tab-c">
-                  <div class="icon-l icon-back"
+                  <!-- <div class="icon-l icon-back"
                     ><Icon icon="healthicons:money-bag-outline" style="color: white" />
-                  </div>
+                  </div> -->
+                  <img class="icon-back" src="@/assets/imgs/hushu.png" />
                   <div>
                     <div class="strong">{{ populationScreenDtoList[0] }}户</div>
                     <div class="sub-title">总户数</div>
                   </div>
                 </div>
-                <div class="data-left-header-tab-c">
-                  <div class="icon-r icon-back">
+                <div class="data-left-header-tab-c" style="padding-right: 30px">
+                  <!-- <div class="icon-r icon-back">
                     <Icon icon="material-symbols:person-add" style="color: white"
-                  /></div>
+                  /></div> -->
+                  <img class="icon-back" src="@/assets/imgs/caichan.png" />
                   <div>
                     <div class="strong">{{ populationScreenDtoList[2] }}户</div>
                     <div class="sub-title">财产户</div>
@@ -74,18 +76,19 @@
                 </div>
               </div>
             </div>
-            <div class="data-left-header-tab-c" style="width: 100%; margin-top: 8px">
+            <div class="data-left-header-tab-c" style="width: 100%; margin-top: 15px">
               <div class="data-left-header-tab-c">
-                <div class="icon-l icon-back"
+                <!-- <div class="icon-l icon-back"
                   ><Icon icon="fluent:home-person-24-filled" style="color: white" />
-                </div>
+                </div> -->
+                <img class="icon-back" src="@/assets/imgs/ren.png" />
                 <div>
                   <div class="strong">{{ populationScreenDtoList[1] }}户</div>
                   <div class="sub-title">总人数</div>
                 </div>
               </div>
               <div>
-                <div class="land data-left-header-tab-c">
+                <div class="land data-left-header-tab-c" style="background-color: #f3f7ff">
                   <div
                     style="
                       display: flex;
@@ -129,7 +132,9 @@
             <div class="land data-left-header-tab-c">
               <div v-for="item in houseList" :key="item.id" class="land-list">
                 <div class="sub-title">{{ item.name }}</div>
-                <div class="amount">{{ item.num }}<span class="sub-title">m²</span></div>
+                <div class="amount" style="padding-top: 10px"
+                  >{{ item.num }}<span class="sub-title">万m²</span></div
+                >
               </div>
             </div>
           </div>
@@ -139,13 +144,14 @@
             >
             <div class="data-left-header-tab-c">
               <div v-for="(item, index) in institutionsList" :key="index" class="flex">
-                <div class="icon-back" :style="{ backgroundColor: item.background }">
+                <!-- <div class="icon-back" :style="{ backgroundColor: item.background }">
                   <Icon
                     :icon="item.icon"
                     :style="{
                       color: item.color
                     }"
-                /></div>
+                /></div> -->
+                <img class="icon-back" :src="item.url" />
                 <div>
                   <div class="strong">{{ item.num }}家</div>
                   <div class="sub-title">{{ item.title }}</div>
@@ -188,7 +194,7 @@
       <!-- 中间内容 -->
       <div class="data-center data-common common-hegiht">
         <div class="common-color" @click="goLink()">
-          <img :src="VR" alt="背景图" style="width: 100%; height: 320px" />
+          <img :src="VR" alt="背景图" style="width: 100%; height: 373px" />
         </div>
         <div class="common-color">
           <div class="data-left-header-tab" @click="handleClickItem(4)">
@@ -340,7 +346,7 @@
             </div>
           </div>
         </div>
-        <div class="common-color">
+        <div class="common-color" style="height: 400px">
           <div class="data-left-header-tab" @click="handleClickItem(3)">
             <div class="data-left-header-tab">
               <div class="flex">
@@ -360,10 +366,10 @@
           <div v-for="item in scheduleList" :key="item.id" class="schedule">{{ item.name }} </div> -->
           <Echart :options="impProgressOption" :height="300" />
         </div>
-        <div class="common-color">
+        <div class="common-color" style="height: 120px">
           <img :src="Reports" alt="背景图" />
         </div>
-        <div class="common-color" @click="handleClickItem(1)">
+        <div class="common-color" @click="handleClickItem(1)" style="height: 120px">
           <img :src="Analysis" alt="背景图" />
         </div>
       </div>
@@ -377,6 +383,11 @@ import { ref, onMounted } from 'vue'
 // import Hydrograph from '@/assets/imgs/icon_Hydrograph.png'
 import Analysis from '@/assets/imgs/Big_Data_Analysis.png'
 import Reports from '@/assets/imgs/Smart_Reports.png'
+import qiye from '@/assets/imgs/qiye.png'
+// import ren from '@/assets/imgs/ren.png'
+import gongshang from '@/assets/imgs/gongshang.png'
+import station from '@/assets/imgs/station.png'
+import tankuang from '@/assets/imgs/tankuang.png'
 import VR from '@/assets/imgs/VR.png'
 import { useRouter } from 'vue-router'
 import Echart from '@/components/Echart/src/Echart.vue'
@@ -739,27 +750,37 @@ const projectsList = ref<any>([
 // ]
 
 const institutionsList = ref<any>([
-  { title: '企业', num: 4, icon: 'ph:buildings-fill', color: '#97b7ff', background: '#e3f0ff' },
+  {
+    title: '企业',
+    num: 4,
+    icon: 'ph:buildings-fill',
+    color: '#97b7ff',
+    background: '#e3f0ff',
+    url: qiye
+  },
   {
     title: '水电站',
     num: 9,
     icon: 'solar:buildings-3-bold',
     color: '#fd8746',
-    background: '#ffefea'
+    background: '#ffefea',
+    url: station
   },
   {
     title: '个体工商户',
     num: 476,
     icon: 'icon-park-solid:building-four',
     color: '#fd8746',
-    background: '#fff4d9'
+    background: '#fff4d9',
+    url: gongshang
   },
   {
     title: '探矿权',
     num: 2,
     icon: 'fluent:building-mosque-48-filled',
     color: '#1ac5ab',
-    background: '#d8f4ee'
+    background: '#d8f4ee',
+    url: tankuang
   }
 ])
 // const newsList = [
@@ -823,19 +844,22 @@ const questionList = ref<any>([
   display: flex;
   justify-content: space-between;
 }
-// .arround {
-//   display: flex;
-//   justify-content: space-around;
-// }
+
+.arround {
+  display: flex;
+  justify-content: space-around;
+}
+
 .common-hegiht {
-  height: 100vh;
-  overflow: auto;
+  height: 105vh;
+  // overflow: auto;
 }
 
 .common-color {
   width: 98%;
   padding: 10px;
   margin: 10px auto;
+  cursor: pointer;
   background-color: aliceblue;
   border-radius: 5px;
 }
@@ -878,6 +902,7 @@ const questionList = ref<any>([
   .land {
     background-color: rgba(231, 237, 253, var(--tw-bg-opacity));
     // padding: 16px;
+    border-radius: 2px;
   }
 }
 
@@ -891,8 +916,8 @@ const questionList = ref<any>([
 
 .icon-back {
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   margin-right: 8px;
   justify-content: center;
   align-items: center;
@@ -1033,16 +1058,17 @@ const questionList = ref<any>([
       margin-right: 10px;
     }
 
+    .amount {
+      padding-top: 10px;
+      font-size: 30px;
+      color: #333;
+    }
+
     .content {
       .sub-title {
         font-size: 14px;
         line-height: 1;
         color: #666;
-      }
-
-      .amount {
-        font-size: 30px;
-        color: #333;
       }
     }
   }
@@ -1127,6 +1153,7 @@ const questionList = ref<any>([
 }
 
 .sub-num {
+  padding-top: 10px;
   font-size: 18px;
   color: #333;
 }
@@ -1171,10 +1198,10 @@ const questionList = ref<any>([
   display: flex;
   // background-color: rgba(231, 237, 253, var(--tw-bg-opacity));
   width: calc((100%) / 5); // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
-  height: 72px;
-  max-width: calc((100%) / 5); // 加入这两个后每个item的宽度就生效了
+  height: 80px;
+  // max-width: calc((100%) / 5); // 加入这两个后每个item的宽度就生效了
   min-width: calc((100%) / 5); // 加入这两个后每个item的宽度就生效了
-  padding-left: 10px;
+  // padding-left: 10px;
   margin-bottom: 8px;
   flex: 1;
   flex-direction: column;
