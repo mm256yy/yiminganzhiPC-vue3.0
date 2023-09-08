@@ -18,21 +18,20 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
-        <ElTableColumn label="名称" prop="name" align="center" header-align="center">
+        <ElTableColumn label="名称" :width="160" prop="name" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入内容" v-model="row.name" />
-            <!-- <div v-else>
-              {{ row.nameText }}
-            </div> -->
+            <ElInput placeholder="请输入" v-model="row.name" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="规格型号" prop="usageType" align="center" header-align="center">
+        <ElTableColumn
+          label="规格型号"
+          :width="160"
+          prop="size"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
-            <!-- v-if="row.isAdd" -->
-            <ElInput placeholder="请输入规格型号" v-model="row.size" />
-            <!-- <div v-else>
-              {{ row.size }}
-            </div> -->
+            <ElInput placeholder="请输入" v-model="row.size" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="175" prop="number" align="center" header-align="center">
@@ -40,9 +39,9 @@
             <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单位" prop="size" align="center" header-align="center">
+        <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择单位" v-model="row.unit">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.unit">
               <ElOption
                 v-for="item in dictObj[268]"
                 :key="item.value"
@@ -53,12 +52,24 @@
           </template>
         </ElTableColumn>
 
-        <ElTableColumn label="用途" prop="name" align="center" header-align="center">
+        <ElTableColumn
+          label="用途"
+          :width="160"
+          prop="purpose"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
-            <ElInput placeholder="请输入内容" v-model="row.purpose" />
+            <ElInput placeholder="请输入" v-model="row.purpose" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="建造/购置年份" prop="name" align="center" header-align="center">
+        <ElTableColumn
+          label="建造/购置年份"
+          :width="180"
+          prop="year"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElDatePicker v-model="row.year" type="year" placeholder="选择年份" class="!w-full" />
           </template>
@@ -66,7 +77,7 @@
         <ElTableColumn
           label="原值(万元)"
           :width="175"
-          prop="number"
+          prop="amount"
           align="center"
           header-align="center"
         >
@@ -74,9 +85,15 @@
             <ElInputNumber :min="0" v-model="scope.row.amount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="搬迁方式" prop="size" align="center" header-align="center">
+        <ElTableColumn
+          label="搬迁方式"
+          :width="160"
+          prop="moveType"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择搬迁方式" v-model="row.moveType">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.moveType">
               <ElOption
                 v-for="item in dictObj[221]"
                 :key="item.value"
@@ -86,16 +103,16 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+        <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
-            <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+            <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action">
           <template #default="scope">
-            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }"
-              >删除</span
-            >
+            <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
+              删除
+            </span>
           </template>
         </ElTableColumn>
       </ElTable>
@@ -126,6 +143,7 @@ import {
   deleteDeviceApi
 } from '@/api/workshop/datafill/device-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { globalData } from '@/config/fill'
 
 interface PropsType {
   householdId: string
@@ -145,13 +163,16 @@ const defaultRow = {
   doorNo: props.doorNo,
   householdId: props.householdId,
   name: '',
-  usageType: '',
   size: '',
   unit: '',
   number: 0,
-  remark: '',
-  isAdd: true
+  purpose: '',
+  year: '',
+  amount: 0,
+  moveType: '',
+  remark: ''
 }
+
 const onDelRow = (row) => {
   ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
     type: 'warning',
@@ -170,6 +191,7 @@ const onDelRow = (row) => {
     })
     .catch(() => {})
 }
+
 const getList = () => {
   const params = {
     doorNo: props.doorNo,
@@ -188,7 +210,16 @@ const onAddRow = () => {
 }
 
 const onSave = () => {
-  saveDeviceListApi(tableData.value).then(() => {
+  let params: any = []
+  if (tableData.value && tableData.value.length) {
+    tableData.value.map((item: any) => {
+      params.push({
+        ...item,
+        status: globalData.currentSurveyStatus
+      })
+    })
+  }
+  saveDeviceListApi(params).then(() => {
     ElMessage.success('操作成功！')
     getList()
   })
