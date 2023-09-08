@@ -53,6 +53,7 @@ interface AppState {
   theme: ThemeTypes
   fixedMenu: boolean
   ProjectStatus: string
+  villageCoder: string
 }
 
 export const useAppStore = defineStore('app', {
@@ -71,6 +72,7 @@ export const useAppStore = defineStore('app', {
       pageLoading: false, // 路由跳转loading
       reservoirName: '',
       ProjectStatus: '',
+      villageCoder: '',
       breadcrumb: true, // 面包屑
       breadcrumbIcon: true, // 面包屑图标
       collapse: false, // 折叠菜单
@@ -129,6 +131,9 @@ export const useAppStore = defineStore('app', {
     },
     getProjectStatus(): string {
       return this.ProjectStatus
+    },
+    getVillageCoder(): string {
+      return this.villageCoder
     },
     getBreadcrumb(): boolean {
       return this.breadcrumb
@@ -327,7 +332,9 @@ export const useAppStore = defineStore('app', {
     setProjectStatus(ProjectStatus: string) {
       this.ProjectStatus = ProjectStatus
     },
-
+    setVillageCoder(villageCoder: string) {
+      this.villageCoder = villageCoder
+    },
     setCurrentProjectId(projectId: number) {
       wsCache.set(CURRENT_PROJECT_KEY, projectId)
       // 同时设置是否是项目管理员的状态，不能的用户可能属于多个项目

@@ -134,7 +134,27 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         name: 'adminSecondHome',
         component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
         meta: {
-          title: '工作台', // 领导端二级首页
+          title: '工作台', // 领导端二级 大数据分析
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'adminhomefund',
+        name: 'adminhomefund',
+        component: () => import('@/views/Workshop/Home/AdminHomeFund.vue'),
+        meta: {
+          title: '工作台', // 领导端二级 资金管理
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'adminhomeprogress',
+        name: 'adminhomeprogress',
+        component: () => import('@/views/Workshop/Home/AdminHomeProgress.vue'),
+        meta: {
+          title: '工作台', // 领导端二级  进度管理
           icon: 'ant-design:home-outlined',
           hidden: true
         }
