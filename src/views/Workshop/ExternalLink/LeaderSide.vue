@@ -188,7 +188,7 @@
       <!-- 中间内容 -->
       <div class="data-center data-common common-hegiht">
         <div class="common-color" @click="goLink()">
-          <img :src="VR" alt="背景图" style=" width: 100%;height: 320px" />
+          <img :src="VR" alt="背景图" style="width: 100%; height: 320px" />
         </div>
         <div class="common-color">
           <div class="data-left-header-tab" @click="handleClickItem(4)">
