@@ -17,9 +17,7 @@ export const getDeviceListApi = (
 export const saveDeviceListApi = (data: any): Promise<TableResponse<DeviceDtoType>> => {
   return request.post({
     url: '/immigrantEquipment/createAll',
-    data: data.map((item) => {
-      item.status = globalData.currentSurveyStatus
-    })
+    data
   })
 }
 

@@ -188,7 +188,7 @@
   </div>
 
   <!-- 档案上传 -->
-  <OnDocumentation :show="showDialog" :door-no="props.doorNo" @close="close" />
+  <OnDocumentation :show="showDialog" :door-no="props.doorNo" :type="type" @close="close" />
 </template>
 
 <script lang="ts" setup>
@@ -200,7 +200,7 @@ import OnDocumentation from '../OnDocumentation/Index.vue'
 interface PropsType {
   doorNo: string
   baseInfo: any
-  type: any
+  type: string
   householdId: number
 }
 
