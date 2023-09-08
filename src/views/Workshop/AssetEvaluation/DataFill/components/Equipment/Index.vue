@@ -102,7 +102,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.purpose">
+            <ElSelect clearable placeholder="请选择" v-model="row.moveType">
               <ElOption
                 v-for="item in dictObj[221]"
                 :key="item.value"
@@ -273,7 +273,7 @@ const defaultRow = {
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
     doorNo: props.doorNo,
-    equipmentStatus: '1'
+    deviceStatus: '1'
   })
   if (result && Array.isArray(result)) {
     reportDialog.value = true

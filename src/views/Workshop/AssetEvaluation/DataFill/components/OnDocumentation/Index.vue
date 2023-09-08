@@ -83,6 +83,76 @@
           </div>
         </ElCol>
       </ElRow>
+
+      <ElRow v-if="type === 'Enterprise' || type === 'IndividualB'">
+        <ElCol :span="24">
+          <div class="col-wrapper">
+            <div class="col-label-required"> 设施设备评估报告： </div>
+            <div class="card-img-list">
+              <ElUpload
+                action="/api/file/type"
+                :data="{
+                  type: 'archives'
+                }"
+                :on-error="onError"
+                :list-type="'picture-card'"
+                accept=".jpg,.png,jpeg,.pdf"
+                :multiple="true"
+                :file-list="devicePic"
+                :headers="headers"
+                :on-success="uploadFileChange3"
+                :before-remove="beforeRemove"
+                :on-remove="removeFile3"
+                :on-preview="imgPreview"
+              >
+                <template #trigger>
+                  <div class="card-img-box">
+                    <div class="card-img-custom">
+                      <Icon icon="ant-design:plus-outlined" :size="22" />
+                    </div>
+                    <div class="card-txt">点击上传</div>
+                  </div>
+                </template>
+              </ElUpload>
+            </div>
+          </div>
+        </ElCol>
+      </ElRow>
+
+      <ElRow v-if="type === 'villageInfoC'">
+        <ElCol :span="24">
+          <div class="col-wrapper">
+            <div class="col-label-required"> 农村小型专项设施评估报告： </div>
+            <div class="card-img-list">
+              <ElUpload
+                action="/api/file/type"
+                :data="{
+                  type: 'archives'
+                }"
+                :on-error="onError"
+                :list-type="'picture-card'"
+                accept=".jpg,.png,jpeg,.pdf"
+                :multiple="true"
+                :file-list="specialPic"
+                :headers="headers"
+                :on-success="uploadFileChange4"
+                :before-remove="beforeRemove"
+                :on-remove="removeFile4"
+                :on-preview="imgPreview"
+              >
+                <template #trigger>
+                  <div class="card-img-box">
+                    <div class="card-img-custom">
+                      <Icon icon="ant-design:plus-outlined" :size="22" />
+                    </div>
+                    <div class="card-txt">点击上传</div>
+                  </div>
+                </template>
+              </ElUpload>
+            </div>
+          </div>
+        </ElCol>
+      </ElRow>
     </ElForm>
 
     <template #footer>
@@ -117,6 +187,7 @@ import { getDocumentationApi, saveDocumentationApi } from '@/api/AssetEvaluation
 interface PropsType {
   show: boolean
   doorNo: string
+  type: string
 }
 
 interface FileItemType {
@@ -134,6 +205,8 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const houseEstimatePic = ref<FileItemType[]>([]) // 房屋评估报告文件列表
 const landEstimatePic = ref<FileItemType[]>([]) // 土地评估报告列表
+const devicePic = ref<FileItemType[]>([]) // 设施设备评估报告列表
+const specialPic = ref<FileItemType[]>([]) // 农村小型专项设施评估报告列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -153,6 +226,14 @@ const initData = () => {
 
       if (form.value.landEstimatePic) {
         landEstimatePic.value = JSON.parse(form.value.landEstimatePic)
+      }
+
+      if (form.value.devicePic) {
+        devicePic.value = JSON.parse(form.value.devicePic)
+      }
+
+      if (form.value.specialPic) {
+        specialPic.value = JSON.parse(form.value.specialPic)
       }
     }
   })
@@ -175,6 +256,7 @@ const submit = (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
+  const { type } = props
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!houseEstimatePic.value.length) {
@@ -183,12 +265,20 @@ const onSubmit = debounce((formEl) => {
       } else if (!landEstimatePic.value.length) {
         ElMessage.error('请上传土地评估报告')
         return
+      } else if ((type === 'Enterprise' || type === 'IndividualB') && !devicePic.value.length) {
+        ElMessage.error('请上传设施设备评估报告')
+        return
+      } else if (type === 'villageInfoC' && !specialPic.value.length) {
+        ElMessage.error('请上传农村小型专项设施评估报告')
+        return
       } else {
         let params: any = {
           ...form.value,
           doorNo: props.doorNo,
           houseEstimatePic: JSON.stringify(houseEstimatePic.value || []), // 房屋评估报告
-          landEstimatePic: JSON.stringify(landEstimatePic.value || []) // 土地评估报告
+          landEstimatePic: JSON.stringify(landEstimatePic.value || []), // 土地评估报告
+          devicePic: JSON.stringify(devicePic.value || []), // 设施设备评估报告
+          specialPic: JSON.stringify(specialPic.value || []) // 农村小型专项设施评估报告
         }
         submit(params)
       }
@@ -216,6 +306,10 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     houseEstimatePic.value = list
   } else if (type === 'landEstimate') {
     landEstimatePic.value = list
+  } else if (type === 'device') {
+    devicePic.value = list
+  } else if (type === 'special') {
+    specialPic.value = list
   }
 }
 
@@ -228,6 +322,14 @@ const uploadFileChange2 = (_response: any, _file: UploadFile, fileList: UploadFi
   handleFileList(fileList, 'landEstimate')
 }
 
+const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'device')
+}
+
+const uploadFileChange4 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'special')
+}
+
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'houseEstimate')
@@ -235,6 +337,14 @@ const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
 
 const removeFile2 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'landEstimate')
+}
+
+const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'device')
+}
+
+const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'special')
 }
 
 // 移除之前

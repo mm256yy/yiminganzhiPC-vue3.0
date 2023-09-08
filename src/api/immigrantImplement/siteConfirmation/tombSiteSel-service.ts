@@ -6,8 +6,8 @@ import { GraveType } from './tombSiteSel-types'
  * @param query 查询条件
  * @returns Object 接口请求后返回对象
  */
-export const getGraveListApi = (doorNo: string) => {
-  return request.get({ url: '/immigrantGrave', params: { doorNo } })
+export const getGraveListApi = (params: any) => {
+  return request.get({ url: '/immigrantGrave', params })
 }
 
 /**

@@ -148,6 +148,8 @@ import { globalData } from '@/config/fill'
 interface PropsType {
   householdId: string
   doorNo: string
+  surveyStatus: string
+  projectId: number
 }
 
 const props = defineProps<PropsType>()
@@ -162,6 +164,8 @@ const dictObj = computed(() => dictStore.getDictObj)
 const defaultRow = {
   doorNo: props.doorNo,
   householdId: props.householdId,
+  projectId: props.projectId,
+  status: props.surveyStatus,
   name: '',
   size: '',
   unit: '',
