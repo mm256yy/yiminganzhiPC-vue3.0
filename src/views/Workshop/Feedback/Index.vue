@@ -5,11 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">问题列表</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
     </div>
 
     <div class="table-wrap">
@@ -18,11 +14,11 @@
         <div></div>
       </div>
 
-      <el-tabs v-model="tabId" class="demo-tabs" @tab-change="onTableClick">
+      <!-- <el-tabs v-model="tabId" class="demo-tabs" @tab-change="onTableClick">
         <el-tab-pane label="待解决" name="0" />
         <el-tab-pane label="已解决" name="1" />
         <el-tab-pane label="全部" name="-1" />
-      </el-tabs>
+      </el-tabs> -->
 
       <Table
         v-model:pageSize="tableObject.size"
@@ -41,12 +37,14 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #latitude="{ row }">
-          <div>{{ row.longitude }}</div>
-          <div>{{ row.latitude }}</div>
+        <template #type="{ row }">
+          <div>{{ getStateLabel(row.type) }}</div>
+        </template>
+        <template #status="{ row }">
+          <div>{{ row.status === '0' ? '未处理' : row.status === '1' ? '已解决' : '未解决' }}</div>
         </template>
         <template #createdDate="{ row }">
-          <div>{{ row.createdDate }}</div>
+          <div>{{ dayjs(row.createdDate).format('YYYY-MM-DD') }}</div>
         </template>
         <template #action="{ row }">
           <TableEditColumn
@@ -70,20 +68,29 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
+import dayjs from 'dayjs'
 import { useAppStore } from '@/store/modules/app'
-import { ElBreadcrumb, ElBreadcrumbItem, ElTabs, ElTabPane } from 'element-plus'
+import {
+  ElBreadcrumb,
+  ElBreadcrumbItem
+  // ElTabs,
+  // ElTabPane
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getFeedBackListApi } from '@/api/workshop/feedback/service'
+import { FeedbackStage, getStateLabel } from './config'
+import { useRouter } from 'vue-router'
 
+const { push } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // 处理结果 0未处理 1已完成 2未完成
-const tabId = ref<'-1' | '0' | '1' | '2'>('-1')
+// const tabId = ref<'-1' | '0' | '1' | '2'>('-1')
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFeedBackListApi
@@ -91,35 +98,24 @@ const { register, tableObject, methods } = useTable({
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId,
-  status: tabId.value === '-1' ? '' : tabId.value
+  projectId
+  // status: tabId.value === '-1' ? '' : tabId.value
 }
 
 getList()
 
+// 1资格认定 2资产评估 3安置确认 4择址确认 5腾空过度 6动迁协议 7搬迁安置 8生产安置
+
 const schema = reactive<CrudSchema[]>([
   // 搜索栏
   {
-    field: 'stage',
+    field: 'type',
     label: '反馈阶段',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '资格认定',
-            value: 'a'
-          },
-          {
-            label: '房屋腾空',
-            value: 'b'
-          },
-          {
-            label: '安置确认',
-            value: 'c'
-          }
-        ]
+        options: FeedbackStage
       }
     },
     table: {
@@ -127,7 +123,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householder',
     label: '户主/企业名称',
     search: {
       show: true,
@@ -141,7 +137,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'time',
+    field: 'createdDate',
     label: '反馈时间',
     search: {
       show: true,
@@ -165,12 +161,16 @@ const schema = reactive<CrudSchema[]>([
       componentProps: {
         options: [
           {
-            label: '未解决',
+            label: '未处理',
             value: '0'
           },
           {
             label: '已解决',
             value: '1'
+          },
+          {
+            label: '未解决',
+            value: '2'
           }
         ]
       }
@@ -186,7 +186,7 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
-    field: 'id',
+    field: 'householder',
     label: '户主/企业名称',
     search: {
       show: false
@@ -199,7 +199,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: ' status',
+    field: 'type',
     label: '工作阶段',
     search: {
       show: false
@@ -212,7 +212,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'content',
+    field: 'remark',
     label: '反馈内容',
     search: {
       show: false
@@ -225,7 +225,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'town',
+    field: 'createdDate',
     label: '反馈时间',
     search: {
       show: false
@@ -238,7 +238,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'village',
+    field: 'status',
     label: '解决状态',
     search: {
       show: false
@@ -272,12 +272,32 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const onViewRow = (row: any) => {
   console.log(row, 'row')
+  push(`/Workshop/Feedback/Detail?id=${row.id}`)
 }
 
-const onTableClick = (tab: any) => {
-  console.log(tab, 'tab')
-  tabId.value = tab
-  tableObject.params.status = tab === '-1' ? '' : tab
-  getList()
+// const onTableClick = (tab: any) => {
+//   console.log(tab, 'tab')
+//   tabId.value = tab
+//   tableObject.params.status = tab === '-1' ? '' : tab
+//   getList()
+// }
+
+const onSearch = (data) => {
+  //解决是否户主relation入参变化
+  let searchData = JSON.parse(JSON.stringify(data))
+  console.log(searchData)
+
+  // 处理参数
+  let params = {
+    projectId,
+    ...searchData
+  }
+
+  if (params.createdDate) {
+    // 拿到对应的参数key
+    params.createdDate = [dayjs(params.createdDate[0]), dayjs(params.createdDate[1])]
+  }
+
+  setSearchParams({ ...params })
 }
 </script>

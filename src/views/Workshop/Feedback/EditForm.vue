@@ -17,10 +17,10 @@
       label-width="100px"
       :rules="rules"
     >
-      <ElFormItem label="意见描述：" prop="content" required>
-        <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.content" />
+      <ElFormItem label="意见描述：" prop="remark" required>
+        <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.remark" />
       </ElFormItem>
-      <ElFormItem label="是否解决：" prop="status" required>
+      <ElFormItem v-if="currentUserId === props.readerId" label="是否解决：" prop="status" required>
         <el-radio-group v-model="form.status" class="ml-4">
           <el-radio label="1" size="large">已解决</el-radio>
           <el-radio label="2" size="large">未解决</el-radio>
@@ -48,50 +48,38 @@ import {
   ElRadioGroup,
   ElRadio
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
+import { saveFeedbackMessageApi } from '@/api/workshop/feedback/service'
 import { useAppStore } from '@/store/modules/app'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit'
-  row?: any
+  feedbackId: number
+  readerId: number
 }
+
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+
+const currentUserId = computed(() => {
+  return appStore.getUserInfo ? appStore.getUserInfo.id : ''
+})
 
 const defaultValue = {
   status: '',
-  content: ''
+  remark: ''
 }
 const form = ref<any>(defaultValue)
 
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      form.value = {
-        ...val
-      }
-    } else {
-      form.value = defaultValue
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
-
 // 规则校验
 const rules = reactive<FormRules>({
-  status: [required()],
-  content: [required()]
+  remark: [required()]
 })
 
 // 关闭弹窗
@@ -103,11 +91,16 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: any) => {
-  if (props.actionType === 'add') {
-    console.log(data, 'data', projectId)
+  const params = {
+    ...data,
+    feedbackId: props.feedbackId
   }
-  ElMessage.success('操作成功！')
-  onClose(true)
+  saveFeedbackMessageApi(params).then((res) => {
+    if (res) {
+      ElMessage.success('操作成功！')
+      onClose(true)
+    }
+  })
 }
 
 // 提交表单

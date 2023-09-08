@@ -17,18 +17,18 @@
       label-width="100px"
       :rules="rules"
     >
-      <ElFormItem label="户主：" prop="content"> 张三 </ElFormItem>
-      <ElFormItem label="反馈阶段：" prop="content"> 资产评估 </ElFormItem>
-      <ElFormItem label="问题描述：" prop="content" required>
-        <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.content" />
+      <ElFormItem label="户主：" prop="householder"> {{ props.householder }} </ElFormItem>
+      <ElFormItem label="反馈阶段：" prop="type"> {{ getStateLabel(props.type) }} </ElFormItem>
+      <ElFormItem label="问题描述：" prop="remark" required>
+        <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.remark" />
       </ElFormItem>
-      <ElFormItem label="附件：" prop="status">
+      <ElFormItem label="附件：" prop="feedbackPic">
         <ElUpload
-          :file-list="form.fileList"
+          :file-list="feedbackPic"
           :data="{
             type: 'image'
           }"
-          accept=".dwg,.dws,.dxf"
+          accept=".dwg,.dws,.dxf,.png,.jpg,.jpeg"
           class="upload-demo"
           action="/api/file/type"
           multiple
@@ -64,17 +64,21 @@ import {
   ElMessageBox,
   ElUpload
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
+import { saveFeedBackApi } from '@/api/workshop/feedback/service'
+import { getStateLabel } from './config'
 
 interface PropsType {
   show: boolean
-  actionType: 'add' | 'edit'
-  row?: any
+  householder: string
+  doorNo: string
+  type: string
 }
+
 interface FileItemType {
   name: string
   url: string
@@ -86,38 +90,29 @@ const { required } = useValidator()
 const formRef = ref<FormInstance>()
 
 const appStore = useAppStore()
-const projectId = appStore.currentProjectId
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
 
+/**
+ * 反馈默认值
+ */
 const defaultValue = {
-  fileList: [],
-  content: ''
+  projectId: appStore.getCurrentProjectId,
+  householder: props.householder,
+  doorNo: props.doorNo,
+  type: props.type,
+  feedbackPic: '[]',
+  remark: '',
+  status: '0'
 }
 const form = ref<any>(defaultValue)
-
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      form.value = {
-        ...val
-      }
-    } else {
-      form.value = defaultValue
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+const feedbackPic = ref<FileItemType[]>([])
 
 // 规则校验
 const rules = reactive<FormRules>({
-  content: [required()]
+  remark: [required()]
 })
 
 // 关闭弹窗
@@ -129,11 +124,13 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: any) => {
-  if (props.actionType === 'add') {
-    console.log(data, 'data', projectId)
-  }
-  ElMessage.success('操作成功！')
-  onClose(true)
+  console.log(data, 'data')
+  saveFeedBackApi(data).then((res) => {
+    if (res) {
+      ElMessage.success('操作成功！')
+      onClose(true)
+    }
+  })
 }
 
 // 提交表单
@@ -143,6 +140,7 @@ const onSubmit = debounce((formEl) => {
       const data: any = {
         ...form.value
       }
+      data.feedbackPic = JSON.stringify(feedbackPic.value)
       submit(data)
     } else {
       return false
@@ -165,6 +163,7 @@ const handleFileList = (fileList: UploadFiles) => {
   }
   // CADfile.value
   console.log(list, 'list')
+  feedbackPic.value = list
 }
 
 // 文件上传
