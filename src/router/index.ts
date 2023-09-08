@@ -302,6 +302,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '乡镇资金入账',
           hidden: true
         }
+      },
+      {
+        path: 'PaymentApplication',
+        name: 'PaymentApplication',
+        component: () => import('@/views/Workshop/FundManage/PaymentApplication/Index.vue'),
+        meta: {
+          title: '付款申请',
+          hidden: false
+        }
       }
     ]
   }
