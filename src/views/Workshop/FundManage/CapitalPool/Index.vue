@@ -216,7 +216,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'typeText',
     label: '资金操作类型',
     search: {
       show: false
