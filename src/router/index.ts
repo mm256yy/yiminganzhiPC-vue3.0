@@ -304,8 +304,8 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
-        path: 'PaymentApplication',
-        name: 'PaymentApplication',
+        path: 'paymentApplication',
+        name: 'paymentApplication',
         component: () => import('@/views/Workshop/FundManage/PaymentApplication/Index.vue'),
         meta: {
           title: '付款申请',
