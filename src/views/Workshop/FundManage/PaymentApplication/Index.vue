@@ -99,6 +99,8 @@ const headInfo = ref<DemographicHeadType>({
   peasantHouseholdNum: 0
 })
 
+console.log(999)
+
 const excelList = ref<ExcelListType[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
