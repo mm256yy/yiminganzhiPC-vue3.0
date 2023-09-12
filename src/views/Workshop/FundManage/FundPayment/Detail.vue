@@ -24,16 +24,16 @@
       <div class="row-cont">
         <div class="row">
           <div class="label">申请类型：</div>
-          <div class="value">4444</div>
+          <div class="value">工程回款</div>
         </div>
 
         <div class="row">
           <div class="label">申请名称：</div>
-          <div class="value">4444</div>
+          <div class="value">感觉沙拉酱拉升</div>
         </div>
         <div class="row">
           <div class="label">概算科目：</div>
-          <div class="value">4444</div>
+          <div class="value">城市美化</div>
         </div>
         <div class="row">
           <div class="label">资金科目：</div>
@@ -42,12 +42,12 @@
 
         <div class="row">
           <div class="label">付款说明:</div>
-          <div class="value">4444</div>
+          <div class="value">范德萨发撒发生发大发的是谁</div>
         </div>
 
         <div class="row">
           <div class="label">申请时间:</div>
-          <div class="value">4444</div>
+          <div class="value">2023-10-23 08:00:00</div>
         </div>
 
         <div class="row">
@@ -57,22 +57,22 @@
 
         <div class="row">
           <div class="label">收款单位:</div>
-          <div class="value">4444</div>
+          <div class="value">的房间里睡觉啊了解了封疆大吏睡觉啊</div>
         </div>
 
         <div class="row">
           <div class="label">付款时间:</div>
-          <div class="value">4444</div>
+          <div class="value">2023-10-23 08:00:00</div>
         </div>
 
         <div class="row">
           <div class="label">申请金额:</div>
-          <div class="value">4444</div>
+          <div class="value">4453355</div>
         </div>
 
         <div class="row">
           <div class="label">申请凭证:</div>
-          <div class="value">4444</div>
+          <div class="value">粉底刷卡即将离开房间里都是</div>
         </div>
       </div>
 

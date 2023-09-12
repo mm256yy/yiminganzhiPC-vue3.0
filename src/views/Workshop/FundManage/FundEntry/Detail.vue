@@ -24,32 +24,32 @@
       <div class="row-cont">
         <div class="row">
           <div class="label">资金名称：</div>
-          <div class="value">4444</div>
+          <div class="value">范德萨发的是事实</div>
         </div>
 
         <div class="row">
           <div class="label">资金来源：</div>
-          <div class="value">4444</div>
+          <div class="value">反馈短斤少两</div>
         </div>
 
         <div class="row">
           <div class="label">金额(元)：</div>
-          <div class="value">4444</div>
+          <div class="value">6666</div>
         </div>
 
         <div class="row">
           <div class="label">入账时间：</div>
-          <div class="value">4444</div>
+          <div class="value">2023-10-23 08:00:00</div>
         </div>
 
         <div class="row">
           <div class="label">说明：</div>
-          <div class="value">4444</div>
+          <div class="value">福建卡德纳斯看看</div>
         </div>
 
         <div class="row">
           <div class="label">凭证：</div>
-          <div class="value">4444</div>
+          <div class="value">福建卡德纳斯看看</div>
         </div>
       </div>
 
