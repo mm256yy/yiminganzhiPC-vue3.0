@@ -499,7 +499,7 @@ const householdOption = ref({
 .echart-wrap {
   display: flex;
   flex-direction: column;
-  width: 436px;
+  // width: 436px;
   height: 570px;
   padding: 0 10px;
   box-sizing: border-box;
