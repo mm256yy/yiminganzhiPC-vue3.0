@@ -20,7 +20,8 @@
               </ElSelect>
             </div>
           </div>
-          <div>{{ landScreenDtoListObj.overview }}</div>
+          <!-- <div>{{ landScreenDtoListObj.overview }}</div> -->
+          <div></div>
         </div>
         <div class="data-left-bottom common-color">
           <div class="data-left-header-tab">
@@ -42,7 +43,7 @@
             <div class="land data-left-header-tab-c">
               <div v-for="item in landList" :key="item.id" class="land-list">
                 <div class="sub-title">{{ item.name }}</div>
-                <div class="amount">{{ item.num }}<span class="sub-title">亩</span></div>
+                <!-- <div class="amount">{{ item.num }}<span class="sub-title">亩</span></div> -->
               </div>
             </div>
           </div>
@@ -133,7 +134,7 @@
               <div v-for="item in houseList" :key="item.id" class="land-list">
                 <div class="sub-title">{{ item.name }}</div>
                 <div class="amount" style="padding-top: 10px"
-                  >{{ item.num }}<span class="sub-title">万m²</span></div
+                  >{{ (item.num / 10000).toFixed(2) }}<span class="sub-title">万m²</span></div
                 >
               </div>
             </div>
@@ -311,7 +312,7 @@
               <div>{{ item.price }}</div>
             </div></div
           > -->
-          <div class="content-1">
+          <div class="content-1 land land-fill">
             <div class="item">
               <img class="img" src="@/assets/imgs/home/icon_gszj.png" />
               <div class="content">
@@ -319,7 +320,7 @@
                 <div class="amount">642,103</div>
               </div>
             </div>
-            <div class="item">
+            <div class="item" style="background-color: white">
               <img class="img" src="@/assets/imgs/icon_Hydrograph.png" />
               <div class="content">
                 <div class="sub-title">累计使用(万元)</div>
@@ -337,7 +338,7 @@
               <div class="sub-title">本年使用资金(万元)</div>
               <div class="amount">98,000</div>
             </div>
-            <div class="chart-3">
+            <div class="chart-3 land land-fill">
               <div class="sub-title">概算内(万元)</div>
               <div class="amount">642,103</div>
               <div class="line"></div>
@@ -1009,6 +1010,7 @@ const questionList = ref<any>([
   display: flex;
   height: 36px;
   padding: 0 10px;
+  font-weight: bold;
   background: #f2f6ff;
   box-sizing: border-box;
   align-items: center;
@@ -1047,7 +1049,7 @@ const questionList = ref<any>([
     width: 213px;
     height: 90px;
     padding: 15px;
-    background: #f2f6ff;
+    // background: #f2f6ff;
     border-radius: 4px;
     box-sizing: border-box;
     align-items: center;
@@ -1120,7 +1122,7 @@ const questionList = ref<any>([
     width: 150px;
     height: 100%;
     padding: 14px 30px;
-    background: #f3f7ff;
+    // background: #f3f7ff;
     border-radius: 4px;
     box-sizing: border-box;
 
