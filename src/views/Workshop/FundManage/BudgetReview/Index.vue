@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElRadioGroup, ElRadioButton, ElButton } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -53,6 +53,7 @@ import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getLandlordListApi, delLandlordByIdApi } from '@/api/workshop/landlord/service'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ReviewForm from './ReviewForm.vue'
 import { MainType } from '@/types/print'
 
@@ -62,78 +63,7 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 审核弹窗标识
 const tabVal = ref<string>('1')
-
-// 资金科目
-const fundAccountList = ref<any[]>([
-  {
-    name: '一级科目1',
-    code: '1',
-    children: [
-      {
-        name: '一级级科目11',
-        code: '11',
-        children: [
-          {
-            name: '一级级科目111',
-            code: '111'
-          },
-          {
-            name: '一级级科目112',
-            code: '112'
-          }
-        ]
-      },
-      {
-        name: '一级科目12',
-        code: '12',
-        children: [
-          {
-            name: '一级级科目121',
-            code: '121'
-          },
-          {
-            name: '一级级科目122',
-            code: '122'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name: '二级科目1',
-    code: '2',
-    children: [
-      {
-        name: '二级级科目21',
-        code: '21',
-        children: [
-          {
-            name: '一级级科目211',
-            code: '211'
-          },
-          {
-            name: '一级级科目212',
-            code: '212'
-          }
-        ]
-      },
-      {
-        name: '二级科目22',
-        code: '22',
-        children: [
-          {
-            name: '一级级科目221',
-            code: '221'
-          },
-          {
-            name: '一级级科目222',
-            code: '222'
-          }
-        ]
-      }
-    ]
-  }
-])
+const fundAccountList = ref<any[]>([]) // 资金科目
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
@@ -419,6 +349,15 @@ const tabChange = (data: string) => {
   setSearchParams({ type: MainType.PeasantHousehold, status: tabVal.value })
 }
 
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+    }
+  })
+}
+
 const onReviewRow = async (row) => {
   tableObject.currentRow = row
   dialog.value = true
@@ -428,6 +367,10 @@ const onReviewRow = async (row) => {
 const onCloseReview = () => {
   dialog.value = false
 }
+
+onMounted(() => {
+  getFundSubjectList()
+})
 </script>
 
 <style lang="less" scoped>
