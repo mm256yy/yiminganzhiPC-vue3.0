@@ -16,21 +16,21 @@
       >
         <ElRow>
           <ElCol :span="8">
-            <ElFormItem label="项目名称" prop="projectName">
-              <ElInput v-model="searchForm.projectName" class="!w-250px" />
+            <ElFormItem label="项目名称" prop="name">
+              <ElInput v-model="searchForm.name" class="!w-250px" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
-            <ElFormItem label="项目编号" prop="projectNum">
-              <ElInput v-model="searchForm.projectNum" class="!w-250px" />
+            <ElFormItem label="项目编号" prop="code">
+              <ElInput v-model="searchForm.code" class="!w-250px" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="8">
             <div class="btn-wrap">
-              <ElButton type="primary" @click="search">
+              <ElButton type="primary" @click="onSearch">
                 <Icon icon="ep:search" class="mr-5px" /> 查询
               </ElButton>
-              <ElButton @click="reset">
+              <ElButton @click="onReset">
                 <Icon icon="ep:refresh-right" class="mr-5px" /> 重置
               </ElButton>
             </div>
@@ -47,46 +47,46 @@
         <ElButton v-if="!showAdjustingInvestment" type="primary" @click="addInvest('2')">
           添加调概投资
         </ElButton>
-        <ElButton type="primary" @click="save">保存</ElButton>
+        <ElButton type="primary" :loading="loading" @click="save">保存</ElButton>
       </div>
 
       <ElTable :data="tableData" row-key="id" style="width: 100%" class="mt-5" border>
         <ElTableColumn label="序号" width="80" align="center" type="index" header-align="center" />
-        <ElTableColumn label="项目名称" align="center" prop="projectName" header-align="center" />
-        <ElTableColumn label="项目编码" prop="projectNum" align="center" header-align="center" />
+        <ElTableColumn label="项目名称" align="center" prop="name" header-align="center" />
+        <ElTableColumn label="项目编码" prop="code" align="center" header-align="center" />
         <ElTableColumn
           label="概算投资"
           width="230"
-          prop="estimatedInvestment"
+          prop="gsInvest"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber class="!w-200px" v-model="row.estimatedInvestment" />
+            <ElInputNumber class="!w-200px" v-model="row.gsInvest" />
           </template>
         </ElTableColumn>
         <ElTableColumn
           v-if="showAdjustedInvestment"
           label="调估投资"
           width="230"
-          prop="adjustedInvestment"
+          prop="guInvest"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber class="!w-200px" v-model="row.adjustedInvestment" />
+            <ElInputNumber class="!w-200px" v-model="row.guInvest" />
           </template>
         </ElTableColumn>
         <ElTableColumn
           v-if="showAdjustingInvestment"
           label="调概投资"
           width="230"
-          prop="adjustingInvestment"
+          prop="gaiInvest"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber class="!w-200px" v-model="row.adjustingInvestment" />
+            <ElInputNumber class="!w-200px" v-model="row.gaiInvest" />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -108,84 +108,48 @@ import {
   ElInput,
   ElInputNumber,
   ElTable,
-  ElTableColumn
+  ElTableColumn,
+  ElMessage
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import { updateInvestListApi } from '@/api/fundManage/estimateFilling-service'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { onMounted } from 'vue'
 
 const searchForm = ref<any>({
-  projectName: '',
-  projectNum: ''
+  name: '',
+  code: ''
 })
 
 const formRef = ref<FormInstance>()
 const rules = ref<any>({})
+const tableData = ref<any[]>([]) // 列表数据
 const showAdjustedInvestment = ref<boolean>(false) // 展示添加的调估投资
 const showAdjustingInvestment = ref<boolean>(false) // 展示添加的调概投资
+const loading = ref<boolean>(false)
 
-const tableData = ref<any[]>([
-  {
-    id: 1,
-    projectName: '农村部分1',
-    projectNum: '001',
-    estimatedInvestment: null,
-    adjustedInvestment: null,
-    adjustingInvestment: null,
-    children: [
-      {
-        id: 11,
-        projectName: '土地补偿费和安置补偿费1',
-        projectNum: '0001',
-        estimatedInvestment: null,
-        adjustedInvestment: null,
-        adjustingInvestment: null,
-        children: [
-          {
-            id: 111,
-            projectName: '征收集体土地补偿费和安置补助费1',
-            projectNum: '00001',
-            estimatedInvestment: null,
-            adjustedInvestment: null,
-            adjustingInvestment: null
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: 2,
-    projectName: '农村部分2',
-    projectNum: '002',
-    estimatedInvestment: null,
-    adjustedInvestment: null,
-    adjustingInvestment: null,
-    children: [
-      {
-        id: 21,
-        projectName: '土地补偿费和安置补偿费2',
-        projectNum: '0002',
-        estimatedInvestment: null,
-        adjustedInvestment: null,
-        adjustingInvestment: null,
-        children: [
-          {
-            id: 221,
-            projectName: '征收集体土地补偿费和安置补助费2',
-            projectNum: '00002',
-            estimatedInvestment: null,
-            adjustedInvestment: null,
-            adjustingInvestment: null
-          }
-        ]
-      }
-    ]
+// 初始化页面列表获取
+const initData = () => {
+  if (!searchForm.value.name) {
+    delete searchForm.value.name
   }
-])
+  if (!searchForm.value.code) {
+    delete searchForm.value.code
+  }
+  getFundSubjectListApi(searchForm.value).then((res: any) => {
+    if (res) {
+      tableData.value = res.content
+    }
+  })
+}
 
 // 搜素
-const search = () => {}
+const onSearch = () => {
+  initData()
+}
 
 // 重置
-const reset = () => {
+const onReset = () => {
   nextTick(() => {
     formRef.value?.resetFields()
   })
@@ -204,7 +168,21 @@ const addInvest = (type: string) => {
 }
 
 // 保存
-const save = () => {}
+const save = async () => {
+  await updateInvestListApi(tableData.value)
+    .then(() => {
+      loading.value = false
+    })
+    .catch(() => {
+      loading.value = false
+    })
+  ElMessage.success('操作成功！')
+  initData()
+}
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

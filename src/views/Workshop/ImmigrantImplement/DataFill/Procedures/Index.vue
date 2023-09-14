@@ -51,7 +51,6 @@ const currentRow = ref<any>({})
 // 获取列表数据
 const getList = () => {
   getProceduresApi(props.doorNo).then((res) => {
-    console.log(res, 'res')
     if (res && res.length) {
       tableData.value = res
     }

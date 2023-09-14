@@ -142,14 +142,6 @@ const rules = reactive<FormRules>({
   completePic: [{ required: true }]
 })
 
-// 关闭弹窗
-const onClose = () => {
-  emit('close')
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
-}
-
 // 处理函数
 const handleFileList = (fileList: UploadFiles) => {
   let list: FileItemType[] = []
@@ -197,10 +189,10 @@ const onError = () => {
 
 const submit = async (data: any) => {
   await saveProceduresApi({
+    ...data,
     doorNo: props.doorNo, // 户号
     type: data.type, // 字典373
     completeDate: data.completeDate ? dayjs(data.completeDate) : '',
-    completePic: data.completePic,
     needHandle: '1',
     isComplete: '1'
   })
@@ -237,6 +229,15 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
+
+// 关闭弹窗
+const onClose = () => {
+  emit('close')
+  nextTick(() => {
+    formRef.value?.resetFields()
+    completePic.value = []
+  })
+}
 </script>
 
 <style lang="less" scoped>

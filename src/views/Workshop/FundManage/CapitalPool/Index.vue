@@ -7,11 +7,11 @@
 
     <!-- 统计信息 -->
     <div class="statistics-wrap">
-      <div class="item">
+      <div class="item" @click="toLink('townshipFundEntry')">
         <div class="title">入账总金额(元)</div>
         <div class="content">121,000</div>
       </div>
-      <div class="item center">
+      <div class="item center" @click="toLink('paymentApplication')">
         <div class="item-1">
           <div class="title">出账总金额(元)</div>
           <div class="content">1,100</div>
@@ -78,6 +78,7 @@
 
 <script lang="ts" setup>
 import { reactive, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElImage } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -95,6 +96,7 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const projectId = appStore.currentProjectId
 const dictObj = computed(() => dictStore.getDictObj)
+const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 
 const { register, tableObject, methods } = useTable({
@@ -214,7 +216,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'typeText',
     label: '资金操作类型',
     search: {
       show: false
@@ -333,6 +335,14 @@ const onFormPupClose = () => {
 
 // 导出
 const onExport = () => {}
+
+/**
+ * 跳转至指定页面
+ * @param name 路由名称
+ */
+const toLink = (name: string) => {
+  push({ name: name })
+}
 </script>
 
 <style lang="less" scoped>
@@ -354,6 +364,7 @@ const onExport = () => {}
     align-items: center;
     width: 360px;
     height: 112px;
+    cursor: pointer;
     background-color: #eef4ff;
 
     .title {

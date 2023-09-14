@@ -2,30 +2,21 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">付款申请</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">资金审核</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
     </div>
 
     <div class="table-wrap">
+      <el-radio-group class="mb-5" v-model="tabVal" @change="tabChange">
+        <el-radio-button label="1">待办</el-radio-button>
+        <el-radio-button label="2">已办</el-radio-button>
+      </el-radio-group>
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款申请记录</span>
-
-          <div class="text">
-            已完成：{{ 1 }}笔 <span class="num">{{ 1000 }}</span> 元
-          </div>
-          <div class="text">
-            审核中：{{ 1 }}笔 <span class="num">{{ 1000 }}</span> 元
-          </div>
-          <div class="text">
-            待提交：{{ 1 }}笔 <span class="num">{{ 1000 }}</span> 元
-          </div>
         </div>
-        <ElSpace>
-          <ElButton type="primary" @click="onAddRow"> 申请 </ElButton>
-        </ElSpace>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -51,30 +42,34 @@
         </template>
 
         <!-- <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
-        </template> -->
+            <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
+          </template> -->
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
-          <el-button type="primary" link @click="onEditRow(row)">编辑</el-button>
-          <el-button v-if="row.relation != 1" type="danger" link> 删除 </el-button>
+          <el-button type="primary" link @click="onReviewRow(row)">审核</el-button>
+          <!-- <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row)">
+            删除
+          </el-button> -->
         </template>
       </Table>
     </div>
 
-    <EditForm :show="dialog" @close="onEditFormClose" :actionType="actionType" />
+    <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
+    <ReviewForm :show="dialog" @close="onCloseReview" :actionType="actionType" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElRadioGroup, ElRadioButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-// import { useIcon } from '@/hooks/web/useIcon'
+import ReviewForm from './ReviewForm.vue'
+// import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
   getDemographicListApi,
   delDemographicByIdApi,
@@ -89,7 +84,9 @@ import {
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
 // import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
-import EditForm from './EditForm.vue'
+// import EditForm from '../FundPayment/EditForm.vue'
+const tabVal = ref<string>('1')
+
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -99,10 +96,8 @@ const headInfo = ref<DemographicHeadType>({
   peasantHouseholdNum: 0
 })
 
-console.log(999)
-
 const excelList = ref<ExcelListType[]>([])
-const actionType = ref<'view' | 'add' | 'edit'>('add')
+const actionType = ref<'view' | 'add' | 'edit'>('view')
 const dialog = ref<boolean>(false)
 
 let timer = 0
@@ -118,7 +113,10 @@ tableObject.params = {
 }
 
 getList()
-
+const tabChange = (data: string) => {
+  tabVal.value = data
+  // setSearchParams({ type: MainType.PeasantHousehold, status: tabVal.value })
+}
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()
   headInfo.value = info
@@ -151,56 +149,36 @@ onBeforeUnmount(() => {
 //   )
 // }
 
-const onAddRow = () => {
-  actionType.value = 'add'
-  tableObject.currentRow = null
+// const onAddRow = () => {
+//   actionType.value = 'add'
+//   tableObject.currentRow = null
+//   dialog.value = true
+// }
+
+// const onEditRow = (row: any) => {
+//   actionType.value = 'edit'
+//   tableObject.currentRow = row
+//   dialog.value = true
+// }
+const onReviewRow = async (row) => {
+  tableObject.currentRow = row
   dialog.value = true
+  actionType.value = 'edit'
+}
+const onViewRow = async (row) => {
+  tableObject.currentRow = row
+  dialog.value = true
+  actionType.value = 'view'
 }
 
-const onEditRow = (row: any) => {
-  actionType.value = 'edit'
-  tableObject.currentRow = row
-  dialog.value = true
-}
-const onViewRow = (row: any) => {
-  actionType.value = 'view'
-  //   tableObject.currentRow = {
-  //     ...row,
-  //     occupation: row.occupation ? JSON.parse(row.occupation) : '',
-  //     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  //   }
-  tableObject.currentRow = row
-  dialog.value = true
+// 关闭审核弹窗
+const onCloseReview = () => {
+  dialog.value = false
 }
 const schema = reactive<CrudSchema[]>([
   {
     field: 'name',
     label: '申请类别',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'relationText',
-    label: '状态',
     search: {
       show: true,
       component: 'Select',
@@ -529,12 +507,12 @@ const onSearch = (data) => {
   }
 }
 
-const onEditFormClose = (flag: boolean) => {
-  if (flag) {
-    getList()
-  }
-  dialog.value = false
-}
+// const onEditFormClose = (flag: boolean) => {
+//   if (flag) {
+//     getList()
+//   }
+//   dialog.value = false
+// }
 </script>
 
 <style lang="less" scoped>
