@@ -1,5 +1,13 @@
 <template>
   <div class="data-fill">
+    <ElButton
+      @click="onBack"
+      :icon="BackIcon"
+      type="default"
+      class="px-9px py-0px !h-28px mr-8px !text-12px"
+    >
+      返回
+    </ElButton>
     <!-- 上面区域 -->
     <div class="common-color" style="background-color: white">
       <div class="between">
@@ -160,7 +168,12 @@ import {
   getVillageList
 } from '@/api/AssetEvaluation/leader-side'
 import { useAppStore } from '@/store/modules/app'
-import { ElSelect, ElOption } from 'element-plus'
+import { ElSelect, ElOption, ElButton } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
 const tabVillageAnalysis = (index) => {
   typeNumber.value = index + 1
   getVillageAnalysisLists()
@@ -960,6 +973,10 @@ const genderOption = ref({
     }
   ]
 })
+const { back } = useRouter()
+const onBack = () => {
+  back()
+}
 </script>
 
 <style scoped>
