@@ -1,5 +1,13 @@
 <template>
   <div class="data-fill">
+    <ElButton
+      @click="onBack"
+      :icon="BackIcon"
+      type="default"
+      class="px-9px py-0px !h-28px mr-8px !text-12px"
+    >
+      返回
+    </ElButton>
     <div class="between">
       <div class="between" @click="checktab(-1)">
         <div class="header-list">
@@ -126,7 +134,11 @@ import {
   villageScheduleList,
   scheduleRankList
 } from '@/api/AssetEvaluation/leader-side'
-import { ElTabs, ElTabPane } from 'element-plus'
+import { ElTabs, ElTabPane, ElButton } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+import { useRouter } from 'vue-router'
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
 const type = ref<number>(1)
@@ -411,6 +423,10 @@ const householdOption = ref({
     }
   ]
 })
+const { back } = useRouter()
+const onBack = () => {
+  back()
+}
 </script>
 
 <style lang="less" scoped>

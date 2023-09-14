@@ -1,5 +1,13 @@
 <template>
   <div class="data-fill">
+    <ElButton
+      @click="onBack"
+      :icon="BackIcon"
+      type="default"
+      class="px-9px py-0px !h-28px mr-8px !text-12px"
+    >
+      返回
+    </ElButton>
     <!-- 上面区域 -->
     <div class="between">
       <div class="common-color background">
@@ -58,9 +66,13 @@
 
 <script lang="ts" setup>
 import Echart from '@/components/Echart/src/Echart.vue'
+import { ElButton } from 'element-plus'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import tabButton from '../Home/components/tabButton.vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
+import { useIcon } from '@/hooks/web/useIcon'
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tabList = [
   {
     title: '企业'
@@ -552,6 +564,10 @@ const taxationOption = ref({
     }
   ]
 })
+const { back } = useRouter()
+const onBack = () => {
+  back()
+}
 </script>
 
 <style lang="less" scoped>

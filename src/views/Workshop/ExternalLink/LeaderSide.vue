@@ -3,7 +3,10 @@
     <div class="data-fill">
       <!-- 左边内容 -->
       <div class="data-left data-common common-hegiht">
-        <div class="data-left-header common-color" style="height: 98px">
+        <div
+          class="data-left-header common-color"
+          style="height: 178px; overflow: hidden; text-overflow: ellipsis"
+        >
           <div class="data-left-header-tab">
             <div class="flex">
               <div class="line"></div>
@@ -20,7 +23,7 @@
               </ElSelect>
             </div>
           </div>
-          <!-- <div>{{ landScreenDtoListObj.overview }}</div> -->
+          <div>{{ landScreenDtoListObj.overview }}</div>
           <div></div>
         </div>
         <div class="data-left-bottom common-color">
@@ -89,7 +92,7 @@
                 </div>
               </div>
               <div>
-                <div class="land data-left-header-tab-c" style="background-color: #f3f7ff">
+                <div class="land data-left-header-tab-c land-fill">
                   <div
                     style="
                       display: flex;
@@ -195,7 +198,7 @@
       <!-- 中间内容 -->
       <div class="data-center data-common common-hegiht">
         <div class="common-color" @click="goLink()">
-          <img :src="VR" alt="背景图" style="width: 100%; height: 373px" />
+          <img :src="VR" alt="背景图" style="width: 100%; height: 453px" />
         </div>
         <div class="common-color">
           <div class="data-left-header-tab" @click="handleClickItem(4)">
@@ -347,7 +350,7 @@
             </div>
           </div>
         </div>
-        <div class="common-color" style="height: 400px">
+        <div class="common-color" style="height: 480px">
           <div class="data-left-header-tab" @click="handleClickItem(3)">
             <div class="data-left-header-tab">
               <div class="flex">
@@ -375,8 +378,8 @@
         </div>
       </div>
     </div>
-    <bottomTarg />
   </div>
+  <div style="margin-top: 80px"> <bottomTarg /></div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
@@ -447,7 +450,7 @@ const initPolicyData = () => {
   })
 }
 const getList = async () => {
-  const list = await getLeadershipScreen({})
+  const list = await getLeadershipScreen({ code: reason.value })
   leadershipScreenList.value = list
   const planList = ref<any>([])
   const actualList = ref<any>([])
@@ -507,6 +510,7 @@ const villageList = async () => {
 const tabVillage = async () => {
   console.log(reason.value, '选中的code')
   appStore.setVillageCoder(reason.value)
+  getList()
 }
 onMounted(() => {
   getList()
