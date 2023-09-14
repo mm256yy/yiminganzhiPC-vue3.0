@@ -272,7 +272,7 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const onViewRow = (row: any) => {
   console.log(row, 'row')
-  push(`/Workshop/Feedback/Detail?id=${row.id}`)
+  push(`/Feedback/FeedbackDetail?id=${row.id}`)
 }
 
 // const onTableClick = (tab: any) => {
