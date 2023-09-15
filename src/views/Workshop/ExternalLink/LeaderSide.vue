@@ -13,7 +13,15 @@
               <div class="strong">项目概览</div></div
             >
             <div>
-              <ElSelect clearable filterable v-model="reason" class="!w-full" @change="tabVillage">
+              <ElSelect
+                clearable
+                filterable
+                v-model="reason"
+                class="!w-full"
+                @change="tabVillage"
+                placeholder="全域"
+                @clear="clearInput"
+              >
                 <ElOption
                   v-for="item in villageLists"
                   :key="item.code"
@@ -23,7 +31,7 @@
               </ElSelect>
             </div>
           </div>
-          <div>{{ landScreenDtoListObj.overview }}</div>
+          <div class="direction">{{ landScreenDtoListObj.overview }}</div>
           <div></div>
         </div>
         <div class="data-left-bottom common-color">
@@ -46,7 +54,7 @@
             <div class="land data-left-header-tab-c">
               <div v-for="item in landList" :key="item.id" class="land-list">
                 <div class="sub-title">{{ item.name }}</div>
-                <!-- <div class="amount">{{ item.num }}<span class="sub-title">亩</span></div> -->
+                <div class="amount">{{ item.num }}<span class="sub-title">亩</span></div>
               </div>
             </div>
           </div>
@@ -104,8 +112,9 @@
                     "
                   >
                     <div class="sub-title">农业</div>
-                    <div class="amount"
-                      >{{ populationScreenDtoList[3] }}<span class="sub-title">人</span></div
+                    <div class="amount" style="display: flex; align-items: center"
+                      ><span>{{ populationScreenDtoList[3] }}</span
+                      ><span class="sub-title">人</span></div
                     >
                   </div>
                   <div
@@ -119,8 +128,9 @@
                     "
                   >
                     <div class="sub-title">非农业</div>
-                    <div class="amount"
-                      >{{ populationScreenDtoList[4] }}<span class="sub-title">人</span></div
+                    <div class="amount" style="display: flex; align-items: center"
+                      ><span>{{ populationScreenDtoList[4] }}</span
+                      ><span class="sub-title">人</span></div
                     >
                   </div>
                 </div>
@@ -200,7 +210,7 @@
         <div class="common-color" @click="goLink()">
           <img :src="VR" alt="背景图" style="width: 100%; height: 453px" />
         </div>
-        <div class="common-color">
+        <div class="common-color height-fill">
           <div class="data-left-header-tab" @click="handleClickItem(4)">
             <div class="data-left-header-tab">
               <div class="flex">
@@ -266,7 +276,7 @@
           </ElTabs>
         </div>
         <div class="common-color">
-          <div class="data-left-header-tab">
+          <div class="data-left-header-tab" @click="handleClickItem(5)">
             <div class="data-left-header-tab">
               <div class="flex">
                 <div class="line"></div>
@@ -293,13 +303,18 @@
       </div>
       <!-- 右边内容 -->
       <div class="data-right data-common common-hegiht">
-        <div class="common-color" @click="handleClickItem(2)">
-          <div class="data-left-header-tab">
+        <div class="common-color">
+          <div class="data-left-header-tab" @click="handleClickItem(2)">
             <div class="flex">
               <div class="line"></div>
               <div class="strong">资金管理</div></div
             >
+            <div class="toMore aliam-center">
+              <div>查看更多</div>
+              <Icon icon="ant-design:right-outlined" />
+            </div>
           </div>
+
           <!-- <div class="data-left-header-tab">
             <div v-for="item in fundList" :key="item.id" class="fund-list flex">
               <img :src="item.icon" alt="背景图" />
@@ -378,8 +393,8 @@
         </div>
       </div>
     </div>
+    <div> <bottomTarg /></div>
   </div>
-  <div style="margin-top: 80px"> <bottomTarg /></div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
@@ -414,6 +429,8 @@ const leadershipScreenList = ref<any>({})
 const populationScreenDtoList = ref<any>([])
 const landScreenDtoList = ref<any>([])
 const landScreenDtoListObj = ref<any>({})
+const landScreenDtoListObjs = ref<any>({})
+const paramsValue = ref<any>({})
 const arr = ref<any>([])
 const goLink = () => {
   let url = 'https://lanhuapp.com/link/#/invite?sid=lxetfKaa'
@@ -450,47 +467,57 @@ const initPolicyData = () => {
   })
 }
 const getList = async () => {
-  const list = await getLeadershipScreen({ code: reason.value })
-  leadershipScreenList.value = list
-  const planList = ref<any>([])
-  const actualList = ref<any>([])
-  list.progressManagementDto.forEach((item) => {
-    arr.value.push(item.name)
-    planList.value.push(item.plan)
-    actualList.value.push(item.actual)
-  })
-  impProgressOption.value.yAxis.data = arr.value
-  impProgressOption.value.series[1].data = planList.value
-  impProgressOption.value.series[0].data = actualList.value
-  const professionalList = ref<any>([])
-  const companyDtoList = ref<any>([])
-  const houseScreenDtoList = ref<any>([])
-  let i = ref<number>(0)
-  professionalList.value = Object.values(list.professionalProjectsDto)
-  companyDtoList.value = Object.values(list.companyDto)
-  houseScreenDtoList.value = Object.values(list.houseScreenDto)
-  populationScreenDtoList.value = Object.values(list.populationScreenDto)
-  landScreenDtoList.value = Object.values(list.landScreenDto)
-  landScreenDtoListObj.value = list.landScreenDto
-  console.log(landScreenDtoList.value, '11111111111111')
-  professionalList.value.forEach((item, index) => {
-    projectsList.value[index].num = item
-  })
-  companyDtoList.value.forEach((item, index) => {
-    delete companyDtoList.value[4]
-    institutionsList.value[index].num = item
-  })
-  houseScreenDtoList.value.forEach((item, index) => {
-    delete houseScreenDtoList.value[3]
-    houseList.value[index].num = item
-  })
-  landScreenDtoList.value.forEach((item) => {
-    delete landScreenDtoList.value[0]
-    delete landScreenDtoList.value[1]
-    delete landScreenDtoList.value[2]
-    delete landScreenDtoList.value[3]
-    landList.value[i.value++].num = item
-  })
+  if (reason.value) {
+    paramsValue.value = { code: reason.value }
+    const list = await getLeadershipScreen(paramsValue.value)
+    leadershipScreenList.value = list
+    const planList = ref<any>([])
+    const actualList = ref<any>([])
+    arr.value = []
+    planList.value = []
+    actualList.value = []
+    list.progressManagementDto.forEach((item) => {
+      arr.value.push(item.name)
+      planList.value.push(item.plan)
+      actualList.value.push(item.actual)
+    })
+    console.log(arr.value, planList.value, '111')
+    impProgressOption.value.yAxis.data = arr.value
+    impProgressOption.value.series[1].data = planList.value
+    impProgressOption.value.series[0].data = actualList.value
+    const professionalList = ref<any>([])
+    const companyDtoList = ref<any>([])
+    const houseScreenDtoList = ref<any>([])
+    professionalList.value = Object.values(list.professionalProjectsDto)
+    companyDtoList.value = Object.values(list.companyDto)
+    houseScreenDtoList.value = Object.values(list.houseScreenDto)
+    populationScreenDtoList.value = Object.values(list.populationScreenDto)
+
+    landScreenDtoListObj.value = JSON.parse(JSON.stringify(list.landScreenDto))
+    landScreenDtoListObjs.value = JSON.parse(JSON.stringify(list.landScreenDto))
+    delete landScreenDtoListObjs.value.overview
+
+    delete landScreenDtoListObjs.value.totalArea
+
+    landScreenDtoList.value = Object.values(landScreenDtoListObjs.value)
+    console.log(landScreenDtoList.value, '11111111111111')
+    professionalList.value.forEach((item, index) => {
+      projectsList.value[index].num = item
+    })
+    companyDtoList.value.forEach((item, index) => {
+      delete companyDtoList.value[4]
+      institutionsList.value[index].num = item
+    })
+    houseScreenDtoList.value.forEach((item, index) => {
+      delete houseScreenDtoList.value[3]
+      houseList.value[index].num = item
+    })
+    landScreenDtoList.value.forEach((item, index) => {
+      delete landScreenDtoList.value[0]
+      delete landScreenDtoList.value[4]
+      landList.value[index].num = item
+    })
+  }
 }
 
 const feedback = async () => {
@@ -512,13 +539,59 @@ const tabVillage = async () => {
   appStore.setVillageCoder(reason.value)
   getList()
 }
+const clearInput = async () => {
+  const list = await getLeadershipScreen({ code: undefined })
+  leadershipScreenList.value = list
+  const planList = ref<any>([])
+  const actualList = ref<any>([])
+  arr.value = []
+  planList.value = []
+  actualList.value = []
+  list.progressManagementDto.forEach((item) => {
+    arr.value.push(item.name)
+    planList.value.push(item.plan)
+    actualList.value.push(item.actual)
+  })
+  console.log(arr.value, planList.value, '111')
+  impProgressOption.value.yAxis.data = arr.value
+  impProgressOption.value.series[1].data = planList.value
+  impProgressOption.value.series[0].data = actualList.value
+  const professionalList = ref<any>([])
+  const companyDtoList = ref<any>([])
+  const houseScreenDtoList = ref<any>([])
+  professionalList.value = Object.values(list.professionalProjectsDto)
+  companyDtoList.value = Object.values(list.companyDto)
+  houseScreenDtoList.value = Object.values(list.houseScreenDto)
+  populationScreenDtoList.value = Object.values(list.populationScreenDto)
+  landScreenDtoListObj.value = JSON.parse(JSON.stringify(list.landScreenDto))
+  landScreenDtoListObjs.value = JSON.parse(JSON.stringify(list.landScreenDto))
+  delete landScreenDtoListObjs.value.overview
+  delete landScreenDtoListObjs.value.totalArea
+  landScreenDtoList.value = Object.values(landScreenDtoListObjs.value)
+  console.log(landScreenDtoList.value, '11111111111111')
+  professionalList.value.forEach((item, index) => {
+    projectsList.value[index].num = item
+  })
+  companyDtoList.value.forEach((item, index) => {
+    delete companyDtoList.value[4]
+    institutionsList.value[index].num = item
+  })
+  houseScreenDtoList.value.forEach((item, index) => {
+    delete houseScreenDtoList.value[3]
+    houseList.value[index].num = item
+  })
+  landScreenDtoList.value.forEach((item, index) => {
+    delete landScreenDtoList.value[0]
+    delete landScreenDtoList.value[4]
+    landList.value[index].num = item
+  })
+}
 onMounted(() => {
-  getList()
+  clearInput()
   initNewsData()
   initPolicyData()
   feedback()
   villageList()
-  console.log(projectsList.value)
 })
 
 const impProgressOption = ref({
@@ -605,7 +678,8 @@ const handleClickItem = (type: number) => {
     1: 'adminSecondHome', // 大数据分析
     2: 'adminhomefund', //资金管理
     3: 'adminhomeprogress', //进度管理 //新闻管理
-    4: 'NewsList' //新闻管理
+    4: 'Project', //新闻管理
+    5: 'Feedback' //反馈管理
   }
   console.log(pathMap[type], '测试')
   push({ name: pathMap[type] })
@@ -842,6 +916,7 @@ const questionList = ref<any>([
 .data-left-header-tab {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 46px;
 }
 
@@ -856,7 +931,7 @@ const questionList = ref<any>([
 }
 
 .common-hegiht {
-  height: 105vh;
+  // height: 105vh;
   // overflow: auto;
 }
 
@@ -898,7 +973,7 @@ const questionList = ref<any>([
   width: 100%;
   margin: 0 auto;
   justify-content: space-between;
-  // height: 100vh;
+  // height: 120vh;
   .data-common {
     width: 35%;
     // background-color: aquamarine;
@@ -1214,5 +1289,17 @@ const questionList = ref<any>([
   justify-content: center;
   align-items: center;
   // border-right: 1px solid gray;
+}
+
+.direction {
+  overflow: hidden; //超出隐藏
+  font-size: 14px;
+  text-indent: 2em;
+  text-overflow: ellipsis; //超出显示...
+  white-space: wrap; //设置文字不换行
+}
+
+.height-fill {
+  height: 253px;
 }
 </style>

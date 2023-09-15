@@ -159,6 +159,26 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           hidden: true
         }
       },
+      // {
+      //   path: 'Feedback',
+      //   name: 'Feedback',
+      //   component: () => import('@/views/Workshop/Feedback/Index.vue'),
+      //   meta: {
+      //     title: '工作台', // 反馈
+      //     icon: 'ant-design:home-outlined',
+      //     hidden: true
+      //   }
+      // },
+      {
+        path: 'Project',
+        name: 'Project',
+        component: () => import('@/views/Project/News/Index.vue'),
+        meta: {
+          title: '工作台', // 新闻法规
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
       {
         path: 'adminThirdHome',
         name: 'adminThirdHome',
