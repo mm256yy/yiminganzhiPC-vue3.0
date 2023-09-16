@@ -31,7 +31,6 @@
     <BaseInfo :baseInfo="baseInfo" :tabCurrentId="tabCurrentId" />
   </div>
 
-  <!-- 居民户 -->
   <div class="data-fill-body">
     <!-- 协议签订 -->
     <signing-agreement

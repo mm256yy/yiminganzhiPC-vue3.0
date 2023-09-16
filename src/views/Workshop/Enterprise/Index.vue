@@ -192,6 +192,7 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
+
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
   ? router.currentRoute.value?.meta?.title?.split('-')[1]

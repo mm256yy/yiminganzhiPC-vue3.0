@@ -65,6 +65,10 @@
           </div>
         </div>
       </div>
+
+      <div v-if="tabCurrentId !== 0" class="flex align-center pt-20px justify-end">
+        <ElButton type="primary" @click="onFeedback">问题反馈</ElButton>
+      </div>
     </div>
 
     <!-- 居民户 -->
@@ -134,7 +138,7 @@
           v-if="subTabCurrentId === TabIds[1]"
         />
 
-        <!-- 坟墓安置 -->
+        <!-- 坟墓确认 -->
         <grave-arrange :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[2]" />
       </template>
 
@@ -355,18 +359,20 @@
       <!-- 腾空(村集体只有房屋腾空) -->
       <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
 
-      <!-- 协议签订 -->
-      <template v-if="tabCurrentId === 2">
-        <!-- 动迁安置协议 -->
-        <village-relocation-agreement v-if="subTabCurrentId === TabIds[0]" />
-
-        <!-- 过渡安置协议 -->
-        <village-transition-agreement v-if="subTabCurrentId === TabIds[1]" />
-      </template>
+      <!-- 动迁协议 -->
+      <village-relocation-agreement v-if="tabCurrentId === 2" />
 
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>
+
+    <FeedbackForm
+      :show="feedbackShow"
+      :householder="baseInfo.name"
+      :doorNo="doorNo"
+      :type="feedbackType"
+      @close="onFeedbackClose"
+    />
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
@@ -403,7 +409,7 @@ import SchemeBase from './SchemeBase/Index.vue' // 模拟安置
 
 import RelocationArrange from './ResettleConfirm/Relocation/Index.vue' // 安置确认 -- 搬迁安置
 import ProduceArrange from './ResettleConfirm/Produce/Index.vue' // 安置确认 -- 生产安置
-import GraveArrange from './ResettleConfirm/Grave/Index.vue' // 安置确认 -- 坟墓安置
+import GraveArrange from './ResettleConfirm/Grave/Index.vue' // 安置确认 -- 坟墓确认
 
 import ProdLand from './SiteConfirmation/ProdLand/Index.vue' // 择址确认 -- 生产用地
 import SiteSel from './SiteConfirmation/SiteSel/Index.vue' // 择址确认 -- 选房择址
@@ -412,8 +418,7 @@ import TombSiteSel from './SiteConfirmation/TombSiteSel/Index.vue' // 择址确�
 import HouseholdAgreementSign from './Agreement/HouseholdAgreementSign.vue' // 居民户 -- 协议签订
 import EntRelocationAgreement from './Agreement/EntRelocationAgreement.vue' // 企业 -- 动迁协议
 import IndividualRelocationAgreement from './Agreement/IndividualRelocationAgreement.vue' // 个体户 -- 动迁协议
-import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁安置协议
-import VillageTransitionAgreement from './Agreement/VillageTransitionAgreement.vue' // 村集体 -- 过渡安置协议
+import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁协议
 
 import CreateCard from './CreateCard/Index.vue' // 居民户移民建卡
 import EntCardEstablishment from './EntCardEstablishment/Index.vue' // 企业建卡
@@ -439,6 +444,7 @@ import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
 
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
+import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
 
 const titleMsg = (type: string, index: number) => {
@@ -564,7 +570,7 @@ const getStatus = (data: any) => {
       subTabsList.value[5].active = true // 生产安置
     }
     if (data.graveArrangementStatus === '1') {
-      subTabsList.value[6].active = true // 坟墓安置
+      subTabsList.value[6].active = true // 坟墓确认
     }
     if (data.landUseStatus === '1') {
       subTabsList.value[7].active = true // 生产用地
@@ -776,6 +782,51 @@ onMounted(() => {
 const onBack = () => {
   back()
 }
+
+/**
+ * 意见反馈相关
+ */
+const feedbackShow = ref<boolean>(false)
+const feedbackType = ref<string>('1')
+const onFeedback = () => {
+  // 拿到阶段
+  let feedbacktypeCopy = '1'
+  if (type === 'PeasantHousehold') {
+    feedbacktypeCopy = `${tabCurrentId.value}`
+  }
+  if (type === 'Enterprise' || type === 'IndividualB') {
+    if (tabCurrentId.value === 0) {
+      feedbacktypeCopy = '2' // 资产评估
+    } else if (tabCurrentId.value === 1) {
+      feedbacktypeCopy = '7'
+    } else if (tabCurrentId.value === 2) {
+      feedbacktypeCopy = '8'
+    } else if (tabCurrentId.value === 3) {
+      feedbacktypeCopy = '6'
+    } else if (tabCurrentId.value === 4) {
+      feedbacktypeCopy = '11'
+    }
+  }
+
+  if (type === 'Village') {
+    if (tabCurrentId.value === 0) {
+      feedbacktypeCopy = '2' // 资产评估
+    } else if (tabCurrentId.value === 1) {
+      feedbacktypeCopy = '8' // 腾空
+    } else if (tabCurrentId.value === 2) {
+      feedbacktypeCopy = '6'
+    } else if (tabCurrentId.value === 3) {
+      feedbacktypeCopy = '12' // 集体资产处置方法
+    }
+  }
+  console.log(feedbacktypeCopy, 'type')
+  feedbackType.value = feedbacktypeCopy
+  feedbackShow.value = true
+}
+const onFeedbackClose = () => {
+  feedbackShow.value = false
+}
+// 意见反馈结束
 </script>
 
 <style lang="less" scoped>

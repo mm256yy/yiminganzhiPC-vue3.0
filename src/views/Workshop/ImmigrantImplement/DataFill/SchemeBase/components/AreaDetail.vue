@@ -139,9 +139,6 @@ onMounted(() => {
     }
   }
 
-  // .area-box {
-  // }
-
   .base-info {
     display: flex;
     flex-direction: row;

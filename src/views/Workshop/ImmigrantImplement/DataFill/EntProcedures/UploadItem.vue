@@ -134,7 +134,7 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .upload-cont {
   .upload-trigger {
     display: flex;

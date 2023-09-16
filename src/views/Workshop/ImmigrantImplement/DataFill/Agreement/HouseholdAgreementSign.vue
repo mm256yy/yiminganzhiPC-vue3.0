@@ -166,24 +166,25 @@
                   间暂计 {{ dataCalculateBase('storeroomNum', 15000, 'immigrantSign') }} 元。</span
                 >
               </div>
-              <div class="agm-txt"
-                >安置房结算房款建筑面积以房管部门实测为准。公寓房房款结算单价根据“办法”按基准价结合楼层系数确定：一楼按基准价减5%；二楼、四楼按基准价增加3%；三楼按基准价增加7%；五楼按基准价减8％。</div
-              >
+              <div class="agm-txt">
+                安置房结算房款建筑面积以房管部门实测为准。公寓房房款结算单价根据“办法”按基准价结合楼层系数
+                确定：一楼按基准价减5%；二楼、四楼按基准价增加3%；三楼按基准价增加7%；五楼按基准价减8％。
+              </div>
             </div>
 
             <div class="agm-tit-2"> （五）安置房“定位到户”按照相关实施细则执行。 </div>
 
-            <div class="agm-tit-1 floor-item" id="第四条 补偿费、补助费及奖励费"
-              >第四条 补偿费、补助费及奖励费</div
-            >
+            <div class="agm-tit-1 floor-item" id="第四条 补偿费、补助费及奖励费">
+              第四条 补偿费、补助费及奖励费
+            </div>
 
             <div class="agm-tit-2">（一）补偿费</div>
             <div class="detail-box">
-              <div class="agm-txt"
-                >根据镜岭昌信价格事务有限公司出具的评估报告（附后），乙方房屋及
+              <div class="agm-txt">
+                根据镜岭昌信价格事务有限公司出具的评估报告（附后），乙方房屋及
                 附属建（构）筑物、青苗等地上附着物等补偿费总计
-                {{ form.immigrantSign && form.immigrantSign.feeSum }} 元。</div
-              >
+                {{ form.immigrantSign && form.immigrantSign.feeSum }} 元。
+              </div>
             </div>
 
             <div class="agm-tit-2">（二）补助费</div>
@@ -209,8 +210,8 @@
                   {{ form.immigrantSign && form.immigrantSign.unTrailingNum }}
                   人，补助标准为每人3000元，小计 3000 元；合计
                   {{ dataCalculateBase('unTrailingNum', 3000, 'immigrantSign') }}
-                  元。</span
-                >
+                  元。
+                </span>
               </div>
               <div>
                 <span class="agm-bold">3、临时安置补助费：</span>
@@ -219,16 +220,18 @@
                   {{ form.immigrantSign && form.immigrantSign.roomSelectionNum }}
                   人，补助标准为每人每月450元，小计临时安置补助费每月
                   {{ dataCalculateBase('roomSelectionNum', 450, 'immigrantSign') }}
-                  元。补助时间为腾空被拆迁房屋并办理移交手续的当月至安置房选房的当月。首次发放时间为乙方腾空被拆迁房屋并办理移交手续之日起十五日内，每半年发放一次。符合补助条件的，按附件一办理确认手续。</span
-                >
+                  元。补助时间为腾空被拆迁房屋并办理移交手续的当月至安置房选房的当月。首次
+                  发放时间为乙方腾空被拆迁房屋并办理移交手续之日起十五日内，每半年发放一次。
+                  符合补助条件的，按附件一办理确认手续。
+                </span>
               </div>
 
               <div>
                 <span class="agm-bold">4、异地搬迁补助费：</span>
                 <span class="agm-txt">
                   在腾空被拆迁房屋并办理移交手续之日，按乙方符合享受县级（含）以上农民异地搬迁补助政策的人数，每人补助
-                  5600 元。符合补助条件的，按附件二办理确认手续。</span
-                >
+                  5600 元。符合补助条件的，按附件二办理确认手续。
+                </span>
               </div>
 
               <div class="agm-bold"> 5、其他补助费 </div>
@@ -252,15 +255,17 @@
             <div class="agm-tit-2">（三）奖励费</div>
             <div class="detail-box">
               <div class="agm-bold"> 1、签约奖 </div>
-              <div class="agm-txt"
-                >① 网格签约奖：根据 《
-                关于在镜岭水库库区设置移民网格和建立乡村干部联系移民网格的通知 》 （社委 〔 2022 〕
-                36 号）文件规定，乙方划分在 {{ villageText }} 村第
-                <span class="common-ipt">{{
-                  form.immigrantSign && form.immigrantSign.gridName
-                }}</span>
-                网格。如乙方所在网格内所有签约对象在2022年12月10日17时前全部完成镜岭水库工程建设征地实物补偿、搬迁安置协议签订，按本协议签约之日乙方农村移民和随迁人口数量，每人奖励3000元。符合奖励条件的，按附件三办理确认手续。</div
-              >
+              <div class="agm-txt">
+                ① 网格签约奖：根据
+                《关于在镜岭水库库区设置移民网格和建立乡村干部联系移民网格的通知》 （社委 〔 2022
+                〕36 号）文件规定，乙方划分在 {{ villageText }} 村第
+                <span class="common-ipt">
+                  {{ form.immigrantSign && form.immigrantSign.gridName }}
+                </span>
+                网格。如乙方所在网格内所有签约对象在2022年12月10日17时前全部完成镜岭水库工程建设征
+                地实物补偿、搬迁安置协议签订，按本协议签约之日乙方农村移民和随迁人口数量，每人奖励3000元。
+                符合奖励条件的，按附件三办理确认手续。
+              </div>
               <div class="agm-txt">
                 ②
                 按时签约奖：如乙方在2022年12月10日17时前完成本协议签订，按本协议签约之日乙方农村移民和随迁人口数量，每人奖励
@@ -268,12 +273,12 @@
               </div>
 
               <div class="agm-bold"> 2 、提前腾空奖 </div>
-              <div class="agm-txt"
-                >① 房屋提前腾空奖：如乙方在 2023 年 3 月 31 日 17
+              <div class="agm-txt">
+                ① 房屋提前腾空奖：如乙方在 2023 年 3 月 31 日 17
                 时前完成房屋腾空并办理移交手续，按住宅建筑面积每平方米奖励 200 元；如乙方在 2023 年
                 5 月 15 日 17 时前完成房屋腾空并办理移交手续，按住宅建筑面积每平方米奖励 100
-                元．符合奖励条件的，按附件五办理确认手续。</div
-              >
+                元．符合奖励条件的，按附件五办理确认手续。
+              </div>
               <div class="agm-txt">
                 ② 青苗提前腾空奖：如乙方在 2023 年 5 月 15 日 17
                 时前完成被征土地上青苗等地上附着物腾空并办理交地手续，按青苗等地上附着物涉及的土地面积，耕地每亩奖励
@@ -296,9 +301,9 @@
               </div>
             </div>
 
-            <div class="agm-tit-1 floor-item" id="第五条 安置房房款结算及交付"
-              >第五条 安置房房款结算及交付</div
-            >
+            <div class="agm-tit-1 floor-item" id="第五条 安置房房款结算及交付">
+              第五条 安置房房款结算及交付
+            </div>
             <div class="agm-txt">
               安置房结算房款建筑面积以房管部门实测为准，结算单价按“办法”相关规定执行。结算房款时，若乙方已拨至甲方指定银行账户的抵扣资金少于结算房款的，乙方应在安置房交房前将差额部分资金足额缴纳至甲方指定的银行帐户。
             </div>
@@ -331,10 +336,10 @@
 
             <div class="agm-tit-1 floor-item" id="第十一条">第十一条</div>
             <div class="agm-txt">
-              其他约定：<span class="common-ipt">{{
-                form.immigrantSign && form.immigrantSign.remark
-              }}</span></div
-            >
+              其他约定：<span class="common-ipt">
+                {{ form.immigrantSign && form.immigrantSign.remark }}
+              </span>
+            </div>
 
             <div class="agm-tit-2 agm-mt-40">甲方：镜岭镇人民政府（盖章）</div>
 
@@ -456,7 +461,7 @@ const navList = ref<NavType[]>([
   }
 ])
 
-const activeIndex = ref(0)
+const activeIndex = ref<number>(0)
 const contentLocation = ref<any[]>([])
 const scrollRef = ref()
 interface PropsType {
@@ -472,7 +477,6 @@ let form = ref<any>({})
 const getDetail = async () => {
   const res = await getAgreementApi(props.doorNo)
   form.value = res
-  console.log(res, 'ssssss')
   calculateData()
 }
 
@@ -520,6 +524,7 @@ const calculateData = () => {
     ).toFixed(2)
   }
 }
+
 const getDetailInfo = async () => {
   const res = await getSchemeBaseInfoApi(props.doorNo)
   if (res) {
@@ -529,8 +534,11 @@ const getDetailInfo = async () => {
     form.value.demolitionHouseOtherAmount = demolitionHouseOtherAmount
   }
 }
+
 getDetailInfo()
+
 getDetail()
+
 interface VillageType {
   code: string
   value: string | number
@@ -546,6 +554,7 @@ const dictAdministration = (name?: string) => {
   )?.code
 }
 dictAdministration()
+
 const dataCalculateBase = (formProps, baseData, type) => {
   const tempForm = type ? form.value[type] : form
   if (tempForm) {
@@ -555,25 +564,26 @@ const dataCalculateBase = (formProps, baseData, type) => {
     return ''
   }
 }
+
 const houseTypeText = () => {
   const tempHouseType = form.value.immigrantScheme?.houseType
   return tempHouseType === 1 ? '联排' : tempHouseType === 2 ? '公寓' : '一次性货币补偿'
 }
+
 const houseAreaTypeText = () => {
   const tempHouseAreaType = form.value.immigrantScheme?.houseAreaType
   const item = dictObj.value[318].find((item) => item.value === tempHouseAreaType)
   return item ? item.label + (isNaN(Number(item.label)) ? '' : '㎡') : ''
 }
+
 onMounted(() => {
   const floors = document.querySelectorAll('.floor-item')
   const arr: any[] = []
   floors.forEach((floor: any, index: number) => {
     if (index === 0) {
       arr.push(0)
-    } else if (index === 1) {
-      arr.push(floor.offsetTop + 130)
     } else {
-      arr.push(floor.offsetTop + 220)
+      arr.push(floor.offsetTop - 20 * index)
     }
   })
   contentLocation.value = arr
@@ -594,7 +604,7 @@ const listenScroll = (scrollTop) => {
     if (scrollTop === 0) {
       activeIndex.value = 0
     } else if (scrollTop >= el) {
-      activeIndex.value = index + 1
+      activeIndex.value = index
     }
   })
 }
@@ -690,6 +700,7 @@ const scroll = ({ scrollTop }) => {
     height: 40px;
     padding-left: 20px;
     margin-top: 10px;
+    font-size: 14px;
     line-height: 40px;
     cursor: pointer;
     border-left: 4px solid transparent;

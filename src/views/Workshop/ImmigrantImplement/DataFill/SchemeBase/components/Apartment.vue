@@ -4,10 +4,9 @@
       <div class="common-label flex-center">公寓房安置人数：</div>
       <div class="common-value">
         <div class="value-center">
-          {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，非农移民
-          ：{{ baseInfo.unruralMigrantNum }}人，随迁人口：{{
-            baseInfo.familyNum - baseInfo.ruralMigrantNum - baseInfo.unruralMigrantNum
-          }}人
+          {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，
+          非农移民：{{ baseInfo.unruralMigrantNum }}人，随迁人口：
+          {{ baseInfo.familyNum - baseInfo.ruralMigrantNum - baseInfo.unruralMigrantNum }} 人
         </div>
       </div>
     </div>
@@ -33,8 +32,9 @@
             v-for="item in apartmentArea"
             :key="item.id"
             @click="viewAreaDetail(item.id)"
-            >地块详情</div
           >
+            地块详情
+          </div>
         </div>
       </div>
     </div>
@@ -47,7 +47,6 @@
             <!-- 第一行 -->
             <tr class="head-tr">
               <td colspan="2" class="column-w1 bold">搬迁安置</td>
-
               <td class="column-w3" v-for="(item, index) in tableData" :key="item.id">
                 <div class="plan-tit" :class="{ active: item.isSelected }">
                   方案{{ index + 1 }}
@@ -139,7 +138,7 @@
     </div>
 
     <div class="common-form-item">
-      <div class="common-label">可选安置点：</div>
+      <div class="common-label">可选户型：</div>
       <div class="common-value">
         <div class="area-size">
           <div class="area-size-item" v-for="item in areaSize" :key="item.id">
@@ -161,17 +160,15 @@
         <div class="info-item">
           根据您输入的安置人数：
           <span class="red">{{ baseInfo.familyNum }}</span> 人，选购总面积为：
-          <span class="red">{{ totalArea }}</span
-          >m²
+          <span class="red">{{ totalArea }}</span> m²
         </div>
 
         <div class="info-item">
           选择选定户型为：
           <template v-for="item in areaSize" :key="item.id">
             <template v-if="item.num > 0">
-              <span class="red">{{ item.name }}</span> {{ item.unit
-              }}<span class="red">{{ item.num }}</span
-              >套
+              <span class="red">{{ item.name }}</span> {{ item.unit }}
+              <span class="red">{{ item.num }}</span> 套
               <span>，</span>
             </template>
           </template>
@@ -179,8 +176,7 @@
 
         <div class="info-item">
           剩余面积： <span class="red">{{ residueArea }}</span> ㎡ 超出面积：
-          <span class="red">{{ exceedArea }}</span
-          >m²
+          <span class="red">{{ exceedArea }}</span> m²
         </div>
 
         <div class="info-item">
