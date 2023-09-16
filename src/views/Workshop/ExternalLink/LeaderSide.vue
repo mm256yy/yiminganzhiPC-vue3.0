@@ -433,7 +433,7 @@ const landScreenDtoListObjs = ref<any>({})
 const paramsValue = ref<any>({})
 const arr = ref<any>([])
 const goLink = () => {
-  let url = 'https://lanhuapp.com/link/#/invite?sid=lxetfKaa'
+  let url = 'http://test-jinglingtoc.jldt.top/'
   window.open(url)
 }
 // 路由跳转
