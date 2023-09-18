@@ -17,13 +17,20 @@
       :rules="rules"
     >
       <ElFormItem label="资金名称:" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.name" />
       </ElFormItem>
       <ElFormItem label="资金来源:" required>
-        <ElInput type="text" />
+        <ElSelect class="w-350px" v-model="form.source">
+          <ElOption
+            v-for="item in dictObj[388]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
       <ElFormItem label="收款方:" required>
-        <ElSelect class="w-350px" v-model="form.locationType">
+        <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[326]"
             :key="item.value"
@@ -33,13 +40,13 @@
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="金额(元):" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="付款日期:" required>
-        <ElDatePicker type="date" />
+        <ElDatePicker type="date" v-model="form.updateTime" />
       </ElFormItem>
       <ElFormItem label="说明:">
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 凭证： </div>
@@ -52,7 +59,7 @@
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="relocateVerifyPic"
+            :file-list="receipt"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -104,11 +111,12 @@ import { ref, reactive, nextTick, onMounted, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { addFunPaymentApi, updateFunPaymentApi } from '@/api/fundManage/fundPayment-service'
 
 interface PropsType {
   show: boolean
+  actionType: 'add' | 'edit' | 'view'
 }
 
 interface FileItemType {
@@ -123,11 +131,17 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-const form = ref<any>({})
+const form = ref<any>({
+  name: '',
+  source: '1',
+  payee: '1',
+  amount: 0,
+  updateTime: '',
+  remark: ''
+})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
-const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
+const receipt = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -148,24 +162,34 @@ const onClose = (flag = false) => {
 }
 
 const submit = (data: any) => {
-  saveDocumentationApi(data).then(() => {
-    ElMessage.success('操作成功！')
-  })
-  onClose(true)
+  if (props.actionType === 'add') {
+    addFunPaymentApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  } else {
+    updateFunPaymentApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  }
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!relocateVerifyPic.value.length) {
-        ElMessage.error('请上传搬迁安置确认单')
+      if (!receipt.value.length) {
+        ElMessage.error('请上传凭证')
         return
       } else {
         let params: any = {
           ...form.value,
-          relocateVerifyPic: JSON.stringify(relocateVerifyPic.value || []), // 搬迁安置确认单
-          relocateOtherPic: JSON.stringify(relocateOtherPic.value || []) // 其他附件
+          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
         submit(params)
       }
@@ -190,7 +214,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
   }
 
   if (type === 'relocateVerify') {
-    relocateVerifyPic.value = list
+    receipt.value = list
   }
 }
 

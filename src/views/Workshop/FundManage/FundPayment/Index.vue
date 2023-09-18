@@ -64,12 +64,7 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
+import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
 // import type {
 //   DemographicDtoType,
 //   DemographicHeadType,
@@ -79,6 +74,7 @@ import type { DemographicHeadType, ExcelListType } from '@/api/workshop/populati
 // import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 import EditForm from './EditForm.vue'
+import { getFunPaymentListApi, deleteFunPaymentApi } from '@/api/fundManage/fundPayment-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -96,8 +92,8 @@ const dialog = ref<boolean>(false)
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getFunPaymentListApi,
+  delListApi: deleteFunPaymentApi
 })
 const { getList, setSearchParams } = methods
 
