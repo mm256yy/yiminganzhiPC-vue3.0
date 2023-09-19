@@ -359,7 +359,7 @@ const getFundSubjectList = () => {
 }
 
 const onReviewRow = async (row) => {
-  tableObject.currentRow = row
+  tableObject.currentRow = { ...row }
   dialog.value = true
 }
 
