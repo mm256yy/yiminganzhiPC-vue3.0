@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 import {
   ElBreadcrumb,
   ElBreadcrumbItem,
@@ -114,7 +114,6 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { updateInvestListApi } from '@/api/fundManage/estimateFilling-service'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-import { onMounted } from 'vue'
 
 const searchForm = ref<any>({
   name: '',
@@ -150,6 +149,7 @@ const onSearch = () => {
 
 // 重置
 const onReset = () => {
+  initData()
   nextTick(() => {
     formRef.value?.resetFields()
   })
