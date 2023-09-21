@@ -105,7 +105,7 @@
                     style="
                       display: flex;
                       height: 72px;
-                      padding: 0 50px;
+                      padding: 0 30px;
                       flex-direction: column;
                       justify-content: center;
                       align-items: center;
@@ -121,7 +121,7 @@
                     style="
                       display: flex;
                       height: 72px;
-                      padding: 0 50px;
+                      padding: 0 30px;
                       flex-direction: column;
                       justify-content: center;
                       align-items: center;
@@ -950,7 +950,7 @@ const questionList = ref<any>([
 }
 
 .toMore {
-  color: #999999;
+  color: #666666;
 }
 
 .center {
@@ -1034,7 +1034,7 @@ const questionList = ref<any>([
 
   .tab-item {
     font-size: 14px;
-    color: #666;
+    color: #666666;
     cursor: pointer;
 
     &.active {
@@ -1125,7 +1125,7 @@ const questionList = ref<any>([
 
   .item {
     display: flex;
-    width: 213px;
+    width: 50%;
     height: 90px;
     padding: 15px;
     // background: #f2f6ff;
@@ -1149,7 +1149,7 @@ const questionList = ref<any>([
       .sub-title {
         font-size: 14px;
         line-height: 1;
-        color: #666;
+        color: #666666;
       }
     }
   }
@@ -1188,7 +1188,7 @@ const questionList = ref<any>([
     .sub-title {
       font-size: 14px;
       line-height: 1;
-      color: #666;
+      color: #666666;
     }
 
     .amount {
@@ -1209,7 +1209,7 @@ const questionList = ref<any>([
       margin-bottom: 5px;
       font-size: 14px;
       line-height: 1;
-      color: #4e5969;
+      color: #666666;
     }
 
     .amount {
@@ -1230,7 +1230,7 @@ const questionList = ref<any>([
 .sub-title {
   font-size: 14px;
   line-height: 1;
-  color: #666;
+  color: #666666;
 }
 
 .sub-num {
@@ -1294,6 +1294,7 @@ const questionList = ref<any>([
 .direction {
   overflow: hidden; //超出隐藏
   font-size: 14px;
+  color: #666666;
   text-indent: 2em;
   text-overflow: ellipsis; //超出显示...
   white-space: wrap; //设置文字不换行
