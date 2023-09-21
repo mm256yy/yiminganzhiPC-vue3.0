@@ -324,3 +324,20 @@ export const filterViewDoorNo = (data: any): string => {
   }
   return doorNo
 }
+
+/**
+ * 获取字典对应的 label
+ * @param arr  字典数据
+ * @param data 传入的值
+ * @returns
+ */
+export const fmtDict = (arr: any[], data) => {
+  if (arr && arr.length) {
+    const newArr: any = arr.filter((item: any) => item.value === data)
+    if (newArr && newArr.length) {
+      return newArr[0].label
+    }
+  } else {
+    return ''
+  }
+}
