@@ -26,7 +26,7 @@
         </ElCol>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 相关凭证： </div>
+            <div class="col-labels"> 相关凭证： </div>
             <div class="card-img-list">
               <ElUpload
                 class="view"
@@ -125,7 +125,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
 .head-wrapper {
   display: flex;
   align-items: center;
@@ -154,6 +154,26 @@ onMounted(() => {
 .content-2 {
   .tips {
     margin: 0 0 20px 130px;
+  }
+
+  .col-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 16px 16px 0;
+
+    .col-labels {
+      display: inline-flex;
+      width: 130px;
+      height: 32px;
+      padding: 0 12px 0 0;
+      font-size: 14px;
+      line-height: 32px;
+      color: #606266;
+      box-sizing: border-box;
+      justify-content: flex-end;
+      align-items: flex-start;
+      flex: 0 0 auto;
+    }
   }
 }
 

@@ -65,7 +65,6 @@
             <div class="strong">进度预警</div></div
           >
           <Table
-            selection
             :data="tableObject"
             :columns="allSchemas.tableColumns"
             row-key="id"
@@ -92,6 +91,9 @@
                 <template #reportDate="{ row }">
                   <div>{{ formatDate(row.reportDate) }}</div>
                 </template> -->
+            <template #radiu>
+              <div class="center"><div class="radiuBox"></div></div>
+            </template>
             <template #filling="{ row }">
               <div class="filling-btn" @click="viewProfile(row)">查看档案</div>
             </template>
@@ -190,11 +192,20 @@ const schema = reactive<CrudSchema[]>([
   // {
   //   field: 'index',
   //   type: 'index',
-  //   label: '序号',
+  //   label: '进度预警',
   //   search: {
   //     show: false
   //   }
   // },
+  {
+    field: 'radiu',
+    label: '进度预警',
+    fixed: 'left',
+    width: 115,
+    search: {
+      show: false
+    }
+  },
   {
     field: 'name',
     label: '户主姓名',
@@ -217,21 +228,21 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'regionText',
-    label: '所属区域',
-    width: 190,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'regionText',
-    label: '所在位置',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'regionText',
+  //   label: '所属区域',
+  //   width: 190,
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'regionText',
+  //   label: '所在位置',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'gridmanName',
     label: '工作组',
@@ -294,7 +305,7 @@ const checktab = (index) => {
     type.value = index + 2
     console.log(type.value)
     getVillageScheduleList()
-    if (index == 1) {
+    if (index == 0) {
       flag.value = true
     } else {
       flag.value = false
@@ -445,6 +456,7 @@ const onBack = () => {
 .between {
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .arround {
@@ -597,5 +609,12 @@ const onBack = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.radiuBox {
+  width: 10px;
+  height: 10px;
+  background-color: #ff5722;
+  border-radius: 50%;
 }
 </style>

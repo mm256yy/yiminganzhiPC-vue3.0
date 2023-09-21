@@ -1,12 +1,11 @@
 <template>
   <WorkContentWrap>
-    <!--小型专项及农副业设施评估</div>-->
+    <!-- 小型专项及农副业设施评估 -->
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
           设备设施评估费：
-          <span class="text-[#1C5DF1]"> {{ total() }}</span>
-          （元）
+          <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
         </div>
         <ElSpace>
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">

@@ -107,8 +107,8 @@ const onClose = (flag = false) => {
 const submit = (data: any) => {
   saveImmigrantChooseHouseApi(data).then(() => {
     ElMessage.success('操作成功！')
+    onClose(true)
   })
-  onClose(true)
 }
 
 // 提交表单
@@ -126,5 +126,3 @@ onMounted(() => {
   getRoomNoList()
 })
 </script>
-
-<style lang="less" scoped></style>

@@ -107,7 +107,18 @@ const householdOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁']
+    data: [
+      '竹潭村',
+      '小泉溪村',
+      '殿前村',
+      '下潘村',
+      '大畈村',
+      '潭角村',
+      '后染村',
+      '里镜屏村',
+      '溪西村',
+      '安山村'
+    ]
   },
   yAxis: {
     type: 'value'
@@ -187,7 +198,18 @@ const villageOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁']
+    data: [
+      '竹潭村',
+      '小泉溪村',
+      '殿前村',
+      '下潘村',
+      '大畈村',
+      '潭角村',
+      '后染村',
+      '里镜屏村',
+      '溪西村',
+      '安山村'
+    ]
   },
   yAxis: {
     type: 'value'
@@ -267,7 +289,12 @@ const enterpriseOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁']
+    data: [
+      '新昌县金禾纺织有限公司',
+      '新昌县镜屏欣欣纺织器材厂',
+      '新昌县新亚建筑工程有限公司',
+      '新昌县明盛纺织有限公司'
+    ]
   },
   yAxis: {
     type: 'value'
@@ -276,7 +303,7 @@ const enterpriseOption = ref({
   series: [
     {
       name: '应付',
-      data: [1400, 1800, 3000, 2000, 1500],
+      data: [1400, 1800, 3000, 2000],
       type: 'bar',
       barWidth: 62,
       // stack: 'all',
@@ -300,7 +327,7 @@ const enterpriseOption = ref({
     },
     {
       name: '已付',
-      data: [1200, 1300, 2500, 2100, 1800],
+      data: [1200, 1300, 2500, 2100],
       type: 'bar',
       barWidth: 62,
       // stack: 'all',
@@ -347,7 +374,18 @@ const specialityOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁']
+    data: [
+      '交通',
+      '电力',
+      '电信',
+      '移动',
+      '联通',
+      '铁塔',
+      '广电',
+      '溪西水文站',
+      '县级文保站',
+      '宗教设施'
+    ]
   },
   yAxis: {
     type: 'value'
@@ -427,7 +465,15 @@ const otherOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁']
+    data: [
+      '前期工作费',
+      '综合勘测科研费',
+      '实施管理费',
+      '实施机构开办费',
+      '技术培训费',
+      '监督评估费',
+      ''
+    ]
   },
   yAxis: {
     type: 'value'

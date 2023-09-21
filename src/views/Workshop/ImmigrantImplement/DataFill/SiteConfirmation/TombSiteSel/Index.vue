@@ -46,7 +46,7 @@
           <template #default="{ row }">
             <!-- handleWay 处理方式，1 择址地址 2 安置公墓 -->
             <ElInput v-if="row.handleWay == 1" placeholder="请输入" v-model="row.settingAddress" />
-            <div v-else-if="row.handleWay == 2">{{ row.settingGrave }}</div>
+            <div v-else-if="row.handleWay == 2">{{ row.settingGraveText }}</div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="编号" prop="graveNo" align="center" header-align="center">
@@ -94,7 +94,13 @@ const emit = defineEmits(['updateData'])
 
 // 获取列表数据
 const getList = () => {
-  getGraveListApi(props.doorNo).then((res: any) => {
+  let params = {
+    householdId: props.baseInfo.id,
+    projectId: props.baseInfo.projectId,
+    status: props.baseInfo.status,
+    registrantDoorNo: props.doorNo
+  }
+  getGraveListApi(params).then((res: any) => {
     tableData.value = res.content
   })
 }

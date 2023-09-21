@@ -232,7 +232,7 @@ const onVillageDialogClose = (flag?: boolean) => {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form {
   .el-upload-dragger {
     padding-top: 20px;

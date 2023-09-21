@@ -38,13 +38,13 @@ export const LandlordTabs = [
     id: TabIds[5],
     icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
     active: false
-  },
-  {
-    name: '坟墓评估',
-    id: TabIds[6],
-    icon: 'tabler:grave-2',
-    active: false
   }
+  // {
+  //   name: '坟墓评估',
+  //   id: TabIds[6],
+  //   icon: 'tabler:grave-2',
+  //   active: false
+  // }
 ]
 
 // 企业资产评估 tabs 列表

@@ -716,7 +716,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .upload {
   .el-upload--picture-card {
     display: none;

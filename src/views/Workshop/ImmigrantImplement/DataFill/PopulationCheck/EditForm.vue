@@ -554,7 +554,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .col-wrapper {
   display: flex;
   align-items: center;

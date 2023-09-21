@@ -315,7 +315,7 @@ const schema = reactive<CrudSchema[]>([
   //   showOverflowTooltip: false
   // },
   {
-    field: 'grid',
+    field: 'gridmanName',
     label: '所属网格',
     search: {
       show: false

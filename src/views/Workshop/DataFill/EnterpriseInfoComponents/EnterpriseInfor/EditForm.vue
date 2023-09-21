@@ -130,8 +130,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="经济性质" prop="economicNature">
             <ElInput v-model="form.economicNature" placeholder="请输入" class="!w-full" />
@@ -154,8 +155,9 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="7">
           <ElFormItem label="成立日期" prop="establishDate">
             <el-date-picker v-model="form.establishDate" type="date" placeholder="请选择成立日期" />

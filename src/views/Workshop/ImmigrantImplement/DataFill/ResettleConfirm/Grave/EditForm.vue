@@ -133,7 +133,6 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
-// import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
 import type { GraveDtoType } from '@/api/workshop/datafill/grave-types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -242,7 +241,7 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .upload {
   .el-upload--picture-card {
     display: none;

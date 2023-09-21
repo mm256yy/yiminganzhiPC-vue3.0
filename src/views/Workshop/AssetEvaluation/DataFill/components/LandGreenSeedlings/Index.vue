@@ -5,8 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div>
           土地青苗及附着物评估合计：
-          <span class="text-[#1C5DF1]"> {{ total() }}</span>
-          （元）
+          <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
         </div>
         <ElSpace>
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
@@ -196,7 +195,7 @@ const defaultRow = {
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
     doorNo: props.doorNo,
-    landStatus: '1'
+    landSeedlingStatus: '1'
   })
   if (result && Array.isArray(result)) {
     reportDialog.value = true

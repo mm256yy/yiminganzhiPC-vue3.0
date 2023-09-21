@@ -104,7 +104,7 @@ export const HouseholdSubTabs = [
   },
   {
     type: 4,
-    name: '坟墓安置',
+    name: '坟墓确认',
     id: TabIds[2],
     icon: 'tabler:grave-2',
     active: false
@@ -324,7 +324,7 @@ export const VillageTabs = [
   },
   {
     id: 2,
-    name: '协议签订'
+    name: '动迁协议'
   },
   {
     id: 3,
@@ -354,22 +354,6 @@ export const VillageSubTabs = [
     name: '小型专项及农副业设施评估报告',
     id: TabIds[2],
     icon: 'fluent-mdl2:product-variant',
-    active: false
-  },
-
-  // 协议签订
-  {
-    type: 2,
-    name: '动迁安置协议',
-    id: TabIds[0],
-    icon: 'icon-park-outline:agreement',
-    active: false
-  },
-  {
-    type: 2,
-    name: '过渡安置协议',
-    id: TabIds[1],
-    icon: 'icon-park-outline:agreement',
     active: false
   }
 ]

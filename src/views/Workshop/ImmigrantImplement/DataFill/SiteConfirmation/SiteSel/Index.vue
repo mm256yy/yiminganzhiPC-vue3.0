@@ -70,7 +70,11 @@
           prop="settleAddress"
           align="center"
           header-align="center"
-        />
+        >
+          <template #default="{ row }">
+            {{ getSettleAddress(row) }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="类型"
           width="100"
@@ -297,7 +301,7 @@ const getcarNoList = (name?: string) => {
 
 const enterRoomNo = (row: any) => {
   roomNoDialog.value = true
-  currentRow.value = row
+  currentRow.value = { ...row }
 }
 
 // 归档
@@ -324,7 +328,6 @@ const onSave = (row: any) => {
  * @param flag
  */
 const close = (params: any[], type: string) => {
-  console.log('params:', params)
   if (type === 'documentation') {
     dialog.value = false
   } else if (type === 'roomNo') {
