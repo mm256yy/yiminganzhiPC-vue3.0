@@ -225,8 +225,13 @@ const getSettleAddress = (data: string) => {
 }
 
 // 获取地块编号配置数据
-const getChooseConfig = (name?: string) => {
-  getChooseConfigApi(props.baseInfo.projectId, 1, name).then((res: any) => {
+const getChooseConfig = (settingAddress?: string) => {
+  const params = {
+    projectId: props.baseInfo.projectId,
+    type: 1,
+    settingAddress
+  }
+  getChooseConfigApi(params).then((res: any) => {
     options.value = res.content
   })
 }
