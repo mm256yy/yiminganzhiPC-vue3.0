@@ -17,37 +17,47 @@
       :rules="rules"
     >
       <ElFormItem label="申请类型:" required>
-        <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+        <el-radio-group class="ml-4" v-model="form.applyType">
+          <el-radio
+            v-for="item in dictObj[381]"
+            :label="item.value"
+            size="large"
+            :key="item.value"
+            >{{ item.label }}</el-radio
+          >
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="申请名称:" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.name" />
       </ElFormItem>
       <ElFormItem label="概算科目:" required>
-        <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+        <el-radio-group class="ml-4" v-model="form.type">
+          <el-radio
+            v-for="item in dictObj[382]"
+            :label="item.value"
+            size="large"
+            :key="item.value"
+            >{{ item.label }}</el-radio
+          >
         </el-radio-group>
       </ElFormItem>
 
       <ElFormItem label="资金科目:" required>
-        <ElTreeSelect class="!w-full" v-model="form.parentCode" :data="[]" node-key="code" />
+        <ElTreeSelect class="!w-full" v-model="form.funSubjectId" :data="[]" node-key="code" />
       </ElFormItem>
 
       <ElFormItem label="付款说明:" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
 
       <ElFormItem label="收款单位:" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.receivePaymentUnit" />
       </ElFormItem>
       <ElFormItem label="付款时间:" required>
-        <ElDatePicker type="date" />
+        <ElDatePicker type="date" v-model="form.paymentTime" />
       </ElFormItem>
       <ElFormItem label="申请金额:">
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.amount" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -56,11 +66,11 @@
             :list-type="'picture-card'"
             action="/api/file/type"
             :data="{
-              type: 'archives'
+              type: 'image'
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="relocateVerifyPic"
+            :file-list="receipt"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -99,27 +109,26 @@ import {
   FormInstance,
   FormRules,
   ElUpload,
-  // ElRow,
-  // ElCol,
   ElMessage,
   ElMessageBox,
   ElInput,
   ElDatePicker,
-  // ElSelect,
-  // ElOption,
   ElRadioGroup,
   ElRadio,
   ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import { ref, reactive, nextTick, watch, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
+import { addFunPayApi, updateFunPayApi } from '@/api/fundManage/fundPayment-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import dayjs from 'dayjs'
 
 interface PropsType {
   show: boolean
+  actionType: 'add' | 'edit' | 'view'
+  row?: any
 }
 
 interface FileItemType {
@@ -139,8 +148,7 @@ console.log(dictObj)
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
-const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
+const receipt = ref<FileItemType[]>([]) // 凭证
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -150,7 +158,20 @@ const headers = {
 // 规则校验
 const rules = reactive<FormRules>({})
 
-const initData = () => {}
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      form.value = {
+        ...val
+      }
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 
 // 关闭弹窗
 const onClose = (flag = false) => {
@@ -161,25 +182,36 @@ const onClose = (flag = false) => {
 }
 
 const submit = (data: any) => {
-  saveDocumentationApi(data).then(() => {
-    ElMessage.success('操作成功！')
-  })
-  onClose(true)
+  if (props.actionType === 'add') {
+    addFunPayApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  } else {
+    updateFunPayApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  }
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!relocateVerifyPic.value.length) {
+      if (!receipt.value.length) {
         ElMessage.error('请上传搬迁安置确认单')
         return
       } else {
         let params: any = {
           ...form.value,
-          relocateVerifyPic: JSON.stringify(relocateVerifyPic.value || []), // 搬迁安置确认单
-          relocateOtherPic: JSON.stringify(relocateOtherPic.value || []) // 其他附件
+          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
+        params.paymentTime = dayjs(params.paymentTime)
         submit(params)
       }
     } else {
@@ -202,19 +234,19 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
 
-  if (type === 'relocateVerify') {
-    relocateVerifyPic.value = list
+  if (type === 'receipt') {
+    receipt.value = list
   }
 }
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 移除之前
@@ -234,10 +266,6 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-
-onMounted(() => {
-  initData()
-})
 </script>
 
 <style lang="less" scoped>

@@ -1,33 +1,47 @@
 import request from '@/config/axios'
-import { FunPaymentType } from './fundPayment-types'
+import { FunPayType } from './fundPayment-types'
 
-// 获取资金付款列表
-export const getFunPaymentListApi = (params?: any): Promise<TableResponse<FunPaymentType>> => {
-  return request.get({ url: `/funPayment/list`, params })
+// 获取资金支付列表
+export const getFunPayListApi = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({ url: `/funPay/list`, params })
 }
 
-// 新增资金付款
-export const addFunPaymentApi = (data: Partial<FunPaymentType>): Promise<any> => {
+// 新增资金支付
+export const addFunPayApi = (data: Partial<FunPayType>): Promise<any> => {
   return request.post({
-    url: '/funPayment/insert',
+    url: '/funPay/insert',
     data
   })
 }
 
-// 更新资金付款
-export const updateFunPaymentApi = (data: Partial<FunPaymentType>): Promise<any> => {
-  return request.get({
-    url: '/funPayment/update',
-    params: data
+// 更新资金支付
+export const updateFunPayApi = (data: Partial<FunPayType>): Promise<any> => {
+  return request.post({
+    url: '/funPay/update',
+    data
   })
 }
 
-// 更新资金付款
-export const deleteFunPaymentApi = (id: number): Promise<void> => {
+// 更新资金支付
+export const deleteFunPayApi = (id: number): Promise<void> => {
   return request.get({
-    url: '/funPayment/delete',
+    url: '/funPay/delete',
     params: {
       id
     }
+  })
+}
+
+// 法人列表
+export const getLpList = (): Promise<void> => {
+  return request.get({
+    url: '/funPay/lpList'
+  })
+}
+
+// 资金支付总额
+export const getFunPaySumAmount = (): Promise<void> => {
+  return request.get({
+    url: '/funPay/sumAmount'
   })
 }
