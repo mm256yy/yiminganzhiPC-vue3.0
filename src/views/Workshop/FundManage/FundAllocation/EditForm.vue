@@ -43,7 +43,7 @@
         <ElInput type="text" v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="付款日期:" required>
-        <ElDatePicker type="date" v-model="form.updateTime" />
+        <ElDatePicker type="date" v-model="form.paymentTime" />
       </ElFormItem>
       <ElFormItem label="说明:">
         <ElInput type="text" v-model="form.remark" />
@@ -55,7 +55,7 @@
             :list-type="'picture-card'"
             action="/api/file/type"
             :data="{
-              type: 'archives'
+              type: 'image'
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
@@ -107,16 +107,18 @@ import {
   ElSelect,
   ElOption
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import dayjs from 'dayjs'
+import { ref, reactive, nextTick, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { addFunPaymentApi, updateFunPaymentApi } from '@/api/fundManage/fundPayment-service'
+import { addFunPaymentApi, updateFunPaymentApi } from '@/api/fundManage/fundAllocation-service'
 
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
+  row?: any
 }
 
 interface FileItemType {
@@ -136,7 +138,7 @@ const form = ref<any>({
   source: '1',
   payee: '1',
   amount: 0,
-  updateTime: '',
+  paymentTime: '',
   remark: ''
 })
 const imgUrl = ref<string>('')
@@ -151,7 +153,20 @@ const headers = {
 // 规则校验
 const rules = reactive<FormRules>({})
 
-const initData = () => {}
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      form.value = {
+        ...val
+      }
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 
 // 关闭弹窗
 const onClose = (flag = false) => {
@@ -191,6 +206,7 @@ const onSubmit = debounce((formEl) => {
           ...form.value,
           receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
+        params.paymentTime = dayjs(params.paymentTime)
         submit(params)
       }
     } else {
@@ -213,19 +229,19 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
 
-  if (type === 'relocateVerify') {
+  if (type === 'receipt') {
     receipt.value = list
   }
 }
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 移除之前
@@ -245,10 +261,6 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-
-onMounted(() => {
-  initData()
-})
 </script>
 
 <style lang="less" scoped>

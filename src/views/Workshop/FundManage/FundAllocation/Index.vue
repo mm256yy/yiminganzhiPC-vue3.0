@@ -37,12 +37,16 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+        <template #updateTime="{ row }">
+          <div>{{
+            row.updateTime ? dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #createTime="{ row }">
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
         <template #action="{ row }">
@@ -51,7 +55,12 @@
       </Table>
     </div>
 
-    <EditForm :show="dialog" :actionType="actionType" @close="onEditFormClose" />
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      @close="onEditFormClose"
+    />
   </WorkContentWrap>
 </template>
 
@@ -65,15 +74,9 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
-import { getFunPaymentListApi, deleteFunPaymentApi } from '@/api/fundManage/fundPayment-service'
+import { getFunPaymentListApi, deleteFunPaymentApi } from '@/api/fundManage/fundAllocation-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId

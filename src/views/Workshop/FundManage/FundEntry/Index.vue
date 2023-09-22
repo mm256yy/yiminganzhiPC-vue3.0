@@ -37,12 +37,16 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+        <template #recordTime="{ row }">
+          <div>{{
+            row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #createTime="{ row }">
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
         <template #action="{ row }">
@@ -51,12 +55,17 @@
       </Table>
     </div>
 
-    <EditForm :show="dialog" @close="onEditFormClose" />
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      @close="onEditFormClose"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -65,27 +74,17 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
+import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
+import { getFundEntryListApi, deleteFundEntryApi } from '@/api/fundManage/fundEntry-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
-const villageTree = ref<any[]>([])
+
 const headInfo = ref<DemographicHeadType>({
   demographicNum: 0,
   peasantHouseholdNum: 0
@@ -95,11 +94,9 @@ const excelList = ref<ExcelListType[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 
-let timer = 0
-
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getFundEntryListApi,
+  delListApi: deleteFundEntryApi
 })
 const { getList, setSearchParams } = methods
 
@@ -124,11 +121,6 @@ const getExcelUploadList = async () => {
 onMounted(() => {
   getDemographicHeadInfo()
   getExcelUploadList()
-})
-
-onBeforeUnmount(() => {
-  clearInterval(timer)
-  timer = 0
 })
 
 const onDelRow = async (row: any, multiple: boolean) => {
@@ -176,7 +168,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'source',
     label: '资金来源',
     search: {
       show: true,
@@ -201,7 +193,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '金额(元)',
     search: {
       show: true,
@@ -218,7 +210,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sexText',
+    field: 'recordTime',
     label: '入账时间',
     search: {
       show: true,
@@ -238,7 +230,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'dataState',
     label: '状态',
     search: {
       show: true,
@@ -280,7 +272,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'source',
     label: '资金来源',
     search: {
       show: false
@@ -288,7 +280,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sexText',
+    field: 'amount',
     label: '金额(元)',
     search: {
       show: false
@@ -296,7 +288,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'age',
+    field: 'recordTime',
     label: '入账时间',
     search: {
       show: false
@@ -304,14 +296,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'card',
+    field: 'createTime',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'createUserName',
     label: '操作人',
     search: {
       show: false
@@ -320,7 +312,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'censusRegister',
+    field: 'dataState',
     label: '状态',
     search: {
       show: false
@@ -345,38 +337,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-// const onDelRow = async (row: DemographicDtoType | null, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
-
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
-
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
@@ -398,14 +358,8 @@ const onSearch = (data) => {
     projectId
   }
   if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
-      delete params.code
-      setSearchParams({ ...params })
-    })
+    delete params.code
+    setSearchParams({ ...params })
   } else {
     delete params.code
     setSearchParams({ ...params })
