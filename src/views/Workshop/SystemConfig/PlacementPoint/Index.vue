@@ -13,7 +13,6 @@
       </div>
 
       <Table
-        selection
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
