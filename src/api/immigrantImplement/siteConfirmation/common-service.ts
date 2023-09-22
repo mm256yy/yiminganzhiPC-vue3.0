@@ -1,4 +1,5 @@
 import request from '@/config/axios'
+import { ConfigDtoType } from './common-types'
 
 /**
  * 获取择址确认配置信息
@@ -7,13 +8,11 @@ import request from '@/config/axios'
  * @param name 选项名
  * @returns
  */
-export const getChooseConfigApi = (projectId: number, type: string | number, name?: string) => {
+export const getChooseConfigApi = (data: ConfigDtoType): Promise<TableResponse<ConfigDtoType>> => {
   return request.get({
     url: `/chooseConfig`,
     params: {
-      projectId,
-      type,
-      name,
+      ...data,
       size: 1000
     }
   })
