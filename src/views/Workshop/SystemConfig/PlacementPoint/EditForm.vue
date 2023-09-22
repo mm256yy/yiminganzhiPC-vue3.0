@@ -184,6 +184,9 @@ watch(
     if (val) {
       // 处理行政区划
       form.value = { ...val }
+      position.longitude = form.value.longitude
+      position.latitude = form.value.latitude
+      position.address = form.value.address
     }
   },
   {
