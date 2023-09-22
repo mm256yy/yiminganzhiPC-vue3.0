@@ -401,7 +401,6 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
-  console.log('data:', data)
   // 处理参数
   let params = {
     ...data
