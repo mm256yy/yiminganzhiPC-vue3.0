@@ -72,10 +72,10 @@
             <div class="strong">房屋分析</div></div
           >
         </div>
-        <tabButton @tab="tab" :tabList="tabListHouse" />
+        <tabButton @tabPerson="tabPerson" :tabList="tabListHouse" />
         <div class="between gender-list">
           <div>户均住房面积</div>
-          <div>2000,000人</div>
+          <div>2000,000m²</div>
         </div>
         <Echart :options="houseOption" :height="300" />
       </div>
@@ -184,11 +184,44 @@ const villageAnalysisNumber = ref<number>()
 const typeNumber = ref<number>(1)
 const numberMan = ref<number>()
 const numberWoman = ref<number>()
+const tag = ref<boolean>(true)
 const getChartScreenLists = async () => {
-  const list = await getChartScreenList({ code: appStore.getVillageCoder })
+  const list = await getChartScreenList({ code: reason.value })
   console.log(list, '1111')
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
+  genderOption.value.series[0].data = [
+    list.ageNumber[0].numberMan0,
+    list.ageNumber[0].numberMan18,
+    list.ageNumber[0].numberMan36,
+    list.ageNumber[0].numberMan50,
+    list.ageNumber[0].numberMan66
+  ]
+  genderOption.value.series[1].data = [
+    list.ageNumber[0].numberWoman0,
+    list.ageNumber[0].numberWoman18,
+    list.ageNumber[0].numberWoman36,
+    list.ageNumber[0].numberWoman50,
+    list.ageNumber[0].numberWoman66
+  ]
+  const householdNumberList = ref<any>([])
+  for (var index in list.householdNumber[0]) {
+    householdNumberList.value.push(list.householdNumber[0][index])
+  }
+  domicileOption.value.series[0].data = householdNumberList.value
+  if (tag.value) {
+    const perHouseholdList = ref<any>([])
+    list.perHousehold.forEach((item) => {
+      perHouseholdList.value.push(item.area)
+    })
+    houseOption.value.series[0].data = perHouseholdList.value
+  } else {
+    const perHouseholdList = ref<any>([])
+    list.perPerson.forEach((item) => {
+      perHouseholdList.value.push(item.area)
+    })
+    houseOption.value.series[0].data = perHouseholdList.value
+  }
 }
 const villageLists = ref<any>([])
 const villageList = async () => {
@@ -196,7 +229,8 @@ const villageList = async () => {
 }
 const getVillageAnalysisLists = async () => {
   const list = await getVillageAnalysisList({
-    code: appStore.getVillageCoder,
+    // code: appStore.getVillageCoder,
+    code: reason.value,
     type: typeNumber.value
   })
   console.log(list, '2222')
@@ -215,6 +249,17 @@ const getVillageAnalysisLists = async () => {
 }
 const tabVillage = async () => {
   console.log(reason.value, '选中的code')
+  getVillageAnalysisLists()
+  getChartScreenLists()
+}
+const tabPerson = (index) => {
+  if (index == 0) {
+    tag.value = true
+    getChartScreenLists()
+  } else {
+    tag.value = false
+    getChartScreenLists()
+  }
 }
 onMounted(() => {
   getChartScreenLists()
