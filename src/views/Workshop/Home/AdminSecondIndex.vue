@@ -185,7 +185,7 @@ const typeNumber = ref<number>(1)
 const numberMan = ref<number>()
 const numberWoman = ref<number>()
 const getChartScreenLists = async () => {
-  const list = await getChartScreenList({ code: appStore.getVillageCoder })
+  const list = await getChartScreenList({ code: reason.value })
   console.log(list, '1111')
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
@@ -196,7 +196,8 @@ const villageList = async () => {
 }
 const getVillageAnalysisLists = async () => {
   const list = await getVillageAnalysisList({
-    code: appStore.getVillageCoder,
+    // code: appStore.getVillageCoder,
+    code: reason.value,
     type: typeNumber.value
   })
   console.log(list, '2222')
@@ -215,6 +216,8 @@ const getVillageAnalysisLists = async () => {
 }
 const tabVillage = async () => {
   console.log(reason.value, '选中的code')
+  getVillageAnalysisLists()
+  getChartScreenLists()
 }
 onMounted(() => {
   getChartScreenLists()

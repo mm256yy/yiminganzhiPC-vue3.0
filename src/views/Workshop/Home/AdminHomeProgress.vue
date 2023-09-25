@@ -29,11 +29,11 @@
           <div class="line"></div>
           <div class="strong">工作组进度</div></div
         >
-        <tabButton @tab="tab" :tabList="tabList" />
         <ElTabs class="demo-tabs news" v-if="flag" @tab-click="handleClick">
           <ElTabPane label="房产" name="房产">安置概况</ElTabPane>
           <ElTabPane label="土地" name="土地">水库风采</ElTabPane>
         </ElTabs>
+        <tabButton @tab="tab" :tabList="tabList" />
         <div class="echart-wrap">
           <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
             <div class="echart-item-lt">
