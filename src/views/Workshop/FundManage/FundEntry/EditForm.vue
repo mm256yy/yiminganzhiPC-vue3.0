@@ -17,29 +17,40 @@
       :rules="rules"
     >
       <ElFormItem label="资金名称:" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.name" />
       </ElFormItem>
       <ElFormItem label="资金来源:" required>
-        <ElInput type="text" />
+        <ElSelect class="w-350px" v-model="form.source">
+          <ElOption
+            v-for="item in dictObj[388]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
       </ElFormItem>
+
       <ElFormItem label="金额(元):" required>
-        <ElInput type="text" />
+        <ElInput type="text" v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="入账时间:" required>
-        <ElDatePicker type="date" />
+        <ElDatePicker type="date" v-model="form.recordTime" />
+      </ElFormItem>
+      <ElFormItem label="说明:">
+        <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
       <div class="col-wrapper">
-        <div class="col-label-required"> 搬迁安置确认单： </div>
+        <div class="col-label-required"> 凭证： </div>
         <div class="card-img-list">
           <ElUpload
             :list-type="'picture-card'"
             action="/api/file/type"
             :data="{
-              type: 'archives'
+              type: 'image'
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="relocateVerifyPic"
+            :file-list="receipt"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -56,9 +67,6 @@
           </ElUpload>
         </div>
       </div>
-      <ElFormItem label="说明:">
-        <ElInput type="text" />
-      </ElFormItem>
     </ElForm>
 
     <template #footer>
@@ -81,21 +89,23 @@ import {
   FormInstance,
   FormRules,
   ElUpload,
-  // ElRow,
-  // ElCol,
   ElMessage,
   ElMessageBox,
   ElInput,
   ElDatePicker
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, watch, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
+import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useValidator } from '@/hooks/web/useValidator'
 
 interface PropsType {
   show: boolean
+  actionType: 'add' | 'edit' | 'view'
+  row?: any
 }
 
 interface FileItemType {
@@ -107,12 +117,14 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+const { required } = useValidator()
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
-const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
+const receipt = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -120,9 +132,27 @@ const headers = {
 }
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  name: [required()],
+  source: [required()],
+  amount: [required()],
+  recordTime: [required()]
+})
 
-const initData = () => {}
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      form.value = {
+        ...val
+      }
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 
 // 关闭弹窗
 const onClose = (flag = false) => {
@@ -133,24 +163,34 @@ const onClose = (flag = false) => {
 }
 
 const submit = (data: any) => {
-  saveDocumentationApi(data).then(() => {
-    ElMessage.success('操作成功！')
-  })
-  onClose(true)
+  if (props.actionType === 'add') {
+    addFundEntryApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  } else {
+    updateFundEntryApi(data).then((res) => {
+      if (res) {
+        ElMessage.success('操作成功！')
+      }
+    })
+    onClose(true)
+  }
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!relocateVerifyPic.value.length) {
-        ElMessage.error('请上传搬迁安置确认单')
+      if (!receipt.value.length) {
+        ElMessage.error('请上传凭证')
         return
       } else {
         let params: any = {
           ...form.value,
-          relocateVerifyPic: JSON.stringify(relocateVerifyPic.value || []), // 搬迁安置确认单
-          relocateOtherPic: JSON.stringify(relocateOtherPic.value || []) // 其他附件
+          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
         submit(params)
       }
@@ -174,19 +214,19 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
 
-  if (type === 'relocateVerify') {
-    relocateVerifyPic.value = list
+  if (type === 'receipt') {
+    receipt.value = list
   }
 }
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'relocateVerify')
+  handleFileList(fileList, 'receipt')
 }
 
 // 移除之前
@@ -206,10 +246,6 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-
-onMounted(() => {
-  initData()
-})
 </script>
 
 <style lang="less" scoped>

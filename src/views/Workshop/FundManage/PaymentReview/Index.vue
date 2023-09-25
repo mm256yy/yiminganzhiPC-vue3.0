@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElRadioGroup, ElRadioButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -69,6 +69,9 @@ import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import ReviewForm from './ReviewForm.vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+
 // import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
   getDemographicListApi,
@@ -84,6 +87,8 @@ import {
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
 // import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 // import EditForm from '../FundPayment/EditForm.vue'
 const tabVal = ref<string>('1')
 
@@ -128,10 +133,20 @@ const getExcelUploadList = async () => {
     excelList.value = res.content
   }
 }
+const fundAccountList = ref<any[]>([]) // 资金科目
 
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+    }
+  })
+}
 onMounted(() => {
   getDemographicHeadInfo()
   getExcelUploadList()
+  getFundSubjectList()
 })
 
 onBeforeUnmount(() => {
@@ -177,18 +192,13 @@ const onCloseReview = () => {
 }
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'name',
+    field: 'type',
     label: '申请类别',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[381]
       }
     },
     table: {
@@ -219,7 +229,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'applyDate',
     label: '申请时间',
     search: {
       show: true,
@@ -256,18 +266,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'classify',
     label: '概算科目',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[382]
       }
     },
     table: {
@@ -281,18 +286,21 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'fundAccount',
     label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        data: fundAccountList,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -306,7 +314,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'applyUser',
     label: '申请人',
     search: {
       show: true,
@@ -372,7 +380,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sexText',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: false
@@ -380,7 +388,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'age',
+    field: 'estimateSubject',
     label: '概算科目',
     search: {
       show: false
@@ -388,35 +396,35 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'card',
+    field: 'fundSubject',
     label: '资金科目',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'amount',
     label: '资金金额（元）',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'applyType',
     label: '申请类别',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'createDate',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'applyUser',
     label: '申请人',
     search: {
       show: false
@@ -425,7 +433,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'censusRegister',
+    field: 'status',
     label: '状态',
     search: {
       show: false

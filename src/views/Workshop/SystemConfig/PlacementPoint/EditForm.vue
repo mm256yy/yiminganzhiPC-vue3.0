@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="资金支付"
+    :title="actionType === 'edit' ? '编辑' : '新增'"
     :model-value="props.show"
     :width="800"
     @close="onClose"
@@ -16,61 +16,59 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="申请类型:" required>
-        <el-radio-group class="ml-4" v-model="form.applyType">
-          <el-radio
-            v-for="item in dictObj[381]"
-            :label="item.value"
-            size="large"
-            :key="item.value"
-            >{{ item.label }}</el-radio
-          >
-        </el-radio-group>
+      <div style="font-weight: bolder">基本信息</div>
+      <ElFormItem label="安置点:" required prop="name">
+        <ElInput type="text" v-model="form.name" placeholder="请输入安置点" />
       </ElFormItem>
-      <ElFormItem label="申请名称:" required>
-        <ElInput type="text" v-model="form.name" />
+      <ElFormItem label="小区名称:" prop="residential">
+        <ElInput type="text" v-model="form.residential" placeholder="请输入小区名称" />
       </ElFormItem>
-      <ElFormItem label="概算科目:" required>
+      <ElFormItem label="绿化率(%):" prop="greeningRate">
+        <ElInput type="text" v-model="form.greeningRate" placeholder="请输入绿化率(%)" />
+      </ElFormItem>
+      <ElFormItem label="结构类型:">
+        <!-- <el-radio-group class="ml-4">
+          <el-radio label="1" size="large">Option 1</el-radio>
+          <el-radio label="2" size="large">Option 2</el-radio>
+        </el-radio-group> -->
+        <ElTreeSelect class="!w-full" v-model="form.structure" :data="[]" node-key="code" />
+      </ElFormItem>
+      <ElFormItem label="建筑密度(%):" prop="buildingDensity">
+        <ElInput type="text" v-model="form.buildingDensity" placeholder="请输入建筑密度(%)" />
+      </ElFormItem>
+      <ElFormItem label="用地面积(㎡):" prop="landSpace">
+        <ElInput type="text" v-model="form.landSpace" placeholder="请输入用地面积(㎡)" />
+      </ElFormItem>
+      <ElFormItem label="建筑面积(㎡):" prop="floorSpace">
+        <ElInput type="text" v-model="form.floorSpace" placeholder="请输入建筑面积(㎡)" />
+      </ElFormItem>
+      <ElFormItem label="地理位置:" required prop="address">
+        <ElInput type="text" v-model="form.address" placeholder="请输入地理位置" />
+      </ElFormItem>
+      <ElFormItem label="户型类型:" required prop="type">
         <el-radio-group class="ml-4" v-model="form.type">
-          <el-radio
-            v-for="item in dictObj[382]"
-            :label="item.value"
-            size="large"
-            :key="item.value"
-            >{{ item.label }}</el-radio
-          >
+          <el-radio label="1" size="large">宅基地</el-radio>
+          <el-radio label="2" size="large">公寓房</el-radio>
         </el-radio-group>
       </ElFormItem>
-
-      <ElFormItem label="资金科目:" required>
-        <ElTreeSelect class="!w-full" v-model="form.funSubjectId" :data="[]" node-key="code" />
-      </ElFormItem>
-
-      <ElFormItem label="付款说明:" required>
-        <ElInput type="text" v-model="form.remark" />
-      </ElFormItem>
-
-      <ElFormItem label="收款单位:" required>
-        <ElInput type="text" v-model="form.receivePaymentUnit" />
-      </ElFormItem>
-      <ElFormItem label="付款时间:" required>
-        <ElDatePicker type="date" v-model="form.paymentTime" />
-      </ElFormItem>
-      <ElFormItem label="申请金额:">
-        <ElInput type="text" v-model="form.amount" />
+      <ElFormItem label="是否有生产用地:" required prop="isProductionLand">
+        <el-radio-group class="ml-4" v-model="form.isProductionLand">
+          <el-radio label="1" size="large">有</el-radio>
+          <el-radio label="2" size="large">无</el-radio>
+        </el-radio-group>
       </ElFormItem>
       <div class="col-wrapper">
-        <div class="col-label-required"> 申请凭证： </div>
+        <div class="col-label-required"> 规划图： </div>
         <div class="card-img-list">
           <ElUpload
             :list-type="'picture-card'"
             action="/api/file/type"
             :data="{
-              type: 'image'
+              type: 'archives'
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="receipt"
+            :file-list="relocateVerifyPic"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -87,12 +85,25 @@
           </ElUpload>
         </div>
       </div>
+      <div style="font-weight: bolder">周边配套</div>
+      <ElFormItem label="交通:" prop="traffic">
+        <ElInput type="text" v-model="form.traffic" placeholder="请输入交通" />
+      </ElFormItem>
+      <ElFormItem label="商业:" prop="business">
+        <ElInput type="text" v-model="form.business" placeholder="请输入商业" />
+      </ElFormItem>
+      <ElFormItem label="教育:" prop="education">
+        <ElInput type="text" v-model="form.education" placeholder="请输入教育" />
+      </ElFormItem>
+      <ElFormItem label="医院:" prop="hospital">
+        <ElInput type="text" v-model="form.hospital" placeholder="请输入医院" />
+      </ElFormItem>
+      <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
     </ElForm>
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -109,33 +120,46 @@ import {
   FormInstance,
   FormRules,
   ElUpload,
+  // ElRow,
+  // ElCol,
   ElMessage,
   ElMessageBox,
   ElInput,
-  ElDatePicker,
+  // ElDatePicker,
+  // ElSelect,
+  // ElOption,
   ElRadioGroup,
   ElRadio,
   ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, watch, computed } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { addFunPayApi, updateFunPayApi } from '@/api/fundManage/fundPayment-service'
+import { editPlacementPointApi } from '@/api/systemConfig/placementPoint-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import dayjs from 'dayjs'
-
+import { MapFormItem } from '@/components/Map'
+import { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
-  row?: any
+  row?: PlacementPointDtoType | null | undefined
 }
 
 interface FileItemType {
   name: string
   url: string
 }
-
+const position = reactive({
+  latitude: 0,
+  longitude: 0,
+  address: ''
+})
+const onChosePosition = (ps) => {
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
@@ -148,23 +172,21 @@ console.log(dictObj)
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const receipt = ref<FileItemType[]>([]) // 凭证
+const relocateVerifyPic = ref<FileItemType[]>([]) // 规划图列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
-// 规则校验
-const rules = reactive<FormRules>({})
-
 watch(
   () => props.row,
   (val) => {
     if (val) {
-      form.value = {
-        ...val
-      }
+      // 处理行政区划
+      form.value = { ...val }
+      position.longitude = form.value.longitude
+      position.latitude = form.value.latitude
+      position.address = form.value.address
     }
   },
   {
@@ -172,6 +194,10 @@ watch(
     deep: true
   }
 )
+// 规则校验
+const rules = reactive<FormRules>({})
+
+const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
@@ -182,36 +208,30 @@ const onClose = (flag = false) => {
 }
 
 const submit = (data: any) => {
-  if (props.actionType === 'add') {
-    addFunPayApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+  editPlacementPointApi(data).then(() => {
+    ElMessage.success('操作成功！')
     onClose(true)
-  } else {
-    updateFunPayApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
-    onClose(true)
-  }
+  })
 }
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!receipt.value.length) {
-        ElMessage.error('请上传搬迁安置确认单')
-        return
+      if (props.actionType === 'add') {
+        let params: any = {
+          ...form.value,
+          ...position,
+          pic: JSON.stringify(relocateVerifyPic.value || []) // 规划图
+        }
+        submit(params)
       } else {
         let params: any = {
           ...form.value,
-          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+          ...position,
+          pic: JSON.stringify(relocateVerifyPic.value || []), // 规划图
+          id: form.value.id
         }
-        params.paymentTime = dayjs(params.paymentTime)
         submit(params)
       }
     } else {
@@ -234,19 +254,19 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
       })
   }
 
-  if (type === 'receipt') {
-    receipt.value = list
+  if (type === 'relocateVerify') {
+    relocateVerifyPic.value = list
   }
 }
 
 // 文件上传
 const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'receipt')
+  handleFileList(fileList, 'relocateVerify')
 }
 
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'receipt')
+  handleFileList(fileList, 'relocateVerify')
 }
 
 // 移除之前
@@ -266,6 +286,10 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+
+onMounted(() => {
+  initData()
+})
 </script>
 
 <style lang="less" scoped>

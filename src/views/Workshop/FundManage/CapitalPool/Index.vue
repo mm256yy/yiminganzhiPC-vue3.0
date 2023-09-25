@@ -325,7 +325,7 @@ const onSearch = (data) => {
 }
 
 const onViewRow = async (row) => {
-  tableObject.currentRow = row
+  tableObject.currentRow = { ...row }
   dialog.value = true
 }
 

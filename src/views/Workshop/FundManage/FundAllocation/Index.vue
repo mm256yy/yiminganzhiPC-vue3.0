@@ -1,4 +1,5 @@
 <template>
+  <!-- 资金付款 -->
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
@@ -36,12 +37,16 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+        <template #updateTime="{ row }">
+          <div>{{
+            row.updateTime ? dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #createTime="{ row }">
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
         <template #action="{ row }">
@@ -50,7 +55,12 @@
       </Table>
     </div>
 
-    <EditForm :show="dialog" @close="onEditFormClose" />
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      @close="onEditFormClose"
+    />
   </WorkContentWrap>
 </template>
 
@@ -64,15 +74,9 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
+import { getFunPaymentListApi, deleteFunPaymentApi } from '@/api/fundManage/fundAllocation-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -83,8 +87,8 @@ const dialog = ref<boolean>(false)
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getFunPaymentListApi,
+  delListApi: deleteFunPaymentApi
 })
 const { getList, setSearchParams } = methods
 
@@ -140,7 +144,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'source',
     label: '资金来源',
     search: {
       show: true,
@@ -165,7 +169,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '金额(元)',
     search: {
       show: true,
@@ -182,8 +186,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sexText',
-    label: '入账时间',
+    field: 'createTime',
+    label: '时间',
     search: {
       show: true,
       component: 'DatePicker',
@@ -219,7 +223,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'source',
     label: '资金来源',
     search: {
       show: false
@@ -227,7 +231,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sexText',
+    field: 'amount',
     label: '金额(元)',
     search: {
       show: false
@@ -235,7 +239,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'age',
+    field: 'updateTime',
     label: '付款日期',
     search: {
       show: false
@@ -243,14 +247,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'card',
+    field: 'createTime',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'createUserName',
     label: '操作人',
     search: {
       show: false
@@ -259,7 +263,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'censusRegister',
+    field: 'dataState',
     label: '状态',
     search: {
       show: false
@@ -283,18 +287,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
 
 const onSearch = (data) => {
   //解决是否户主relation入参变化

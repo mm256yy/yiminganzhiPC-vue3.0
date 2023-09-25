@@ -14,7 +14,7 @@
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金支付记录</span>
 
           <div class="text">
-            合计金额： <span class="num">{{ 1000 }}</span> 元
+            合计金额： <span class="num">{{ headInfo }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -36,12 +36,16 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+        <template #createTime="{ row }">
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #paymentTime="{ row }">
+          <div>{{
+            row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
 
         <template #action="{ row }">
@@ -50,12 +54,17 @@
       </Table>
     </div>
 
-    <EditForm :show="dialog" @close="onEditFormClose" />
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      @close="onEditFormClose"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -64,40 +73,30 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import {
-  getDemographicListApi,
-  delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
-import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
+import {
+  getFunPayListApi,
+  deleteFunPayApi,
+  getLpList,
+  getFunPaySumAmount
+} from '@/api/fundManage/fundPayment-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const villageTree = ref<any[]>([])
-const headInfo = ref<DemographicHeadType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0
-})
+const headInfo = ref<any>()
 
-const excelList = ref<ExcelListType[]>([])
+const lpList = ref<any[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 
-let timer = 0
-
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getFunPayListApi,
+  delListApi: deleteFunPayApi
 })
 const { getList, setSearchParams } = methods
 
@@ -107,26 +106,21 @@ tableObject.params = {
 
 getList()
 
-const getDemographicHeadInfo = async () => {
-  const info = await getDemographicHeadApi()
+const getHeadInfo = async () => {
+  const info = await getFunPaySumAmount()
   headInfo.value = info
 }
 
-const getExcelUploadList = async () => {
-  const res = await getExcelList()
-  if (res && res.content) {
-    excelList.value = res.content
+const getLpListHandle = async () => {
+  const res: any = await getLpList()
+  if (res && res.length) {
+    lpList.value = res
   }
 }
 
 onMounted(() => {
-  getDemographicHeadInfo()
-  getExcelUploadList()
-})
-
-onBeforeUnmount(() => {
-  clearInterval(timer)
-  timer = 0
+  getHeadInfo()
+  getLpListHandle()
 })
 
 const onDelRow = async (row: any, multiple: boolean) => {
@@ -170,18 +164,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[382]
       }
     },
     table: {
@@ -195,7 +184,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
@@ -220,27 +209,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
-    label: '资金科目',
-    search: {
-      show: true,
-      component: 'DatePicker',
-      componentProps: {
-        type: 'daterange'
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
-  {
-    field: 'price',
+    field: 'amount',
     label: '付款金额',
     search: {
       show: true,
@@ -257,18 +226,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
-    label: '付款类别',
+    field: 'applyType',
+    label: '申请类型',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[381]
       }
     },
     table: {
@@ -282,18 +246,17 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'createUserName',
     label: '登记人',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: lpList.value,
+        props: {
+          value: 'id',
+          label: 'nickName'
+        }
       }
     },
     table: {
@@ -307,7 +270,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'receivePaymentUnit',
     label: '收款单位',
     search: {
       show: true,
@@ -341,7 +304,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'type',
     label: '概算科目',
     search: {
       show: false
@@ -349,67 +312,58 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sexText',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
     }
   },
   {
-    width: 200,
-    field: 'age',
-    label: '付款日期',
-    search: {
-      show: false
-    }
-  },
-  {
     width: 160,
-    field: 'card',
+    field: 'amount',
     label: '资金金额（元)',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'applyType',
     label: '资金类别',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'receivePaymentUnit',
     label: '收款单位',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'paymentTime',
     label: '付款日期',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'createTime',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'nationText',
+    field: 'createUserName',
     label: '操作人',
     search: {
       show: false
     }
   },
-
   {
     width: 100,
-    field: 'censusRegister',
+    field: 'status',
     label: '状态',
     search: {
       show: false
@@ -434,28 +388,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
-
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
@@ -477,14 +409,8 @@ const onSearch = (data) => {
     projectId
   }
   if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
-      delete params.code
-      setSearchParams({ ...params })
-    })
+    delete params.code
+    setSearchParams({ ...params })
   } else {
     delete params.code
     setSearchParams({ ...params })
