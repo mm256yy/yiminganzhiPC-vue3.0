@@ -12,12 +12,13 @@ interface PropsType {
   tabList: any
 }
 const props = defineProps<PropsType>()
-const emit = defineEmits(['tab', 'tabVillageAnalysis', 'tabHouse', 'tabCareer'])
+const emit = defineEmits(['tab', 'tabVillageAnalysis', 'tabHouse', 'tabCareer', 'tabPerson'])
 const onTab = (index) => {
   emit('tab', index)
   emit('tabVillageAnalysis', index)
   emit('tabHouse', index)
   emit('tabCareer', index)
+  emit('tabPerson', index)
 }
 </script>
 
