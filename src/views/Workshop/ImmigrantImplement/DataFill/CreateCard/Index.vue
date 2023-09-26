@@ -216,48 +216,6 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
         colspan: 0
       }
     }
-  } else if (columnIndex === 1) {
-    if (rowIndex === 17) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 18) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 19) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 20) {
-      return {
-        rowspan: 2,
-        colspan: 1
-      }
-    } else if (rowIndex === 21) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 22) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 23) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 24) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    }
   }
 }
 

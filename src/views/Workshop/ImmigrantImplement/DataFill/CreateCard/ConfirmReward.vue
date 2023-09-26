@@ -110,7 +110,9 @@ const emit = defineEmits(['close'])
 
 const initData = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
-    tableData.value = res
+    if (res && res.length) {
+      tableData.value = res.filter((item: any) => item.type === '3')
+    }
   })
 }
 
