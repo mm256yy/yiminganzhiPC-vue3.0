@@ -86,7 +86,7 @@ import {
   ElSelect,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, nextTick, computed, watch } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { editProfessionalProjectApi } from '@/api/professional/service'
@@ -111,7 +111,7 @@ const formRef = ref<FormInstance>()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const btnLoading = ref(false)
-const defaultValue: Omit<ProfessionalProjectDtoType, 'id'> = {
+const defaultValue = {
   projectId,
   status: 'implementation',
   locationType: 'SubmergedArea',
@@ -129,14 +129,14 @@ const defaultValue: Omit<ProfessionalProjectDtoType, 'id'> = {
 const form = ref<Omit<ProfessionalProjectDtoType, 'id'>>(defaultValue)
 
 watch(
-  () => props.row,
+  () => props.actionType,
   (val) => {
     btnLoading.value = false
-    if (val) {
+    if (val !== 'add') {
       // 处理行政区划
-      form.value = { ...val }
+      form.value = { ...props.row }
     } else {
-      form.value = defaultValue
+      form.value = { ...defaultValue }
     }
   },
   {
@@ -156,9 +156,8 @@ const rules = reactive<FormRules>({
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
+  formRef.value?.resetFields()
+  form.value = { ...defaultValue }
 }
 
 // 提交表单

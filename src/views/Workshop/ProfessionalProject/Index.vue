@@ -234,6 +234,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
+  console.log('currentRow:', tableObject.currentRow)
   dialog.value = true
 }
 
