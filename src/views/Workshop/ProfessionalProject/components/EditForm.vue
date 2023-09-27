@@ -129,19 +129,16 @@ const defaultValue = {
 const form = ref<Omit<ProfessionalProjectDtoType, 'id'>>(defaultValue)
 
 watch(
-  () => props.actionType,
+  () => props.show,
   (val) => {
     btnLoading.value = false
-    if (val !== 'add') {
-      // 处理行政区划
-      form.value = { ...props.row }
-    } else {
-      form.value = { ...defaultValue }
+    if (val) {
+      if (props.actionType === 'edit') {
+        form.value = { ...props.row }
+      } else {
+        form.value = { ...defaultValue }
+      }
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
