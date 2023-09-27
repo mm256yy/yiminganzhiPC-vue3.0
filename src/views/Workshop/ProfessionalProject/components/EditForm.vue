@@ -23,7 +23,7 @@
         <ElInput v-model="form.code" class="!w-350px" placeholder="请输入专项编码" />
       </ElFormItem>
       <ElFormItem label="专项类别" prop="type">
-        <ElSelect class="w-350px" v-model="form.type">
+        <ElSelect class="!w-350px" v-model="form.type">
           <ElOption
             v-for="item in dictObj[342]"
             :key="item.value"
