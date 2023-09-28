@@ -16,3 +16,10 @@ export interface BudgetAdjustmentType {
   gsStatus: string
   [key: string]: any
 }
+
+export interface AdjustmentType {
+  ids: string
+  type: string
+  gsRemark: string
+  [key: string]: any
+}

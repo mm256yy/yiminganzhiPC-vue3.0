@@ -46,12 +46,7 @@
     <ViewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseView" />
 
     <!-- 概算调整 -->
-    <AdjustForm
-      :show="adjustDialog"
-      :row="tableObject.currentRow"
-      :selectionIds="getSelections"
-      @close="onCloseAdjust"
-    />
+    <AdjustForm :show="adjustDialog" :selectionIds="selectionIds" @close="onCloseAdjust" />
   </WorkContentWrap>
 </template>
 
@@ -77,6 +72,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 const dialog = ref(false) // 查看弹窗标识
 const adjustDialog = ref(false) // 调整概算弹窗标识
 const fundAccountList = ref<any[]>([]) // 资金科目
+const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 
 const { register, tableObject, methods } = useTable({
   getListApi: getBudgetAdjustmentListApi
@@ -487,6 +483,7 @@ const onViewRow = async (row) => {
 // 调整概算
 const onAdjust = async () => {
   const res = await getSelections()
+  selectionIds.value = [...res]
   if (res && res.length) {
     adjustDialog.value = true
   } else {
