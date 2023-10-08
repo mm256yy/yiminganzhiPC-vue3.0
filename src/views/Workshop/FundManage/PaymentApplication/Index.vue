@@ -49,14 +49,12 @@
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
-
-        <!-- <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
-        </template> -->
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <el-button type="primary" link @click="onEditRow(row)">编辑</el-button>
-          <el-button v-if="row.relation != 1" type="danger" link> 删除 </el-button>
+          <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row, false)">
+            删除
+          </el-button>
         </template>
       </Table>
     </div>
@@ -66,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -76,18 +74,9 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 // import { useIcon } from '@/hooks/web/useIcon'
 import {
-  getDemographicListApi,
-  delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
-import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
+  getPaymentApplicationListApi,
+  delPaymentApplicationByIdApi
+} from '@/api/fundManage/paymentApplication-service'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 import EditForm from './EditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -95,12 +84,7 @@ import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const villageTree = ref<any[]>([])
-const headInfo = ref<DemographicHeadType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0
-})
+
 const fundAccountList = ref<any[]>([]) // 资金科目
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
@@ -111,19 +95,16 @@ const getFundSubjectList = () => {
   })
 }
 
-console.log(999)
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
-const excelList = ref<ExcelListType[]>([])
+// const excelList = ref<ExcelListType[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 
-let timer = 0
-
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getPaymentApplicationListApi,
+  delListApi: delPaymentApplicationByIdApi
 })
 const { getList, setSearchParams } = methods
 
@@ -133,38 +114,32 @@ tableObject.params = {
 
 getList()
 
-const getDemographicHeadInfo = async () => {
-  const info = await getDemographicHeadApi()
-  headInfo.value = info
-}
+// const getDemographicHeadInfo = async () => {
+//   const info = await getDemographicHeadApi()
+//   headInfo.value = info
+// }
 
-const getExcelUploadList = async () => {
-  const res = await getExcelList()
-  if (res && res.content) {
-    excelList.value = res.content
-  }
-}
+// const getExcelUploadList = async () => {
+//   const res = await getExcelList()
+//   if (res && res.content) {
+//     excelList.value = res.content
+//   }
+// }
 
 onMounted(() => {
-  getDemographicHeadInfo()
-  getExcelUploadList()
   getFundSubjectList()
 })
 
-onBeforeUnmount(() => {
-  clearInterval(timer)
-  timer = 0
-})
-
-// const onDelRow = async (row: any, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
+const onDelRow = async (row: any, multiple: boolean) => {
+  tableObject.currentRow = row
+  console.log('currentRow', tableObject.currentRow)
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
+}
 
 const onAddRow = () => {
   actionType.value = 'add'
@@ -179,11 +154,9 @@ const onEditRow = (row: any) => {
 }
 const onViewRow = (row: any) => {
   actionType.value = 'view'
-  //   tableObject.currentRow = {
-  //     ...row,
-  //     occupation: row.occupation ? JSON.parse(row.occupation) : '',
-  //     insuranceType: row.insuranceType ? row.insuranceType.split(',') : ''
-  //   }
+  tableObject.currentRow = {
+    ...row
+  }
   tableObject.currentRow = row
   dialog.value = true
 }
@@ -209,7 +182,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'status',
+    field: 'gsStatus',
     label: '状态',
     search: {
       show: true,
@@ -233,7 +206,10 @@ const schema = reactive<CrudSchema[]>([
     label: '申请名称',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入'
+      }
     },
     table: {
       show: false
@@ -246,7 +222,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: true,
@@ -266,7 +242,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '申请金额',
     search: {
       show: true,
@@ -283,7 +259,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'classify',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
@@ -303,11 +279,11 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
         data: fundAccountList,
         nodeKey: 'code',
@@ -322,12 +298,6 @@ const schema = reactive<CrudSchema[]>([
     },
     table: {
       show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
     }
   },
   {
@@ -335,7 +305,10 @@ const schema = reactive<CrudSchema[]>([
     label: '申请人',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入'
+      }
     },
     table: {
       show: false
@@ -348,18 +321,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[384]
       }
     },
     table: {
@@ -381,7 +349,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'name',
+    field: 'code',
     label: '付款编号',
     search: {
       show: false
@@ -389,7 +357,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'name',
     label: '申请名称',
     search: {
       show: false
@@ -405,7 +373,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'estimateSubject',
+    field: 'typeTxt',
     label: '概算科目',
     search: {
       show: false
@@ -413,7 +381,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'fundSubject',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
@@ -427,7 +395,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeTxt',
     label: '申请类别',
     search: {
       show: false
@@ -441,7 +409,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: false
@@ -450,7 +418,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'gsStatusTxt',
     label: '状态',
     search: {
       show: false
@@ -487,49 +455,54 @@ const findRecursion = (data, code, callback) => {
   })
 }
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 const onSearch = (data) => {
-  //解决是否户主relation入参变化
-  let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
-
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
-
   // 处理参数
   let params = {
-    ...searchData
+    ...data
   }
+
+  // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
-      delete params.code
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
+
+  if (!params.name) {
+    delete params.name
   }
+
+  if (!params.applyType) {
+    delete params.applyType
+  }
+
+  if (!params.dataState) {
+    delete params.dataState
+  }
+
+  if (!params.createdDate) {
+    delete params.createdDate
+  }
+
+  if (!params.amount && !params.amount.length) {
+    delete params.amount
+  }
+
+  if (!params.type) {
+    delete params.type
+  }
+
+  if (!params.funSubjectId) {
+    delete params.funSubjectId
+  }
+
+  if (!params.applyUserName) {
+    delete params.applyUserName
+  }
+
+  if (!params.paymentType) {
+    delete params.paymentType
+  }
+
+  setSearchParams({ ...params, status: '4' })
 }
 
 const onEditFormClose = (flag: boolean) => {

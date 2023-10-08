@@ -18,17 +18,17 @@
     >
       <ElFormItem label="申请类型:" required>
         <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+          <el-radio label="1" size="large">付款申请</el-radio>
+          <el-radio label="2" size="large">退款申请</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="申请名称:" required>
-        <ElInput type="text" />
+        <ElInput v-model="form.name" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
       <ElFormItem label="概算科目:" required>
         <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+          <el-radio label="1" size="large">概算内</el-radio>
+          <el-radio label="2" size="large">概算外</el-radio>
         </el-radio-group>
       </ElFormItem>
 
@@ -37,24 +37,15 @@
       </ElFormItem>
 
       <ElFormItem label="付款说明:" required>
-        <ElInput type="text" />
+        <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
       <ElFormItem label="付款对象类型:" required>
         <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+          <el-radio label="1" size="large">专业项目</el-radio>
+          <el-radio label="2" size="large">其他</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="付款类型:" required> 支付 </ElFormItem>
-      <!-- <ElFormItem label="收款单位:" required>
-        <ElInput type="text" />
-      </ElFormItem>
-      <ElFormItem label="付款时间:" required>
-        <ElDatePicker type="date" />
-      </ElFormItem>
-      <ElFormItem label="申请金额:">
-        <ElInput type="text" />
-      </ElFormItem> -->
       <ElFormItem label="付款对象:">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>

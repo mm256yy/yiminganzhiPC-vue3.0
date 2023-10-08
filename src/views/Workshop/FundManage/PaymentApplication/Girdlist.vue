@@ -8,37 +8,6 @@
     appendToBody
     :closeOnClickModal="false"
   >
-    <!-- <WorkContentWrap>
-      <div class="search-form-wrap">
-        <Search
-          :schema="allSchemas.searchSchema"
-          expand
-          :defaultExpand="false"
-          :expand-field="'card'"
-          @search="onSearch"
-          @reset="setSearchParams"
-        />
-      </div> -->
-
-    <!-- <div class="table-wrap">
-        <Table
-          selection
-          v-model:pageSize="tableObject.size"
-          v-model:currentPage="tableObject.currentPage"
-          :pagination="{
-            total: tableObject.total
-          }"
-          :loading="tableObject.loading"
-          :data="tableObject.tableList"
-          :columns="allSchemas.tableColumns"
-          row-key="id"
-          headerAlign="center"
-          align="center"
-          highlightCurrentRow
-          @register="register"
-        />
-      </div> -->
-    <!-- </WorkContentWrap> -->
     <ElTable
       :data="tableData"
       :span-method="objectSpanMethod"
