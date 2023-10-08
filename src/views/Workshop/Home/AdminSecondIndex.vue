@@ -72,7 +72,7 @@
             <div class="strong">房屋分析</div></div
           >
         </div>
-        <tabButton @tabPerson="tabPerson" :tabList="tabListHouse" />
+        <tabButton @tab-person="tabPerson" :tabList="tabListHouse" />
         <div class="between gender-list">
           <div>户均住房面积</div>
           <div>2000,000m²</div>
@@ -145,7 +145,7 @@
             <div class="strong">移民村分析</div></div
           >
         </div>
-        <tabButton @tabVillageAnalysis="tabVillageAnalysis" :tabList="tabListImmigration" />
+        <tabButton @tab-village-analysis="tabVillageAnalysis" :tabList="tabListImmigration" />
         <div class="between gender-list">
           <div>总人口</div>
           <div>{{ villageAnalysisNumber }}人</div>

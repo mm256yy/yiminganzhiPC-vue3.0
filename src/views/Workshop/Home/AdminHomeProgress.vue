@@ -138,9 +138,9 @@ import {
 } from '@/api/AssetEvaluation/leader-side'
 import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-const BackIcon = useIcon({ icon: 'iconoir:undo' })
-
 import { useRouter } from 'vue-router'
+
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
 const type = ref<number>(1)
