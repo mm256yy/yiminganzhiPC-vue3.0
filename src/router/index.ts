@@ -102,35 +102,35 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           icon: 'ant-design:home-outlined'
         }
       },
-      {
-        path: 'adminHome',
-        name: 'adminHome',
-        component: () => import('@/views/Workshop/Home/AdminIndex.vue'),
-        meta: {
-          title: '工作台', // 用于领导端
-          icon: 'ant-design:home-outlined'
-        }
-      },
-      {
-        path: 'adminSecondHome',
-        name: 'adminSecondHome',
-        component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
-        meta: {
-          title: '工作台', // 领导端二级首页
-          icon: 'ant-design:home-outlined',
-          hidden: true
-        }
-      },
-      {
-        path: 'adminThirdHome',
-        name: 'adminThirdHome',
-        component: () => import('@/views/Workshop/Home/AdminThirdIndex.vue'),
-        meta: {
-          title: '工作台', // 领导端三级首页
-          icon: 'ant-design:home-outlined',
-          hidden: true
-        }
-      },
+      // {
+      //   path: 'adminHome',
+      //   name: 'adminHome',
+      //   component: () => import('@/views/Workshop/Home/AdminIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 用于领导端
+      //     icon: 'ant-design:home-outlined'
+      //   }
+      // },
+      // {
+      //   path: 'adminSecondHome',
+      //   name: 'adminSecondHome',
+      //   component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 领导端二级首页
+      //     icon: 'ant-design:home-outlined',
+      //     hidden: true
+      //   }
+      // },
+      // {
+      //   path: 'adminThirdHome',
+      //   name: 'adminThirdHome',
+      //   component: () => import('@/views/Workshop/Home/AdminThirdIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 领导端三级首页
+      //     icon: 'ant-design:home-outlined',
+      //     hidden: true
+      //   }
+      // },
       {
         path: 'newDetail',
         name: 'newDetail',
