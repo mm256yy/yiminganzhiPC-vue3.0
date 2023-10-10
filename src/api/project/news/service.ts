@@ -2,7 +2,7 @@ import request from '@/config/axios'
 import { NewsDtoType } from './types'
 
 /**
- * 查询新闻信息列表
+ * 查询文章信息列表
  */
 export const getNewsListApi = (
   query: Partial<NewsDtoType>
@@ -11,28 +11,28 @@ export const getNewsListApi = (
 }
 
 /**
- * 新增新闻信息
+ * 新增文章信息
  */
 export const addNewsApi = (data: NewsDtoType): Promise<NewsDtoType> => {
   return request.post({ url: '/news/create', data })
 }
 
 /**
- * 更新新闻信息
+ * 更新文章信息
  */
 export const updateNewsApi = (data: NewsDtoType): Promise<NewsDtoType> => {
   return request.post({ url: '/news/update', data })
 }
 
 /**
- * 删除新闻信息
+ * 删除文章信息
  */
 export const delNewsByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/news/delete/${id}` })
 }
 
 /**
- * 查询单个新闻信息
+ * 查询单个文章信息
  */
 export const getNewsByIdApi = (id: number): Promise<NewsDtoType> => {
   return request.get({ url: `/news/${id}` })

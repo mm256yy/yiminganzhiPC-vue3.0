@@ -170,10 +170,11 @@
 
       <!-- 设施设备信息 -->
       <DeviceInfor
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
+        :projectId="projectId"
       />
 
       <!-- 附件上传 -->
@@ -220,18 +221,19 @@
 
       <!-- 零星(林)果木信息 -->
       <Fruitwood
+        v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
 
       <!-- 设施设备信息 -->
       <DeviceInfor
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :doorNo="doorNo"
         :householdId="householdId"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
+        :projectId="projectId"
       />
 
       <!-- 附件上传 -->
@@ -385,6 +387,7 @@ import {
   signLandlordApi
 } from '@/api/workshop/landlord/service'
 import { ReportStatus, SignStatus } from '@/views/Workshop/DataFill/config'
+import { useAppStore } from '@/store/modules/app'
 
 import Demographic from './Demographic/Index.vue' // 人口信息
 import House from './House/Index.vue' // 房屋信息
@@ -399,7 +402,6 @@ import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vu
 import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue' // 设施设备信息
 
 import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue' // 个体工商户基本情况
-// import villageInfoCInfor from './VillageComponents/villageInfoCInfor/Index.vue'
 import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue' // 农村小型专项及农副业设施信息
 import LandInfo from './LandInfo/Index.vue' // 土地信息
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
@@ -424,6 +426,8 @@ const titleMsg = (type: string) => {
 }
 const { currentRoute, back } = useRouter()
 const { doorNo, householdId, type, name } = currentRoute.value.query as any
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const surveyStatus = ref<SurveyStatusEnum>(SurveyStatusEnum.Survey)

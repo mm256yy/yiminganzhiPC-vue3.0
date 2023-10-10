@@ -214,8 +214,9 @@
               @click="appearanceTabChange(item)"
               v-for="item in appearanceTabList"
               :key="item.id"
-              >{{ item.name }}</div
             >
+              {{ item.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -253,8 +254,8 @@ const impProgressOption = ref({
         params.map((item: any) => {
           nameStr = item.name
           str = str.concat(`
-          <div>${item.seriesName}：${item.value}%</div>
-        `)
+            <div>${item.seriesName}：${item.value}%</div>
+          `)
         })
       return nameStr + str
     }
@@ -523,12 +524,13 @@ const appearanceTabChange = (item: any) => {
   display: flex;
   width: 100%;
   margin-top: 10px;
-  overflow-x: scroll;
   justify-content: center;
 
   .home-main {
     display: flex;
     align-items: center;
+    width: 1440px;
+    overflow-x: scroll;
 
     .col {
       display: flex;
@@ -602,7 +604,8 @@ const appearanceTabChange = (item: any) => {
           .list {
             display: flex;
             flex-wrap: wrap;
-            padding: 0 30px;
+            justify-content: center;
+            padding: 0 25px;
             box-sizing: border-box;
 
             .item {
@@ -710,11 +713,13 @@ const appearanceTabChange = (item: any) => {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
+            width: 418px;
 
             .list-item {
               display: flex;
+              width: 418px;
               padding: 4px 0;
-              border: 1px solid #ebebeb;
+              border-bottom: 1px solid #ebebeb;
               box-sizing: border-box;
               align-items: center;
 
@@ -725,8 +730,10 @@ const appearanceTabChange = (item: any) => {
               }
 
               .content {
+                width: 328px;
+
                 .news-title {
-                  width: 327px;
+                  width: 328px;
                   overflow: hidden;
                   font-size: 16px;
                   color: #333;
@@ -1022,7 +1029,7 @@ const appearanceTabChange = (item: any) => {
                 .progress {
                   height: 9px;
                   background: linear-gradient(90deg, rgba(255, 197, 61, 0.3) 0%, #faad14 100%);
-                  transform: skewX(-15deg);
+                  transform: skewX(-30deg);
                   transform-origin: 0% 0%;
                 }
               }

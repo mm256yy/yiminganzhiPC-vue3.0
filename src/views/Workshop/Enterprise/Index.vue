@@ -25,14 +25,10 @@
           </div>
           <div class="text">
             共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
-            <!-- <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人 -->
             <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span
-            >家
+            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
             <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
-            >家
+            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
           </div>
         </div>
         <ElSpace>
@@ -76,15 +72,15 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #reportStatus="{ row }">
+        <template #fillStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="[
                 'status',
-                row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+                row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
               ]"
             ></span>
-            {{ row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
+            {{ row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
           >
         </template>
         <template #reportDate="{ row }">
@@ -118,8 +114,7 @@
       :row="tableObject.currentRow"
       @close="onFormPupClose"
     />
-    <!-- @update-district="onUpdateDistrict"
-    -->
+
     <Print
       :show="printDialog"
       :landlordIds="landlordIds"
@@ -127,12 +122,14 @@
       @close="onPrintDialogClose"
       :outsideData="outsideData"
     />
+
     <Export
       :show="exportDialog"
       :type="'Company'"
       :list="exportList"
       @close="onExportDialogClose"
     />
+
     <Survey :show="surveyDialog" :data="surveyInfo" @close="onSurveyDialogClose" />
   </WorkContentWrap>
 </template>
@@ -160,7 +157,6 @@ export default defineComponent({
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-//
 import {
   ElButton,
   ElSpace,
@@ -177,7 +173,6 @@ import Print from '../components/Print.vue'
 import Export from '../components/Export.vue'
 import Survey from './components/Survey.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-// import { getDistrictTreeApi } from '@/api/district'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -187,7 +182,6 @@ import {
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
 import { screeningTree } from '@/api/workshop/village/service'
-// ReportStatusEnums
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
@@ -198,6 +192,7 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
+
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
   ? router.currentRoute.value?.meta?.title?.split('-')[1]
@@ -209,7 +204,6 @@ const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
-// const villageTree = ref<any[]>([])
 const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
@@ -268,17 +262,8 @@ tableObject.params = {
   projectId
 }
 
-// getList()
 setSearchParams({ type: 'Company' })
-// const getVillageTree = async () => {
-//   const list = await screeningTree(projectId, 'Company')
-//   villageTree.value = list || []
-//   return list || []
-// }
 
-// const onUpdateDistrict = () => {
-//   getVillageTree()
-// }
 const districtTree = ref<any>([])
 const getDistrictTree = async () => {
   const list = await screeningTree(projectId, 'Company')
@@ -421,7 +406,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportStatus',
+    field: 'fillStatus',
     label: '填报状态',
     search: {
       show: false
@@ -476,14 +461,14 @@ const onDelRow = async (row: LandlordDtoType) => {
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
-    <strong>${row.name}企业包含:</strong>
-  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
-  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
-  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+        <strong>${row.name}企业包含:</strong>
+      <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+      <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+      <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
 
-  <strong>是否删除该企业信息</strong>
-</div>
-  `,
+      <strong>是否删除该企业信息</strong>
+    </div>
+    `,
     '提示',
     {
       dangerouslyUseHTMLString: true,
@@ -494,19 +479,11 @@ const onDelRow = async (row: LandlordDtoType) => {
   )
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
-        // getList()
         setSearchParams({ type: 'Company' })
         getLandlordHeadInfo()
       })
     })
     .catch(() => {})
-
-  // const { delList, getSelections } = methods
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
 }
 
 const onAddRow = () => {
@@ -638,13 +615,6 @@ const onSurveyDialogClose = () => {
 }
 
 const onViewRow = async (row) => {
-  // const result = await getLandlordSurveyByIdApi(row.id)
-  // if (result) {
-  //   surveyInfo.value = result
-  //   surveyDialog.value = true
-  // } else {
-  //   ElMessage.warning('查看失败！')
-  // }
   actionType.value = 'view'
   tableObject.currentRow = row
   dialog.value = true

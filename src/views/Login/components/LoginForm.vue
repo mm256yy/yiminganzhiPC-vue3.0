@@ -234,9 +234,17 @@ const doRoute = async () => {
     await setPlatform('workshop', addRoute)
   }
   // window.location.href = path
-  setTimeout(() => {
-    window.location.href = path
-  }, 0)
+  const projects = ref<any>([])
+  projects.value = appStore.getUserInfo?.projectUsers[0].roles
+  if (projects.value[0].code == 'leaderworkbenches') {
+    setTimeout(() => {
+      window.location.href = '#/workshop/leaderSide'
+    }, 0)
+  } else {
+    setTimeout(() => {
+      window.location.href = path
+    }, 0)
+  }
 }
 </script>
 

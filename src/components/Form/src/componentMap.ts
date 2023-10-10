@@ -22,6 +22,7 @@ import {
 import { InputPassword } from '@/components/InputPassword'
 import { Editor } from '@/components/Editor'
 import { ComponentName } from '@/types/components'
+import { InputRange } from '@/components/InputRange'
 
 const componentMap: Recordable<Component, ComponentName> = {
   Radio: ElRadioGroup,
@@ -45,7 +46,8 @@ const componentMap: Recordable<Component, ComponentName> = {
   RadioButton: ElRadioGroup,
   InputPassword: InputPassword,
   Editor: Editor,
-  TreeSelect: ElTreeSelect
+  TreeSelect: ElTreeSelect,
+  InputRange: InputRange
 }
 
 export { componentMap }

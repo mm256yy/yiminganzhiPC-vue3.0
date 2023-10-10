@@ -11,7 +11,6 @@
       <template #systemRole>
         <el-select v-model="systemRole" @change="systemRoleChange">
           <el-option label="系统管理员" :value="SystemRoleEnum.SYS_ADMIN" />
-
           <el-option label="项目管理员" :value="SystemRoleEnum.PROJECT_ADMIN" />
           <el-option label="普通用户" :value="SystemRoleEnum.NORMAL_USER" />
         </el-select>

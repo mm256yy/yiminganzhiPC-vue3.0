@@ -26,6 +26,11 @@ export interface HouseDtoType {
   longitude: string
   latitude: string
   housePic: string
+  ownersSituation?: Array<[]>
+  addReason?: string
+  deleteReason?: string
+  isComplianceA?: string
+  otherProofPic?: string
   remark: string
   [key: string]: any
 }

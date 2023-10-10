@@ -2,6 +2,8 @@ export interface DemographicDtoType {
   id: number
   altitude: number
   benefit: number
+  reason?: string
+  addReason?: string
   name: string
   sex: string
   card: string
@@ -36,6 +38,9 @@ export interface DemographicDtoType {
   villageText: string
   virutalVillageText: string
   insured: boolean
+  settingWay: any
+  settingWayText: string
+  settingRemark: string
   [key: string]: any
 }
 

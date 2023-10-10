@@ -96,6 +96,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
+          },
+          {
+            entry: 'src/h5/main.ts',
+            filename: 'h5.html',
+            template: 'h5.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
           }
         ]
       })
@@ -119,7 +131,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         {
           find: /\@\//,
           replacement: `${pathResolve('src')}/`
-        }
+        },
+        {
+          find: /\@h5\//,
+          replacement: `${pathResolve('src/h5')}/`
+        },
       ]
     },
     build: {
@@ -136,7 +152,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, "index.html"),
-          admin: resolve(__dirname, "admin.html")
+          admin: resolve(__dirname, "admin.html"),
+          h5: resolve(__dirname, "h5.html")
         }
       }
     },

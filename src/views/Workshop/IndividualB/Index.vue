@@ -25,14 +25,10 @@
           </div>
           <div class="text">
             共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家个体工商
-            <!-- <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 人 -->
             <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span
-            >家
+            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
             <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span
-            >家
+            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
           </div>
         </div>
         <ElSpace>
@@ -76,15 +72,15 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #reportStatus="{ row }">
+        <template #fillStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="[
                 'status',
-                row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+                row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
               ]"
             ></span>
-            {{ row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
+            {{ row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
           >
         </template>
         <template #reportDate="{ row }">
@@ -184,9 +180,7 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi
 } from '@/api/workshop/landlord/service'
-// import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { screeningTree } from '@/api/workshop/village/service'
-// import { getDistrictTreeApi } from '@/api/district'
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
@@ -256,14 +250,13 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-// getList
+
 const { setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId
 }
 
-// getList()
 setSearchParams({ type: 'IndividualHousehold' })
 
 const getVillageTree = async () => {
@@ -414,7 +407,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportStatus',
+    field: 'fillStatus',
     label: '填报状态',
     search: {
       show: false
@@ -468,14 +461,14 @@ const onDelRow = async (row: LandlordDtoType) => {
   ElMessageBox.confirm(
     `
     <div style='text-align:center'>
-    <strong>${row.name}个体工商包含:</strong>
+        <strong>${row.name}个体工商包含:</strong>
 
-  <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
-  <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
-  <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
+      <div>房屋信息: ${result.immigrantHouseList.length} 栋房屋信息</div>
+      <div>附属物信息: ${result.immigrantAppendantList.length} 项附属物信息</div>
+      <div>零星(林)果木信息: ${result.immigrantTreeList.length} 项零星果木信息</div>
 
-  <strong>是否删除该个体工商信息</strong>
-</div>
+      <strong>是否删除该个体工商信息</strong>
+    </div>
   `,
     '提示',
     {
@@ -487,18 +480,11 @@ const onDelRow = async (row: LandlordDtoType) => {
   )
     .then(() => {
       delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
-        // getList()
         setSearchParams({ type: 'IndividualHousehold' })
         getLandlordHeadInfo()
       })
     })
     .catch(() => {})
-
-  // const selections = await getSelections()
-  // await delList(
-  //   multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-  //   multiple
-  // )
 }
 
 const onAddRow = () => {
@@ -516,7 +502,6 @@ const onEditRow = (row: LandlordDtoType) => {
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
-    // getList()
     setSearchParams({ type: 'IndividualHousehold' })
     getLandlordHeadInfo()
   }
@@ -625,13 +610,6 @@ const onSurveyDialogClose = () => {
 }
 
 const onViewRow = async (row) => {
-  // const result = await getLandlordSurveyByIdApi(row.id)
-  // if (result) {
-  //   surveyInfo.value = result
-  //   surveyDialog.value = true
-  // } else {
-  //   ElMessage.warning('查看失败！')
-  // }
   actionType.value = 'view'
   tableObject.currentRow = row
   dialog.value = true
