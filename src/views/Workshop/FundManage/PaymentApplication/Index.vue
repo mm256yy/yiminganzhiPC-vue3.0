@@ -132,7 +132,6 @@ onMounted(() => {
 
 const onDelRow = async (row: any, multiple: boolean) => {
   tableObject.currentRow = row
-  console.log('currentRow', tableObject.currentRow)
   const { delList, getSelections } = methods
   const selections = await getSelections()
   await delList(

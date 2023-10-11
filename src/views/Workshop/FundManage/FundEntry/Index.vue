@@ -14,7 +14,7 @@
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金入账记录</span>
 
           <div class="text">
-            合计金额： <span class="num">{{ 1000 }}</span> 元
+            合计金额： <span class="num">{{ sumAmount }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -48,7 +48,9 @@
             row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-
+        <template #dataState="{ row }">
+          <div>{{ row.dataState === 0 ? '草稿' : '正常' }}</div>
+        </template>
         <template #action="{ row }">
           <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
         </template>
@@ -74,30 +76,28 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
-import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
 import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
-import { getFundEntryListApi, deleteFundEntryApi } from '@/api/fundManage/fundEntry-service'
+import {
+  getFundEntryListApi,
+  deleteFundEntryApi,
+  getSumAmountApi
+} from '@/api/fundManage/fundEntry-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 
-const headInfo = ref<DemographicHeadType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0
-})
-
-const excelList = ref<ExcelListType[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
+const sumAmount = ref<string>('')
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFundEntryListApi,
   delListApi: deleteFundEntryApi
 })
+
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
@@ -105,23 +105,6 @@ tableObject.params = {
 }
 
 getList()
-
-const getDemographicHeadInfo = async () => {
-  const info = await getDemographicHeadApi()
-  headInfo.value = info
-}
-
-const getExcelUploadList = async () => {
-  const res = await getExcelList()
-  if (res && res.content) {
-    excelList.value = res.content
-  }
-}
-
-onMounted(() => {
-  getDemographicHeadInfo()
-  getExcelUploadList()
-})
 
 const onDelRow = async (row: any, multiple: boolean) => {
   tableObject.currentRow = row
@@ -148,6 +131,16 @@ const onEditRow = (row: any) => {
 const onExport = () => {
   console.log('导出')
 }
+
+const sumAmountApi = async () => {
+  try {
+    sumAmount.value = await getSumAmountApi()
+  } catch (error) {}
+}
+
+onMounted(() => {
+  sumAmountApi()
+})
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -238,7 +231,11 @@ const schema = reactive<CrudSchema[]>([
       componentProps: {
         options: [
           {
-            label: '1',
+            label: '草稿',
+            value: 0
+          },
+          {
+            label: '正常',
             value: 1
           }
         ]
@@ -272,7 +269,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'source',
+    field: 'sourceTxt',
     label: '资金来源',
     search: {
       show: false
@@ -368,6 +365,7 @@ const onSearch = (data) => {
 
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
+    sumAmountApi()
     getList()
   }
   dialog.value = false

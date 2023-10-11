@@ -143,8 +143,6 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-console.log(dictObj)
-
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -159,17 +157,19 @@ const headers = {
 const rules = reactive<FormRules>({})
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
-      form.value = {
-        ...val
+      if (props.actionType === 'edit') {
+        // 编辑
+        form.value = {
+          ...props.row
+        }
+      } else {
+        // 新增
+        form.value = {}
       }
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
@@ -188,15 +188,14 @@ const submit = (data: any) => {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   } else {
     updateFunPayApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   }
+  onClose(true)
 }
 
 // 提交表单
