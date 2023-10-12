@@ -48,8 +48,8 @@
             row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-        <template #dataState="{ row }">
-          <div>{{ row.dataState === 0 ? '草稿' : '正常' }}</div>
+        <template #status="{ row }">
+          <div>{{ row.status === 0 ? '草稿' : '正常' }}</div>
         </template>
         <template #action="{ row }">
           <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -83,8 +83,11 @@ import {
   deleteFundEntryApi,
   getSumAmountApi
 } from '@/api/fundManage/fundEntry-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
@@ -167,12 +170,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[388]
       }
     },
     table: {
@@ -223,7 +221,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'dataState',
+    field: 'status',
     label: '状态',
     search: {
       show: true,
@@ -309,7 +307,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'dataState',
+    field: 'status',
     label: '状态',
     search: {
       show: false

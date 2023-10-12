@@ -71,8 +71,8 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -185,7 +185,7 @@ const submit = (data: any) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
@@ -194,6 +194,7 @@ const onSubmit = debounce((formEl) => {
       }
       let params: any = {
         ...form.value,
+        status,
         receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
       }
       submit(params)
