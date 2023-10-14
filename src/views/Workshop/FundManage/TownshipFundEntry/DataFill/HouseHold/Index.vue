@@ -18,7 +18,7 @@
       </ElSpace>
     </div>
     <Table
-      border
+      selection
       v-model:pageSize="tableObject.size"
       v-model:currentPage="tableObject.currentPage"
       :pagination="{
@@ -62,7 +62,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { ElButton, ElSpace } from 'element-plus'
+import { ElButton, ElSpace, ElMessage } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { Search } from '@/components/Search'
@@ -81,6 +81,7 @@ const props = defineProps<PropsType>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const districtTree = ref<any[]>([])
+const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
@@ -94,7 +95,7 @@ tableObject.tableList = [
   }
 ]
 
-const { setSearchParams } = methods
+const { setSearchParams, getSelections } = methods
 
 // 需要重置一次params
 tableObject.params = {
@@ -109,8 +110,17 @@ const getdistrictTree = async () => {
   return list || []
 }
 
-const onBatchRelease = () => {}
-
+// 批量发放
+const onBatchRelease = async () => {
+  const res = await getSelections()
+  selectionIds.value = [...res]
+  if (res && res.length) {
+    // 执行批量发放操作
+  } else {
+    ElMessage.info('请先勾选列表数据')
+  }
+}
+// 批量发放模板
 const onBatchReleaseTemplate = () => {}
 
 onMounted(() => {
@@ -227,13 +237,13 @@ const { allSchemas } = useCrudSchemas(schema)
 
 // 发放
 const onIssue = (row: any) => {
+  console.log('row-发放', row)
   editDialog.value = true
-  console.log('row', row)
 }
 // 查看
 const onCheckRow = (row: any) => {
+  console.log('row-查看', row)
   checkDialog.value = true
-  console.log('row', row)
 }
 
 const onEditFormClose = () => {

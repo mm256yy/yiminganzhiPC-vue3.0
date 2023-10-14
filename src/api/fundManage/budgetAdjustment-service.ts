@@ -9,7 +9,6 @@ import { BudgetAdjustmentType, AdjustmentType } from './budgetAdjustment-types'
 export const getBudgetAdjustmentListApi = (params: BudgetAdjustmentType) => {
   return request.get({ url: `/funPaymentRequest`, params })
 }
-
 /**
  * 调整概算
  * @param data

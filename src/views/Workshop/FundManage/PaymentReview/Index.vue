@@ -48,7 +48,7 @@
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <el-button type="primary" link @click="onReviewRow(row)">审核</el-button>
           <!-- <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row)">
-            删除
+            删除    
           </el-button> -->
         </template>
       </Table>
@@ -192,7 +192,7 @@ const onCloseReview = () => {
 }
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'type',
+    field: 'applyType',
     label: '申请类别',
     search: {
       show: true,
@@ -212,7 +212,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'applyUserName',
     label: '申请名称',
     search: {
       show: true,
@@ -249,7 +249,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '申请金额',
     search: {
       show: true,
@@ -266,7 +266,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'classify',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
@@ -286,7 +286,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
@@ -314,7 +314,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: true,
@@ -331,7 +331,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'payType',
     label: '付款对象类型',
     search: {
       show: true,
@@ -364,7 +364,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'name',
+    field: 'code',
     label: '付款编号',
     search: {
       show: false
@@ -372,7 +372,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'applyUserName',
     label: '申请名称',
     search: {
       show: false
@@ -380,7 +380,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'paymentType',
+    field: 'payType',
     label: '付款对象类型',
     search: {
       show: false
@@ -388,7 +388,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'estimateSubject',
+    field: 'type',
     label: '概算科目',
     search: {
       show: false
@@ -396,7 +396,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'fundSubject',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
@@ -417,14 +417,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: false

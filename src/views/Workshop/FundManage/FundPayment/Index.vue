@@ -12,7 +12,6 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金支付记录</span>
-
           <div class="text">
             合计金额： <span class="num">{{ headInfo }}</span> 元
           </div>
@@ -419,6 +418,7 @@ const onSearch = (data) => {
 
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
+    getHeadInfo()
     getList()
   }
   dialog.value = false

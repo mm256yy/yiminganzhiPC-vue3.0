@@ -16,13 +16,13 @@ export const addFundEntryApi = (data: Partial<FundEntryType>): Promise<any> => {
 
 // 更新资金入账
 export const updateFundEntryApi = (data: Partial<FundEntryType>): Promise<any> => {
-  return request.get({
+  return request.post({
     url: '/funRrd/update',
-    params: data
+    data
   })
 }
 
-// 更新资金入账
+// 删除资金入账
 export const deleteFundEntryApi = (id: number): Promise<void> => {
   return request.get({
     url: '/funRrd/delete',
@@ -30,4 +30,9 @@ export const deleteFundEntryApi = (id: number): Promise<void> => {
       id
     }
   })
+}
+
+// 查询资金入账总金额
+export const getSumAmountApi = (params?: any) => {
+  return request.get({ url: `/funRrd/sumAmount`, params })
 }
