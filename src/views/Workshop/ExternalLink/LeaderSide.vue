@@ -46,7 +46,7 @@
               <div class="strong flex title-padding">
                 <Icon
                   icon="teenyicons:right-solid"
-                  style=" margin-right: 4px;color: #97b7ff"
+                  style="margin-right: 4px; color: #97b7ff"
                 />永久用地</div
               >
               <div
@@ -68,7 +68,7 @@
               <div class="strong flex title-padding">
                 <Icon
                   icon="teenyicons:right-solid"
-                  style=" margin-right: 4px;color: #97b7ff"
+                  style="margin-right: 4px; color: #97b7ff"
                 />人口</div
               >
             </div>
@@ -150,7 +150,7 @@
               <div class="strong flex title-padding">
                 <Icon
                   icon="teenyicons:right-solid"
-                  style=" margin-right: 4px;color: #97b7ff"
+                  style="margin-right: 4px; color: #97b7ff"
                 />房屋</div
               >
             </div>
@@ -165,7 +165,7 @@
           </div>
           <div>
             <div class="strong flex title-padding">
-              <Icon icon="teenyicons:right-solid" style=" margin-right: 4px;color: #97b7ff" />
+              <Icon icon="teenyicons:right-solid" style="margin-right: 4px; color: #97b7ff" />
               企(事业单位)</div
             >
             <div class="data-left-header-tab-c">
@@ -190,7 +190,7 @@
               <div class="strong title-padding flex">
                 <Icon
                   icon="teenyicons:right-solid"
-                  style=" margin-right: 4px;color: #97b7ff"
+                  style="margin-right: 4px; color: #97b7ff"
                 />主要专业项目</div
               >
             </div>
@@ -256,7 +256,7 @@
             <ElTabPane
               name="水库要闻"
               label="水库要闻"
-              style=" height: 145px;overflow: auto; overflow-x: hidden"
+              style="height: 145px; overflow: auto; overflow-x: hidden"
             >
               <div
                 class="element news"
@@ -707,7 +707,6 @@ const handleClickItem = (type: number) => {
     5: 'Feedback', //反馈管理
     6: 'SmartReport' // 智慧报表
   }
-  console.log(pathMap[type], '测试')
   push({ name: pathMap[type] })
 }
 // const agricultureList = ref<any>([
