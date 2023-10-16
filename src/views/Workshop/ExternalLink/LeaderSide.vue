@@ -44,7 +44,10 @@
           <div>
             <div class="data-left-header-tab-c">
               <div class="strong flex title-padding">
-                <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />永久用地</div
+                <Icon
+                  icon="teenyicons:right-solid"
+                  style=" margin-right: 4px;color: #97b7ff"
+                />永久用地</div
               >
               <div
                 ><span class="num-color">{{ landScreenDtoListObj.totalArea }}</span
@@ -53,15 +56,20 @@
             </div>
             <div class="land data-left-header-tab-c">
               <div v-for="item in landList" :key="item.id" class="land-list">
-                <div class="sub-title">{{ item.name }}</div>
-                <div class="amount">{{ item.num }}<span class="sub-title">亩</span></div>
+                <div class="sub-title" style="margin-top: 8px">{{ item.name }}</div>
+                <div class="amount" style="margin-top: 8px"
+                  >{{ item.num }}<span class="sub-title">亩</span></div
+                >
               </div>
             </div>
           </div>
           <div>
             <div class="data-left-header-tab">
-              <div class="strong title-padding">
-                <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />人口</div
+              <div class="strong flex title-padding">
+                <Icon
+                  icon="teenyicons:right-solid"
+                  style=" margin-right: 4px;color: #97b7ff"
+                />人口</div
               >
             </div>
             <div class="data-left-header-tab-c">
@@ -139,13 +147,16 @@
           </div>
           <div>
             <div class="data-left-header-tab-c">
-              <div class="strong title-padding">
-                <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />房屋</div
+              <div class="strong flex title-padding">
+                <Icon
+                  icon="teenyicons:right-solid"
+                  style=" margin-right: 4px;color: #97b7ff"
+                />房屋</div
               >
             </div>
             <div class="land data-left-header-tab-c">
               <div v-for="item in houseList" :key="item.id" class="land-list">
-                <div class="sub-title">{{ item.name }}</div>
+                <div class="sub-title" style="margin-top: 20px">{{ item.name }}</div>
                 <div class="amount" style="padding-top: 10px"
                   >{{ (item.num / 10000).toFixed(2) }}<span class="sub-title">万m²</span></div
                 >
@@ -153,8 +164,9 @@
             </div>
           </div>
           <div>
-            <div class="strong title-padding">
-              <Icon icon="teenyicons:right-solid" style="color: #97b7ff" /> 企(事业单位)</div
+            <div class="strong flex title-padding">
+              <Icon icon="teenyicons:right-solid" style=" margin-right: 4px;color: #97b7ff" />
+              企(事业单位)</div
             >
             <div class="data-left-header-tab-c">
               <div v-for="(item, index) in institutionsList" :key="index" class="flex">
@@ -175,8 +187,11 @@
           </div>
           <div>
             <div class="data-left-header-tab-c">
-              <div class="strong title-padding">
-                <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />主要专业项目</div
+              <div class="strong title-padding flex">
+                <Icon
+                  icon="teenyicons:right-solid"
+                  style=" margin-right: 4px;color: #97b7ff"
+                />主要专业项目</div
               >
             </div>
             <div style="display: flex; flex-wrap: wrap">
@@ -184,7 +199,7 @@
                 v-for="item in projectsList"
                 :key="item.id"
                 class="land-list"
-                style="background-color: rgba(231, 237, 253, var(--tw-bg-opacity))"
+                style="background-color: #f2f6ff"
               >
                 <div class="sub-title">{{ item.name }}</div>
                 <div class="sub-num">{{ item.num }}<span class="sub-title">m²</span></div>
@@ -208,7 +223,7 @@
       <!-- 中间内容 -->
       <div class="data-center data-common common-hegiht">
         <div class="common-color" @click="goLink()">
-          <img :src="VR" alt="背景图" style="width: 100%; height: 453px" />
+          <img :src="VR" alt="背景图" style="width: 100%; height: 400px" />
         </div>
         <div class="common-color height-fill">
           <div class="data-left-header-tab" @click="handleClickItem(4)">
@@ -219,7 +234,7 @@
               >
             </div>
             <div class="toMore aliam-center">
-              <div>查看更多</div>
+              <div class="mores">查看更多</div>
               <Icon icon="ant-design:right-outlined" />
             </div>
           </div>
@@ -238,21 +253,25 @@
             </div>
           </div> -->
           <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
-            <ElTabPane name="水库要闻" label="水库要闻">
-              <div class="element news">
+            <ElTabPane
+              name="水库要闻"
+              label="水库要闻"
+              style=" height: 145px;overflow: auto; overflow-x: hidden"
+            >
+              <div
+                class="element news"
+                v-for="item in newsList"
+                :key="item.id"
+                style="width: 100%; height: 55px"
+              >
                 <div class="list-box-left" v-if="newsList && newsList.length > 0">
-                  <img class="cover-pic" :src="newsList[0].coverPic" />
+                  <img class="cover-pic" :src="item.coverPic" style="width: 80px; height: 50px" />
                 </div>
                 <div class="list-box-right">
-                  <div
-                    class="text"
-                    v-for="item in newsList"
-                    :key="item.id"
-                    @click="routerJump(`newDetail?id=${item.id}`)"
-                  >
+                  <div class="text" @click="routerJump(`newDetail?id=${item.id}`)">
                     <div class="title">{{ item.title }}</div>
-                    <div class="time">{{ item.releaseTime }}</div>
                   </div>
+                  <div class="time">{{ item.releaseTime.replace(/-/g, '/') }}</div>
                 </div>
               </div>
             </ElTabPane>
@@ -284,19 +303,21 @@
               >
             </div>
             <div class="toMore aliam-center">
-              <div>查看更多</div>
+              <div class="mores">查看更多</div>
               <Icon icon="ant-design:right-outlined" />
             </div>
           </div>
           <div class="th-title">
             <div>问题内容</div>
-            <div>提交人</div>
-            <div>提交时间</div>
+            <div class="data-left-header-tab-c" style="width: 30%">
+              <div>提交人</div>
+              <div>提交时间</div>
+            </div>
           </div>
           <div class="question-list">
             <div class="item" v-for="item in questionList" :key="item.id">
               <div class="name">{{ item.name }}</div>
-              <div class="time">{{ item.createTime }}</div>
+              <div class="time">{{ item.createTime.replace(/\//g, '-') }}</div>
             </div>
           </div>
         </div>
@@ -310,7 +331,7 @@
               <div class="strong">资金管理</div></div
             >
             <div class="toMore aliam-center">
-              <div>查看更多</div>
+              <div class="mores">查看更多</div>
               <Icon icon="ant-design:right-outlined" />
             </div>
           </div>
@@ -365,7 +386,7 @@
             </div>
           </div>
         </div>
-        <div class="common-color" style="height: 480px">
+        <div class="common-color" style="height: 440px">
           <div class="data-left-header-tab" @click="handleClickItem(3)">
             <div class="data-left-header-tab">
               <div class="flex">
@@ -374,7 +395,7 @@
               >
             </div>
             <div class="toMore aliam-center">
-              <div>查看更多</div>
+              <div class="mores">查看更多</div>
               <Icon icon="ant-design:right-outlined" />
             </div>
           </div>
@@ -386,10 +407,10 @@
           <Echart :options="impProgressOption" :height="300" />
         </div>
         <div class="common-color" style="height: 120px">
-          <img :src="Reports" alt="背景图" />
+          <img :src="Reports" alt="背景图" style="width: 100%; height: 90px" />
         </div>
         <div class="common-color" @click="handleClickItem(1)" style="height: 120px">
-          <img :src="Analysis" alt="背景图" />
+          <img :src="Analysis" alt="背景图" style="width: 100%; height: 90px" />
         </div>
       </div>
     </div>
@@ -917,7 +938,7 @@ const questionList = ref<any>([
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 46px;
+  height: 36px;
 }
 
 .data-left-header-tab-c {
@@ -937,10 +958,11 @@ const questionList = ref<any>([
 
 .common-color {
   width: 98%;
-  padding: 10px;
+  padding: 16px;
   margin: 10px auto;
   cursor: pointer;
-  background-color: aliceblue;
+  // background-color: aliceblue;
+  background: linear-gradient(360deg, #ffffff 0%, rgba(255, 255, 255, 0.73) 100%);
   border-radius: 5px;
 }
 
@@ -980,14 +1002,14 @@ const questionList = ref<any>([
   }
 
   .land {
-    background-color: rgba(231, 237, 253, var(--tw-bg-opacity));
+    background-color: #f2f6ff;
     // padding: 16px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 }
 
 .strong {
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .schedule {
@@ -1142,6 +1164,7 @@ const questionList = ref<any>([
     .amount {
       padding-top: 10px;
       font-size: 30px;
+      font-weight: bold;
       color: #333;
     }
 
@@ -1193,6 +1216,7 @@ const questionList = ref<any>([
 
     .amount {
       font-size: 24px;
+      font-weight: bold;
       color: #333;
     }
   }
@@ -1236,11 +1260,13 @@ const questionList = ref<any>([
 .sub-num {
   padding-top: 10px;
   font-size: 18px;
+  font-weight: bold;
   color: #333;
 }
 
 .amount {
   font-size: 24px;
+  font-weight: bold;
   color: #333;
 }
 
@@ -1272,6 +1298,7 @@ const questionList = ref<any>([
 
 .num-color {
   font-size: 24px;
+  font-weight: bold;
   color: #3e73ec;
 }
 
@@ -1279,7 +1306,7 @@ const questionList = ref<any>([
   display: flex;
   // background-color: rgba(231, 237, 253, var(--tw-bg-opacity));
   width: calc((100%) / 5); // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
-  height: 80px;
+  height: 72px;
   // max-width: calc((100%) / 5); // 加入这两个后每个item的宽度就生效了
   min-width: calc((100%) / 5); // 加入这两个后每个item的宽度就生效了
   // padding-left: 10px;
@@ -1302,5 +1329,10 @@ const questionList = ref<any>([
 
 .height-fill {
   height: 253px;
+}
+
+.mores {
+  font-size: 14px;
+  color: #999;
 }
 </style>

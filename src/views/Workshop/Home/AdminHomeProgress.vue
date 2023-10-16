@@ -67,6 +67,7 @@
           <Table
             :data="tableObject"
             :columns="allSchemas.tableColumns"
+            :header-cell-style="{ background: '#F2F6ff' }"
             row-key="id"
             headerAlign="center"
             align="center"
@@ -159,7 +160,8 @@ const getVillageScheduleList = async () => {
     incompleteNumberList.value.push(item.incompleteNumber)
     completeNumberList.value.push(item.completeNumber)
   })
-  householdOption.value.xAxis.data = dataList.value
+  // householdOption.value.xAxis.data = dataList.value
+  console.log(householdOption.value.xAxis.data, '11111')
   householdOption.value.series[0].data = completeNumberList.value
   householdOption.value.series[1].data = incompleteNumberList.value
 }
@@ -377,16 +379,59 @@ const householdOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: []
+    data: [
+      '殿前村',
+      '大畈村',
+      '后染村',
+      '里镜村',
+      '潭角村',
+      '下潘村',
+      '小泉村',
+      '竹潭村',
+      '安山村',
+      '荷塘村',
+      '市中社',
+      '钟楼社',
+      '桐中井',
+      '里东村',
+      '姚宫村',
+      '琅珂村',
+      '大塘坑'
+    ]
   },
   yAxis: {
     type: 'value'
-    // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
+    // data: ['村6', '村7', '村8', '村6', '村7', '村8', '村6', '村7', '村8', '村6']
   },
   series: [
     {
       name: '已完成',
-      data: [],
+      data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      type: 'bar',
+      barWidth: 18,
+      // stack: 'all',
+      color: {
+        type: 'linear',
+        x: 0, // 右
+        y: 0, // 下
+        x2: 0, // 左
+        y2: 1, // 上
+        colorStops: [
+          {
+            offset: 0,
+            color: '#51CE94' // 0% 处的颜色
+          }
+          // {
+          //   offset: 1,
+          //   color: '#8EBBFF' // 100% 处的颜色
+          // }
+        ]
+      }
+    },
+    {
+      name: '未完成',
+      data: [1, 1, 1, 1, 1, 1, 1, 1, 1],
+
       type: 'bar',
       barWidth: 18,
       // stack: 'all',
@@ -400,30 +445,6 @@ const householdOption = ref({
           {
             offset: 0,
             color: '#65A4FE' // 0% 处的颜色
-          }
-          // {
-          //   offset: 1,
-          //   color: '#8EBBFF' // 100% 处的颜色
-          // }
-        ]
-      }
-    },
-    {
-      name: '未完成',
-      data: [],
-      type: 'bar',
-      barWidth: 18,
-      // stack: 'all',
-      color: {
-        type: 'linear',
-        x: 0, // 右
-        y: 0, // 下
-        x2: 0, // 左
-        y2: 1, // 上
-        colorStops: [
-          {
-            offset: 0,
-            color: '#51CE94  ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -616,5 +637,6 @@ const onBack = () => {
   height: 10px;
   background-color: #ff5722;
   border-radius: 50%;
+  box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
 }
 </style>

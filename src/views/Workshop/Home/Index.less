@@ -330,7 +330,7 @@
 }
 
 .list-box-left {
-  width: 240px;
+  // width: 240px;
   padding: 5px 0;
 
   .cover-pic {
@@ -340,16 +340,21 @@
 }
 
 .list-box-right {
-  height: 145px;
-  padding-left: 22px;
+  // height: 145px;
+  padding: 5px 0 5px 22px;
   overflow: hidden;
-  width: 50%;
+  display: flex;
+  /* align-items: center; */
+  /* display: flow; */
+  flex-direction: column;
+  justify-content: center;
+  // width: 50%;
   .text {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 36px;
-    line-height: 36px;
+    // height: 36px;
+    // line-height: 36px;
 
     .title {
       // width: 214px;
@@ -361,11 +366,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-
-    .time {
-      color: rgba(153, 153, 153, 1);
-      font-size: 14px;
-    }
+  }
+  .time {
+    color: #999999;
+    font-size: 14px;
   }
 }
 
@@ -401,7 +405,7 @@
 .element {
   // height: 283px;
   cursor: pointer;
-  overflow-y: auto;
+  // overflow-y: auto;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */
 
