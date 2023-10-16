@@ -8,7 +8,7 @@
         </div>
         <div class="content">
           <div class="item" v-for="(twoItem, twoIndex) of item.body" :key="twoIndex">
-            <div class="left"> {{ twoItem.label }}： </div>
+            <div class="left"> {{ twoItem.label }}:</div>
             <div class="right">
               <div class="right_top">
                 <div
@@ -258,22 +258,37 @@ let cardList = reactive<any>([
     body: [
       {
         label: '居民户',
-        content: ['居民户', '资金使用详细'],
+        content: [
+          {
+            label: '居民户'
+          },
+          {
+            label: '资金使用详细'
+          }
+        ],
         showNum: 2
       },
       {
         label: '村集体',
-        content: ['村集体'],
+        content: [{ label: '村集体' }],
         showNum: 1
       },
       {
         label: '企(事)业单位',
-        content: ['企业', '个体户', '水电站'],
+        content: [{ label: '企业' }, { label: '个体户' }, { label: '水电站' }],
         showNum: 3
       },
       {
         label: '专业项目',
-        content: ['电信工程', '移动工程', '联通工程', '铁打工程', '广播电视工程', '水文站', '宗教'],
+        content: [
+          { label: '电信工程' },
+          { label: '移动工程' },
+          { label: '联通工程' },
+          { label: '铁打工程' },
+          { label: '广播电视工程' },
+          { label: '水文站' },
+          { label: '宗教' }
+        ],
         showNum: 7
       }
     ]
@@ -283,7 +298,7 @@ let cardList = reactive<any>([
     body: [
       {
         label: '安置意愿',
-        content: ['生产安置意愿', '搬迁安置意愿'],
+        content: [{ label: '生产安置意愿' }, { label: '搬迁安置意愿' }],
         showNum: 2
       }
     ]
@@ -293,17 +308,17 @@ let cardList = reactive<any>([
     body: [
       {
         label: '居民户',
-        content: ['居民户按区域', '资金使用详细'],
+        content: [{ label: '居民户按区域' }, { label: '资金使用详细' }],
         showNum: 2
       },
       {
         label: '企(事)业单位',
-        content: ['企业', '个体户按区域', '个体户按工作区'],
+        content: [{ label: '企业' }, { label: '个体户按区域' }, { label: '个体户按工作区' }],
         showNum: 3
       },
       {
         label: '专业项目',
-        content: ['交通/电力/移动联通铁塔电信/文物', '寺庙/水文站'],
+        content: [{ label: '交通/电力/移动联通铁塔电信/文物' }, { label: '寺庙/水文站' }],
         showNum: 2
       }
     ]
@@ -492,6 +507,7 @@ const objectSpanMethod3 = ({
         }
 
         .right {
+          padding-left: 6px;
           flex: 1;
 
           .right_top {
