@@ -148,7 +148,27 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '领导工作台',
           icon: 'ant-design:home-outlined',
           hidden: true
-        }
+        },
+        children: [
+          {
+            path: 'fundPeople',
+            name: 'fundPeople',
+            component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
+            meta: {
+              title: '资金管理-居民户报表',
+              icon: 'ant-design:home-outlined'
+            }
+          }
+          // {
+          //   path: 'fundPeople',
+          //   name: 'fundPeople',
+          //   component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
+          //   meta: {
+          //     title: '资金管理-居民户报表',
+          //     icon: 'ant-design:home-outlined'
+          //   }
+          // }
+        ]
       },
       {
         path: 'padSide',
