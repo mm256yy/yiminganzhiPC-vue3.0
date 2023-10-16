@@ -1,5 +1,40 @@
 <template>
   <div style="margin-bottom: 30px">
+    <div class="smart_report">
+      <div class="card" v-for="(item, index) of cardList" :key="index">
+        <div class="header">
+          <div class="left"></div>
+          <b class="label">{{ item.header }}</b>
+        </div>
+        <div class="content">
+          <div class="item" v-for="(twoItem, twoIndex) of item.body" :key="twoIndex">
+            <div class="left"> {{ twoItem.label }}： </div>
+            <div class="right">
+              <div class="right_top">
+                <div
+                  :class="{
+                    right_item: true,
+                    right_tabs: twoItem.tabs,
+                    tabs_click: threeItem.click && twoItem.tabs,
+                    no_tabs_choose: threeItem.click && !twoItem.tabs
+                  }"
+                  v-for="(threeItem, threeIndex) of twoItem.content"
+                  :key="threeIndex"
+                  @click="chooseItem(threeItem, twoItem)"
+                >
+                  <span>{{ threeItem.label }}</span>
+                  <template v-if="twoItem.tabs">
+                    <Icon icon="formkit:down" width="16" height="16" v-show="true" />
+                    <Icon icon="formkit:up" width="16" height="16" v-show="false" />
+                  </template>
+                </div>
+              </div>
+              <div class="right_bottom" v-show="twoItem.openTabs">111</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 企业基本情况 -->
     <ElTable :data="tableData1" style="width: 100%" :span-method="objectSpanMethod1">
       <ElTableColumn prop="test" label="序号" />
@@ -51,48 +86,13 @@
       </ElTableColumn>
     </ElTable>
   </div>
-  <div class="smart_report">
-    <div class="card" v-for="(item, index) of cardList" :key="index">
-      <div class="header">
-        <div class="left"></div>
-        <b class="label">{{ item.header }}</b>
-      </div>
-      <div class="content">
-        <div class="item" v-for="(twoItem, twoIndex) of item.body" :key="twoIndex">
-          <div class="left"> {{ twoItem.label }}： </div>
-          <div class="right">
-            <div class="right_top">
-              <div
-                :class="{
-                  right_item: true,
-                  right_tabs: twoItem.tabs,
-                  tabs_click: threeItem.click && twoItem.tabs,
-                  no_tabs_choose: threeItem.click && !twoItem.tabs
-                }"
-                v-for="(threeItem, threeIndex) of twoItem.content"
-                :key="threeIndex"
-                @click="chooseItem(threeItem, twoItem)"
-              >
-                <span>{{ threeItem.label }}</span>
-                <template v-if="twoItem.tabs">
-                  <Icon icon="formkit:down" width="16" height="16" v-show="true" />
-                  <Icon icon="formkit:up" width="16" height="16" v-show="false" />
-                </template>
-              </div>
-            </div>
-            <div class="right_bottom" v-show="twoItem.openTabs">111</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { ElTable, ElTableColumn } from 'element-plus'
 
-let cardList = reactive([
+let cardList = reactive<any>([
   {
     header: '实物成果',
     body: [
@@ -204,110 +204,110 @@ let cardList = reactive([
             ]
           }
         ]
+      },
+      {
+        label: '专业项目',
+        content: [
+          {
+            label: '交通工程设施',
+            click: false
+          },
+          {
+            label: '输变电工程设施',
+            click: false
+          },
+          {
+            label: '文物古迹',
+            click: false
+          },
+          {
+            label: '电信工程',
+            content: [{}, '房屋及其附属物设备汇总']
+          },
+          {
+            label: '移动工程',
+            content: ['设施汇总', '房屋及其附属物设备汇总']
+          },
+          {
+            label: '联通工程',
+            content: ['设施汇总', '房屋及其附属物设备汇总']
+          },
+          {
+            label: '铁塔工程',
+            content: ['设施汇总']
+          },
+          {
+            label: '广播电视工程',
+            content: ['设施汇总', '房屋及其附属物设备汇总']
+          },
+          {
+            label: '水文站',
+            content: ['房屋及其附属物设备汇总']
+          },
+          {
+            label: '宗教',
+            content: ['基本情况', '房屋及其附属物设备汇总']
+          }
+        ],
+        showNum: 3
       }
-      // {
-      //   label: '专业项目',
-      //   content: [
-      //     {
-      //       label: '交通工程设施',
-      //       click: false
-      //     },
-      //     {
-      //       label: '输变电工程设施',
-      //       click: false
-      //     },
-      //     {
-      //       label: '文物古迹',
-      //       click: false
-      //     },
-      //     {
-      //       label: '电信工程',
-      //       content: [{}, '房屋及其附属物设备汇总']
-      //     },
-      //     {
-      //       label: '移动工程',
-      //       content: ['设施汇总', '房屋及其附属物设备汇总']
-      //     },
-      //     {
-      //       label: '联通工程',
-      //       content: ['设施汇总', '房屋及其附属物设备汇总']
-      //     },
-      //     {
-      //       label: '铁塔工程',
-      //       content: ['设施汇总']
-      //     },
-      //     {
-      //       label: '广播电视工程',
-      //       content: ['设施汇总', '房屋及其附属物设备汇总']
-      //     },
-      //     {
-      //       label: '水文站',
-      //       content: ['房屋及其附属物设备汇总']
-      //     },
-      //     {
-      //       label: '宗教',
-      //       content: ['基本情况', '房屋及其附属物设备汇总']
-      //     }
-      //   ],
-      //   showNum: 3
-      // }
+    ]
+  },
+  {
+    header: '资金管理',
+    body: [
+      {
+        label: '居民户',
+        content: ['居民户', '资金使用详细'],
+        showNum: 2
+      },
+      {
+        label: '村集体',
+        content: ['村集体'],
+        showNum: 1
+      },
+      {
+        label: '企(事)业单位',
+        content: ['企业', '个体户', '水电站'],
+        showNum: 3
+      },
+      {
+        label: '专业项目',
+        content: ['电信工程', '移动工程', '联通工程', '铁打工程', '广播电视工程', '水文站', '宗教'],
+        showNum: 7
+      }
+    ]
+  },
+  {
+    header: '安置意愿',
+    body: [
+      {
+        label: '安置意愿',
+        content: ['生产安置意愿', '搬迁安置意愿'],
+        showNum: 2
+      }
+    ]
+  },
+  {
+    header: '进度管理',
+    body: [
+      {
+        label: '居民户',
+        content: ['居民户按区域', '资金使用详细'],
+        showNum: 2
+      },
+      {
+        label: '企(事)业单位',
+        content: ['企业', '个体户按区域', '个体户按工作区'],
+        showNum: 3
+      },
+      {
+        label: '专业项目',
+        content: ['交通/电力/移动联通铁塔电信/文物', '寺庙/水文站'],
+        showNum: 2
+      }
     ]
   }
-  // {
-  //   header: '资金管理',
-  //   body: [
-  //     {
-  //       label: '居民户',
-  //       content: ['居民户', '资金使用详细'],
-  //       showNum: 2
-  //     },
-  //     {
-  //       label: '村集体',
-  //       content: ['村集体'],
-  //       showNum: 1
-  //     },
-  //     {
-  //       label: '企(事)业单位',
-  //       content: ['企业', '个体户', '水电站'],
-  //       showNum: 3
-  //     },
-  //     {
-  //       label: '专业项目',
-  //       content: ['电信工程', '移动工程', '联通工程', '铁打工程', '广播电视工程', '水文站', '宗教'],
-  //       showNum: 7
-  //     }
-  //   ]
-  // },
-  // {
-  //   header: '安置意愿',
-  //   body: [
-  //     {
-  //       label: '安置意愿',
-  //       content: ['生产安置意愿', '搬迁安置意愿'],
-  //       showNum: 2
-  //     }
-  //   ]
-  // },
-  // {
-  //   header: '进度管理',
-  //   body: [
-  //     {
-  //       label: '居民户',
-  //       content: ['居民户按区域', '资金使用详细'],
-  //       showNum: 2
-  //     },
-  //     {
-  //       label: '企(事)业单位',
-  //       content: ['企业', '个体户按区域', '个体户按工作区'],
-  //       showNum: 3
-  //     },
-  //     {
-  //       label: '专业项目',
-  //       content: ['交通/电力/移动联通铁塔电信/文物', '寺庙/水文站'],
-  //       showNum: 2
-  //     }
-  //   ]
-  // }
 ])
 
 function chooseItem(item: any, x: any) {
