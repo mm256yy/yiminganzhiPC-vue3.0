@@ -521,13 +521,8 @@ const getList = async () => {
 }
 
 const feedback = async () => {
-  let i = ref<number>(0)
   const list = await feedbackList({})
   // console.log(list, '测试问题反馈列表')
-  let test = []
-  for (let i of list.content) {
-    test.push(i.remark)
-  }
   if (list.content.length > 0) {
     list.content.forEach((item, index) => {
       // questionList.value[i.value++].name = item.remark
