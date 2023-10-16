@@ -707,7 +707,6 @@ const handleClickItem = (type: number) => {
     5: 'Feedback', //反馈管理
     6: 'SmartReport' // 智慧报表
   }
-  console.log(pathMap[type], '测试')
   push({ name: pathMap[type] })
 }
 // const agricultureList = ref<any>([
