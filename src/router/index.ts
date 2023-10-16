@@ -141,6 +141,16 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'SmartReport',
+        name: 'SmartReport',
+        component: () => import('@/views/Workshop/SmartReport/index.vue'),
+        meta: {
+          title: '领导工作台',
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
         path: 'padSide',
         name: 'PadSide',
         component: () => import('@/views/Workshop/ExternalLink/PadSide.vue'),

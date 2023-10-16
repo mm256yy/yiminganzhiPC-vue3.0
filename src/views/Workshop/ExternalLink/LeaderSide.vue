@@ -385,7 +385,7 @@
           <div v-for="item in scheduleList" :key="item.id" class="schedule">{{ item.name }} </div> -->
           <Echart :options="impProgressOption" :height="300" />
         </div>
-        <div class="common-color" style="height: 120px">
+        <div class="common-color" style="height: 120px" @click="handleClickItem(6)">
           <img :src="Reports" alt="背景图" />
         </div>
         <div class="common-color" @click="handleClickItem(1)" style="height: 120px">
@@ -524,9 +524,16 @@ const feedback = async () => {
   let i = ref<number>(0)
   const list = await feedbackList({})
   // console.log(list, '测试问题反馈列表')
+  let test = []
+  for (let i of list.content) {
+    test.push(i.remark)
+  }
   if (list.content.length > 0) {
-    list.content.forEach((item) => {
-      questionList.value[i.value++].name = item.remark
+    list.content.forEach((item, index) => {
+      // questionList.value[i.value++].name = item.remark
+      if (questionList.value[index]) {
+        questionList.value[index].name = item.remark
+      }
     })
   }
 }
@@ -583,7 +590,9 @@ const clearInput = async () => {
   landScreenDtoList.value.forEach((item, index) => {
     delete landScreenDtoList.value[0]
     delete landScreenDtoList.value[4]
-    landList.value[index].num = item
+    if (landList.value[index]) {
+      landList.value[index].num = item
+    }
   })
 }
 onMounted(() => {
@@ -679,7 +688,8 @@ const handleClickItem = (type: number) => {
     2: 'adminhomefund', //资金管理
     3: 'adminhomeprogress', //进度管理 //新闻管理
     4: 'Project', //新闻管理
-    5: 'Feedback' //反馈管理
+    5: 'Feedback', //反馈管理
+    6: 'SmartReport' // 智慧报表
   }
   console.log(pathMap[type], '测试')
   push({ name: pathMap[type] })
