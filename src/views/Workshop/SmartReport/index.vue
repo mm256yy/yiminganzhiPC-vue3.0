@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
+// import { ElTable, ElTableColumn } from 'element-plus'
 // import ScheduleReport from '../ScheduleReport/template.vue'
 
 let cardList = reactive<any>([
