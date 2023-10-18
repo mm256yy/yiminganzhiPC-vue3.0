@@ -158,6 +158,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '资金管理-居民户报表',
               icon: 'ant-design:home-outlined'
             }
+          },
+          {
+            path: 'proHouseReport',
+            name: 'proHouseReport',
+            component: () => import('@/views/Workshop/PlacementReport/ProHouseReport.vue'),
+            meta: {
+              title: '安置意愿-生产安置意愿报表',
+              icon: 'ant-design:home-outlined'
+            }
           }
           // {
           //   path: 'fundPeople',

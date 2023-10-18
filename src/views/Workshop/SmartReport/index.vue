@@ -91,7 +91,8 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { ElTable, ElTableColumn } from 'element-plus'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 let cardList = reactive<any>([
   {
     header: '实物成果',
@@ -298,7 +299,7 @@ let cardList = reactive<any>([
     body: [
       {
         label: '安置意愿',
-        content: [{ label: '生产安置意愿' }, { label: '搬迁安置意愿' }],
+        content: [{ label: '生产安置意愿', name: 'proHouseReport' }, { label: '搬迁安置意愿' }],
         showNum: 2
       }
     ]
@@ -341,6 +342,9 @@ function chooseItem(item: any, x: any) {
   if (x.tabs && !x.openTabs) {
     x.openTabs = true
   }
+
+  if (!item.name) return
+  router.push({ name: item.name })
 }
 
 // 企业基本情况
