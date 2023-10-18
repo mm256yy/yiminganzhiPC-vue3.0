@@ -48,7 +48,9 @@
         <template #createdDate="{ row }">
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
-
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>

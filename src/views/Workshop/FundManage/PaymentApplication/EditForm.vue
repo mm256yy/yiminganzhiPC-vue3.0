@@ -45,16 +45,92 @@
           <el-radio label="2" size="large">其他</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="付款类型:" required> 支付 </ElFormItem>
-      <ElFormItem label="付款对象:">
+      <ElFormItem label="付款类型:" required v-if="form.paymentType == 1"> 支付 </ElFormItem>
+      <ElFormItem label="付款类型:" required v-else>
+        <el-radio-group class="ml-4" v-model="form.test">
+          <el-radio label="1" size="large">支付</el-radio>
+          <el-radio label="2" size="large">预拨</el-radio>
+        </el-radio-group>
+      </ElFormItem>
+      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">123 </ElFormItem>
+      <div class="table-wrap">
+        <div
+          class="flex items-center justify-between pb-12px"
+          v-if="actionType == 'view' && form.paymentType == 1"
+        >
+          <div class="table-header-left">
+            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">专业项目合同清单</span>
+
+            <div class="text">
+              申请总金额:
+              <span class="num">1</span> 元
+            </div>
+            <div class="text">
+              审核笔数：
+              <span class="num">1</span> 笔
+            </div>
+          </div>
+        </div>
+      </div>
+      <ElFormItem label="收款方:" v-if="form.test == 2">
+        <ElSelect class="w-350px" v-model="form.source">
+          <ElOption
+            v-for="item in dictObj[388]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
+      <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
+      <div class="table-wrap">
+        <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
+          <div class="table-header-left">
+            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
+              form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
+            }}</span>
+
+            <div class="text">
+              申请总金额:
+              <span class="num">1</span> 元
+            </div>
+            <div class="text">
+              审核笔数：
+              <span class="num">1</span> 笔
+            </div>
+          </div>
+          <ElSpace>
+            <ElButton type="primary" @click="onAddRow"> 清空 </ElButton>
+          </ElSpace>
+        </div>
+        <ElTable
+          :data="tableData"
+          :span-method="objectSpanMethod"
+          style="width: 100%"
+          class="mb-20"
+          :border="true"
+          v-if="form.paymentType == 2"
+        >
+          <ElTableColumn
+            label="序号"
+            align="center"
+            width="80"
+            type="index"
+            header-align="center"
+          />
+          <ElTableColumn label="支付对象" align="center" prop="specialName" header-align="center" />
+          <ElTableColumn label="申请金额" prop="applyAmount" align="center" header-align="center" />
+        </ElTable>
+      </div>
       <ElTable
         :data="tableData"
         :span-method="objectSpanMethod"
         style="width: 100%"
         class="mb-20"
         :border="true"
+        v-if="form.paymentType == 1"
       >
         <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
         <ElTableColumn label="专项名称" align="center" prop="specialName" header-align="center" />
@@ -98,39 +174,44 @@
           </ElUpload>
         </div>
       </div>
-      <div class="title-2">审批流程</div>
+      <div v-if="actionType === 'view'">
+        <div class="title-2">审批流程</div>
 
-      <div class="progress-wrapper">
-        <div class="progress-list">
-          <div class="progress-item" v-for="item in progressList" :key="item.name">
-            <div class="left">
-              <div class="icon-box">
-                <div v-if="item.isAudit === '0'" class="disabled"></div>
-                <img
-                  v-if="item.isAudit === '1'"
-                  src="@/assets/imgs/icon_finish.png"
-                  width="18"
-                  height="18"
-                />
-                <div v-if="item.isAudit === '2'" class="hollow"></div>
+        <div class="progress-wrapper">
+          <div class="progress-list">
+            <div class="progress-item" v-for="item in progressList" :key="item.name">
+              <div class="left">
+                <div class="icon-box">
+                  <div v-if="item.isAudit === '0'" class="disabled"></div>
+                  <img
+                    v-if="item.isAudit === '1'"
+                    src="@/assets/imgs/icon_finish.png"
+                    width="18"
+                    height="18"
+                  />
+                  <div v-if="item.isAudit === '2'" class="hollow"></div>
+                </div>
+                <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
+                <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
+                <div
+                  v-if="item.isAudit === '2' && item.type !== '5'"
+                  class="line in-progress"
+                ></div>
+                <div v-if="item.type === '6'" class="line none"></div>
+                <!-- <div v-if="item.type === '6'" class="none"></div> -->
               </div>
-              <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
-              <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
-              <div v-if="item.isAudit === '2' && item.type !== '5'" class="line in-progress"></div>
-              <div v-if="item.type === '6'" class="line none"></div>
-              <!-- <div v-if="item.type === '6'" class="none"></div> -->
-            </div>
-            <div class="right">
-              <div class="content-box">
-                <div class="content-1">
-                  <div class="name">{{ item.name }}</div>
-                </div>
-                <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div>
-                <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
-                  审核时间：{{ dayjs(item.auditDate).format('YYYY-MM-DD') }}
-                </div>
-                <div class="remark" v-if="item.isAudit === '1' && item.remark">
-                  审核意见: {{ item.remark }}
+              <div class="right">
+                <div class="content-box">
+                  <div class="content-1">
+                    <div class="name">{{ item.name }}</div>
+                  </div>
+                  <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div>
+                  <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
+                    审核时间：{{ dayjs(item.auditDate).format('YYYY-MM-DD') }}
+                  </div>
+                  <div class="remark" v-if="item.isAudit === '1' && item.remark">
+                    审核意见: {{ item.remark }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,14 +221,18 @@
     </ElForm>
 
     <template #footer>
-      <ElButton type="primary" @click="onSubmit(formRef)">暂存</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">提交</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef)" v-if="actionType != 'view'"
+        >暂存</ElButton
+      >
+      <ElButton type="primary" @click="onSubmit(formRef)" v-if="actionType != 'view'"
+        >提交</ElButton
+      >
       <ElButton @click="onClose">取消</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
     </el-dialog>
-    <GirdList :show="girdDialog" @close="onFormPupClose" />
+    <GirdList :show="girdDialog" @close="onFormPupClose" :type="type" />
   </ElDialog>
 </template>
 
@@ -165,8 +250,8 @@ import {
   ElMessage,
   ElMessageBox,
   ElInput,
-  // ElSelect,
-  // ElOption,
+  ElSelect,
+  ElOption,
   ElTable,
   ElTableColumn,
   ElRadioGroup,
@@ -192,6 +277,8 @@ interface FileItemType {
   url: string
 }
 const girdDialog = ref(false)
+const type = ref(false)
+
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
@@ -383,7 +470,10 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
+// 清空
+const onAddRow = () => {
+  console.log('清空')
+}
 // 规则校验
 const rules = reactive<FormRules>({})
 
@@ -401,6 +491,8 @@ const onFormPupClose = () => {
 }
 const girdList = () => {
   girdDialog.value = true
+  // type.value = true
+  form.value.paymentType == 2 ? (type.value = true) : (type.value = false)
 }
 const submit = (data: any) => {
   saveDocumentationApi(data).then(() => {
