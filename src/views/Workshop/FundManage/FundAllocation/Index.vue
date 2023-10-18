@@ -124,7 +124,7 @@ const { getList, setSearchParams } = methods
 tableObject.params = {
   projectId
 }
-
+// 获取列表
 getList()
 
 const onDelRow = async (row: any, multiple: boolean) => {
