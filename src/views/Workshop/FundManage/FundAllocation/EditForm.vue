@@ -43,7 +43,7 @@
         <ElInput type="text" v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="付款日期:" required>
-        <ElDatePicker type="date" v-model="form.paymentTime" />
+        <ElDatePicker type="date" v-model="form.recordTime" />
       </ElFormItem>
       <ElFormItem label="说明:">
         <ElInput type="text" v-model="form.remark" />
@@ -80,8 +80,14 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+
+      <template v-if="actionType === 'add'">
+        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -113,7 +119,7 @@ import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { addFunPaymentApi, updateFunPaymentApi } from '@/api/fundManage/fundAllocation-service'
+import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
 
 interface PropsType {
   show: boolean
@@ -135,10 +141,10 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const form = ref<any>({
   name: '',
-  source: '1',
-  payee: '1',
+  source: '',
+  payee: '',
   amount: 0,
-  paymentTime: '',
+  recordTime: '',
   remark: ''
 })
 const imgUrl = ref<string>('')
@@ -160,6 +166,14 @@ watch(
       form.value = {
         ...val
       }
+      receipt.value = JSON.parse(props.row.receipt)
+      if (form.value.recordTime) {
+        form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
+      }
+    } else {
+      // 新增
+      form.value = {}
+      receipt.value = []
     }
   },
   {
@@ -176,16 +190,19 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
+const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
-    addFunPaymentApi(data).then((res) => {
+    data.status = status
+    data.projectId = appStore.getCurrentProjectId
+    data.entryType = '2'
+    addFundEntryApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
     onClose(true)
   } else {
-    updateFunPaymentApi(data).then((res) => {
+    updateFundEntryApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
@@ -195,7 +212,7 @@ const submit = (data: any) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
@@ -206,8 +223,8 @@ const onSubmit = debounce((formEl) => {
           ...form.value,
           receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
-        params.paymentTime = dayjs(params.paymentTime)
-        submit(params)
+        params.recordTime = dayjs(params.recordTime)
+        submit(params, status)
       }
     } else {
       return false

@@ -170,7 +170,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: true
+          changeOrigin: false
         }
       },
       hmr: {

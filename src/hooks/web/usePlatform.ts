@@ -70,7 +70,6 @@ export const usePlatform = () => {
       dictStore.setIsSetDict(true)
     }
 
-    console.log(1000)
     permissionStore.initRoutes(addRoute, menus)
     appStore.setCurrentPlatform(platform)
   }

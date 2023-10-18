@@ -428,6 +428,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '付款审核',
           hidden: false
         }
+      },
+      {
+        path: 'fundDistribution',
+        name: 'fundDistribution',
+        component: () => import('@/views/Workshop/FundManage/FundDistribution/Index.vue'),
+        meta: {
+          title: '资金发放',
+          hidden: false
+        }
+      },
+      {
+        path: 'distributionSituation',
+        name: 'distributionSituation',
+        component: () => import('@/views/Workshop/FundManage/FundDistribution/Situation.vue'),
+        meta: {
+          title: '资金发放情况',
+          hidden: false
+        }
       }
     ]
   }

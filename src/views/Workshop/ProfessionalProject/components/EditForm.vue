@@ -23,7 +23,7 @@
         <ElInput v-model="form.code" class="!w-350px" placeholder="请输入专项编码" />
       </ElFormItem>
       <ElFormItem label="专项类别" prop="type">
-        <ElSelect class="w-350px" v-model="form.type">
+        <ElSelect class="!w-350px" v-model="form.type">
           <ElOption
             v-for="item in dictObj[342]"
             :key="item.value"
@@ -86,7 +86,7 @@ import {
   ElSelect,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, nextTick, computed, watch } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { editProfessionalProjectApi } from '@/api/professional/service'
@@ -111,7 +111,7 @@ const formRef = ref<FormInstance>()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const btnLoading = ref(false)
-const defaultValue: Omit<ProfessionalProjectDtoType, 'id'> = {
+const defaultValue = {
   projectId,
   status: 'implementation',
   locationType: 'SubmergedArea',
@@ -129,19 +129,16 @@ const defaultValue: Omit<ProfessionalProjectDtoType, 'id'> = {
 const form = ref<Omit<ProfessionalProjectDtoType, 'id'>>(defaultValue)
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     btnLoading.value = false
     if (val) {
-      // 处理行政区划
-      form.value = { ...val }
-    } else {
-      form.value = defaultValue
+      if (props.actionType === 'edit') {
+        form.value = { ...props.row }
+      } else {
+        form.value = { ...defaultValue }
+      }
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
@@ -156,9 +153,8 @@ const rules = reactive<FormRules>({
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
+  formRef.value?.resetFields()
+  form.value = { ...defaultValue }
 }
 
 // 提交表单

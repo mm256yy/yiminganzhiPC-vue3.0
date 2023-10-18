@@ -43,7 +43,16 @@
       </ElFormItem>
 
       <ElFormItem label="资金科目:" required>
-        <ElTreeSelect class="!w-full" v-model="form.funSubjectId" :data="[]" node-key="code" />
+        <ElTreeSelect
+          class="!w-full"
+          v-model="form.funSubjectId"
+          :data="fundAccountList"
+          node-key="code"
+          :props="{ value: 'code', label: 'name' }"
+          showCheckbox
+          checkStrictly
+          checkOnClickNode
+        />
       </ElFormItem>
 
       <ElFormItem label="付款说明:" required>
@@ -57,7 +66,7 @@
         <ElDatePicker type="date" v-model="form.paymentTime" />
       </ElFormItem>
       <ElFormItem label="申请金额:">
-        <ElInput type="text" v-model="form.amount" />
+        <ElInputNumber type="text" v-model="form.amount" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -91,8 +100,13 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      <template v-if="actionType === 'add'">
+        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -115,15 +129,17 @@ import {
   ElDatePicker,
   ElRadioGroup,
   ElRadio,
-  ElTreeSelect
+  ElTreeSelect,
+  ElInputNumber
 } from 'element-plus'
-import { ref, reactive, nextTick, watch, computed } from 'vue'
+import { ref, reactive, nextTick, watch, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { addFunPayApi, updateFunPayApi } from '@/api/fundManage/fundPayment-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import dayjs from 'dayjs'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 interface PropsType {
   show: boolean
@@ -142,8 +158,7 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-
-console.log(dictObj)
+const fundAccountList = ref<any[]>([]) // 资金科目
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')
@@ -159,17 +174,23 @@ const headers = {
 const rules = reactive<FormRules>({})
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
-      form.value = {
-        ...val
+      if (props.actionType === 'edit') {
+        // 编辑
+        form.value = {
+          ...props.row
+        }
+        receipt.value = JSON.parse(props.row.receipt)
+        if (form.value.paymentTime) {
+          form.value.paymentTime = dayjs(form.value.paymentTime).format('YYYY-MM-DD')
+        }
+      } else {
+        // 新增
+        form.value = {}
       }
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
@@ -181,26 +202,27 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
+const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
+    data.projectId = appStore.getCurrentProjectId
+    data.status = status
     addFunPayApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   } else {
     updateFunPayApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   }
+  onClose(true)
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
@@ -212,7 +234,7 @@ const onSubmit = debounce((formEl) => {
           receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
         params.paymentTime = dayjs(params.paymentTime)
-        submit(params)
+        submit(params, status)
       }
     } else {
       return false
@@ -266,6 +288,19 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+    }
+  })
+}
+
+onMounted(() => {
+  getFundSubjectList()
+})
 </script>
 
 <style lang="less" scoped>

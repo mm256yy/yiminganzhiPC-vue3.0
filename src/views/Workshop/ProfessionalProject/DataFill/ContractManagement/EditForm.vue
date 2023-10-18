@@ -96,7 +96,7 @@ import {
   ElDatePicker,
   ElInputNumber
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
@@ -148,25 +148,18 @@ const defaultValue: Partial<ProfessionalContractDtoType> & { time: any } = {
 const form = ref<Partial<ProfessionalContractDtoType> & { time: any }>(defaultValue)
 
 watch(
-  () => props.row,
-  (val: any) => {
+  () => props.show,
+  (val) => {
     btnLoading.value = false
     if (val) {
-      // 处理行政区划
-      const { startDate, endDate, nodeDtoList } = val
-      console.log(nodeDtoList, 'nodeDtoList')
-      form.value = {
-        ...val,
-        time: [dayjs(startDate), dayjs(endDate)]
+      if (props.actionType !== 'add') {
+        const { startDate, endDate, nodeDtoList } = props.row as any
+        form.value = { ...props.row, time: [dayjs(startDate), dayjs(endDate)] }
+        nodeList.value = nodeDtoList || []
+      } else {
+        form.value = { ...defaultValue, time: [] }
       }
-      nodeList.value = nodeDtoList || []
-    } else {
-      form.value = defaultValue
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
@@ -201,10 +194,9 @@ const minusRow = (index) => {
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-    nodeList.value = []
-  })
+  formRef.value?.resetFields()
+  nodeList.value = []
+  form.value = { ...defaultValue, time: [] }
 }
 
 // 提交表单
@@ -220,7 +212,6 @@ const onSubmit = debounce((formEl) => {
       data.professionalId = props.professionalId
       data.nodeDtoList = nodeList.value
       delete data.time
-      console.log(data, 'data')
       submit(data)
     } else {
       return false

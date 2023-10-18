@@ -24,32 +24,50 @@
       <div class="row-cont">
         <div class="row">
           <div class="label">资金名称：</div>
-          <div class="value">范德萨发的是事实</div>
+          <div class="value">{{ detail.name }}</div>
         </div>
 
         <div class="row">
           <div class="label">资金来源：</div>
-          <div class="value">反馈短斤少两</div>
+          <div class="value">{{ detail.sourceText }}</div>
+        </div>
+
+        <div class="row">
+          <div class="label">收款方：</div>
+          <div class="value">{{ detail.payee ? fmtDict(dictObj[326], detail.payee) : '-' }}</div>
         </div>
 
         <div class="row">
           <div class="label">金额(元)：</div>
-          <div class="value">6666</div>
+          <div class="value">{{ detail.amount }}</div>
         </div>
 
         <div class="row">
           <div class="label">入账时间：</div>
-          <div class="value">2023-10-23 08:00:00</div>
+          <div class="value">{{
+            detail.recordTime ? dayjs(detail.recordTime).format('YYYY-MM-DD') : '-'
+          }}</div>
         </div>
 
         <div class="row">
           <div class="label">说明：</div>
-          <div class="value">福建卡德纳斯看看</div>
+          <div class="value">{{ detail.remark }}</div>
         </div>
 
         <div class="row">
           <div class="label">凭证：</div>
-          <div class="value">福建卡德纳斯看看</div>
+          <div class="value">
+            <div class="img-list" v-if="detail.receipt && detail.receipt.length">
+              <div
+                class="img-box"
+                @click="viewImg(item.url)"
+                v-for="(item, index) in detail.receipt"
+                :key="index"
+              >
+                <img class="img" :src="item.url" alt="" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -61,27 +79,63 @@
       <div class="row-cont">
         <div class="row">
           <div class="label">操作人：</div>
-          <div class="value">4444</div>
+          <div class="value">{{ detail.createdBy }}</div>
         </div>
         <div class="row">
-          <div class="label">操作时间：</div>
-          <div class="value">4444</div>
+          <div class="label">创建时间：</div>
+          <div class="value">{{
+            detail.createdDate ? dayjs(detail.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </div>
       </div>
     </div>
+
+    <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
+      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+    </el-dialog>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-// import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
-// import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { unref, onMounted, ref, computed } from 'vue'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElDialog } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+import { getFundEntryByIdApi } from '@/api/fundManage/fundEntry-service'
+import dayjs from 'dayjs'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { fmtDict } from '@/utils'
 
-const { back } = useRouter()
+const { back, currentRoute } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { query } = unref(currentRoute)
+const id: number = query.id ? +query.id : 0
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+
+const detail = ref<any>({})
+const dialogVisible = ref<boolean>(false)
+const imgUrl = ref<string>('')
+
+onMounted(() => {
+  if (!id) {
+    return
+  }
+  getFundEntryByIdApi(id).then((res) => {
+    if (res) {
+      if (res.receipt) {
+        res.receipt = JSON.parse(res.receipt as string)
+      }
+      detail.value = res
+    }
+  })
+})
+
+const viewImg = (url: string) => {
+  imgUrl.value = url
+  dialogVisible.value = true
+}
 
 const onBack = () => {
   back()
@@ -113,6 +167,27 @@ const onBack = () => {
     font-size: 14px;
     font-weight: 500;
     color: #171718;
+  }
+
+  .img-list {
+    display: flex;
+    width: 100%;
+    padding-bottom: 10px;
+
+    .img-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 200px;
+      height: 200px;
+      margin: 10px 10px 0 0;
+      overflow: hidden;
+      cursor: pointer;
+
+      .img {
+        width: 100%;
+      }
+    }
   }
 }
 

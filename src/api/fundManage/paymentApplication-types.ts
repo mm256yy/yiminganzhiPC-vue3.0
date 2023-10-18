@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 
-export interface BudgetAdjustmentType {
+export interface PaymentApplicationDtoType {
   applyType: string
   name: string
   type: string
@@ -14,12 +14,5 @@ export interface BudgetAdjustmentType {
   auditType: number
   status: string
   gsStatus: string
-  [key: string]: any
-}
-
-export interface AdjustmentType {
-  ids: string
-  type: string
-  gsRemark: string
   [key: string]: any
 }
