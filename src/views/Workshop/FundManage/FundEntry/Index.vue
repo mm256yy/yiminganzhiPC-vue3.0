@@ -42,9 +42,7 @@
         @register="register"
       >
         <template #recordTime="{ row }">
-          <div>{{
-            row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
+          <div>{{ row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD') : '-' }}</div>
         </template>
 
         <template #createdDate="{ row }">
