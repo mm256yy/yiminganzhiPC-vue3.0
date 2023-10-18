@@ -23,7 +23,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家个体工商
+            共 <span class="num">{{ tableObject.total }}</span> 家个体工商
           </div>
         </div>
       </div>

@@ -5,7 +5,11 @@
       <ElBreadcrumbItem class="text-size-12px">资金支付</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
@@ -420,35 +424,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onSearch = (data) => {
-  //解决是否户主relation入参变化
-  let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
-
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
-
-  // 处理参数
-  let params = {
-    ...searchData
-  }
-  tableObject.params = {
-    projectId
-  }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
-  }
-}
 
 const onEditFormClose = (flag: boolean) => {
   if (flag) {

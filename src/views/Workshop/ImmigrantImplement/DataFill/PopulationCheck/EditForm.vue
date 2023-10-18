@@ -31,222 +31,6 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="姓名" prop="name">
-            <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="性别" prop="sex">
-            <ElSelect clearable filterable v-model="form.sex" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[292]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="身份证号" prop="card">
-            <ElInput
-              clearable
-              filterable
-              type="text"
-              class="!w-full"
-              v-model="form.card"
-              placeholder="请输入"
-            />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="与户主关系" prop="relation">
-            <ElSelect clearable filterable v-model="form.relation" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[307]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="婚姻状况" prop="marital">
-            <ElSelect clearable filterable v-model="form.marital" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[260]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="户籍册类别" prop="censusType">
-            <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[249]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label">身份证照片</div>
-            <div class="card-img-list">
-              <ElUpload
-                :class="[cardFront.length > 0 || actionType === 'view' ? 'upload' : '']"
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :disabled="actionType === 'view'"
-                :limit="1"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="false"
-                :file-list="cardFront"
-                :headers="headers"
-                :on-success="uploadFileChange1"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile1"
-                :on-preview="imgPreview"
-                :on-error="onError"
-              >
-                <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
-                  <div class="card-img-box">
-                    <img class="card-img" src="@/assets/imgs/card-front.png" alt="" />
-                    <div class="card-txt"> 上传正面 </div>
-                  </div>
-                </template>
-                <template #trigge v-else></template>
-              </ElUpload>
-              <ElUpload
-                class="ml-8px"
-                :class="[cardEnd.length > 0 || actionType === 'view' ? 'upload' : '']"
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :on-error="onError"
-                :disabled="actionType === 'view'"
-                :limit="1"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="false"
-                :file-list="cardEnd"
-                :headers="headers"
-                :on-success="uploadFileChange2"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile2"
-                :on-preview="imgPreview"
-              >
-                <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
-                  <div class="card-img-box">
-                    <img class="card-img" src="@/assets/imgs/card-back.png" alt="" />
-                    <div class="card-txt"> 上传背面 </div>
-                  </div>
-                </template>
-              </ElUpload>
-            </div>
-          </div>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label">户口本照片</div>
-            <div class="card-img-list">
-              <ElUpload
-                :on-error="onError"
-                :class="[actionType === 'view' ? 'upload' : '']"
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :limit="1"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="false"
-                :file-list="householdPic"
-                :headers="headers"
-                :on-success="uploadFileChange3"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile3"
-                :on-preview="imgPreview"
-              >
-                <template #trigger v-if="actionType !== 'view'">
-                  <div class="card-img-box">
-                    <img class="card-img" src="@/assets/imgs/household.png" alt="" />
-                    <div class="card-txt"> 点击上传 </div>
-                  </div>
-                </template>
-              </ElUpload>
-            </div>
-          </div>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="24">
-          <ElFormItem label="其他附件">
-            <div class="card-img-list">
-              <ElUpload
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :on-error="onError"
-                :class="[actionType === 'view' ? 'upload' : '']"
-                :disabled="actionType === 'view'"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="true"
-                :file-list="otherPic"
-                :headers="headers"
-                :on-success="uploadFileChange4"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile4"
-                :on-preview="imgPreview"
-              >
-                <template #trigger v-if="actionType !== 'view'">
-                  <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
-                    </div>
-                    <div class="card-txt"> 点击上传 </div>
-                  </div>
-                </template>
-              </ElUpload>
-            </div>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <!-- 分割线 -->
-      <ElRow>
-        <ElDivider />
-      </ElRow>
-
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="人口性质" prop="populationNature">
@@ -271,6 +55,223 @@
         </ElCol>
         <ElCol :span="12" />
       </ElRow>
+
+      <div v-if="form.addReason !== '3'">
+        <!-- 分割线 -->
+        <ElRow>
+          <ElDivider />
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="12">
+            <ElFormItem label="姓名" prop="name">
+              <ElInput v-model="form.name" class="!w-full" placeholder="请输入" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="12">
+            <ElFormItem label="性别" prop="sex">
+              <ElSelect clearable filterable v-model="form.sex" class="!w-full">
+                <ElOption
+                  v-for="item in dictObj[292]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="12">
+            <ElFormItem label="身份证号" prop="card">
+              <ElInput
+                clearable
+                filterable
+                type="text"
+                class="!w-full"
+                v-model="form.card"
+                placeholder="请输入"
+              />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="12">
+            <ElFormItem label="与户主关系" prop="relation">
+              <ElSelect clearable filterable v-model="form.relation" class="!w-full">
+                <ElOption
+                  v-for="item in dictObj[307]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="12">
+            <ElFormItem label="婚姻状况" prop="marital">
+              <ElSelect clearable filterable v-model="form.marital" class="!w-full">
+                <ElOption
+                  v-for="item in dictObj[260]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="12">
+            <ElFormItem label="户籍册类别" prop="censusType">
+              <ElSelect clearable filterable v-model="form.censusType" class="!w-full">
+                <ElOption
+                  v-for="item in dictObj[249]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="12" />
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label">身份证照片</div>
+              <div class="card-img-list">
+                <ElUpload
+                  :class="[cardFront.length > 0 || actionType === 'view' ? 'upload' : '']"
+                  action="/api/file/type"
+                  :data="{
+                    type: 'image'
+                  }"
+                  :disabled="actionType === 'view'"
+                  :limit="1"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.jpeg,.png"
+                  :multiple="false"
+                  :file-list="cardFront"
+                  :headers="headers"
+                  :on-success="uploadFileChange1"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile1"
+                  :on-preview="imgPreview"
+                  :on-error="onError"
+                >
+                  <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
+                    <div class="card-img-box">
+                      <img class="card-img" src="@/assets/imgs/card-front.png" alt="" />
+                      <div class="card-txt"> 上传正面 </div>
+                    </div>
+                  </template>
+                  <template #trigge v-else></template>
+                </ElUpload>
+                <ElUpload
+                  class="ml-8px"
+                  :class="[cardEnd.length > 0 || actionType === 'view' ? 'upload' : '']"
+                  action="/api/file/type"
+                  :data="{
+                    type: 'image'
+                  }"
+                  :on-error="onError"
+                  :disabled="actionType === 'view'"
+                  :limit="1"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.jpeg,.png"
+                  :multiple="false"
+                  :file-list="cardEnd"
+                  :headers="headers"
+                  :on-success="uploadFileChange2"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile2"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
+                    <div class="card-img-box">
+                      <img class="card-img" src="@/assets/imgs/card-back.png" alt="" />
+                      <div class="card-txt"> 上传背面 </div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </div>
+          </ElCol>
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label">户口本照片</div>
+              <div class="card-img-list">
+                <ElUpload
+                  :on-error="onError"
+                  :class="[actionType === 'view' ? 'upload' : '']"
+                  action="/api/file/type"
+                  :data="{
+                    type: 'image'
+                  }"
+                  :limit="1"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.jpeg,.png"
+                  :multiple="false"
+                  :file-list="householdPic"
+                  :headers="headers"
+                  :on-success="uploadFileChange3"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile3"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger v-if="actionType !== 'view'">
+                    <div class="card-img-box">
+                      <img class="card-img" src="@/assets/imgs/household.png" alt="" />
+                      <div class="card-txt"> 点击上传 </div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </div>
+          </ElCol>
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="24">
+            <ElFormItem label="其他附件">
+              <div class="card-img-list">
+                <ElUpload
+                  action="/api/file/type"
+                  :data="{
+                    type: 'image'
+                  }"
+                  :on-error="onError"
+                  :class="[actionType === 'view' ? 'upload' : '']"
+                  :disabled="actionType === 'view'"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.jpeg,.png"
+                  :multiple="true"
+                  :file-list="otherPic"
+                  :headers="headers"
+                  :on-success="uploadFileChange4"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile4"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger v-if="actionType !== 'view'">
+                    <div class="card-img-box">
+                      <div class="card-img-custom">
+                        <Icon icon="ant-design:plus-outlined" :size="22" />
+                      </div>
+                      <div class="card-txt"> 点击上传 </div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
+      </div>
     </ElForm>
 
     <template #footer v-if="actionType !== 'view'">
@@ -447,16 +448,19 @@ const submit = async (data: DemographicDtoType) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!cardFront.value || !cardFront.value.length) {
-        ElMessage.warning('请上传身份证正面照片')
-        return
-      } else if (!cardEnd.value || !cardEnd.value.length) {
-        ElMessage.warning('请上传身份证背面照片')
-        return
-      } else if (!householdPic.value || !householdPic.value.length) {
-        ElMessage.warning('请上传户口本照片')
-        return
+      if (form.value.addReason !== '3') {
+        if (!cardFront.value || !cardFront.value.length) {
+          ElMessage.warning('请上传身份证正面照片')
+          return
+        } else if (!cardEnd.value || !cardEnd.value.length) {
+          ElMessage.warning('请上传身份证背面照片')
+          return
+        } else if (!householdPic.value || !householdPic.value.length) {
+          ElMessage.warning('请上传户口本照片')
+          return
+        }
       }
+
       // form.value.birthday = standardFormatDate(form.value.birthday)
       const data: any = {
         ...form.value,

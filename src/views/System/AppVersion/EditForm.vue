@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, unref, ref, onMounted } from 'vue'
+import { reactive, unref, ref, onMounted, computed } from 'vue'
 import { ElButton, ElMessageBox, ElMessage, ElUpload, ElInput, FormRules } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
@@ -66,7 +66,7 @@ const emit = defineEmits(['close', 'submit'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 // const projectId = ref(props.projectId)
 
 const headers = ref({

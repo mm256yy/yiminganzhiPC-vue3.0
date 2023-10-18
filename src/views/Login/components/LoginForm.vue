@@ -13,7 +13,7 @@
         <div style="text-align: center">
           <div style="display: flex">
             <img src="@/assets/imgs/LOGO22.png" alt="" srcset="" width="34" />
-            <h2 class="text-3xl font-bold text-center w-[100%]">移民安置综合管理平台</h2>
+            <h2 class="text-3xl font-bold text-center w-[100%]">移民安置综合平台</h2>
           </div>
 
           <div
@@ -234,9 +234,17 @@ const doRoute = async () => {
     await setPlatform('workshop', addRoute)
   }
   // window.location.href = path
-  setTimeout(() => {
-    window.location.href = path
-  }, 0)
+  const projects = ref<any>([])
+  projects.value = appStore.getUserInfo?.projectUsers[0].roles
+  if (projects.value[0].code == 'leaderworkbenches') {
+    setTimeout(() => {
+      window.location.href = '#/workshop/leaderSide'
+    }, 0)
+  } else {
+    setTimeout(() => {
+      window.location.href = path
+    }, 0)
+  }
 }
 </script>
 
