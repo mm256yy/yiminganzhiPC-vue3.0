@@ -14,7 +14,7 @@
       </div>
     </div>
     <Table
-      border
+      selection
       v-model:pageSize="tableObject.size"
       v-model:currentPage="tableObject.currentPage"
       :pagination="{

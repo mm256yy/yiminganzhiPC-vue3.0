@@ -17,44 +17,35 @@
       :rules="rules"
     >
       <ElFormItem label="申请类型:" required>
-        <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+        <el-radio-group class="ml-4" v-model="form.applyType">
+          <el-radio label="1" size="large">付款申请</el-radio>
+          <el-radio label="2" size="large">退款申请</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="申请名称:" required>
-        <ElInput type="text" />
+        <ElInput v-model="form.name" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
       <ElFormItem label="概算科目:" required>
-        <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+        <el-radio-group class="ml-4" v-model="form.type">
+          <el-radio label="1" size="large">概算内</el-radio>
+          <el-radio label="2" size="large">概算外</el-radio>
         </el-radio-group>
       </ElFormItem>
 
       <ElFormItem label="资金科目:" required>
-        <ElTreeSelect class="!w-full" v-model="form.parentCode" :data="[]" node-key="code" />
+        <ElTreeSelect class="!w-full" v-model="form.funSubjectId" :data="[]" node-key="code" />
       </ElFormItem>
 
       <ElFormItem label="付款说明:" required>
-        <ElInput type="text" />
+        <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
       <ElFormItem label="付款对象类型:" required>
-        <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
+        <el-radio-group class="ml-4" v-model="form.paymentType">
+          <el-radio label="1" size="large">专业项目</el-radio>
+          <el-radio label="2" size="large">其他</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="付款类型:" required> 支付 </ElFormItem>
-      <!-- <ElFormItem label="收款单位:" required>
-        <ElInput type="text" />
-      </ElFormItem>
-      <ElFormItem label="付款时间:" required>
-        <ElDatePicker type="date" />
-      </ElFormItem>
-      <ElFormItem label="申请金额:">
-        <ElInput type="text" />
-      </ElFormItem> -->
       <ElFormItem label="付款对象:">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
@@ -182,7 +173,7 @@ import {
   ElRadio,
   ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -193,6 +184,7 @@ import dayjs from 'dayjs'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
+  row: null | undefined
 }
 
 interface FileItemType {
@@ -214,6 +206,22 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      // 处理行政区划
+      form.value = { ...(val as {}) }
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const progressList = ref<any[]>([
   {
     auditDate: '2023-09-04T07:21:53.373+00:00',

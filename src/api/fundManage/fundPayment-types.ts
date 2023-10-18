@@ -8,7 +8,7 @@ export interface FunPayType {
   receivePaymentUnit: string
   paymentTime: string
   amount: number
-  receipt: string
+  receipt: any
   createUserId: number
   createUserName: string
   status: string

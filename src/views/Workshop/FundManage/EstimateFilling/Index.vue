@@ -15,18 +15,18 @@
         :rules="rules"
       >
         <ElRow>
-          <ElCol :span="8">
+          <ElCol :span="4">
             <ElFormItem label="项目名称" prop="name">
               <ElInput v-model="searchForm.name" class="!w-250px" />
             </ElFormItem>
           </ElCol>
-          <ElCol :span="8">
+          <ElCol :span="4">
             <ElFormItem label="项目编号" prop="code">
               <ElInput v-model="searchForm.code" class="!w-250px" />
             </ElFormItem>
           </ElCol>
-          <ElCol :span="8">
-            <div class="btn-wrap">
+          <ElCol :span="16">
+            <div>
               <ElButton type="primary" @click="onSearch">
                 <Icon icon="ep:search" class="mr-5px" /> 查询
               </ElButton>
@@ -50,7 +50,14 @@
         <ElButton type="primary" :loading="loading" @click="save">保存</ElButton>
       </div>
 
-      <ElTable :data="tableData" row-key="id" style="width: 100%" class="mt-5" border>
+      <ElTable
+        :data="tableData"
+        :loading="tableLoading"
+        row-key="id"
+        style="width: 100%"
+        class="mt-5"
+        border
+      >
         <ElTableColumn label="序号" width="80" align="center" type="index" header-align="center" />
         <ElTableColumn label="项目名称" align="center" prop="name" header-align="center" />
         <ElTableColumn label="项目编码" prop="code" align="center" header-align="center" />
@@ -126,6 +133,7 @@ const tableData = ref<any[]>([]) // 列表数据
 const showAdjustedInvestment = ref<boolean>(false) // 展示添加的调估投资
 const showAdjustingInvestment = ref<boolean>(false) // 展示添加的调概投资
 const loading = ref<boolean>(false)
+const tableLoading = ref<boolean>(false)
 
 // 初始化页面列表获取
 const initData = () => {
@@ -135,11 +143,20 @@ const initData = () => {
   if (!searchForm.value.code) {
     delete searchForm.value.code
   }
-  getFundSubjectListApi(searchForm.value).then((res: any) => {
-    if (res) {
-      tableData.value = res.content
+  tableLoading.value = true
+  getFundSubjectListApi(searchForm.value).then(
+    (res: any) => {
+      if (res) {
+        tableLoading.value = false
+        tableData.value = res.content
+      }
+    },
+    (err: any) => {
+      if (err) {
+        tableLoading.value = false
+      }
     }
-  })
+  )
 }
 
 // 搜素
