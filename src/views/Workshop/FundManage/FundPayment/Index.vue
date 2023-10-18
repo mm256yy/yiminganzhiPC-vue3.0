@@ -42,13 +42,24 @@
         </template>
 
         <template #paymentTime="{ row }">
-          <div>{{
-            row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
+          <div>{{ row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD') : '-' }}</div>
         </template>
 
         <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
+          <TableEditColumn
+            :view-type="'link'"
+            :icons="[
+              {
+                icon: '',
+                tooltip: '查看',
+                type: 'primary',
+                action: () => onViewRow(row)
+              }
+            ]"
+            :row="row"
+            @delete="onDelRow"
+            @edit="onEditRow"
+          />
         </template>
       </Table>
     </div>
@@ -77,11 +88,14 @@ import EditForm from './EditForm.vue'
 import {
   getFunPayListApi,
   deleteFunPayApi,
-  getLpList,
-  getFunPaySumAmount
+  getLpListApi,
+  getFunPaySumAmountApi
 } from '@/api/fundManage/fundPayment-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { useRouter } from 'vue-router'
 
+const { push } = useRouter()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
@@ -92,6 +106,7 @@ const headInfo = ref<any>()
 const lpList = ref<any[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
+const fundAccountList = ref<any[]>([]) // 资金科目
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFunPayListApi,
@@ -106,20 +121,36 @@ tableObject.params = {
 getList()
 
 const getHeadInfo = async () => {
-  const info = await getFunPaySumAmount()
+  const info = await getFunPaySumAmountApi()
   headInfo.value = info
 }
 
 const getLpListHandle = async () => {
-  const res: any = await getLpList()
+  const res: any = await getLpListApi()
+  console.log(res, 'res')
   if (res && res.length) {
-    lpList.value = res
+    lpList.value = res.map((item) => {
+      return {
+        label: item.userName,
+        value: item.id
+      }
+    })
   }
+}
+
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+    }
+  })
 }
 
 onMounted(() => {
   getHeadInfo()
   getLpListHandle()
+  getFundSubjectList()
 })
 
 const onDelRow = async (row: any, multiple: boolean) => {
@@ -142,6 +173,10 @@ const onEditRow = (row: any) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
+}
+
+const onViewRow = (row) => {
+  push(`/FundManage/FundPayment/Detail?id=${row.id}`)
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -187,14 +222,17 @@ const schema = reactive<CrudSchema[]>([
     label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        data: fundAccountList,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -245,17 +283,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createUserName',
+    field: 'createUserId',
     label: '登记人',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: lpList.value,
-        props: {
-          value: 'id',
-          label: 'nickName'
-        }
+        options: lpList as any
       }
     },
     table: {

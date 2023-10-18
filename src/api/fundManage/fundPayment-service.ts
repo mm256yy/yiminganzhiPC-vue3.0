@@ -32,15 +32,22 @@ export const deleteFunPayApi = (id: number): Promise<void> => {
   })
 }
 
+// 资金支付详情
+export const getFunPayByIdApi = (id: number): Promise<FunPayType> => {
+  return request.get({
+    url: `/funPay/${id}`
+  })
+}
+
 // 法人列表
-export const getLpList = (): Promise<void> => {
+export const getLpListApi = (): Promise<void> => {
   return request.get({
     url: '/funPay/lpList'
   })
 }
 
 // 资金支付总额
-export const getFunPaySumAmount = (): Promise<void> => {
+export const getFunPaySumAmountApi = (): Promise<void> => {
   return request.get({
     url: '/funPay/sumAmount'
   })

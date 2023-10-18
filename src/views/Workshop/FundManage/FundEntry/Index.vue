@@ -5,7 +5,11 @@
       <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
@@ -19,7 +23,7 @@
         </div>
         <ElSpace>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 添加 </ElButton>
-          <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton>
+          <!-- <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton> -->
         </ElSpace>
       </div>
       <Table
@@ -43,16 +47,29 @@
           }}</div>
         </template>
 
-        <template #createTime="{ row }">
+        <template #createdDate="{ row }">
           <div>{{
-            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+            row.createdDate ? dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
         <template #status="{ row }">
           <div>{{ row.status === 0 ? '草稿' : '正常' }}</div>
         </template>
         <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
+          <TableEditColumn
+            :view-type="'link'"
+            :icons="[
+              {
+                icon: '',
+                tooltip: '查看',
+                type: 'primary',
+                action: () => onViewRow(row)
+              }
+            ]"
+            :row="row"
+            @delete="onDelRow"
+            @edit="onEditRow"
+          />
         </template>
       </Table>
     </div>
@@ -84,13 +101,15 @@ import {
   getSumAmountApi
 } from '@/api/fundManage/fundEntry-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useRouter } from 'vue-router'
 
+const { push } = useRouter()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
+// const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
@@ -131,9 +150,14 @@ const onEditRow = (row: any) => {
   dialog.value = true
 }
 
-const onExport = () => {
-  console.log('导出')
+const onViewRow = (row) => {
+  push(`/FundManage/FundEntry/Detail?id=${row.id}`)
 }
+
+// const onExport = () => {
+//   console.log('导出')
+//   // 无接口
+// }
 
 const sumAmountApi = async () => {
   try {
@@ -267,7 +291,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sourceTxt',
+    field: 'sourceText',
     label: '资金来源',
     search: {
       show: false
@@ -291,14 +315,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'createTime',
+    field: 'createdDate',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'createUserName',
+    field: 'createdBy',
     label: '操作人',
     search: {
       show: false
@@ -331,35 +355,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onSearch = (data) => {
-  //解决是否户主relation入参变化
-  let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
-
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
-
-  // 处理参数
-  let params = {
-    ...searchData
-  }
-  tableObject.params = {
-    projectId
-  }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
-  }
-}
 
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
