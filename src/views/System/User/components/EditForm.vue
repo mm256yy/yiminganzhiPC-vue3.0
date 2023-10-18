@@ -202,7 +202,7 @@ const deleteIcon = useIcon({ icon: 'ant-design:delete-outlined' })
 const showProjectUserForm = ref(false)
 const currentProjectUser = ref<ProjectUserType>()
 const projectUsers = ref<ProjectUserType[]>(props.row?.projectUsers || [])
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 const projectUser = ref<ProjectUser>(
   props.row?.projectUsers[0] || {
     projectId: appStore.getCurrentProjectId,

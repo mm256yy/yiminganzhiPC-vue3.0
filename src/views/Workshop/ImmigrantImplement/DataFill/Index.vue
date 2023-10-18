@@ -65,6 +65,10 @@
           </div>
         </div>
       </div>
+
+      <div v-if="tabCurrentId !== 0" class="flex align-center pt-20px justify-end">
+        <ElButton type="primary" @click="onFeedback">问题反馈</ElButton>
+      </div>
     </div>
 
     <!-- 居民户 -->
@@ -361,6 +365,14 @@
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>
+
+    <FeedbackForm
+      :show="feedbackShow"
+      :householder="baseInfo.name"
+      :doorNo="doorNo"
+      :type="feedbackType"
+      @close="onFeedbackClose"
+    />
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
@@ -432,6 +444,7 @@ import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
 
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
+import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
 
 const titleMsg = (type: string, index: number) => {
@@ -769,6 +782,51 @@ onMounted(() => {
 const onBack = () => {
   back()
 }
+
+/**
+ * 意见反馈相关
+ */
+const feedbackShow = ref<boolean>(false)
+const feedbackType = ref<string>('1')
+const onFeedback = () => {
+  // 拿到阶段
+  let feedbacktypeCopy = '1'
+  if (type === 'PeasantHousehold') {
+    feedbacktypeCopy = `${tabCurrentId.value}`
+  }
+  if (type === 'Enterprise' || type === 'IndividualB') {
+    if (tabCurrentId.value === 0) {
+      feedbacktypeCopy = '2' // 资产评估
+    } else if (tabCurrentId.value === 1) {
+      feedbacktypeCopy = '7'
+    } else if (tabCurrentId.value === 2) {
+      feedbacktypeCopy = '8'
+    } else if (tabCurrentId.value === 3) {
+      feedbacktypeCopy = '6'
+    } else if (tabCurrentId.value === 4) {
+      feedbacktypeCopy = '11'
+    }
+  }
+
+  if (type === 'Village') {
+    if (tabCurrentId.value === 0) {
+      feedbacktypeCopy = '2' // 资产评估
+    } else if (tabCurrentId.value === 1) {
+      feedbacktypeCopy = '8' // 腾空
+    } else if (tabCurrentId.value === 2) {
+      feedbacktypeCopy = '6'
+    } else if (tabCurrentId.value === 3) {
+      feedbacktypeCopy = '12' // 集体资产处置方法
+    }
+  }
+  console.log(feedbacktypeCopy, 'type')
+  feedbackType.value = feedbacktypeCopy
+  feedbackShow.value = true
+}
+const onFeedbackClose = () => {
+  feedbackShow.value = false
+}
+// 意见反馈结束
 </script>
 
 <style lang="less" scoped>
