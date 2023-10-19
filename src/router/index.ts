@@ -312,15 +312,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           hidden: false
         }
       },
-      {
-        path: 'allocationdetail',
-        name: 'allocationdetail',
-        component: () => import('@/views/Workshop/FundManage/FundAllocation/Detail.vue'),
-        meta: {
-          title: '资金预拨详情',
-          hidden: false
-        }
-      },
+      // {
+      //   path: 'allocationdetail',
+      //   name: 'allocationdetail',
+      //   component: () => import('@/views/Workshop/FundManage/FundAllocation/Detail.vue'),
+      //   meta: {
+      //     title: '资金预拨详情',
+      //     hidden: false
+      //   }
+      // },
       {
         path: 'allocation',
         name: 'allocation',
@@ -435,6 +435,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         component: () => import('@/views/Workshop/FundManage/FundDistribution/Situation.vue'),
         meta: {
           title: '资金发放情况',
+          hidden: false
+        }
+      },
+      {
+        path: 'physicalResults',
+        name: 'physicalResults',
+        component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+        meta: {
+          title: '实施',
           hidden: false
         }
       }

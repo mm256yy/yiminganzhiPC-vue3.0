@@ -52,3 +52,31 @@ export const getFunPaySumAmountApi = (): Promise<void> => {
     url: '/funPay/sumAmount'
   })
 }
+//查询资金发放
+export const getFunAmountGrant = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/funAmountGrant',
+    params
+  })
+}
+//企业基本情况 /api
+export const getEnterprise = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/resultForms/enterprise',
+    params
+  })
+}
+//资金发放情况
+export const getDetailsList = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/funAmountGrant/detailsList',
+    params
+  })
+}
+//资金发放情况 查看
+export const getFindByDoorNo = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/funAmountGrant/findByDoorNo',
+    params
+  })
+}

@@ -53,16 +53,20 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createTime="{ row }">
+        <template #villageText="{ row }">
           <div>{{
-            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+            (row.cityCodeText ? row.cityCodeText + '/' : '') +
+            (row.areaCodeText ? row.areaCodeText + '/' : '') +
+            (row.townCodeText ? row.townCodeText + '/' : '') +
+            (row.villageText ? row.villageText : '')
           }}</div>
         </template>
 
-        <template #paymentTime="{ row }">
-          <div>{{
-            row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
+        <template #grantTime="{ row }">
+          <div>{{ row.grantTime ? dayjs(row.grantTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div>
+        </template>
+        <template #grantStatus="{ row }">
+          <div>{{ row.grantStatus == '1' ? '已放款' : '未放款' }}</div>
         </template>
       </Table>
     </div>
@@ -88,7 +92,7 @@ import { useTable } from '@/hooks/web/useTable'
 import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
 import {
-  getFunPayListApi,
+  getFunAmountGrant,
   deleteFunPayApi,
   getLpListApi,
   getFunPaySumAmountApi
@@ -108,7 +112,7 @@ const dialog = ref<boolean>(false)
 const goObject = reactive<any>({
   state: [
     { label: '已发放', value: '1' },
-    { label: '未发放', value: '2' }
+    { label: '待发放', value: '0' }
   ],
   batch: [
     { label: '第一批', value: '1' },
@@ -117,7 +121,7 @@ const goObject = reactive<any>({
   ]
 })
 const { register, tableObject, methods } = useTable({
-  getListApi: getFunPayListApi,
+  getListApi: getFunAmountGrant,
   delListApi: deleteFunPayApi
 })
 const { getList, setSearchParams } = methods
@@ -168,7 +172,7 @@ const IssueClick = () => {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'cityCode',
     label: '所属区域',
     search: {
       show: true,
@@ -190,7 +194,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'receivePaymentUnit',
+    field: 'name',
     label: '姓名',
     search: {
       show: true,
@@ -224,7 +228,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'cardType',
     label: '发放批次',
     search: {
       show: true,
@@ -244,7 +248,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'cardStatus',
     label: '发放状态',
     search: {
       show: true,
@@ -264,13 +268,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createTime',
+    field: 'grantTime',
     label: '发放时间',
     search: {
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'datetime'
       }
     },
     table: {
@@ -300,7 +304,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'type',
+    field: 'doorNo',
     label: '户号',
     search: {
       show: false
@@ -308,7 +312,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'funSubjectId',
+    field: 'villageText',
     label: '所属区域',
     search: {
       show: false
@@ -316,14 +320,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'amount',
+    field: 'type',
     label: '发放批次',
     search: {
       show: false
     }
   },
   {
-    field: 'applyType',
+    field: 'grantStatus',
     label: '发放状态',
     search: {
       show: false
@@ -331,14 +335,14 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'paymentTime',
-    label: '可发放日期',
+    field: 'pendingAmount',
+    label: '可发放金额（元）',
     search: {
       show: false
     }
   },
   {
-    field: 'createTime',
+    field: 'grantTime',
     label: '发放日期',
     search: {
       show: false
@@ -351,7 +355,6 @@ let { allSchemas } = useCrudSchemas(schema)
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
 
   if (searchData.relation == '1') {
     searchData.relation = ['is', 1]
@@ -360,7 +363,7 @@ const onSearch = (data) => {
   } else {
     delete searchData.relation
   }
-
+  console.log(searchData)
   // 处理参数
   let params = {
     ...searchData
@@ -368,13 +371,15 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
+  if (params.grantTime) {
+    params.grantTime = [params.grantTime]
   }
+  for (let i in params) {
+    if (!params[i]) {
+      delete params[i]
+    }
+  }
+  setSearchParams({ ...params })
 }
 
 const onEditFormClose = (flag: boolean) => {

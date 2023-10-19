@@ -49,19 +49,16 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #createTime="{ row }">
+        <template #villageText="{ row }">
           <div>{{
-            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+            (row.cityCodeText ? row.cityCodeText + '/' : '') +
+            (row.areaCodeText ? row.areaCodeText + '/' : '') +
+            (row.townCodeText ? row.townCodeText + '/' : '') +
+            (row.villageText ? row.villageText : '')
           }}</div>
         </template>
-
-        <template #paymentTime="{ row }">
-          <div>{{
-            row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
-        </template>
-        <template #action>
-          <el-button type="primary" link>查看</el-button>
+        <template #action="{ row }">
+          <el-button type="primary" link @click="handelShowform(row)">查看</el-button>
         </template>
       </Table>
     </div>
@@ -84,13 +81,13 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
 import {
-  getFunPayListApi,
   deleteFunPayApi,
   getLpListApi,
-  getFunPaySumAmountApi
+  getFunPaySumAmountApi,
+  getDetailsList,
+  getFindByDoorNo
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
@@ -116,7 +113,7 @@ const goObject = reactive<any>({
   ]
 })
 const { register, tableObject, methods } = useTable({
-  getListApi: getFunPayListApi,
+  getListApi: getDetailsList,
   delListApi: deleteFunPayApi
 })
 const { getList, setSearchParams } = methods
@@ -256,7 +253,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'type',
+    field: 'doorNo',
     label: '户号',
     search: {
       show: false
@@ -264,7 +261,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'funSubjectId',
+    field: 'villageText',
     label: '所属区域',
     search: {
       show: false
@@ -272,14 +269,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'amount',
+    field: 'totalPrice',
     label: '金额(元)',
     search: {
       show: false
     }
   },
   {
-    field: 'applyType',
+    field: 'pendingAmount',
     label: '待发金额(元)',
     search: {
       show: false
@@ -287,7 +284,7 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'paymentTime',
+    field: 'issuedAmount',
     label: '可发金额(元)',
     search: {
       show: false
@@ -340,7 +337,12 @@ const onSearch = (data) => {
     setSearchParams({ ...params })
   }
 }
-
+let handelShowform = (e: any) => {
+  dialog.value = true
+  getFindByDoorNo({ doorNo: e.doorNo }).then((res) => {
+    console.log(res)
+  })
+}
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
     getHeadInfo()
