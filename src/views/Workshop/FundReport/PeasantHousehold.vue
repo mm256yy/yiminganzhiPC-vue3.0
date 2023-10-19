@@ -48,7 +48,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getVillageListApi, delVillageByIdApi } from '@/api/workshop/village/service'
+import { getHouseholdReportListApi } from '@/api/fundReport/service'
 
 // interface SpanMethodProps {
 //   row: any
@@ -61,8 +61,7 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getVillageListApi,
-  delListApi: delVillageByIdApi
+  getListApi: getHouseholdReportListApi
 })
 const { getList, setSearchParams } = methods
 
