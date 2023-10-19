@@ -195,11 +195,13 @@ let cardList = reactive<any>([
           },
           {
             label: '探矿权',
+            name: 'explorationRight',
             click: false,
             openTabs: false,
             content: [
               {
                 label: '探矿权汇总表',
+
                 click: false
               }
             ]
@@ -211,14 +213,18 @@ let cardList = reactive<any>([
         content: [
           {
             label: '交通工程设施',
+            name: 'transportationFacilities',
             click: false
           },
           {
             label: '输变电工程设施',
+            name: 'transmissionFacilities',
             click: false
           },
           {
             label: '文物古迹',
+
+            name: 'culturalRelic',
             click: false
           },
           {
@@ -235,6 +241,7 @@ let cardList = reactive<any>([
           },
           {
             label: '铁塔工程',
+            name: 'ironFacilities',
             content: ['设施汇总']
           },
           {
@@ -287,7 +294,7 @@ let cardList = reactive<any>([
           { label: '联通工程' },
           { label: '铁打工程' },
           { label: '广播电视工程' },
-          { label: '水文站' },
+          { label: '水文站', name: 'hydrographicStation' },
           { label: '宗教' }
         ],
         showNum: 7

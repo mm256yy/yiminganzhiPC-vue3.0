@@ -160,6 +160,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           },
           {
+            path: 'hydrographicStation',
+            name: 'hydrographicStation',
+            component: () => import('@/views/Workshop/FundReport/HydrographicStation.vue'),
+            meta: {
+              title: '资金管理-水文战报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
             path: 'proHouseReport',
             name: 'proHouseReport',
             component: () => import('@/views/Workshop/PlacementReport/ProHouseReport.vue'),
@@ -167,7 +176,55 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '安置意愿-生产安置意愿报表',
               icon: 'ant-design:home-outlined'
             }
+          },
+          {
+            path: 'explorationRight',
+            name: 'explorationRight',
+            component: () => import('@/views/Workshop/AchievementsReport/ExplorationRight.vue'),
+            meta: {
+              title: '实物成果-探矿权',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'ironFacilities',
+            name: 'ironFacilities',
+            component: () => import('@/views/Workshop/AchievementsReport/IronFacilities.vue'),
+            meta: {
+              title: '实物成果-铁塔工程',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'culturalRelic',
+            name: 'culturalRelic',
+            component: () => import('@/views/Workshop/AchievementsReport/CulturalRelic.vue'),
+            meta: {
+              title: '实物成果-文物古迹',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'transportationFacilities',
+            name: 'transportationFacilities',
+            component: () =>
+              import('@/views/Workshop/AchievementsReport/TransportationFacilities.vue'),
+            meta: {
+              title: '实物成果-专业项目（交通工程设施）公示表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'transmissionFacilities',
+            name: 'transmissionFacilities',
+            component: () =>
+              import('@/views/Workshop/AchievementsReport/TransmissionFacilities.vue'),
+            meta: {
+              title: '实物成果-专业项目(输变电工程设施) 公示表',
+              icon: 'ant-design:home-outlined'
+            }
           }
+
           // {
           //   path: 'fundPeople',
           //   name: 'fundPeople',
