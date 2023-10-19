@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 水文站房屋及附属物设备汇总表 </div>
       </div>
-      <img src="@/assets/imgs/Intelligentreport/hydrology_appendage.png" alt="" />
+      <img src="@/assets/imgs/IntelligentReport/hydrology_appendage.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>
