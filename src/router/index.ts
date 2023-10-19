@@ -159,21 +159,22 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               icon: 'ant-design:home-outlined'
             }
           },
-          {
-            path: 'hydrographicStation',
-            name: 'hydrographicStation',
-            component: () => import('@/views/Workshop/FundReport/HydrographicStation.vue'),
-            meta: {
-              title: '资金管理-水文战报表',
-              icon: 'ant-design:home-outlined'
-            }
-          },
+
           {
             path: 'proHouseReport',
             name: 'proHouseReport',
             component: () => import('@/views/Workshop/PlacementReport/ProHouseReport.vue'),
             meta: {
               title: '安置意愿-生产安置意愿报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'hydrographicStation',
+            name: 'hydrographicStation',
+            component: () => import('@/views/Workshop/AchievementsReport/HydrographicStation.vue'),
+            meta: {
+              title: '实物成果-水文站房屋及附属物设备汇总表',
               icon: 'ant-design:home-outlined'
             }
           },
@@ -191,7 +192,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             name: 'ironFacilities',
             component: () => import('@/views/Workshop/AchievementsReport/IronFacilities.vue'),
             meta: {
-              title: '实物成果-铁塔工程',
+              title: '实物成果-铁塔工程设施',
               icon: 'ant-design:home-outlined'
             }
           },
@@ -204,6 +205,25 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               icon: 'ant-design:home-outlined'
             }
           },
+          {
+            path: 'moveAppendage',
+            name: 'moveAppendage',
+            component: () => import('@/views/Workshop/AchievementsReport/MoveAppendage.vue'),
+            meta: {
+              title: '实物成果-移动工程附属物设备汇总',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'moveFacilities',
+            name: 'moveFacilities',
+            component: () => import('@/views/Workshop/AchievementsReport/MoveFacilities.vue'),
+            meta: {
+              title: '实物成果-移动工程设施汇总',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+
           {
             path: 'transportationFacilities',
             name: 'transportationFacilities',
@@ -221,6 +241,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               import('@/views/Workshop/AchievementsReport/TransmissionFacilities.vue'),
             meta: {
               title: '实物成果-专业项目(输变电工程设施) 公示表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'religiousInformation',
+            name: 'religiousInformation',
+            component: () => import('@/views/Workshop/AchievementsReport/ReligiousInformation.vue'),
+            meta: {
+              title: '实物成果-宗教基本信息',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'religiousAppendage',
+            name: 'religiousAppendage',
+            component: () => import('@/views/Workshop/AchievementsReport/ReligiousAppendage.vue'),
+            meta: {
+              title: '实物成果-宗教设施房屋及其附属建筑物',
               icon: 'ant-design:home-outlined'
             }
           }

@@ -7,7 +7,7 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">专业项目(输变电工程设施) 公示表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">宗教设施房屋及其附属建筑物</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
     <div class="search-form-wrap">
@@ -15,9 +15,9 @@
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 专业项目(输变电工程设施) 公示表 </div>
+        <div class="table-left-title"> 宗教设施房屋及其附属建筑物报表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/Transmission_facilities.png" alt="" />
+      <img src="@/assets/imgs/IntelligentReport/religious_appendage.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

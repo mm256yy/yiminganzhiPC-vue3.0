@@ -6,8 +6,8 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">水文站房屋及附属物设备汇总表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">移动工程设施汇总</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
     <div class="search-form-wrap">
@@ -15,9 +15,9 @@
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 水文站房屋及附属物设备汇总表 </div>
+        <div class="table-left-title"> 移动工程设施汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/hydrology_appendage.png" alt="" />
+      <img src="@/assets/imgs/IntelligentReport/move_facilities.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

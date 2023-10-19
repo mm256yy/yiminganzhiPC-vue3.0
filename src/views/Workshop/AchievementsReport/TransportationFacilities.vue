@@ -6,7 +6,7 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">专业项目（交通工程设施）公示表</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
