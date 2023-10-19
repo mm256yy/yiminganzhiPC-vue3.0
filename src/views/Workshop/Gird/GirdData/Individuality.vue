@@ -69,6 +69,9 @@
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template>
+        <template #gridmanName="{ row }">
+          <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
+        </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="adjust(row)">调整网络</div>
         </template>

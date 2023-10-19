@@ -16,48 +16,50 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="申请类型:" required>
-        <el-radio-group class="ml-4" v-model="form.applyType">
-          <el-radio
-            v-for="item in dictObj[381]"
-            :label="item.value"
-            size="large"
-            :key="item.value"
-            >{{ item.label }}</el-radio
-          >
-        </el-radio-group>
+      <ElFormItem label="申请类型:" required prop="applyType">
+        <ElRadioGroup class="ml-4" v-model="form.applyType">
+          <ElRadio v-for="item in dictObj[381]" :label="item.value" :key="item.value">{{
+            item.label
+          }}</ElRadio>
+        </ElRadioGroup>
       </ElFormItem>
-      <ElFormItem label="申请名称:" required>
+      <ElFormItem label="申请名称:" required prop="name">
         <ElInput type="text" v-model="form.name" />
       </ElFormItem>
-      <ElFormItem label="概算科目:" required>
-        <el-radio-group class="ml-4" v-model="form.type">
-          <el-radio
-            v-for="item in dictObj[382]"
-            :label="item.value"
-            size="large"
-            :key="item.value"
-            >{{ item.label }}</el-radio
-          >
-        </el-radio-group>
+      <ElFormItem label="概算科目:" required prop="type">
+        <ElRadioGroup class="ml-4" v-model="form.type">
+          <ElRadio v-for="item in dictObj[382]" :label="item.value" :key="item.value">{{
+            item.label
+          }}</ElRadio>
+        </ElRadioGroup>
       </ElFormItem>
 
-      <ElFormItem label="资金科目:" required>
-        <ElTreeSelect class="!w-full" v-model="form.funSubjectId" :data="[]" node-key="code" />
+      <ElFormItem label="资金科目:" required prop="funSubjectId">
+        <ElTreeSelect
+          class="!w-full"
+          v-model="form.funSubjectId"
+          :data="props.fundAccountList"
+          :props="{ value: 'code', label: 'name' }"
+          node-key="code"
+          showCheckbox
+          checkStrictly
+          checkOnClickNode
+          :default-checked-keys="[form.funSubjectId]"
+        />
       </ElFormItem>
 
-      <ElFormItem label="付款说明:" required>
+      <ElFormItem label="付款说明:" required prop="remark">
         <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
 
-      <ElFormItem label="收款单位:" required>
+      <ElFormItem label="收款单位:" required prop="receivePaymentUnit">
         <ElInput type="text" v-model="form.receivePaymentUnit" />
       </ElFormItem>
-      <ElFormItem label="付款时间:" required>
+      <ElFormItem label="付款时间:" required prop="paymentTime">
         <ElDatePicker type="date" v-model="form.paymentTime" />
       </ElFormItem>
-      <ElFormItem label="申请金额:">
-        <ElInput type="text" v-model="form.amount" />
+      <ElFormItem label="申请金额:" prop="amount">
+        <ElInputNumber type="text" v-model="form.amount" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -91,8 +93,13 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      <template v-if="actionType === 'add'">
+        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -115,7 +122,8 @@ import {
   ElDatePicker,
   ElRadioGroup,
   ElRadio,
-  ElTreeSelect
+  ElTreeSelect,
+  ElInputNumber
 } from 'element-plus'
 import { ref, reactive, nextTick, watch, computed } from 'vue'
 import { debounce } from 'lodash-es'
@@ -129,6 +137,7 @@ interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: any
+  fundAccountList: any[]
 }
 
 interface FileItemType {
@@ -143,6 +152,7 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
+console.log(dictObj.value[382], '382')
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -157,19 +167,28 @@ const headers = {
 const rules = reactive<FormRules>({})
 
 watch(
-  () => props.show,
+  () => props.row,
   (val) => {
     if (val) {
-      if (props.actionType === 'edit') {
-        // 编辑
-        form.value = {
-          ...props.row
-        }
-      } else {
-        // 新增
-        form.value = {}
+      console.log(val, '当前对象')
+      // 编辑
+      form.value = {
+        ...val
       }
+      if (val.receipt) {
+        receipt.value = JSON.parse(val.receipt)
+      }
+      if (form.value.paymentTime) {
+        form.value.paymentTime = dayjs(form.value.paymentTime).format('YYYY-MM-DD')
+      }
+    } else {
+      // 新增
+      form.value = {}
     }
+  },
+  {
+    immediate: true,
+    deep: true
   }
 )
 
@@ -181,8 +200,10 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
+const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
+    data.projectId = appStore.getCurrentProjectId
+    data.status = status
     addFunPayApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
@@ -199,9 +220,10 @@ const submit = (data: any) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
+      console.log(form.value, 'form')
       if (!receipt.value.length) {
         ElMessage.error('请上传搬迁安置确认单')
         return
@@ -211,7 +233,7 @@ const onSubmit = debounce((formEl) => {
           receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
         params.paymentTime = dayjs(params.paymentTime)
-        submit(params)
+        submit(params, status)
       }
     } else {
       return false

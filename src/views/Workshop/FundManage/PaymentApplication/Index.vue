@@ -48,7 +48,9 @@
         <template #createdDate="{ row }">
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
-
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
@@ -80,7 +82,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-// import { useIcon } from '@/hooks/web/useIcon'
+
 import {
   getPaymentApplicationListApi,
   delPaymentApplicationByIdApi

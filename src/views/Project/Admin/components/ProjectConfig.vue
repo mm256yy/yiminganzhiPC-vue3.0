@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, unref, ref, onMounted } from 'vue'
+import { reactive, unref, ref, onMounted, computed } from 'vue'
 import { ElButton, ElMessage, ElTabs, ElTabPane } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { Form } from '@/components/Form'
@@ -42,7 +42,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 
 const rules = {
   dingCorpId: [required()],

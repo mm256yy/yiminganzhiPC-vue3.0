@@ -17,27 +17,50 @@
       :rules="rules"
       label-suffix=":"
     >
-      <ElFormItem v-if="isHouseHold" label="户主" prop="household"> 张三 </ElFormItem>
-      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isHouseHold" label="户主" prop="household"> {{ form.name }} </ElFormItem>
+      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber">
+        {{ form.doorNo }}
+      </ElFormItem>
 
-      <ElFormItem v-if="isVillage" label="村集体" prop="household"> 张三 </ElFormItem>
-      <ElFormItem v-if="isVillage" label="村集体编号" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isVillage" label="村集体" prop="household">
+        {{ form.villageText }}
+      </ElFormItem>
+      <ElFormItem v-if="isVillage" label="村集体编号" prop="accountNumber">
+        {{ form.villageCode }}
+      </ElFormItem>
 
       <ElFormItem v-if="isOther" label="名称" prop="name"> 张三 </ElFormItem>
       <ElFormItem v-if="isOther" label="资金科目" prop="accountNumber"> aaaa </ElFormItem>
 
-      <ElFormItem v-if="!isOther" label="所属区域" prop="area"> 所属区域文本 </ElFormItem>
-      <ElFormItem label="到账金额" prop="amountReceived"> 到账金额文本 </ElFormItem>
-      <ElFormItem label="金额(元)" prop="amount"> 金额文本 </ElFormItem>
-      <ElFormItem label="发放金额" prop="issuedAmount" required>
-        <ElInputNumber v-model="issuedAmount" placeholder="请输入" />
+      <ElFormItem v-if="!isOther" label="所属区域" prop="area">
+        {{
+          `
+              ${form.cityCodeText ? form.cityCodeText + '/' : ''}
+              ${form.areaCodeText ? form.areaCodeText : ''}
+              ${form.townCodeText ? '/' + form.townCodeText : ''}
+              ${form.villageText ? '/' + form.villageText : ''}
+              ${form.virutalVillageText ? '/' + form.virutalVillageText : ''}
+              `
+        }}
+      </ElFormItem>
+      <ElFormItem label="到账金额" prop="amountReceived">
+        {{ form.issuedAmount }}&nbsp;元
+      </ElFormItem>
+      <ElFormItem label="已发放金额" prop="issuedAmount">
+        {{ form.issuedAmount }}&nbsp;元</ElFormItem
+      >
+      <ElFormItem label="待发放" prop="pendingAmount">
+        {{ form.pendingAmount }}&nbsp;元
+      </ElFormItem>
+      <ElFormItem label="发放金额" prop="amount" required>
+        <ElInputNumber v-model="form.amount" placeholder="请输入" />
         <span>&nbsp;&nbsp;元</span>
       </ElFormItem>
-      <ElFormItem label="发放日期" prop="issuedDate" required>
-        <ElDatePicker v-model="issuedDate" type="datetime" />
+      <ElFormItem label="发放日期" prop="paymentTime" required>
+        <ElDatePicker v-model="form.paymentTime" type="datetime" />
       </ElFormItem>
-      <ElFormItem label="发放说明" prop="issuedExplain" required>
-        <ElInput v-model="issuedExplain" type="textarea" :rows="3" placeholder="请输入" />
+      <ElFormItem label="发放说明" prop="remark" required>
+        <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 相关凭证： </div>
@@ -94,14 +117,16 @@ import {
   ElInputNumber,
   ElDatePicker
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import { ref, reactive, nextTick, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
+import type { TownshipFundEntryDtoType } from '@/api/fundManage/townshipFundEntry-types'
+import { addFundEntryApi } from '@/api/fundManage/townshipFundEntry-service'
 
 interface PropsType {
   show: boolean
+  row?: TownshipFundEntryDtoType | null | undefined
   type: number // 类型
 }
 
@@ -120,10 +145,6 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
 
-const issuedAmount = ref<number>(0) // 发放金额
-const issuedExplain = ref<string>('') // 发放说明
-const issuedDate = ref<string>('') // 发放日期
-
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
@@ -131,12 +152,10 @@ const headers = {
 
 // 规则校验
 const rules = reactive<FormRules>({
-  issuedAmount: [{ required: true, message: '发放金额不能为空', trigger: 'blur' }],
-  issuedDate: [{ required: true, message: '发放日期不能为空', trigger: 'change' }],
-  issuedExplain: [{ required: true, message: '发放说明不能为空', trigger: 'blur' }]
+  amount: [{ required: true, message: '发放金额不能为空', trigger: 'blur' }],
+  paymentTime: [{ required: true, message: '发放日期不能为空', trigger: 'change' }],
+  remark: [{ required: true, message: '发放说明不能为空', trigger: 'blur' }]
 })
-
-const initData = () => {}
 
 const isHouseHold = computed(() => {
   return props.type === 1
@@ -150,16 +169,35 @@ const isOther = computed(() => {
   return props.type === 3
 })
 
+const getTabType = (type: number) => {
+  const map = {
+    1: 'PeasantHousehold',
+    2: 'Village',
+    3: 'Other'
+  }
+  return map[type]
+}
+
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      form.value = props.row
+    }
+  }
+)
+
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
+  form.value = {}
   nextTick(() => {
     formRef.value?.resetFields()
   })
 }
 
 const submit = (data: any) => {
-  saveDocumentationApi(data).then(() => {
+  addFundEntryApi(data).then(() => {
     ElMessage.success('操作成功！')
   })
   onClose(true)
@@ -175,7 +213,8 @@ const onSubmit = debounce((formEl) => {
       } else {
         let params: any = {
           ...form.value,
-          relocateOtherPic: JSON.stringify(relocateOtherPic.value || []) // 其他附件
+          relocateOtherPic: JSON.stringify(relocateOtherPic.value || []), // 其他附件
+          type: getTabType(props.type)
         }
         submit(params)
       }
@@ -229,10 +268,6 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-
-onMounted(() => {
-  initData()
-})
 </script>
 
 <style lang="less" scoped>

@@ -65,7 +65,7 @@
         :pagination="{
           total: tableObject.total
         }"
-        :loading="false"
+        :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         tableLayout="auto"
@@ -89,45 +89,28 @@ import { computed, reactive } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { useAppStore } from '@/store/modules/app'
+// import { useAppStore } from '@/store/modules/app'
 import { useRouter } from 'vue-router'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { Search } from '@/components/Search'
-// import { getExportApi } from '@/api/workshop/export/service'
-
-// interface ExportListType {
-//   name: string
-//   value: string | number
-// }
+import { getFunPayTownshipListApi } from '@/api/fundManage/townshipFundEntry-service'
 
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-// const form = ref<any>({})
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+// const appStore = useAppStore()
+// const projectId = appStore.currentProjectId
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 
-const { register, tableObject, methods } = useTable()
-tableObject.loading = false
-
-tableObject.tableList = [
-  {
-    index: '1',
-    name: '123'
-  }
-]
+const { register, tableObject, methods } = useTable({
+  getListApi: getFunPayTownshipListApi
+})
 
 const { setSearchParams } = methods
 
-// 需要重置一次params
-tableObject.params = {
-  projectId
-}
-
-setSearchParams({ name: '', code: '' })
+setSearchParams({ name: '', type: '' })
 
 // 导出
 const onExport = async () => {
@@ -165,7 +148,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'budgetAccount',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
@@ -179,7 +162,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
@@ -193,7 +176,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'accountTime',
+    field: 'paymentTime',
     label: '入账时间',
     search: {
       show: true,
@@ -207,7 +190,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAmount',
+    field: 'amount',
     label: '资金金额',
     search: {
       show: true,
@@ -218,7 +201,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundCategory',
+    field: 'payType',
     label: '资金类别',
     search: {
       show: true,
@@ -232,7 +215,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'payerType',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: true,
@@ -262,7 +245,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'showDoorNo',
+    field: 'paymentType',
     label: '付款对象类别',
     width: 180,
     search: {
@@ -270,35 +253,35 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'regionText',
+    field: 'type',
     label: '概算科目',
     search: {
       show: false
     }
   },
   {
-    field: 'hasPropertyAccountText',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
+    field: 'amount',
     label: '资金金额（元）',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
+    field: 'payType',
     label: '资金类别',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
+    field: 'paymentTime',
     label: '入账时间',
     search: {
       show: false

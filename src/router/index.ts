@@ -102,6 +102,35 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           icon: 'ant-design:home-outlined'
         }
       },
+      // {
+      //   path: 'adminHome',
+      //   name: 'adminHome',
+      //   component: () => import('@/views/Workshop/Home/AdminIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 用于领导端
+      //     icon: 'ant-design:home-outlined'
+      //   }
+      // },
+      // {
+      //   path: 'adminSecondHome',
+      //   name: 'adminSecondHome',
+      //   component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 领导端二级首页
+      //     icon: 'ant-design:home-outlined',
+      //     hidden: true
+      //   }
+      // },
+      // {
+      //   path: 'adminThirdHome',
+      //   name: 'adminThirdHome',
+      //   component: () => import('@/views/Workshop/Home/AdminThirdIndex.vue'),
+      //   meta: {
+      //     title: '工作台', // 领导端三级首页
+      //     icon: 'ant-design:home-outlined',
+      //     hidden: true
+      //   }
+      // },
       {
         path: 'leaderSide',
         name: 'LeaderSide',
@@ -110,6 +139,36 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '领导工作台', // 外链
           icon: 'ant-design:home-outlined'
         }
+      },
+      {
+        path: 'SmartReport',
+        name: 'SmartReport',
+        component: () => import('@/views/Workshop/SmartReport/index.vue'),
+        meta: {
+          title: '领导工作台',
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        },
+        children: [
+          {
+            path: 'fundPeople',
+            name: 'fundPeople',
+            component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
+            meta: {
+              title: '资金管理-居民户报表',
+              icon: 'ant-design:home-outlined'
+            }
+          }
+          // {
+          //   path: 'fundPeople',
+          //   name: 'fundPeople',
+          //   component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
+          //   meta: {
+          //     title: '资金管理-居民户报表',
+          //     icon: 'ant-design:home-outlined'
+          //   }
+          // }
+        ]
       },
       {
         path: 'padSide',
@@ -134,7 +193,47 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         name: 'adminSecondHome',
         component: () => import('@/views/Workshop/Home/AdminSecondIndex.vue'),
         meta: {
-          title: '工作台', // 领导端二级首页
+          title: '工作台', // 领导端二级 大数据分析
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'adminhomefund',
+        name: 'adminhomefund',
+        component: () => import('@/views/Workshop/Home/AdminHomeFund.vue'),
+        meta: {
+          title: '工作台', // 领导端二级 资金管理
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'adminhomeprogress',
+        name: 'adminhomeprogress',
+        component: () => import('@/views/Workshop/Home/AdminHomeProgress.vue'),
+        meta: {
+          title: '工作台', // 领导端二级  进度管理
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'Feedback',
+        name: 'Feedback',
+        component: () => import('@/views/Workshop/Feedback/Index.vue'),
+        meta: {
+          title: '工作台', // 反馈
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'Project',
+        name: 'Project',
+        component: () => import('@/views/Project/News/Index.vue'),
+        meta: {
+          title: '工作台', // 新闻法规
           icon: 'ant-design:home-outlined',
           hidden: true
         }
@@ -318,6 +417,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         component: () => import('@/views/Workshop/FundManage/PaymentReview/Index.vue'),
         meta: {
           title: '付款审核',
+          hidden: false
+        }
+      },
+      {
+        path: 'fundDistribution',
+        name: 'fundDistribution',
+        component: () => import('@/views/Workshop/FundManage/FundDistribution/Index.vue'),
+        meta: {
+          title: '资金发放',
+          hidden: false
+        }
+      },
+      {
+        path: 'distributionSituation',
+        name: 'distributionSituation',
+        component: () => import('@/views/Workshop/FundManage/FundDistribution/Situation.vue'),
+        meta: {
+          title: '资金发放情况',
           hidden: false
         }
       }

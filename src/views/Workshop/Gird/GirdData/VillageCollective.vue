@@ -54,6 +54,9 @@
         <template #doorNo="{ row }">
           {{ filterViewDoorNo(row) }}
         </template>
+        <template #gridmanName="{ row }">
+          <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
+        </template>
         <template #regionText="{ row }">
           <div>
             {{

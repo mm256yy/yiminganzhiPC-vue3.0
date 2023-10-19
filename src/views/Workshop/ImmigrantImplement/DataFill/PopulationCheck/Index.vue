@@ -40,11 +40,14 @@
     </div>
 
     <!-- 删除弹窗 -->
-    <el-dialog title="删除人员信息" v-model="dialogVisible" width="500">
+    <el-dialog title="删除人员信息" v-model="dialogVisible" width="500" @close="onClose">
       <div style="display: flex; margin-bottom: 10px">
         <el-icon><InfoFilled /></el-icon>是否删除
-        <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
-        的信息
+        <div v-if="tableObject.currentRow?.name" style="display: flex">
+          <span style="margin: 0 6px; font-weight: 600">{{ tableObject.currentRow?.name }}</span>
+          的信息
+        </div>
+        <span v-else>该条记录</span>
       </div>
       <span style="position: absolute; top: 125px; left: 60px; color: red">*</span>
       <ElFormItem label="删除原因" prop="reason">
@@ -226,6 +229,7 @@ const onClose = () => {
   reason.value = ''
   dialogVisible.value = false
 }
+
 const onSubmit = () => {
   if (!reason.value) {
     ElMessage.warning('请选择删除原因')
