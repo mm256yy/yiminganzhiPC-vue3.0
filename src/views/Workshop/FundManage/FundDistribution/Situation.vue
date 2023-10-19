@@ -89,8 +89,8 @@ import EditForm from './EditForm.vue'
 import {
   getFunPayListApi,
   deleteFunPayApi,
-  getLpList,
-  getFunPaySumAmount
+  getLpListApi,
+  getFunPaySumAmountApi
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
@@ -128,12 +128,12 @@ tableObject.params = {
 getList()
 
 const getHeadInfo = async () => {
-  const info = await getFunPaySumAmount()
+  const info = await getFunPaySumAmountApi()
   headInfo.value = info
 }
 
 const getLpListHandle = async () => {
-  const res: any = await getLpList()
+  const res: any = await getLpListApi()
   if (res && res.length) {
     lpList.value = res
   }

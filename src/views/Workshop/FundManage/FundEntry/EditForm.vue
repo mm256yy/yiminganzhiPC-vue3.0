@@ -71,8 +71,13 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      <template v-if="actionType === 'add'">
+        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -104,6 +109,8 @@ import { useAppStore } from '@/store/modules/app'
 import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useValidator } from '@/hooks/web/useValidator'
+import dayjs from 'dayjs'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -151,6 +158,9 @@ watch(
           ...props.row
         }
         receipt.value = JSON.parse(props.row.receipt)
+        if (form.value.recordTime) {
+          form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
+        }
       } else {
         // 新增
         form.value = {}
@@ -167,8 +177,11 @@ const onClose = (flag = false) => {
   form.value = {}
 }
 
-const submit = (data: any) => {
+const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
+    data.status = status
+    data.projectId = appStore.getCurrentProjectId
+    data.entryType = '1' // 1普通入账 2法人入账
     addFundEntryApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
@@ -185,7 +198,7 @@ const submit = (data: any) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl, status) => {
+const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
@@ -194,10 +207,10 @@ const onSubmit = debounce((formEl, status) => {
       }
       let params: any = {
         ...form.value,
-        status,
         receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
       }
-      submit(params)
+      params.recordTime = dayjs(params.recordTime)
+      submit(params, status)
     } else {
       return false
     }

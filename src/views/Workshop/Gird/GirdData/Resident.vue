@@ -69,8 +69,8 @@
         <!-- <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template> -->
-        <template #hasPropertyAccount="{ row }">
-          <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
+        <template #gridmanName="{ row }">
+          <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
         </template>
         <!-- <template #implementFillStatus="{ row }">
           <div class="flex items-center justify-center">

@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { ElRow, ElCol, ElFormItem, ElForm } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 import { LoginLogInfoType } from '@/api/audit/login/types'
@@ -141,7 +141,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['close'])
 
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 
 onMounted(async () => {
   console.log(currentRow.value)

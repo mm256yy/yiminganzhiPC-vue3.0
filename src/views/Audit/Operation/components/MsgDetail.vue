@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { ElRow, ElCol, ElFormItem, ElForm } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
 
@@ -84,7 +84,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['close'])
 
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 console.log(currentRow, 'ssss')
 
 onMounted(async () => {

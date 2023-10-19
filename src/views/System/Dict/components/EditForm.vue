@@ -44,7 +44,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 const dictGroup = ref<string>()
 
 const title = computed(() => {

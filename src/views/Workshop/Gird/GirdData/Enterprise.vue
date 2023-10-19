@@ -66,8 +66,8 @@
             }}
           </div>
         </template>
-        <template #hasPropertyAccount="{ row }">
-          <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
+        <template #gridmanName="{ row }">
+          <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="adjust(row)">调整网络</div>
