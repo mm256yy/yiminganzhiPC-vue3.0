@@ -261,6 +261,42 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
       }
     }
   }
+  // else if (columnIndex === 3) {
+  //   if (rowIndex === 0) {
+  //     return {
+  //       rowspan: 3,
+  //       colspan: 1
+  //     }
+  //   } else {
+  //     return {
+  //       rowspan: 0,
+  //       colspan: 0
+  //     }
+  //   }
+  // } else if (columnIndex === 4) {
+  //   if (rowIndex === 0) {
+  //     return {
+  //       rowspan: 3,
+  //       colspan: 1
+  //     }
+  //   } else {
+  //     return {
+  //       rowspan: 0,
+  //       colspan: 0
+  //     }
+  //   }
+  // } else if (columnIndex === 5) {
+  //   if (rowIndex === 0) {
+  //     return {
+  //       rowspan: 3,
+  //       colspan: 1
+  //     }
+  //   } else {
+  //     return {
+  //       rowspan: 0,
+  //       colspan: 0
+  //     }
+  //   }
 }
 // const schema = reactive<CrudSchema[]>([
 //   {
