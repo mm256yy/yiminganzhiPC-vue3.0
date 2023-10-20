@@ -11,24 +11,20 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
-            <div class="amount">30000.00元</div>
-          </div>
-          <div class="content">
-            <div class="sub-title">发放金额</div>
-            <div class="amount">2000.00元</div>
+            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
           </div>
           <div class="content">
             <div class="sub-title">余额</div>
-            <div class="amount">1000.00元</div>
+            <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>
       <div class="item">
-        <div class="title">支付款</div>
+        <div class="title">发放款</div>
         <div class="content-wrapper">
           <div class="content">
-            <div class="sub-title">入账金额</div>
-            <div class="amount">1000.00元</div>
+            <div class="sub-title">发放金额</div>
+            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>
@@ -85,30 +81,39 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-// import { useAppStore } from '@/store/modules/app'
+import { useAppStore } from '@/store/modules/app'
 import { useRouter } from 'vue-router'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { Search } from '@/components/Search'
-import { getFunPayTownshipListApi } from '@/api/fundManage/townshipFundEntry-service'
+import {
+  getFunPayTownshipListApi,
+  getTownshipSumAmount
+} from '@/api/fundManage/townshipFundEntry-service'
+import type { AmountDtoType } from '@/api/fundManage/townshipFundEntry-types'
 
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-// const appStore = useAppStore()
-// const projectId = appStore.currentProjectId
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
+const amountItem = ref<AmountDtoType>()
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFunPayTownshipListApi
 })
 
 const { setSearchParams } = methods
+
+tableObject.params = {
+  projectId
+}
 
 setSearchParams({ name: '', type: '' })
 
@@ -317,6 +322,16 @@ const onCheckRow = (row) => {
     }
   })
 }
+
+const getSumAmount = () => {
+  getTownshipSumAmount().then((res) => {
+    amountItem.value = res
+  })
+}
+
+onMounted(() => {
+  getSumAmount()
+})
 </script>
 
 <style lang="less" scoped>

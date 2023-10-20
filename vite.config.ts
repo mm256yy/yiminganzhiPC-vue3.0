@@ -66,7 +66,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         prodEnabled: false,
         injectCode: `
           import { setupProdMockServer } from '../mock/_createProductionServer'
-
           setupProdMockServer()
           `
       }),
