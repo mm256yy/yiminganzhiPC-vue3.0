@@ -1,70 +1,69 @@
 <template>
-  <WorkContentWrap>
-    <div class="table-wrap">
-      <Table
-        ref="tabalRef"
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
-        :loading="tableObject.loading"
-        :data="tableObject.tableList"
-        :columns="allSchemas.tableColumns"
-        row-key="id"
-        headerAlign="center"
-        align="center"
-        :selection="true"
-        highlightCurrentRow
-        @register="register"
-      >
-        <template #grantTime="{ row }">
-          <div>{{ row.grantTime ? dayjs(row.grantTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div>
-        </template>
-        <template #grantStatus="{ row }">
-          <div>{{ row.grantStatus == '1' ? '已放款' : '未放款' }}</div>
-        </template>
-      </Table>
-    </div>
-
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      @close="onEditFormClose"
-    />
-  </WorkContentWrap>
+  <ElDialog
+    title="详情"
+    :model-value="props.show"
+    :width="1000"
+    @close="onClose"
+    alignCenter
+    appendToBody
+    :closeOnClickModal="false"
+  >
+    <Table
+      ref="tabalRef"
+      :loading="tableObject.loading"
+      :data="dataForm"
+      :columns="allSchemas.tableColumns"
+      row-key="id"
+      headerAlign="center"
+      align="center"
+      highlightCurrentRow
+      @register="register"
+      height="250"
+    >
+      <template #grantTime="{ row }">
+        <div>{{ row.grantTime ? dayjs(row.grantTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div>
+      </template>
+      <template #type="{ row }">
+        <div>{{ `第${row.type}批次` }}</div>
+      </template>
+      <template #grantStatus="{ row }">
+        <div>{{ row.grantStatus == '1' ? '已放款' : '未放款' }}</div>
+      </template>
+    </Table>
+  </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import dayjs from 'dayjs'
-import EditForm from './EditForm.vue'
 import {
-  getFunAmountGrant,
+  getFindByDoorNo,
   deleteFunPayApi,
   getLpListApi,
   getFunPaySumAmountApi
 } from '@/api/fundManage/fundPayment-service'
+import { ElDialog } from 'element-plus'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+interface PropsType {
+  show: boolean
+  id: string
+}
+const emit = defineEmits(['close', 'submit'])
+const props = defineProps<PropsType>()
 const appStore = useAppStore()
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
+let dataForm = ref<any[]>([])
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
 const lpList = ref<any[]>([])
-const actionType = ref<'view' | 'add' | 'edit'>('add')
-const dialog = ref<boolean>(false)
 const { register, tableObject, methods } = useTable({
-  getListApi: getFunAmountGrant,
+  getListApi: getFindByDoorNo,
   delListApi: deleteFunPayApi
 })
 const { getList } = methods
@@ -74,7 +73,11 @@ tableObject.params = {
 }
 
 getList()
-
+let getFindByDoorNoAsync = async () => {
+  const data: any = await getFindByDoorNo({ doorNo: props.id })
+  console.log(data, 'bbq')
+  dataForm.value = data
+}
 const getHeadInfo = async () => {
   const info = await getFunPaySumAmountApi()
   headInfo.value = info
@@ -91,12 +94,20 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
+const onClose = (flag = false) => {
+  emit('close', flag)
+}
 onMounted(() => {
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
 })
-
+watch(
+  () => props.id,
+  () => {
+    getFindByDoorNoAsync()
+  }
+)
 const schema = reactive<CrudSchema[]>([
   // table
   {
@@ -114,7 +125,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'doorNo',
+    field: 'totalPrice',
     label: '金额（元）',
     search: {
       show: false
@@ -122,7 +133,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'villageText',
+    field: 'grantStatus',
     label: '是否发放',
     search: {
       show: false
@@ -130,7 +141,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'type',
+    field: 'grantTime',
     label: '发放日期',
     search: {
       show: false
@@ -138,23 +149,14 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'grantTime',
+    field: 'grantUser',
     label: '发放人',
     search: {
       show: false
     }
   }
 ])
-
 let { allSchemas } = useCrudSchemas(schema)
-
-const onEditFormClose = (flag: boolean) => {
-  if (flag) {
-    getHeadInfo()
-    getList()
-  }
-  dialog.value = false
-}
 </script>
 
 <style lang="less" scoped>

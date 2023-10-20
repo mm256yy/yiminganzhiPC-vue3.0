@@ -21,15 +21,15 @@
 
           <div class="text">
             已完成：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
           <div class="text">
             审核中：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
           <div class="text">
             待提交：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -65,37 +65,36 @@
         <template #grantTime="{ row }">
           <div>{{ row.grantTime ? dayjs(row.grantTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div>
         </template>
+        <template #type="{ row }">
+          <div>{{ `第${row.type}批次` }}</div>
+        </template>
         <template #grantStatus="{ row }">
           <div>{{ row.grantStatus == '1' ? '已放款' : '未放款' }}</div>
         </template>
       </Table>
     </div>
 
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      @close="onEditFormClose"
-    />
+    <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElMessage, ElMessageBox } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import dayjs from 'dayjs'
-import EditForm from './EditForm.vue'
 import {
   getFunAmountGrant,
   deleteFunPayApi,
   getLpListApi,
-  getFunPaySumAmountApi
+  getFunPaySumAmountApi,
+  getSumAmount,
+  postGrant
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
@@ -107,8 +106,6 @@ let tabalRef = ref()
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
 const lpList = ref<any[]>([])
-const actionType = ref<'view' | 'add' | 'edit'>('add')
-const dialog = ref<boolean>(false)
 const goObject = reactive<any>({
   state: [
     { label: '已发放', value: '1' },
@@ -116,9 +113,15 @@ const goObject = reactive<any>({
   ],
   batch: [
     { label: '第一批', value: '1' },
-    { label: '第二批', value: '2' },
-    { label: '全部', value: '3' }
+    { label: '第二批次', value: '2' },
+    { label: '第三批次', value: '3' },
+    { label: '第四批次', value: '4' }
   ]
+})
+let molingData = ref<any>({
+  issuedAmount: 0,
+  pendingAmount: 0,
+  totalPrice: 0
 })
 const { register, tableObject, methods } = useTable({
   getListApi: getFunAmountGrant,
@@ -148,10 +151,17 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
+let moneyList = async () => {
+  let list = await getSumAmount({ projectId: projectId })
+  molingData.value = list
+  console.log(molingData)
+}
 onMounted(() => {
+  moneyList()
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
+  console.log(tableObject)
 })
 
 const selenceTable = (e: string) => {
@@ -167,7 +177,37 @@ const selenceTable = (e: string) => {
   tabalRef.value.setColumns(allSchemas.tableColumns)
 }
 const IssueClick = () => {
-  console.log(1)
+  console.log(tabalRef.value.selections)
+  let all = 0
+  let pamaers = tabalRef.value.selections.reduce((pre, item) => {
+    pre.push({
+      type: item.type,
+      doorNo: item.doorNo,
+      status: '1'
+    })
+    all += item.pendingAmount
+    return pre
+  }, [])
+  ElMessageBox.confirm(`本次发放共${pamaers.length}户居民户，共${all}元。请确认是否发放`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消'
+  })
+    .then(() => {
+      console.log(pamaers)
+      postGrant(pamaers).then(() => {
+        ElMessage({
+          type: 'success',
+          message: '发放成功'
+        })
+        getList()
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'success',
+        message: '取消成功'
+      })
+    })
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -380,14 +420,6 @@ const onSearch = (data) => {
     }
   }
   setSearchParams({ ...params })
-}
-
-const onEditFormClose = (flag: boolean) => {
-  if (flag) {
-    getHeadInfo()
-    getList()
-  }
-  dialog.value = false
 }
 </script>
 

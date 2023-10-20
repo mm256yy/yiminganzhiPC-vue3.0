@@ -21,15 +21,15 @@
 
           <div class="text">
             已完成：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
           <div class="text">
             审核中：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
           <div class="text">
             待提交：0笔
-            <span class="num">0</span> 元
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
         </div>
       </div>
@@ -63,12 +63,7 @@
       </Table>
     </div>
 
-    <EditForm
-      :show="dialog"
-      :actionType="actionType"
-      :row="tableObject.currentRow"
-      @close="onEditFormClose"
-    />
+    <EditForm :show="dialog" :id="doorNo" @close="onEditFormClose" />
   </WorkContentWrap>
 </template>
 
@@ -87,7 +82,7 @@ import {
   getLpListApi,
   getFunPaySumAmountApi,
   getDetailsList,
-  getFindByDoorNo
+  getSumAmount
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
@@ -99,8 +94,13 @@ let tabalRef = ref()
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
 const lpList = ref<any[]>([])
-const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
+let doorNo = ref()
+let molingData = ref<any>({
+  issuedAmount: 0,
+  pendingAmount: 0,
+  totalPrice: 0
+})
 const goObject = reactive<any>({
   state: [
     { label: '已发放', value: '1' },
@@ -140,7 +140,13 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
+let moneyList = async () => {
+  let list = await getSumAmount({ projectId: projectId })
+  molingData.value = list
+  console.log(molingData)
+}
 onMounted(() => {
+  moneyList()
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
@@ -339,9 +345,7 @@ const onSearch = (data) => {
 }
 let handelShowform = (e: any) => {
   dialog.value = true
-  getFindByDoorNo({ doorNo: e.doorNo }).then((res) => {
-    console.log(res)
-  })
+  doorNo.value = e.doorNo
 }
 const onEditFormClose = (flag: boolean) => {
   if (flag) {

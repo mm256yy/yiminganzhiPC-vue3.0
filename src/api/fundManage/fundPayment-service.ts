@@ -80,3 +80,31 @@ export const getFindByDoorNo = (params?: any): Promise<TableResponse<FunPayType>
     params
   })
 }
+//企业房屋 /api/
+export const getEnterpriseAppendant = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/resultForms/enterpriseAppendant',
+    params
+  })
+}
+// 企业果树
+export const getEnterpriseTree = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/resultForms/enterpriseTree',
+    params
+  })
+}
+// 资金发放金额
+export const getSumAmount = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: 'funAmountGrant/sumAmount',
+    params
+  })
+}
+//资金发放 funAmountGrant/grant
+export const postGrant = (data: Partial<FunPayType>): Promise<any> => {
+  return request.post({
+    url: '/funAmountGrant/grant',
+    data
+  })
+}

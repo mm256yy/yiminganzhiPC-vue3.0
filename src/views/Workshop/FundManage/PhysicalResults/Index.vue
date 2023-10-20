@@ -1,8 +1,8 @@
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <!-- <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
-    </div>
+    </div> -->
 
     <div class="table-wrap">
       <ElTable :data="tableData1.tableList" style="width: 100%" :span-method="objectSpanMethod1">
@@ -36,8 +36,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+// import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { ElTable, ElTableColumn, ElPagination } from 'element-plus'
 import {
@@ -63,7 +62,7 @@ const { tableObject, methods } = useTable({
   getListApi: getEnterprise,
   delListApi: deleteFunPayApi
 })
-const { getList, setSearchParams } = methods
+const { getList } = methods
 
 tableObject.params = {
   projectId
@@ -89,63 +88,63 @@ const getEnterpriseAsync = async (e: any) => {
   return list
 }
 
-const schema = reactive<CrudSchema[]>([
-  {
-    field: 'code',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: districtTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
-      }
-    },
-    table: {
-      show: false
-    }
-  }
+// const schema = reactive<CrudSchema[]>([
+//   {
+//     field: 'code',
+//     label: '所属区域',
+//     search: {
+//       show: true,
+//       component: 'TreeSelect',
+//       componentProps: {
+//         data: districtTree,
+//         nodeKey: 'code',
+//         props: {
+//           value: 'code',
+//           label: 'name'
+//         },
+//         showCheckbox: true,
+//         checkStrictly: true,
+//         checkOnClickNode: true
+//       }
+//     },
+//     table: {
+//       show: false
+//     }
+//   }
 
-  // table
-])
+//   // table
+// ])
 
-let { allSchemas } = useCrudSchemas(schema)
+// let { allSchemas } = useCrudSchemas(schema)
 
-const onSearch = (data) => {
-  //解决是否户主relation入参变化
-  let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
+// const onSearch = (data) => {
+//   //解决是否户主relation入参变化
+//   let searchData = JSON.parse(JSON.stringify(data))
+//   console.log(searchData)
 
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
+//   if (searchData.relation == '1') {
+//     searchData.relation = ['is', 1]
+//   } else if (searchData.relation == '0') {
+//     searchData.relation = ['not', 1]
+//   } else {
+//     delete searchData.relation
+//   }
 
-  // 处理参数
-  let params = {
-    ...searchData
-  }
-  tableObject.params = {
-    projectId
-  }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
-  }
-}
+//   // 处理参数
+//   let params = {
+//     ...searchData
+//   }
+//   tableObject.params = {
+//     projectId
+//   }
+//   if (params.code) {
+//     delete params.code
+//     setSearchParams({ ...params })
+//   } else {
+//     delete params.code
+//     setSearchParams({ ...params })
+//   }
+// }
 
 const objectSpanMethod1 = ({
   // row,
@@ -169,16 +168,16 @@ const objectSpanMethod1 = ({
 }
 const handleSizeChange = (val: number) => {
   tableData1.pageSizeRef = val
-  getEnterpriseAsync({ projectId, size: val, page: tableData1.currentPageRef })
+  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
 const handleCurrentChange = (val: number) => {
-  tableData1.currentPageRef = val
-  getEnterpriseAsync({ projectId, size: 10, page: val })
+  tableData1.currentPageRef = val - 1
+  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
-  getEnterpriseAsync({ projectId, size: 10, page: 1 })
+  getEnterpriseAsync({ projectId, size: 10, page: 0 })
 })
 </script>
 
