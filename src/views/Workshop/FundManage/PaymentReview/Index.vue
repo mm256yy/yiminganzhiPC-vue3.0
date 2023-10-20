@@ -57,7 +57,12 @@
     </div>
 
     <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
-    <ReviewForm :show="dialog" @close="onCloseReview" :actionType="actionType" />
+    <ReviewForm
+      :show="dialog"
+      @close="onCloseReview"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+    />
   </WorkContentWrap>
 </template>
 
@@ -73,7 +78,8 @@ import { useTable } from '@/hooks/web/useTable'
 import ReviewForm from './ReviewForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
+import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+// import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
 // import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
   // getDemographicListApi,
@@ -110,19 +116,21 @@ const dialog = ref<boolean>(false)
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getPaymentApplicationListApi
+  getListApi: getPaymentReviewListApi
   // delListApi: delPaymentApplicationByIdApi
 })
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  businessId: 1,
+  auditType: tabVal.value
 }
 
 getList()
 const tabChange = (data: string) => {
   tabVal.value = data
-  // setSearchParams({ type: MainType.PeasantHousehold, status: tabVal.value })
+  setSearchParams({ businessId: 1, auditType: tabVal.value })
 }
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()

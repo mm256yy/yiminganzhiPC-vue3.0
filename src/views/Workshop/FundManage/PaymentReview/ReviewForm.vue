@@ -11,29 +11,14 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请类型</div>
-          <div class="content">付款申请</div>
+          <div class="label">申请类型:</div>
+          <div class="content">{{ form.applyType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请名称</div>
-          <div class="content">专业项目合同款</div>
-        </div>
-      </ElCol>
-    </ElRow>
-
-    <ElRow>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">申请人</div>
-          <div class="content">王涛</div>
-        </div>
-      </ElCol>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款说明</div>
-          <div class="content">专业项目合同款说明</div>
+          <div class="label">申请名称:</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -41,29 +26,14 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">概算科目</div>
-          <div class="content">概算内</div>
+          <div class="label">申请人:</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">资金科目</div>
-          <div class="content">一级科目 二级科目 三级科目</div>
-        </div>
-      </ElCol>
-    </ElRow>
-
-    <ElRow>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款对象类型</div>
-          <div class="content">专业项目</div>
-        </div>
-      </ElCol>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款类型</div>
-          <div class="content">支付</div>
+          <div class="label">付款说明:</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -71,21 +41,51 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">收款方</div>
-          <div class="content">境岭镇</div>
+          <div class="label">概算科目:</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请总金额</div>
-          <div class="content">100,019.20 元</div>
+          <div class="label">资金科目:</div>
+          <div class="content">{{ form.funSubjectId }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
+
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款对象类型:</div>
+          <div class="content">{{ form.paymentType }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款类型:</div>
+          <div class="content">{{ form.payType }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
+
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">收款方:</div>
+          <div class="content">{{ form.payee }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请总金额:</div>
+          <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">付款对象</div>
+          <div class="label">付款对象:</div>
           <!-- <div class="content">境岭镇</div> -->
         </div>
       </ElCol>
@@ -121,6 +121,34 @@
         </div>
       </ElCol>
     </ElRow>
+    <div class="col-wrapper">
+      <div class="col-label-required"> 申请凭证： </div>
+      <div class="card-img-list">
+        <ElUpload
+          :list-type="'picture-card'"
+          action="/api/file/type"
+          :data="{
+            type: 'archives'
+          }"
+          accept=".jpg,.png,jpeg,.pdf"
+          :multiple="false"
+          :file-list="relocateVerifyPic"
+          :headers="headers"
+          :on-error="onError"
+          :on-success="uploadFileChange1"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile1"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <div class="card-img-box">
+              <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+              <div class="card-txt">点击上传</div>
+            </div>
+          </template>
+        </ElUpload>
+      </div>
+    </div>
     <ElRow v-if="actionType === 'edit'">
       <ElCol :span="24">
         <div class="col-wrap">
@@ -196,13 +224,13 @@ import {
   ElCol,
   ElTable,
   ElTableColumn,
-  // ElUpload,
+  ElUpload,
   ElInput,
   ElMessage,
   ElButton,
-  // UploadFile,
-  // UploadFiles,
-  // ElMessageBox,
+  UploadFile,
+  UploadFiles,
+  ElMessageBox,
   ElDatePicker
 } from 'element-plus'
 import { ref, watch } from 'vue'
@@ -214,7 +242,8 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 // import { useTable } from '@/hooks/web/useTable'
 // import { Table } from '@/components/Table'
 // import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
-// import { useAppStore } from '@/store/modules/app'
+import { getPaymentReviewListSSApi } from '@/api/fundManage/paymentApplication-service'
+import { useAppStore } from '@/store/modules/app'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 const size = ref<'default' | 'large' | 'small'>('default')
 
@@ -225,10 +254,10 @@ interface PropsType {
   row?: LandlordDtoType | null | undefined
 }
 
-// interface FileItemType {
-//   name: string
-//   url: string
-// }
+interface FileItemType {
+  name: string
+  url: string
+}
 
 // const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
@@ -237,71 +266,90 @@ const props = defineProps<PropsType>()
 // const householdPic = ref<FileItemType[]>([])
 // const otherPic = ref<FileItemType[]>([])
 const emit = defineEmits(['close', 'updateDistrict'])
-const dataInfo = ref<any>()
+// const dataInfo = ref<any>()
 const remark = ref<string>('') // 审核意见
 const btnLoading = ref<boolean>(false)
-// const imgUrl = ref<string>('')
-// const dialogVisible = ref<boolean>(false)
+const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
+const form = ref<any>({})
+const imgUrl = ref<string>('')
+const dialogVisible = ref<boolean>(false)
 // const { register, tableObject, methods } = useTable({
 //   getListApi: getLandlordListApiGird
 // })
 // const { setSearchParams } = methods
-// const appStore = useAppStore()
+const appStore = useAppStore()
 // const projectId = appStore.currentProjectId
 // tableObject.params = {
 //   projectId,
 //   status: 'implementation'
 // }
 // setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
-// const onError = () => {
-//   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
-// }
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      // 处理行政区划
+      form.value = { ...(val as {}) }
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+const onError = () => {
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+}
 
 // 处理函数
-// const handleFileList = (fileList: UploadFiles, type: string) => {
-//   let list: FileItemType[] = []
-//   if (fileList && fileList.length) {
-//     list = fileList
-//       .filter((fileItem) => fileItem.status === 'success')
-//       .map((fileItem) => {
-//         return {
-//           name: fileItem.name,
-//           url: (fileItem.response as any)?.data || fileItem.url
-//         }
-//       })
-//   }
-//   if (type === 'card-front') {
-//     cardFront.value = list
-//   } else if (type === 'card-end') {
-//     cardEnd.value = list
-//   } else if (type === 'householdPic') {
-//     householdPic.value = list
-//   } else if (type === 'other') {
-//     otherPic.value = list
-//   }
-// }
-// const headers = {
-//   'Project-Id': appStore.getCurrentProjectId,
-//   Authorization: appStore.getToken
-// }
+// 处理函数
+const handleFileList = (fileList: UploadFiles, type: string) => {
+  let list: FileItemType[] = []
+  if (fileList && fileList.length) {
+    list = fileList
+      .filter((fileItem) => fileItem.status === 'success')
+      .map((fileItem) => {
+        return {
+          name: fileItem.name,
+          url: (fileItem.response as any)?.data || fileItem.url
+        }
+      })
+  }
 
-// const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-//   handleFileList(fileList, 'householdPic')
-// }
+  if (type === 'relocateVerify') {
+    relocateVerifyPic.value = list
+  }
+}
+const headers = {
+  'Project-Id': appStore.getCurrentProjectId,
+  Authorization: appStore.getToken
+}
+const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
+}
 // 移除之前
-// const beforeRemove = (uploadFile: UploadFile) => {
-//   return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
-//     () => true,
-//     () => false
-//   )
-// }
+const beforeRemove = (uploadFile: UploadFile) => {
+  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
+    () => true,
+    () => false
+  )
+}
+
+// 文件移除
+const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
+}
+
 // const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
 //   handleFileList(fileList, 'householdPic')
 // }
-// const imgPreview = (uploadFile: UploadFile) => {
-//   imgUrl.value = uploadFile.url!
-//   dialogVisible.value = true
-// }
+const imgPreview = (uploadFile: UploadFile) => {
+  imgUrl.value = uploadFile.url!
+  dialogVisible.value = true
+}
 // const schema = reactive<CrudSchema[]>([
 //   {
 //     field: 'blurry',
@@ -505,21 +553,20 @@ const progressList = ref<any[]>([
 
 // const dictObj = computed(() => dictStore.getDictObj)
 
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      dataInfo.value = {
-        ...val
-      }
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
-
+// watch(
+//   () => props.row,
+//   (val) => {
+//     if (val) {
+//       dataInfo.value = {
+//         ...val
+//       }
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   console.log(row, column)
   console.log(rowIndex, columnIndex)
@@ -547,6 +594,91 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
         colspan: 0
       }
     }
+  } else if (columnIndex === 2) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 3) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 4) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 5) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 7) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
   }
 }
 
@@ -558,8 +690,23 @@ const onSubmit = async (status: string) => {
   //   status
   // })
   btnLoading.value = false
-  ElMessage.success('操作成功！')
-  onClose()
+  let params: any = {
+    ...form.value,
+    // paymentObjectList: [
+    //   {
+    //     contractId: 571923,
+    //     nodeIds: '571919,571920'
+    //   }
+    // ],
+    status: status,
+    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+  }
+  getPaymentReviewListSSApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    onClose()
+  })
+  // ElMessage.success('操作成功！')
+  // onClose()
 }
 
 // 关闭弹窗

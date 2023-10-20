@@ -2,6 +2,14 @@
   <WorkContentWrap>
     <!-- 居民户信息 -- 协议签订 -->
     <div class="table-wrap !py-12px !mt-0px">
+      <div class="flex items-center justify-between pb-12px">
+        <div> </div>
+        <ElSpace>
+          <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
+          <!-- <ElButton class="!bg-[#30A952] !border-[#30A952]" type="primary"> 协议打印 </ElButton> -->
+        </ElSpace>
+      </div>
+
       <div class="agm-wrap">
         <ElScrollbar ref="scrollRef" height="600px" @scroll="scroll">
           <div class="agm-cont">
@@ -384,16 +392,20 @@
         </div>
       </div>
     </div>
+
+    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="close" />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { ref, nextTick, onMounted, computed, reactive } from 'vue'
-import { ElTable, ElTableColumn, ElScrollbar } from 'element-plus'
+import { ElTable, ElTableColumn, ElScrollbar, ElSpace, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { getAgreementApi, getDistrictApi } from '@/api/immigrantImplement/agreement/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getSchemeBaseInfoApi } from '@/api/immigrantImplement/schemeBase/service'
+import OnDocumentation from './OnDocumentation.vue'
+
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
@@ -403,6 +415,7 @@ interface NavType {
   active: boolean
 }
 
+const dialog = ref<boolean>(false)
 const navList = ref<NavType[]>([
   {
     id: 0,
@@ -611,6 +624,15 @@ const listenScroll = (scrollTop) => {
 
 const scroll = ({ scrollTop }) => {
   listenScroll(scrollTop)
+}
+
+// 归档
+const onDocumentation = () => {
+  dialog.value = true
+}
+
+const close = () => {
+  dialog.value = false
 }
 </script>
 
