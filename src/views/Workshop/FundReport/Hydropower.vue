@@ -1,0 +1,8 @@
+<template>
+  <!-- 水电站 -->
+  <div>44</div>
+</template>
+
+<script lang="ts" setup></script>
+
+<style lang="less" scoped></style>
