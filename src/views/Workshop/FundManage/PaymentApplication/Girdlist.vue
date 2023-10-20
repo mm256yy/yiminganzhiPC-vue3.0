@@ -2,7 +2,7 @@
   <ElDialog
     title="付款对象选择"
     :model-value="props.show"
-    :width="1000"
+    :width="1200"
     @close="onClose"
     alignCenter
     appendToBody
@@ -45,6 +45,7 @@
           >
         </ElTableColumn>
       </ElTable>
+      <!-- <div></div> -->
       <div>合计金额:1000元</div>
     </div>
     <ElTable
@@ -55,14 +56,17 @@
       :border="true"
       v-if="props.type == false"
     >
-      <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
+      <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
       <ElTableColumn label="专项名称" align="center" prop="specialName" header-align="center" />
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
       <ElTableColumn label="合同编号" prop="contractNo" align="center" header-align="center" />
       <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
       <ElTableColumn label="合同金额(万元)" prop="amount" align="center" header-align="center" />
+      <ElTableColumn type="selection" width="55" align="center" header-align="center" />
       <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center" />
-      <ElTableColumn label="申请金额" prop="applyAmount" align="center" header-align="center" />
+      <ElTableColumn label="申请金额" align="center" header-align="center">
+        <ElInputNumber class="!w-200px" style="width: 50px"
+      /></ElTableColumn>
     </ElTable>
     <template #footer>
       <ElButton @click="onClose(false)">取消</ElButton>
@@ -243,7 +247,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
         colspan: 0
       }
     }
-  } else if (columnIndex === 7) {
+  } else if (columnIndex === 8) {
     if (rowIndex === 0) {
       return {
         rowspan: 3,

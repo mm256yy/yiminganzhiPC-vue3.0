@@ -18,7 +18,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请名称:</div>
-          <div class="content">专业项目合同款</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -27,13 +27,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请人:</div>
-          <div class="content">王涛</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款说明:</div>
-          <div class="content">专业项目合同款说明</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -42,13 +42,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">概算科目:</div>
-          <div class="content">概算内</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">资金科目:</div>
-          <div class="content">一级科目 二级科目 三级科目</div>
+          <div class="content">{{ form.funSubjectId }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -57,13 +57,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">专业项目</div>
+          <div class="content">{{ form.paymentType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款类型:</div>
-          <div class="content">支付</div>
+          <div class="content">{{ form.payType }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -72,13 +72,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">收款方:</div>
-          <div class="content">境岭镇</div>
+          <div class="content">{{ form.payee }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请总金额:</div>
-          <div class="content">100,019.20 元</div>
+          <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
@@ -242,6 +242,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 // import { useTable } from '@/hooks/web/useTable'
 // import { Table } from '@/components/Table'
 // import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
+import { getPaymentReviewListSSApi } from '@/api/fundManage/paymentApplication-service'
 import { useAppStore } from '@/store/modules/app'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 const size = ref<'default' | 'large' | 'small'>('default')
@@ -689,8 +690,23 @@ const onSubmit = async (status: string) => {
   //   status
   // })
   btnLoading.value = false
-  ElMessage.success('操作成功！')
-  onClose()
+  let params: any = {
+    ...form.value,
+    // paymentObjectList: [
+    //   {
+    //     contractId: 571923,
+    //     nodeIds: '571919,571920'
+    //   }
+    // ],
+    status: status,
+    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+  }
+  getPaymentReviewListSSApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    onClose()
+  })
+  // ElMessage.success('操作成功！')
+  // onClose()
 }
 
 // 关闭弹窗

@@ -48,11 +48,19 @@ export const getPaymentApplicationPpsList = (params?: any) => {
 export const PaymentApplicationByIdDetailApi = (params?: any): Promise<void> => {
   return request.get({ url: `/funPaymentRequest`, params })
 }
-// /* 获取付款审核列表数据*/
-// export const getPaymentReviewListApi = (params: PaymentApplicationDtoType) => {
-//   return request.get({ url: `/funPaymentRequest`, params })
-// }
-
+/* 获取付款审核列表数据*/
+export const getPaymentReviewListApi = (params: PaymentApplicationDtoType) => {
+  return request.get({ url: `/funPaymentRequest/auditList`, params })
+}
+/* 付款审核（审核或驳货）*/
+export const getPaymentReviewListSSApi = (
+  data: Partial<PaymentApplicationDtoType>
+): Promise<any> => {
+  return request.post({
+    url: '/funPaymentRequest/auditList',
+    data
+  })
+}
 // /**
 //  * 删除付款审核
 //  */
