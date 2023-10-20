@@ -295,8 +295,6 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
     },
     children: [
       {
-
-
         path: 'capitalPool',
         name: 'capitalPool',
         component: () => import('@/views/Workshop/FundManage/CapitalPool/Index.vue'),
