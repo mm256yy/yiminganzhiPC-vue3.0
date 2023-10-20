@@ -13,7 +13,41 @@ export const getPaymentApplicationListApi = (params?: PaymentApplicationDtoType)
 export const delPaymentApplicationByIdApi = (id: number): Promise<void> => {
   return request.post({ url: `/funPaymentRequest/delete/${id}` })
 }
+/**
+ * 新增付款申请
+ */
+export const addPaymentApplicationList = (
+  data: Partial<PaymentApplicationDtoType>
+): Promise<any> => {
+  return request.post({
+    url: '/funPaymentRequest/create',
+    data
+  })
+}
 
+/**
+ * 更新付款申请
+ */
+export const updatePaymentApplicationList = (
+  data: Partial<PaymentApplicationDtoType>
+): Promise<any> => {
+  return request.post({
+    url: '/funPaymentRequest/update',
+    data
+  })
+}
+/**
+ * 付款对象列表数据
+ */
+export const getPaymentApplicationPpsList = (params?: any) => {
+  return request.get({ url: `/funPaymentRequest/pps/list`, params })
+}
+/**
+ * 查询单个付款详情(包含流程接口)
+ */
+export const PaymentApplicationByIdDetailApi = (params?: any): Promise<void> => {
+  return request.get({ url: `/funPaymentRequest`, params })
+}
 // /* 获取付款审核列表数据*/
 // export const getPaymentReviewListApi = (params: PaymentApplicationDtoType) => {
 //   return request.get({ url: `/funPaymentRequest`, params })

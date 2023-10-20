@@ -52,6 +52,7 @@ import { useAppStore } from '@/store/modules/app'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import EditForm from '../../components/EditForm.vue'
 import CheckForm from '../../components/CheckForm.vue'
+import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
 
 interface PropsType {
   type: number // 类型
@@ -66,14 +67,9 @@ const districtTree = ref<any[]>([])
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
 
-const { register, tableObject, methods } = useTable()
-
-tableObject.tableList = [
-  {
-    index: '1',
-    name: '123'
-  }
-]
+const { register, tableObject, methods } = useTable({
+  getListApi: getPaymentApplicationListApi
+})
 
 const { setSearchParams } = methods
 
@@ -82,7 +78,7 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ name: '', code: '' })
+setSearchParams({ name: '' })
 
 const getdistrictTree = async () => {
   const list = await getVillageTreeApi(projectId)
@@ -126,7 +122,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false

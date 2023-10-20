@@ -8,12 +8,52 @@
     appendToBody
     :closeOnClickModal="false"
   >
+    <div v-if="props.type == true">
+      <ElButton @click="onClose" type="primary" style="float: right; margin-bottom: 10px"
+        >添加</ElButton
+      >
+      <ElTable
+        :data="tableData"
+        :span-method="objectSpanMethod"
+        style="width: 100%"
+        class="mb-20"
+        :border="true"
+      >
+        <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
+        <ElTableColumn label="支付对象" align="center" prop="specialName" header-align="center">
+          <ElSelect class="w-350px" v-model="payObject">
+            <ElOption
+              v-for="item in dictObj[393]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </ElSelect>
+        </ElTableColumn>
+        <ElTableColumn label="申请金额" prop="contractName" align="center" header-align="center">
+          <ElInputNumber class="!w-200px" />
+        </ElTableColumn>
+        <ElTableColumn
+          label="操作"
+          prop="contractName"
+          align="center"
+          header-align="center"
+          width="80"
+        >
+          <ElButton @click="del" type="primary" style="float: right; margin-bottom: 10px"
+            >删除</ElButton
+          >
+        </ElTableColumn>
+      </ElTable>
+      <div>合计金额:1000元</div>
+    </div>
     <ElTable
       :data="tableData"
       :span-method="objectSpanMethod"
       style="width: 100%"
       class="mb-20"
       :border="true"
+      v-if="props.type == false"
     >
       <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
       <ElTableColumn label="专项名称" align="center" prop="specialName" header-align="center" />
@@ -25,26 +65,46 @@
       <ElTableColumn label="申请金额" prop="applyAmount" align="center" header-align="center" />
     </ElTable>
     <template #footer>
-      <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onClose">确定</ElButton>
+      <ElButton @click="onClose(false)">取消</ElButton>
+      <ElButton type="primary" @click="addSubmit(false)">确定</ElButton>
     </template>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElTable, ElTableColumn, ElDialog, ElButton } from 'element-plus'
+import { ref, computed, onMounted } from 'vue'
+import {
+  ElTable,
+  ElTableColumn,
+  ElDialog,
+  ElButton,
+  ElSelect,
+  ElOption,
+  ElInputNumber
+} from 'element-plus'
 // import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getPaymentApplicationPpsList } from '@/api/fundManage/paymentApplication-service'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   show: any
+  type: any
 }
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
-
+const payObject = ref()
 // 关闭弹窗
-const onClose = (flag = false) => {
+const onClose = (flag: boolean) => {
   emit('close', flag)
+}
+const addSubmit = (flag: boolean) => {
+  emit('close', flag)
+}
+//删除
+const del = () => {
+  console.log('删除')
 }
 const tableData = ref<any[]>([
   {
@@ -107,6 +167,91 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
     if (rowIndex === 0) {
       return {
         rowspan: 4,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 2) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 3) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 4) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 5) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 7) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
         colspan: 1
       }
     } else {
@@ -215,7 +360,16 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
-
+const ppsList = () => {
+  getPaymentApplicationPpsList().then((res: any) => {
+    if (res) {
+      // tableData.value = res
+    }
+  })
+}
+onMounted(() => {
+  ppsList()
+})
 // const getParamsKey = (key: string) => {
 //   const map = {
 //     Country: 'areaCode',

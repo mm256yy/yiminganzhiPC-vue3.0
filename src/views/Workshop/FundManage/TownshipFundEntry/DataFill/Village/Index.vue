@@ -65,10 +65,11 @@ import { useTable } from '@/hooks/web/useTable'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useAppStore } from '@/store/modules/app'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
 import EditForm from '../../components/EditForm.vue'
 import CheckForm from '../../components/CheckForm.vue'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { filterViewDoorNo } from '@/utils/index'
+import { getFundDistributionListApi } from '@/api/fundManage/townshipFundEntry-service'
 
 interface PropsType {
   type: number // 类型
@@ -83,21 +84,13 @@ const districtTree = ref<any[]>([])
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
 
-const { register, tableObject, methods } = useTable()
-
-tableObject.tableList = [
-  {
-    index: '1',
-    name: '123'
-  }
-]
+const { register, tableObject, methods } = useTable({
+  getListApi: getFundDistributionListApi
+})
 
 const { setSearchParams } = methods
 
-// 需要重置一次params
-tableObject.params = {
-  projectId
-}
+setSearchParams({ name: '', type: 'Village' })
 
 setSearchParams({ name: '', code: '' })
 

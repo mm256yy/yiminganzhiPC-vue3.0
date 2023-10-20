@@ -40,7 +40,9 @@
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
-
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
         <!-- <template #action="{ row }">
             <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
           </template> -->
@@ -55,7 +57,12 @@
     </div>
 
     <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
-    <ReviewForm :show="dialog" @close="onCloseReview" :actionType="actionType" />
+    <ReviewForm
+      :show="dialog"
+      @close="onCloseReview"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+    />
   </WorkContentWrap>
 </template>
 
@@ -71,11 +78,11 @@ import { useTable } from '@/hooks/web/useTable'
 import ReviewForm from './ReviewForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
+import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
 // import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
-  getDemographicListApi,
-  delDemographicByIdApi,
+  // getDemographicListApi,
+  // delDemographicByIdApi,
   getDemographicHeadApi,
   getExcelList
 } from '@/api/workshop/population/service'
@@ -108,8 +115,8 @@ const dialog = ref<boolean>(false)
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getPaymentApplicationListApi
+  // delListApi: delPaymentApplicationByIdApi
 })
 const { getList, setSearchParams } = methods
 
@@ -331,18 +338,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'payType',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[384]
       }
     },
     table: {
@@ -380,7 +382,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'payType',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: false
@@ -410,7 +412,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeTxt',
     label: '申请类别',
     search: {
       show: false
