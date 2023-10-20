@@ -44,6 +44,16 @@ pnpm run dev
 pnpm run build:pro
 ```
 
+## VsCode 插件推荐
+
+- Eslint
+- Git History
+- TypeScript Vue Plugin
+- JavaScript and TypeScipt Nightly
+- Volar
+- Stylelint
+- Prettier
+
 ## Git 贡献提交规范
 
 该项目启用了强制的 git 提交规范，提交时请遵守，具体可参考 [这里](https://zdwp.coding.net/p/dev-doc/d/doc/git/tree/master/dev-corp/commit.md)
