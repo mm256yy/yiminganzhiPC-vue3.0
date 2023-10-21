@@ -108,3 +108,19 @@ export const postGrant = (data: Partial<FunPayType>): Promise<any> => {
     data
   })
 }
+//个人房屋 /api/
+export const getIndividualHouseholdAppendant = (
+  params?: any
+): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/resultForms/individualHouseholdAppendant',
+    params
+  })
+}
+// 个人果树
+export const getIndividualHouseholdTree = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/resultForms/individualHouseholdTree',
+    params
+  })
+}

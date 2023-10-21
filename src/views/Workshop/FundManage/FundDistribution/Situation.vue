@@ -16,7 +16,7 @@
 
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-header-left">
+        <div class="table-header-left max-header">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款申请记录</span>
 
           <div class="text">
@@ -416,5 +416,9 @@ const onEditFormClose = (flag: boolean) => {
 
 .numFont {
   font-size: 14px;
+}
+
+.max-header {
+  width: 1000px;
 }
 </style>

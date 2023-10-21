@@ -25,7 +25,12 @@ import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getEnterpriseAppendant, getEnterpriseTree } from '@/api/fundManage/fundPayment-service'
+import {
+  getEnterpriseAppendant,
+  getEnterpriseTree,
+  getIndividualHouseholdAppendant,
+  getIndividualHouseholdTree
+} from '@/api/fundManage/fundPayment-service'
 
 // interface SpanMethodProps {
 //   row: any
@@ -374,13 +379,24 @@ const commonTableItemSchema = {
 // const { allSchemas } = useCrudSchemas(schema)
 onMounted(() => {
   let a = 1
+  let b = 2
   if (a == 1) {
-    getEnterpriseAppendants()
-  } else getEnterpriseTrees()
+    if (b == 1) {
+      getEnterpriseAppendants(getEnterpriseAppendant())
+    } else {
+      getEnterpriseAppendants(getIndividualHouseholdAppendant())
+    }
+  } else {
+    if (b == 1) {
+      getEnterpriseTrees(getEnterpriseTree())
+    } else {
+      getEnterpriseTrees(getIndividualHouseholdTree())
+    }
+  }
 })
-let getEnterpriseAppendants = async () => {
+let getEnterpriseAppendants = async (e) => {
   //附属物接口处理
-  let data: any = await getEnterpriseAppendant()
+  let data: any = await e
   let clome: any = [
     {
       width: 80,
@@ -437,8 +453,8 @@ let getEnterpriseAppendants = async () => {
     return pre
   }, [])
 }
-let getEnterpriseTrees = async () => {
-  let data: any = await getEnterpriseTree()
+let getEnterpriseTrees = async (e) => {
+  let data: any = await e
   let clome: any = [
     {
       width: 80,
