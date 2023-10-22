@@ -57,7 +57,7 @@ export const getPaymentReviewListSSApi = (
   data: Partial<PaymentApplicationDtoType>
 ): Promise<any> => {
   return request.post({
-    url: '/funPaymentRequest/auditList',
+    url: '/funPaymentRequest/audit',
     data
   })
 }

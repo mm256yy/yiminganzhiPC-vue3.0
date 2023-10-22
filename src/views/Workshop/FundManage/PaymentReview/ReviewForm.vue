@@ -117,7 +117,12 @@
         <div class="col-wrap">
           <div class="label">付款日期</div>
           <!-- <div class="content">境岭镇</div> -->
-          <ElDatePicker v-model="value1" type="date" placeholder="请选择日期" :size="size" />
+          <ElDatePicker
+            v-model="form.paymentTime"
+            type="date"
+            placeholder="请选择日期"
+            :size="size"
+          />
         </div>
       </ElCol>
     </ElRow>
@@ -155,7 +160,7 @@
           <div class="label">审核意见</div>
           <div class="content">
             <ElInput
-              v-model="remark"
+              v-model="form.remark"
               :rows="4"
               type="textarea"
               class="!w-600px"
@@ -247,7 +252,7 @@ import { useAppStore } from '@/store/modules/app'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 const size = ref<'default' | 'large' | 'small'>('default')
 
-const value1 = ref('')
+// const value1 = ref('')
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   show: any
@@ -267,7 +272,7 @@ const props = defineProps<PropsType>()
 // const otherPic = ref<FileItemType[]>([])
 const emit = defineEmits(['close', 'updateDistrict'])
 // const dataInfo = ref<any>()
-const remark = ref<string>('') // 审核意见
+// const remark = ref<string>('') // 审核意见
 const btnLoading = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 const form = ref<any>({})
@@ -691,15 +696,17 @@ const onSubmit = async (status: string) => {
   // })
   btnLoading.value = false
   let params: any = {
-    ...form.value,
+    // ...form.value,
     // paymentObjectList: [
     //   {
     //     contractId: 571923,
     //     nodeIds: '571919,571920'
     //   }
     // ],
+    businessId: form.value.id,
     status: status,
-    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+    type: 1 //付款申请
+    // receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
   }
   getPaymentReviewListSSApi(params).then(() => {
     ElMessage.success('操作成功！')
