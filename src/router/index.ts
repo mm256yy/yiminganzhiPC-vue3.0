@@ -163,12 +163,22 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           {
             path: 'proHouseReport',
             name: 'proHouseReport',
-            component: () => import('@/views/Workshop/PlacementReport/ProHouseReport.vue'),
+            component: () => import('@/views/Workshop/PlacementReport/proHouseReport.vue'),
             meta: {
               title: '安置意愿-生产安置意愿报表',
               icon: 'ant-design:home-outlined'
             }
           },
+          {
+            path: 'moveHouseReport',
+            name: 'moveHouseReport',
+            component: () => import('@/views/Workshop/PlacementReport/MoveHouseReport.vue'),
+            meta: {
+              title: '资金管理-搬迁安置意愿报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+
           {
             path: 'hydrographicStation',
             name: 'hydrographicStation',
@@ -259,6 +269,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             component: () => import('@/views/Workshop/AchievementsReport/ReligiousAppendage.vue'),
             meta: {
               title: '实物成果-宗教设施房屋及其附属建筑物',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'residentRegion',
+            name: 'residentRegion',
+            component: () => import('@/views/Workshop/ScheduleReport/ResidentRegion.vue'),
+            meta: {
+              title: '进度管理-居民户按区域',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'residentWork',
+            name: 'residentWork',
+            component: () => import('@/views/Workshop/ScheduleReport/ResidentWork.vue'),
+            meta: {
+              title: '进度管理-居民户按工作分组',
               icon: 'ant-design:home-outlined'
             }
           }
