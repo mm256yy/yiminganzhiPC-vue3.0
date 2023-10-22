@@ -305,6 +305,9 @@ const getList = () => {
     size: 1000
   }
   getLandBasicInfoListApi(params).then((res) => {
+    res.content.forEach((item) => {
+      item.valuationAmount = item.valuationPrice * item.landArea
+    })
     tableData.value = res.content
   })
 }
