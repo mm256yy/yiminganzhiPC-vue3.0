@@ -446,6 +446,7 @@ import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
 import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
+import { deepClone } from '@/utils'
 
 const titleMsg = (type: string, index: number) => {
   if (type == 'PeasantHousehold') {
@@ -490,6 +491,8 @@ const getFillingStatus = () => {
 
 // 填报状态判断
 const getStatus = (data: any) => {
+  const tabsListCopy = deepClone(tabsList.value)
+  const subTabsListCopy = deepClone(subTabsList.value)
   if (type === 'PeasantHousehold') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.householdPicStatus // 居民户信息总状态
@@ -517,87 +520,87 @@ const getStatus = (data: any) => {
 
     // 第一层 Tab
     if (data.householdPicStatus === '1') {
-      tabsList.value[0].active = true // 居民户信息
+      tabsListCopy[0].active = true // 居民户信息
     }
     if (data.qualificationStatus === '1') {
-      tabsList.value[1].active = true // 资格认定
+      tabsListCopy[1].active = true // 资格认定
     }
     if (data.estimateeStatus === '1') {
-      tabsList.value[2].active = true // 资产评估
+      tabsListCopy[2].active = true // 资产评估
     }
     if (data.arrangementStatus === '1') {
-      tabsList.value[4].active = true // 安置确认
+      tabsListCopy[4].active = true // 安置确认
     }
     if (data.chooseStatus === '1') {
-      tabsList.value[5].active = true // 择址确认
+      tabsListCopy[5].active = true // 择址确认
     }
     if (data.agreementStatus === '1') {
-      tabsList.value[6].active = true // 协议签订
+      tabsListCopy[6].active = true // 协议签订
     }
     if (data.cardStatus === '1') {
-      tabsList.value[7].active = true // 移民建卡
+      tabsListCopy[7].active = true // 移民建卡
     }
     if (data.excessSoarStatus === '1') {
-      tabsList.value[8].active = true // 腾空过渡
+      tabsListCopy[8].active = true // 腾空过渡
     }
     if (data.relocateArrangementAllStatus === '1') {
-      tabsList.value[9].active = true // 搬迁安置
+      tabsListCopy[9].active = true // 搬迁安置
     }
     if (data.productionArrangementAllStatus === '1') {
-      tabsList.value[10].active = true // 生产安置
+      tabsListCopy[10].active = true // 生产安置
     }
     if (data.proceduresStatus === '1') {
-      tabsList.value[11].active = true // 相关手续
+      tabsListCopy[11].active = true // 相关手续
     }
 
     // 第二层 Tab
     if (data.populationStatus === '1') {
-      subTabsList.value[0].active = true // 人口核定
+      subTabsListCopy[0].active = true // 人口核定
     }
     if (data.propertyStatus === '1') {
-      subTabsList.value[1].active = true // 房屋产权
+      subTabsListCopy[1].active = true // 房屋产权
     }
     if (data.appendageStatus === '1') {
-      subTabsList.value[2].active = true // 房屋附属物评估报告
+      subTabsListCopy[2].active = true // 房屋附属物评估报告
     }
     if (data.landStatus === '1') {
-      subTabsList.value[3].active = true // 土地附着物评估报告
+      subTabsListCopy[3].active = true // 土地附着物评估报告
     }
     if (data.relocateArrangementStatus === '1') {
-      subTabsList.value[4].active = true // 搬迁安置
+      subTabsListCopy[4].active = true // 搬迁安置
     }
     if (data.productionArrangementStatus === '1') {
-      subTabsList.value[5].active = true // 生产安置
+      subTabsListCopy[5].active = true // 生产安置
     }
     if (data.graveArrangementStatus === '1') {
-      subTabsList.value[6].active = true // 坟墓确认
+      subTabsListCopy[6].active = true // 坟墓确认
     }
     if (data.landUseStatus === '1') {
-      subTabsList.value[7].active = true // 生产用地
+      subTabsListCopy[7].active = true // 生产用地
     }
     if (data.chooseHouseStatus === '1') {
-      subTabsList.value[8].active = true // 选房择址
+      subTabsListCopy[8].active = true // 选房择址
     }
     if (data.chooseGraveStatus === '1') {
-      subTabsList.value[9].active = true // 坟墓择址
+      subTabsListCopy[9].active = true // 坟墓择址
     }
     if (data.houseSoarStatus === '1') {
-      subTabsList.value[10].active = true // 房屋腾空
+      subTabsListCopy[10].active = true // 房屋腾空
     }
     if (data.landSoarStatus === '1') {
-      subTabsList.value[11].active = true // 土地腾让
+      subTabsListCopy[11].active = true // 土地腾让
     }
     if (data.excessStatus === '1') {
-      subTabsList.value[12].active = true // 过渡安置
+      subTabsListCopy[12].active = true // 过渡安置
     }
     if (data.agricultureArrangementStatus === '1') {
-      subTabsList.value[13].active = true // 农业安置
+      subTabsListCopy[13].active = true // 农业安置
     }
     if (data.retirementStatus === '1') {
-      subTabsList.value[14].active = true // 养老保险
+      subTabsListCopy[14].active = true // 养老保险
     }
     if (data.selfEmploymentStatus === '1') {
-      subTabsList.value[15].active = true // 自谋职业
+      subTabsListCopy[15].active = true // 自谋职业
     }
   } else if (type === 'Enterprise') {
     if (tabCurrentId.value === 0) {
@@ -614,36 +617,36 @@ const getStatus = (data: any) => {
 
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
-      tabsList.value[0].active = true // 资产评估
+      tabsListCopy[0].active = true // 资产评估
     }
     if (data.cardStatus === '1') {
-      tabsList.value[1].active = true // 企业建卡
+      tabsListCopy[1].active = true // 企业建卡
     }
     if (data.excessSoarStatus === '1') {
-      tabsList.value[2].active = true // 腾空
+      tabsListCopy[2].active = true // 腾空
     }
     if (data.agreementStatus === '1') {
-      tabsList.value[3].active = true // 动迁协议
+      tabsListCopy[3].active = true // 动迁协议
     }
     if (data.proceduresStatus === '1') {
-      tabsList.value[4].active = true // 相关手续
+      tabsListCopy[4].active = true // 相关手续
     }
 
     // 第二层 Tab
     if (data.appendageStatus === '1') {
-      subTabsList.value[0].active = true // 房屋附属物评估报告
+      subTabsListCopy[0].active = true // 房屋附属物评估报告
     }
     if (data.landStatus === '1') {
-      subTabsList.value[1].active = true // 土地附着物评估报告
+      subTabsListCopy[1].active = true // 土地附着物评估报告
     }
     if (data.deviceStatus === '1') {
-      subTabsList.value[2].active = true // 设施设备评估报告
+      subTabsListCopy[2].active = true // 设施设备评估报告
     }
     if (data.houseSoarStatus === '1') {
-      subTabsList.value[3].active = true // 房屋腾空
+      subTabsListCopy[3].active = true // 房屋腾空
     }
     if (data.landSoarStatus === '1') {
-      subTabsList.value[4].active = true // 土地腾让
+      subTabsListCopy[4].active = true // 土地腾让
     }
   } else if (type === 'IndividualB') {
     if (tabCurrentId.value === 0) {
@@ -660,36 +663,36 @@ const getStatus = (data: any) => {
 
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
-      tabsList.value[0].active = true
+      tabsListCopy[0].active = true
     }
     if (data.cardStatus === '1') {
-      tabsList.value[1].active = true
+      tabsListCopy[1].active = true
     }
     if (data.excessSoarStatus === '1') {
-      tabsList.value[2].active = true
+      tabsListCopy[2].active = true
     }
     if (data.agreementStatus === '1') {
-      tabsList.value[3].active = true
+      tabsListCopy[3].active = true
     }
     if (data.proceduresStatus === '1') {
-      tabsList.value[4].active = true
+      tabsListCopy[4].active = true
     }
 
     // 第二层 Tab
     if (data.appendageStatus === '1') {
-      subTabsList.value[0].active = true // 房屋附属物评估报告
+      subTabsListCopy[0].active = true // 房屋附属物评估报告
     }
     if (data.landStatus === '1') {
-      subTabsList.value[1].active = true // 土地附着物评估报告
+      subTabsListCopy[1].active = true // 土地附着物评估报告
     }
     if (data.deviceStatus === '1') {
-      subTabsList.value[2].active = true // 设施设备评估报告
+      subTabsListCopy[2].active = true // 设施设备评估报告
     }
     if (data.houseSoarStatus === '1') {
-      subTabsList.value[3].active = true // 房屋腾空
+      subTabsListCopy[3].active = true // 房屋腾空
     }
     if (data.landSoarStatus === '1') {
-      subTabsList.value[4].active = true // 土地腾让
+      subTabsListCopy[4].active = true // 土地腾让
     }
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
@@ -704,35 +707,39 @@ const getStatus = (data: any) => {
 
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
-      tabsList.value[0].active = true // 资产评估
+      tabsListCopy[0].active = true // 资产评估
     }
     if (data.excessSoarStatus === '1') {
-      tabsList.value[1].active = true // 腾空
+      tabsListCopy[1].active = true // 腾空
     }
     if (data.excessSoarStatus === '1') {
-      tabsList.value[2].active = true // 协议签订
+      tabsListCopy[2].active = true // 协议签订
     }
     if (data.disposalMeasuresStatus === '1') {
-      tabsList.value[3].active = true // 集体资产处置方法
+      tabsListCopy[3].active = true // 集体资产处置方法
     }
 
     // 第二层 Tab
     if (data.appendageStatus === '1') {
-      subTabsList.value[0].active = true // 房屋附属物评估报告
+      subTabsListCopy[0].active = true // 房屋附属物评估报告
     }
     if (data.landStatus === '1') {
-      subTabsList.value[1].active = true // 土地附着物评估报告
+      subTabsListCopy[1].active = true // 土地附着物评估报告
     }
     if (data.specialStatus === '1') {
-      subTabsList.value[2].active = true // 小型专项及农副业设施评估报告
+      subTabsListCopy[2].active = true // 小型专项及农副业设施评估报告
     }
     if (data.houseSoarStatus === '1') {
-      subTabsList.value[3].active = true // 动迁安置
+      subTabsListCopy[3].active = true // 动迁安置
     }
     if (data.landSoarStatus === '1') {
-      subTabsList.value[4].active = true // 过渡安置
+      subTabsListCopy[4].active = true // 过渡安置
     }
   }
+
+  // 触发重新渲染
+  subTabsList.value = subTabsListCopy
+  tabsList.value = tabsListCopy
 }
 
 // 农户详情
@@ -743,8 +750,6 @@ const getLandlordInfo = () => {
   })
   getFillingStatus()
 }
-
-getLandlordInfo()
 
 const onTabClick = (tabItem) => {
   // if (tabCurrentId.value === tabItem.id) {
@@ -777,6 +782,8 @@ onMounted(() => {
     tabsList.value = VillageTabs
     subTabsList.value = VillageSubTabs
   }
+
+  getLandlordInfo()
 })
 
 const onBack = () => {

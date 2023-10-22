@@ -1,137 +1,115 @@
 <template>
   <div style="margin-bottom: 30px">
     <div class="smart_report">
-      <div class="card" v-for="(item, index) of cardList" :key="index">
+      <div class="card" v-for="(item, index) of navList" :key="index">
         <div class="header">
           <div class="left"></div>
           <b class="label">{{ item.header }}</b>
         </div>
-        <div class="content">
+        <div class="children">
           <div class="item" v-for="(twoItem, twoIndex) of item.body" :key="twoIndex">
-            <div class="left"> {{ twoItem.label }}:</div>
+            <div class="left" v-if="twoItem.label !== 'project'"> {{ twoItem.label }}:</div>
+            <div class="left" v-else></div>
             <div class="right">
               <div class="right_top">
                 <div
                   :class="{
                     right_item: true,
                     right_tabs: twoItem.tabs,
-                    tabs_click: threeItem.click && twoItem.tabs,
-                    no_tabs_choose: threeItem.click && !twoItem.tabs
+                    tabs_click: threeItem.active && twoItem.tabs,
+                    active: threeItem.active && !twoItem.tabs
                   }"
-                  v-for="(threeItem, threeIndex) of twoItem.content"
+                  v-for="(threeItem, threeIndex) of twoItem.children"
                   :key="threeIndex"
                   @click="chooseItem(threeItem, twoItem)"
                 >
                   <span>{{ threeItem.label }}</span>
                   <template v-if="twoItem.tabs">
-                    <Icon icon="formkit:down" width="16" height="16" v-show="true" />
-                    <Icon icon="formkit:up" width="16" height="16" v-show="false" />
+                    <Icon icon="formkit:up" width="16" height="16" v-if="threeItem.active" />
+                    <Icon icon="formkit:down" width="16" height="16" v-else />
                   </template>
                 </div>
               </div>
-              <div class="right_bottom" v-show="twoItem.openTabs">111</div>
+              <div class="right_bottom" v-show="twoItem.openTabs">
+                <div
+                  :class="{
+                    right_item: true,
+                    active: deepItem.active
+                  }"
+                  v-for="(deepItem, deepIndex) of deepChildren"
+                  :key="deepIndex"
+                  @click="deepChooseItem(deepItem)"
+                >
+                  <span>{{ deepItem.label }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 企业基本情况 -->
-    <ElTable :data="tableData1" style="width: 100%" :span-method="objectSpanMethod1">
-      <ElTableColumn prop="test" label="序号" />
-      <ElTableColumn prop="test" label="行政村" />
-      <ElTableColumn prop="test" label="名称" />
-      <ElTableColumn prop="test" label="法人代表" />
-      <ElTableColumn prop="test" label="工商证" />
-      <ElTableColumn prop="test" label="用地性质" />
-      <ElTableColumn prop="test" label="所属行业" />
-      <ElTableColumn prop="test" label="主要产品" />
-      <ElTableColumn prop="test" label="年产值（万元）" />
-      <ElTableColumn prop="test" label="年利润（万元）" />
-      <ElTableColumn prop="test" label="从业人员（人）" />
-    </ElTable>
-    <!-- 企业房屋及其附属物 -->
-    <ElTable :data="tableData2" style="width: 100%" :span-method="objectSpanMethod2" show-summary>
-      <ElTableColumn prop="test" label="行政村" />
-      <ElTableColumn prop="test" label="名称" />
-      <ElTableColumn prop="test" label="房屋面积">
-        <ElTableColumn prop="test" label="砖混" />
-        <ElTableColumn prop="test" label="砖木" />
-        <ElTableColumn prop="test" label="简易" />
-        <ElTableColumn prop="test" label="小计" />
-      </ElTableColumn>
-      <ElTableColumn prop="test" label="附属物">
-        <ElTableColumn prop="test" label="有线电视（处）" />
-        <ElTableColumn prop="test" label="网络宽带（处）" />
-        <ElTableColumn prop="test" label="空调（处）" />
-        <ElTableColumn prop="test" label="动力电表（只）" />
-        <ElTableColumn prop="test" label="太阳能热水器（只）" />
-        <ElTableColumn prop="test" label="台阶（㎡）" />
-        <ElTableColumn prop="test" label="花坛（㎡）" />
-        <ElTableColumn prop="test" label="洗衣台（㎡）" />
-        <ElTableColumn prop="test" label="水井（口）" />
-        <ElTableColumn prop="test" label="蓄水池（㎡）" />
-        <ElTableColumn prop="test" label="柴灶（座）" />
-        <ElTableColumn prop="test" label="水塔（个）" />
-        <ElTableColumn prop="test" label="棚（㎡）" />
-        <ElTableColumn prop="test" label="地坪（㎡）" />
-      </ElTableColumn>
-    </ElTable>
-    <!-- 企业零星林（果）木 -->
-    <ElTable :data="tableData3" style="width: 100%" :span-method="objectSpanMethod3" show-summary>
-      <ElTableColumn prop="test" label="序号" />
-      <ElTableColumn prop="test" label="行政村" />
-      <ElTableColumn prop="test" label="名称" />
-      <ElTableColumn prop="test" label="零星果木">
-        <ElTableColumn prop="test" label="景观树（株）" />
-      </ElTableColumn>
-    </ElTable>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-// import { ElTable, ElTableColumn } from 'element-plus'
-// import ScheduleReport from '../ScheduleReport/template.vue'
+import { useRouter } from 'vue-router'
+import { reactive, ref } from 'vue'
 
-let cardList = reactive<any>([
+const router = useRouter()
+const deepChildren = ref<any[]>([])
+
+/**
+ * 以下为路由配置
+ * value 即为路由名
+ * 所有路由都为管理系统配置产生
+ * 此处的路由名 对应 配置的路由名
+ */
+let navList = reactive<any>([
   {
     header: '实物成果',
     body: [
       {
         label: '居民户',
-        content: [
+        children: [
           {
             label: '人口房屋',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '附属物',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '零星林(果)木',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '实物成果汇总',
-            click: false
+            value: '',
+            active: false
           }
         ]
       },
       {
         label: '村集体',
-        content: [
+        children: [
           {
             label: '房屋/附属物/零星林(果)木',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '土地',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '坟墓',
-            click: false
+            value: '',
+            active: false
           }
         ]
       },
@@ -139,68 +117,77 @@ let cardList = reactive<any>([
         label: '企(事)业单位',
         openTabs: false,
         tabs: true,
-        content: [
+        children: [
           {
             label: '企业',
-            click: false,
+            active: false,
             openTabs: false,
-            content: [
+            children: [
               {
                 label: '基本情况',
-                click: false
+                value: '',
+                active: false
               },
               {
                 label: '房屋及其附属物',
-                click: false
+                value: '',
+                active: false
               },
               {
                 label: '零星林(果)木',
-                click: false
+                value: '',
+                active: false
               }
             ]
           },
           {
             label: '个体户',
-            click: false,
+            active: false,
             openTabs: false,
-            content: [
+            children: [
               {
                 label: '基本情况',
-                click: false
+                value: '',
+                active: false
               },
               {
                 label: '附属物',
-                click: false
+                value: '',
+                active: false
               }
             ]
           },
           {
             label: '水电站',
-            click: false,
+            active: false,
             openTabs: false,
-            content: [
+            children: [
               {
                 label: '基本情况',
-                click: false
+                value: 'waterbasicreport',
+                active: false
               },
               {
                 label: '房屋',
-                click: false
+                value: 'waterhousereport',
+                active: false
               },
               {
                 label: '附属物',
-                click: false
+                value: 'waterappendreport',
+                active: false
               }
             ]
           },
           {
             label: '探矿权',
-            click: false,
+            active: false,
             openTabs: false,
-            content: [
+            children: [
               {
                 label: '探矿权汇总表',
-                click: false
+                value: '',
+                active: false
               }
             ]
           }
@@ -208,49 +195,132 @@ let cardList = reactive<any>([
       },
       {
         label: '专业项目',
-        content: [
+        children: [
           {
             label: '交通工程设施',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '输变电工程设施',
-            click: false
+            value: '',
+            active: false
           },
           {
             label: '文物古迹',
-            click: false
-          },
+            value: '',
+            active: false
+          }
+        ]
+      },
+      {
+        label: 'project',
+        openTabs: false,
+        tabs: true,
+        children: [
           {
             label: '电信工程',
-            content: [{}, '房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '设施汇总',
+                value: 'telecomfacilitreport',
+                active: false
+              },
+              {
+                label: '房屋及其附属物设备汇总',
+                value: 'telecomhousereport',
+                active: false
+              }
+            ]
           },
           {
             label: '移动工程',
-            content: ['设施汇总', '房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '设施汇总',
+                value: '',
+                active: false
+              },
+              {
+                label: '房屋及其附属物设备汇总',
+                value: '',
+                active: false
+              }
+            ]
           },
           {
             label: '联通工程',
-            content: ['设施汇总', '房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '设施汇总',
+                value: 'uniconfacilityreport',
+                active: false
+              },
+              {
+                label: '房屋及其附属物设备汇总',
+                value: 'unicomappendreport',
+                active: false
+              }
+            ]
           },
           {
             label: '铁塔工程',
-            content: ['设施汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '设施汇总',
+                value: '',
+                active: false
+              }
+            ]
           },
           {
             label: '广播电视工程',
-            content: ['设施汇总', '房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '设施汇总',
+                value: 'broadeacilityreport',
+                active: false
+              },
+              {
+                label: '房屋及其附属物设备汇总',
+                value: 'broadappendreport',
+                active: false
+              }
+            ]
           },
           {
             label: '水文站',
-            content: ['房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '房屋及其附属物设备汇总',
+                value: '',
+                active: false
+              }
+            ]
           },
           {
             label: '宗教',
-            content: ['基本情况', '房屋及其附属物设备汇总']
+            openTabs: false,
+            children: [
+              {
+                label: '基本情况',
+                value: '',
+                active: false
+              },
+              {
+                label: '房屋及其附属物设备汇总',
+                value: '',
+                active: false
+              }
+            ]
           }
-        ],
-        showNum: 3
+        ]
       }
     ]
   },
@@ -259,38 +329,88 @@ let cardList = reactive<any>([
     body: [
       {
         label: '居民户',
-        content: [
+        children: [
           {
-            label: '居民户'
+            label: '居民户',
+            value: '',
+            active: false
           },
           {
-            label: '资金使用详细'
+            label: '资金使用详细',
+            value: '',
+            active: false
           }
-        ],
-        showNum: 2
+        ]
       },
       {
         label: '村集体',
-        content: [{ label: '村集体' }],
-        showNum: 1
+        children: [
+          {
+            label: '村集体',
+            value: '',
+            active: false
+          }
+        ]
       },
       {
         label: '企(事)业单位',
-        content: [{ label: '企业' }, { label: '个体户' }, { label: '水电站' }],
-        showNum: 3
+        children: [
+          {
+            label: '企业',
+            value: '',
+            active: false
+          },
+          {
+            label: '个体户',
+            value: '',
+            active: false
+          },
+          {
+            label: '水电站',
+            value: '',
+            active: false
+          }
+        ]
       },
       {
         label: '专业项目',
-        content: [
-          { label: '电信工程' },
-          { label: '移动工程' },
-          { label: '联通工程' },
-          { label: '铁打工程' },
-          { label: '广播电视工程' },
-          { label: '水文站' },
-          { label: '宗教' }
-        ],
-        showNum: 7
+        children: [
+          {
+            label: '电信工程',
+            value: '',
+            active: false
+          },
+          {
+            label: '移动工程',
+            value: '',
+            active: false
+          },
+          {
+            label: '联通工程',
+            value: '',
+            active: false
+          },
+          {
+            label: '铁打工程',
+            value: '',
+            active: false
+          },
+          {
+            label: '广播电视工程',
+            value: '',
+            active: false
+          },
+          {
+            label: '水文站',
+            value: '',
+            active: false
+          },
+          {
+            label: '宗教',
+            value: '',
+            active: false
+          }
+        ]
       }
     ]
   },
@@ -299,8 +419,18 @@ let cardList = reactive<any>([
     body: [
       {
         label: '安置意愿',
-        content: [{ label: '生产安置意愿' }, { label: '搬迁安置意愿' }],
-        showNum: 2
+        children: [
+          {
+            label: '生产安置意愿',
+            value: '',
+            active: false
+          },
+          {
+            label: '搬迁安置意愿',
+            value: '',
+            active: false
+          }
+        ]
       }
     ]
   },
@@ -309,153 +439,120 @@ let cardList = reactive<any>([
     body: [
       {
         label: '居民户',
-        content: [{ label: '居民户按区域' }, { label: '资金使用详细' }],
-        showNum: 2
+        children: [
+          {
+            label: '居民户按区域',
+            value: '',
+            active: false
+          },
+          {
+            label: '资金使用详细',
+            value: '',
+            active: false
+          }
+        ]
       },
       {
         label: '企(事)业单位',
-        content: [{ label: '企业' }, { label: '个体户按区域' }, { label: '个体户按工作区' }],
-        showNum: 3
+        children: [
+          {
+            label: '企业',
+            value: 'enterprisereport',
+            active: false
+          },
+          {
+            label: '个体户按区域',
+            value: 'individualregionreport',
+            active: false
+          },
+          {
+            label: '个体户按工作区',
+            value: 'individualworkreport',
+            active: false
+          }
+        ]
       },
       {
         label: '专业项目',
-        content: [{ label: '交通/电力/移动联通铁塔电信/文物' }, { label: '寺庙/水文站' }],
-        showNum: 2
+        children: [
+          {
+            label: '交通/电力/移动联通铁塔电信/文物',
+            value: 'comprehensivereport',
+            active: false
+          },
+          {
+            label: '寺庙/水文站',
+            value: '',
+            active: false
+          }
+        ]
       }
     ]
   }
 ])
 
 function chooseItem(item: any, x: any) {
-  console.log(item, x)
-  for (let a of cardList) {
+  // 重置
+  for (let a of navList) {
     for (let b of a.body) {
-      if (!x.tabs) {
-        b.openTabs = false
-      }
-      for (let c of b.content) {
-        c.click = false
-      }
-    }
-  }
-  item.click = true
-  if (x.tabs && !x.openTabs) {
-    x.openTabs = true
-  }
-}
-
-// 企业基本情况
-let tableData1 = reactive([
-  {
-    test: '1'
-  },
-  {
-    test: '2'
-  },
-  {
-    test: '3'
-  },
-  {
-    test: '4'
-  }
-])
-const objectSpanMethod1 = ({
-  // row,
-  // column,
-  rowIndex,
-  columnIndex
-}) => {
-  if (columnIndex === 1) {
-    if (rowIndex % 4 === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
+      b.openTabs = false
+      for (let c of b.children) {
+        c.openTabs = false
+        c.active = false
+        if (c.children) {
+          for (let d of c.children) {
+            d.active = false
+          }
+        }
       }
     }
   }
+  // 高亮
+  item.active = true
+  // 有子项
+  if (x.tabs) {
+    if (!x.openTabs) {
+      x.openTabs = true
+    }
+    // 三级赋值
+    deepChildren.value = item.children || []
+  } else {
+    // 路由跳转
+
+    goLink(item.value)
+  }
 }
 
-// 企业房屋及其附属物
-let tableData2 = reactive([
-  {
-    test: '1'
-  },
-  {
-    test: '2'
-  },
-  {
-    test: '3'
-  },
-  {
-    test: '4'
-  }
-])
-const objectSpanMethod2 = ({
-  // row,
-  // column,
-  rowIndex,
-  columnIndex
-}) => {
-  if (columnIndex === 0) {
-    if (rowIndex % 4 === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
+const deepChooseItem = (item) => {
+  for (let a of navList) {
+    for (let b of a.body) {
+      for (let c of b.children) {
+        if (c.children) {
+          for (let d of c.children) {
+            d.active = false
+          }
+        }
       }
     }
   }
+  item.active = true
+  // 路由跳转
+
+  goLink(item.value)
 }
 
-// 企业零星林（果）木
-let tableData3 = reactive([
-  {
-    test: '1'
-  },
-  {
-    test: '2'
-  },
-  {
-    test: '3'
-  },
-  {
-    test: '4'
-  }
-])
-const objectSpanMethod3 = ({
-  // row,
-  // column,
-  rowIndex,
-  columnIndex
-}) => {
-  if (columnIndex === 1) {
-    if (rowIndex % 4 === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
+const goLink = (routerName: string) => {
+  console.log('路由名称:', routerName)
+  if (!routerName) return
+  // router.push({
+  //   name: routerName
+  // })
 
-// function setRightTabs(a: any, b: any) {
-//   return a.tabs && a.openTabs && b.openTabs
-// }
-// let moreFlag = ref<boolean>(true)
+  const linkObj = router.resolve({
+    name: routerName
+  })
+  window.open(linkObj.href, '_blank')
+}
 </script>
 
 <style lang="less" scoped>
@@ -491,7 +588,7 @@ const objectSpanMethod3 = ({
       }
     }
 
-    .content {
+    .children {
       padding: 0 16px;
 
       .item {
@@ -513,22 +610,23 @@ const objectSpanMethod3 = ({
 
           .right_top {
             display: flex;
-
-            .right_item {
-              padding: 4px 16px;
-              margin-right: 16px;
-              cursor: pointer;
-            }
-
-            .right_item:last-child {
-              margin-right: 0;
-            }
           }
 
           .right_bottom {
+            display: flex;
             padding: 16px;
             border: 1px solid #ebebeb;
             border-radius: 0px 4px 4px 4px;
+          }
+
+          .right_item {
+            padding: 4px 16px;
+            margin-right: 16px;
+            cursor: pointer;
+          }
+
+          .right_item:last-child {
+            margin-right: 0;
           }
         }
       }
@@ -544,19 +642,15 @@ const objectSpanMethod3 = ({
   }
 }
 
-.no_tabs_choose {
-  color: #3e73ec;
-  background-color: #f2f6ff;
-  border-radius: 4px;
-}
-
-.tabs_choose {
+.active {
   color: #3e73ec;
   background-color: #f2f6ff;
   border-radius: 4px;
 }
 
 .tabs_click {
+  margin-bottom: -1px;
+  background-color: #fff;
   border: 1px solid #ebebeb;
   border-bottom: none;
   border-radius: 4px 4px 0 0;
