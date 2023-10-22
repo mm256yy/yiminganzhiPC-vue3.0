@@ -9,29 +9,35 @@
     :closeOnClickModal="false"
   >
     <div v-if="props.type == true">
-      <ElButton @click="onClose" type="primary" style="float: right; margin-bottom: 10px"
+      <ElButton @click="addDemo" type="primary" style="float: right; margin-bottom: 10px"
         >添加</ElButton
       >
-      <ElTable
-        :data="tableData"
-        :span-method="objectSpanMethod"
-        style="width: 100%"
-        class="mb-20"
-        :border="true"
-      >
-        <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
-        <ElTableColumn label="支付对象" align="center" prop="specialName" header-align="center">
-          <ElSelect class="w-350px" v-model="payObject">
-            <ElOption
-              v-for="item in dictObj[393]"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </ElSelect>
+      <ElTable :data="tableDatas" style="width: 100%" class="mb-20" :border="true" row-key="id">
+        <ElTableColumn
+          label="序号"
+          align="center"
+          width="80"
+          type="index"
+          header-align="center"
+          prop="index"
+        />
+        <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center">
+          <template #default="{ row }">
+            <ElSelect class="w-350px" v-model="row.payObject">
+              <ElOption
+                v-for="item in dictObj[393]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="contractName" align="center" header-align="center">
-          <ElInputNumber class="!w-200px" />
+          <!-- <ElInputNumber class="!w-200px" /> -->
+          <template #default="{ row }">
+            <ElInputNumber class="!w-200px" v-model="row.contractName" />
+          </template>
         </ElTableColumn>
         <ElTableColumn
           label="操作"
@@ -40,13 +46,21 @@
           header-align="center"
           width="80"
         >
-          <ElButton @click="del" type="primary" style="float: right; margin-bottom: 10px"
-            >删除</ElButton
-          >
+          <template #default="{ row }">
+            <ElButton @click="delDemo(row)" type="primary" style="float: right; margin-bottom: 10px"
+              >删除</ElButton
+            >
+          </template>
         </ElTableColumn>
       </ElTable>
-      <!-- <div></div> -->
-      <div>合计金额:1000元</div>
+      <!-- <div>
+        <div>序号</div>
+        <div>序号</div>
+        <div>序号</div>
+        <div>序号</div>
+      </div> -->
+
+      <div>合计金额:{{ amountPrice }}元</div>
     </div>
     <ElTable
       :data="tableData"
@@ -84,7 +98,8 @@ import {
   ElButton,
   ElSelect,
   ElOption,
-  ElInputNumber
+  ElInputNumber,
+  ElMessage
 } from 'element-plus'
 // import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
@@ -97,19 +112,22 @@ interface PropsType {
   type: any
 }
 const props = defineProps<PropsType>()
-const emit = defineEmits(['close', 'updateDistrict'])
-const payObject = ref()
+const emit = defineEmits(['close', 'updateDistrict', 'objlist'])
+// const payObject = ref()
 // 关闭弹窗
 const onClose = (flag: boolean) => {
   emit('close', flag)
 }
 const addSubmit = (flag: boolean) => {
+  emit('objlist', tableDatas.value)
   emit('close', flag)
 }
+const dataId = ref<number>(0)
+const amountPrice = ref<number>(0)
 //删除
-const del = () => {
-  console.log('删除')
-}
+// const del = () => {
+//   console.log('删除')
+// }
 const tableData = ref<any[]>([
   {
     id: 1,
@@ -152,6 +170,20 @@ const tableData = ref<any[]>([
     applyAmount: '25,000'
   }
 ])
+const tableDatas = ref<any[]>([])
+const addDemo = () => {
+  const d = {
+    index: dataId.value++,
+    payObject: '',
+    contractName: ''
+  }
+  tableDatas.value.push(d)
+  amountPrice.value = tableDatas.value.reduce((c, item) => c + item.contractName * 1, 0)
+}
+const delDemo = (row: any) => {
+  tableDatas.value.splice(row.index, 1)
+  ElMessage.success('删除成功！')
+}
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   console.log(row, column)
   console.log(rowIndex, columnIndex)
@@ -302,6 +334,35 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   //     }
   //   }
 }
+// const objectSpanMethods = ({ row, column, rowIndex, columnIndex }: any) => {
+//   console.log(row, column)
+//   console.log(rowIndex, columnIndex)
+//   if (columnIndex === 0) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 1) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
 // const schema = reactive<CrudSchema[]>([
 //   {
 //     field: 'blurry',

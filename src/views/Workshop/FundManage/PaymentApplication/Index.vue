@@ -69,6 +69,7 @@
       @close="onEditFormClose"
       :actionType="actionType"
       :row="tableObject.currentRow"
+      :parmasList="parmasList"
     />
   </WorkContentWrap>
 </template>
@@ -98,7 +99,7 @@ const projectId = appStore.currentProjectId
 
 const fundAccountList = ref<any[]>([]) // 资金科目
 const otherList = ref<any>({})
-// const parmasList = ref<any[]>([])
+const parmasList = ref<any[]>([])
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
@@ -178,9 +179,9 @@ const onEditRow = (row: any) => {
   dialog.value = true
 }
 const onViewRow = (row: any) => {
-  PaymentApplicationByIdDetailApi({ id: row.id, type: 1 }).then((res: any) => {
-    // parmasList.value = res.content
-    console.log(res)
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res.funPaymentRequestFlowNodeList
+    console.log(res.funPaymentRequestFlowNodeList, '测试')
   })
   actionType.value = 'view'
   tableObject.currentRow = {

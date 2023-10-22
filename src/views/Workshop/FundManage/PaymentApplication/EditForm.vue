@@ -102,7 +102,7 @@
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">1</span> 笔
+              <span class="num">{{ otherDataAmount[0].num }}</span> 笔
             </div>
           </div>
         </div>
@@ -129,20 +129,22 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{ otherDataAmount[0].amoutPrice }}</span> 元
+              <span class="num">{{
+                otherDataAmount[0].amoutPrice ? otherDataAmount[0].amoutPrice : 0
+              }}</span>
+              元
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">1</span> 笔
+              <span class="num">{{ otherDataAmount[0].num ? otherDataAmount[0].num : 0 }}</span> 笔
             </div>
           </div>
           <ElSpace>
-            <ElButton type="primary" @click="onAddRow"> 清空 </ElButton>
+            <ElButton type="primary" @click="delRow"> 清空 </ElButton>
           </ElSpace>
         </div>
         <ElTable
           :data="otherData"
-          :span-method="objectSpanMethod"
           style="width: 100%"
           class="mb-20"
           :border="true"
@@ -154,9 +156,15 @@
             width="80"
             type="index"
             header-align="center"
+            prop="index"
           />
-          <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center" />
-          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+          <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center" />
+          <ElTableColumn
+            label="申请金额"
+            prop="contractName"
+            align="center"
+            header-align="center"
+          />
         </ElTable>
       </div>
       <ElTable
@@ -215,7 +223,7 @@
         <div class="progress-wrapper">
           <div class="progress-list">
             <div class="progress-item" v-for="item in progressList" :key="item.name">
-              <div class="left">
+              <!-- <div class="left">
                 <div class="icon-box">
                   <div v-if="item.isAudit === '0'" class="disabled"></div>
                   <img
@@ -233,14 +241,13 @@
                   class="line in-progress"
                 ></div>
                 <div v-if="item.type === '6'" class="line none"></div>
-                <!-- <div v-if="item.type === '6'" class="none"></div> -->
-              </div>
+              </div> -->
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
                     <div class="name">{{ item.name }}</div>
                   </div>
-                  <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div>
+                  <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
                     审核时间：{{ dayjs(item.auditDate).format('YYYY-MM-DD') }}
                   </div>
@@ -267,7 +274,7 @@
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
     </el-dialog>
-    <GirdList :show="girdDialog" @close="onFormPupClose" :type="type" />
+    <GirdList :show="girdDialog" @close="onFormPupClose" :type="type" @objlist="objListArr" />
   </ElDialog>
 </template>
 
@@ -303,13 +310,22 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
+import { funFlowNodeApi } from '@/api/fundManage/paymentApplication-service'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row: null | undefined
+  parmasList: any
 }
-
+// const onViewRow = () => {
+//   if (form.value.id) {
+//     PaymentApplicationByIdDetailApi(form.value.id, 1).then((res: any) => {
+//       parmasList.value = res.funPaymentRequestFlowNodeList
+//       console.log(res.funPaymentRequestFlowNodeList, '123123')
+//     })
+//   }
+// }
+// console.log(parmasList, '123123123123123123')
 interface FileItemType {
   name: string
   url: string
@@ -338,6 +354,9 @@ const getFundSubjectList = () => {
     if (res) {
       fundAccountList.value = res.content
     }
+  })
+  funFlowNodeApi({ node: 1 }).then((res: any) => {
+    console.log(res, '测试数据')
   })
 }
 watch(
@@ -380,77 +399,72 @@ const progressList = ref<any[]>([
     type: '1',
     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
     remark: ''
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '财务审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '2',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '分管领导审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '3',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '动迁科长审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '4',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '监督评估审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '5',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '动迁发起申请',
-    projectId: 53,
-    status: 'implementation',
-    type: '6',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
   }
+  // {
+  //   auditDate: '2023-09-04T07:21:53.373+00:00',
+  //   doorNo: 'jl1090011',
+  //   id: 571944,
+  //   isAudit: '1',
+  //   name: '财务审核',
+  //   projectId: 53,
+  //   status: 'implementation',
+  //   type: '2',
+  //   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+  //   remark: '同意'
+  // },
+  // {
+  //   auditDate: '2023-09-04T07:21:53.373+00:00',
+  //   doorNo: 'jl1090011',
+  //   id: 571944,
+  //   isAudit: '1',
+  //   name: '分管领导审核',
+  //   projectId: 53,
+  //   status: 'implementation',
+  //   type: '3',
+  //   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+  //   remark: '同意'
+  // },
+  // {
+  //   auditDate: '2023-09-04T07:21:53.373+00:00',
+  //   doorNo: 'jl1090011',
+  //   id: 571944,
+  //   isAudit: '1',
+  //   name: '动迁科长审核',
+  //   projectId: 53,
+  //   status: 'implementation',
+  //   type: '4',
+  //   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+  //   remark: '同意'
+  // },
+  // {
+  //   auditDate: '2023-09-04T07:21:53.373+00:00',
+  //   doorNo: 'jl1090011',
+  //   id: 571944,
+  //   isAudit: '1',
+  //   name: '监督评估审核',
+  //   projectId: 53,
+  //   status: 'implementation',
+  //   type: '5',
+  //   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+  //   remark: ''
+  // },
+  // {
+  //   auditDate: '2023-09-04T07:21:53.373+00:00',
+  //   doorNo: 'jl1090011',
+  //   id: 571944,
+  //   isAudit: '1',
+  //   name: '动迁发起申请',
+  //   projectId: 53,
+  //   status: 'implementation',
+  //   type: '6',
+  //   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+  //   remark: ''
+  // }
 ])
-const otherData = ref<any[]>([
-  {
-    contractId: '测试',
-    amount: '123'
-  }
-])
+const otherData = ref<any[]>([])
 const otherDataAmount = ref<any[]>([
   {
-    amoutPrice: '123123123',
+    amoutPrice: '',
     num: ''
   }
 ])
@@ -615,8 +629,10 @@ const headers = {
   Authorization: appStore.getToken
 }
 // 清空
-const onAddRow = () => {
-  console.log('清空')
+const delRow = () => {
+  otherDataAmount.value[0].amoutPrice = 0
+  otherDataAmount.value[0].num = 0
+  otherData.value = []
 }
 // 规则校验
 const rules = reactive<FormRules>({})
@@ -632,6 +648,15 @@ const onClose = (flag = false) => {
 }
 const onFormPupClose = (flag: boolean) => {
   girdDialog.value = flag
+}
+const objListArr = (list: any) => {
+  console.log(list, otherData.value.length, '测试用的')
+  otherData.value = list
+  otherDataAmount.value[0].num = otherData.value.length
+  otherDataAmount.value[0].amoutPrice = otherData.value.reduce(
+    (c, item) => c + item.contractName * 1,
+    0
+  )
 }
 const girdList = () => {
   girdDialog.value = true
@@ -679,7 +704,9 @@ const onSubmit = debounce((formEl, status?: number) => {
           paymentObjectList: [
             {
               contractId: 571923,
-              nodeIds: '571919,571920'
+              nodeIds: '571919,571920',
+              amount: otherDataAmount.value[0].amoutPrice
+              // paymentObjectJson:
             }
           ],
           receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
@@ -742,6 +769,7 @@ const onError = () => {
 onMounted(() => {
   initData()
   getFundSubjectList()
+  // onViewRow()
 })
 </script>
 

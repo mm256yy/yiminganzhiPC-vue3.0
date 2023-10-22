@@ -60,7 +60,9 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
+// import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
+import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ViewForm from './ViewForm.vue'
 import AdjustForm from './AdjustForm.vue'
@@ -75,12 +77,24 @@ const fundAccountList = ref<any[]>([]) // 资金科目
 const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getBudgetAdjustmentListApi
+  getListApi: getPaymentReviewListApi
 })
 
 const { setSearchParams, getSelections } = methods
+// tableObject.params = {
+//   projectId,
+//   businessId: 2
+//   // auditType: tabVal.value
+// }
 
-setSearchParams({ status: '4' })
+tableObject.params = {
+  projectId,
+  businessId: 2
+  // auditType: tabVal.value
+}
+setSearchParams({})
+
+// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
