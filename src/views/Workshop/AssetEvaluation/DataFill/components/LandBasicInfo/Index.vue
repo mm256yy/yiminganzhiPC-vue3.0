@@ -21,7 +21,7 @@
           </ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
+      <ElTable :data="tableData" style="width: 100%" @cell-click="cellHandleClick">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
           label="组别"
@@ -376,6 +376,10 @@ const onSave = () => {
 onMounted(() => {
   getList()
 })
+//计算评估金额
+const cellHandleClick = (row: Record<string, any>) => {
+  row.valuationAmount = row.valuationPrice * row.landArea
+}
 </script>
 <style lang="less" scoped>
 .btn-txt {
