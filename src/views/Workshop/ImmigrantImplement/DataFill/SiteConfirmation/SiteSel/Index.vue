@@ -93,13 +93,18 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn
-          label="房号"
-          width="140"
-          prop="roomNo"
-          align="center"
-          header-align="center"
-        />
+        <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+              <ElOption
+                v-for="item in row.roomNoOptions"
+                :key="item.id"
+                :label="item.code"
+                :value="item.code"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="储藏室编号"
           width="120"
@@ -226,6 +231,7 @@ import {
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
 // import { deepClone } from '@/utils'
+import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 
 interface PropsType {
   doorNo: string
@@ -253,7 +259,8 @@ const getList = () => {
           ...item,
           landNoOptions: [],
           storeroomNoOptions: [],
-          carNoOptions: []
+          carNoOptions: [],
+          roomNoOptions: []
         })
       })
       arr.map((item: any) => {
@@ -265,6 +272,9 @@ const getList = () => {
         })
         getcarNoList(item.settleAddress).then((res: any) => {
           item.carNoOptions = [...res]
+        })
+        getHouseConfigApi(props.baseInfo.projectId, 2, item.settleAddress).then((res: any) => {
+          item.roomNoOptions = [...res.content]
         })
       })
       tableData.value = [...arr]

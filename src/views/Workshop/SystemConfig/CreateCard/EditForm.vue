@@ -30,7 +30,7 @@
       <ElFormItem label="类别:" required prop="category">
         <ElSelect>
           <ElOption
-            v-for="item in dictObj[392]"
+            v-for="item in dictObj[394]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
