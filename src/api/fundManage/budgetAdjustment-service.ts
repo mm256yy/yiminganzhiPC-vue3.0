@@ -20,3 +20,11 @@ export const updateAdjustmentApi = (data: AdjustmentType) => {
     data
   })
 }
+
+/* 概算审核（审核或驳货）*/
+export const getPaymentReviewListSSApi = (data: Partial<BudgetAdjustmentType>): Promise<any> => {
+  return request.post({
+    url: '/funPaymentRequest/audit',
+    data
+  })
+}

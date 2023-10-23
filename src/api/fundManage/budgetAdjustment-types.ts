@@ -23,3 +23,7 @@ export interface AdjustmentType {
   gsRemark: string
   [key: string]: any
 }
+
+export interface Up {
+  name: string
+}
