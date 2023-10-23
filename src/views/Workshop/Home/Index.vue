@@ -967,7 +967,7 @@ const toLink = (type: string) => {
     } else {
       routerJump('/WorkshopCheck/IndividualBCheck')
     }
-  } else {
+  } else {s
     // routerJump('/Workshop/villageInfoC')
     if (metype.value === '/Workshop') {
       routerJump('/Workshop/VillageCollective')

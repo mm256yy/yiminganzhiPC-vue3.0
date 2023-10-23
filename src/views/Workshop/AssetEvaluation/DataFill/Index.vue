@@ -134,7 +134,7 @@
 
       <!-- 村集体 小型专项及农副业设施评估 -->
       <SpecialEquipment
-        v-show="type === 'villageInfoC' && tabCurrentId === TabIds[6]"
+        v-show="type === 'VillageInfoC' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"

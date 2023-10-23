@@ -215,6 +215,7 @@ const rules = ref()
 const dialogVisible = ref(false)
 const tableData = ref<any>([])
 const emit = defineEmits(['updateData'])
+console.log(tableData, '////////')
 
 const getPeopleList = async () => {
   const res = await getProduceListApi({
