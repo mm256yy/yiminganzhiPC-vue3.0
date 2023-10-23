@@ -9,28 +9,32 @@
     <div class="statistics-wrap">
       <div class="item" @click="toLink('townshipFundEntry')">
         <div class="title">入账总金额(元)</div>
-        <div class="content">121,000</div>
+        <div class="content">{{ accountData?.entryAmount }}</div>
       </div>
       <div class="item center" @click="toLink('paymentApplication')">
         <div class="item-1">
           <div class="title">出账总金额(元)</div>
-          <div class="content">1,100</div>
+          <div class="content">{{ accountData?.outgoingAmount }}</div>
         </div>
-        <div class="item-line"></div>
+        <!-- <div class="item-line"></div>
         <div class="item-2">
           <div>拨付总额 <span class="red">800</span> 元</div>
           <div>支付总额 <span class="red">300</span> 元</div>
-        </div>
+        </div> -->
       </div>
       <div class="item">
         <div class="title">资金池余额(元)</div>
-        <div class="content">2,000</div>
+        <div class="content">{{ accountData?.residueAmount }}</div>
       </div>
     </div>
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
@@ -40,7 +44,8 @@
             <ElImage class="icon" :src="IconCapital" fit="cover" />
           </div>
           <div class="data-box">
-            <span class="green">10</span> 笔 <span class="green">10,000</span> 元
+            <span class="green">共{{ tableObject.total }}</span> 笔
+            <!-- <span class="green">10</span> 笔 <span class="green">10,000</span> 元 -->
           </div>
         </div>
         <div class="col right">
@@ -66,6 +71,9 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #typeTxt="{ row }">
+          <div>{{ row.type === '1' ? '入账' : '出账' }}</div>
+        </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
         </template>
@@ -77,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElImage } from 'element-plus'
 import { Search } from '@/components/Search'
@@ -86,27 +94,24 @@ import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getLandlordListApi, delLandlordByIdApi } from '@/api/workshop/landlord/service'
+import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
+import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
 import EditForm from './EditForm.vue'
-import { MainType } from '@/types/print'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 
 const appStore = useAppStore()
-const dictStore = useDictStoreWithOut()
 const projectId = appStore.currentProjectId
-const dictObj = computed(() => dictStore.getDictObj)
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
+const accountData = ref<CapitalPoolAccount>()
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi,
-  delListApi: delLandlordByIdApi
+  getListApi: getCapitalPoolListApi
 })
 
 const { setSearchParams } = methods
 
-setSearchParams({ type: MainType.PeasantHousehold })
+setSearchParams({})
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -116,7 +121,16 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: dictObj.value[387]
+        options: [
+          {
+            label: '入账',
+            value: '1'
+          },
+          {
+            label: '出账',
+            value: '2'
+          }
+        ]
       }
     },
     table: {
@@ -130,7 +144,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundName',
+    field: 'name',
     label: '资金操作名称',
     search: {
       show: true,
@@ -150,7 +164,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'operatonTime',
+    field: 'recordTime',
     label: '操作时间',
     search: {
       show: true,
@@ -170,7 +184,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '操作金额',
     search: {
       show: true,
@@ -203,7 +217,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundName',
+    field: 'name',
     label: '资金名称',
     search: {
       show: false
@@ -216,7 +230,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'typeText',
+    field: 'typeTxt',
     label: '资金操作类型',
     search: {
       show: false
@@ -242,7 +256,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'operationTime',
+    field: 'recordTime',
     label: '操作时间',
     search: {
       show: false
@@ -268,7 +282,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'operationUser',
+    field: 'createdBy',
     label: '操作人',
     search: {
       show: false
@@ -303,31 +317,10 @@ tableObject.params = {
   projectId
 }
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = { ...data }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
-  }
-
-  if (!params.card) {
-    delete params.card
-  }
-  setSearchParams({ ...params, type: MainType.PeasantHousehold })
-}
-
 const onViewRow = (row) => {
   // 点击查看进入入账详情页面
-  toLink('entrydetail')
   console.log(row)
+  toLink('entrydetail')
 }
 
 const onFormPupClose = () => {
@@ -336,6 +329,13 @@ const onFormPupClose = () => {
 
 // 导出
 const onExport = () => {}
+
+onMounted(() => {
+  let params: CapitalPoolDtoType = {}
+  getCapitalPoolApi(params).then((res) => {
+    accountData.value = res
+  })
+})
 
 /**
  * 跳转至指定页面
