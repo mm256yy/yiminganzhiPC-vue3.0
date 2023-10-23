@@ -157,7 +157,9 @@ watch(
         form.value = {
           ...props.row
         }
-        receipt.value = JSON.parse(props.row.receipt)
+        if (props.row.receipt) {
+          receipt.value = JSON.parse(props.row.receipt)
+        }
         if (form.value.recordTime) {
           form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
         }
@@ -167,6 +169,10 @@ watch(
         receipt.value = []
       }
     }
+  },
+  {
+    immediate: true,
+    deep: true
   }
 )
 

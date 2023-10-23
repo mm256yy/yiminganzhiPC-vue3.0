@@ -48,7 +48,9 @@
         <template #createdDate="{ row }">
           <div>{{ formatDate(row.createdDate) }}</div>
         </template>
-
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
@@ -80,10 +82,11 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-// import { useIcon } from '@/hooks/web/useIcon'
+
 import {
   getPaymentApplicationListApi,
-  delPaymentApplicationByIdApi
+  delPaymentApplicationByIdApi,
+  PaymentApplicationByIdDetailApi
 } from '@/api/fundManage/paymentApplication-service'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 import EditForm from './EditForm.vue'
@@ -95,6 +98,7 @@ const projectId = appStore.currentProjectId
 
 const fundAccountList = ref<any[]>([]) // 资金科目
 const otherList = ref<any>({})
+// const parmasList = ref<any[]>([])
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
@@ -174,9 +178,14 @@ const onEditRow = (row: any) => {
   dialog.value = true
 }
 const onViewRow = (row: any) => {
+  PaymentApplicationByIdDetailApi({ id: row.id, type: 1 }).then((res: any) => {
+    // parmasList.value = res.content
+    console.log(res)
+  })
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
+    // parmasList: parmasList.value
   }
   tableObject.currentRow = row
   dialog.value = true

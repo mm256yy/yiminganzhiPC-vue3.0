@@ -24,7 +24,7 @@
       :pagination="{
         total: tableObject.total
       }"
-      :loading="false"
+      :loading="tableObject.loading"
       :data="tableObject.tableList"
       :columns="allSchemas.tableColumns"
       row-key="id"
@@ -55,9 +55,9 @@
       </template>
     </Table>
     <!--发放-->
-    <EditForm :show="editDialog" :type="props.type" @close="onEditFormClose" />
+    <EditForm :show="editDialog" :type="props.type" :row="itemRow" @close="onEditFormClose" />
     <!--查看-->
-    <CheckForm :show="checkDialog" :type="props.type" @close="onCheckFormClose" />
+    <CheckForm :show="checkDialog" :type="props.type" :row="itemRow" @close="onCheckFormClose" />
   </div>
 </template>
 <script setup lang="ts">
@@ -72,6 +72,8 @@ import { getVillageTreeApi } from '@/api/workshop/village/service'
 import EditForm from '../../components/EditForm.vue'
 import CheckForm from '../../components/CheckForm.vue'
 import { filterViewDoorNo } from '@/utils/index'
+import type { TownshipFundEntryDtoType } from '@/api/fundManage/townshipFundEntry-types'
+import { getFundDistributionListApi } from '@/api/fundManage/townshipFundEntry-service'
 
 interface PropsType {
   type: number // 类型
@@ -82,27 +84,18 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const districtTree = ref<any[]>([])
 const selectionIds = ref<any[]>([]) // 选择的项 id 集合
+const itemRow = ref<any>({})
 
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
 
-const { register, tableObject, methods } = useTable()
-
-tableObject.tableList = [
-  {
-    index: '1',
-    name: '123'
-  }
-]
+const { register, tableObject, methods } = useTable({
+  getListApi: getFundDistributionListApi
+})
 
 const { setSearchParams, getSelections } = methods
 
-// 需要重置一次params
-tableObject.params = {
-  projectId
-}
-
-setSearchParams({ name: '', code: '' })
+setSearchParams({ name: '', type: 'PeasantHousehold' })
 
 const getdistrictTree = async () => {
   const list = await getVillageTreeApi(projectId)
@@ -151,13 +144,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'blurry',
+    field: 'name',
     label: '户主',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '户主姓名/户号'
+        placeholder: '户主姓名'
       }
     },
     table: {
@@ -203,7 +196,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'issued',
+    field: 'issuedAmount',
     label: '已发放（元）',
     search: {
       show: false
@@ -236,13 +229,13 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 // 发放
-const onIssue = (row: any) => {
-  console.log('row-发放', row)
+const onIssue = (row: TownshipFundEntryDtoType) => {
+  itemRow.value = row
   editDialog.value = true
 }
 // 查看
-const onCheckRow = (row: any) => {
-  console.log('row-查看', row)
+const onCheckRow = (row: TownshipFundEntryDtoType) => {
+  itemRow.value = row
   checkDialog.value = true
 }
 

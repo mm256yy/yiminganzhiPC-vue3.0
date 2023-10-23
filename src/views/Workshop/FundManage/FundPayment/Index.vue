@@ -49,6 +49,10 @@
           <div>{{ row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD') : '-' }}</div>
         </template>
 
+        <template #status="{ row }">
+          <div>{{ row.status === 0 ? '草稿' : '正常' }}</div>
+        </template>
+
         <template #action="{ row }">
           <TableEditColumn
             :view-type="'link'"
@@ -72,6 +76,7 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
+      :fundAccountList="fundAccountList"
       @close="onEditFormClose"
     />
   </WorkContentWrap>
@@ -131,7 +136,6 @@ const getHeadInfo = async () => {
 
 const getLpListHandle = async () => {
   const res: any = await getLpListApi()
-  console.log(res, 'res')
   if (res && res.length) {
     lpList.value = res.map((item) => {
       return {
@@ -341,7 +345,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'type',
+    field: 'typeText',
     label: '概算科目',
     search: {
       show: false
@@ -349,7 +353,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'funSubjectId',
+    field: 'funSubjectIdText',
     label: '资金科目',
     search: {
       show: false
@@ -364,7 +368,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeText',
     label: '资金类别',
     search: {
       show: false

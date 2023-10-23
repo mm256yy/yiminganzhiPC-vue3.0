@@ -11,29 +11,14 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请类型</div>
-          <div class="content">付款申请</div>
+          <div class="label">申请类型:</div>
+          <div class="content">{{ form.applyType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请名称</div>
-          <div class="content">专业项目合同款</div>
-        </div>
-      </ElCol>
-    </ElRow>
-
-    <ElRow>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">申请人</div>
-          <div class="content">王涛</div>
-        </div>
-      </ElCol>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款说明</div>
-          <div class="content">专业项目合同款说明</div>
+          <div class="label">申请名称:</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -41,29 +26,14 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">概算科目</div>
-          <div class="content">概算内</div>
+          <div class="label">申请人:</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">资金科目</div>
-          <div class="content">一级科目 二级科目 三级科目</div>
-        </div>
-      </ElCol>
-    </ElRow>
-
-    <ElRow>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款对象类型</div>
-          <div class="content">专业项目</div>
-        </div>
-      </ElCol>
-      <ElCol :span="12">
-        <div class="col-wrap">
-          <div class="label">付款类型</div>
-          <div class="content">支付</div>
+          <div class="label">付款说明:</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -71,21 +41,51 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">收款方</div>
-          <div class="content">境岭镇</div>
+          <div class="label">概算科目:</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请总金额</div>
-          <div class="content">100,019.20 元</div>
+          <div class="label">资金科目:</div>
+          <div class="content">{{ form.funSubjectId }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
+
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款对象类型:</div>
+          <div class="content">{{ form.paymentType }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款类型:</div>
+          <div class="content">{{ form.payType }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
+
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">收款方:</div>
+          <div class="content">{{ form.payee }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请总金额:</div>
+          <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">付款对象</div>
+          <div class="label">付款对象:</div>
           <!-- <div class="content">境岭镇</div> -->
         </div>
       </ElCol>
@@ -95,7 +95,7 @@
       申请总金额：<span class="num">100,019.20</span> 元 申请户数：<span class="num">2</span> 户
     </div>
 
-    <!-- <ElTable
+    <ElTable
       :data="tableData"
       :span-method="objectSpanMethod"
       style="width: 100%"
@@ -110,82 +110,8 @@
       <ElTableColumn label="合同金额(万元)" prop="amount" align="center" header-align="center" />
       <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center" />
       <ElTableColumn label="申请金额" prop="applyAmount" align="center" header-align="center" />
-    </ElTable> -->
-    <Table
-      v-model:pageSize="tableObject.size"
-      v-model:currentPage="tableObject.currentPage"
-      :pagination="{
-        total: tableObject.total
-      }"
-      :loading="tableObject.loading"
-      :data="tableObject.tableList"
-      :columns="allSchemas.tableColumns"
-      row-key="id"
-      headerAlign="center"
-      align="center"
-      highlightCurrentRow
-      @register="register"
-    />
-    <div class="col-wrapper">
-      <div class="col-label-required"> 申请凭证： </div>
-      <div class="card-img-list">
-        <ElUpload
-          :on-error="onError"
-          :class="[actionType === 'view' ? 'upload' : '']"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          :limit="1"
-          :list-type="'picture-card'"
-          accept=".jpg,.jpeg,.png"
-          :multiple="false"
-          :file-list="householdPic"
-          :headers="headers"
-          :on-success="uploadFileChange3"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile3"
-          :on-preview="imgPreview"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="card-img-box">
-              <img class="card-img" src="@/assets/imgs/household.png" alt="" />
-              <div class="card-txt"> 点击上传 </div>
-            </div>
-          </template>
-        </ElUpload>
-      </div>
-    </div>
-    <div class="col-wrapper">
-      <div class="col-label-required"> 财务凭证： </div>
-      <div class="card-img-list">
-        <ElUpload
-          :on-error="onError"
-          :class="[actionType === 'view' ? 'upload' : '']"
-          action="/api/file/type"
-          :data="{
-            type: 'image'
-          }"
-          :limit="1"
-          :list-type="'picture-card'"
-          accept=".jpg,.jpeg,.png"
-          :multiple="false"
-          :file-list="householdPic"
-          :headers="headers"
-          :on-success="uploadFileChange3"
-          :before-remove="beforeRemove"
-          :on-remove="removeFile3"
-          :on-preview="imgPreview"
-        >
-          <template #trigger v-if="actionType !== 'view'">
-            <div class="card-img-box">
-              <img class="card-img" src="@/assets/imgs/household.png" alt="" />
-              <div class="card-txt"> 点击上传 </div>
-            </div>
-          </template>
-        </ElUpload>
-      </div>
-    </div>
+    </ElTable>
+
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
@@ -195,6 +121,34 @@
         </div>
       </ElCol>
     </ElRow>
+    <div class="col-wrapper">
+      <div class="col-label-required"> 申请凭证： </div>
+      <div class="card-img-list">
+        <ElUpload
+          :list-type="'picture-card'"
+          action="/api/file/type"
+          :data="{
+            type: 'archives'
+          }"
+          accept=".jpg,.png,jpeg,.pdf"
+          :multiple="false"
+          :file-list="relocateVerifyPic"
+          :headers="headers"
+          :on-error="onError"
+          :on-success="uploadFileChange1"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile1"
+          :on-preview="imgPreview"
+        >
+          <template #trigger>
+            <div class="card-img-box">
+              <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+              <div class="card-txt">点击上传</div>
+            </div>
+          </template>
+        </ElUpload>
+      </div>
+    </div>
     <ElRow v-if="actionType === 'edit'">
       <ElCol :span="24">
         <div class="col-wrap">
@@ -268,8 +222,8 @@ import {
   ElDialog,
   ElRow,
   ElCol,
-  // ElTable,
-  // ElTableColumn,
+  ElTable,
+  ElTableColumn,
   ElUpload,
   ElInput,
   ElMessage,
@@ -279,17 +233,18 @@ import {
   ElMessageBox,
   ElDatePicker
 } from 'element-plus'
-import { ref, watch, reactive } from 'vue'
+import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 // import { updateLandlordApi } from '@/api/immigrantImplement/common-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { useTable } from '@/hooks/web/useTable'
-import { Table } from '@/components/Table'
-import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
+// import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+// import { useTable } from '@/hooks/web/useTable'
+// import { Table } from '@/components/Table'
+// import { getLandlordListApiGird } from '@/api/AssetEvaluation/gird-service'
+import { getPaymentReviewListSSApi } from '@/api/fundManage/paymentApplication-service'
 import { useAppStore } from '@/store/modules/app'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+// import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 const size = ref<'default' | 'large' | 'small'>('default')
 
 const value1 = ref('')
@@ -306,31 +261,50 @@ interface FileItemType {
 
 // const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
-const cardFront = ref<FileItemType[]>([])
-const cardEnd = ref<FileItemType[]>([])
-const householdPic = ref<FileItemType[]>([])
-const otherPic = ref<FileItemType[]>([])
+// const cardFront = ref<FileItemType[]>([])
+// const cardEnd = ref<FileItemType[]>([])
+// const householdPic = ref<FileItemType[]>([])
+// const otherPic = ref<FileItemType[]>([])
 const emit = defineEmits(['close', 'updateDistrict'])
-const dataInfo = ref<any>()
+// const dataInfo = ref<any>()
 const remark = ref<string>('') // 审核意见
 const btnLoading = ref<boolean>(false)
+const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
+const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApiGird
-})
-const { setSearchParams } = methods
+// const { register, tableObject, methods } = useTable({
+//   getListApi: getLandlordListApiGird
+// })
+// const { setSearchParams } = methods
 const appStore = useAppStore()
-const projectId = appStore.currentProjectId
-tableObject.params = {
-  projectId,
-  status: 'implementation'
-}
-setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
+// const projectId = appStore.currentProjectId
+// tableObject.params = {
+//   projectId,
+//   status: 'implementation'
+// }
+// setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
+watch(
+  () => props.row,
+  (val) => {
+    if (val) {
+      // 处理行政区划
+      form.value = { ...(val as {}) }
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 
+// 处理函数
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
   let list: FileItemType[] = []
@@ -344,23 +318,17 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
         }
       })
   }
-  if (type === 'card-front') {
-    cardFront.value = list
-  } else if (type === 'card-end') {
-    cardEnd.value = list
-  } else if (type === 'householdPic') {
-    householdPic.value = list
-  } else if (type === 'other') {
-    otherPic.value = list
+
+  if (type === 'relocateVerify') {
+    relocateVerifyPic.value = list
   }
 }
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
-const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'householdPic')
+const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
 }
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {
@@ -369,126 +337,132 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => false
   )
 }
-const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList, 'householdPic')
+
+// 文件移除
+const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
 }
+
+// const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
+//   handleFileList(fileList, 'householdPic')
+// }
 const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
-const schema = reactive<CrudSchema[]>([
-  {
-    field: 'blurry',
-    label: '网格员',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入网格员名称'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
+// const schema = reactive<CrudSchema[]>([
+//   {
+//     field: 'blurry',
+//     label: '网格员',
+//     search: {
+//       show: true,
+//       component: 'Input',
+//       componentProps: {
+//         placeholder: '请输入网格员名称'
+//       }
+//     },
+//     table: {
+//       show: false
+//     }
+//   },
 
-  // table字段 分割
-  {
-    field: 'index',
-    type: 'index',
-    label: '序号',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'nickName',
-    label: '网格员',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'phone',
-    label: '网格员手机号',
-    width: 180,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'peasantHouseholdNumber',
-    label: '负责居民户数',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'companyNumber',
-    label: '负责企业',
-    width: 190,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'individualHouseholdNumber',
-    label: '负责个体户',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'villageNumber',
-    label: '负责村集体',
-    search: {
-      show: false
-    }
-  }
-])
-const { allSchemas } = useCrudSchemas(schema)
-// const tableData = ref<any[]>([
+//   // table字段 分割
 //   {
-//     id: 1,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
+//     field: 'index',
+//     type: 'index',
+//     label: '序号',
+//     search: {
+//       show: false
+//     }
 //   },
 //   {
-//     id: 2,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
+//     field: 'nickName',
+//     label: '网格员',
+//     search: {
+//       show: false
+//     }
 //   },
 //   {
-//     id: 3,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
+//     field: 'phone',
+//     label: '网格员手机号',
+//     width: 180,
+//     search: {
+//       show: false
+//     }
 //   },
 //   {
-//     id: 4,
-//     specialName: '通讯光缆',
-//     contractName: '安装合同',
-//     contractNo: '001',
-//     contractPartyB: 'B公司',
-//     amount: 400,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '25,000'
+//     field: 'peasantHouseholdNumber',
+//     label: '负责居民户数',
+//     search: {
+//       show: false
+//     }
+//   },
+//   {
+//     field: 'companyNumber',
+//     label: '负责企业',
+//     width: 190,
+//     search: {
+//       show: false
+//     }
+//   },
+//   {
+//     field: 'individualHouseholdNumber',
+//     label: '负责个体户',
+//     search: {
+//       show: false
+//     }
+//   },
+//   {
+//     field: 'villageNumber',
+//     label: '负责村集体',
+//     search: {
+//       show: false
+//     }
 //   }
 // ])
+// const { allSchemas } = useCrudSchemas(schema)
+const tableData = ref<any[]>([
+  {
+    id: 1,
+    specialName: '通讯光缆',
+    contractName: '迁移合同',
+    contractNo: '001',
+    contractPartyB: 'A公司',
+    amount: 200,
+    paymentNode: '2023年10月2日 金额：30,000元',
+    applyAmount: '100,000'
+  },
+  {
+    id: 2,
+    specialName: '通讯光缆',
+    contractName: '迁移合同',
+    contractNo: '001',
+    contractPartyB: 'A公司',
+    amount: 200,
+    paymentNode: '2023年10月2日 金额：30,000元',
+    applyAmount: '100,000'
+  },
+  {
+    id: 3,
+    specialName: '通讯光缆',
+    contractName: '迁移合同',
+    contractNo: '001',
+    contractPartyB: 'A公司',
+    amount: 200,
+    paymentNode: '2023年10月2日 金额：30,000元',
+    applyAmount: '100,000'
+  },
+  {
+    id: 4,
+    specialName: '通讯光缆',
+    contractName: '安装合同',
+    contractNo: '001',
+    contractPartyB: 'B公司',
+    amount: 400,
+    paymentNode: '2023年10月2日 金额：30,000元',
+    applyAmount: '25,000'
+  }
+])
 
 const progressList = ref<any[]>([
   {
@@ -579,50 +553,134 @@ const progressList = ref<any[]>([
 
 // const dictObj = computed(() => dictStore.getDictObj)
 
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      dataInfo.value = {
-        ...val
+// watch(
+//   () => props.row,
+//   (val) => {
+//     if (val) {
+//       dataInfo.value = {
+//         ...val
+//       }
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
+const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
+  console.log(row, column)
+  console.log(rowIndex, columnIndex)
+  if (columnIndex === 0) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 4,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
       }
     }
-  },
-  {
-    immediate: true,
-    deep: true
+  } else if (columnIndex === 1) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 4,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 2) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 3) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 4) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 5) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 7) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
   }
-)
-
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-//   console.log(row, column)
-//   console.log(rowIndex, columnIndex)
-//   if (columnIndex === 0) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 1) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   }
-// }
+}
 
 const onSubmit = async (status: string) => {
   console.log(status)
@@ -632,8 +690,23 @@ const onSubmit = async (status: string) => {
   //   status
   // })
   btnLoading.value = false
-  ElMessage.success('操作成功！')
-  onClose()
+  let params: any = {
+    ...form.value,
+    // paymentObjectList: [
+    //   {
+    //     contractId: 571923,
+    //     nodeIds: '571919,571920'
+    //   }
+    // ],
+    status: status,
+    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+  }
+  getPaymentReviewListSSApi(params).then(() => {
+    ElMessage.success('操作成功！')
+    onClose()
+  })
+  // ElMessage.success('操作成功！')
+  // onClose()
 }
 
 // 关闭弹窗
