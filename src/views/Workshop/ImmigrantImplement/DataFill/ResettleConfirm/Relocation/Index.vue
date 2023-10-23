@@ -67,13 +67,19 @@
           </ElButton>
         </ElSpace>
       </div>
-      <el-table :data="tableData" style="width: 100%">
+
+      <el-table v-if="showTable" :data="tableData" style="width: 100%">
         <el-table-column type="index" label="序号" width="100" align="center" />
         <el-table-column prop="settleAddressText" label="安置区" align="center" />
         <el-table-column prop="area" label="户型/套型" align="center" />
         <el-table-column prop="num" label="数量" align="center" />
         <el-table-column prop="houseAreaTypeText" label="类型" align="center" />
       </el-table>
+
+      <div class="flex justify-center items-center h-[60px]" v-else>
+        <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
+        <div class="txt"> 该户选择{{ houseTypeText[houseType] }} </div>
+      </div>
     </div>
     <el-dialog title="提示" v-model="dialogVisible" width="500">
       <div style="display: flex; margin-bottom: 10px">
@@ -153,7 +159,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import {
   ElMessage,
   ElButton,
@@ -216,7 +222,12 @@ const dialogVisible = ref(false)
 const tableData = ref<any>([])
 const emit = defineEmits(['updateData'])
 console.log(tableData, '////////')
+const houseTypeText = {
+  oneself: '自谋出路',
+  concentrate: '集中供养'
+}
 
+const showTable = computed(() => houseType.value !== 'oneself' && houseType.value !== 'concentrate')
 const getPeopleList = async () => {
   const res = await getProduceListApi({
     doorNo: props.doorNo,

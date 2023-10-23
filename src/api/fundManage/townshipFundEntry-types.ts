@@ -25,3 +25,9 @@ export interface TownshipFundEntryDtoType {
   grantTime: string[]
   [key: string]: any
 }
+
+export interface AmountDtoType {
+  issuedAmount: number
+  allAmount: number
+  pendingAmount: number
+}

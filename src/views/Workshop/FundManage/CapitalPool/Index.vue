@@ -324,9 +324,10 @@ const onSearch = (data) => {
   setSearchParams({ ...params, type: MainType.PeasantHousehold })
 }
 
-const onViewRow = async (row) => {
-  tableObject.currentRow = { ...row }
-  dialog.value = true
+const onViewRow = (row) => {
+  // 点击查看进入入账详情页面
+  toLink('entrydetail')
+  console.log(row)
 }
 
 const onFormPupClose = () => {

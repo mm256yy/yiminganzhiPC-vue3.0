@@ -38,6 +38,13 @@
           >
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
+
+            <Icon
+              icon="gg:check-o"
+              color="#3e73ec"
+              class="ml-[5px]"
+              v-if="baseInfo.implementFillStatus === '1'"
+            />
           </div>
         </div>
       </div>

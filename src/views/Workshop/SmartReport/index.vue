@@ -164,17 +164,17 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'waterbasicreport',
                 active: false
               },
               {
                 label: '房屋',
-                value: '',
+                value: 'waterhousereport',
                 active: false
               },
               {
                 label: '附属物',
-                value: '',
+                value: 'waterappendreport',
                 active: false
               }
             ]
@@ -224,12 +224,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'telecomfacilitreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'telecomhousereport',
                 active: false
               }
             ]
@@ -256,12 +256,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'uniconfacilityreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'unicomappendreport',
                 active: false
               }
             ]
@@ -283,12 +283,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'broadeacilityreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'broadappendreport',
                 active: false
               }
             ]
@@ -457,17 +457,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '企业',
-            value: '',
+            value: 'enterprisereport',
             active: false
           },
           {
             label: '个体户按区域',
-            value: '',
+            value: 'individualregionreport',
             active: false
           },
           {
             label: '个体户按工作区',
-            value: '',
+            value: 'individualworkreport',
             active: false
           }
         ]
@@ -477,7 +477,7 @@ let navList = reactive<any>([
         children: [
           {
             label: '交通/电力/移动联通铁塔电信/文物',
-            value: '',
+            value: 'comprehensivereport',
             active: false
           },
           {

@@ -45,8 +45,8 @@ export const getPaymentApplicationPpsList = (params?: any) => {
 /**
  * 查询单个付款详情(包含流程接口)
  */
-export const PaymentApplicationByIdDetailApi = (params?: any): Promise<void> => {
-  return request.get({ url: `/funPaymentRequest`, params })
+export const PaymentApplicationByIdDetailApi = (id: number, type: number): Promise<void> => {
+  return request.get({ url: `/funPaymentRequest/${id}?type=${type}` })
 }
 /* 获取付款审核列表数据*/
 export const getPaymentReviewListApi = (params: PaymentApplicationDtoType) => {
@@ -57,9 +57,14 @@ export const getPaymentReviewListSSApi = (
   data: Partial<PaymentApplicationDtoType>
 ): Promise<any> => {
   return request.post({
-    url: '/funPaymentRequest/auditList',
+    url: '/funPaymentRequest/audit',
     data
   })
+}
+
+/* 获取付款审核配置数据*/
+export const funFlowNodeApi = (params?: any) => {
+  return request.get({ url: `/funFlowNode`, params })
 }
 // /**
 //  * 删除付款审核
