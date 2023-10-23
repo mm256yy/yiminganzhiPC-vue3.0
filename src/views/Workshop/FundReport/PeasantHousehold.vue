@@ -158,6 +158,7 @@ const getTableHeaderAndData = (nameLink: any[], list: any[]) => {
       {
         label: '户主',
         field: 'name',
+        fixed: true,
         ...commonTableItemSchema
       },
       ...nameList
