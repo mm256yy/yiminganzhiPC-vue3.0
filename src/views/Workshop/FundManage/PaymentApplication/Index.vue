@@ -449,7 +449,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'gsStatusTxt',
+    field: 'status',
     label: '状态',
     search: {
       show: false

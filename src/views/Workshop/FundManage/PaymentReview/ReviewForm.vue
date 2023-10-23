@@ -57,7 +57,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">{{ form.paymentType }}</div>
+          <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
@@ -257,6 +257,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   show: any
   row?: LandlordDtoType | null | undefined
+  parmasList: any
 }
 
 interface FileItemType {
