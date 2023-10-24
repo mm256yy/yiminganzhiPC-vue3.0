@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -60,14 +60,14 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
-import { useIcon } from '@/hooks/web/useIcon'
+// import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
-const BackIcon = useIcon({ icon: 'iconoir:undo' })
+// const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getGraveListApi
