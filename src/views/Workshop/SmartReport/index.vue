@@ -422,12 +422,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '生产安置意愿',
-            value: '',
+            value: 'proHouseReport',
             active: false
           },
           {
             label: '搬迁安置意愿',
-            value: '',
+            value: 'moveHouseReport',
             active: false
           }
         ]
@@ -442,12 +442,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户按区域',
-            value: '',
+            value: 'residentRegion',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'residentWork',
             active: false
           }
         ]

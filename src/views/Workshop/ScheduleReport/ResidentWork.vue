@@ -21,7 +21,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户按工作分组报表 </div>
       </div>
-      <el-table :data="tableData" border style="width: 100%">
+      <el-table height="250px" :data="tableData" border style="width: 100%">
         <el-table-column prop="hz" label="序号" align="center" width="60" />
         <el-table-column prop="hz" label="工作组" align="center" width="60" />
         <el-table-column prop="hz" label="总任务数（户）" align="center" width="60" />
@@ -57,7 +57,7 @@
           </el-table-column>
           <el-table-column prop="f" label="动迁协议" align="center" />
         </el-table-column>
-        <el-table-column prop="hz" label="安置阶段(户)" align="center">
+        <el-table-column fixed="right" prop="hz" label="安置阶段(户)" align="center">
           <el-table-column prop="hz" label="搬迁安置" align="center">
             <el-table-column prop="hz" label="自建房" align="center" width="120" />
 
