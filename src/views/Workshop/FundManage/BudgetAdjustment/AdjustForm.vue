@@ -16,15 +16,15 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="概算科目调整" prop="estimateSubject">
-        <el-radio-group v-model="form.estimateSubject">
-          <el-radio label="概算内调为概算外">概算内调为概算外</el-radio>
-          <el-radio label="6概算外调为概算内">概算外调为概算内</el-radio>
+      <ElFormItem label="概算科目调整" prop="type">
+        <el-radio-group v-model="form.type">
+          <el-radio label="1">概算内调为概算外</el-radio>
+          <el-radio label="2">概算外调为概算内</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="调整说明" prop="remark">
+      <ElFormItem label="调整说明" prop="gsRemark">
         <ElInput
-          v-model="form.remark"
+          v-model="form.gsRemark"
           :rows="4"
           type="textarea"
           class="!w-350px"
@@ -53,17 +53,16 @@ import {
   FormRules,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, watch, nextTick } from 'vue'
+import { ref, reactive, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-import { updateLandlordApi } from '@/api/immigrantImplement/common-service'
-import type { LandlordDtoType } from '@/api/workshop/landlord/types'
+import { updateAdjustmentApi } from '@/api/fundManage/budgetAdjustment-service'
+import type { AdjustmentType } from '@/api/fundManage/budgetAdjustment-types'
 
 interface PropsType {
   show: any
-  row?: LandlordDtoType | null | undefined
-  selectionIds: () => Promise<LandlordDtoType[]>
+  selectionIds: any[]
 }
 
 const props = defineProps<PropsType>()
@@ -75,30 +74,13 @@ const projectId = appStore.currentProjectId
 
 const btnLoading = ref(false)
 
-const defaultValue: Omit<LandlordDtoType, 'id'> = {
-  estimateSubject: '',
-  remark: ''
+const defaultValue = {
+  ids: props.selectionIds.toString(),
+  type: '',
+  gsRemark: ''
 }
 
-const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
-
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      // 处理行政区划
-      form.value = {
-        ...val
-      }
-    } else {
-      form.value = defaultValue
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+const form = ref<Omit<AdjustmentType, 'id'>>(defaultValue)
 
 // 规则校验
 const rules = reactive<FormRules>({
@@ -131,11 +113,10 @@ const onSubmit = debounce((formEl) => {
   })
 }, 600)
 
-const submit = async (data: LandlordDtoType) => {
-  await updateLandlordApi({
+const submit = async (data: AdjustmentType) => {
+  await updateAdjustmentApi({
     ...data,
-    projectId,
-    selectionIds: props.selectionIds.toString()
+    projectId
   })
   btnLoading.value = false
   ElMessage.success('操作成功！')

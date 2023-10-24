@@ -31,7 +31,7 @@
       </ElFormItem>
 
       <ElFormItem label="金额(元):" required>
-        <ElInput type="text" v-model="form.amount" />
+        <ElInputNumber v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="入账时间:" required>
         <ElDatePicker type="date" v-model="form.recordTime" />
@@ -71,8 +71,13 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存草稿</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      <template v-if="actionType === 'add'">
+        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
+      </template>
+      <template v-else>
+        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+      </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -89,18 +94,22 @@ import {
   FormInstance,
   FormRules,
   ElUpload,
+  ElSelect,
+  ElOption,
   ElMessage,
   ElMessageBox,
   ElInput,
+  ElInputNumber,
   ElDatePicker
 } from 'element-plus'
-import { ref, reactive, nextTick, watch, computed } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useValidator } from '@/hooks/web/useValidator'
+import dayjs from 'dayjs'
 
 interface PropsType {
   show: boolean
@@ -140,11 +149,24 @@ const rules = reactive<FormRules>({
 })
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
-      form.value = {
-        ...val
+      if (props.actionType === 'edit') {
+        // 编辑
+        form.value = {
+          ...props.row
+        }
+        if (props.row.receipt) {
+          receipt.value = JSON.parse(props.row.receipt)
+        }
+        if (form.value.recordTime) {
+          form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
+        }
+      } else {
+        // 新增
+        form.value = {}
+        receipt.value = []
       }
     }
   },
@@ -157,43 +179,44 @@ watch(
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
+  formRef.value?.resetFields()
+  form.value = {}
 }
 
-const submit = (data: any) => {
+const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
+    data.status = status
+    data.projectId = appStore.getCurrentProjectId
+    data.entryType = '1' // 1普通入账 2法人入账
     addFundEntryApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   } else {
     updateFundEntryApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
       }
     })
-    onClose(true)
   }
+  onClose(true)
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
         ElMessage.error('请上传凭证')
         return
-      } else {
-        let params: any = {
-          ...form.value,
-          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
-        }
-        submit(params)
       }
+      let params: any = {
+        ...form.value,
+        receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+      }
+      params.recordTime = dayjs(params.recordTime)
+      submit(params, status)
     } else {
       return false
     }
@@ -216,6 +239,7 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
 
   if (type === 'receipt') {
     receipt.value = list
+    console.log('MM-P', receipt.value)
   }
 }
 

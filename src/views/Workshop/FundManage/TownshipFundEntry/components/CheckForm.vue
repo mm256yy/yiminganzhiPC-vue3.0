@@ -17,20 +17,42 @@
       :rules="rules"
       label-suffix=":"
     >
-      <ElFormItem v-if="isHouseHold" label="户主" prop="household"> 张三 </ElFormItem>
-      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isHouseHold" label="户主" prop="household"> {{ form.name }} </ElFormItem>
+      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber">
+        {{ form.doorNo }}
+      </ElFormItem>
 
-      <ElFormItem v-if="isVillage" label="村集体" prop="household"> 张三 </ElFormItem>
-      <ElFormItem v-if="isVillage" label="村集体编号" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isVillage" label="村集体" prop="household">
+        {{ form.villageText }}
+      </ElFormItem>
+      <ElFormItem v-if="isVillage" label="村集体编号" prop="accountNumber">
+        {{ form.villageCode }}
+      </ElFormItem>
 
       <ElFormItem v-if="isOther" label="名称" prop="household"> 张三 </ElFormItem>
       <ElFormItem v-if="isOther" label="资金科目" prop="accountNumber"> aaaa </ElFormItem>
 
-      <ElFormItem v-if="!isOther" label="所属区域" prop="area"> 所属区域文本 </ElFormItem>
+      <ElFormItem v-if="!isOther" label="所属区域" prop="area">
+        {{
+          `
+              ${form.cityCodeText ? form.cityCodeText + '/' : ''}
+              ${form.areaCodeText ? form.areaCodeText : ''}
+              ${form.townCodeText ? '/' + form.townCodeText : ''}
+              ${form.villageText ? '/' + form.villageText : ''}
+              ${form.virutalVillageText ? '/' + form.virutalVillageText : ''}
+              `
+        }}
+      </ElFormItem>
 
-      <ElFormItem label="到账金额" prop="amountReceived"> 到账金额文本 </ElFormItem>
-      <ElFormItem label="金额(元)" prop="amount"> 金额文本 </ElFormItem>
-      <ElFormItem label="发放金额" prop="issuedAmount"> 1000 </ElFormItem>
+      <ElFormItem label="到账金额" prop="issuedAmount">
+        {{ form.issuedAmount }}&nbsp;元
+      </ElFormItem>
+      <ElFormItem label="已发放金额" prop="issuedAmount">
+        {{ form.issuedAmount }}&nbsp;元
+      </ElFormItem>
+      <ElFormItem label="待发放" prop="pendingAmount">
+        {{ form.pendingAmount }}&nbsp;元
+      </ElFormItem>
       <div class="table-wrap">
         <Table
           border
@@ -43,36 +65,44 @@
           highlightCurrentRow
           @register="register"
         >
-          <template #proof>
-            <div class="proof-container">
-              <ElImage :src="avatarSrc" @click="onShowImage" alt="相关凭证"
+          <template #receipt>
+            <div class="proof-container" v-for="(item, index) in relocateOtherPic" :key="index">
+              <ElImage :src="item.url" @click="onShowImage" alt="相关凭证"
             /></div>
           </template>
         </Table>
       </div>
     </ElForm>
-    <el-dialog title="查看图片" :width="600" v-model="dialogVisible">
+    <!-- <el-dialog title="查看图片" :width="600" v-model="dialogVisible">
       <img class="block w-full" :src="avatarSrc" alt="Preview Image" />
-    </el-dialog>
+    </el-dialog> -->
   </ElDialog>
 </template>
 
 <script setup lang="ts">
 import { ElDialog, ElForm, ElFormItem, FormInstance, FormRules, ElImage } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import { ref, reactive, nextTick, computed, watch } from 'vue'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import avatarSrc from '@/assets/imgs/done_icon.png'
+import type { TownshipFundEntryDtoType } from '@/api/fundManage/townshipFundEntry-types'
+import { getFundGrantFindByDoorNo } from '@/api/fundManage/townshipFundEntry-service'
 
 interface PropsType {
   show: boolean
+  row?: TownshipFundEntryDtoType | null | undefined
   type: number // 类型
+}
+
+interface FileItemType {
+  name: string
+  url: string
 }
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
+const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
 
 const form = ref<any>({})
 const dialogVisible = ref<boolean>(false)
@@ -95,20 +125,8 @@ const onShowImage = () => {
 
 const { register, tableObject } = useTable()
 
-tableObject.tableList = [
-  {
-    index: '1',
-    issueDate: '123',
-    amount: '100',
-    instructions: '100'
-  }
-]
-
 // 规则校验
 const rules = reactive<FormRules>({})
-
-const initData = () => {}
-
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
@@ -117,16 +135,24 @@ const onClose = (flag = false) => {
   })
 }
 
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      form.value = props.row
+      getFundGrantFindByDoorNo(props.row?.doorNo).then((res) => {
+        tableObject.tableList = res.data
+        relocateOtherPic.value = res.data?.receipt ? JSON.parse(res.data?.receipt) : []
+      })
+    }
+  }
+)
+
 // 预览
 // const imgPreview = (uploadFile: UploadFile) => {
 //   imgUrl.value = uploadFile.url!
 //   dialogVisible.value = true
 // }
-
-onMounted(() => {
-  initData()
-})
-
 const schema = reactive<CrudSchema[]>([
   // table字段
   {
@@ -138,7 +164,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'issueDate',
+    field: 'paymentTime',
     label: '发放日期',
     search: {
       show: false
@@ -153,14 +179,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'instructions',
+    field: 'remark',
     label: '说明',
     search: {
       show: false
     }
   },
   {
-    field: 'proof',
+    field: 'receipt',
     label: '相关凭证',
     align: 'center',
     search: {

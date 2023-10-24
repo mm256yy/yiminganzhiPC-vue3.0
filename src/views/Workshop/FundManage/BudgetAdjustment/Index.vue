@@ -46,18 +46,13 @@
     <ViewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseView" />
 
     <!-- 概算调整 -->
-    <AdjustForm
-      :show="adjustDialog"
-      :row="tableObject.currentRow"
-      :selectionIds="getSelections"
-      @close="onCloseAdjust"
-    />
+    <AdjustForm :show="adjustDialog" :selectionIds="selectionIds" @close="onCloseAdjust" />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref, computed, onMounted } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
@@ -65,8 +60,9 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { MainType } from '@/types/print'
-import { getLandlordListApi, delLandlordByIdApi } from '@/api/workshop/landlord/service'
+import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
+// import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ViewForm from './ViewForm.vue'
 import AdjustForm from './AdjustForm.vue'
@@ -78,19 +74,32 @@ const dictObj = computed(() => dictStore.getDictObj)
 const dialog = ref(false) // 查看弹窗标识
 const adjustDialog = ref(false) // 调整概算弹窗标识
 const fundAccountList = ref<any[]>([]) // 资金科目
+const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getLandlordListApi,
-  delListApi: delLandlordByIdApi
+  getListApi: getBudgetAdjustmentListApi
 })
 
 const { setSearchParams, getSelections } = methods
+// tableObject.params = {
+//   projectId,
+//   businessId: 2
+//   // auditType: tabVal.value
+// }
 
-setSearchParams({ type: MainType.PeasantHousehold })
+tableObject.params = {
+  projectId,
+  // businessId: 2,
+  status: 4
+  // auditType: tabVal.value
+}
+setSearchParams({})
+
+// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'type',
+    field: 'applyType',
     label: '申请类别',
     search: {
       show: true,
@@ -110,7 +119,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'status',
+    field: 'gsStatus',
     label: '状态',
     search: {
       show: true,
@@ -150,7 +159,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: true,
@@ -170,7 +179,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '申请金额',
     search: {
       show: true,
@@ -187,7 +196,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'classify',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
@@ -207,7 +216,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
@@ -228,6 +237,46 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+  {
+    field: 'applyUserName',
+    label: '申请人',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入'
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'paymentType',
+    label: '付款对象类型',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: dictObj.value[384]
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
 
   // table 字段
   {
@@ -245,7 +294,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundName',
+    field: 'name',
     label: '资金名称',
     search: {
       show: false
@@ -258,20 +307,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundSource',
-    label: '资金来源',
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'paymentType',
+    field: 'paymentTypeTxt',
     label: '付款对象类型',
     search: {
       show: false
@@ -284,7 +320,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'estimateSubject',
+    field: 'typeTxt',
     label: '概算科目',
     search: {
       show: false
@@ -297,7 +333,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundSubject',
+    field: 'funSubjectTxt',
     label: '资金科目',
     search: {
       show: false
@@ -323,7 +359,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeTxt',
     label: '申请类别',
     search: {
       show: false
@@ -337,7 +373,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'createDate',
-    label: '创建时间',
+    label: '申请时间',
     search: {
       show: false
     },
@@ -349,7 +385,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: false
@@ -400,22 +436,49 @@ tableObject.params = {
 const onSearch = (data) => {
   // 处理参数
   let params = { ...data }
-  if (!data.reportStatus) {
-    Reflect.deleteProperty(params, 'reportStatus')
-  }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+
+  if (!params.name) {
+    delete params.name
   }
 
-  if (!params.card) {
-    delete params.card
+  if (!params.applyType) {
+    delete params.applyType
   }
-  setSearchParams({ ...params, type: MainType.PeasantHousehold })
+
+  if (!params.dataState) {
+    delete params.dataState
+  }
+
+  if (!params.createdDate) {
+    delete params.createdDate
+  }
+
+  if (!params.amount && !params.amount.length) {
+    delete params.amount
+  }
+
+  if (!params.type) {
+    delete params.type
+  }
+
+  if (!params.funSubjectId) {
+    delete params.funSubjectId
+  }
+
+  if (!params.applyUserName) {
+    delete params.applyUserName
+  }
+
+  if (!params.paymentType) {
+    delete params.paymentType
+  }
+
+  setSearchParams({ ...params, status: '4' })
 }
 
 // 获取资金科目选项列表
@@ -433,8 +496,15 @@ const onViewRow = async (row) => {
 }
 
 // 调整概算
-const onAdjust = () => {
-  adjustDialog.value = true
+const onAdjust = async () => {
+  const res = await getSelections()
+  selectionIds.value = [...res]
+  console.log(selectionIds.value, '123123123')
+  if (res && res.length) {
+    adjustDialog.value = true
+  } else {
+    ElMessage.info('请先勾选列表数据')
+  }
 }
 
 // 关闭查看弹窗
@@ -446,7 +516,7 @@ const onCloseView = () => {
 const onCloseAdjust = (flag: boolean) => {
   adjustDialog.value = false
   if (flag === true) {
-    setSearchParams({ type: MainType.PeasantHousehold })
+    setSearchParams({ status: '4' })
   }
 }
 

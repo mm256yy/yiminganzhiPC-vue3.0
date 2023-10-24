@@ -5,14 +5,17 @@
       <ElBreadcrumbItem class="text-size-12px">资金支付</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
 
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金支付记录</span>
-
           <div class="text">
             合计金额： <span class="num">{{ headInfo }}</span> 元
           </div>
@@ -43,13 +46,28 @@
         </template>
 
         <template #paymentTime="{ row }">
-          <div>{{
-            row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
+          <div>{{ row.paymentTime ? dayjs(row.paymentTime).format('YYYY-MM-DD') : '-' }}</div>
+        </template>
+
+        <template #status="{ row }">
+          <div>{{ row.status === 0 ? '草稿' : '正常' }}</div>
         </template>
 
         <template #action="{ row }">
-          <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
+          <TableEditColumn
+            :view-type="'link'"
+            :icons="[
+              {
+                icon: '',
+                tooltip: '查看',
+                type: 'primary',
+                action: () => onViewRow(row)
+              }
+            ]"
+            :row="row"
+            @delete="onDelRow"
+            @edit="onEditRow"
+          />
         </template>
       </Table>
     </div>
@@ -58,6 +76,7 @@
       :show="dialog"
       :actionType="actionType"
       :row="tableObject.currentRow"
+      :fundAccountList="fundAccountList"
       @close="onEditFormClose"
     />
   </WorkContentWrap>
@@ -78,11 +97,14 @@ import EditForm from './EditForm.vue'
 import {
   getFunPayListApi,
   deleteFunPayApi,
-  getLpList,
-  getFunPaySumAmount
+  getLpListApi,
+  getFunPaySumAmountApi
 } from '@/api/fundManage/fundPayment-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { useRouter } from 'vue-router'
 
+const { push } = useRouter()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
@@ -93,6 +115,7 @@ const headInfo = ref<any>()
 const lpList = ref<any[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
+const fundAccountList = ref<any[]>([]) // 资金科目
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFunPayListApi,
@@ -107,20 +130,35 @@ tableObject.params = {
 getList()
 
 const getHeadInfo = async () => {
-  const info = await getFunPaySumAmount()
+  const info = await getFunPaySumAmountApi()
   headInfo.value = info
 }
 
 const getLpListHandle = async () => {
-  const res: any = await getLpList()
+  const res: any = await getLpListApi()
   if (res && res.length) {
-    lpList.value = res
+    lpList.value = res.map((item) => {
+      return {
+        label: item.userName,
+        value: item.id
+      }
+    })
   }
+}
+
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+    }
+  })
 }
 
 onMounted(() => {
   getHeadInfo()
   getLpListHandle()
+  getFundSubjectList()
 })
 
 const onDelRow = async (row: any, multiple: boolean) => {
@@ -143,6 +181,10 @@ const onEditRow = (row: any) => {
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
+}
+
+const onViewRow = (row) => {
+  push(`/FundManage/FundPayment/Detail?id=${row.id}`)
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -188,14 +230,17 @@ const schema = reactive<CrudSchema[]>([
     label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        data: fundAccountList,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -246,17 +291,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createUserName',
+    field: 'createUserId',
     label: '登记人',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: lpList.value,
-        props: {
-          value: 'id',
-          label: 'nickName'
-        }
+        options: lpList as any
       }
     },
     table: {
@@ -304,7 +345,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'type',
+    field: 'typeText',
     label: '概算科目',
     search: {
       show: false
@@ -312,7 +353,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'funSubjectId',
+    field: 'funSubjectIdText',
     label: '资金科目',
     search: {
       show: false
@@ -327,7 +368,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeText',
     label: '资金类别',
     search: {
       show: false
@@ -388,37 +429,9 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onSearch = (data) => {
-  //解决是否户主relation入参变化
-  let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
-
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
-
-  // 处理参数
-  let params = {
-    ...searchData
-  }
-  tableObject.params = {
-    projectId
-  }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
-  }
-}
-
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
+    getHeadInfo()
     getList()
   }
   dialog.value = false

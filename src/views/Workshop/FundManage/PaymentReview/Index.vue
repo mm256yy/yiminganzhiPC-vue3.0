@@ -40,7 +40,9 @@
         <template #age="{ row }">
           <div>{{ analyzeIDCard(row.card) }}</div>
         </template>
-
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
         <!-- <template #action="{ row }">
             <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
           </template> -->
@@ -48,14 +50,20 @@
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <el-button type="primary" link @click="onReviewRow(row)">审核</el-button>
           <!-- <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row)">
-            删除
+            删除    
           </el-button> -->
         </template>
       </Table>
     </div>
 
     <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
-    <ReviewForm :show="dialog" @close="onCloseReview" :actionType="actionType" />
+    <ReviewForm
+      :show="dialog"
+      @close="onCloseReview"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      :parmasList="parmasList"
+    />
   </WorkContentWrap>
 </template>
 
@@ -71,11 +79,15 @@ import { useTable } from '@/hooks/web/useTable'
 import ReviewForm from './ReviewForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
+import {
+  getPaymentReviewListApi,
+  PaymentApplicationByIdDetailApi
+} from '@/api/fundManage/paymentApplication-service'
+// import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
 // import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
-  getDemographicListApi,
-  delDemographicByIdApi,
+  // getDemographicListApi,
+  // delDemographicByIdApi,
   getDemographicHeadApi,
   getExcelList
 } from '@/api/workshop/population/service'
@@ -96,6 +108,8 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const villageTree = ref<any[]>([])
+const parmasList = ref<any[]>([])
+
 const headInfo = ref<DemographicHeadType>({
   demographicNum: 0,
   peasantHouseholdNum: 0
@@ -108,19 +122,21 @@ const dialog = ref<boolean>(false)
 let timer = 0
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getDemographicListApi,
-  delListApi: delDemographicByIdApi
+  getListApi: getPaymentReviewListApi
+  // delListApi: delPaymentApplicationByIdApi
 })
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  businessId: 1,
+  auditType: tabVal.value
 }
 
 getList()
 const tabChange = (data: string) => {
   tabVal.value = data
-  // setSearchParams({ type: MainType.PeasantHousehold, status: tabVal.value })
+  setSearchParams({ businessId: 1, auditType: tabVal.value })
 }
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()
@@ -180,10 +196,18 @@ const onReviewRow = async (row) => {
   dialog.value = true
   actionType.value = 'edit'
 }
-const onViewRow = async (row) => {
+const onViewRow = async (row: any) => {
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  actionType.value = 'view'
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
   tableObject.currentRow = row
   dialog.value = true
-  actionType.value = 'view'
 }
 
 // 关闭审核弹窗
@@ -192,7 +216,7 @@ const onCloseReview = () => {
 }
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'type',
+    field: 'applyType',
     label: '申请类别',
     search: {
       show: true,
@@ -212,7 +236,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'applyUserName',
     label: '申请名称',
     search: {
       show: true,
@@ -249,7 +273,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'price',
+    field: 'amount',
     label: '申请金额',
     search: {
       show: true,
@@ -266,7 +290,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'classify',
+    field: 'type',
     label: '概算科目',
     search: {
       show: true,
@@ -286,7 +310,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fundAccount',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: true,
@@ -314,7 +338,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: true,
@@ -331,18 +355,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relationText',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: [
-          {
-            label: '1',
-            value: 1
-          }
-        ]
+        options: dictObj.value[384]
       }
     },
     table: {
@@ -364,7 +383,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'name',
+    field: 'code',
     label: '付款编号',
     search: {
       show: false
@@ -372,7 +391,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'relationText',
+    field: 'applyUserName',
     label: '申请名称',
     search: {
       show: false
@@ -388,7 +407,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'estimateSubject',
+    field: 'type',
     label: '概算科目',
     search: {
       show: false
@@ -396,7 +415,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'fundSubject',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
@@ -410,21 +429,21 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyType',
+    field: 'applyTypeTxt',
     label: '申请类别',
     search: {
       show: false
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '创建时间',
     search: {
       show: false
     }
   },
   {
-    field: 'applyUser',
+    field: 'applyUserName',
     label: '申请人',
     search: {
       show: false
@@ -433,7 +452,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'statusText',
     label: '状态',
     search: {
       show: false
