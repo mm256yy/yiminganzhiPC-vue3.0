@@ -6,7 +6,7 @@ export const getGraveListApi = (
   params: Partial<GraveDtoType>
 ): Promise<TableResponse<GraveDtoType>> => {
   return request.get({
-    url: '/query/queryGrave',
+    url: '/resultForms/queryGrave',
     params
   })
 }

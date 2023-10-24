@@ -73,22 +73,22 @@ let navList = reactive<any>([
         children: [
           {
             label: '人口房屋',
-            value: '',
+            value: 'PopulationHousing',
             active: false
           },
           {
             label: '附属物',
-            value: '',
+            value: 'Accessory',
             active: false
           },
           {
             label: '零星林(果)木',
-            value: '',
+            value: 'FruitWood',
             active: false
           },
           {
             label: '实物成果汇总',
-            value: '',
+            value: 'Achievements',
             active: false
           }
         ]
@@ -98,17 +98,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '房屋/附属物/零星林(果)木',
-            value: '',
+            value: 'VillageCollective',
             active: false
           },
           {
             label: '土地',
-            value: '',
+            value: 'Land',
             active: false
           },
           {
             label: '坟墓',
-            value: '',
+            value: 'Grave',
             active: false
           }
         ]
@@ -377,37 +377,37 @@ let navList = reactive<any>([
         children: [
           {
             label: '电信工程',
-            value: '',
+            value: 'telecommunication',
             active: false
           },
           {
             label: '移动工程',
-            value: '',
+            value: 'moveExcel',
             active: false
           },
           {
             label: '联通工程',
-            value: '',
+            value: 'unicom',
             active: false
           },
           {
             label: '铁打工程',
-            value: '',
+            value: 'Irontower',
             active: false
           },
           {
             label: '广播电视工程',
-            value: '',
+            value: 'radioExcel',
             active: false
           },
           {
             label: '水文站',
-            value: '',
+            value: 'hydrology',
             active: false
           },
           {
             label: '宗教',
-            value: '',
+            value: 'religion',
             active: false
           }
         ]

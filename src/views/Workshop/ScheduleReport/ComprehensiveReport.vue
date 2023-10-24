@@ -60,7 +60,10 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
 
+const { back } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
@@ -277,7 +280,9 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
-
+const onBack = () => {
+  back()
+}
 onMounted(() => {
   getVillageTree()
   setSearchParams({})

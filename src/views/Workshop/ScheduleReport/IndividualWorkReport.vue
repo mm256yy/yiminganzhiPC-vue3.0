@@ -59,7 +59,9 @@ import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/population
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
-
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+const { back } = useRouter()
 interface SpanMethodProps {
   row: PopulationHousingDtoType
   column: PopulationHousingDtoType
@@ -330,7 +332,9 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
-
+const onBack = () => {
+  back()
+}
 onMounted(() => {
   getVillageTree()
   setSearchParams({})
