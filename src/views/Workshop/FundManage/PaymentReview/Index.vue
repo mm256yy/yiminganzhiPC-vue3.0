@@ -62,6 +62,7 @@
       @close="onCloseReview"
       :actionType="actionType"
       :row="tableObject.currentRow"
+      :parmasList="parmasList"
     />
   </WorkContentWrap>
 </template>
@@ -78,7 +79,10 @@ import { useTable } from '@/hooks/web/useTable'
 import ReviewForm from './ReviewForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+import {
+  getPaymentReviewListApi,
+  PaymentApplicationByIdDetailApi
+} from '@/api/fundManage/paymentApplication-service'
 // import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
 // import { useIcon } from '@/hooks/web/useIcon' // 操作类型
 import {
@@ -104,6 +108,8 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const villageTree = ref<any[]>([])
+const parmasList = ref<any[]>([])
+
 const headInfo = ref<DemographicHeadType>({
   demographicNum: 0,
   peasantHouseholdNum: 0
@@ -190,10 +196,18 @@ const onReviewRow = async (row) => {
   dialog.value = true
   actionType.value = 'edit'
 }
-const onViewRow = async (row) => {
+const onViewRow = async (row: any) => {
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  actionType.value = 'view'
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
   tableObject.currentRow = row
   dialog.value = true
-  actionType.value = 'view'
 }
 
 // 关闭审核弹窗
@@ -438,7 +452,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'statusText',
     label: '状态',
     search: {
       show: false

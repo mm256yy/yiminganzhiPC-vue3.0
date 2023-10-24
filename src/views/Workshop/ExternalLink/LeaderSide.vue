@@ -299,7 +299,7 @@
             <div class="data-left-header-tab">
               <div class="flex">
                 <div class="line"></div>
-                <div class="strong">消息反馈</div></div
+                <div class="strong">信息反馈</div></div
               >
             </div>
             <div class="toMore aliam-center">
@@ -543,10 +543,8 @@ const getList = async () => {
 
 const feedback = async () => {
   const list = await feedbackList({})
-  // console.log(list, '测试问题反馈列表')
   if (list.content.length > 0) {
     list.content.forEach((item, index) => {
-      // questionList.value[i.value++].name = item.remark
       if (questionList.value[index]) {
         questionList.value[index].name = item.remark
       }
@@ -570,11 +568,21 @@ const clearInput = async () => {
   arr.value = []
   planList.value = []
   actualList.value = []
+  // list.progressManagementDto.forEach((item) => {
+  //   arr.value.push(item.name)
+  //   planList.value.push(item.plan)
+  //   actualList.value.push(item.actual)
+  // })
+
+  // 先对 list.progressManagementDto 数组进行排序
+  list.progressManagementDto.reverse()
+  // 然后再遍历排好序的数组
   list.progressManagementDto.forEach((item) => {
     arr.value.push(item.name)
     planList.value.push(item.plan)
     actualList.value.push(item.actual)
   })
+
   console.log(arr.value, planList.value, '111')
   impProgressOption.value.yAxis.data = arr.value
   impProgressOption.value.series[1].data = planList.value

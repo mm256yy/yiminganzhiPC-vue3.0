@@ -61,6 +61,8 @@ import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
+// import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ViewForm from './ViewForm.vue'
 import AdjustForm from './AdjustForm.vue'
@@ -79,8 +81,21 @@ const { register, tableObject, methods } = useTable({
 })
 
 const { setSearchParams, getSelections } = methods
+// tableObject.params = {
+//   projectId,
+//   businessId: 2
+//   // auditType: tabVal.value
+// }
 
-setSearchParams({ status: '4' })
+tableObject.params = {
+  projectId,
+  // businessId: 2,
+  status: 4
+  // auditType: tabVal.value
+}
+setSearchParams({})
+
+// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -383,7 +398,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'gsStatusTxt',
+    field: 'status',
     label: '状态',
     search: {
       show: false
@@ -484,6 +499,7 @@ const onViewRow = async (row) => {
 const onAdjust = async () => {
   const res = await getSelections()
   selectionIds.value = [...res]
+  console.log(selectionIds.value, '123123123')
   if (res && res.length) {
     adjustDialog.value = true
   } else {

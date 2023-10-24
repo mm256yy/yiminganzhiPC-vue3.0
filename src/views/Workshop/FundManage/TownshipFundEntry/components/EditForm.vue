@@ -18,19 +18,21 @@
       label-suffix=":"
     >
       <ElFormItem v-if="isHouseHold" label="户主" prop="household"> {{ form.name }} </ElFormItem>
-      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber">
+      <ElFormItem v-if="isHouseHold" label="户号" prop="doorNo">
         {{ form.doorNo }}
       </ElFormItem>
 
-      <ElFormItem v-if="isVillage" label="村集体" prop="household">
+      <ElFormItem v-if="isVillage" label="村集体" prop="villageText">
         {{ form.villageText }}
       </ElFormItem>
-      <ElFormItem v-if="isVillage" label="村集体编号" prop="accountNumber">
+      <ElFormItem v-if="isVillage" label="村集体编号" prop="villageCode">
         {{ form.villageCode }}
       </ElFormItem>
 
-      <ElFormItem v-if="isOther" label="名称" prop="name"> 张三 </ElFormItem>
-      <ElFormItem v-if="isOther" label="资金科目" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isOther" label="名称" prop="name"> {{ form.name }} </ElFormItem>
+      <ElFormItem v-if="isOther" label="资金科目" prop="funSubjectName">
+        {{ form.funSubjectName }}
+      </ElFormItem>
 
       <ElFormItem v-if="!isOther" label="所属区域" prop="area">
         {{
@@ -173,7 +175,7 @@ const getTabType = (type: number) => {
   const map = {
     1: 'PeasantHousehold',
     2: 'Village',
-    3: 'Other'
+    3: 'other'
   }
   return map[type]
 }
@@ -182,7 +184,10 @@ watch(
   () => props.show,
   (val) => {
     if (val) {
-      form.value = props.row
+      form.value = {
+        ...props.row,
+        amount: null
+      }
     }
   }
 )

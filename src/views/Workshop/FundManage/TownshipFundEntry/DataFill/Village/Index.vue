@@ -9,7 +9,9 @@
       <div class="table-header-left">
         <span style="margin: 0 10px; font-size: 16px; font-weight: 600">资金发放记录</span>
         <div class="text">
-          预拨款总额：11000000.01元 &nbsp;&nbsp; 发放金额：100000.09元 &nbsp;&nbsp; 余额：9999.99元
+          预拨款总额：{{ amountItem?.allAmount }}元 &nbsp;&nbsp; 发放金额：{{
+            amountItem?.issuedAmount
+          }}元 &nbsp;&nbsp; 余额：{{ amountItem?.pendingAmount }}元
         </div>
       </div>
     </div>
@@ -52,9 +54,9 @@
       </template>
     </Table>
     <!--发放-->
-    <EditForm :show="editDialog" @close="onEditFormClose" :type="props.type" />
+    <EditForm :show="editDialog" :row="itemRow" @close="onEditFormClose" :type="props.type" />
     <!--查看-->
-    <CheckForm :show="checkDialog" @close="onCheckFormClose" :type="props.type" />
+    <CheckForm :show="checkDialog" :row="itemRow" @close="onCheckFormClose" :type="props.type" />
   </div>
 </template>
 <script setup lang="ts">
@@ -69,7 +71,11 @@ import EditForm from '../../components/EditForm.vue'
 import CheckForm from '../../components/CheckForm.vue'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { filterViewDoorNo } from '@/utils/index'
-import { getFundDistributionListApi } from '@/api/fundManage/townshipFundEntry-service'
+import {
+  getFundDistributionListApi,
+  getGrantSumAmount
+} from '@/api/fundManage/townshipFundEntry-service'
+import type { AmountDtoType } from '@/api/fundManage/townshipFundEntry-types'
 
 interface PropsType {
   type: number // 类型
@@ -80,9 +86,11 @@ const props = defineProps<PropsType>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const districtTree = ref<any[]>([])
+const itemRow = ref<any>({})
 
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
+const amountItem = ref<AmountDtoType>()
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFundDistributionListApi
@@ -92,16 +100,25 @@ const { setSearchParams } = methods
 
 setSearchParams({ name: '', type: 'Village' })
 
-setSearchParams({ name: '', code: '' })
-
 const getdistrictTree = async () => {
   const list = await getVillageTreeApi(projectId)
   districtTree.value = list || []
   return list || []
 }
 
+const getAmount = () => {
+  const params = {
+    projectId,
+    type: 'Village'
+  }
+  getGrantSumAmount(params).then((res) => {
+    amountItem.value = res
+  })
+}
+
 onMounted(() => {
   getdistrictTree()
+  getAmount()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -128,7 +145,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'blurry',
+    field: 'name',
     label: '村集体名',
     search: {
       show: true,
@@ -214,13 +231,13 @@ const { allSchemas } = useCrudSchemas(schema)
 
 // 发放
 const onIssue = (row: any) => {
+  itemRow.value = row
   editDialog.value = true
-  console.log('row', row)
 }
 // 查看
 const onCheckRow = (row: any) => {
+  itemRow.value = row
   checkDialog.value = true
-  console.log('row', row)
 }
 
 const onEditFormClose = () => {

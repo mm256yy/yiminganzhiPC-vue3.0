@@ -18,8 +18,8 @@
     >
       <ElFormItem label="概算科目调整" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio label="概算内调为概算外">概算内调为概算外</el-radio>
-          <el-radio label="6概算外调为概算内">概算外调为概算内</el-radio>
+          <el-radio label="1">概算内调为概算外</el-radio>
+          <el-radio label="2">概算外调为概算内</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="调整说明" prop="gsRemark">

@@ -38,6 +38,13 @@
           >
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
+
+            <Icon
+              icon="gg:check-o"
+              color="#3e73ec"
+              class="ml-[5px]"
+              v-if="baseInfo.implementFillStatus === '1'"
+            />
           </div>
         </div>
       </div>
@@ -134,7 +141,7 @@
 
       <!-- 村集体 小型专项及农副业设施评估 -->
       <SpecialEquipment
-        v-show="type === 'villageInfoC' && tabCurrentId === TabIds[6]"
+        v-show="type === 'VillageInfoC' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"

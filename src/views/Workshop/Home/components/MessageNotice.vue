@@ -53,11 +53,11 @@
         </div>
       </div>
     </div>
-    <!--消息反馈-->
+    <!--信息反馈-->
     <div class="statistic-item">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_feed.png" class="icon" />
-        <div>消息反馈</div>
+        <div>信息反馈</div>
       </div>
       <div>
         <div class="top-title">

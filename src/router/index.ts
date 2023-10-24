@@ -151,8 +151,53 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         },
         children: [
           {
-            path: 'fundPeople',
-            name: 'fundPeople',
+            path: 'FundEnterprise',
+            name: 'FundEnterprise',
+            component: () => import('@/views/Workshop/FundReport/Enterprise.vue'),
+            meta: {
+              title: '资金管理-企业报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundIndividualB',
+            name: 'FundIndividualB',
+            component: () => import('@/views/Workshop/FundReport/IndividualB.vue'),
+            meta: {
+              title: '资金管理-个体户报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundVillage',
+            name: 'FundVillage',
+            component: () => import('@/views/Workshop/FundReport/Village.vue'),
+            meta: {
+              title: '资金管理-村集体报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundHydropower',
+            name: 'FundHydropower',
+            component: () => import('@/views/Workshop/FundReport/Hydropower.vue'),
+            meta: {
+              title: '资金管理-水电站报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundUseDetail',
+            name: 'FundUseDetail',
+            component: () => import('@/views/Workshop/FundReport/FundDetail.vue'),
+            meta: {
+              title: '资金管理-资金使用情况报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundPeople',
+            name: 'FundPeople',
             component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
             meta: {
               title: '资金管理-居民户报表',
@@ -291,6 +336,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           }
 
+          },
           // {
           //   path: 'fundPeople',
           //   name: 'fundPeople',
@@ -300,6 +346,123 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           //     icon: 'ant-design:home-outlined'
           //   }
           // }
+          {
+            path: 'telecomhousereport',
+            name: 'telecomhousereport',
+            component: () => import('@/views/Workshop/AchievementsReport/TelecomHouseReport.vue'),
+            meta: {
+              title: '实物成果-电信工程-房屋及其附属物设备汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'telecomfacilitreport',
+            name: 'telecomfacilitreport',
+            component: () => import('@/views/Workshop/AchievementsReport/TelecomFacilitReport.vue'),
+            meta: {
+              title: '实物成果-电信工程-设施汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'broadappendreport',
+            name: 'broadappendreport',
+            component: () => import('@/views/Workshop/AchievementsReport/BroadAppendReport.vue'),
+            meta: {
+              title: '实物成果-广播电视工程-房屋及其附属物设备汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'broadeacilityreport',
+            name: 'broadeacilityreport',
+            component: () => import('@/views/Workshop/AchievementsReport/BroadFacilityReport.vue'),
+            meta: {
+              title: '实物成果-广播电视工程-设施汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'uniconfacilityreport',
+            name: 'uniconfacilityreport',
+            component: () => import('@/views/Workshop/AchievementsReport/UniconFacilityReport.vue'),
+            meta: {
+              title: '实物成果-联通工程-设施汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'unicomappendreport',
+            name: 'unicomappendreport',
+            component: () => import('@/views/Workshop/AchievementsReport/UnicomAppendReport.vue'),
+            meta: {
+              title: '实物成果-联通工程-附属物设备汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'waterbasicreport',
+            name: 'waterbasicreport',
+            component: () => import('@/views/Workshop/AchievementsReport/WaterBasicReport.vue'),
+            meta: {
+              title: '实物成果-水电站-基本情况',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'waterhousereport',
+            name: 'waterhousereport',
+            component: () => import('@/views/Workshop/AchievementsReport/WaterHouseReport.vue'),
+            meta: {
+              title: '实物成果-水电站-房屋汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'waterappendreport',
+            name: 'waterappendreport',
+            component: () => import('@/views/Workshop/AchievementsReport/WaterAppendReport.vue'),
+            meta: {
+              title: '实物成果-水电站-房屋汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'enterprisereport',
+            name: 'enterprisereport',
+            component: () => import('@/views/Workshop/ScheduleReport/EnterpriseReport.vue'),
+            meta: {
+              title: '进度管理-企业报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'individualregionreport',
+            name: 'individualregionreport',
+            component: () => import('@/views/Workshop/ScheduleReport/IndividualRegionReport.vue'),
+            meta: {
+              title: '进度管理-个体户按区域',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'individualworkreport',
+            name: 'individualworkreport',
+            component: () => import('@/views/Workshop/ScheduleReport/IndividualWorkReport.vue'),
+            meta: {
+              title: '进度管理-个体户按区域',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'comprehensivereport',
+            name: 'comprehensivereport',
+            component: () => import('@/views/Workshop/ScheduleReport/ComprehensiveReport.vue'),
+            meta: {
+              title: '进度管理-个体户按区域',
+              icon: 'ant-design:home-outlined'
+            }
+          }
         ]
       },
       {
@@ -427,6 +590,60 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
     },
     children: [
       {
+        path: 'paymentdetail',
+        name: 'paymentdetail',
+        component: () => import('@/views/Workshop/FundManage/FundPayment/Detail.vue'),
+        meta: {
+          title: '资金支付详情',
+          hidden: false
+        }
+      },
+      {
+        path: 'fundpayment',
+        name: 'fundpayment',
+        component: () => import('@/views/Workshop/FundManage/FundPayment/Index.vue'),
+        meta: {
+          title: '资金支付',
+          hidden: false
+        }
+      },
+      // {
+      //   path: 'allocationdetail',
+      //   name: 'allocationdetail',
+      //   component: () => import('@/views/Workshop/FundManage/FundAllocation/Detail.vue'),
+      //   meta: {
+      //     title: '资金预拨详情',
+      //     hidden: false
+      //   }
+      // },
+      {
+        path: 'allocation',
+        name: 'allocation',
+        component: () => import('@/views/Workshop/FundManage/FundAllocation/Index.vue'),
+        meta: {
+          title: '资金预拨',
+          hidden: false
+        }
+      },
+      {
+        path: 'entrydetail',
+        name: 'entrydetail',
+        component: () => import('@/views/Workshop/FundManage/FundEntry/Detail.vue'),
+        meta: {
+          title: '入账详情',
+          hidden: false
+        }
+      },
+      {
+        path: 'entry',
+        name: 'fundEntry',
+        component: () => import('@/views/Workshop/FundManage/FundEntry/Index.vue'),
+        meta: {
+          title: '资金入账',
+          hidden: false
+        }
+      },
+      {
         path: 'capitalPool',
         name: 'capitalPool',
         component: () => import('@/views/Workshop/FundManage/CapitalPool/Index.vue'),
@@ -516,6 +733,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           hidden: false
         }
       }
+      // {
+      //   path: 'physicalResults',
+      //   name: 'physicalResults',
+      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+      //   meta: {
+      //     title: '实施',
+      //     hidden: false
+      //   }
+      // },
+      // {
+      //   path: 'PhysicaFrom',
+      //   name: 'PhysicaFrom',
+      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
+      //   meta: {
+      //     title: '实施1',
+      //     hidden: false
+      //   }
+      // }
     ]
   }
 ]

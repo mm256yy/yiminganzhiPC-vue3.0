@@ -12,13 +12,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请类型</div>
-          <div class="content">付款申请</div>
+          <div class="content">{{ form.applyType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请名称</div>
-          <div class="content">专业项目合同款</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -27,13 +27,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请人</div>
-          <div class="content">王涛</div>
+          <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款说明</div>
-          <div class="content">专业项目合同款说明</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -42,13 +42,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">概算科目</div>
-          <div class="content">概算内</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">资金科目</div>
-          <div class="content">一级科目 二级科目 三级科目</div>
+          <div class="content">{{ form.funSubjectId }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -57,13 +57,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型</div>
-          <div class="content">专业项目</div>
+          <div class="content">{{ form.paymentType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款类型</div>
-          <div class="content">支付</div>
+          <div class="content">{{ form.payType }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -72,7 +72,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">申请总金额</div>
-          <div class="content">100,019.20 元</div>
+          <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
@@ -168,8 +168,8 @@ interface PropsType {
 // const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
-const dataInfo = ref<any>()
-
+// const dataInfo = ref<any>()
+const form = ref<any>({})
 const tableData = ref<any[]>([
   {
     id: 1,
@@ -282,9 +282,11 @@ watch(
   () => props.row,
   (val) => {
     if (val) {
-      dataInfo.value = {
-        ...val
-      }
+      // 处理行政区划
+      form.value = { ...(val as {}) }
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
     }
   },
   {
@@ -312,6 +314,91 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
     if (rowIndex === 0) {
       return {
         rowspan: 4,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 2) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 3) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 4) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 5) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  } else if (columnIndex === 7) {
+    if (rowIndex === 0) {
+      return {
+        rowspan: 3,
+        colspan: 1
+      }
+    } else if (rowIndex === 3) {
+      return {
+        rowspan: 1,
         colspan: 1
       }
     } else {

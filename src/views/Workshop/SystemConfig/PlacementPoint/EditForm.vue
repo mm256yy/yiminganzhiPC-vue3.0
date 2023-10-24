@@ -31,7 +31,21 @@
           <el-radio label="1" size="large">Option 1</el-radio>
           <el-radio label="2" size="large">Option 2</el-radio>
         </el-radio-group> -->
-        <ElTreeSelect class="!w-full" v-model="form.structure" :data="[]" node-key="code" />
+        <!-- <ElTreeSelect
+          class="!w-full"
+          v-model="form.structure"
+          :data="dictObj[252]"
+          node-key="code"
+        /> -->
+        <ElSelect v-model="form.structure" style="width: 100%">
+          <ElOption
+            v-for="item in dictObj[252]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="item.disabled"
+          />
+        </ElSelect>
       </ElFormItem>
       <ElFormItem label="建筑密度(%):" prop="buildingDensity">
         <ElInput type="text" v-model="form.buildingDensity" placeholder="请输入建筑密度(%)" />
@@ -130,7 +144,8 @@ import {
   // ElOption,
   ElRadioGroup,
   ElRadio,
-  ElTreeSelect
+  ElSelect,
+  ElOption
 } from 'element-plus'
 import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
@@ -165,9 +180,6 @@ const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
-
-console.log(dictObj)
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')
@@ -178,6 +190,8 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
+const dictObj = computed(() => dictStore.getDictObj)
+// console.log('obj', dictObj.value[252])
 watch(
   () => props.row,
   (val) => {
