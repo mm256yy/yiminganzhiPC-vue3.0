@@ -51,53 +51,52 @@
     </div>
 
     <div class="data-fill-body">
-      <template v-if="role === RoleCodeType.assessor">
-        <!-- 房屋主体评估 -->
-        <main-house
-          v-show="tabCurrentId === TabIds[0]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 房屋主体评估 -->
+      <main-house
+        v-show="tabCurrentId === TabIds[0]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 房屋装修评估 -->
-        <house-decoration
-          v-show="tabCurrentId === TabIds[1]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 房屋装修评估 -->
+      <house-decoration
+        v-show="tabCurrentId === TabIds[1]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 房屋附属设施评估 -->
-        <house-accessory
-          v-show="tabCurrentId === TabIds[2]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 房屋附属设施评估 -->
+      <house-accessory
+        v-show="tabCurrentId === TabIds[2]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 零星林（果）木评估 -->
-        <fruit-tree
-          v-show="tabCurrentId === TabIds[3]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 零星林（果）木评估 -->
+      <fruit-tree
+        v-show="tabCurrentId === TabIds[3]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 坟墓评估 -->
-        <!-- <grave
+      <!-- 坟墓评估 -->
+      <!-- <grave
         v-show="type == 'Landlord' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
@@ -107,52 +106,49 @@
         @update-data="getLandlordInfo"
       /> -->
 
-        <!-- 企业、个体工商户 设施设备评估 -->
-        <Equipment
-          v-show="(type === 'Enterprise' || type === 'IndividualB') && tabCurrentId === TabIds[6]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 土地基本情况评估 -->
+      <land-basic-info
+        v-show="tabCurrentId === TabIds[4]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 村集体 小型专项及农副业设施评估 -->
-        <SpecialEquipment
-          v-show="type === 'villageInfoC' && tabCurrentId === TabIds[6]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
-      </template>
+      <!-- 土地青苗及附着物评估 -->
+      <land-green-seedlings
+        v-show="tabCurrentId === TabIds[5]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-      <template v-else>
-        <!-- 土地基本情况评估 -->
-        <land-basic-info
-          v-show="tabCurrentId === TabIds[4]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
+      <!-- 企业、个体工商户 设施设备评估 -->
+      <Equipment
+        v-show="(type === 'Enterprise' || type === 'IndividualB') && tabCurrentId === TabIds[6]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
-        <!-- 土地青苗及附着物评估 -->
-        <land-green-seedlings
-          v-show="tabCurrentId === TabIds[5]"
-          :doorNo="doorNo"
-          :householdId="Number(householdId)"
-          :projectId="Number(projectId)"
-          :uid="uid"
-          :baseInfo="baseInfo"
-          @update-data="getLandlordInfo"
-        />
-      </template>
+      <!-- 村集体 小型专项及农副业设施评估 -->
+      <SpecialEquipment
+        v-show="type === 'villageInfoC' && tabCurrentId === TabIds[6]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
     </div>
   </WorkContentWrap>
 </template>
@@ -161,7 +157,14 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { LandlordTabs, TabIds, EnterpriseTabs, IndividualBTabs, VillageInfoCTabs } from './config'
+import {
+  LandlordTabs,
+  TabIds,
+  EnterpriseTabs,
+  IndividualBTabs,
+  VillageInfoCTabs,
+  LandlordLandTabs
+} from './config'
 import { useAppStore } from '@/store/modules/app'
 import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 
@@ -177,9 +180,10 @@ import LandGreenSeedlings from './components/LandGreenSeedlings/Index.vue' // �
 import Equipment from './components/Equipment/Index.vue' // 资产评估 -- (企业/个体工商户)设施设备评估
 import SpecialEquipment from './components/SpecialEquipment/Index.vue' // 资产评估 -- (村集体)小型专项及农副业设施评估
 
+// 角色代码为字典值
 enum RoleCodeType {
   assessor = 'assessor',
-  assessorland = 'reviewerland'
+  assessorland = 'assessorland'
 }
 
 const titleMsg = (type: string, index: number) => {
@@ -253,13 +257,29 @@ const onReportTabClick = (tabItem) => {
 onMounted(() => {
   role.value = getRole()
   if (type === 'Landlord') {
-    tabsType.value = LandlordTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = LandlordTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'Enterprise') {
-    tabsType.value = EnterpriseTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = EnterpriseTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'IndividualB') {
-    tabsType.value = IndividualBTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = IndividualBTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'VillageInfoC') {
-    tabsType.value = VillageInfoCTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = VillageInfoCTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   }
 })
 
