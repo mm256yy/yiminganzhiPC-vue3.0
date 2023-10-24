@@ -186,7 +186,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '探矿权汇总表',
-                value: '',
+                value: 'explorationRight',
                 active: false
               }
             ]
@@ -198,17 +198,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '交通工程设施',
-            value: '',
+            value: 'transportationFacilities',
             active: false
           },
           {
             label: '输变电工程设施',
-            value: '',
+            value: 'transmissionFacilities',
             active: false
           },
           {
             label: '文物古迹',
-            value: '',
+            value: 'culturalRelic',
             active: false
           }
         ]
@@ -240,12 +240,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'moveFacilities',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'moveAppendage',
                 active: false
               }
             ]
@@ -272,7 +272,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'ironFacilities',
                 active: false
               }
             ]
@@ -299,7 +299,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'hydrographicStation',
                 active: false
               }
             ]
@@ -310,12 +310,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'religiousInformation',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'religiousAppendage',
                 active: false
               }
             ]
@@ -422,12 +422,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '生产安置意愿',
-            value: '',
+            value: 'proHouseReport',
             active: false
           },
           {
             label: '搬迁安置意愿',
-            value: '',
+            value: 'moveHouseReport',
             active: false
           }
         ]
@@ -442,12 +442,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户按区域',
-            value: '',
+            value: 'residentRegion',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'residentWork',
             active: false
           }
         ]
