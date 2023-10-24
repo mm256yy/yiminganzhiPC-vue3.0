@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 企业房屋及其附属物汇总表序号 行政村（公示表） </div>
+        <div class="table-left-title"> {{ titles }}</div>
         <div></div>
       </div>
       <Table
@@ -31,7 +31,8 @@ import {
   getIndividualHouseholdAppendant,
   getIndividualHouseholdTree
 } from '@/api/fundManage/fundPayment-service'
-
+import { useRoute } from 'vue-router'
+let Route = useRoute()
 // interface SpanMethodProps {
 //   row: any
 //   column: any
@@ -58,6 +59,7 @@ const commonTableItemSchema = {
     show: false
   }
 }
+let titles = ref('')
 // const schema = reactive<CrudSchema[]>([
 //   // 搜索字段定义
 
@@ -378,20 +380,18 @@ const commonTableItemSchema = {
 
 // const { allSchemas } = useCrudSchemas(schema)
 onMounted(() => {
-  let a = 1
-  let b = 2
-  if (a == 1) {
-    if (b == 1) {
-      getEnterpriseAppendants(getEnterpriseAppendant())
-    } else {
-      getEnterpriseAppendants(getIndividualHouseholdAppendant())
-    }
-  } else {
-    if (b == 1) {
-      getEnterpriseTrees(getEnterpriseTree())
-    } else {
-      getEnterpriseTrees(getIndividualHouseholdTree())
-    }
+  let id = Route.query.id
+  console.log(id)
+
+  if (id == '2') {
+    titles.value = '企业房屋及其附属物汇总表序号 行政村（公示表）'
+    getEnterpriseAppendants(getEnterpriseAppendant())
+  } else if (id == '3') {
+    titles.value = '企业零星林（果）木汇总表序号 行政村（公示表）'
+    getEnterpriseAppendants(getIndividualHouseholdAppendant())
+  } else if (id == '5') {
+    titles.value = '个体户零星林（果）木汇总表序号 行政村（公示表）'
+    getEnterpriseTrees(getIndividualHouseholdTree())
   }
 })
 let getEnterpriseAppendants = async (e) => {

@@ -732,25 +732,25 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '资金发放情况',
           hidden: false
         }
+      },
+      {
+        path: 'physicalResults',
+        name: 'physicalResults',
+        component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+        meta: {
+          title: '实施',
+          hidden: false
+        }
+      },
+      {
+        path: 'PhysicaFrom',
+        name: 'PhysicaFrom',
+        component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
+        meta: {
+          title: '实施1',
+          hidden: false
+        }
       }
-      // {
-      //   path: 'physicalResults',
-      //   name: 'physicalResults',
-      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
-      //   meta: {
-      //     title: '实施',
-      //     hidden: false
-      //   }
-      // },
-      // {
-      //   path: 'PhysicaFrom',
-      //   name: 'PhysicaFrom',
-      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
-      //   meta: {
-      //     title: '实施1',
-      //     hidden: false
-      //   }
-      // }
     ]
   }
 ]

@@ -38,7 +38,7 @@
                   }"
                   v-for="(deepItem, deepIndex) of deepChildren"
                   :key="deepIndex"
-                  @click="deepChooseItem(deepItem)"
+                  @click="deepChooseItem(deepItem, { id: deepItem.query })"
                 >
                   <span>{{ deepItem.label }}</span>
                 </div>
@@ -125,17 +125,20 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'physicalResults',
+                query: '1',
                 active: false
               },
               {
                 label: '房屋及其附属物',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '2',
                 active: false
               },
               {
                 label: '零星林(果)木',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '3',
                 active: false
               }
             ]
@@ -147,12 +150,14 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'physicalResults',
+                query: '4',
                 active: false
               },
               {
                 label: '附属物',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '5',
                 active: false
               }
             ]
@@ -519,11 +524,11 @@ function chooseItem(item: any, x: any) {
   } else {
     // 路由跳转
 
-    goLink(item.value)
+    goLink(item.value, {})
   }
 }
 
-const deepChooseItem = (item) => {
+const deepChooseItem = (item, query = {}) => {
   for (let a of navList) {
     for (let b of a.body) {
       for (let c of b.children) {
@@ -538,18 +543,19 @@ const deepChooseItem = (item) => {
   item.active = true
   // 路由跳转
 
-  goLink(item.value)
+  goLink(item.value, query)
 }
 
-const goLink = (routerName: string) => {
-  console.log('路由名称:', routerName)
+const goLink = (routerName: string, query: any) => {
+  console.log('路由名称:', routerName, query)
   if (!routerName) return
   // router.push({
   //   name: routerName
   // })
 
   const linkObj = router.resolve({
-    name: routerName
+    name: routerName,
+    query: query
   })
   window.open(linkObj.href, '_blank')
 }
