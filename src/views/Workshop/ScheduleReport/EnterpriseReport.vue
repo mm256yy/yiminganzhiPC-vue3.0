@@ -59,6 +59,9 @@ import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/population
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+const { back } = useRouter()
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -70,6 +73,7 @@ interface SpanMethodProps {
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getPopulationHousingListApi
@@ -345,6 +349,9 @@ const findRecursion = (data, code, callback) => {
       return findRecursion(item.children, code, callback)
     }
   })
+}
+const onBack = () => {
+  back()
 }
 
 onMounted(() => {
