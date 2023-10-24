@@ -332,12 +332,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户',
-            value: '',
+            value: 'FundPeople',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'FundUseDetail',
             active: false
           }
         ]
@@ -347,7 +347,7 @@ let navList = reactive<any>([
         children: [
           {
             label: '村集体',
-            value: '',
+            value: 'FundVillage',
             active: false
           }
         ]
@@ -357,17 +357,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '企业',
-            value: '',
+            value: 'FundEnterprise',
             active: false
           },
           {
             label: '个体户',
-            value: '',
+            value: 'FundIndividualB',
             active: false
           },
           {
             label: '水电站',
-            value: '',
+            value: 'FundHydropower',
             active: false
           }
         ]

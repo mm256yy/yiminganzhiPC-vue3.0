@@ -151,8 +151,53 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         },
         children: [
           {
-            path: 'fundPeople',
-            name: 'fundPeople',
+            path: 'FundEnterprise',
+            name: 'FundEnterprise',
+            component: () => import('@/views/Workshop/FundReport/Enterprise.vue'),
+            meta: {
+              title: '资金管理-企业报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundIndividualB',
+            name: 'FundIndividualB',
+            component: () => import('@/views/Workshop/FundReport/IndividualB.vue'),
+            meta: {
+              title: '资金管理-个体户报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundVillage',
+            name: 'FundVillage',
+            component: () => import('@/views/Workshop/FundReport/Village.vue'),
+            meta: {
+              title: '资金管理-村集体报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundHydropower',
+            name: 'FundHydropower',
+            component: () => import('@/views/Workshop/FundReport/Hydropower.vue'),
+            meta: {
+              title: '资金管理-水电站报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundUseDetail',
+            name: 'FundUseDetail',
+            component: () => import('@/views/Workshop/FundReport/FundDetail.vue'),
+            meta: {
+              title: '资金管理-资金使用情况报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundPeople',
+            name: 'FundPeople',
             component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
             meta: {
               title: '资金管理-居民户报表',
