@@ -1,15 +1,5 @@
+<!-- 宗教表格 -->
 <template>
-  <div class="flex items-center">
-    <!-- <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-      返回
-    </ElButton> -->
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业</ElBreadcrumbItem>
-    </ElBreadcrumb>
-  </div>
   <WorkContentWrap>
     <div class="search-form-wrap">
       <Search
@@ -25,9 +15,6 @@
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="tableObject.loading">
-      <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 企业 </div>
-      </div>
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -49,19 +36,16 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+// import { ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
+// import { exportTypes } from '../config'
+import { getProfessionalProjectsPageApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
-import { useIcon } from '@/hooks/web/useIcon'
-import { useRouter } from 'vue-router'
-const { back } = useRouter()
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -72,11 +56,10 @@ interface SpanMethodProps {
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
-const BackIcon = useIcon({ icon: 'iconoir:undo' })
+// const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getPopulationHousingListApi
+  getListApi: getProfessionalProjectsPageApi
 })
 
 const { setSearchParams } = methods
@@ -84,54 +67,55 @@ const { setSearchParams } = methods
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
-  projectId
+  projectId,
+  type: 27
 }
 
 const schema = reactive<CrudSchema[]>([
+  //   {
+  //     field: 'villageCode',
+  //     label: '所属区域',
+  //     search: {
+  //       show: true,
+  //       component: 'TreeSelect',
+  //       componentProps: {
+  //         data: villageTree,
+  //         nodeKey: 'code',
+  //         props: {
+  //           value: 'code',
+  //           label: 'name'
+  //         },
+  //         showCheckbox: false,
+  //         checkStrictly: false,
+  //         checkOnClickNode: false
+  //       }
+  //     },
+  //     table: {
+  //       show: false
+  //     }
+  //   },
+  //   {
+  //     field: 'doorNo',
+  //     label: '户号',
+  //     search: {
+  //       show: true,
+  //       component: 'Input',
+  //       componentProps: {
+  //         placeholder: '请输入户号'
+  //       }
+  //     },
+  //     table: {
+  //       show: false
+  //     }
+  //   },
   {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
+    field: 'name',
+    label: '项目名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'householdName',
-    label: '户主姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户主姓名'
+        placeholder: '请输入项目名称'
       }
     },
     table: {
@@ -141,117 +125,98 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
-    label: '序号',
+    field: 'name',
+    label: '项目名称',
+    width: 180,
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
-    label: '企业编号',
+    field: 'underlyingCompany',
+    label: '权属单位名称',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
-    label: '企业',
+    field: 'responsibilityCompany',
+    label: '责任单位',
+    search: {
+      show: false
+    }
+    // children: [
+    //   {
+    //     field: 'inCount',
+    //     label: '册内人口',
+    //     search: {
+    //       show: false
+    //     }
+    //   },
+    //   {
+    //     field: 'outCount',
+    //     label: '册外人口',
+    //     search: {
+    //       show: false
+    //     }
+    //   },
+    //   {
+    //     field: 'sumCount',
+    //     label: '合计',
+    //     search: {
+    //       show: false
+    //     }
+    //   }
+    // ]
+  },
+  {
+    field: 'designCompany',
+    label: '设计单位',
     search: {
       show: false
     }
   },
   {
-    field: '',
-    label: '动迁阶段',
+    field: 'supervisionCompany',
+    label: '监理单位',
     search: {
       show: false
-    },
-    children: [
-      {
-        field: 'inCount',
-        label: '资产评估',
-        search: {
-          show: false
-        },
-        children: [
-          {
-            field: 'inCount',
-            label: '房屋/附属物',
-            search: {
-              show: false
-            }
-          },
-          {
-            field: 'inCount',
-            label: '土地/附着物',
-            search: {
-              show: false
-            }
-          },
-          {
-            field: 'inCount',
-            label: '设施设备',
-            search: {
-              show: false
-            }
-          }
-        ]
-      },
-      {
-        field: 'outCount',
-        label: '企业建卡',
-        search: {
-          show: false
-        }
-      },
-      {
-        field: 'inCount',
-        label: '腾空',
-        search: {
-          show: false
-        },
-        children: [
-          {
-            field: 'inCount',
-            label: '房屋腾空',
-            search: {
-              show: false
-            }
-          },
-          {
-            field: 'inCount',
-            label: '土地腾空',
-            search: {
-              show: false
-            }
-          }
-        ]
-      },
-      {
-        field: 'inCount',
-        label: '动迁协议',
-        search: {
-          show: false
-        }
-      }
-    ]
+    }
   },
   {
-    field: 'inCount',
-    label: '安置阶段',
+    field: 'startDate',
+    label: '合同开始时间',
     search: {
       show: false
-    },
-    children: [
-      {
-        field: 'inCount',
-        label: '相关手续',
-        search: {
-          show: false
-        }
-      }
-    ]
+    }
+  },
+  {
+    field: 'endDate',
+    label: '合同终止时间',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'contractAmount',
+    label: '合同金额(元)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'payAmount',
+    label: '已付金额(元)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'unPayAmount',
+    label: '待付金额(元)',
+    search: {
+      show: false
+    }
   }
 ])
 
@@ -326,10 +291,10 @@ const onSearch = (data) => {
   }
 }
 
-// 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
-}
+// // 数据导出
+// const onExport = () => {
+//   emit('export', villageTree.value, exportTypes.house)
+// }
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
@@ -350,9 +315,7 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
-const onBack = () => {
-  back()
-}
+
 onMounted(() => {
   getVillageTree()
   setSearchParams({})

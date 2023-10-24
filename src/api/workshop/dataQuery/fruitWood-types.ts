@@ -8,3 +8,16 @@ export interface FruitWoodDtoType {
   remark: string
   [key: string]: any
 }
+
+export interface summary {
+  serNo: string
+  proName: string
+  unit: string
+  inundatedArea: string
+  influenceArea: string
+  buildArea: string
+  subtotal: string
+  waterProjectArea: string
+  total: string
+  [key: string]: any
+}

@@ -460,6 +460,144 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '进度管理-个体户按区域',
               icon: 'ant-design:home-outlined'
             }
+          },
+          {
+            path: 'hydrology',
+            name: 'hydrology',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/hydrology.vue'),
+            meta: {
+              title: '水文站',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'Irontower',
+            name: 'Irontower',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/Irontower.vue'),
+            meta: {
+              title: '铁塔工程',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'radioExcel',
+            name: 'radioExcel',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/radioExcel.vue'),
+            meta: {
+              title: '广播电视工程表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'religion',
+            name: 'religion',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/religion.vue'),
+            meta: {
+              title: '宗教表格',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'moveExcel',
+            name: 'moveExcel',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/moveExcel.vue'),
+            meta: {
+              title: '移动表格',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'telecommunication',
+            name: 'telecommunication',
+            component: () =>
+              import('@/views/Workshop/ProfessionalProjectsExcel/telecommunication.vue'),
+            meta: {
+              title: '电信表格',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'unicom',
+            name: 'unicom',
+            component: () => import('@/views/Workshop/ProfessionalProjectsExcel/unicom.vue'),
+            meta: {
+              title: '联通',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'PopulationHousing',
+            name: 'PopulationHousing',
+            component: () =>
+              import(
+                '@/views/Workshop/DataQuery/DataCollectionPublicity/PopulationHousing/Index.vue'
+              ),
+            meta: {
+              title: '人口房屋',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'Accessory',
+            name: 'Accessory',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Accessory/Index.vue'),
+            meta: {
+              title: '附属物',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FruitWood',
+            name: 'FruitWood',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/FruitWood/Index.vue'),
+            meta: {
+              title: '零星林(果)木',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'Achievements',
+            name: 'Achievements',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Achievements/Index.vue'),
+            meta: {
+              title: '实物成果汇总',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'VillageCollective',
+            name: 'VillageCollective',
+            component: () =>
+              import(
+                '@/views/Workshop/DataQuery/DataCollectionPublicity/VillageCollective/Index.vue'
+              ),
+            meta: {
+              title: '房屋/附属物/零星林(果)木',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'Land',
+            name: 'Land',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Land/Index.vue'),
+            meta: {
+              title: '土地',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'Grave',
+            name: 'Grave',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Grave/Index.vue'),
+            meta: {
+              title: '坟墓',
+              icon: 'ant-design:home-outlined'
+            }
           }
         ]
       },

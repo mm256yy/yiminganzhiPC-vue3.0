@@ -6,7 +6,17 @@ export const getPopulationHousingListApi = (
   params: Partial<PopulationHousingDtoType>
 ): Promise<TableResponse<PopulationHousingDtoType>> => {
   return request.get({
-    url: '/query/queryHouse',
+    url: '/resultForms/queryHouse',
+    params
+  })
+}
+
+// 资金报表
+export const getProfessionalProjectsPageApi = (
+  params: Partial<PopulationHousingDtoType>
+): Promise<TableResponse<PopulationHousingDtoType>> => {
+  return request.get({
+    url: '/fundsForms/getProfessionalProjectsPage',
     params
   })
 }
