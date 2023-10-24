@@ -168,7 +168,7 @@
         </ElTable>
       </div>
       <ElTable
-        :data="tableData"
+        :data="actionType == 'view' ? tableData : parmasList.professionalContractList"
         style="width: 100%"
         class="mb-20"
         :border="true"
@@ -236,7 +236,11 @@
 
         <div class="progress-wrapper">
           <div class="progress-list">
-            <div class="progress-item" v-for="item in parmasList" :key="item.name">
+            <div
+              class="progress-item"
+              v-for="item in parmasList.funPaymentRequestFlowNodeList"
+              :key="item.name"
+            >
               <!-- <div class="left">
                 <div class="icon-box">
                   <div v-if="item.isAudit === '0'" class="disabled"></div>
@@ -259,11 +263,11 @@
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
-                    <div class="name">{{ item.name }}</div>
+                    <div class="name">{{ item.auditor }}</div>
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-                  <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
-                    审核时间：{{ dayjs(item.createTime).format('YYYY-MM-DD') }}
+                  <div class="time">
+                    审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                   </div>
                   <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
                 </div>
