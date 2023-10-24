@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center">
-    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+    <!-- <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
       返回
-    </ElButton>
+    </ElButton> -->
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
@@ -62,6 +62,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+const { back } = useRouter()
 
 const { back } = useRouter()
 const appStore = useAppStore()

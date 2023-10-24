@@ -151,13 +151,191 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         },
         children: [
           {
-            path: 'fundPeople',
-            name: 'fundPeople',
+            path: 'FundEnterprise',
+            name: 'FundEnterprise',
+            component: () => import('@/views/Workshop/FundReport/Enterprise.vue'),
+            meta: {
+              title: '资金管理-企业报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundIndividualB',
+            name: 'FundIndividualB',
+            component: () => import('@/views/Workshop/FundReport/IndividualB.vue'),
+            meta: {
+              title: '资金管理-个体户报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundVillage',
+            name: 'FundVillage',
+            component: () => import('@/views/Workshop/FundReport/Village.vue'),
+            meta: {
+              title: '资金管理-村集体报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundHydropower',
+            name: 'FundHydropower',
+            component: () => import('@/views/Workshop/FundReport/Hydropower.vue'),
+            meta: {
+              title: '资金管理-水电站报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundUseDetail',
+            name: 'FundUseDetail',
+            component: () => import('@/views/Workshop/FundReport/FundDetail.vue'),
+            meta: {
+              title: '资金管理-资金使用情况报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'FundPeople',
+            name: 'FundPeople',
             component: () => import('@/views/Workshop/FundReport/PeasantHousehold.vue'),
             meta: {
               title: '资金管理-居民户报表',
               icon: 'ant-design:home-outlined'
             }
+          },
+
+          {
+            path: 'proHouseReport',
+            name: 'proHouseReport',
+            component: () => import('@/views/Workshop/PlacementReport/proHouseReport.vue'),
+            meta: {
+              title: '安置意愿-生产安置意愿报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'moveHouseReport',
+            name: 'moveHouseReport',
+            component: () => import('@/views/Workshop/PlacementReport/MoveHouseReport.vue'),
+            meta: {
+              title: '资金管理-搬迁安置意愿报表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+
+          {
+            path: 'hydrographicStation',
+            name: 'hydrographicStation',
+            component: () => import('@/views/Workshop/AchievementsReport/HydrographicStation.vue'),
+            meta: {
+              title: '实物成果-水文站房屋及附属物设备汇总表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'explorationRight',
+            name: 'explorationRight',
+            component: () => import('@/views/Workshop/AchievementsReport/ExplorationRight.vue'),
+            meta: {
+              title: '实物成果-探矿权',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'ironFacilities',
+            name: 'ironFacilities',
+            component: () => import('@/views/Workshop/AchievementsReport/IronFacilities.vue'),
+            meta: {
+              title: '实物成果-铁塔工程设施',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'culturalRelic',
+            name: 'culturalRelic',
+            component: () => import('@/views/Workshop/AchievementsReport/CulturalRelic.vue'),
+            meta: {
+              title: '实物成果-文物古迹',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'moveAppendage',
+            name: 'moveAppendage',
+            component: () => import('@/views/Workshop/AchievementsReport/MoveAppendage.vue'),
+            meta: {
+              title: '实物成果-移动工程附属物设备汇总',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'moveFacilities',
+            name: 'moveFacilities',
+            component: () => import('@/views/Workshop/AchievementsReport/MoveFacilities.vue'),
+            meta: {
+              title: '实物成果-移动工程设施汇总',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+
+          {
+            path: 'transportationFacilities',
+            name: 'transportationFacilities',
+            component: () =>
+              import('@/views/Workshop/AchievementsReport/TransportationFacilities.vue'),
+            meta: {
+              title: '实物成果-专业项目（交通工程设施）公示表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'transmissionFacilities',
+            name: 'transmissionFacilities',
+            component: () =>
+              import('@/views/Workshop/AchievementsReport/TransmissionFacilities.vue'),
+            meta: {
+              title: '实物成果-专业项目(输变电工程设施) 公示表',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'religiousInformation',
+            name: 'religiousInformation',
+            component: () => import('@/views/Workshop/AchievementsReport/ReligiousInformation.vue'),
+            meta: {
+              title: '实物成果-宗教基本信息',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'religiousAppendage',
+            name: 'religiousAppendage',
+            component: () => import('@/views/Workshop/AchievementsReport/ReligiousAppendage.vue'),
+            meta: {
+              title: '实物成果-宗教设施房屋及其附属建筑物',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'residentRegion',
+            name: 'residentRegion',
+            component: () => import('@/views/Workshop/ScheduleReport/ResidentRegion.vue'),
+            meta: {
+              title: '进度管理-居民户按区域',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'residentWork',
+            name: 'residentWork',
+            component: () => import('@/views/Workshop/ScheduleReport/ResidentWork.vue'),
+            meta: {
+              title: '进度管理-居民户按工作分组',
+              icon: 'ant-design:home-outlined'
+            }
+          }
+
           },
           // {
           //   path: 'fundPeople',
@@ -692,25 +870,25 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           title: '资金发放情况',
           hidden: false
         }
+      },
+      {
+        path: 'physicalResults',
+        name: 'physicalResults',
+        component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+        meta: {
+          title: '实施',
+          hidden: false
+        }
+      },
+      {
+        path: 'PhysicaFrom',
+        name: 'PhysicaFrom',
+        component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
+        meta: {
+          title: '实施1',
+          hidden: false
+        }
       }
-      // {
-      //   path: 'physicalResults',
-      //   name: 'physicalResults',
-      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
-      //   meta: {
-      //     title: '实施',
-      //     hidden: false
-      //   }
-      // },
-      // {
-      //   path: 'PhysicaFrom',
-      //   name: 'PhysicaFrom',
-      //   component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
-      //   meta: {
-      //     title: '实施1',
-      //     hidden: false
-      //   }
-      // }
     ]
   }
 ]
