@@ -72,6 +72,7 @@ interface SpanMethodProps {
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getPopulationHousingListApi
