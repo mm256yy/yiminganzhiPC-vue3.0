@@ -11,13 +11,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请类型</div>
+          <div class="label">申请类型:</div>
           <div class="content">{{ form.applyType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请名称</div>
+          <div class="label">申请名称:</div>
           <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
@@ -26,13 +26,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请人</div>
+          <div class="label">申请人:</div>
           <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款说明</div>
+          <div class="label">付款说明:</div>
           <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
@@ -41,13 +41,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">概算科目</div>
+          <div class="label">概算科目:</div>
           <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">资金科目</div>
+          <div class="label">资金科目:</div>
           <div class="content">{{ form.funSubjectId }}</div>
         </div>
       </ElCol>
@@ -56,13 +56,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款对象类型</div>
-          <div class="content">{{ form.paymentType }}</div>
+          <div class="label">付款对象类型:</div>
+          <div class="content">{{ form.paymentTypeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款类型</div>
+          <div class="label">付款类型:</div>
           <div class="content">{{ form.payType }}</div>
         </div>
       </ElCol>
@@ -71,15 +71,18 @@
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">申请总金额</div>
+          <div class="label">申请总金额:</div>
           <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
 
     <div class="title-1">
-      <span class="main-title">专业项目合同清单</span>
-      申请总金额：<span class="num">100,019.20</span> 元 申请合同数：<span class="num">2</span> 个
+      <span class="main-title">专业项目合同清单:</span>
+      申请总金额：<span class="num"></span> 元 申请合同数：<span class="num">{{
+        parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+      }}</span>
+      个
     </div>
 
     <ElTable
@@ -117,51 +120,60 @@
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">调整事项</div>
-          <div class="content">概算内调整为概算外</div>
+          <div class="label">调整事项:</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">调整说明</div>
-          <div class="content">合同变更</div>
+          <div class="label">调整说明:</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
     </ElRow>
 
-    <div class="title-2">审批流程</div>
+    <div
+      v-if="
+        parmasList.funPaymentRequestFlowNodeList &&
+        parmasList.funPaymentRequestFlowNodeList.length > 0
+      "
+    >
+      <div class="title-2">审批流程</div>
 
-    <div class="progress-wrapper">
-      <div class="progress-list">
-        <div
-          class="progress-item"
-          v-for="item in parmasList.funPaymentRequestFlowNodeList"
-          :key="item.name"
-        >
-          <!-- <div class="left">
-            <div class="icon-box">
-              <div v-if="item.isAudit === '0'" class="disabled"></div>
-              <img
-                v-if="item.isAudit === '1'"
-                src="@/assets/imgs/icon_finish.png"
-                width="18"
-                height="18"
-              />
-              <div v-if="item.isAudit === '2'" class="hollow"></div>
-            </div>
-            <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
-            <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
-            <div v-if="item.isAudit === '2' && item.type !== '5'" class="line in-progress"></div>
-            <div v-if="item.type === '6'" class="line none"></div>
-          </div> -->
-          <div class="right">
-            <div class="content-box">
-              <div class="content-1">
-                <div class="name">{{ item.auditor }}</div>
+      <div class="progress-wrapper">
+        <div class="progress-list">
+          <div
+            class="progress-item"
+            v-for="item in parmasList.funPaymentRequestFlowNodeList"
+            :key="item.name"
+          >
+            <!-- <div class="left">
+        <div class="icon-box">
+          <div v-if="item.isAudit === '0'" class="disabled"></div>
+          <img
+            v-if="item.isAudit === '1'"
+            src="@/assets/imgs/icon_finish.png"
+            width="18"
+            height="18"
+          />
+          <div v-if="item.isAudit === '2'" class="hollow"></div>
+        </div>
+        <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
+        <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
+        <div v-if="item.isAudit === '2' && item.type !== '5'" class="line in-progress"></div>
+        <div v-if="item.type === '6'" class="line none"></div>
+      </div> -->
+            <div class="right">
+              <div class="content-box">
+                <div class="content-1">
+                  <div class="name">{{ item.auditor }}</div>
+                </div>
+                <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
+                <div class="time">
+                  审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
+                </div>
+                <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
               </div>
-              <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-              <div class="time"> 审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }} </div>
-              <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
             </div>
           </div>
         </div>

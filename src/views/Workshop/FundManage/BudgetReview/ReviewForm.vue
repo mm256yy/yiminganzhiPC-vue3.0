@@ -11,13 +11,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请类型</div>
+          <div class="label">申请类型:</div>
           <div class="content">{{ form.applyType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请名称</div>
+          <div class="label">申请名称:</div>
           <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
@@ -26,13 +26,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">申请人</div>
+          <div class="label">申请人:</div>
           <div class="content">{{ form.applyUserName }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款说明</div>
+          <div class="label">付款说明:</div>
           <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
@@ -41,13 +41,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">概算科目</div>
+          <div class="label">概算科目:</div>
           <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">资金科目</div>
+          <div class="label">资金科目:</div>
           <div class="content">{{ form.funSubjectId }}</div>
         </div>
       </ElCol>
@@ -56,13 +56,13 @@
     <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款对象类型</div>
+          <div class="label">付款对象类型:</div>
           <div class="content">{{ form.paymentType }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
-          <div class="label">付款类型</div>
+          <div class="label">付款类型:</div>
           <div class="content">{{ form.payType }}</div>
         </div>
       </ElCol>
@@ -71,15 +71,18 @@
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">申请总金额</div>
+          <div class="label">申请总金额:</div>
           <div class="content">{{ form.amount }} 元</div>
         </div>
       </ElCol>
     </ElRow>
 
     <div class="title-1">
-      <span class="main-title">专业项目合同清单</span>
-      申请总金额：<span class="num">100,019.20</span> 元 申请合同数：<span class="num">2</span> 个
+      <span class="main-title">专业项目合同清单:</span>
+      申请总金额：<span class="num"></span> 元 申请合同数：<span class="num">{{
+        parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+      }}</span>
+      个
     </div>
     <ElTable
       :data="parmasList.professionalContractList"
@@ -116,14 +119,14 @@
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">调整事项</div>
-          <div class="content">概算内调整为概算外</div>
+          <div class="label">调整事项:</div>
+          <div class="content">{{ form.type }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">调整说明</div>
-          <div class="content">合同变更</div>
+          <div class="label">调整说明:</div>
+          <div class="content">{{ form.remark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -131,7 +134,7 @@
     <ElRow v-if="actionType === 'edit'">
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">审核意见</div>
+          <div class="label">审核意见:</div>
           <div class="content">
             <ElInput
               v-model="form.remark"
@@ -491,7 +494,7 @@ const onSubmit = async (status: string) => {
   // })
   btnLoading.value = false
   let params: any = {
-    // ...form.value,
+    ...form.value,
     // paymentObjectList: [
     //   {
     //     contractId: 571923,

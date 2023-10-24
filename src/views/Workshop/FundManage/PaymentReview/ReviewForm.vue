@@ -92,7 +92,10 @@
     </ElRow>
     <div class="title-1">
       <!-- <span class="main-title">专业项目合同清单</span> -->
-      申请总金额：<span class="num">100,019.20</span> 元 申请户数：<span class="num">2</span> 户
+      申请总金额：<span class="num"></span> 元 申请户数：<span class="num">{{
+        parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+      }}</span>
+      户
     </div>
 
     <ElTable
@@ -714,7 +717,7 @@ const onSubmit = async (status: string) => {
   // })
   btnLoading.value = false
   let params: any = {
-    // ...form.value,
+    ...form.value,
     // paymentObjectList: [
     //   {
     //     contractId: 571923,
@@ -723,8 +726,8 @@ const onSubmit = async (status: string) => {
     // ],
     businessId: form.value.id,
     status: status,
-    type: 1 //付款申请
-    // receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+    type: 1, //付款申请
+    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
   }
   getPaymentReviewListSSApi(params).then(() => {
     ElMessage.success('操作成功！')

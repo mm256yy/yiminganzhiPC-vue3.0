@@ -82,12 +82,12 @@
       </ElFormItem>
       <ElFormItem label="付款类型:" required v-if="form.paymentType == 1"> 支付 </ElFormItem>
       <ElFormItem label="付款类型:" required v-else>
-        <el-radio-group class="ml-4" v-model="form.test">
+        <el-radio-group class="ml-4" v-model="form.payType">
           <el-radio label="1" size="large">支付</el-radio>
           <el-radio label="2" size="large">预拨</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">123 </ElFormItem>
+      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem>
       <div class="table-wrap">
         <div
           class="flex items-center justify-between pb-12px"
