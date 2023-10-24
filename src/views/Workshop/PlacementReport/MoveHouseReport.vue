@@ -25,7 +25,6 @@
         height="250px"
         :span-method="objectSpanMethod"
         show-summary
-        :summary-method="getSummaries"
         :data="tableData"
         border
         style="width: 100%"
@@ -173,7 +172,7 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 const { allSchemas } = useCrudSchemas(schema)
-const { methods } = useTable({})
+const { methods } = useTable()
 const { getList, setSearchParams } = methods
 getList()
 const getMoveHouseReportList = (page, size) => {
@@ -233,7 +232,7 @@ const sums = (arr, key) => {
 //   { hz: '合计' }
 // )
 
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }) => {
+const objectSpanMethod = ({ row, columnIndex }) => {
   if (row.hz === '合计') {
     if (columnIndex === 1) {
       return {

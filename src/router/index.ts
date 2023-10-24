@@ -334,8 +334,6 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '进度管理-居民户按工作分组',
               icon: 'ant-design:home-outlined'
             }
-          }
-
           },
           // {
           //   path: 'fundPeople',
