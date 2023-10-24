@@ -184,35 +184,35 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'constructionTypeText',
+    field: 'startDate',
     label: '合同开始时间',
     search: {
       show: false
     }
   },
   {
-    field: 'landArea',
+    field: 'endDate',
     label: '合同终止时间',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
+    field: 'contractAmount',
     label: '合同金额(元)',
     search: {
       show: false
     }
   },
   {
-    field: 'locationTypeText',
+    field: 'payAmount',
     label: '已付金额(元)',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'unPayAmount',
     label: '待付金额(元)',
     search: {
       show: false
