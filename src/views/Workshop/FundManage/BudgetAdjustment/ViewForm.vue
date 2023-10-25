@@ -79,9 +79,12 @@
 
     <div class="title-1">
       <span class="main-title">专业项目合同清单:</span>
-      申请总金额：<span class="num"></span> 元 申请合同数：<span class="num">{{
-        parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
-      }}</span>
+      申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请合同数：<span
+        class="num"
+        >{{
+          parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+        }}</span
+      >
       个
     </div>
 
@@ -144,25 +147,26 @@
         <div class="progress-list">
           <div
             class="progress-item"
-            v-for="item in parmasList.funPaymentRequestFlowNodeList"
-            :key="item.name"
+            v-for="(item, index) in parmasList.funPaymentRequestFlowNodeList"
+            :key="index"
           >
-            <!-- <div class="left">
-        <div class="icon-box">
-          <div v-if="item.isAudit === '0'" class="disabled"></div>
-          <img
-            v-if="item.isAudit === '1'"
-            src="@/assets/imgs/icon_finish.png"
-            width="18"
-            height="18"
-          />
-          <div v-if="item.isAudit === '2'" class="hollow"></div>
-        </div>
-        <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
-        <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
-        <div v-if="item.isAudit === '2' && item.type !== '5'" class="line in-progress"></div>
-        <div v-if="item.type === '6'" class="line none"></div>
-      </div> -->
+            <div class="left">
+              <div class="icon-box">
+                <div class="disabled"></div>
+                <img
+                  v-if="item.type == 1"
+                  src="@/assets/imgs/icon_finish.png"
+                  width="18"
+                  height="18"
+                />
+              </div>
+              <div
+                class="line"
+                v-if="index == parmasList.funPaymentRequestFlowNodeList.length - 1"
+                style="background: white"
+              ></div>
+              <div class="line" v-else></div>
+            </div>
             <div class="right">
               <div class="content-box">
                 <div class="content-1">
@@ -187,125 +191,15 @@ import { ElDialog, ElRow, ElCol, ElTable, ElTableColumn } from 'element-plus'
 import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   show: any
   row?: LandlordDtoType | null | undefined
   parmasList: any
 }
-// const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
-// const dataInfo = ref<any>()
 const form = ref<any>({})
-// const tableData = ref<any[]>([
-//   {
-//     id: 1,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
-//   },
-//   {
-//     id: 2,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
-//   },
-//   {
-//     id: 3,
-//     specialName: '通讯光缆',
-//     contractName: '迁移合同',
-//     contractNo: '001',
-//     contractPartyB: 'A公司',
-//     amount: 200,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '100,000'
-//   },
-//   {
-//     id: 4,
-//     specialName: '通讯光缆',
-//     contractName: '安装合同',
-//     contractNo: '001',
-//     contractPartyB: 'B公司',
-//     amount: 400,
-//     paymentNode: '2023年10月2日 金额：30,000元',
-//     applyAmount: '25,000'
-//   }
-// ])
-
-// const progressList = ref<any[]>([
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '主管领导审核',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '1',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: ''
-//   },
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '财务审核',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '2',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: '同意'
-//   },
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '分管领导审核',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '3',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: '同意'
-//   },
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '动迁科长审核',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '4',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: '同意'
-//   },
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '监督评估发起申请',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '5',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: ''
-//   }
-// ])
-
-// const dictObj = computed(() => dictStore.getDictObj)
 
 watch(
   () => props.row,

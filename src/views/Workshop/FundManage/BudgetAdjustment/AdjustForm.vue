@@ -75,7 +75,6 @@ const projectId = appStore.currentProjectId
 const btnLoading = ref(false)
 
 const defaultValue = {
-  // ids: props.selectionIds.toString(),
   ids: props.landlordIds.toString(),
   type: '',
   gsRemark: ''

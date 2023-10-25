@@ -92,17 +92,10 @@ const { register, tableObject, methods } = useTable({
 })
 
 const { setSearchParams, getSelections } = methods
-// tableObject.params = {
-//   projectId,
-//   businessId: 2
-//   // auditType: tabVal.value
-// }
 
 tableObject.params = {
   projectId,
-  // businessId: 2,
   status: 4
-  // auditType: tabVal.value
 }
 setSearchParams({})
 
@@ -512,10 +505,6 @@ const onViewRow = async (row: any) => {
   tableObject.currentRow = row
   dialog.value = true
 }
-// const onViewRow = async (row) => {
-//   tableObject.currentRow = { ...row }
-//   dialog.value = true
-// }
 
 // 调整概算
 const onAdjust = async () => {

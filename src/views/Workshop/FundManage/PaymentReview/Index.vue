@@ -83,30 +83,15 @@ import {
   getPaymentReviewListApi,
   PaymentApplicationByIdDetailApi
 } from '@/api/fundManage/paymentApplication-service'
-// import { getPaymentApplicationListApi } from '@/api/fundManage/paymentApplication-service'
-// import { useIcon } from '@/hooks/web/useIcon' // 操作类型
-import {
-  // getDemographicListApi,
-  // delDemographicByIdApi,
-  getDemographicHeadApi,
-  getExcelList
-} from '@/api/workshop/population/service'
-// import type {
-//   DemographicDtoType,
-//   DemographicHeadType,
-//   ExcelListType
-// } from '@/api/workshop/population/types'
+import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-// import dayjs from 'dayjs'
 import { formatDate, analyzeIDCard } from '@/utils/index'
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-// import EditForm from '../FundPayment/EditForm.vue'
 const tabVal = ref<string>('1')
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-// const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const villageTree = ref<any[]>([])
 const parmasList = ref<any[]>([])
 
@@ -123,7 +108,6 @@ let timer = 0
 
 const { register, tableObject, methods } = useTable({
   getListApi: getPaymentReviewListApi
-  // delListApi: delPaymentApplicationByIdApi
 })
 const { getList, setSearchParams } = methods
 
@@ -170,27 +154,6 @@ onBeforeUnmount(() => {
   timer = 0
 })
 
-// const onDelRow = async (row: any, multiple: boolean) => {
-//   tableObject.currentRow = row
-//   const { delList, getSelections } = methods
-//   const selections = await getSelections()
-//   await delList(
-//     multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-//     multiple
-//   )
-// }
-
-// const onAddRow = () => {
-//   actionType.value = 'add'
-//   tableObject.currentRow = null
-//   dialog.value = true
-// }
-
-// const onEditRow = (row: any) => {
-//   actionType.value = 'edit'
-//   tableObject.currentRow = row
-//   dialog.value = true
-// }
 const onReviewRow = async (row) => {
   tableObject.currentRow = row
   dialog.value = true
@@ -533,13 +496,6 @@ const onSearch = (data) => {
     setSearchParams({ ...params })
   }
 }
-
-// const onEditFormClose = (flag: boolean) => {
-//   if (flag) {
-//     getList()
-//   }
-//   dialog.value = false
-// }
 </script>
 
 <style lang="less" scoped>

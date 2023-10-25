@@ -41,19 +41,6 @@
           >
         </el-radio-group>
       </ElFormItem>
-
-      <!-- <ElFormItem label="资金科目:" required>
-        <ElTreeSelect
-          class="!w-full"
-          v-model="form.funSubjectId"
-          :data="fundAccountList"
-          node-key="code"
-          :props="{ value: 'code', label: 'name' }"
-          showCheckbox
-          checkStrictly
-          checkOnClickNode
-        />
-      </ElFormItem> -->
       <ElFormItem label="资金科目:" required>
         <ElTreeSelect
           class="!w-full"
@@ -98,11 +85,14 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{ otherDataAmount[0].amoutPrice }}</span> 元
+              <span class="num">{{ parmasList.amount }}</span> 元
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">{{ otherDataAmount[0].num }}</span> 笔
+              <span class="num">{{
+                parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+              }}</span>
+              笔
             </div>
           </div>
         </div>
@@ -121,7 +111,7 @@
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
 
-      <!-- 其他付款对象 -->
+      <!-- 选择付款对象(专业项目,其他) -->
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
           <div class="table-header-left">
@@ -131,14 +121,13 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{
-                otherDataAmount[0].amoutPrice ? otherDataAmount[0].amoutPrice : 0
-              }}</span>
+              <span class="num">{{ amoutPrice }}</span>
               元
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">{{ otherDataAmount[0].num ? otherDataAmount[0].num : 0 }}</span> 笔
+              <span class="num">{{ num }}</span>
+              笔
             </div>
           </div>
           <ElSpace>
@@ -168,43 +157,60 @@
             header-align="center"
           />
         </ElTable>
-      </div>
-      <ElTable
-        :data="actionType == 'view' ? tableData : parmasList.professionalContractList"
-        style="width: 100%"
-        class="mb-20"
-        :border="true"
-        v-if="form.paymentType == 1"
-      >
-        <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
-        <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
-        <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
-        <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-        <ElTableColumn
-          label="合同乙方"
-          prop="contractPartyB"
-          align="center"
-          header-align="center"
-        />
-        <ElTableColumn
-          label="合同金额(万元)"
-          prop="contractAmount"
-          align="center"
-          header-align="center"
-        />
-        <ElTableColumn
-          label="支付节点"
-          prop="paymentNode"
-          align="center"
-          header-align="center"
-          width="200"
+        <ElTable
+          :data="actionType == 'view' ? parmasList.professionalContractList : tableData"
+          style="width: 100%"
+          class="mb-20"
+          :border="true"
+          v-if="form.paymentType == 1"
         >
-          <template #default="{ row }">
-            <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
-      </ElTable>
+          <ElTableColumn
+            label="序号"
+            align="center"
+            width="80"
+            type="index"
+            header-align="center"
+          />
+          <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
+          <ElTableColumn
+            label="合同名称"
+            prop="contractName"
+            align="center"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="合同编号"
+            prop="contractCode"
+            align="center"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="合同乙方"
+            prop="contractPartyB"
+            align="center"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="合同金额(万元)"
+            prop="contractAmount"
+            align="center"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="支付节点"
+            prop="paymentNode"
+            align="center"
+            header-align="center"
+            width="200"
+          >
+            <template #default="{ row }">
+              <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+        </ElTable>
+      </div>
+      <!--  -->
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
         <div class="card-img-list">
@@ -240,28 +246,26 @@
           <div class="progress-list">
             <div
               class="progress-item"
-              v-for="item in parmasList.funPaymentRequestFlowNodeList"
-              :key="item.name"
+              v-for="(item, index) in parmasList.funPaymentRequestFlowNodeList"
+              :key="index"
             >
-              <!-- <div class="left">
+              <div class="left">
                 <div class="icon-box">
-                  <div v-if="item.isAudit === '0'" class="disabled"></div>
+                  <div class="disabled"></div>
                   <img
-                    v-if="item.isAudit === '1'"
+                    v-if="item.type == 1"
                     src="@/assets/imgs/icon_finish.png"
                     width="18"
                     height="18"
                   />
-                  <div v-if="item.isAudit === '2'" class="hollow"></div>
                 </div>
-                <div v-if="item.isAudit === '0' && item.type !== '5'" class="line disabled"></div>
-                <div v-if="item.isAudit === '1' && item.type !== '6'" class="line"></div>
                 <div
-                  v-if="item.isAudit === '2' && item.type !== '5'"
-                  class="line in-progress"
+                  class="line"
+                  v-if="index == parmasList.funPaymentRequestFlowNodeList.length - 1"
+                  style="background: white"
                 ></div>
-                <div v-if="item.type === '6'" class="line none"></div>
-              </div> -->
+                <div class="line" v-else></div>
+              </div>
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
@@ -324,7 +328,7 @@ import {
   ElRadio,
   ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed, watch, toRaw } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -334,22 +338,12 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-// import { funFlowNodeApi } from '@/api/fundManage/paymentApplication-service'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row: null | undefined
   parmasList: any
 }
-// const onViewRow = () => {
-//   if (form.value.id) {
-//     PaymentApplicationByIdDetailApi(form.value.id, 1).then((res: any) => {
-//       parmasList.value = res.funPaymentRequestFlowNodeList
-//       console.log(res.funPaymentRequestFlowNodeList, '123123')
-//     })
-//   }
-// }
-// console.log(parmasList, '123123123123123123')
 interface FileItemType {
   name: string
   url: string
@@ -379,9 +373,6 @@ const getFundSubjectList = () => {
       fundAccountList.value = res.content
     }
   })
-  // funFlowNodeApi({ node: 1 }).then((res: any) => {
-  //   console.log(res, '测试数据')
-  // })
 }
 watch(
   () => props.row,
@@ -399,243 +390,19 @@ watch(
     deep: true
   }
 )
-// const progressList = ref<any[]>([
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '财务上传凭证',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '0',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: ''
-//   },
-//   {
-//     auditDate: '2023-09-04T07:21:53.373+00:00',
-//     doorNo: 'jl1090011',
-//     id: 571944,
-//     isAudit: '1',
-//     name: '主管领导审核',
-//     projectId: 53,
-//     status: 'implementation',
-//     type: '1',
-//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//     remark: ''
-//   }
-// {
-//   auditDate: '2023-09-04T07:21:53.373+00:00',
-//   doorNo: 'jl1090011',
-//   id: 571944,
-//   isAudit: '1',
-//   name: '财务审核',
-//   projectId: 53,
-//   status: 'implementation',
-//   type: '2',
-//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//   remark: '同意'
-// },
-// {
-//   auditDate: '2023-09-04T07:21:53.373+00:00',
-//   doorNo: 'jl1090011',
-//   id: 571944,
-//   isAudit: '1',
-//   name: '分管领导审核',
-//   projectId: 53,
-//   status: 'implementation',
-//   type: '3',
-//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//   remark: '同意'
-// },
-// {
-//   auditDate: '2023-09-04T07:21:53.373+00:00',
-//   doorNo: 'jl1090011',
-//   id: 571944,
-//   isAudit: '1',
-//   name: '动迁科长审核',
-//   projectId: 53,
-//   status: 'implementation',
-//   type: '4',
-//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//   remark: '同意'
-// },
-// {
-//   auditDate: '2023-09-04T07:21:53.373+00:00',
-//   doorNo: 'jl1090011',
-//   id: 571944,
-//   isAudit: '1',
-//   name: '监督评估审核',
-//   projectId: 53,
-//   status: 'implementation',
-//   type: '5',
-//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//   remark: ''
-// },
-// {
-//   auditDate: '2023-09-04T07:21:53.373+00:00',
-//   doorNo: 'jl1090011',
-//   id: 571944,
-//   isAudit: '1',
-//   name: '动迁发起申请',
-//   projectId: 53,
-//   status: 'implementation',
-//   type: '6',
-//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-//   remark: ''
-// }
-// ])
 const otherData = ref<any[]>([])
-const otherDataAmount = ref<any[]>([
-  {
-    amoutPrice: '',
-    num: ''
-  }
-])
-const tableData = ref<any[]>([
-  // {
-  //   id: 1,
-  //   projectName: '通讯光缆',
-  //   contractName: '迁移合同',
-  //   contractCode: '001',
-  //   contractPartyB: 'A公司',
-  //   contractAmount: 200,
-  //   paymentNode: ['2023-10-21 金额:50000元', '2023-10-31 金额:20000元'],
-  //   amount: 123
-  // },
-  // {
-  //   id: 2,
-  //   projectName: '通讯光缆',
-  //   contractName: '迁移合同',
-  //   contractCode: '001',
-  //   contractPartyB: 'A公司',
-  //   contractAmount: 200,
-  //   paymentNode: ['2023-10-21 金额:50000元', '2023-10-31 金额:20000元'],
-  //   amount: 456
-  // }
-])
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-//   console.log(row, column)
-//   console.log(rowIndex, columnIndex)
-//   if (columnIndex === 0) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 1) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 2) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 3) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 4) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 5) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 7) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   }
-// }
+const amoutPrice = ref<any>()
+const num = ref<any>()
+const tableData = ref<any[]>([])
+
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
 // 清空
 const delRow = () => {
-  otherDataAmount.value[0].amoutPrice = 0
-  otherDataAmount.value[0].num = 0
+  amoutPrice.value = 0
+  num.value = 0
   otherData.value = []
   tableData.value = []
 }
@@ -655,34 +422,29 @@ const onFormPupClose = (flag: boolean) => {
   girdDialog.value = flag
 }
 const objListArr = (list: any) => {
-  console.log(list, otherData.value.length, '测试用的')
-  otherData.value = list
-  otherDataAmount.value[0].num = otherData.value.length
-  otherDataAmount.value[0].amoutPrice = otherData.value.reduce(
-    (c, item) => c + item.contractName * 1,
-    0
-  )
+  //其他
+  console.log(list, '测试用的')
+  otherData.value = toRaw(list)
+  num.value = otherData.value.length
+  amoutPrice.value = otherData.value.reduce((c, item) => c + item.contractName * 1, 0)
+  console.log(num.value, amoutPrice.value, '计算其他的数据')
 }
 const tableArr = (val: any) => {
+  //专业项目
   tableData.value = val
+  console.log(tableData.value, '专业项目数据')
   tableData.value = tableData.value.filter(
     (item, index) =>
       tableData.value.findIndex((i) => i.contractCode === item.contractCode) === index
   )
-  otherDataAmount.value[0].num = tableData.value.length
-  otherDataAmount.value[0].amoutPrice = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
+  num.value = tableData.value.length
+  amoutPrice.value = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
+  console.log(num.value, amoutPrice.value, '计算专业项目的数据')
 }
 const girdList = () => {
   girdDialog.value = true
-  // type.value = true
   form.value.paymentType == 2 ? (type.value = true) : (type.value = false)
 }
-// const detail = () => {
-//   PaymentApplicationByIdDetailApi({ id }).then((res) => {
-//     debugger
-//     console.log('查询成功')
-//   })
-// }
 const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
     data.status = status
@@ -716,25 +478,28 @@ const onSubmit = debounce((formEl, status?: number) => {
       } else {
         let params: any = {
           ...form.value,
-          paymentObjectList: [
-            {
-              // contractId: 571923,
-              contractId: '',
-              // nodeIds: '571919,571920',
-              // nodeIds: '',
-              // amount: otherDataAmount.value[0].amoutPrice
-              // paymentObjectJson:
-              amount: ''
-            }
-          ],
+          paymentObjectList: [{}],
           receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
         }
-        params.paymentObjectList = otherData.value.map((item) => {
-          return {
-            contractId: item.payObject,
-            amount: item.contractName
-          }
-        })
+        console.log(tableData.value, '提交测试')
+        if (form.value.paymentType == 1) {
+          // 付款对象
+          params.paymentObjectList = toRaw(tableData.value).map((item) => {
+            return {
+              contractId: item.contractId,
+              amount: item.contractAmount,
+              nodeIds: item.nodeIds
+            }
+          })
+        } else {
+          //其他
+          params.paymentObjectList = toRaw(otherData.value).map((item) => {
+            return {
+              contractId: item.payObject,
+              amount: item.contractName
+            }
+          })
+        }
         submit(params, status)
       }
     } else {
