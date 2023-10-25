@@ -187,24 +187,16 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
+const submit = async (data: any) => {
   if (props.actionType === 'add') {
     data.projectId = appStore.getCurrentProjectId
     data.entryType = '2'
-    addFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
-    onClose(true)
+    await addFundEntryApi(data)
   } else {
-    updateFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
-    onClose(true)
+    await updateFundEntryApi(data)
   }
+  ElMessage.success('操作成功！')
+  onClose(true)
 }
 
 // 提交表单

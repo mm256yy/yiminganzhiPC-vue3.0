@@ -201,21 +201,14 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
+const submit = async (data: any) => {
   if (props.actionType === 'add') {
     data.projectId = appStore.getCurrentProjectId
-    addFunPayApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await addFunPayApi(data)
   } else {
-    updateFunPayApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await updateFunPayApi(data)
   }
+  ElMessage.success('操作成功！')
   onClose(true)
 }
 

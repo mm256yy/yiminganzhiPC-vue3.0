@@ -178,22 +178,15 @@ const onClose = (flag = false) => {
   form.value = {}
 }
 
-const submit = (data: any) => {
+const submit = async (data: any) => {
   if (props.actionType === 'add') {
     data.projectId = appStore.getCurrentProjectId
     data.entryType = '1' // 1普通入账 2法人入账
-    addFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await addFundEntryApi(data)
   } else {
-    updateFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await updateFundEntryApi(data)
   }
+  ElMessage.success('操作成功！')
   onClose(true)
 }
 
