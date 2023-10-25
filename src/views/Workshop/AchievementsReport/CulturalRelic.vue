@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 文物古迹报表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/cultural_relic.png" alt="" />
+      <img src="@/assets/imgs/report/cultural_relic.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

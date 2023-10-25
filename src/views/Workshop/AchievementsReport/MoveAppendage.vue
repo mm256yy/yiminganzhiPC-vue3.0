@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 移动工程附属物设备汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/move_appendage.png" alt="" />
+      <img src="@/assets/imgs/report/move_appendage.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

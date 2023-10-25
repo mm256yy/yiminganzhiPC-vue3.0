@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 宗教基本信息报表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/religious_information.png" alt="" />
+      <img src="@/assets/imgs/report/religious_information.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

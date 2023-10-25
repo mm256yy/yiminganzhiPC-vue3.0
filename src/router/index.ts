@@ -560,6 +560,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '坟墓',
               icon: 'ant-design:home-outlined'
             }
+          },
+          {
+            path: 'physicalResults',
+            name: 'physicalResults',
+            component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+            meta: {
+              title: '企业报表',
+              hidden: false
+            }
+          },
+          {
+            path: 'PhysicaFrom',
+            name: 'PhysicaFrom',
+            component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
+            meta: {
+              title: '个体报表',
+              hidden: false
+            }
           }
         ]
       },

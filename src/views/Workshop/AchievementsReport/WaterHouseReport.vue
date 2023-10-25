@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 水电站房屋汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/hydropower_house.png" alt="" />
+      <img src="@/assets/imgs/report/hydropower_house.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

@@ -168,7 +168,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: false
+          changeOrigin: true
         }
       },
       hmr: {
@@ -194,7 +194,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs'
+        'dayjs' 
       ]
     }
   }

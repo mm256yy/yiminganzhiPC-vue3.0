@@ -19,11 +19,7 @@
         <div class="table-left-title"> 水电站 </div>
       </div>
       <div class="container">
-        <img
-          src="@/assets/imgs/IntelligentReport/hydropower_station.png"
-          style="max-width: none"
-          alt=""
-        />
+        <img src="@/assets/imgs/report/hydropower_station.png" style="max-width: none" alt="" />
       </div>
     </div>
   </WorkContentWrap>

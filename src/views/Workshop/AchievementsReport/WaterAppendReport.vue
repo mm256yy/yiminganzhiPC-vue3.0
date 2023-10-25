@@ -19,11 +19,7 @@
         <div class="table-left-title"> 水电站附属物汇总表 </div>
       </div>
       <div class="container">
-        <img
-          style="max-width: none"
-          src="@/assets/imgs/IntelligentReport/hydropower_appendage.png"
-          alt=""
-        />
+        <img style="max-width: none" src="@/assets/imgs/report/hydropower_appendage.png" alt="" />
       </div>
     </div>
   </WorkContentWrap>
