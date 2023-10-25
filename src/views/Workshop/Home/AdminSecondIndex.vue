@@ -331,7 +331,7 @@ const insuredOption = ref({
   // ],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
-    data: ['奖励费1', '奖励费2', '奖励费3', '奖励费4'],
+    data: ['商业保险', '医疗保险', '养老保险', '其他'],
     // 指示框位置  距离上下左右多少
     // right: 'center',
     bottom: '2%',
@@ -367,7 +367,7 @@ const insuredOption = ref({
   tooltip: {},
   series: [
     {
-      name: '奖励费1',
+      name: '商业保险',
       type: 'bar',
       data: [20, 40, 60, 80],
       coordinateSystem: 'polar',
@@ -375,7 +375,7 @@ const insuredOption = ref({
       colorBy: 'data'
     },
     {
-      name: '奖励费2',
+      name: '医疗保险',
       type: 'bar',
       data: [20, 40, 60, 80],
       coordinateSystem: 'polar',
@@ -383,7 +383,7 @@ const insuredOption = ref({
       colorBy: 'data'
     },
     {
-      name: '奖励费3',
+      name: '养老保险',
       type: 'bar',
       data: [20, 40, 60, 80],
       coordinateSystem: 'polar',
@@ -391,7 +391,7 @@ const insuredOption = ref({
       colorBy: 'data'
     },
     {
-      name: '奖励费4',
+      name: '其他',
       type: 'bar',
       data: [20, 40, 60, 80],
       coordinateSystem: 'polar',

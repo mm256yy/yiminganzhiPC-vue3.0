@@ -202,7 +202,9 @@
                 style="background-color: #f2f6ff"
               >
                 <div class="sub-title">{{ item.name }}</div>
-                <div class="sub-num">{{ item.num }}<span class="sub-title">m²</span></div>
+                <div class="sub-num"
+                  >{{ item.num }}<span class="sub-title">{{ item.type }}</span></div
+                >
               </div>
             </div>
           </div>
@@ -294,7 +296,7 @@
             <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
           </ElTabs>
         </div>
-        <div class="common-color">
+        <div class="common-color" style="height: 322px; overflow: hidden">
           <div class="data-left-header-tab" @click="handleClickItem(5)">
             <div class="data-left-header-tab">
               <div class="flex">
@@ -316,8 +318,9 @@
           </div>
           <div class="question-list">
             <div class="item" v-for="item in questionList" :key="item.id">
-              <div class="name">{{ item.name }}</div>
-              <div class="time">{{ item.createTime.replace(/\//g, '-') }}</div>
+              <div class="name">{{ item.remark }}</div>
+              <!-- <div class="name">{{ item.creater }}</div> -->
+              <div class="time">{{ renderTime(item.createdDate) }}</div>
             </div>
           </div>
         </div>
@@ -543,13 +546,10 @@ const getList = async () => {
 
 const feedback = async () => {
   const list = await feedbackList({})
-  if (list.content.length > 0) {
-    list.content.forEach((item, index) => {
-      if (questionList.value[index]) {
-        questionList.value[index].name = item.remark
-      }
-    })
-  }
+  list.content.sort(function (a, b) {
+    return b.createdDate < a.createdDate ? -1 : 1
+  })
+  questionList.value = list.content
 }
 const villageLists = ref<any>([])
 const villageList = async () => {
@@ -717,6 +717,14 @@ const handleClickItem = (type: number) => {
   }
   push({ name: pathMap[type] })
 }
+
+const renderTime = (date: any) => {
+  let dateee = new Date(date).toJSON()
+  return new Date(+new Date(dateee) + 8 * 3600 * 1000)
+    .toISOString()
+    .replace(/T/g, ' ')
+    .replace(/\.[\d]{3}Z/, '')
+}
 // const agricultureList = ref<any>([
 //   {
 //     id: 1,
@@ -767,52 +775,62 @@ const projectsList = ref<any>([
   {
     id: 1,
     name: '四级公路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 2,
     name: '35KV电力线路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 3,
     name: '电信杆路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 4,
     name: '移动杆路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 5,
     name: '联通杆路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 6,
     name: '铁塔基站',
-    num: ''
+    num: '',
+    type: '座'
   },
   {
     id: 7,
     name: '广电杆路',
-    num: ''
+    num: '',
+    type: 'km'
   },
   {
     id: 8,
     name: '溪西水文站',
-    num: ''
+    num: '',
+    type: '处'
   },
   {
     id: 9,
     name: '县级文保点',
-    num: ''
+    num: '',
+    type: '处'
   },
   {
     id: 10,
     name: '宗教设施',
-    num: ''
+    num: '',
+    type: '处'
   }
 ])
 // const fundList = [
@@ -916,31 +934,31 @@ const institutionsList = ref<any>([
 //   }
 // ]
 const questionList = ref<any>([
-  {
-    id: 1,
-    name: '关于零星林果木补偿费谈判遇阻',
-    createTime: '2023/4/1'
-  },
-  {
-    id: 2,
-    name: '少算坟墓补助',
-    createTime: '2023/2/20'
-  },
-  {
-    id: 3,
-    name: '建房困难补助怎么算',
-    createTime: '2023/2/11'
-  },
-  {
-    id: 4,
-    name: '我投靠亲友怎么算钱',
-    createTime: '2023/2/1'
-  },
-  {
-    id: 5,
-    name: '能不能选两个安置点',
-    createTime: '2023/1/1'
-  }
+  // {
+  //   id: 1,
+  //   name: '关于零星林果木补偿费谈判遇阻',
+  //   createdDate: '2023/4/1'
+  // }
+  // {
+  //   id: 2,
+  //   name: '少算坟墓补助',
+  //   createdDate: '2023/2/20'
+  // },
+  // {
+  //   id: 3,
+  //   name: '建房困难补助怎么算',
+  //   createdDate: '2023/2/11'
+  // },
+  // {
+  //   id: 4,
+  //   name: '我投靠亲友怎么算钱',
+  //   createTime: '2023/2/1'
+  // },
+  // {
+  //   id: 5,
+  //   name: '能不能选两个安置点',
+  //   createTime: '2023/1/1'
+  // }
 ])
 </script>
 <style lang="less" scoped>
