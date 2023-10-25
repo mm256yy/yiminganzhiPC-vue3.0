@@ -2,36 +2,42 @@
   <ElDialog
     title="付款对象选择"
     :model-value="props.show"
-    :width="1200"
+    :width="1700"
     @close="onClose"
     alignCenter
     appendToBody
     :closeOnClickModal="false"
   >
     <div v-if="props.type == true">
-      <ElButton @click="onClose" type="primary" style="float: right; margin-bottom: 10px"
+      <ElButton @click="addDemo" type="primary" style="float: right; margin-bottom: 10px"
         >添加</ElButton
       >
-      <ElTable
-        :data="tableData"
-        :span-method="objectSpanMethod"
-        style="width: 100%"
-        class="mb-20"
-        :border="true"
-      >
-        <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
-        <ElTableColumn label="支付对象" align="center" prop="specialName" header-align="center">
-          <ElSelect class="w-350px" v-model="payObject">
-            <ElOption
-              v-for="item in dictObj[393]"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </ElSelect>
+      <ElTable :data="tableDatas" style="width: 100%" class="mb-20" :border="true" row-key="id">
+        <ElTableColumn
+          label="序号"
+          align="center"
+          width="80"
+          type="index"
+          header-align="center"
+          prop="index"
+        />
+        <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center">
+          <template #default="{ row }">
+            <ElSelect class="w-350px" v-model="row.payObject">
+              <ElOption
+                v-for="item in dictObj[393]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="contractName" align="center" header-align="center">
-          <ElInputNumber class="!w-200px" />
+          <!-- <ElInputNumber class="!w-200px" /> -->
+          <template #default="{ row }">
+            <ElInputNumber class="!w-200px" v-model="row.contractName" />
+          </template>
         </ElTableColumn>
         <ElTableColumn
           label="操作"
@@ -40,34 +46,92 @@
           header-align="center"
           width="80"
         >
-          <ElButton @click="del" type="primary" style="float: right; margin-bottom: 10px"
-            >删除</ElButton
-          >
+          <template #default="{ row }">
+            <ElButton @click="delDemo(row)" type="primary" style="float: right; margin-bottom: 10px"
+              >删除</ElButton
+            >
+          </template>
         </ElTableColumn>
       </ElTable>
-      <!-- <div></div> -->
-      <div>合计金额:1000元</div>
+      <!-- <div>
+        <div>序号</div>
+        <div>序号</div>
+        <div>序号</div>
+        <div>序号</div>
+      </div> -->
+
+      <div>合计金额:{{ amountPrice }}元</div>
     </div>
+    <!-- <div class="search-form-wrap">
+      <ElForm
+        class="form"
+        ref="formRef"
+        :model="searchForm"
+        label-width="80px"
+        :label-position="'right'"
+        :rules="rules"
+      >
+        <ElRow>
+          <ElCol :span="4">
+            <ElFormItem label="项目名称" prop="name">
+              <ElInput v-model="searchForm.name" class="!w-250px" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="4">
+            <ElFormItem label="项目编号" prop="code">
+              <ElInput v-model="searchForm.code" class="!w-250px" />
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="16">
+            <div>
+              <ElButton type="primary" @click="onSearch">
+                <Icon icon="ep:search" class="mr-5px" /> 查询
+              </ElButton>
+              <ElButton @click="onReset">
+                <Icon icon="ep:refresh-right" class="mr-5px" /> 重置
+              </ElButton>
+            </div>
+          </ElCol>
+        </ElRow>
+      </ElForm>
+    </div> -->
     <ElTable
       :data="tableData"
-      :span-method="objectSpanMethod"
       style="width: 100%"
       class="mb-20"
       :border="true"
       v-if="props.type == false"
     >
       <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
-      <ElTableColumn label="专项名称" align="center" prop="specialName" header-align="center" />
+      <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
-      <ElTableColumn label="合同编号" prop="contractNo" align="center" header-align="center" />
+      <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
       <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
-      <ElTableColumn label="合同金额(万元)" prop="amount" align="center" header-align="center" />
-      <ElTableColumn type="selection" width="55" align="center" header-align="center" />
-      <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center" />
+      <ElTableColumn
+        label="合同金额(万元)"
+        prop="contractAmount"
+        align="center"
+        header-align="center"
+      />
+      <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
+        <template #default="{ row }">
+          <ElCheckboxGroup v-model="check" @change="checkList(row)">
+            <ElCheckbox
+              :label="formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'"
+              v-for="(item, index) in row.nodeDtoList"
+              :key="index"
+              v-model="checkType"
+            />
+          </ElCheckboxGroup>
+        </template>
+      </ElTableColumn>
       <ElTableColumn label="申请金额" align="center" header-align="center">
-        <ElInputNumber class="!w-200px" style="width: 50px"
-      /></ElTableColumn>
+        <template #default="{ row }">
+          <ElInputNumber class="!w-200px" style="width: 50px" v-model="row.amount" />
+        </template>
+      </ElTableColumn>
     </ElTable>
+
     <template #footer>
       <ElButton @click="onClose(false)">取消</ElButton>
       <ElButton type="primary" @click="addSubmit(false)">确定</ElButton>
@@ -84,224 +148,134 @@ import {
   ElButton,
   ElSelect,
   ElOption,
-  ElInputNumber
+  ElInputNumber,
+  ElMessage,
+  ElCheckboxGroup,
+  ElCheckbox
 } from 'element-plus'
 // import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getPaymentApplicationPpsList } from '@/api/fundManage/paymentApplication-service'
+import { formatDate } from '@/utils/index'
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   show: any
   type: any
 }
+// const formRef = ref<any>()
 const props = defineProps<PropsType>()
-const emit = defineEmits(['close', 'updateDistrict'])
-const payObject = ref()
+const emit = defineEmits(['close', 'updateDistrict', 'objlist', 'tableList'])
+// const payObject = ref()
 // 关闭弹窗
 const onClose = (flag: boolean) => {
   emit('close', flag)
 }
 const addSubmit = (flag: boolean) => {
+  emit('objlist', tableDatas.value)
+  emit('tableList', tableObj.value)
   emit('close', flag)
 }
+const dataId = ref<number>(0)
+const amountPrice = ref<number>(0)
 //删除
-const del = () => {
-  console.log('删除')
+// const del = () => {
+//   console.log('删除')
+// }
+const check = ref<any>()
+const checkType = ref<boolean>()
+const tableData = ref<any[]>([])
+const tableObj = ref<any[]>([]) //付款对象集合
+const checkList = (row: any) => {
+  console.log(row.amount, '123123')
+  tableObj.value.push({
+    projectName: row.projectName,
+    contractName: row.contractName,
+    contractCode: row.contractCode,
+    contractAmount: row.contractAmount,
+    paymentNode: check,
+    amount: row.amount
+  })
+  console.log(tableObj.value, '测试传递的数据')
 }
-const tableData = ref<any[]>([
-  {
-    id: 1,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 2,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 3,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 4,
-    specialName: '通讯光缆',
-    contractName: '安装合同',
-    contractNo: '001',
-    contractPartyB: 'B公司',
-    amount: 400,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '25,000'
+const tableDatas = ref<any[]>([])
+const addDemo = () => {
+  const d = {
+    index: dataId.value++,
+    payObject: '',
+    contractName: ''
   }
-])
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-  console.log(row, column)
-  console.log(rowIndex, columnIndex)
-  if (columnIndex === 0) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 1) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 2) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 3) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 4) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 5) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 8) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-  // else if (columnIndex === 3) {
-  //   if (rowIndex === 0) {
-  //     return {
-  //       rowspan: 3,
-  //       colspan: 1
-  //     }
-  //   } else {
-  //     return {
-  //       rowspan: 0,
-  //       colspan: 0
-  //     }
-  //   }
-  // } else if (columnIndex === 4) {
-  //   if (rowIndex === 0) {
-  //     return {
-  //       rowspan: 3,
-  //       colspan: 1
-  //     }
-  //   } else {
-  //     return {
-  //       rowspan: 0,
-  //       colspan: 0
-  //     }
-  //   }
-  // } else if (columnIndex === 5) {
-  //   if (rowIndex === 0) {
-  //     return {
-  //       rowspan: 3,
-  //       colspan: 1
-  //     }
-  //   } else {
-  //     return {
-  //       rowspan: 0,
-  //       colspan: 0
-  //     }
-  //   }
+  tableDatas.value.push(d)
+  amountPrice.value = tableDatas.value.reduce((c, item) => c + item.contractName * 1, 0)
 }
+const delDemo = (row: any) => {
+  tableDatas.value.splice(row.index, 1)
+  ElMessage.success('删除成功！')
+}
+// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
+//   console.log(row, column)
+//   console.log(rowIndex, columnIndex)
+//   if (columnIndex === 0) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 7) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
+// const objectSpanMethods = ({ row, column, rowIndex, columnIndex }: any) => {
+//   console.log(row, column)
+//   console.log(rowIndex, columnIndex)
+//   if (columnIndex === 0) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 1) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
 // const schema = reactive<CrudSchema[]>([
 //   {
 //     field: 'blurry',
@@ -401,9 +375,10 @@ const findRecursion = (data, code, callback) => {
   })
 }
 const ppsList = () => {
-  getPaymentApplicationPpsList().then((res: any) => {
+  getPaymentApplicationPpsList({ keywords: '1' }).then((res: any) => {
     if (res) {
-      // tableData.value = res
+      tableData.value = res
+      console.log(tableData.value, '付款对象数据')
     }
   })
 }
@@ -459,6 +434,10 @@ onMounted(() => {
 </script>
 
 <style lang="less">
+.el-checkbox:last-of-type {
+  margin-right: 30px;
+}
+
 .filling-btn {
   display: flex;
   width: 80px;

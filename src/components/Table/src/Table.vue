@@ -80,6 +80,7 @@ export default defineComponent({
 
     const setColumn = (columnProps: TableSetPropsType[], columnsChildren?: TableColumn[]) => {
       const { columns } = unref(getProps)
+      console.log(columnsChildren, columns, columnProps)
       for (const v of columnsChildren || columns) {
         for (const item of columnProps) {
           if (v.field === item.field) {
@@ -90,7 +91,19 @@ export default defineComponent({
         }
       }
     }
-
+    const setColumns = (columnProps: any) => {
+      //修改表头
+      const { columns } = unref(getProps)
+      console.log(columns, columnProps)
+      for (const v of columns) {
+        for (const item of columnProps) {
+          if (v.field === item.field) {
+            v.label = item.label
+          }
+        }
+      }
+      console.log(columns, columnProps)
+    }
     const selections = ref<Recordable[]>([])
 
     const selectionChange = (selection: Recordable[]) => {
@@ -101,7 +114,8 @@ export default defineComponent({
       setProps,
       setColumn,
       selections,
-      elTableRef
+      elTableRef,
+      setColumns
     })
 
     const pagination = computed(() => {

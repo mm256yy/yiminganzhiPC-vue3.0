@@ -43,15 +43,25 @@
     </div>
 
     <!-- 查看 -->
-    <ViewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseView" />
+    <ViewForm
+      :show="dialog"
+      :row="tableObject.currentRow"
+      @close="onCloseView"
+      :parmasList="parmasList"
+    />
 
     <!-- 概算调整 -->
-    <AdjustForm :show="adjustDialog" :selectionIds="selectionIds" @close="onCloseAdjust" />
+    <AdjustForm
+      :show="adjustDialog"
+      :selectionIds="selectionIds"
+      @close="onCloseAdjust"
+      :landlordIds="landlordIds"
+    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed, onMounted } from 'vue'
+import { reactive, ref, computed, onMounted, toRaw } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -61,10 +71,12 @@ import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
+// import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ViewForm from './ViewForm.vue'
 import AdjustForm from './AdjustForm.vue'
-
+import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const projectId = appStore.currentProjectId
@@ -73,14 +85,28 @@ const dialog = ref(false) // 查看弹窗标识
 const adjustDialog = ref(false) // 调整概算弹窗标识
 const fundAccountList = ref<any[]>([]) // 资金科目
 const selectionIds = ref<any[]>([]) // 选择的项 id 集合
-
+const landlordIds = ref<number[]>([])
+const parmasList = ref<any[]>([])
 const { register, tableObject, methods } = useTable({
   getListApi: getBudgetAdjustmentListApi
 })
 
 const { setSearchParams, getSelections } = methods
+// tableObject.params = {
+//   projectId,
+//   businessId: 2
+//   // auditType: tabVal.value
+// }
 
-setSearchParams({ status: '4' })
+tableObject.params = {
+  projectId,
+  // businessId: 2,
+  status: 4
+  // auditType: tabVal.value
+}
+setSearchParams({})
+
+// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -383,7 +409,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'gsStatusTxt',
+    field: 'status',
     label: '状态',
     search: {
       show: false
@@ -474,23 +500,34 @@ const getFundSubjectList = () => {
     }
   })
 }
-
-const onViewRow = async (row) => {
-  tableObject.currentRow = { ...row }
+const onViewRow = async (row: any) => {
+  PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
+  tableObject.currentRow = row
   dialog.value = true
 }
+// const onViewRow = async (row) => {
+//   tableObject.currentRow = { ...row }
+//   dialog.value = true
+// }
 
 // 调整概算
 const onAdjust = async () => {
   const res = await getSelections()
-  selectionIds.value = [...res]
   if (res && res.length) {
     adjustDialog.value = true
+    landlordIds.value = res.map((item) => item.id)
+    console.log('landlordIds', toRaw(landlordIds.value))
   } else {
     ElMessage.info('请先勾选列表数据')
   }
 }
-
 // 关闭查看弹窗
 const onCloseView = () => {
   dialog.value = false

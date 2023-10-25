@@ -41,3 +41,21 @@ export const addFundEntryApi = (data: Partial<TownshipFundEntryDtoType>): Promis
     data
   })
 }
+
+/**
+ * 查询乡镇金额合计
+ * @param params
+ * @returns
+ */
+export const getTownshipSumAmount = () => {
+  return request.get({ url: `/funGrant/townshipSumAmount` })
+}
+
+/**
+ * 查询发放薪资合计
+ * @param params
+ * @returns
+ */
+export const getGrantSumAmount = (params: any) => {
+  return request.get({ url: `/funGrant/grantSumAmount`, params })
+}

@@ -142,7 +142,7 @@ watch(
       form.value = props.row
       getFundGrantFindByDoorNo(props.row?.doorNo).then((res) => {
         tableObject.tableList = res.data
-        relocateOtherPic.value = JSON.parse(res.data.receipt || [])
+        relocateOtherPic.value = res.data?.receipt ? JSON.parse(res.data?.receipt) : []
       })
     }
   }

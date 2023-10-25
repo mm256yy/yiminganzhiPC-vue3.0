@@ -8,7 +8,7 @@ export const getLeadershipScreen = (params: any): Promise<any> => {
   })
 }
 
-//消息反馈
+//信息反馈
 export const feedbackList = (params: any): Promise<any> => {
   return request.get({
     url: `feedback`,

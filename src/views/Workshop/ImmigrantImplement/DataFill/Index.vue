@@ -67,7 +67,7 @@
       </div>
 
       <div v-if="tabCurrentId !== 0" class="flex align-center pt-20px justify-end">
-        <ElButton type="primary" @click="onFeedback">问题反馈</ElButton>
+        <ElButton type="primary" @click="onFeedback">信息反馈</ElButton>
       </div>
     </div>
 

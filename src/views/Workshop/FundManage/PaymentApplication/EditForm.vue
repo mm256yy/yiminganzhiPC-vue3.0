@@ -82,12 +82,12 @@
       </ElFormItem>
       <ElFormItem label="付款类型:" required v-if="form.paymentType == 1"> 支付 </ElFormItem>
       <ElFormItem label="付款类型:" required v-else>
-        <el-radio-group class="ml-4" v-model="form.test">
+        <el-radio-group class="ml-4" v-model="form.payType">
           <el-radio label="1" size="large">支付</el-radio>
           <el-radio label="2" size="large">预拨</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">123 </ElFormItem>
+      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem>
       <div class="table-wrap">
         <div
           class="flex items-center justify-between pb-12px"
@@ -102,7 +102,7 @@
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">1</span> 笔
+              <span class="num">{{ otherDataAmount[0].num }}</span> 笔
             </div>
           </div>
         </div>
@@ -120,6 +120,8 @@
       <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
+
+      <!-- 其他付款对象 -->
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
           <div class="table-header-left">
@@ -129,20 +131,22 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{ otherDataAmount[0].amoutPrice }}</span> 元
+              <span class="num">{{
+                otherDataAmount[0].amoutPrice ? otherDataAmount[0].amoutPrice : 0
+              }}</span>
+              元
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">1</span> 笔
+              <span class="num">{{ otherDataAmount[0].num ? otherDataAmount[0].num : 0 }}</span> 笔
             </div>
           </div>
           <ElSpace>
-            <ElButton type="primary" @click="onAddRow"> 清空 </ElButton>
+            <ElButton type="primary" @click="delRow"> 清空 </ElButton>
           </ElSpace>
         </div>
         <ElTable
           :data="otherData"
-          :span-method="objectSpanMethod"
           style="width: 100%"
           class="mb-20"
           :border="true"
@@ -154,32 +158,52 @@
             width="80"
             type="index"
             header-align="center"
+            prop="index"
           />
-          <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center" />
-          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+          <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center" />
+          <ElTableColumn
+            label="申请金额"
+            prop="contractName"
+            align="center"
+            header-align="center"
+          />
         </ElTable>
       </div>
       <ElTable
-        :data="tableData"
-        :span-method="objectSpanMethod"
+        :data="actionType == 'view' ? tableData : parmasList.professionalContractList"
         style="width: 100%"
         class="mb-20"
         :border="true"
         v-if="form.paymentType == 1"
       >
         <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
-        <ElTableColumn label="专项名称" align="center" prop="specialName" header-align="center" />
+        <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
         <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
-        <ElTableColumn label="合同编号" prop="contractNo" align="center" header-align="center" />
+        <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
         <ElTableColumn
           label="合同乙方"
           prop="contractPartyB"
           align="center"
           header-align="center"
         />
-        <ElTableColumn label="合同金额(万元)" prop="amount" align="center" header-align="center" />
-        <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center" />
-        <ElTableColumn label="申请金额" prop="applyAmount" align="center" header-align="center" />
+        <ElTableColumn
+          label="合同金额(万元)"
+          prop="contractAmount"
+          align="center"
+          header-align="center"
+        />
+        <ElTableColumn
+          label="支付节点"
+          prop="paymentNode"
+          align="center"
+          header-align="center"
+          width="200"
+        >
+          <template #default="{ row }">
+            <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
       </ElTable>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -214,8 +238,12 @@
 
         <div class="progress-wrapper">
           <div class="progress-list">
-            <div class="progress-item" v-for="item in progressList" :key="item.name">
-              <div class="left">
+            <div
+              class="progress-item"
+              v-for="item in parmasList.funPaymentRequestFlowNodeList"
+              :key="item.name"
+            >
+              <!-- <div class="left">
                 <div class="icon-box">
                   <div v-if="item.isAudit === '0'" class="disabled"></div>
                   <img
@@ -233,20 +261,17 @@
                   class="line in-progress"
                 ></div>
                 <div v-if="item.type === '6'" class="line none"></div>
-                <!-- <div v-if="item.type === '6'" class="none"></div> -->
-              </div>
+              </div> -->
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
-                    <div class="name">{{ item.name }}</div>
+                    <div class="name">{{ item.auditor }}</div>
                   </div>
-                  <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div>
-                  <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
-                    审核时间：{{ dayjs(item.auditDate).format('YYYY-MM-DD') }}
+                  <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
+                  <div class="time">
+                    审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                   </div>
-                  <div class="remark" v-if="item.isAudit === '1' && item.remark">
-                    审核意见: {{ item.remark }}
-                  </div>
+                  <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
                 </div>
               </div>
             </div>
@@ -267,7 +292,13 @@
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
     </el-dialog>
-    <GirdList :show="girdDialog" @close="onFormPupClose" :type="type" />
+    <GirdList
+      :show="girdDialog"
+      @close="onFormPupClose"
+      :type="type"
+      @objlist="objListArr"
+      @tableList="tableArr"
+    />
   </ElDialog>
 </template>
 
@@ -303,13 +334,22 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
+// import { funFlowNodeApi } from '@/api/fundManage/paymentApplication-service'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row: null | undefined
+  parmasList: any
 }
-
+// const onViewRow = () => {
+//   if (form.value.id) {
+//     PaymentApplicationByIdDetailApi(form.value.id, 1).then((res: any) => {
+//       parmasList.value = res.funPaymentRequestFlowNodeList
+//       console.log(res.funPaymentRequestFlowNodeList, '123123')
+//     })
+//   }
+// }
+// console.log(parmasList, '123123123123123123')
 interface FileItemType {
   name: string
   url: string
@@ -339,6 +379,9 @@ const getFundSubjectList = () => {
       fundAccountList.value = res.content
     }
   })
+  // funFlowNodeApi({ node: 1 }).then((res: any) => {
+  //   console.log(res, '测试数据')
+  // })
 }
 watch(
   () => props.row,
@@ -356,267 +399,245 @@ watch(
     deep: true
   }
 )
-const progressList = ref<any[]>([
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '财务上传凭证',
-    projectId: 53,
-    status: 'implementation',
-    type: '0',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '主管领导审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '1',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '财务审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '2',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '分管领导审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '3',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '动迁科长审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '4',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: '同意'
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '监督评估审核',
-    projectId: 53,
-    status: 'implementation',
-    type: '5',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
-  },
-  {
-    auditDate: '2023-09-04T07:21:53.373+00:00',
-    doorNo: 'jl1090011',
-    id: 571944,
-    isAudit: '1',
-    name: '动迁发起申请',
-    projectId: 53,
-    status: 'implementation',
-    type: '6',
-    uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
-    remark: ''
-  }
-])
-const otherData = ref<any[]>([
-  {
-    contractId: '测试',
-    amount: '123'
-  }
-])
+// const progressList = ref<any[]>([
+//   {
+//     auditDate: '2023-09-04T07:21:53.373+00:00',
+//     doorNo: 'jl1090011',
+//     id: 571944,
+//     isAudit: '1',
+//     name: '财务上传凭证',
+//     projectId: 53,
+//     status: 'implementation',
+//     type: '0',
+//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//     remark: ''
+//   },
+//   {
+//     auditDate: '2023-09-04T07:21:53.373+00:00',
+//     doorNo: 'jl1090011',
+//     id: 571944,
+//     isAudit: '1',
+//     name: '主管领导审核',
+//     projectId: 53,
+//     status: 'implementation',
+//     type: '1',
+//     uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//     remark: ''
+//   }
+// {
+//   auditDate: '2023-09-04T07:21:53.373+00:00',
+//   doorNo: 'jl1090011',
+//   id: 571944,
+//   isAudit: '1',
+//   name: '财务审核',
+//   projectId: 53,
+//   status: 'implementation',
+//   type: '2',
+//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//   remark: '同意'
+// },
+// {
+//   auditDate: '2023-09-04T07:21:53.373+00:00',
+//   doorNo: 'jl1090011',
+//   id: 571944,
+//   isAudit: '1',
+//   name: '分管领导审核',
+//   projectId: 53,
+//   status: 'implementation',
+//   type: '3',
+//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//   remark: '同意'
+// },
+// {
+//   auditDate: '2023-09-04T07:21:53.373+00:00',
+//   doorNo: 'jl1090011',
+//   id: 571944,
+//   isAudit: '1',
+//   name: '动迁科长审核',
+//   projectId: 53,
+//   status: 'implementation',
+//   type: '4',
+//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//   remark: '同意'
+// },
+// {
+//   auditDate: '2023-09-04T07:21:53.373+00:00',
+//   doorNo: 'jl1090011',
+//   id: 571944,
+//   isAudit: '1',
+//   name: '监督评估审核',
+//   projectId: 53,
+//   status: 'implementation',
+//   type: '5',
+//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//   remark: ''
+// },
+// {
+//   auditDate: '2023-09-04T07:21:53.373+00:00',
+//   doorNo: 'jl1090011',
+//   id: 571944,
+//   isAudit: '1',
+//   name: '动迁发起申请',
+//   projectId: 53,
+//   status: 'implementation',
+//   type: '6',
+//   uid: '4214fee0-0cf0-4c73-b418-c6f20715a114',
+//   remark: ''
+// }
+// ])
+const otherData = ref<any[]>([])
 const otherDataAmount = ref<any[]>([
   {
-    amoutPrice: '123123123',
+    amoutPrice: '',
     num: ''
   }
 ])
 const tableData = ref<any[]>([
-  {
-    id: 1,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 2,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 3,
-    specialName: '通讯光缆',
-    contractName: '迁移合同',
-    contractNo: '001',
-    contractPartyB: 'A公司',
-    amount: 200,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '100,000'
-  },
-  {
-    id: 4,
-    specialName: '通讯光缆',
-    contractName: '安装合同',
-    contractNo: '001',
-    contractPartyB: 'B公司',
-    amount: 400,
-    paymentNode: '2023年10月2日 金额：30,000元',
-    applyAmount: '25,000'
-  }
+  // {
+  //   id: 1,
+  //   projectName: '通讯光缆',
+  //   contractName: '迁移合同',
+  //   contractCode: '001',
+  //   contractPartyB: 'A公司',
+  //   contractAmount: 200,
+  //   paymentNode: ['2023-10-21 金额:50000元', '2023-10-31 金额:20000元'],
+  //   amount: 123
+  // },
+  // {
+  //   id: 2,
+  //   projectName: '通讯光缆',
+  //   contractName: '迁移合同',
+  //   contractCode: '001',
+  //   contractPartyB: 'A公司',
+  //   contractAmount: 200,
+  //   paymentNode: ['2023-10-21 金额:50000元', '2023-10-31 金额:20000元'],
+  //   amount: 456
+  // }
 ])
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-  console.log(row, column)
-  console.log(rowIndex, columnIndex)
-  if (columnIndex === 0) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 1) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 4,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 2) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 3) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 4) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 5) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  } else if (columnIndex === 7) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 3) {
-      return {
-        rowspan: 1,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
+// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
+//   console.log(row, column)
+//   console.log(rowIndex, columnIndex)
+//   if (columnIndex === 0) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 1) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 4,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 2) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 3) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 4) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 5) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   } else if (columnIndex === 7) {
+//     if (rowIndex === 0) {
+//       return {
+//         rowspan: 3,
+//         colspan: 1
+//       }
+//     } else if (rowIndex === 3) {
+//       return {
+//         rowspan: 1,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
 // 清空
-const onAddRow = () => {
-  console.log('清空')
+const delRow = () => {
+  otherDataAmount.value[0].amoutPrice = 0
+  otherDataAmount.value[0].num = 0
+  otherData.value = []
+  tableData.value = []
 }
 // 规则校验
 const rules = reactive<FormRules>({})
@@ -632,6 +653,24 @@ const onClose = (flag = false) => {
 }
 const onFormPupClose = (flag: boolean) => {
   girdDialog.value = flag
+}
+const objListArr = (list: any) => {
+  console.log(list, otherData.value.length, '测试用的')
+  otherData.value = list
+  otherDataAmount.value[0].num = otherData.value.length
+  otherDataAmount.value[0].amoutPrice = otherData.value.reduce(
+    (c, item) => c + item.contractName * 1,
+    0
+  )
+}
+const tableArr = (val: any) => {
+  tableData.value = val
+  tableData.value = tableData.value.filter(
+    (item, index) =>
+      tableData.value.findIndex((i) => i.contractCode === item.contractCode) === index
+  )
+  otherDataAmount.value[0].num = tableData.value.length
+  otherDataAmount.value[0].amoutPrice = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
 }
 const girdList = () => {
   girdDialog.value = true
@@ -666,6 +705,7 @@ const submit = (data: any, status?: number) => {
   }
   onClose(true)
 }
+
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
   formEl?.validate((valid: any) => {
@@ -678,12 +718,23 @@ const onSubmit = debounce((formEl, status?: number) => {
           ...form.value,
           paymentObjectList: [
             {
-              contractId: 571923,
-              nodeIds: '571919,571920'
+              // contractId: 571923,
+              contractId: '',
+              // nodeIds: '571919,571920',
+              // nodeIds: '',
+              // amount: otherDataAmount.value[0].amoutPrice
+              // paymentObjectJson:
+              amount: ''
             }
           ],
           receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
         }
+        params.paymentObjectList = otherData.value.map((item) => {
+          return {
+            contractId: item.payObject,
+            amount: item.contractName
+          }
+        })
         submit(params, status)
       }
     } else {
@@ -742,6 +793,7 @@ const onError = () => {
 onMounted(() => {
   initData()
   getFundSubjectList()
+  // onViewRow()
 })
 </script>
 

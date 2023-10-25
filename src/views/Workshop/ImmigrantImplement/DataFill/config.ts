@@ -428,18 +428,6 @@ export const ProductionPlaceWay = [
 // 宅基地安置区块
 export const resettleArea = [
   {
-    id: '1',
-    name: '曙光安置区'
-  },
-  {
-    id: '2',
-    name: '镜岭集镇安置区'
-  }
-]
-
-// 公寓安置地块
-export const apartmentArea = [
-  {
     id: '3',
     name: '棠村安置区'
   },
@@ -450,6 +438,18 @@ export const apartmentArea = [
   {
     id: '5',
     name: '东坪安置区'
+  }
+]
+
+// 公寓安置地块
+export const apartmentArea = [
+  {
+    id: '1',
+    name: '曙光安置区'
+  },
+  {
+    id: '2',
+    name: '镜岭集镇安置区'
   }
 ]
 

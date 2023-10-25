@@ -125,13 +125,14 @@ import {
   ElTreeSelect,
   ElInputNumber
 } from 'element-plus'
-import { ref, reactive, nextTick, watch, computed } from 'vue'
+import { ref, reactive, nextTick, watch, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { addFunPayApi, updateFunPayApi } from '@/api/fundManage/fundPayment-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import dayjs from 'dayjs'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 interface PropsType {
   show: boolean
@@ -151,8 +152,8 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
+// const fundAccountList = ref<any[]>([]) // 资金科目
 
-console.log(dictObj.value[382], '382')
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -287,6 +288,19 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+
+// 获取资金科目选项列表
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      // fundAccountList.value = res.content
+    }
+  })
+}
+
+onMounted(() => {
+  getFundSubjectList()
+})
 </script>
 
 <style lang="less" scoped>
