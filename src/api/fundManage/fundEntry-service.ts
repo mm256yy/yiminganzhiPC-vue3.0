@@ -3,14 +3,23 @@ import { FundEntryType } from './fundEntry-types'
 
 // 获取资金入账列表
 export const getFundEntryListApi = (params?: any): Promise<TableResponse<FundEntryType>> => {
-  return request.get({ url: `/funReceiptsRecord`, params })
+  return request.get({
+    url: `/funReceiptsRecord`,
+    params: {
+      ...params,
+      type: '1'
+    }
+  })
 }
 
 // 新增资金入账
 export const addFundEntryApi = (data: Partial<FundEntryType>): Promise<any> => {
   return request.post({
     url: '/funReceiptsRecord/create',
-    data
+    data: {
+      ...data,
+      type: '1'
+    }
   })
 }
 
@@ -18,7 +27,10 @@ export const addFundEntryApi = (data: Partial<FundEntryType>): Promise<any> => {
 export const updateFundEntryApi = (data: Partial<FundEntryType>): Promise<any> => {
   return request.post({
     url: '/funReceiptsRecord/update',
-    data
+    data: {
+      ...data,
+      type: '1'
+    }
   })
 }
 
