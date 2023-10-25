@@ -180,7 +180,7 @@ const onEditRow = (row: any) => {
 }
 const onViewRow = (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res.funPaymentRequestFlowNodeList
+    parmasList.value = res
     console.log(res.funPaymentRequestFlowNodeList, '测试')
   })
   actionType.value = 'view'

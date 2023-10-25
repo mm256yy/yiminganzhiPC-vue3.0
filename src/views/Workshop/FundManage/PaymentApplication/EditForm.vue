@@ -82,12 +82,12 @@
       </ElFormItem>
       <ElFormItem label="付款类型:" required v-if="form.paymentType == 1"> 支付 </ElFormItem>
       <ElFormItem label="付款类型:" required v-else>
-        <el-radio-group class="ml-4" v-model="form.test">
+        <el-radio-group class="ml-4" v-model="form.payType">
           <el-radio label="1" size="large">支付</el-radio>
           <el-radio label="2" size="large">预拨</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">123 </ElFormItem>
+      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem>
       <div class="table-wrap">
         <div
           class="flex items-center justify-between pb-12px"
@@ -120,6 +120,8 @@
       <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
+
+      <!-- 其他付款对象 -->
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
           <div class="table-header-left">
@@ -168,7 +170,7 @@
         </ElTable>
       </div>
       <ElTable
-        :data="tableData"
+        :data="actionType == 'view' ? tableData : parmasList.professionalContractList"
         style="width: 100%"
         class="mb-20"
         :border="true"
@@ -236,7 +238,11 @@
 
         <div class="progress-wrapper">
           <div class="progress-list">
-            <div class="progress-item" v-for="item in parmasList" :key="item.name">
+            <div
+              class="progress-item"
+              v-for="item in parmasList.funPaymentRequestFlowNodeList"
+              :key="item.name"
+            >
               <!-- <div class="left">
                 <div class="icon-box">
                   <div v-if="item.isAudit === '0'" class="disabled"></div>
@@ -259,11 +265,11 @@
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
-                    <div class="name">{{ item.name }}</div>
+                    <div class="name">{{ item.auditor }}</div>
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-                  <div class="time" v-if="item.isAudit === '1' && item.type !== '0'">
-                    审核时间：{{ dayjs(item.createTime).format('YYYY-MM-DD') }}
+                  <div class="time">
+                    审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                   </div>
                   <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
                 </div>

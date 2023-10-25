@@ -73,22 +73,22 @@ let navList = reactive<any>([
         children: [
           {
             label: '人口房屋',
-            value: '',
+            value: 'PopulationHousing',
             active: false
           },
           {
             label: '附属物',
-            value: '',
+            value: 'Accessory',
             active: false
           },
           {
             label: '零星林(果)木',
-            value: '',
+            value: 'FruitWood',
             active: false
           },
           {
             label: '实物成果汇总',
-            value: '',
+            value: 'Achievements',
             active: false
           }
         ]
@@ -98,17 +98,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '房屋/附属物/零星林(果)木',
-            value: '',
+            value: 'VillageCollective',
             active: false
           },
           {
             label: '土地',
-            value: '',
+            value: 'Land',
             active: false
           },
           {
             label: '坟墓',
-            value: '',
+            value: 'Grave',
             active: false
           }
         ]
@@ -191,7 +191,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '探矿权汇总表',
-                value: '',
+                value: 'explorationRight',
                 active: false
               }
             ]
@@ -203,17 +203,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '交通工程设施',
-            value: '',
+            value: 'transportationFacilities',
             active: false
           },
           {
             label: '输变电工程设施',
-            value: '',
+            value: 'transmissionFacilities',
             active: false
           },
           {
             label: '文物古迹',
-            value: '',
+            value: 'culturalRelic',
             active: false
           }
         ]
@@ -245,12 +245,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'moveFacilities',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'moveAppendage',
                 active: false
               }
             ]
@@ -277,7 +277,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'ironFacilities',
                 active: false
               }
             ]
@@ -304,7 +304,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'hydrographicStation',
                 active: false
               }
             ]
@@ -315,12 +315,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'religiousInformation',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'religiousAppendage',
                 active: false
               }
             ]
@@ -337,12 +337,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户',
-            value: '',
+            value: 'FundPeople',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'FundUseDetail',
             active: false
           }
         ]
@@ -352,7 +352,7 @@ let navList = reactive<any>([
         children: [
           {
             label: '村集体',
-            value: '',
+            value: 'FundVillage',
             active: false
           }
         ]
@@ -362,17 +362,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '企业',
-            value: '',
+            value: 'FundEnterprise',
             active: false
           },
           {
             label: '个体户',
-            value: '',
+            value: 'FundIndividualB',
             active: false
           },
           {
             label: '水电站',
-            value: '',
+            value: 'FundHydropower',
             active: false
           }
         ]
@@ -382,37 +382,37 @@ let navList = reactive<any>([
         children: [
           {
             label: '电信工程',
-            value: '',
+            value: 'telecommunication',
             active: false
           },
           {
             label: '移动工程',
-            value: '',
+            value: 'moveExcel',
             active: false
           },
           {
             label: '联通工程',
-            value: '',
+            value: 'unicom',
             active: false
           },
           {
             label: '铁打工程',
-            value: '',
+            value: 'Irontower',
             active: false
           },
           {
             label: '广播电视工程',
-            value: '',
+            value: 'radioExcel',
             active: false
           },
           {
             label: '水文站',
-            value: '',
+            value: 'hydrology',
             active: false
           },
           {
             label: '宗教',
-            value: '',
+            value: 'religion',
             active: false
           }
         ]
@@ -427,12 +427,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '生产安置意愿',
-            value: '',
+            value: 'proHouseReport',
             active: false
           },
           {
             label: '搬迁安置意愿',
-            value: '',
+            value: 'moveHouseReport',
             active: false
           }
         ]
@@ -447,12 +447,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户按区域',
-            value: '',
+            value: 'residentRegion',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'residentWork',
             active: false
           }
         ]

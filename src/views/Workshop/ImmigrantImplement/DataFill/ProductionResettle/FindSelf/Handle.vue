@@ -87,7 +87,7 @@
         <ElCol :span="24">
           <div class="col-wrapper">
             <div class="col-label-required">
-              {{ props.voucherType === 'findSelf' ? '集中供养凭证：' : '养老保险凭证：' }}
+              {{ props.voucherType === 'findSelf' ? '自谋职业凭证：' : '养老保险凭证：' }}
             </div>
             <div class="card-img-list">
               <ElUpload
