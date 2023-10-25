@@ -201,10 +201,9 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any, status?: number) => {
+const submit = (data: any) => {
   if (props.actionType === 'add') {
     data.projectId = appStore.getCurrentProjectId
-    data.status = status
     addFunPayApi(data).then((res) => {
       if (res) {
         ElMessage.success('操作成功！')
@@ -221,7 +220,7 @@ const submit = (data: any, status?: number) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl, status?: number) => {
+const onSubmit = debounce((formEl, status: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       console.log(form.value, 'form')
@@ -234,7 +233,8 @@ const onSubmit = debounce((formEl, status?: number) => {
           receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
         }
         params.paymentTime = dayjs(params.paymentTime)
-        submit(params, status)
+        params.status = status
+        submit(params)
       }
     } else {
       return false

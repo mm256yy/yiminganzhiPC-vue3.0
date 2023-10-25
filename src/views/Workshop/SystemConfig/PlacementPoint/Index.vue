@@ -126,7 +126,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'regionText',
-    label: '所属区域',
+    label: '地理位置',
     search: {
       show: false
     },

@@ -311,10 +311,10 @@
           </div>
           <div class="th-title">
             <div>问题内容</div>
-            <div class="data-left-header-tab-c" style="width: 30%">
-              <div>提交人</div>
-              <div>提交时间</div>
-            </div>
+            <!-- <div class="data-left-header-tab-c" style="width: 30%"> -->
+            <div>提交人</div>
+            <div>提交时间</div>
+            <!-- </div> -->
           </div>
           <div class="question-list">
             <div class="item" v-for="item in questionList" :key="item.id">
@@ -444,6 +444,7 @@ import {
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 import { getNewsList, getPolicyListApi } from '@/api/home'
 import { useAppStore } from '@/store/modules/app'
+import dayjs from 'dayjs'
 const appStore = useAppStore()
 const reason = ref()
 const activeName2 = ref('水库要闻')
@@ -1159,8 +1160,12 @@ const questionList = ref<any>([
     justify-content: space-between;
 
     .name {
+      width: 70px;
+      overflow: hidden;
       font-size: 14px;
       color: #131313;
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap;
     }
 
     .time {
