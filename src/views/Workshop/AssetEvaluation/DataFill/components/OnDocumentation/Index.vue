@@ -16,143 +16,147 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label-required"> 房屋评估报告： </div>
-            <div class="card-img-list">
-              <ElUpload
-                :list-type="'picture-card'"
-                action="/api/file/type"
-                :data="{
-                  type: 'archives'
-                }"
-                accept=".jpg,.png,jpeg,.pdf"
-                :multiple="false"
-                :file-list="houseEstimatePic"
-                :headers="headers"
-                :on-error="onError"
-                :on-success="uploadFileChange1"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile1"
-                :on-preview="imgPreview"
-              >
-                <template #trigger>
-                  <div class="card-img-box">
-                    <img class="card-img" src="@/assets/imgs/house.png" alt="" />
-                    <div class="card-txt">点击上传</div>
-                  </div>
-                </template>
-              </ElUpload>
-            </div>
-          </div>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label-required"> 土地评估报告： </div>
-            <div class="card-img-list">
-              <ElUpload
-                action="/api/file/type"
-                :data="{
-                  type: 'archives'
-                }"
-                :on-error="onError"
-                :list-type="'picture-card'"
-                accept=".jpg,.png,jpeg,.pdf"
-                :multiple="true"
-                :file-list="landEstimatePic"
-                :headers="headers"
-                :on-success="uploadFileChange2"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile2"
-                :on-preview="imgPreview"
-              >
-                <template #trigger>
-                  <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
+      <template v-if="role === RoleCodeType.assessor || role === RoleCodeType.other">
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required"> 房屋评估报告： </div>
+              <div class="card-img-list">
+                <ElUpload
+                  :list-type="'picture-card'"
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="false"
+                  :file-list="houseEstimatePic"
+                  :headers="headers"
+                  :on-error="onError"
+                  :on-success="uploadFileChange1"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile1"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                      <div class="card-txt">点击上传</div>
                     </div>
-                    <div class="card-txt">点击上传</div>
-                  </div>
-                </template>
-              </ElUpload>
+                  </template>
+                </ElUpload>
+              </div>
             </div>
-          </div>
-        </ElCol>
-      </ElRow>
+          </ElCol>
+        </ElRow>
 
-      <ElRow v-if="type === 'Enterprise' || type === 'IndividualB'">
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label-required"> 设施设备评估报告： </div>
-            <div class="card-img-list">
-              <ElUpload
-                action="/api/file/type"
-                :data="{
-                  type: 'archives'
-                }"
-                :on-error="onError"
-                :list-type="'picture-card'"
-                accept=".jpg,.png,jpeg,.pdf"
-                :multiple="true"
-                :file-list="devicePic"
-                :headers="headers"
-                :on-success="uploadFileChange3"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile3"
-                :on-preview="imgPreview"
-              >
-                <template #trigger>
-                  <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
+        <ElRow v-if="type === 'Enterprise' || type === 'IndividualB'">
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required"> 设施设备评估报告： </div>
+              <div class="card-img-list">
+                <ElUpload
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  :on-error="onError"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="true"
+                  :file-list="devicePic"
+                  :headers="headers"
+                  :on-success="uploadFileChange3"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile3"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <div class="card-img-custom">
+                        <Icon icon="ant-design:plus-outlined" :size="22" />
+                      </div>
+                      <div class="card-txt">点击上传</div>
                     </div>
-                    <div class="card-txt">点击上传</div>
-                  </div>
-                </template>
-              </ElUpload>
+                  </template>
+                </ElUpload>
+              </div>
             </div>
-          </div>
-        </ElCol>
-      </ElRow>
+          </ElCol>
+        </ElRow>
 
-      <ElRow v-if="type === 'villageInfoC'">
-        <ElCol :span="24">
-          <div class="col-wrapper">
-            <div class="col-label-required"> 农村小型专项设施评估报告： </div>
-            <div class="card-img-list">
-              <ElUpload
-                action="/api/file/type"
-                :data="{
-                  type: 'archives'
-                }"
-                :on-error="onError"
-                :list-type="'picture-card'"
-                accept=".jpg,.png,jpeg,.pdf"
-                :multiple="true"
-                :file-list="specialPic"
-                :headers="headers"
-                :on-success="uploadFileChange4"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile4"
-                :on-preview="imgPreview"
-              >
-                <template #trigger>
-                  <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
+        <ElRow v-if="type === 'VillageInfoC'">
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required"> 农村小型专项设施评估报告： </div>
+              <div class="card-img-list">
+                <ElUpload
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  :on-error="onError"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="true"
+                  :file-list="specialPic"
+                  :headers="headers"
+                  :on-success="uploadFileChange4"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile4"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <div class="card-img-custom">
+                        <Icon icon="ant-design:plus-outlined" :size="22" />
+                      </div>
+                      <div class="card-txt">点击上传</div>
                     </div>
-                    <div class="card-txt">点击上传</div>
-                  </div>
-                </template>
-              </ElUpload>
+                  </template>
+                </ElUpload>
+              </div>
             </div>
-          </div>
-        </ElCol>
-      </ElRow>
+          </ElCol>
+        </ElRow>
+      </template>
+
+      <template v-if="role === RoleCodeType.assessorland || role === RoleCodeType.other">
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required"> 土地评估报告： </div>
+              <div class="card-img-list">
+                <ElUpload
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  :on-error="onError"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="true"
+                  :file-list="landEstimatePic"
+                  :headers="headers"
+                  :on-success="uploadFileChange2"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile2"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <div class="card-img-custom">
+                        <Icon icon="ant-design:plus-outlined" :size="22" />
+                      </div>
+                      <div class="card-txt">点击上传</div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </div>
+          </ElCol>
+        </ElRow>
+      </template>
     </ElForm>
 
     <template #footer>
@@ -178,7 +182,7 @@ import {
   ElMessage,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -195,10 +199,18 @@ interface FileItemType {
   url: string
 }
 
+// 角色代码为字典值
+enum RoleCodeType {
+  assessor = 'assessor', // 房屋
+  assessorland = 'assessorland', // 土地
+  other = 'other'
+}
+
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const currentProjectId = appStore.currentProjectId
 
 const form = ref<any>({})
 const imgUrl = ref<string>('')
@@ -207,6 +219,8 @@ const houseEstimatePic = ref<FileItemType[]>([]) // 房屋评估报告文件列�
 const landEstimatePic = ref<FileItemType[]>([]) // 土地评估报告列表
 const devicePic = ref<FileItemType[]>([]) // 设施设备评估报告列表
 const specialPic = ref<FileItemType[]>([]) // 农村小型专项设施评估报告列表
+const role = ref<RoleCodeType>(RoleCodeType.assessor) // 角色代码 assessor 房屋评估的 assessorland 土地评估的
+const userInfo = computed(() => appStore.getUserInfo)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -215,6 +229,22 @@ const headers = {
 
 // 规则校验
 const rules = reactive<FormRules>({})
+
+/**
+ * 判断角色
+ */
+const getRole = () => {
+  if (userInfo.value) {
+    const project = userInfo.value.projectUsers.find((x: any) => x.projectId === currentProjectId)
+    const role =
+      project && project.roles && project.roles.length
+        ? (project.roles[0].code as RoleCodeType)
+        : RoleCodeType.other
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return RoleCodeType.other
+}
 
 const initData = () => {
   getDocumentationApi(props.doorNo).then((res: any) => {
@@ -259,29 +289,36 @@ const onSubmit = debounce((formEl) => {
   const { type } = props
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!houseEstimatePic.value.length) {
-        ElMessage.error('请上传房屋评估报告')
-        return
-      } else if (!landEstimatePic.value.length) {
-        ElMessage.error('请上传土地评估报告')
-        return
-      } else if ((type === 'Enterprise' || type === 'IndividualB') && !devicePic.value.length) {
-        ElMessage.error('请上传设施设备评估报告')
-        return
-      } else if (type === 'villageInfoC' && !specialPic.value.length) {
-        ElMessage.error('请上传农村小型专项设施评估报告')
-        return
-      } else {
-        let params: any = {
-          ...form.value,
-          doorNo: props.doorNo,
-          houseEstimatePic: JSON.stringify(houseEstimatePic.value || []), // 房屋评估报告
-          landEstimatePic: JSON.stringify(landEstimatePic.value || []), // 土地评估报告
-          devicePic: JSON.stringify(devicePic.value || []), // 设施设备评估报告
-          specialPic: JSON.stringify(specialPic.value || []) // 农村小型专项设施评估报告
-        }
-        submit(params)
+      let params: any = {
+        ...form.value,
+        doorNo: props.doorNo
       }
+      // 房屋 或 其他
+      if (role.value === RoleCodeType.assessor || role.value === RoleCodeType.other) {
+        if (!houseEstimatePic.value.length) {
+          ElMessage.error('请上传房屋评估报告')
+          return
+        } else if ((type === 'Enterprise' || type === 'IndividualB') && !devicePic.value.length) {
+          ElMessage.error('请上传设施设备评估报告')
+          return
+        } else if (type === 'VillageInfoC' && !specialPic.value.length) {
+          ElMessage.error('请上传农村小型专项设施评估报告')
+          return
+        } else {
+          params.houseEstimatePic = JSON.stringify(houseEstimatePic.value || [])
+          params.devicePic = JSON.stringify(devicePic.value || [])
+          params.specialPic = JSON.stringify(specialPic.value || [])
+        }
+      }
+      // 土地 或者 其他
+      if (role.value === RoleCodeType.assessorland || role.value === RoleCodeType.other) {
+        if (!landEstimatePic.value.length) {
+          ElMessage.error('请上传土地评估报告')
+          return
+        }
+        params.landEstimatePic = JSON.stringify(landEstimatePic.value || [])
+      }
+      submit(params)
     } else {
       return false
     }
@@ -366,6 +403,7 @@ const onError = () => {
 }
 
 onMounted(() => {
+  role.value = getRole()
   initData()
 })
 </script>

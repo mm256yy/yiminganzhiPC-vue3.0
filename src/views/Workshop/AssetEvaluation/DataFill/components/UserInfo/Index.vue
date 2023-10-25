@@ -167,7 +167,7 @@
       </div>
     </div>
 
-    <div class="other" v-if="type == 'villageInfoC'">
+    <div class="other" v-if="type == 'VillageInfoC'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -229,7 +229,7 @@ onMounted(() => {
     infoData.value = { icon: 'carbon:enterprise' }
   } else if (props.type == 'IndividualB') {
     infoData.value = { icon: 'material-symbols:add-business' }
-  } else if (props.type == 'villageInfoC') {
+  } else if (props.type == 'VillageInfoC') {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })

@@ -313,22 +313,6 @@ const schema = reactive<CrudSchema[]>([
     detail: {
       show: false
     }
-  },
-
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 150,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
   }
 ])
 
