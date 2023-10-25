@@ -3,31 +3,9 @@
     <div class="inner">
       <div class="echart-title">
         <img src="@/assets/imgs/Icon_workteam.png" class="icon" />
-        <div class="text">网格进度排行榜(居民户)</div>
-      </div>
-      <div class="tabs-status">
-        <div
-          v-for="item in tabStatus"
-          :key="item.id"
-          class="tabs-txt"
-          :class="[item.id === statusTab ? 'active' : '']"
-          @click="statusTabChange(item.id)"
-        >
-          {{ item.name }}
-        </div>
+        <div class="text">工作组TOP5</div>
       </div>
       <div class="bottom-wrapper" v-loading="chartLoading">
-        <div class="top5-tabs">
-          <div
-            v-for="item in tabs"
-            :key="item.id"
-            class="top5-tab-item"
-            :class="[item.id === currentTab ? 'active' : '']"
-            @click="tabChange(item.id)"
-          >
-            {{ item.name }}
-          </div>
-        </div>
         <div class="echart-wrap">
           <div class="echart-item" v-for="(item, index) in echartOptions" :key="index">
             <div class="echart-item-lt">
@@ -51,7 +29,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { getImplementationTopGroup } from '@/api/home-service'
+import { getEvaluatorTopGroup } from '@/api/home-service'
 
 import top5_1 from '@/assets/imgs/Rank_1.png'
 import top5_2 from '@/assets/imgs/Rank_2.png'
@@ -75,10 +53,8 @@ interface OptionsType {
   img?: string
 }
 
-interface TabType {
-  id: number
-  name: string
-}
+const echartOptions = ref<OptionsType[]>([])
+const chartLoading = ref<boolean>(false)
 
 const imgArr = [
   top5_1,
@@ -97,104 +73,24 @@ const imgArr = [
   top5_14,
   top5_15
 ]
-const statusTab = ref(0)
-const currentTab = ref(0)
-const chartLoading = ref<boolean>(false)
-
-const tabStatus = ref([
-  {
-    id: 0,
-    name: '动迁阶段'
-  },
-  {
-    id: 1,
-    name: '安置阶段'
-  }
-])
-
-let tabs = ref<TabType[]>([])
-
-const tabs1 = ref<TabType[]>([
-  {
-    name: '资格认定',
-    id: 0
-  },
-  {
-    name: '安置确认',
-    id: 1
-  },
-  {
-    name: '择址确认',
-    id: 2
-  },
-  {
-    name: '腾空过渡',
-    id: 3
-  },
-  {
-    name: '动迁协议',
-    id: 4
-  }
-])
-
-const tabs2 = ref<TabType[]>([
-  {
-    name: '拆迁安置',
-    id: 0
-  },
-  {
-    name: '生产安置',
-    id: 1
-  }
-])
-
-const echartOptions = ref<OptionsType[]>([])
-
-const tabChange = (id: number) => {
-  if (currentTab.value === id) {
-    return
-  }
-  currentTab.value = id
-  getTopGroupApi()
-}
-
-const statusTabChange = (id: number) => {
-  statusTab.value = id
-  tabs.value = statusTab.value === 0 ? tabs1.value : tabs2.value
-  getTopGroupApi()
-}
-
-/**
- * 获取排行榜查询参数
- * @param statusTab
- * @param currentTab
- */
-const getTopGroupParams = (statusTab: number, currentTab: number) => {
-  const arrStatusTab1 = ['qualification', 'arrangement', 'choose', 'excess_soar', 'agreement']
-  const arrStatusTab2 = ['relocate_arrangement', 'production_arrangement']
-  return statusTab === 0 ? arrStatusTab1[currentTab] : arrStatusTab2[currentTab]
-}
 
 // 排行榜
 const getTopGroupApi = async () => {
-  let params = getTopGroupParams(statusTab.value, currentTab.value)
   chartLoading.value = true
   try {
-    const result = await getImplementationTopGroup(params)
+    const result = await getEvaluatorTopGroup()
     chartLoading.value = false
     echartOptions.value = result.map((item, index) => ({
-      name: item.gridmanName,
+      name: item.userName,
       progress: item.countComplete,
       img: imgArr[index]
     }))
-    console.log('result-group', result)
   } catch {
     chartLoading.value = false
   }
 }
 
 onMounted(() => {
-  statusTabChange(0)
   getTopGroupApi()
 })
 </script>
@@ -338,7 +234,7 @@ onMounted(() => {
         .echart-item-ct {
           display: flex;
           align-items: center;
-          width: 719px;
+          width: 500px;
 
           .progress {
             height: 10px;
@@ -351,9 +247,10 @@ onMounted(() => {
         .echart-item-rt {
           display: flex;
           align-items: center;
-          margin-right: 40px;
+          margin-right: 220px;
 
           .txt {
+            margin-right: 40px;
             font-size: 14px;
             font-weight: 400;
             color: #333333;
