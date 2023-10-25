@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 广播电视工程房屋及其附属物设备汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/broadcasting_appurtenance.png" alt="" />
+      <img src="@/assets/imgs/report/broadcasting_appurtenance.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

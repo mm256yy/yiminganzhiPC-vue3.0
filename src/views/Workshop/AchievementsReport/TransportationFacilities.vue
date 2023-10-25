@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 专业项目（交通工程设施）公示表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/Transportation_facilities.png" alt="" />
+      <img src="@/assets/imgs/report/Transportation_facilities.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

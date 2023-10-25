@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 电信工程房屋及其附属物设备汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/telegraphy_tenement.png" alt="电信房屋及附属物表" />
+      <img src="@/assets/imgs/report/telegraphy_tenement.png" alt="电信房屋及附属物表" />
     </div>
   </WorkContentWrap>
 </template>

@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 宗教设施房屋及其附属建筑物报表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/religious_appendage.png" alt="" />
+      <img src="@/assets/imgs/report/religious_appendage.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>
