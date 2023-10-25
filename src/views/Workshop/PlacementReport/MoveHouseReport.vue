@@ -10,23 +10,20 @@
         <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+    <div class="search-form-wrap" style="display: none">
+      <Search :schema="allSchemas.searchSchema" @search="handleSearch" @reset="setSearchParams" />
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
       </div>
       <el-table
-        height="250px"
+        :height="tableHeight"
         :span-method="objectSpanMethod"
         :data="tableData"
         border
         style="width: 100%"
+        ref="tableRef"
       >
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
@@ -70,8 +67,16 @@
             <el-table-column prop="homesteadSG16Count" label="168" align="center" width="50" />
           </el-table-column>
         </el-table-column>
-        <el-table-column prop="oneselfCount" label="自谋出路(户)" />
-        <el-table-column prop="concentrateCount" label="集中供养(户)" fixed="right" />
+        <el-table-column prop="oneselfCount" label="自谋出路(户)" align="center">
+          <template #default="{ row }">
+            {{ row.oneselfCount ?? '-' }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="concentrateCount" label="集中供养(户)" align="center">
+          <template #default="{ row }">
+            {{ row.concentrateCount ?? '-' }}
+          </template>
+        </el-table-column>
       </el-table>
       <p class="w-[180px] text-center text-[14px] mt-[5px]">已选占比:{{ percent }}</p>
       <div class="py-[10px] bg-[#fff]">
@@ -101,7 +106,7 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
@@ -169,67 +174,78 @@ const schema = reactive<CrudSchema[]>([
 ])
 const { allSchemas } = useCrudSchemas(schema)
 const { methods } = useTable()
-const { getList, setSearchParams } = methods
-getList()
-const tableData = ref<any>([])
-const percent = ref()
+const { setSearchParams } = methods
 
+const tableData = ref<any>([])
+const percent = ref() //已选占比
+const tableRef = ref()
+const tableHeight = ref(200)
+const handleSearch = () => {
+  getMoveHouseReportList('0', '10')
+}
 const getMoveHouseReportList = (page, size) => {
   const params = {
     page: page,
     size: size
   }
-
   getMoveHouseReportListApi(params).then((res) => {
-    console.log('res22', res)
     tableData.value = res.reports.content
-
     percent.value = toPercent(res.percent)
     totalNum.value = res.reports.total
     const tableArr = tableData.value
     tableArr.push(
       {
         name: '合计（套/宗)',
-        flatTC7Count: sums(tableArr, 'flatTC7Count'),
-        flatTC9Count: sums(tableArr, 'flatTC9Count'),
-        flatTC11Count: sums(tableArr, 'flatTC11Count'),
-        flatTC13Count: sums(tableArr, 'flatTC13Count'),
-        flatMJ7Count: sums(tableArr, 'flatMJ7Count'),
-        flatMJ9Count: sums(tableArr, 'flatMJ9Count'),
-        flatMJ11Count: sums(tableArr, 'flatMJ11Count'),
-        flatMJ13Count: sums(tableArr, 'flatMJ13Count'),
-        flatDP7Count: sums(tableArr, 'flatDP7Count'),
-        flatDP9Count: sums(tableArr, 'flatDP9Count'),
-        flatDP11Count: sums(tableArr, 'flatDP11Count'),
-        flatDP13Count: sums(tableArr, 'flatDP13Count'),
-        homesteadSG4Count: sums(tableArr, 'homesteadSG4Count'),
-        homesteadSG7Count: sums(tableArr, 'homesteadSG7Count'),
-        homesteadSG9Count: sums(tableArr, 'homesteadSG9Count'),
-        homesteadSG12Count: sums(tableArr, 'homesteadSG12Count'),
-        homesteadSG14Count: sums(tableArr, 'homesteadSG14Count'),
-        homesteadSG16Count: sums(tableArr, 'homesteadSG16Count'),
-        homesteadJL4Count: sums(tableArr, 'homesteadJL4Count'),
-        homesteadJL7Count: sums(tableArr, 'homesteadJL7Count'),
-        homesteadJL9Count: sums(tableArr, 'homesteadJL9Count'),
-        homesteadJL12Count: sums(tableArr, 'homesteadJL12Count'),
-        homesteadJL14Count: sums(tableArr, 'homesteadJL14Count'),
-        homesteadJL16Count: sums(tableArr, 'homesteadJL16Count')
+        flatTC7Count: totalColumn(tableArr, 'flatTC7Count'),
+        flatTC9Count: totalColumn(tableArr, 'flatTC9Count'),
+        flatTC11Count: totalColumn(tableArr, 'flatTC11Count'),
+        flatTC13Count: totalColumn(tableArr, 'flatTC13Count'),
+        flatMJ7Count: totalColumn(tableArr, 'flatMJ7Count'),
+        flatMJ9Count: totalColumn(tableArr, 'flatMJ9Count'),
+        flatMJ11Count: totalColumn(tableArr, 'flatMJ11Count'),
+        flatMJ13Count: totalColumn(tableArr, 'flatMJ13Count'),
+        flatDP7Count: totalColumn(tableArr, 'flatDP7Count'),
+        flatDP9Count: totalColumn(tableArr, 'flatDP9Count'),
+        flatDP11Count: totalColumn(tableArr, 'flatDP11Count'),
+        flatDP13Count: totalColumn(tableArr, 'flatDP13Count'),
+        homesteadSG4Count: totalColumn(tableArr, 'homesteadSG4Count'),
+        homesteadSG7Count: totalColumn(tableArr, 'homesteadSG7Count'),
+        homesteadSG9Count: totalColumn(tableArr, 'homesteadSG9Count'),
+        homesteadSG12Count: totalColumn(tableArr, 'homesteadSG12Count'),
+        homesteadSG14Count: totalColumn(tableArr, 'homesteadSG14Count'),
+        homesteadSG16Count: totalColumn(tableArr, 'homesteadSG16Count'),
+        homesteadJL4Count: totalColumn(tableArr, 'homesteadJL4Count'),
+        homesteadJL7Count: totalColumn(tableArr, 'homesteadJL7Count'),
+        homesteadJL9Count: totalColumn(tableArr, 'homesteadJL9Count'),
+        homesteadJL12Count: totalColumn(tableArr, 'homesteadJL12Count'),
+        homesteadJL14Count: totalColumn(tableArr, 'homesteadJL14Count'),
+        homesteadJL16Count: totalColumn(tableArr, 'homesteadJL16Count')
       },
       {
         name: '合计(户)',
         flatTC7Count: totalApparent(tableArr),
-        flatTC9Count: totalZjd(tableArr),
-        oneselfCount: sums(tableArr, 'oneselfCount'),
-        concentrateCount: sums(tableArr, 'concentrateCount')
+        homesteadSG4Count: totalHomestead(tableArr),
+        oneselfCount: totalColumn(tableArr, 'oneselfCount'),
+        concentrateCount: totalColumn(tableArr, 'concentrateCount')
       }
     )
-    console.log('table', tableData.value)
   })
 }
-
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 
-getMoveHouseReportList('0', '10')
+onMounted(() => {
+  getMoveHouseReportList('0', '10')
+  const tHeight = tableRef.value.$el.offsetHeight
+  // 设置表格高度
+  tableHeight.value = window.innerHeight - tHeight - 150
+  // / 监听浏览器窗口变化，动态计算表格高度，
+  window.onresize = () => {
+    return (() => {
+      tableHeight.value = window.innerHeight - tHeight - 150
+    })()
+  }
+})
+
 const onBack = () => {
   back()
 }
@@ -241,25 +257,39 @@ const handleCurrentChange = (val: number) => {
   pageNum.value = val
   getMoveHouseReportList(pageNum.value - 1, pageSize.value)
 }
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-  console.log(rowIndex, columnIndex, '1243123')
+//合并合计户单元格
+const objectSpanMethod = ({ row, columnIndex }: any) => {
   if (row.name === '合计(户)') {
     if (columnIndex === 1) {
-      if (rowIndex === 1) {
-        return {
-          rowspan: 1,
-          colspan: 12
-        }
-      } else {
-        return {
-          rowspan: 0,
-          colspan: 0
-        }
+      return {
+        rowspan: 1,
+        colspan: 12
+      }
+    }
+    //把被合并的单元格进行处理
+    if (columnIndex > 1 && columnIndex <= 12) {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+    if (columnIndex === 13) {
+      return {
+        rowspan: 1,
+        colspan: 12
+      }
+    }
+    //把被合并的单元格进行处理
+    if (columnIndex > 13 && columnIndex < 25) {
+      return {
+        rowspan: 0,
+        colspan: 0
       }
     }
   }
 }
-const sums = (arr, key) => {
+//合计表格列
+const totalColumn = (arr, key) => {
   let s = 0
   arr.forEach((item) => {
     const num = Number(item[key])
@@ -269,6 +299,7 @@ const sums = (arr, key) => {
   })
   return s
 }
+//公寓房合计
 const totalApparent = (arr) => {
   let s = 0
   arr.forEach((item) => {
@@ -292,7 +323,8 @@ const totalApparent = (arr) => {
   })
   return s
 }
-const totalZjd = (arr) => {
+//宅基地合计
+const totalHomestead = (arr) => {
   let s = 0
   arr.forEach((item) => {
     let total =

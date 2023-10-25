@@ -10,14 +10,22 @@
         <ElBreadcrumbItem class="text-size-12px">生产安置意愿</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div class="search-form-wrap" style="display: none">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 生产安置意愿报表 </div>
+        <div class="table-left-title">生产安置意愿报表</div>
       </div>
-      <el-table class="flex-col flex-1" :data="tableData" border show-summary style="width: 100%">
+      <el-table
+        class="flex-col flex-1"
+        :data="tableData"
+        border
+        show-summary
+        style="width: 100%"
+        ref="tableRef"
+        :height="tableHeight"
+      >
         <el-table-column label="序号" align="center">
           <template #default="scope">
             {{ scope.$index + 1 }}
@@ -130,6 +138,8 @@ const { allSchemas } = useCrudSchemas(schema)
 const tableData = ref([])
 //百分比
 const percent = ref()
+const tableRef = ref()
+const tableHeight = ref(200)
 //格式化百分比
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 //获取列表数据
@@ -154,6 +164,13 @@ const handleCurrentChange = (val: number) => {
 }
 onMounted(() => {
   getProHouseReportList('0', pageSize.value)
+  const tHeight = tableRef.value.$el.offsetHeight
+  tableHeight.value = window.innerHeight - tHeight - 150
+  window.onresize = () => {
+    return (() => {
+      tableHeight.value = window.innerHeight - tHeight - 150
+    })()
+  }
 })
 const onBack = () => {
   back()
