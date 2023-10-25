@@ -19,7 +19,7 @@
           <span class="point"></span>
           {{ props.baseInfo.implementFillStatus === '1' ? '已填报' : '未填报' }}
         </div>
-        <div
+        <!-- <div
           :class="{
             status: true,
             success: props.baseInfo.implementEscalationStatus === '1'
@@ -27,7 +27,7 @@
         >
           <span class="point"></span>
           {{ props.baseInfo.implementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
-        </div>
+        </div> -->
       </ElSpace>
     </div>
 
