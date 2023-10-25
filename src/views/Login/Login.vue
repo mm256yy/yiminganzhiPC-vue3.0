@@ -15,6 +15,7 @@
         </div>
         <Transition appear enter-active-class="animate__animated animate__bounceInRight">
           <div
+            v-show="true"
             class="h-full bg-white flex items-center m-auto w-[100%] @2xl:max-w-500px @xl:max-w-500px @md:max-w-500px @lg:max-w-500px"
           >
             <LoginForm class="p-20px m-auto <xl:(rounded-3xl light:bg-white)" />
