@@ -120,6 +120,8 @@
       <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
+
+      <!-- 其他付款对象 -->
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
           <div class="table-header-left">
