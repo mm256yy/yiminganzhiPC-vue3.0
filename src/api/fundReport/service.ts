@@ -13,7 +13,7 @@ import {
 export const getFundDetailReportListApi = (
   query: Partial<FundDetailReportType>
 ): Promise<TableResponse<FundDetailReportType>> => {
-  return request.get({ url: '/news', params: query })
+  return request.get({ url: '/fundsForms/fundDetail', params: query })
 }
 
 /**
