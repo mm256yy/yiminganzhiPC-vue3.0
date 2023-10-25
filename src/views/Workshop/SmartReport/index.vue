@@ -451,7 +451,7 @@ let navList = reactive<any>([
             active: false
           },
           {
-            label: '资金使用详细',
+            label: '居民户按工作组',
             value: 'residentWork',
             active: false
           }

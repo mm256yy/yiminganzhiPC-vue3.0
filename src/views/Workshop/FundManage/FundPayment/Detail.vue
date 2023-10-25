@@ -24,7 +24,7 @@
       <div class="row-cont">
         <div class="row">
           <div class="label">申请类型：</div>
-          <div class="value">{{ detail.applyType }}</div>
+          <div class="value">{{ detail.applyTypeText }}</div>
         </div>
 
         <div class="row">
@@ -33,11 +33,11 @@
         </div>
         <div class="row">
           <div class="label">概算科目：</div>
-          <div class="value">{{ detail.type }}</div>
+          <div class="value">{{ detail.typeText }}</div>
         </div>
         <div class="row">
           <div class="label">资金科目：</div>
-          <div class="value">{{ detail.funSubjectId }}</div>
+          <div class="value">{{ detail.funSubjectIdText }}</div>
         </div>
 
         <div class="row">
