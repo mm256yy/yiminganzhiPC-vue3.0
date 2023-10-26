@@ -151,6 +151,7 @@ const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
     if (res) {
       fundAccountList.value = res.content
+      console.log(fundAccountList, '资金测试')
     }
   })
 }
@@ -389,7 +390,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createTime',
+    field: 'createdDate',
     label: '创建时间',
     search: {
       show: false
