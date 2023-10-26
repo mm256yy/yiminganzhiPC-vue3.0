@@ -289,28 +289,6 @@ const onSubmit = debounce((formEl) => {
   const { type } = props
   formEl?.validate((valid: any) => {
     if (valid) {
-<<<<<<< HEAD
-      if (!houseEstimatePic.value.length) {
-        ElMessage.error('请上传房屋评估报告')
-        return
-      } else if (!landEstimatePic.value.length) {
-        ElMessage.error('请上传土地评估报告')
-        return
-      } else if ((type === 'Enterprise' || type === 'IndividualB') && !devicePic.value.length) {
-        ElMessage.error('请上传设施设备评估报告')
-        return
-      } else if (type === 'villageInfoC' && !specialPic.value.length) {
-        ElMessage.error('请上传农村小型专项设施评估报告')
-        return
-      } else {
-        let params: any = {
-          ...form.value,
-          doorNo: props.doorNo,
-          houseEstimatePic: JSON.stringify(houseEstimatePic.value || []), // 房屋评估报告
-          landEstimatePic: JSON.stringify(landEstimatePic.value || []), // 土地评估报告
-          devicePic: JSON.stringify(devicePic.value || []), // 设施设备评估报告
-          specialPic: JSON.stringify(specialPic.value || []) // 农村小型专项设施评估报告
-=======
       let params: any = {
         ...form.value,
         doorNo: props.doorNo
@@ -330,7 +308,6 @@ const onSubmit = debounce((formEl) => {
           params.houseEstimatePic = JSON.stringify(houseEstimatePic.value || [])
           params.devicePic = JSON.stringify(devicePic.value || [])
           params.specialPic = JSON.stringify(specialPic.value || [])
->>>>>>> origin/master
         }
       }
       // 土地 或者 其他
