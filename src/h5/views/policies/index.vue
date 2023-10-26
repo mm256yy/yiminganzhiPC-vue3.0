@@ -8,7 +8,7 @@
             class="flex-row justify-between items-center policies-item"
             v-for="(item, index) in items"
             :key="index"
-            @click="toLink('policiesDetail')"
+            @click="toLink('policiesDetail', { id: item.id })"
           >
             <span class="list-item-txt">{{ item.title }}</span>
             <img class="image-right" :src="rightSrc" />
@@ -22,7 +22,8 @@
 import lawsBgSrc from '@/h5/assets/imgs/laws_bg.png'
 import rightSrc from '@/h5/assets/imgs/icon_right.png'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getPolicyLaw } from './service'
 const { push } = useRouter()
 
 const items = ref<any>([
@@ -49,6 +50,15 @@ const toLink = (routeName: string, query = {}) => {
     query
   })
 }
+let getPolicyLaws = async () => {
+  let data = await getPolicyLaw()
+  console.log(data.content)
+  items.value = data.content
+  return data
+}
+onMounted(() => {
+  getPolicyLaws()
+})
 </script>
 
 <style lang="less" scoped>
@@ -67,9 +77,10 @@ const toLink = (routeName: string, query = {}) => {
     }
 
     .section {
-      height: 600px;
+      // height: 600px;
       padding-bottom: 20px;
       margin-top: 24px;
+      overflow: auto;
       background-color: #ffffff;
       border-radius: 16px;
 

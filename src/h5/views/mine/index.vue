@@ -94,6 +94,12 @@ const onClickItem = (index) => {
 
 <style lang="less" scoped>
 .page {
+  position: absolute;
+  top: 75px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
   overflow-x: hidden;
   overflow-y: auto;
   background-color: #f2f6ff;

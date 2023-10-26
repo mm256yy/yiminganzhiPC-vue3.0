@@ -8,12 +8,15 @@
               class="flex-col justify-start items-center relative list-item"
               v-for="(item, index) in items"
               :key="index"
-              @click="toLink('homesicknessDetail')"
+              @click="toLink('homesicknessDetail', { id: item.id })"
             >
-              <img class="image-item" :src="homesicknessBgSrc" />
+              <img
+                class="image-item"
+                :src="item.coverPic ? JSON.parse(item.coverPic)[0].url : ''"
+              />
               <div class="flex-col items-start section">
                 <span class="title-txt">{{ item.title }}</span>
-                <span class="title-desc-txt">{{ item.desc }}</span>
+                <span class="title-desc-txt">{{ item.author }}</span>
               </div>
             </div>
           </div>
@@ -33,6 +36,7 @@ import { ElImage } from 'element-plus'
 import iconContributeSrc from '@/h5/assets/imgs/icon_contribute.png'
 import { useRouter } from 'vue-router'
 import ListView from '@/h5/components/ListView/index.vue'
+import { getHomesickness } from './service'
 const { push } = useRouter()
 
 const toLink = (routeName: string, query = {}) => {
@@ -76,10 +80,15 @@ const items = ref<any>([
     desc: '留影·镜岭水库丨古民宿遗址'
   }
 ])
-
+let getHomesicknesss = async () => {
+  let data = await getHomesickness()
+  console.log(data.content)
+  items.value = data.content
+}
 //第一次加载和加载更多不同,需要手动调用,初始化内容数组和数据总量
 onMounted(() => {
   initData()
+  getHomesicknesss()
 })
 
 //分页参数,当前页码

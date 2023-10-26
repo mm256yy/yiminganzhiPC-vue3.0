@@ -2,27 +2,35 @@
   <div class="flex-col app-container">
     <div class="flex-col flex-auto group-detail">
       <div class="flex-col section">
-        <span class="section-title">浙江省镜岭水库第一次选房通知公告公示时间为2023年8月13日</span>
-        <span class="self-start section-time">2022-9-24</span>
+        <span class="section-title">{{ dataList.title }}</span>
+        <span class="self-start section-time">{{ dataList.releaseTime }}</span>
         <div class="flex-col group-content">
           <img
             class="image-detail"
-            src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/64e83d955a7e3f0310414dfe/64e842454d98100011acce52/16929431167655394822.png"
+            :src="dataList.coverPic ? JSON.parse(dataList.coverPic)[0].url : ''"
           />
-          <span class="section-content">
-            浙江省气象信息网络中心浙江省气象监测预报能力提升工程(数字化预报项目)-集约化高性能计算系统建设中标公告
-            2022年06月30日 16:43 来源:中国政府采购网 【打印】 【显示公告正文】【显示公告概要】
-            公告概要: 公告信息: 采购项目名称
-            浙江省气象监测预报能力提升工程(数字化预报项目)-集约化高性能计算系统建设 品目
-            服务/租赁服务(不带操作员)/计算机设备和软件租赁服务 采购单位 浙江省气象信息网络中心
-            行政区域 滨江区 公告时间 2022年06月30日 16:43
-          </span>
+          <span class="section-content" v-html="dataList.content"> </span>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { getNewsListId } from '../../home/service'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+let Route = useRoute()
+let dataList: any = ref({})
+let getNewsListIds = async () => {
+  let data = await getNewsListId(Route.query.id)
+  console.log(JSON.parse(data.coverPic)[0].url)
+  dataList.value = data
+  return data
+}
+onMounted(() => {
+  getNewsListIds()
+})
+</script>
 
 <style lang="less" scoped>
 .group-detail {
