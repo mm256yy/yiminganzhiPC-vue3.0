@@ -481,13 +481,8 @@ let navList = reactive<any>([
         label: '专业项目',
         children: [
           {
-            label: '交通/电力/移动联通铁塔电信/文物',
+            label: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站',
             value: 'comprehensivereport',
-            active: false
-          },
-          {
-            label: '寺庙/水文站',
-            value: '',
             active: false
           }
         ]
