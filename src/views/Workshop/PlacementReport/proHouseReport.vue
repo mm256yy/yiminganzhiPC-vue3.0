@@ -23,7 +23,7 @@
         border
         show-summary
         style="width: 100%"
-        :height="getHeight(tableData)"
+        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
       >
         <el-table-column label="序号" align="center">
           <template #default="scope">

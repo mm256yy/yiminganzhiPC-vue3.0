@@ -18,7 +18,7 @@
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
       </div>
       <el-table
-        :height="getHeight(tableData)"
+        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
         :span-method="objectSpanMethod"
         :data="tableData"
         border
