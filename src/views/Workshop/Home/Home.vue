@@ -1,6 +1,8 @@
 <template>
   <!-- 领导首页 -->
   <LeaderHome v-if="role == RoleCodeType.leaderworkbenches" />
+  <!--评估人员首页-->
+  <EvaluationHome v-else-if="role == isEvaluation" />
   <!-- 普通用户首页 -->
   <UserHome v-else />
 </template>
@@ -14,13 +16,16 @@
  */
 
 import { computed, onBeforeMount, ref } from 'vue'
-import UserHome from './AdminHome.vue' // 实施人员首页
-import LeaderHome from './EvaluationHome.vue' // 评估人员首页
+import UserHome from './AdminHome.vue'
+import LeaderHome from '../ExternalLink/LeaderSide.vue'
+import EvaluationHome from './EvaluationHome.vue'
 import { useAppStore } from '@/store/modules/app'
 
 // 角色代码
 enum RoleCodeType {
   leaderworkbenches = 'leaderworkbenches', // 读的字典366配置的 为领导工作台
+  assessor = 'assessor', // 房屋评估
+  assessorland = 'assessorland', // 土地评估
   other = 'other' // 其他 注意不是字典 用作区别 领导角色的
 }
 
@@ -29,6 +34,10 @@ const userInfo = computed(() => appStore.getUserInfo)
 const currentProjectId = appStore.currentProjectId
 // 默认展示普通用户首页
 const role = ref<RoleCodeType>(RoleCodeType.other) // 角色代码 other为普通首页
+
+const isEvaluation = computed(() => {
+  return RoleCodeType.assessor || RoleCodeType.assessorland
+})
 
 /**
  * 判断角色
