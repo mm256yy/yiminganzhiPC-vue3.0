@@ -181,6 +181,7 @@ const onConfirm = async () => {
     ElMessage.warning('请选择所属区域')
     return
   }
+  console.log('111')
   const res = await exportPublicityApi({
     villageCode: villageCode.value,
     exportType: type.value
