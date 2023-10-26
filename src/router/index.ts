@@ -103,15 +103,6 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
-        path: 'evaluationHome',
-        name: 'EvaluationHome',
-        component: () => import('@/views/Workshop/Home/EvaluationHome.vue'),
-        meta: {
-          title: '资产评估首页',
-          icon: 'ant-design:home-outlined'
-        }
-      },
-      {
         path: 'SmartReport',
         name: 'SmartReport',
         component: () => import('@/views/Workshop/SmartReport/index.vue'),
