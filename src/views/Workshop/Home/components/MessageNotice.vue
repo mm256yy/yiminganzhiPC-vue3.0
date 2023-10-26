@@ -62,45 +62,18 @@
       <div>
         <div class="top-title">
           <div>
+            <span class="title-index">序号</span>
             <span class="title-content">内容</span>
           </div>
           <span class="time">提交时间</span>
         </div>
         <div class="list">
-          <div class="item-title">
+          <div class="item-title" v-for="(item, index) in messageList" :key="index">
             <div>
-              <span class="item-index">1</span>
-              <span class="item-content">您有5还有居民已严重滞后，请推进实施工作</span>
+              <span class="item-index">{{ index + 1 }}</span>
+              <span class="item-content">{{ item.remark }}</span>
             </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">2</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">3</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">4</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">5</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
+            <span class="item-time">{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}</span>
           </div>
         </div>
       </div>
@@ -109,7 +82,12 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getMessageFeedback } from '@/api/home-service'
+import type { MessageDtoType } from '@/api/home-types'
+import dayjs from 'dayjs'
+
+const messageList = ref<MessageDtoType[]>([])
 
 // const currentTab = ref(0)
 // let menuIndex = ref(0)
@@ -124,6 +102,20 @@
 // const handleItemClick = (index: number) => {
 //   menuIndex.value = index
 // }
+
+// 获取消息
+const getMessage = async () => {
+  try {
+    const result = await getMessageFeedback()
+    messageList.value = result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+onMounted(() => {
+  getMessage()
+})
 </script>
 
 <style lang="less" scoped>

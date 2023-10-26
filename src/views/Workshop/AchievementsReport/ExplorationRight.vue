@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 探矿权汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/exploration_right.png" alt="" />
+      <img src="@/assets/imgs/report/exploration_right.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

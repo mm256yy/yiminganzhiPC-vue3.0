@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 电信工程设施汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/telegraphy_facility.png" alt="电信工程设施汇总表" />
+      <img src="@/assets/imgs/report/telegraphy_facility.png" alt="电信工程设施汇总表" />
     </div>
   </WorkContentWrap>
 </template>

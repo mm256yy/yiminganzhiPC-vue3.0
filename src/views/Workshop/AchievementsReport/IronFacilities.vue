@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 铁塔工程设施汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/iron_facilities.png" alt="" />
+      <img src="@/assets/imgs/report/iron_facilities.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

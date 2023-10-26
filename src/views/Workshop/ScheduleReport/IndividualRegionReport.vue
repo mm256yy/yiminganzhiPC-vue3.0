@@ -41,7 +41,43 @@
         headerAlign="center"
         align="center"
         @register="register"
-      />
+      >
+        <template #appendageStatus="{ row }">
+          <div v-if="row.appendageStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #landStatus="{ row }">
+          <div v-if="row.landStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #deviceStatus="{ row }">
+          <div v-if="row.deviceStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #cardStatus="{ row }">
+          <div v-if="row.cardStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #houseSoarStatus="{ row }">
+          <div v-if="row.houseSoarStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #landSoarStatus="{ row }">
+          <div v-if="row.landSoarStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #agreementStatus="{ row }">
+          <div v-if="row.agreementStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+      </Table>
     </div>
   </WorkContentWrap>
 </template>
@@ -55,8 +91,8 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
-import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
+import { IndividualRegionApi } from '@/api/workshop/individualRegion/service'
+import { IndividualRegionType } from '@/api/workshop/individualRegion/type'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -64,8 +100,8 @@ import { useRouter } from 'vue-router'
 const { back } = useRouter()
 
 interface SpanMethodProps {
-  row: PopulationHousingDtoType
-  column: PopulationHousingDtoType
+  row: IndividualRegionType
+  column: IndividualRegionType
   rowIndex: number
   columnIndex: number
 }
@@ -76,7 +112,7 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getPopulationHousingListApi
+  getListApi: IndividualRegionApi
 })
 
 const { setSearchParams } = methods
@@ -111,7 +147,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'id',
     label: '户号',
     search: {
       show: true,
@@ -141,56 +177,56 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'id',
     label: '序号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'doorNo',
     label: '个体户编号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'name',
     label: '个体户名称',
     search: {
       show: false
     }
   },
   {
-    field: '',
+    field: 'relocation',
     label: '动迁阶段',
     search: {
       show: false
     },
     children: [
       {
-        field: 'inCount',
+        field: 'assess',
         label: '资产评估',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'appendageStatus',
             label: '房屋/附属物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'landStatus',
             label: '土地/附着物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'deviceStatus',
             label: '设施设备',
             search: {
               show: false
@@ -199,28 +235,28 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'outCount',
+        field: 'cardStatus',
         label: '个体户建卡',
         search: {
           show: false
         }
       },
       {
-        field: 'inCount',
+        field: 'vacate',
         label: '腾空',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'inCohouseSoarStatusunt',
             label: '房屋腾空',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'landSoarStatus',
             label: '土地腾空',
             search: {
               show: false
@@ -229,7 +265,7 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'inCount',
+        field: 'agreementStatus',
         label: '动迁协议',
         search: {
           show: false

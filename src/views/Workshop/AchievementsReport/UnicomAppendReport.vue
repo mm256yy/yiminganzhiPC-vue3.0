@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 联通工程附属物设备汇总 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/together_appurtenance.png" alt="" />
+      <img src="@/assets/imgs/report/together_appurtenance.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

@@ -32,13 +32,20 @@
         @register="register"
       >
         <template #action="{ row }">
+          <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <ElButton type="primary" @click="onReviewRow(row)"> 审核 </ElButton>
         </template>
       </Table>
     </div>
 
     <!-- 审核 -->
-    <ReviewForm :show="dialog" :row="tableObject.currentRow" @close="onCloseReview" />
+    <ReviewForm
+      :show="dialog"
+      :row="tableObject.currentRow"
+      @close="onCloseReview"
+      :parmasList="parmasList"
+      :actionType="actionType"
+    />
   </WorkContentWrap>
 </template>
 
@@ -54,6 +61,7 @@ import { useTable } from '@/hooks/web/useTable'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getBudgetReviewListApi } from '@/api/fundManage/budgetReview-service'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
 import ReviewForm from './ReviewForm.vue'
 
 // const dictStore = useDictStoreWithOut()
@@ -63,6 +71,8 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 审核弹窗标识
 const tabVal = ref<string>('1')
 const fundAccountList = ref<any[]>([]) // 资金科目
+const parmasList = ref<any[]>([])
+const actionType = ref<'view' | 'add' | 'edit'>('view')
 
 const { register, tableObject, methods } = useTable({
   getListApi: getBudgetReviewListApi
@@ -116,7 +126,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: true,
@@ -347,7 +357,21 @@ const getFundSubjectList = () => {
 }
 
 const onReviewRow = async (row) => {
-  tableObject.currentRow = { ...row }
+  tableObject.currentRow = row
+  dialog.value = true
+  actionType.value = 'edit'
+}
+const onViewRow = async (row: any) => {
+  PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  actionType.value = 'view'
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
+  tableObject.currentRow = row
   dialog.value = true
 }
 

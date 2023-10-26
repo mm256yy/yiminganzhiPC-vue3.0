@@ -17,7 +17,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 移动工程设施汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/move_facilities.png" alt="" />
+      <img src="@/assets/imgs/report/move_facilities.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

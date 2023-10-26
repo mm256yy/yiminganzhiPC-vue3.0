@@ -51,8 +51,8 @@
         <template #paymentType="{ row }">
           <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
         </template>
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #funSubjectId="{ row }">
+          <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
         </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
@@ -89,7 +89,7 @@ import {
   delPaymentApplicationByIdApi,
   PaymentApplicationByIdDetailApi
 } from '@/api/fundManage/paymentApplication-service'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import { formatDate } from '@/utils/index'
 import EditForm from './EditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
@@ -105,10 +105,26 @@ const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
     if (res) {
       fundAccountList.value = res.content
+      console.log(fundAccountList.value, '资金列表数据')
     }
   })
 }
-
+// 获取树形递归数据
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
 const otherListApi = () => {
   getPaymentApplicationListApi().then((res: any) => {
     if (res) {
@@ -180,7 +196,7 @@ const onEditRow = (row: any) => {
 }
 const onViewRow = (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res.funPaymentRequestFlowNodeList
+    parmasList.value = res
     console.log(res.funPaymentRequestFlowNodeList, '测试')
   })
   actionType.value = 'view'
@@ -433,7 +449,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '创建时间',
     search: {
       show: false

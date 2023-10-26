@@ -18,7 +18,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 广播电视工程设施汇总表 </div>
       </div>
-      <img src="@/assets/imgs/IntelligentReport/broadcasting_facility.png" alt="" />
+      <img src="@/assets/imgs/report/broadcasting_facility.png" alt="" />
     </div>
   </WorkContentWrap>
 </template>

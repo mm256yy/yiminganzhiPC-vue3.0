@@ -19,11 +19,6 @@
         <div></div>
       </div>
       <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
@@ -50,26 +45,14 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getFundDetailReportListApi } from '@/api/fundReport/service'
 
-// interface SpanMethodProps {
-//   row: any
-//   column: any
-//   rowIndex: number
-//   columnIndex: number
-// }
-
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
-const { register, tableObject, methods } = useTable({
-  getListApi: getFundDetailReportListApi
-})
-const { getList, setSearchParams } = methods
+const { register, tableObject } = useTable()
 
 tableObject.params = {
   projectId
 }
-
-getList()
 
 const commonTableItemSchema = {
   search: {
@@ -121,13 +104,13 @@ const schema = reactive<CrudSchema[]>([
 
   // table 字段定义
   {
-    type: 'index',
-    label: '序号'
+    field: 'serNoStr',
+    label: '序号',
+    ...commonTableItemSchema
   },
   {
     field: 'name',
     label: '项目',
-    fixed: true,
     ...commonTableItemSchema
   },
   {
@@ -136,17 +119,17 @@ const schema = reactive<CrudSchema[]>([
     ...commonTableItemSchema
   },
   {
-    field: '1',
+    field: 'gsInvest',
     label: '概算投资(元)',
     ...commonTableItemSchema
   },
   {
-    field: '2',
+    field: 'guInvest',
     label: '调估投资(元)',
     ...commonTableItemSchema
   },
   {
-    field: '3',
+    field: 'gaiInvest',
     label: '调概投资(元)',
     ...commonTableItemSchema
   },
@@ -154,75 +137,40 @@ const schema = reactive<CrudSchema[]>([
     label: '使用资金',
     children: [
       {
-        field: '4',
-        label: '概算内金额(元)',
+        field: 'amount',
+        label: '金额(元)',
         ...commonTableItemSchema
       },
       {
-        field: '5',
-        label: '概算外金额(元)',
+        field: 'apr',
+        label: '实际/概算(%)',
         ...commonTableItemSchema
       }
     ],
-    ...commonTableItemSchema
-  },
-  {
-    field: '6',
-    label: '备注',
     ...commonTableItemSchema
   }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
 
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-//   console.log(column)
-//   if (columnIndex === 0) {
-//     // 如果与上一个分组名称相同，被合并
-//     if (rowIndex !== 0 && row.type === tableObject.tableList[rowIndex - 1].type) {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//     // 统计新的分组所占行数
-//     let index = rowIndex + 1
-//     let rowspan = 1
-//     while (index < tableObject.tableList.length) {
-//       if (row.type === tableObject.tableList[index].type) {
-//         rowspan++
-//         index++
-//       } else {
-//         break
-//       }
-//     }
-//     return {
-//       rowspan: rowspan,
-//       colspan: 1
-//     }
-//   }
-// }
+const getTableList = async (params?: any) => {
+  tableObject.loading = true
+  const res = await getFundDetailReportListApi({
+    projectId: projectId,
+    ...params
+  }).finally(() => {
+    tableObject.loading = false
+  })
+  if (res) {
+    // 赋值表格数据
+    tableObject.tableList = res || []
+  }
+}
 
-/**
- * 获取金额类型
- * @param type 类型 1 补偿, 2 补助, 3 奖励, 4 其他
- */
-// const getTypeStr = (type: string) => {
-//   switch (type) {
-//     case '1':
-//       return '补偿费'
-//       break
-//     case '2':
-//       return '补助费'
-//       break
-//     case '3':
-//       return '奖励费'
-//       break
-//     case '4':
-//       return '其他费用'
-//       break
-//     default:
-//       return ''
-//   }
-// }
+// 搜索
+const setSearchParams = (data: any) => {
+  getTableList(data)
+}
+
+getTableList()
 </script>

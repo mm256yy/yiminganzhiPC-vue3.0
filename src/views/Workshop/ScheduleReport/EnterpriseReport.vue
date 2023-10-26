@@ -41,7 +41,48 @@
         headerAlign="center"
         align="center"
         @register="register"
-      />
+      >
+        <template #appendageStatus="{ row }">
+          <div v-if="row.appendageStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #graveStatus="{ row }">
+          <div v-if="row.graveStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #deviceStatus="{ row }">
+          <div v-if="row.deviceStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #cardStatus="{ row }">
+          <div v-if="row.cardStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #houseSoarStatus="{ row }">
+          <div v-if="row.houseSoarStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #landSoarStatus="{ row }">
+          <div v-if="row.landSoarStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #agreementStatus="{ row }">
+          <div v-if="row.agreementStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+        <template #proceduresStatus="{ row }">
+          <div v-if="row.proceduresStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+        </template>
+      </Table>
     </div>
   </WorkContentWrap>
 </template>
@@ -55,8 +96,9 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
-import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
+
+import { EnterpriseReportType } from '@/api/workshop/enterpriseReport/type'
+import { getEnterpriseReportApi } from '@/api/workshop/enterpriseReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -64,8 +106,8 @@ import { useRouter } from 'vue-router'
 const { back } = useRouter()
 
 interface SpanMethodProps {
-  row: PopulationHousingDtoType
-  column: PopulationHousingDtoType
+  row: EnterpriseReportType
+  column: EnterpriseReportType
   rowIndex: number
   columnIndex: number
 }
@@ -76,7 +118,7 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getPopulationHousingListApi
+  getListApi: getEnterpriseReportApi
 })
 
 const { setSearchParams } = methods
@@ -141,56 +183,56 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'id',
     label: '序号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'doorNo',
     label: '企业编号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'name',
     label: '企业',
     search: {
       show: false
     }
   },
   {
-    field: '',
+    field: 'relocation',
     label: '动迁阶段',
     search: {
       show: false
     },
     children: [
       {
-        field: 'inCount',
+        field: 'estimate',
         label: '资产评估',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'appendageStatus',
             label: '房屋/附属物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'graveStatus',
             label: '土地/附着物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'deviceStatus',
             label: '设施设备',
             search: {
               show: false
@@ -199,28 +241,28 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'outCount',
+        field: 'cardStatus',
         label: '企业建卡',
         search: {
           show: false
         }
       },
       {
-        field: 'inCount',
+        field: 'soar',
         label: '腾空',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'houseSoarStatus',
             label: '房屋腾空',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'landSoarStatus',
             label: '土地腾空',
             search: {
               show: false
@@ -229,7 +271,7 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'inCount',
+        field: 'agreementStatus',
         label: '动迁协议',
         search: {
           show: false
@@ -245,7 +287,7 @@ const schema = reactive<CrudSchema[]>([
     },
     children: [
       {
-        field: 'inCount',
+        field: 'proceduresStatus',
         label: '相关手续',
         search: {
           show: false

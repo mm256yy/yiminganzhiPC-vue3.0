@@ -53,7 +53,7 @@ import {
   FormRules,
   ElMessage
 } from 'element-plus'
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive, nextTick, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
@@ -62,7 +62,7 @@ import type { AdjustmentType } from '@/api/fundManage/budgetAdjustment-types'
 
 interface PropsType {
   show: any
-  selectionIds: any[]
+  landlordIds: number[]
 }
 
 const props = defineProps<PropsType>()
@@ -75,7 +75,7 @@ const projectId = appStore.currentProjectId
 const btnLoading = ref(false)
 
 const defaultValue = {
-  ids: props.selectionIds.toString(),
+  ids: props.landlordIds.toString(),
   type: '',
   gsRemark: ''
 }
@@ -103,7 +103,8 @@ const onSubmit = debounce((formEl) => {
     if (valid) {
       btnLoading.value = true
       const data: any = {
-        ...form.value
+        ...form.value,
+        ids: props.landlordIds.toString()
       }
 
       submit(data)
@@ -122,6 +123,13 @@ const submit = async (data: AdjustmentType) => {
   ElMessage.success('操作成功！')
   onClose(true)
 }
+watch(
+  () => props.landlordIds,
+  () => {
+    console.log(props.landlordIds)
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="less" scoped>

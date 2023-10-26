@@ -19,7 +19,7 @@
           <span class="point"></span>
           {{ props.baseInfo.implementFillStatus === '1' ? '已填报' : '未填报' }}
         </div>
-        <div
+        <!-- <div
           :class="{
             status: true,
             success: props.baseInfo.implementEscalationStatus === '1'
@@ -27,7 +27,7 @@
         >
           <span class="point"></span>
           {{ props.baseInfo.implementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
-        </div>
+        </div> -->
       </ElSpace>
     </div>
 
@@ -167,7 +167,7 @@
       </div>
     </div>
 
-    <div class="other" v-if="type == 'villageInfoC'">
+    <div class="other" v-if="type == 'VillageInfoC'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -229,7 +229,7 @@ onMounted(() => {
     infoData.value = { icon: 'carbon:enterprise' }
   } else if (props.type == 'IndividualB') {
     infoData.value = { icon: 'material-symbols:add-business' }
-  } else if (props.type == 'villageInfoC') {
+  } else if (props.type == 'VillageInfoC') {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })

@@ -10,21 +10,26 @@
         <ElBreadcrumbItem class="text-size-12px">生产安置意愿</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div class="search-form-wrap" style="display: none">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 生产安置意愿报表 </div>
+        <div class="table-left-title">生产安置意愿报表</div>
       </div>
       <el-table
         class="flex-col flex-1"
         :data="tableData"
-        height="250px"
         border
         show-summary
         style="width: 100%"
+        :height="getHeight(tableData)"
       >
+        <el-table-column label="序号" align="center">
+          <template #default="scope">
+            {{ scope.$index + 1 }}
+          </template>
+        </el-table-column>
         <el-table-column prop="name" label="区域/户主" align="center" />
         <el-table-column prop="familyNumber" label="总人数(人)" align="center" />
 
@@ -32,7 +37,7 @@
         <el-table-column prop="countRetirement" label="养老保险(人)" align="center" />
         <el-table-column prop="countSelfEmployee" label="自谋职业(人)" align="center" />
       </el-table>
-      已选占比:{{ percent * 100 + '%' }}
+      <p class="mt-[5px]">已选占比:{{ percent }}</p>
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
           v-model:current-page="pageNum"
@@ -60,13 +65,11 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive, ref } from 'vue'
-
+import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getProHouseReportListApi } from '@/api/workshop/placementReport/service'
 const { back } = useRouter()
-
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
@@ -131,31 +134,47 @@ const { allSchemas } = useCrudSchemas(schema)
 //   getListApi: getProHouseReportListApi
 // })
 // const { getList, setSearchParams } = methods
-
 const tableData = ref([])
+//百分比
 const percent = ref()
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
+//格式化百分比
+const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
+//获取列表数据
 const getProHouseReportList = (page, size) => {
   const params = {
     page: page,
     size: size
   }
   getProHouseReportListApi(params).then((res) => {
-    console.log('res', res)
     tableData.value = res.reports.content
     totalNum.value = res.reports.total
-    percent.value = res.percent
+    percent.value = toPercent(res.percent)
   })
 }
-
-getProHouseReportList('0', pageSize.value)
 const handleSizeChange = (val: number) => {
   pageSize.value = val
-  getProHouseReportList('0', pageSize.value)
+  getProHouseReportList(pageNum.value - 1, pageSize.value)
 }
 const handleCurrentChange = (val: number) => {
-  pageNum.value = val - 1
-  getProHouseReportList(pageNum.value, pageSize.value)
+  pageNum.value = val
+  getProHouseReportList(pageNum.value - 1, pageSize.value)
 }
+onMounted(() => {
+  getProHouseReportList('0', pageSize.value)
+})
 const onBack = () => {
   back()
 }

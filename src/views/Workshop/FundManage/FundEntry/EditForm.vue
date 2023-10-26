@@ -71,13 +71,8 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <template v-if="actionType === 'add'">
-        <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
-        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
-      </template>
-      <template v-else>
-        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
-      </template>
+      <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -183,28 +178,20 @@ const onClose = (flag = false) => {
   form.value = {}
 }
 
-const submit = (data: any, status?: number) => {
+const submit = async (data: any) => {
   if (props.actionType === 'add') {
-    data.status = status
     data.projectId = appStore.getCurrentProjectId
     data.entryType = '1' // 1普通入账 2法人入账
-    addFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await addFundEntryApi(data)
   } else {
-    updateFundEntryApi(data).then((res) => {
-      if (res) {
-        ElMessage.success('操作成功！')
-      }
-    })
+    await updateFundEntryApi(data)
   }
+  ElMessage.success('操作成功！')
   onClose(true)
 }
 
 // 提交表单
-const onSubmit = debounce((formEl, status?: number) => {
+const onSubmit = debounce((formEl, status: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {
@@ -216,7 +203,8 @@ const onSubmit = debounce((formEl, status?: number) => {
         receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
       }
       params.recordTime = dayjs(params.recordTime)
-      submit(params, status)
+      params.status = status
+      submit(params)
     } else {
       return false
     }
