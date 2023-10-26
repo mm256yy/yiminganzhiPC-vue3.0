@@ -229,8 +229,8 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
     // 统计新的分组所占行数
     let index = rowIndex + 1
     let rowspan = 1
-    while (index < tableObject.tableList.length) {
-      if (row.type === tableObject.tableList[index].type) {
+    while (index < feeTableData.value.length) {
+      if (row.type === feeTableData.value[index].type) {
         rowspan++
         index++
       } else {

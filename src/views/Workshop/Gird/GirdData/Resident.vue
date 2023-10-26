@@ -94,7 +94,9 @@
       </Table>
     </div>
     <el-dialog title="分配员" v-model="dialogVisible" width="500">
-      <div style="display: flex; margin-bottom: 10px"> 请将已选择的企业，重新分配网格员 </div>
+      <div style="display: flex; margin-bottom: 10px">
+        请为已分配的{{ props.roleInfo }}，重新分配网格员
+      </div>
       <ElFormItem label="所属网格员" prop="reason">{{
         tableObject.currentRow?.gridmanName
       }}</ElFormItem>
@@ -142,6 +144,9 @@ import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import GirdList from './Girdlist.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
+const props = defineProps({
+  roleInfo: { type: String, default: '' }
+})
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
@@ -461,7 +466,7 @@ const uploadDone = () => {
     message: '正在导入，请等待批量导入结果',
     type: 'success'
   })
-  setSearchParams({ type: 'Village', status: SurveyStatusEnum.Implementation })
+  setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
 }
 
 const uploadError = (error) => {

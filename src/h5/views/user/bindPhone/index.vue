@@ -45,6 +45,8 @@ import { isPhoneNumber } from '@/h5/utils/verify'
 import { ref, onBeforeUnmount } from 'vue'
 import { ElMessage, ElButton, ElImage } from 'element-plus'
 import iconCheckedSrc from '@/h5/assets/imgs/icon_checked.png'
+import { getVerifyCodeApi } from './service'
+import { VerifyCodeDtoType } from './type'
 
 const phone = ref<string>('')
 const code = ref<string>('')
@@ -104,10 +106,15 @@ const handleSendSMS = () => {
     ElMessage.error(msg)
     return
   }
-  verification.value = false
-  time.value = 60
-  // 开始倒计时
-  countDown()
+
+  // 获取验证码
+  getVerifyCodeApi(phone.value).then((res: VerifyCodeDtoType) => {
+    verification.value = false
+    time.value = 60
+    console.log('code', res.code)
+    // 开始倒计时
+    countDown()
+  })
 }
 
 // 勾选协议

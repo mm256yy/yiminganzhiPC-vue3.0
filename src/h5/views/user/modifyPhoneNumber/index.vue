@@ -8,12 +8,21 @@
     </div>
     <div class="part-line"></div>
     <div class="section-input">
+      <div class="input-label">修改后</div>
+      <div class="input-value">
+        <input v-model="phones" placeholder="请输入手机号码" />
+      </div>
+    </div>
+    <div class="part-line"></div>
+    <div class="section-input">
       <div class="input-label">验证码</div>
       <div class="input-value check">
         <input v-model="code" placeholder="请输入验证码" />
       </div>
-      <span class="verificationCode" v-if="verification" @click="handleSendSMS">获取验证码</span>
-      <span class="count-down" v-if="!verification">{{ time }}s</span>
+      <span class="verificationCode" v-if="verification" @click="handleSendSMS" style="width: 2rem"
+        >获取验证码</span
+      >
+      <span class="count-down" v-if="!verification" style="font-size: 12px">{{ time }}s</span>
     </div>
     <ElButton class="blue-btn" :loading="btnLoading" @click="onConfirm">确定</ElButton>
     <div class="service">
@@ -27,15 +36,17 @@
 import { ref, onBeforeUnmount } from 'vue'
 import { isPhoneNumber } from '@/h5/utils/verify'
 import { ElMessage, ElButton } from 'element-plus'
-
+import { getupdatePhone } from './service'
+import { useRouter } from 'vue-router'
 const phone = ref('')
+const phones = ref('')
 const code = ref<string>('')
 const verification = ref<boolean>(true) // 获取验证码
 const time = ref<number>(0)
 let timer = 0
 const btnLoading = ref<boolean>(false)
 const isTicked = ref<boolean>(false)
-
+let { back } = useRouter()
 const checkNullOrEmpty = (val: string, msg: string) => {
   if (!val) {
     ElMessage.error(msg)
@@ -60,18 +71,38 @@ onBeforeUnmount(() => {
   clearInterval(timer)
   timer = 0
 })
-
+let getupdatePhones = async () => {
+  let data = await getupdatePhone({
+    oldPhone: phone.value,
+    newPhone: phones.value,
+    code: code.value
+  })
+  console.log(data)
+  btnLoading.value = false
+}
 const onConfirm = () => {
-  if (!isTicked.value) {
-    const msg = '请先勾选相关协议'
-    ElMessage.error(msg)
-    return
-  }
+  // if (!isTicked.value) {
+  //   const msg = '请先勾选相关协议'
+  //   ElMessage.error(msg)
+  //   return
+  // }
 
   btnLoading.value = true
-  window.setTimeout(() => {
-    btnLoading.value = false
-  }, 1500)
+
+  getupdatePhone({
+    oldPhone: phone.value,
+    newPhone: phones.value,
+    code: code.value
+  })
+    .then((res) => {
+      console.log(res)
+      ElMessage.success('修改成功')
+      back()
+      btnLoading.value = false
+    })
+    .catch(() => {
+      btnLoading.value = false
+    })
 }
 
 // 发送验证码

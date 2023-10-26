@@ -1,10 +1,15 @@
 <template>
   <div class="flex-col page">
     <div class="flex-col group_garden">
-      <div class="flex-col relative section">
-        <ElImage class="garden-section" :src="beautifulGardenBg" fit="cover" alt="美丽家园" />
+      <div class="flex-col relative section" v-for="i in dataList" :key="i.id">
+        <ElImage
+          class="garden-section"
+          :src="i.pic != '[]' ? JSON.parse(i.pic)[0].url : ''"
+          fit="cover"
+          alt="美丽家园"
+        />
         <div class="equal-division">
-          <div class="group-garden-item" @click="toLink('planEffect')">
+          <div class="group-garden-item" @click="toLink('planEffect', { id: i.pic })">
             <img class="image_garden-item" :src="planEffectSrc" />
             <span class="garden-item-txt">规划效果</span>
           </div>
@@ -30,6 +35,8 @@ import iconSmartSite from '@/h5/assets/imgs/icon_smart_site.png'
 import iconVrLive from '@/h5/assets/imgs/icon_vr_live.png'
 import beautifulGardenBg from '@/h5/assets/imgs/beautiful_garden_bg.png'
 import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { getsettleAddress } from './service'
 const { push } = useRouter()
 
 const toLink = (routeName: string, query = {}) => {
@@ -38,6 +45,15 @@ const toLink = (routeName: string, query = {}) => {
     query
   })
 }
+let dataList: any = ref({})
+let getsettleAddressX = async () => {
+  let data = await getsettleAddress()
+  dataList.value = data.content
+  console.log(data.content)
+}
+onMounted(() => {
+  getsettleAddressX()
+})
 </script>
 
 <style lang="less" scoped>
