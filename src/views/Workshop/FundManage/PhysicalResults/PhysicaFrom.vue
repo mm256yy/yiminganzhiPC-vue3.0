@@ -384,12 +384,15 @@ onMounted(() => {
   console.log(id)
 
   if (id == '2') {
+    document.title = '企业房屋及其附属物汇总表序号 行政村（公示表）'
     titles.value = '企业房屋及其附属物汇总表序号 行政村（公示表）'
     getEnterpriseAppendants(getEnterpriseAppendant())
   } else if (id == '3') {
+    document.title = '企业零星林（果）木汇总表序号 行政村（公示表）'
     titles.value = '企业零星林（果）木汇总表序号 行政村（公示表）'
-    getEnterpriseAppendants(getIndividualHouseholdAppendant())
+    getEnterpriseTrees(getEnterpriseTree())
   } else if (id == '5') {
+    document.title = '个体户零星林（果）木汇总表序号 行政村（公示表）'
     titles.value = '个体户零星林（果）木汇总表序号 行政村（公示表）'
     getEnterpriseTrees(getIndividualHouseholdTree())
   }
