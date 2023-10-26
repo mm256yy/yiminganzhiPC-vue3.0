@@ -24,17 +24,11 @@
       <el-table
         :data="tableData"
         border
-        show-summary
-        :summary-method="getSummaries"
+        :span-method="objectSpanMethod"
         style="width: 100%"
-        :height="tableHeight"
-        ref="tableRef"
+        :height="getHeight(tableData)"
       >
-        <el-table-column label="序号" align="center" width="60">
-          <template #default="scope">
-            <span> {{ scope.$index + 1 }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column prop="number" label="序号" align="center" width="60" />
         <el-table-column prop="doorNo" label="户号" align="center" width="60" />
         <el-table-column prop="name" label="户主" align="center" width="60" />
         <!-- 公寓房 -->
@@ -177,12 +171,14 @@
               </template>
             </el-table-column>
             <el-table-column prop="landSoarStatus" label="土地腾让" align="center">
-              <!-- <template #default="{ row }">
-                <div v-if="row.landSoarStatus =='1'">
-                  <Icon class="active-icon" icon="ep:check" color="#000" />
-                  111111
-                </div>
-              </template> -->
+              <template #default="{ row }">
+                <Icon
+                  v-if="row.landSoarStatus == '1'"
+                  class="active-icon"
+                  icon="ep:check"
+                  color="#000"
+                />
+              </template>
             </el-table-column>
             <el-table-column prop="excessStatus" label="过渡安置" align="center">
               <template #default="{ row }">
@@ -412,9 +408,8 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 const { methods } = useTable()
 const { setSearchParams } = methods
-const tableData = ref([])
-const tableRef = ref()
-const tableHeight = ref(200)
+const tableData = ref<any>([])
+
 const handleSizeChange = (val: number) => {
   pageSize.value = val
   getResidentRegionList(pageNum.value - 1, pageSize.value)
@@ -428,32 +423,73 @@ const getResidentRegionList = (page, size) => {
   const params = { page, size }
   getResidentRegionListApi(params).then((res) => {
     tableData.value = res.content
+    tableData.value.forEach((item, index) => {
+      item.number = index + 1
+    })
+    //添加合计行
+    tableData.value.push({
+      number: '合计',
+      populationStatusCount: pageSize.value,
+      propertyStatusCount: pageSize.value,
+      appendageStatus: pageSize.value,
+      landStatus: pageSize.value,
+      productionArrangementStatus: pageSize.value,
+      relocateArrangementStatus: pageSize.value,
+      graveStatus: pageSize.value,
+      landUseStatus: pageSize.value,
+      chooseHouseStatus: pageSize.value,
+      chooseGraveStatus: pageSize.value,
+      cardStatusCount: pageSize.value,
+      houseSoarStatus: pageSize.value,
+      landSoarStatus: pageSize.value,
+      excessStatus: pageSize.value,
+      agreementStatus: pageSize.value,
+      buildOneselfStatus: pageSize.value,
+      flatsStatus: pageSize.value,
+      centralizedSupportStatus: pageSize.value,
+      selfSeekingStatus: pageSize.value,
+      aricutureArrangementStatus: pageSize.value,
+      retirementStatus: pageSize.value,
+      selfEmploymentStatus: pageSize.value,
+      proceduresStatus: pageSize.value
+    })
+
     totalNum.value = res.total
   })
 }
-//计算合计行并合并单元格
-const getSummaries = (param) => {
-  const { columns } = param
-  const sums: any[] = []
-  columns.forEach((column, index) => {
-    if (index === 0) {
-      sums[index] = '合计（户数）'
-      column.colSpan = 3
-    } else {
-      sums[index] = pageSize.value
+
+//合并合计户单元格
+const objectSpanMethod = ({ row, columnIndex }: any) => {
+  if (row.number === '合计') {
+    if (columnIndex == 0) {
+      return {
+        rowspan: 1,
+        colspan: 3
+      }
     }
-  })
-  return sums
+    if (columnIndex == 1 || columnIndex == 2) {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  }
+}
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
 }
 onMounted(() => {
   getResidentRegionList('0', pageSize.value)
-  const tHeight = tableRef.value.$el.offsetHeight
-  tableHeight.value = window.innerHeight - tHeight - 150
-  window.onresize = () => {
-    return (() => {
-      tableHeight.value = window.innerHeight - tHeight - 150
-    })()
-  }
 })
 const onBack = () => {
   back()

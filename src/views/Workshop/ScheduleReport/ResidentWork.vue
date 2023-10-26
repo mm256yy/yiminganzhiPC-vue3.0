@@ -21,7 +21,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户按工作分组报表 </div>
       </div>
-      <el-table :height="tableHeight" ref="tableRef" :data="tableData" border style="width: 100%">
+      <el-table :height="getHeight(tableData)" :data="tableData" border style="width: 100%">
         <el-table-column label="序号" align="center" width="60">
           <template #default="scope">
             <span> {{ scope.$index + 1 }}</span>
@@ -208,8 +208,7 @@ const { methods } = useTable()
 const { setSearchParams } = methods
 
 const tableData = ref([])
-const tableRef = ref()
-const tableHeight = ref(200)
+
 const handleSizeChange = (val: number) => {
   pageSize.value = val
   getResidentWorkList(pageNum.value - 1, pageSize.value)
@@ -226,15 +225,21 @@ const getResidentWorkList = (page, size) => {
     totalNum.value = tableData.value.length
   })
 }
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
 onMounted(() => {
   getResidentWorkList('0', pageSize.value)
-  const tHeight = tableRef.value.$el.offsetHeight
-  tableHeight.value = window.innerHeight - tHeight - 150
-  window.onresize = () => {
-    return (() => {
-      tableHeight.value = window.innerHeight - tHeight - 150
-    })()
-  }
 })
 const onBack = () => {
   back()

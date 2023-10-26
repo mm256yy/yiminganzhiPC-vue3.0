@@ -18,12 +18,11 @@
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
       </div>
       <el-table
-        :height="tableHeight"
+        :height="getHeight(tableData)"
         :span-method="objectSpanMethod"
         :data="tableData"
         border
         style="width: 100%"
-        ref="tableRef"
       >
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
@@ -178,8 +177,20 @@ const { setSearchParams } = methods
 
 const tableData = ref<any>([])
 const percent = ref() //已选占比
-const tableRef = ref()
-const tableHeight = ref(200)
+
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
 const handleSearch = () => {
   getMoveHouseReportList('0', '10')
 }
@@ -235,15 +246,6 @@ const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 
 onMounted(() => {
   getMoveHouseReportList('0', '10')
-  const tHeight = tableRef.value.$el.offsetHeight
-  // 设置表格高度
-  tableHeight.value = window.innerHeight - tHeight - 150
-  // / 监听浏览器窗口变化，动态计算表格高度，
-  window.onresize = () => {
-    return (() => {
-      tableHeight.value = window.innerHeight - tHeight - 150
-    })()
-  }
 })
 
 const onBack = () => {

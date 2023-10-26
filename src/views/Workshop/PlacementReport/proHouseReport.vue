@@ -23,8 +23,7 @@
         border
         show-summary
         style="width: 100%"
-        ref="tableRef"
-        :height="tableHeight"
+        :height="getHeight(tableData)"
       >
         <el-table-column label="序号" align="center">
           <template #default="scope">
@@ -138,8 +137,19 @@ const { allSchemas } = useCrudSchemas(schema)
 const tableData = ref([])
 //百分比
 const percent = ref()
-const tableRef = ref()
-const tableHeight = ref(200)
+/**
+ * 计算 table 的高度
+ * @param arr 当前 table 的数据
+ */
+const getHeight = (arr: any) => {
+  if (arr.length === 0) {
+    return 150
+  } else if (arr.length > 9) {
+    return 500
+  } else {
+    return 'auto'
+  }
+}
 //格式化百分比
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 //获取列表数据
@@ -164,13 +174,6 @@ const handleCurrentChange = (val: number) => {
 }
 onMounted(() => {
   getProHouseReportList('0', pageSize.value)
-  const tHeight = tableRef.value.$el.offsetHeight
-  tableHeight.value = window.innerHeight - tHeight - 150
-  window.onresize = () => {
-    return (() => {
-      tableHeight.value = window.innerHeight - tHeight - 150
-    })()
-  }
 })
 const onBack = () => {
   back()
