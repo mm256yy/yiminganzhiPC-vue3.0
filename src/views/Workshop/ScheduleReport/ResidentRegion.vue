@@ -26,7 +26,7 @@
         border
         :span-method="objectSpanMethod"
         style="width: 100%"
-        :height="getHeight(tableData)"
+        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
       >
         <el-table-column prop="number" label="序号" align="center" width="60" />
         <el-table-column prop="doorNo" label="户号" align="center" width="60" />
@@ -427,37 +427,44 @@ const getResidentRegionList = (page, size) => {
       item.number = index + 1
     })
     //添加合计行
-    tableData.value.push({
-      number: '合计',
-      populationStatusCount: pageSize.value,
-      propertyStatusCount: pageSize.value,
-      appendageStatus: pageSize.value,
-      landStatus: pageSize.value,
-      productionArrangementStatus: pageSize.value,
-      relocateArrangementStatus: pageSize.value,
-      graveStatus: pageSize.value,
-      landUseStatus: pageSize.value,
-      chooseHouseStatus: pageSize.value,
-      chooseGraveStatus: pageSize.value,
-      cardStatusCount: pageSize.value,
-      houseSoarStatus: pageSize.value,
-      landSoarStatus: pageSize.value,
-      excessStatus: pageSize.value,
-      agreementStatus: pageSize.value,
-      buildOneselfStatus: pageSize.value,
-      flatsStatus: pageSize.value,
-      centralizedSupportStatus: pageSize.value,
-      selfSeekingStatus: pageSize.value,
-      aricutureArrangementStatus: pageSize.value,
-      retirementStatus: pageSize.value,
-      selfEmploymentStatus: pageSize.value,
-      proceduresStatus: pageSize.value
-    })
+    const totalData = totalRow(tableData.value)
+    if (tableData.value.length >= 1) {
+      tableData.value.push({
+        number: '合计',
+        populationStatusCount: totalData,
+        propertyStatusCount: totalData,
+        appendageStatus: totalData,
+        landStatus: totalData,
+        productionArrangementStatus: totalData,
+        relocateArrangementStatus: totalData,
+        graveStatus: totalData,
+        landUseStatus: totalData,
+        chooseHouseStatus: totalData,
+        chooseGraveStatus: totalData,
+        cardStatusCount: totalData,
+        houseSoarStatus: totalData,
+        landSoarStatus: totalData,
+        excessStatus: totalData,
+        agreementStatus: totalData,
+        buildOneselfStatus: totalData,
+        flatsStatus: totalData,
+        centralizedSupportStatus: totalData,
+        selfSeekingStatus: totalData,
+        aricutureArrangementStatus: totalData,
+        retirementStatus: totalData,
+        selfEmploymentStatus: totalData,
+        proceduresStatus: totalData
+      })
+    }
 
     totalNum.value = res.total
   })
 }
-
+//表格合计行数
+const totalRow = (data) => {
+  const len = data.length
+  return len / pageSize.value >= 1 ? pageSize.value : len
+}
 //合并合计户单元格
 const objectSpanMethod = ({ row, columnIndex }: any) => {
   if (row.number === '合计') {
