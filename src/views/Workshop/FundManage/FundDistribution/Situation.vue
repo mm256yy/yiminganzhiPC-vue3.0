@@ -11,7 +11,7 @@
       <ElButton type="primary" @click="selenceTable('村集体')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
@@ -327,7 +327,27 @@ const onSearch = (data) => {
   } else {
     delete searchData.relation
   }
+  const findRecursion = (data, code, callback) => {
+    if (!data || !Array.isArray(data)) return null
+    data.forEach((item, index, arr) => {
+      if (item.code === code) {
+        return callback(item, index, arr)
+      }
+      if (item.children) {
+        return findRecursion(item.children, code, callback)
+      }
+    })
+  }
 
+  const getParamsKey = (key: string) => {
+    const map = {
+      Country: 'areaCode',
+      Township: 'townCode',
+      Village: 'villageCode', // 行政村 code
+      NaturalVillage: 'virutalVillageCode' // 自然村 code
+    }
+    return map[key]
+  }
   // 处理参数
   let params = {
     ...searchData
@@ -335,13 +355,20 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
+  for (let i in params) {
+    if (!params[i]) {
+      delete params[i]
+    }
   }
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
+  setSearchParams({ ...params })
 }
 let handelShowform = (e: any) => {
   dialog.value = true
@@ -353,6 +380,10 @@ const onEditFormClose = (flag: boolean) => {
     getList()
   }
   dialog.value = false
+}
+let setSearchParamss = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 </script>
 

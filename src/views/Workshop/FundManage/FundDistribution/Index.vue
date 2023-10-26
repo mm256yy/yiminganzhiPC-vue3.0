@@ -11,7 +11,7 @@
       <ElButton type="primary" @click="selenceTable('村集体')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
@@ -212,7 +212,7 @@ const IssueClick = () => {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'cityCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -391,7 +391,27 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 let { allSchemas } = useCrudSchemas(schema)
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
@@ -419,7 +439,19 @@ const onSearch = (data) => {
       delete params[i]
     }
   }
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
   setSearchParams({ ...params })
+}
+let setSearchParamss = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 </script>
 
