@@ -53,29 +53,24 @@
         </div>
       </div>
     </div>
-    <!--信息反馈-->
+    <!--问题列表-->
     <div class="statistic-item">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_feed.png" class="icon" />
-        <div>信息反馈</div>
+        <div>问题列表</div>
       </div>
       <div>
-        <div class="top-title">
-          <div>
-            <span class="title-index">序号</span>
-            <span class="title-content">内容</span>
-          </div>
-          <span class="time">提交时间</span>
-        </div>
-        <div class="list">
-          <div class="item-title" v-for="(item, index) in messageList" :key="index">
-            <div>
-              <span class="item-index">{{ index + 1 }}</span>
-              <span class="item-content">{{ item.remark }}</span>
-            </div>
-            <span class="item-time">{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}</span>
-          </div>
-        </div>
+        <ElTable :data="messageList" style="width: 100%">
+          <ElTableColumn prop="name" align="householder" label="户主/企业名称" />
+          <ElTableColumn prop="typeText" align="center" label="工作阶段" />
+          <ElTableColumn prop="remark" align="center" label="反馈问题内容" />
+          <ElTableColumn prop="createdDate" label="反馈时间" align="center">
+            <template #createdDate="{ row }">
+              {{ row.createdDate ? dayjs(row.createdDate).format('YYYY-MM-DD') : '-' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn prop="statusText" align="center" label="处理结果" />
+        </ElTable>
       </div>
     </div>
   </div>
@@ -83,25 +78,12 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
+import { ElTable, ElTableColumn } from 'element-plus'
 import { getMessageFeedback } from '@/api/home-service'
 import type { MessageDtoType } from '@/api/home-types'
 import dayjs from 'dayjs'
 
 const messageList = ref<MessageDtoType[]>([])
-
-// const currentTab = ref(0)
-// let menuIndex = ref(0)
-
-// const tabChange = (id: number) => {
-//   if (currentTab.value === id) {
-//     return
-//   }
-//   currentTab.value = id
-// }
-
-// const handleItemClick = (index: number) => {
-//   menuIndex.value = index
-// }
 
 // 获取消息
 const getMessage = async () => {
@@ -116,14 +98,25 @@ const getMessage = async () => {
 onMounted(() => {
   getMessage()
 })
+
+// const tabChange = (id: number) => {
+//   if (currentTab.value === id) {
+//     return
+//   }
+//   currentTab.value = id
+// }
+
+// const handleItemClick = (index: number) => {
+//   menuIndex.value = index
+// }
 </script>
 
 <style lang="less" scoped>
 .statistic {
-  width: 456px;
+  width: 700px;
 
   .statistic-item {
-    height: 338px;
+    height: 295px;
     padding: 10px;
     margin-top: 20px;
     background-color: #ffffff;
@@ -163,16 +156,18 @@ onMounted(() => {
 
 .top-title {
   display: flex;
-  height: 44px;
+  height: 34px;
+  padding: 0 20px;
   font-size: 14px;
   font-weight: 400;
-  line-height: 44px;
+  line-height: 34px;
   color: #171718;
   align-items: center;
   justify-content: space-between;
 
   .title-index {
     padding-right: 12px;
+    flex: 1;
   }
 
   .title-content {
@@ -196,17 +191,17 @@ onMounted(() => {
 
     .item-index {
       width: 28px;
-      height: 44px;
+      height: 34px;
       padding-left: 10px;
       font-weight: 500;
-      line-height: 44px;
+      line-height: 34px;
       color: #131313;
       text-align: center;
     }
 
     .item-content {
-      width: 154px;
-      height: 44px;
+      flex: 1;
+      height: 34px;
       padding-left: 18px;
       font-weight: 500;
       color: #131313;
