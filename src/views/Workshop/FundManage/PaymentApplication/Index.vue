@@ -46,7 +46,7 @@
         @register="register"
       >
         <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+          <div>{{ formatDateTime(row.createdDate) }}</div>
         </template>
         <template #paymentType="{ row }">
           <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
@@ -70,6 +70,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :parmasList="parmasList"
+      :fundAccountList="fundAccountList"
     />
   </WorkContentWrap>
 </template>
@@ -89,7 +90,7 @@ import {
   delPaymentApplicationByIdApi,
   PaymentApplicationByIdDetailApi
 } from '@/api/fundManage/paymentApplication-service'
-import { formatDate } from '@/utils/index'
+import { formatDateTime } from '@/utils/index'
 import EditForm from './EditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
