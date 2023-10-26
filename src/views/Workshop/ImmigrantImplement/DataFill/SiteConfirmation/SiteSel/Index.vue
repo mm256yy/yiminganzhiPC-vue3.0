@@ -18,6 +18,7 @@
           >
             打印报表
           </ElButton> -->
+          <ElButton type="primary" @click="onBatchSave"> 保存 </ElButton>
         </ElSpace>
       </div>
       <ElTable v-if="baseInfo.houseAreaType === 'homestead'" :data="tableData" style="width: 100%">
@@ -226,7 +227,8 @@ import OnDocumentation from './OnDocumentation.vue'
 import EnterRoomNo from './EnterRoomNo.vue'
 import {
   getImmigrantChooseHouseApi,
-  saveImmigrantChooseHouseApi
+  saveImmigrantChooseHouseApi,
+  saveDocumentationApi
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
@@ -390,7 +392,14 @@ const onSave = (row: any) => {
     emit('updateData')
   })
 }
-
+//批量保存
+const onBatchSave = () => {
+  saveDocumentationApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+    emit('updateData')
+  })
+}
 /**
  * 关闭归档/幢号室号弹窗
  * @param flag
