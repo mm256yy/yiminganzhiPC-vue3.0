@@ -19,12 +19,12 @@
         @search="onSearch"
         @reset="setSearchParams"
       />
-      <!-- <ElButton type="primary" @click="onExport">数据导出</ElButton> -->
+      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 交通/电力/移动联通铁塔电信/文物 </div>
       </div>
@@ -35,42 +35,68 @@
           total: tableObject.total
         }"
         :data="tableObject.tableList"
-        :loading="tableObject.loading"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
         align="center"
-        border
         @register="register"
-        :span-method="arraySpanMethod"
-      />
+      >
+        <template #agreementStatus="{ row }">
+          <div v-if="row.agreementStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.agreementStatus == '0'"></div>
+        </template>
+        <template #startStatus="{ row }">
+          <div v-if="row.startStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.startStatus == '0'"></div>
+        </template>
+        <template #checkStatus="{ row }">
+          <div v-if="row.checkStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.checkStatus == '0'"></div>
+        </template>
+      </Table>
     </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, toRaw, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
+
+import { ComprehensiveReportType } from '@/api/workshop/comprehensive/types'
+import { getComprehensiveReportApi } from '@/api/workshop/comprehensive/service'
+
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
-// import { useIcon } from '@/hooks/web/useIcon'
+import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
+
+interface SpanMethodProps {
+  row: ComprehensiveReportType
+  column: ComprehensiveReportType
+  rowIndex: number
+  columnIndex: number
+}
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
-// const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getGraveListApi
+  getListApi: getComprehensiveReportApi
 })
 
 const { setSearchParams } = methods
@@ -105,6 +131,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'id',
+    label: '户号',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入户号'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
     field: 'householdName',
     label: '户主姓名',
     search: {
@@ -121,70 +161,70 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'id',
     label: '序号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'name',
     label: '项目名称',
     search: {
       show: false
     }
   },
   {
-    field: 'number',
+    field: 'code',
+    label: '专项编码',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'type',
     label: '专项类别',
     search: {
       show: false
     }
   },
   {
-    field: 'materials',
+    field: 'responsibilityCompany',
     label: '责任单位',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'designCompany',
     label: '设计单位',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'supervisionCompany',
     label: '监理单位',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'agreementStatus',
     label: '协议签订',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
+    field: 'startStatus',
     label: '开工',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
-    label: '完工',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'remark',
+    field: 'checkStatus',
     label: '验收',
     search: {
       show: false
@@ -211,23 +251,27 @@ const getParamsKey = (key: string) => {
  * @param{Object} rowIndex 当前行下标
  * @param{Object} columnInex 当前列下标
  */
-const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
-  if (column && columnIndex < 2) {
-    const num = tableObject.tableList.filter((item) => item.doorNo === row.doorNo)?.length
-    const index = tableObject.tableList.findIndex((item) => item.doorNo === row.doorNo)
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
+// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
+//   const num = tableObject.tableList.filter(
+//     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+//   ).length
+//   const index = tableObject.tableList.findIndex(
+//     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+//   )
+//   if (column && columnIndex < 1) {
+//     if (index === rowIndex) {
+//       return {
+//         rowspan: num,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
 
 const onSearch = (data) => {
   // 处理参数
@@ -239,9 +283,11 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-
   if (!params.householdName) {
     delete params.householdName
+  }
+  if (!params.doorNo) {
+    delete params.doorNo
   }
   if (params.villageCode) {
     // 拿到对应的参数key
@@ -259,12 +305,12 @@ const onSearch = (data) => {
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value, exportTypes.grave)
+  emit('export', villageTree.value, exportTypes.house)
 }
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'amdinVillage')
+  const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
 }
@@ -288,6 +334,24 @@ onMounted(() => {
   getVillageTree()
   setSearchParams({})
 })
+// 在useTable之后定义一个watcher
+// watch(
+//   [() => tableObject.tableList, () => tableObject],
+//   ([newTableList, newTableObject], [oldTableList, oldTableObject]) => {
+//     // 检查tableList是否有新的数据
+//     if (newTableList !== oldTableList) {
+//       console.log('tableList数据已更新', newTableList, oldTableList)
+//     }
+//     // 检查tableObject是否有新的数据
+//     if (newTableObject !== oldTableObject) {
+//       console.log('tableObject数据已更新')
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
 </script>
 <style lang="less" scoped>
 .search-form-wrap {

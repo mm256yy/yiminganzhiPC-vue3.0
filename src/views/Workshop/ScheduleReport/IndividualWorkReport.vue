@@ -16,7 +16,6 @@
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
-        @search="onSearch"
         @reset="setSearchParams"
       />
       <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
@@ -41,13 +40,56 @@
         headerAlign="center"
         align="center"
         @register="register"
-      />
+      >
+        <template #populationStatusCount="{ row }">
+          <div v-if="Number(row.populationStatusCount) === Number(1)">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.populationStatusCount == '0'"></div>
+        </template>
+        <template #landStatusCount="{ row }">
+          <div v-if="Number(row.landStatusCount) === 1">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.landStatusCount == '0'"></div>
+        </template>
+        <template #deviceStatusCount="{ row }">
+          <div v-if="Number(row.deviceStatusCount) === 1">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.deviceStatusCount == '0'"></div>
+        </template>
+        <template #cardStatusCount="{ row }">
+          <div v-if="row.cardStatusCount == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.cardStatusCount == '0'"></div>
+        </template>
+        <template #houseSoarStatusCount="{ row }">
+          <div v-if="row.houseSoarStatusCount == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.houseSoarStatusCount == '0'"></div>
+        </template>
+        <template #landSoarStatusCount="{ row }">
+          <div v-if="row.landSoarStatusCount == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.landSoarStatusCount == '0'"></div>
+        </template>
+        <template #agreementStatusCount="{ row }">
+          <div v-if="row.agreementStatusCount == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.agreementStatusCount == '0'"></div>
+        </template>
+      </Table>
     </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -57,6 +99,10 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
+
+import { getIndividualWorkListApi } from '@/api/workshop/individualWork/service'
+import { IndividualWorkType } from '@/api/workshop/individualWork/types'
+
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -64,8 +110,8 @@ import { useRouter } from 'vue-router'
 const { back } = useRouter()
 
 interface SpanMethodProps {
-  row: PopulationHousingDtoType
-  column: PopulationHousingDtoType
+  row: IndividualWorkType
+  column: IndividualWorkType
   rowIndex: number
   columnIndex: number
 }
@@ -76,9 +122,8 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getPopulationHousingListApi
+  getListApi: getIndividualWorkListApi
 })
-
 const { setSearchParams } = methods
 
 const villageTree = ref<any[]>([])
@@ -111,7 +156,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'householdName',
     label: '户号',
     search: {
       show: true,
@@ -141,56 +186,56 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'id',
     label: '序号',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'gridmanName',
     label: '工作组',
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
+    field: 'totalHouse',
     label: '总任务数（户）',
     search: {
       show: false
     }
   },
   {
-    field: '',
+    field: 'relocation',
     label: '动迁阶段',
     search: {
       show: false
     },
     children: [
       {
-        field: 'inCount',
+        field: 'assess',
         label: '资产评估',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'populationStatusCount',
             label: '房屋/附属物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'landStatusCount',
             label: '土地/附着物',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'deviceStatusCount',
             label: '设施设备',
             search: {
               show: false
@@ -199,28 +244,28 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'outCount',
+        field: 'cardStatusCount',
         label: '个体户建卡',
         search: {
           show: false
         }
       },
       {
-        field: 'inCount',
+        field: 'soar',
         label: '腾空',
         search: {
           show: false
         },
         children: [
           {
-            field: 'inCount',
+            field: 'houseSoarStatusCount',
             label: '房屋腾空',
             search: {
               show: false
             }
           },
           {
-            field: 'inCount',
+            field: 'landSoarStatusCount',
             label: '土地腾空',
             search: {
               show: false
@@ -229,7 +274,7 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'inCount',
+        field: 'agreementStatusCount',
         label: '动迁协议',
         search: {
           show: false
@@ -260,10 +305,10 @@ const getParamsKey = (key: string) => {
  */
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
   const num = tableObject.tableList.filter(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
   ).length
   const index = tableObject.tableList.findIndex(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
   )
   if (column && columnIndex < 5) {
     if (index === rowIndex) {
@@ -337,10 +382,18 @@ const findRecursion = (data, code, callback) => {
 const onBack = () => {
   back()
 }
+
 onMounted(() => {
-  getVillageTree()
+  // getVillageTree()
   setSearchParams({})
 })
+// computed: {
+//   tableListWithIndex() {
+//     return this.tableObject.tableList.map((item, index) => {
+//       return { ...item, index: index + 1 }
+//     })
+//   }
+// }
 </script>
 <style lang="less" scoped>
 .search-form-wrap {
