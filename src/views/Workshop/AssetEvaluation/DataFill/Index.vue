@@ -141,7 +141,7 @@
 
       <!-- 村集体 小型专项及农副业设施评估 -->
       <SpecialEquipment
-        v-show="type === 'villageInfoC' && tabCurrentId === TabIds[6]"
+        v-show="type === 'VillageInfoC' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -259,26 +259,34 @@ onMounted(() => {
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
-    } else {
+    } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
+    } else {
+      tabsType.value = [...LandlordTabs, ...LandlordLandTabs]
     }
   } else if (type === 'Enterprise') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = EnterpriseTabs
-    } else {
+    } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
+    } else {
+      tabsType.value = [...EnterpriseTabs, ...LandlordLandTabs]
     }
   } else if (type === 'IndividualB') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = IndividualBTabs
-    } else {
+    } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
+    } else {
+      tabsType.value = [...IndividualBTabs, ...LandlordLandTabs]
     }
   } else if (type === 'VillageInfoC') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = VillageInfoCTabs
-    } else {
+    } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
+    } else {
+      tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
     }
   }
 })

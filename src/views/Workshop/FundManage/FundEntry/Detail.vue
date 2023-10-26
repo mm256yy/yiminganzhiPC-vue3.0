@@ -34,7 +34,7 @@
 
         <div class="row">
           <div class="label">收款方：</div>
-          <div class="value">{{ detail.payee ? fmtDict(dictObj[326], detail.payee) : '-' }}</div>
+          <div class="value">{{ detail.payee ? fmtDict(dictObj[395], detail.payee) : '-' }}</div>
         </div>
 
         <div class="row">
