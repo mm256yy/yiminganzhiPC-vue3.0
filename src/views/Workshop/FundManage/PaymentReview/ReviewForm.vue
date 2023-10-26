@@ -211,7 +211,7 @@
               <div class="icon-box">
                 <div class="disabled"></div>
                 <img
-                  v-if="item.type == 1"
+                  v-if="item.status == 1"
                   src="@/assets/imgs/icon_finish.png"
                   width="18"
                   height="18"

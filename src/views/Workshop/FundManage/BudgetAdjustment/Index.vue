@@ -376,7 +376,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: false
