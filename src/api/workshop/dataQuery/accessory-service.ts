@@ -6,7 +6,7 @@ export const getAccessoryListApi = (
   params: Partial<AccessoryDtoType>
 ): Promise<TableResponse<AccessoryDtoType>> => {
   return request.get({
-    url: '/query/queryAppendant',
+    url: '/resultForms/queryAppendant',
     params
   })
 }

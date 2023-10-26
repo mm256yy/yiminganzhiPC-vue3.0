@@ -6,7 +6,7 @@ export const getVillageCollectiveListApi = (
   params: Partial<VillageCollectiveDtoType>
 ): Promise<TableResponse<VillageCollectiveDtoType>> => {
   return request.get({
-    url: '/query/queryVillage',
+    url: '/resultForms/queryVillage',
     params
   })
 }

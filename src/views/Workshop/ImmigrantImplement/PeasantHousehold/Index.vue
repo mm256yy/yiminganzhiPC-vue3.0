@@ -315,7 +315,7 @@ const schema = reactive<CrudSchema[]>([
   //   showOverflowTooltip: false
   // },
   {
-    field: 'grid',
+    field: 'gridmanName',
     label: '所属网格',
     search: {
       show: false
@@ -401,7 +401,6 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
-  console.log('data:', data)
   // 处理参数
   let params = {
     ...data

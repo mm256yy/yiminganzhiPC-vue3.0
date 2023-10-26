@@ -23,7 +23,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家
+            共 <span class="num">{{ tableObject.total }}</span> 家
           </div>
         </div>
       </div>
@@ -132,6 +132,7 @@ const getLandlordHeadInfo = async () => {
 onMounted(() => {
   getVillageTree()
   getLandlordHeadInfo()
+  console.log('hhll', tableObject)
 })
 
 const schema = reactive<CrudSchema[]>([

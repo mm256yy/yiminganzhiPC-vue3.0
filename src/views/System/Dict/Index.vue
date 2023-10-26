@@ -3,49 +3,40 @@
     <div class="flex">
       <div class="min-w-560px w-36% pr-5px mr-8px">
         <ContentWrap title="字典管理">
-          <div class="flex justify-between flex-wrap mb-5px">
-            <div class="mr-5px">
-              <ElInput
-                v-model="blurry"
-                placeholder="请输入字典名称或描述"
-                class="mr-10px"
-                style="width: 200px"
-              />
-              <ElSelect v-model="dictGroup" class="mr-10px" placeholder="请选择分组">
-                <ElOption v-for="item in dictGroupList" :key="item" :label="item" :value="item" />
-              </ElSelect>
-              <ElButton type="primary" @click="searchDict"> 查询 </ElButton>
-              <ElButton @click="reset">重置</ElButton>
-            </div>
-            <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddDict"
-              >新增</ElButton
-            >
+          <div class="flex flex-wrap mb-10px mr-5px">
+            <ElInput v-model="blurry" placeholder="请输入字典名称或描述" class="mr-10px !w-180px" />
+            <ElSelect v-model="dictGroup" class="mr-10px !w-120px" placeholder="请选择分组">
+              <ElOption v-for="item in dictGroupList" :key="item" :label="item" :value="item" />
+            </ElSelect>
+            <ElButton type="primary" @click="searchDict"> 查询 </ElButton>
+            <ElButton @click="reset">重置</ElButton>
+            <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddDict">
+              新增
+            </ElButton>
           </div>
-          <div>
-            <ContentWrap>
-              <Table
-                v-model:current-page="tableObject.currentPage"
-                v-model:page-size="tableObject.size"
-                :loading="tableObject.loading"
-                :pagination="{
-                  total: tableObject.total
-                }"
-                highlight-current-row
-                border
-                header-align="center"
-                align="center"
-                :data="tableObject.tableList"
-                :span-method="objectSpanMethod"
-                @register="register"
-                @row-click="handleRowClick"
-                :show-overflow-tooltip="false"
-              >
-                <template v-if="appStore.getIsSysAdmin" #action="{ row }">
-                  <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
-                </template>
-              </Table>
-            </ContentWrap>
-          </div>
+
+          <Table
+            v-model:current-page="tableObject.currentPage"
+            v-model:page-size="tableObject.size"
+            :loading="tableObject.loading"
+            :pagination="{
+              total: tableObject.total
+            }"
+            highlight-current-row
+            border
+            header-align="center"
+            align="center"
+            :data="tableObject.tableList"
+            :span-method="objectSpanMethod"
+            @register="register"
+            @row-click="handleRowClick"
+            :show-overflow-tooltip="false"
+            :height="560"
+          >
+            <template v-if="appStore.getIsSysAdmin" #action="{ row }">
+              <TableEditColumn :row="row" @edit="onEdit" @delete="onDelete" />
+            </template>
+          </Table>
         </ContentWrap>
       </div>
       <ContentWrap class="flex flex-col flex-grow" title="字典详情">

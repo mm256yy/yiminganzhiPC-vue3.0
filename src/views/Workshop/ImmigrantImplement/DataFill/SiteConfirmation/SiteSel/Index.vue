@@ -37,7 +37,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
               <ElOption
-                v-for="item in landNoOptions"
+                v-for="item in row.landNoOptions"
                 :key="item.id"
                 :label="item.name"
                 :value="item.name"
@@ -70,7 +70,11 @@
           prop="settleAddress"
           align="center"
           header-align="center"
-        />
+        >
+          <template #default="{ row }">
+            {{ getSettleAddress(row) }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="类型"
           width="100"
@@ -89,13 +93,18 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn
-          label="房号"
-          width="140"
-          prop="roomNo"
-          align="center"
-          header-align="center"
-        />
+        <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+              <ElOption
+                v-for="item in row.roomNoOptions"
+                :key="item.id"
+                :label="item.code"
+                :value="item.code"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="储藏室编号"
           width="120"
@@ -106,7 +115,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.storeroomNo">
               <ElOption
-                v-for="item in storeroomNoOptions"
+                v-for="item in row.storeroomNoOptions"
                 :key="item.id"
                 :label="item.name"
                 :value="item.name"
@@ -125,7 +134,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.carNo">
               <ElOption
-                v-for="item in carNoOptions"
+                v-for="item in row.carNoOptions"
                 :key="item.id"
                 :label="item.name"
                 :value="item.name"
@@ -221,6 +230,8 @@ import {
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
+// import { deepClone } from '@/utils'
+import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 
 interface PropsType {
   doorNo: string
@@ -236,16 +247,38 @@ const tableData = ref<any[]>([])
 const dialog = ref<boolean>(false)
 const roomNoDialog = ref<boolean>(false)
 const emit = defineEmits(['updateData'])
-
-const landNoOptions = ref<any[]>([]) // 宅基地地块编号选项列表
-const storeroomNoOptions = ref<any[]>([]) // 储藏室编号选项列表
-const carNoOptions = ref<any[]>([]) // 车位号选项列表
 const currentRow = ref<any>({}) // 当前行数据
 
 // 获取列表数据
 const getList = () => {
   getImmigrantChooseHouseApi(props.doorNo).then((res) => {
-    tableData.value = res.content
+    const arr: any = []
+    if (res && res?.content.length) {
+      res.content.map((item: any) => {
+        arr.push({
+          ...item,
+          landNoOptions: [],
+          storeroomNoOptions: [],
+          carNoOptions: [],
+          roomNoOptions: []
+        })
+      })
+      arr.map((item: any) => {
+        getlandNoList(item.settleAddress).then((res: any) => {
+          item.landNoOptions = [...res]
+        })
+        getStoreroomNoList(item.settleAddress).then((res: any) => {
+          item.storeroomNoOptions = [...res]
+        })
+        getcarNoList(item.settleAddress).then((res: any) => {
+          item.carNoOptions = [...res]
+        })
+        getHouseConfigApi(props.baseInfo.projectId, 2, item.settleAddress).then((res: any) => {
+          item.roomNoOptions = [...res.content]
+        })
+      })
+      tableData.value = [...arr]
+    }
   })
 }
 
@@ -274,30 +307,60 @@ const getSettleAddress = (data: any) => {
   }
 }
 
-// 获取宅基地地块编号选项列表
-const getlandNoList = (name?: string) => {
-  getChooseConfigApi(props.baseInfo.projectId, 2, name).then((res: any) => {
-    landNoOptions.value = res.content
-  })
+// 获取宅基地地块编号选项列表, async 返回的是一个 promise
+const getlandNoList = async (settleAddress?: string) => {
+  let arr: any = []
+  if (settleAddress) {
+    let params = {
+      projectId: props.baseInfo.projectId,
+      type: 2,
+      settleAddress
+    }
+    const res = await getChooseConfigApi(params)
+    if (res && res?.content.length) {
+      arr = [...res.content]
+    }
+  }
+  return arr
 }
 
 // 获取储藏室编号选项列表
-const getStoreroomNoList = (name?: string) => {
-  getChooseConfigApi(props.baseInfo.projectId, 3, name).then((res: any) => {
-    storeroomNoOptions.value = res.content
-  })
+const getStoreroomNoList = async (settleAddress?: string) => {
+  let arr: any = []
+  if (settleAddress) {
+    let params = {
+      projectId: props.baseInfo.projectId,
+      type: 3,
+      settleAddress
+    }
+    const res = await getChooseConfigApi(params)
+    if (res && res?.content.length) {
+      arr = [...res.content]
+    }
+  }
+  return arr
 }
 
 // 获取车位编号选项列表
-const getcarNoList = (name?: string) => {
-  getChooseConfigApi(props.baseInfo.projectId, 4, name).then((res: any) => {
-    carNoOptions.value = res.content
-  })
+const getcarNoList = async (settleAddress?: string) => {
+  let arr: any = []
+  if (settleAddress) {
+    let params = {
+      projectId: props.baseInfo.projectId,
+      type: 4,
+      settleAddress
+    }
+    const res = await getChooseConfigApi(params)
+    if (res && res?.content.length) {
+      arr = [...res.content]
+    }
+  }
+  return arr
 }
 
 const enterRoomNo = (row: any) => {
   roomNoDialog.value = true
-  currentRow.value = row
+  currentRow.value = { ...row }
 }
 
 // 归档
@@ -312,6 +375,15 @@ const onDocumentation = () => {
 
 // 保存
 const onSave = (row: any) => {
+  if (row.landNoOptions) {
+    Reflect.deleteProperty(row, 'landNoOptions')
+  }
+  if (row.storeroomNoOptions) {
+    Reflect.deleteProperty(row, 'storeroomNoOptions')
+  }
+  if (row.carNoOptions) {
+    Reflect.deleteProperty(row, 'carNoOptions')
+  }
   saveImmigrantChooseHouseApi(row).then(() => {
     ElMessage.success('操作成功！')
     getList()
@@ -324,16 +396,10 @@ const onSave = (row: any) => {
  * @param flag
  */
 const close = (params: any[], type: string) => {
-  console.log('params:', params)
   if (type === 'documentation') {
     dialog.value = false
   } else if (type === 'roomNo') {
     roomNoDialog.value = false
-    if (params[0] === true) {
-      getlandNoList()
-      getStoreroomNoList()
-      getcarNoList()
-    }
   }
   if (params[0] === true) {
     getList()
@@ -342,9 +408,6 @@ const close = (params: any[], type: string) => {
 
 onMounted(() => {
   getList()
-  getlandNoList()
-  getStoreroomNoList()
-  getcarNoList()
 })
 </script>
 <style lang="less" scoped>

@@ -29,3 +29,9 @@ export interface DocumentationType {
   agricultureOtherPic: string
   [key: string]: any
 }
+
+export interface ConfigDtoType {
+  projectId: number
+  type: number
+  settleAddress?: string
+}

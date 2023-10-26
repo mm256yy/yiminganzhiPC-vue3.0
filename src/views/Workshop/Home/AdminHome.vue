@@ -4,7 +4,7 @@
       <div class="search-input">
         <input type="span" placeholder="请输入户号、联系方式" />
       </div>
-      <div class="search-btn">
+      <div class="search-btn" @click="toSearch">
         <img class="search-icon" src="@/assets/imgs/icon_search_white.png" mode="aspectFit" />
         <span class="search-txt">查询</span>
       </div>
@@ -297,6 +297,8 @@ import MessageNotice from './components/MessageNotice.vue'
 import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 import type { StatisticsDtoType } from '@/api/home-types'
 import { getImplementationStatistics } from '@/api/home-service'
+import { useRouter } from 'vue-router'
+const { push } = useRouter()
 
 const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
 const statisticsObj = ref<StatisticsDtoType>()
@@ -312,6 +314,13 @@ const toLinkParams = (name: string, params: any) => {
   })
 }
 
+const toTarget = (routeName: string, query = {}) => {
+  push({
+    name: routeName,
+    query
+  })
+}
+
 // 统计
 const getStatistics = async () => {
   try {
@@ -320,6 +329,10 @@ const getStatistics = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const toSearch = () => {
+  toTarget('PeasantHouseholdImp')
 }
 
 onMounted(() => {
@@ -372,6 +385,7 @@ onMounted(() => {
       width: 100px;
       height: 48px;
       overflow: hidden;
+      cursor: pointer;
       background: linear-gradient(270deg, #ffb11a 0%, #ff9432 100%);
       border-radius: 0 8px 8px 0;
       justify-content: center;

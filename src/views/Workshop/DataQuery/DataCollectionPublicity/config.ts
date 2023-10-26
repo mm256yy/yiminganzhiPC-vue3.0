@@ -38,6 +38,12 @@ export const TabDatas = [
     id: TabDataIds[5],
     icon: 'tabler:grave-2',
     active: false
+  },
+  {
+    name: '实物汇总表',
+    id: TabDataIds[6],
+    icon: 'tabler:grave-2',
+    active: false
   }
 ]
 
@@ -48,5 +54,6 @@ export const exportTypes = {
   tree: 'tree', // 零星(林)果木公示
   village: 'village', // 村集体公示
   ground: 'ground', // 土地公示
-  grave: 'grave' // 坟墓公示
+  grave: 'grave', // 坟墓公示
+  achievements: 'achievements' //实物汇总表
 }

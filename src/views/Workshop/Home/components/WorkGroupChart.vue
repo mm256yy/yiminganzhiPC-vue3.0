@@ -161,6 +161,7 @@ const tabChange = (id: number) => {
 const statusTabChange = (id: number) => {
   statusTab.value = id
   tabs.value = statusTab.value === 0 ? tabs1.value : tabs2.value
+  currentTab.value = 0 // 状态tab切换重置currentTab
   getTopGroupApi()
 }
 

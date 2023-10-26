@@ -257,8 +257,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
-    label: '填报人',
+    field: 'gridmanName',
+    label: '所属网格',
     search: {
       show: false
     }
@@ -266,6 +266,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'schedule',
     label: '完成进度',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'reportUserName',
+    label: '填报人',
     search: {
       show: false
     }

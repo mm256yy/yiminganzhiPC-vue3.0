@@ -52,7 +52,7 @@ const emit = defineEmits(['close'])
 
 const { required } = useValidator()
 const loading = ref(false)
-const currentRow = ref(props.row)
+const currentRow = computed(() => props.row)
 const parentOrgId = ref<number | undefined>(undefined)
 const defaultProps = reactive({
   children: 'children',

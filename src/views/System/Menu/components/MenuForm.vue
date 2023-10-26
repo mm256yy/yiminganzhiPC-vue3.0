@@ -6,6 +6,7 @@
     @close="onClose"
     alignCenter
     appendToBody
+    :close-on-click-modal="false"
   >
     <ElForm ref="formRef" :model="form" label-width="80px" :rules="rules">
       <ElFormItem label="菜单类型" prop="type">

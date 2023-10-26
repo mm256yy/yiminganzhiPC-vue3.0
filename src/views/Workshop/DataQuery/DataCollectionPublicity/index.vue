@@ -48,6 +48,9 @@
 
       <!-- 坟墓公示 -->
       <Grave v-else-if="tabCurrentId === TabDataIds[5]" @export="onExport" />
+
+      <!-- 实物成果汇总表列表 -->
+      <Achievements v-else-if="tabCurrentId === TabDataIds[6]" @export="onExport" />
     </div>
 
     <!-- 数据导出 -->
@@ -101,6 +104,7 @@ import FruitWood from './FruitWood/Index.vue' // 零星(林)果木公示
 import VillageCollective from './VillageCollective/Index.vue' // 村集体公示
 import Land from './Land/Index.vue' // 土地公示
 import Grave from './Grave/Index.vue' // 坟墓公示
+import Achievements from './Achievements/Index.vue' //  实物成果汇总表列表
 
 import { exportPublicityApi } from '@/api/workshop/dataQuery/common-service'
 

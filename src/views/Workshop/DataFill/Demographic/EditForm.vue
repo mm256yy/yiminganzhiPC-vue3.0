@@ -195,7 +195,7 @@
         ></ElCol>
         <ElCol :span="8">
           <ElFormItem label="职业" prop="occupation">
-            <ElCascader v-model="form.occupation" :options="occupationOptions" />
+            <ElCascader class="!w-full" v-model="form.occupation" :options="occupationOptions" />
           </ElFormItem>
         </ElCol>
       </ElRow>

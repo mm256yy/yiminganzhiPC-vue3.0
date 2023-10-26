@@ -80,7 +80,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -195,7 +195,7 @@ const defaultRow = {
 const onReportData = async () => {
   const result = await saveImmigrantFillingApi({
     doorNo: props.doorNo,
-    landStatus: '1'
+    landSeedlingStatus: '1'
   })
   if (result && Array.isArray(result)) {
     reportDialog.value = true
@@ -284,6 +284,12 @@ const onSave = () => {
     getList()
     emit('updateData')
   })
+}
+
+// 自动计算评估金额
+const getModelValue = (row: any) => {
+  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
+  return totalPrice
 }
 
 onMounted(() => {

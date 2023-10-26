@@ -25,8 +25,8 @@
             <ElFormItem label="总计建筑面积：" prop="totalArea">
               <ElInput v-model="formData.totalArea" placeholder="输入">
                 <template #append>㎡</template>
-              </ElInput>
-            </ElFormItem>
+              </ElInput> </ElFormItem
+            >2
             <ElFormItem label="住宅建筑面积：" prop="houseArea">
               <ElInput v-model="formData.houseArea" placeholder="输入">
                 <template #append>㎡</template>

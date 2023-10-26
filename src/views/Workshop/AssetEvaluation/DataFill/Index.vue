@@ -38,6 +38,13 @@
           >
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
+
+            <Icon
+              icon="gg:check-o"
+              color="#3e73ec"
+              class="ml-[5px]"
+              v-if="baseInfo.implementFillStatus === '1'"
+            />
           </div>
         </div>
       </div>
@@ -88,6 +95,17 @@
         @update-data="getLandlordInfo"
       />
 
+      <!-- 坟墓评估 -->
+      <!-- <grave
+        v-show="type == 'Landlord' && tabCurrentId === TabIds[6]"
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      /> -->
+
       <!-- 土地基本情况评估 -->
       <land-basic-info
         v-show="tabCurrentId === TabIds[4]"
@@ -102,17 +120,6 @@
       <!-- 土地青苗及附着物评估 -->
       <land-green-seedlings
         v-show="tabCurrentId === TabIds[5]"
-        :doorNo="doorNo"
-        :householdId="Number(householdId)"
-        :projectId="Number(projectId)"
-        :uid="uid"
-        :baseInfo="baseInfo"
-        @update-data="getLandlordInfo"
-      />
-
-      <!-- 坟墓评估 -->
-      <grave
-        v-show="type == 'Landlord' && tabCurrentId === TabIds[6]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"
@@ -146,12 +153,19 @@
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
-import { LandlordTabs, TabIds, EnterpriseTabs, IndividualBTabs, VillageInfoCTabs } from './config'
-
+import {
+  LandlordTabs,
+  TabIds,
+  EnterpriseTabs,
+  IndividualBTabs,
+  VillageInfoCTabs,
+  LandlordLandTabs
+} from './config'
+import { useAppStore } from '@/store/modules/app'
 import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -162,9 +176,15 @@ import HouseAccessory from './components/HouseAccessory/Index.vue' // 资产评�
 import FruitTree from './components/FruitTree/Index.vue' // 资产评估 -- 零星林（果）木评估
 import LandBasicInfo from './components/LandBasicInfo/Index.vue' // 资产评估 -- 土地基本情况评估
 import LandGreenSeedlings from './components/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
-import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
+// import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
 import Equipment from './components/Equipment/Index.vue' // 资产评估 -- (企业/个体工商户)设施设备评估
 import SpecialEquipment from './components/SpecialEquipment/Index.vue' // 资产评估 -- (村集体)小型专项及农副业设施评估
+
+// 角色代码为字典值
+enum RoleCodeType {
+  assessor = 'assessor',
+  assessorland = 'assessorland'
+}
 
 const titleMsg = (type: string, index: number) => {
   if (type == 'Landlord') {
@@ -196,6 +216,26 @@ const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(TabIds[0])
 const { doorNo, householdId, type, projectId, uid } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const appStore = useAppStore()
+const userInfo = computed(() => appStore.getUserInfo)
+const currentProjectId = appStore.currentProjectId
+const role = ref<RoleCodeType>(RoleCodeType.assessor) // 角色代码 assessor 房屋评估的 assessorland 土地评估的
+
+/**
+ * 判断角色
+ */
+const getRole = () => {
+  if (userInfo.value) {
+    const project = userInfo.value.projectUsers.find((x: any) => x.projectId === currentProjectId)
+    const role =
+      project && project.roles && project.roles.length
+        ? (project.roles[0].code as RoleCodeType)
+        : RoleCodeType.assessor
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return RoleCodeType.assessor
+}
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -215,14 +255,31 @@ const onReportTabClick = (tabItem) => {
 }
 
 onMounted(() => {
+  role.value = getRole()
   if (type === 'Landlord') {
-    tabsType.value = LandlordTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = LandlordTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'Enterprise') {
-    tabsType.value = EnterpriseTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = EnterpriseTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'IndividualB') {
-    tabsType.value = IndividualBTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = IndividualBTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   } else if (type === 'VillageInfoC') {
-    tabsType.value = VillageInfoCTabs
+    if (role.value === RoleCodeType.assessor) {
+      tabsType.value = VillageInfoCTabs
+    } else {
+      tabsType.value = LandlordLandTabs
+    }
   }
 })
 

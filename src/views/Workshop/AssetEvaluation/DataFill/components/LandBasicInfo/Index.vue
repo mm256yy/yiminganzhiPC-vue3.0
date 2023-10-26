@@ -21,7 +21,7 @@
           </ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
+      <ElTable :data="tableData" style="width: 100%" @cell-click="cellHandleClick">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
           label="组别"
@@ -305,6 +305,9 @@ const getList = () => {
     size: 1000
   }
   getLandBasicInfoListApi(params).then((res) => {
+    res.content.forEach((item) => {
+      item.valuationAmount = item.valuationPrice * item.landArea
+    })
     tableData.value = res.content
   })
 }
@@ -373,6 +376,10 @@ const onSave = () => {
 onMounted(() => {
   getList()
 })
+//计算评估金额
+const cellHandleClick = (row: Record<string, any>) => {
+  row.valuationAmount = row.valuationPrice * row.landArea
+}
 </script>
 <style lang="less" scoped>
 .btn-txt {

@@ -194,69 +194,52 @@ const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
   console.log(row, column)
+  // if (columnIndex === 0) {
+  //   if (rowIndex === 0) {
+  //     return {
+  //       rowspan: 10,
+  //       colspan: 1
+  //     }
+  //   } else if (rowIndex === 10) {
+  //     return {
+  //       rowspan: 17,
+  //       colspan: 1
+  //     }
+  //   } else if (rowIndex === 27) {
+  //     return {
+  //       rowspan: 7,
+  //       colspan: 1
+  //     }
+  //   } else {
+  //     return {
+  //       rowspan: 0,
+  //       colspan: 0
+  //     }
+  //   }
+  // }
+
   if (columnIndex === 0) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 10,
-        colspan: 1
-      }
-    } else if (rowIndex === 10) {
-      return {
-        rowspan: 17,
-        colspan: 1
-      }
-    } else if (rowIndex === 27) {
-      return {
-        rowspan: 7,
-        colspan: 1
-      }
-    } else {
+    // 如果与上一个分组名称相同，被合并
+    if (rowIndex !== 0 && row.type === feeTableData.value[rowIndex - 1].type) {
       return {
         rowspan: 0,
         colspan: 0
       }
     }
-  } else if (columnIndex === 1) {
-    if (rowIndex === 17) {
-      return {
-        rowspan: 3,
-        colspan: 1
+    // 统计新的分组所占行数
+    let index = rowIndex + 1
+    let rowspan = 1
+    while (index < tableObject.tableList.length) {
+      if (row.type === tableObject.tableList[index].type) {
+        rowspan++
+        index++
+      } else {
+        break
       }
-    } else if (rowIndex === 18) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 19) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 20) {
-      return {
-        rowspan: 2,
-        colspan: 1
-      }
-    } else if (rowIndex === 21) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 22) {
-      return {
-        rowspan: 3,
-        colspan: 1
-      }
-    } else if (rowIndex === 23) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
-    } else if (rowIndex === 24) {
-      return {
-        rowspan: 1,
-        colspan: 0
-      }
+    }
+    return {
+      rowspan: rowspan,
+      colspan: 1
     }
   }
 }
