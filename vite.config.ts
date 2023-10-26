@@ -107,6 +107,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
+          },
+          {
+            entry: 'src/h5/ld/main.ts',
+            filename: 'ld.html',
+            template: 'ld.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
           }
         ]
       })
@@ -194,7 +206,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs'
+        'dayjs' 
       ]
     }
   }

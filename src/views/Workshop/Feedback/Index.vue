@@ -144,6 +144,7 @@ const schema = reactive<CrudSchema[]>([
       component: 'DatePicker',
       componentProps: {
         type: 'daterange',
+        valueFormat: 'YYYY-MM-DD',
         startPlaceholder: '请选择开始时间',
         endPlaceholder: '请选择结束时间'
       }
@@ -291,11 +292,6 @@ const onSearch = (data) => {
   let params = {
     projectId,
     ...searchData
-  }
-
-  if (params.createdDate) {
-    // 拿到对应的参数key
-    params.createdDate = [dayjs(params.createdDate[0]), dayjs(params.createdDate[1])]
   }
 
   setSearchParams({ ...params })

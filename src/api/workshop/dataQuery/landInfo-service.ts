@@ -6,7 +6,7 @@ export const getLandInfoApi = (
   params: Partial<LandInfoType>
 ): Promise<TableResponse<LandInfoType>> => {
   return request.get({
-    url: '/query/queryGround',
+    url: '/resultForms/queryGround',
     params
   })
 }

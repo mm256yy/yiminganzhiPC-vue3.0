@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col app-container">
-    <div class="flex-col flex-auto group-policies-detail">
+    <!-- <div class="flex-col flex-auto group-policies-detail">
       <div class="section">
         <div class="section-title">享受主体</div>
         <div class="section-content">
@@ -50,12 +50,28 @@
           嵊州市：83126216 新昌县：86229808 诸暨市：89075670
         </div>
       </div>
-    </div>
+    </div> -->
+    <div v-html="dataList.title" style="text-align: center"></div>
+    <div v-html="dataList.content"></div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ElImage } from 'element-plus'
-import iconPaperClipSrc from '@/h5/assets/imgs/icon_paper_clip.png'
+// import { ElImage } from 'element-plus'
+// import iconPaperClipSrc from '@/h5/assets/imgs/icon_paper_clip.png'
+import { getPolicyLawId } from '../service'
+import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue'
+let Route = useRoute()
+let dataList: any = ref({})
+let getPolicyLawIds = async () => {
+  let data = await getPolicyLawId(Route.query.id)
+  console.log(data)
+  dataList.value = data
+  return data
+}
+onMounted(() => {
+  getPolicyLawIds()
+})
 </script>
 
 <style lang="less" scoped>

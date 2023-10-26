@@ -12,21 +12,25 @@ import {
  */
 export const getFundDetailReportListApi = (
   query: Partial<FundDetailReportType>
-): Promise<TableResponse<FundDetailReportType>> => {
-  return request.get({ url: '/news', params: query })
+): Promise<FundDetailReportType[]> => {
+  return request.get({ url: '/fundsForms/fundDetail', params: query })
 }
 
 /**
  * 查询居民户资金报表
  */
+
+// fundsForms/peasantHouseholdCard
+
 export const getHouseholdReportListApi = (
   query: Partial<HouseholdReportType>
 ): Promise<TableResponse<HouseholdReportType>> => {
-  return request.get({ url: '/news', params: query })
+  return request.get({ url: '/fundsForms/peasantHouseholdCard', params: query })
 }
 
 /**
  * 查询企业资金报表
+ * 暂无
  */
 export const getEnterpriseReportListApi = (
   query: Partial<EnterpriseReportType>
@@ -36,6 +40,7 @@ export const getEnterpriseReportListApi = (
 
 /**
  * 查询个体户资金报表
+ * 暂无
  */
 export const getIndividualBReportListApi = (
   query: Partial<IndividualBReportType>
@@ -45,6 +50,7 @@ export const getIndividualBReportListApi = (
 
 /**
  * 查询村集体资金报表
+ * 暂无
  */
 export const getVillageReportListApi = (
   query: Partial<VillageReportType>

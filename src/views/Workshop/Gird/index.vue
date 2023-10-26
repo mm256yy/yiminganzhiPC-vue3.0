@@ -33,10 +33,10 @@
   </div>
   <div class="data-fill-body">
     <!-- 人口核定 -->
-    <Resident v-if="tabCurrentId === 0" ref="vill" />
-    <Individuality v-if="tabCurrentId === 1" ref="vill" />
-    <Enterprise v-if="tabCurrentId === 2" ref="vill" />
-    <VillageCollective v-if="tabCurrentId === 3" ref="vill" />
+    <Resident v-if="tabCurrentId === 0" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
+    <Individuality v-if="tabCurrentId === 1" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
+    <Enterprise v-if="tabCurrentId === 2" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
+    <VillageCollective v-if="tabCurrentId === 3" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
     <!-- 1 -->
   </div>
 </template>
@@ -51,6 +51,7 @@ import VillageCollective from './GirdData/VillageCollective.vue'
 import Individuality from './GirdData/Individuality.vue'
 import Enterprise from './GirdData/Enterprise.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
+
 // const tabsList = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const tabListId = ref<number>(0)
@@ -87,6 +88,12 @@ const subTabsList = [
     name: '未分配'
   }
 ]
+const tabObject = {
+  0: '居民户',
+  1: '个体户',
+  2: '企业',
+  3: '村集体'
+}
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
     return

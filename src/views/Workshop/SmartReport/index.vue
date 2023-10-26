@@ -38,7 +38,7 @@
                   }"
                   v-for="(deepItem, deepIndex) of deepChildren"
                   :key="deepIndex"
-                  @click="deepChooseItem(deepItem)"
+                  @click="deepChooseItem(deepItem, { id: deepItem.query })"
                 >
                   <span>{{ deepItem.label }}</span>
                 </div>
@@ -73,22 +73,22 @@ let navList = reactive<any>([
         children: [
           {
             label: '人口房屋',
-            value: '',
+            value: 'PopulationHousing',
             active: false
           },
           {
             label: '附属物',
-            value: '',
+            value: 'Accessory',
             active: false
           },
           {
             label: '零星林(果)木',
-            value: '',
+            value: 'FruitWood',
             active: false
           },
           {
             label: '实物成果汇总',
-            value: '',
+            value: 'Achievements',
             active: false
           }
         ]
@@ -98,17 +98,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '房屋/附属物/零星林(果)木',
-            value: '',
+            value: 'VillageCollective',
             active: false
           },
           {
             label: '土地',
-            value: '',
+            value: 'Land',
             active: false
           },
           {
             label: '坟墓',
-            value: '',
+            value: 'Grave',
             active: false
           }
         ]
@@ -125,17 +125,20 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'physicalResults',
+                query: '1',
                 active: false
               },
               {
                 label: '房屋及其附属物',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '2',
                 active: false
               },
               {
                 label: '零星林(果)木',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '3',
                 active: false
               }
             ]
@@ -147,12 +150,14 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'physicalResults',
+                query: '4',
                 active: false
               },
               {
                 label: '附属物',
-                value: '',
+                value: 'PhysicaFrom',
+                query: '5',
                 active: false
               }
             ]
@@ -164,17 +169,17 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'waterbasicreport',
                 active: false
               },
               {
                 label: '房屋',
-                value: '',
+                value: 'waterhousereport',
                 active: false
               },
               {
                 label: '附属物',
-                value: '',
+                value: 'waterappendreport',
                 active: false
               }
             ]
@@ -186,7 +191,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '探矿权汇总表',
-                value: '',
+                value: 'explorationRight',
                 active: false
               }
             ]
@@ -198,17 +203,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '交通工程设施',
-            value: '',
+            value: 'transportationFacilities',
             active: false
           },
           {
             label: '输变电工程设施',
-            value: '',
+            value: 'transmissionFacilities',
             active: false
           },
           {
             label: '文物古迹',
-            value: '',
+            value: 'culturalRelic',
             active: false
           }
         ]
@@ -224,12 +229,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'telecomfacilitreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'telecomhousereport',
                 active: false
               }
             ]
@@ -240,12 +245,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'moveFacilities',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'moveAppendage',
                 active: false
               }
             ]
@@ -256,12 +261,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'uniconfacilityreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'unicomappendreport',
                 active: false
               }
             ]
@@ -272,7 +277,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'ironFacilities',
                 active: false
               }
             ]
@@ -283,12 +288,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '设施汇总',
-                value: '',
+                value: 'broadeacilityreport',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'broadappendreport',
                 active: false
               }
             ]
@@ -299,7 +304,7 @@ let navList = reactive<any>([
             children: [
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'hydrographicStation',
                 active: false
               }
             ]
@@ -310,12 +315,12 @@ let navList = reactive<any>([
             children: [
               {
                 label: '基本情况',
-                value: '',
+                value: 'religiousInformation',
                 active: false
               },
               {
                 label: '房屋及其附属物设备汇总',
-                value: '',
+                value: 'religiousAppendage',
                 active: false
               }
             ]
@@ -332,12 +337,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户',
-            value: '',
+            value: 'FundPeople',
             active: false
           },
           {
             label: '资金使用详细',
-            value: '',
+            value: 'FundUseDetail',
             active: false
           }
         ]
@@ -347,7 +352,7 @@ let navList = reactive<any>([
         children: [
           {
             label: '村集体',
-            value: '',
+            value: 'FundVillage',
             active: false
           }
         ]
@@ -357,17 +362,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '企业',
-            value: '',
+            value: 'FundEnterprise',
             active: false
           },
           {
             label: '个体户',
-            value: '',
+            value: 'FundIndividualB',
             active: false
           },
           {
             label: '水电站',
-            value: '',
+            value: 'FundHydropower',
             active: false
           }
         ]
@@ -377,37 +382,37 @@ let navList = reactive<any>([
         children: [
           {
             label: '电信工程',
-            value: '',
+            value: 'telecommunication',
             active: false
           },
           {
             label: '移动工程',
-            value: '',
+            value: 'moveExcel',
             active: false
           },
           {
             label: '联通工程',
-            value: '',
+            value: 'unicom',
             active: false
           },
           {
             label: '铁打工程',
-            value: '',
+            value: 'Irontower',
             active: false
           },
           {
             label: '广播电视工程',
-            value: '',
+            value: 'radioExcel',
             active: false
           },
           {
             label: '水文站',
-            value: '',
+            value: 'hydrology',
             active: false
           },
           {
             label: '宗教',
-            value: '',
+            value: 'religion',
             active: false
           }
         ]
@@ -422,12 +427,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '生产安置意愿',
-            value: '',
+            value: 'proHouseReport',
             active: false
           },
           {
             label: '搬迁安置意愿',
-            value: '',
+            value: 'moveHouseReport',
             active: false
           }
         ]
@@ -442,12 +447,12 @@ let navList = reactive<any>([
         children: [
           {
             label: '居民户按区域',
-            value: '',
+            value: 'residentRegion',
             active: false
           },
           {
-            label: '资金使用详细',
-            value: '',
+            label: '居民户按工作组',
+            value: 'residentWork',
             active: false
           }
         ]
@@ -457,17 +462,17 @@ let navList = reactive<any>([
         children: [
           {
             label: '企业',
-            value: '',
+            value: 'enterprisereport',
             active: false
           },
           {
             label: '个体户按区域',
-            value: '',
+            value: 'individualregionreport',
             active: false
           },
           {
             label: '个体户按工作区',
-            value: '',
+            value: 'individualworkreport',
             active: false
           }
         ]
@@ -476,13 +481,8 @@ let navList = reactive<any>([
         label: '专业项目',
         children: [
           {
-            label: '交通/电力/移动联通铁塔电信/文物',
-            value: '',
-            active: false
-          },
-          {
-            label: '寺庙/水文站',
-            value: '',
+            label: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站',
+            value: 'comprehensivereport',
             active: false
           }
         ]
@@ -519,11 +519,11 @@ function chooseItem(item: any, x: any) {
   } else {
     // 路由跳转
 
-    goLink(item.value)
+    goLink(item.value, {})
   }
 }
 
-const deepChooseItem = (item) => {
+const deepChooseItem = (item, query = {}) => {
   for (let a of navList) {
     for (let b of a.body) {
       for (let c of b.children) {
@@ -538,18 +538,19 @@ const deepChooseItem = (item) => {
   item.active = true
   // 路由跳转
 
-  goLink(item.value)
+  goLink(item.value, query)
 }
 
-const goLink = (routerName: string) => {
-  console.log('路由名称:', routerName)
+const goLink = (routerName: string, query: any) => {
+  console.log('路由名称:', routerName, query)
   if (!routerName) return
   // router.push({
   //   name: routerName
   // })
 
   const linkObj = router.resolve({
-    name: routerName
+    name: routerName,
+    query: query
   })
   window.open(linkObj.href, '_blank')
 }

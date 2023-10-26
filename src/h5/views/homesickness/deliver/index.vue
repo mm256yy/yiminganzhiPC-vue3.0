@@ -5,12 +5,12 @@
         <div class="flex-col section">
           <span class="self-start label-txt">标题</span>
           <div class="divider view"></div>
-          <ElInput v-model="title" type="textarea" placeholder="请输入" :rows="3" />
+          <ElInput v-model="form.title" type="textarea" placeholder="请输入" :rows="3" />
         </div>
         <div class="flex-col section">
           <span class="self-start label-txt">内容</span>
           <div class="divider view"></div>
-          <ElInput v-model="content" type="textarea" placeholder="请输入" :rows="4" />
+          <ElInput v-model="form.content" type="textarea" placeholder="请输入" :rows="4" />
         </div>
         <div class="flex-col section">
           <span class="self-start label-txt">封面图</span>
@@ -57,49 +57,30 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox, ElUpload, ElImage, ElInput } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import addImageSrc from '@/h5/assets/imgs/icon_add.png'
-
+// import type { DeliverDtoType } from './type'
+import { addHomesicknessApi } from './service'
+import { useRouter } from 'vue-router'
 interface FileItemType {
   name: string
   url: string
 }
-
+const { back } = useRouter()
 // const appStore = useAppStore()
+// const projectId = appStore.currentProjectId
 const dialogVisible = ref<boolean>(false)
 const imgUrl = ref<string>('')
-
-const title = ref<string>('')
-const content = ref<string>('')
-// const baseInfo = ref<any>({})
+// const title = ref<string>('')
+const form = ref<any>({
+  title: '',
+  content: ''
+})
 const attachPicList = ref<FileItemType[]>([]) // 照片文件列表
 
 const headers = {
   'Project-Id': '',
-  Authorization: ''
+  Authorization:
+    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqbHNzIiwiVUlEIjoiMTM4IiwiYXV0aCI6Ik5PUk1BTF9VU0VSIiwiZXhwIjoxNjk4MjEyNDczfQ.g1NEs0A6I1_H-KRbol8xpuHX8ZDVqDjDAjwXwkQQxijSRKoksAE1ZRD_N0QZsH0pZXBysmoq538dVjAUwHJEqw'
 }
-
-// watch(
-//   () => baseInfo,
-//   (val) => {
-//     // 处理表单数据
-//     // form.value = {
-//     //   ...val
-//     // }
-
-//     attachPicList.value = []
-
-//     try {
-//       //   if (form.value.lumpSumPic) {
-//       //     lumpSumPic.value = JSON.parse(form.value.lumpSumPic)
-//       //   }
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   },
-//   {
-//     immediate: true,
-//     deep: true
-//   }
-// )
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles) => {
@@ -145,15 +126,46 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-
+let addHomesicknessApis = async (e) => {
+  let data = await addHomesicknessApi(e)
+  console.log(data)
+  back()
+}
 // 投稿
 const onDeliver = () => {
-  console.log('onDeliver')
+  console.log(form, attachPicList.value)
+  if (!form.value.title) {
+    ElMessage.error('请填写标题')
+  } else if (!form.value.content) {
+    ElMessage.error('请填写内容')
+  } else if (attachPicList.value.length == 0) {
+    ElMessage.error('请上传图片')
+  } else {
+    addHomesicknessApis({ ...form.value, coverPic: JSON.stringify(attachPicList.value) })
+  }
+
+  // const params = {
+  //   ...data,
+  //   projectId,
+  //   coverPic: JSON.stringify(attachPicList.value)
+  // }
+  // if (actionType === 'add') {
+  //   await addReportApi({ ...params })
+  // } else {
+  //   await updateReportApi({ ...params })
+  // }
+  // btnLoading.value = false
+  // ElMessage.success('操作成功！')
+  // onClose(true)
 }
 
 // 放弃
 const onQuit = () => {
   console.log('onQuit')
+  for (let i in form.value) {
+    delete form.value[i]
+  }
+  back()
 }
 </script>
 
@@ -205,7 +217,7 @@ const onQuit = () => {
 .operate-region {
   position: fixed;
   right: 0;
-  bottom: 0;
+  bottom: 100px;
   left: 0;
   display: flex;
   height: 128px;

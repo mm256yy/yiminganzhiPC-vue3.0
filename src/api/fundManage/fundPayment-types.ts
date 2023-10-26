@@ -1,9 +1,12 @@
 export interface FunPayType {
   id: number
-  applyType: number
   name: string
+  applyType: number
   type: number
   funSubjectId: number
+  applyTypeText: string
+  typeText: string
+  funSubjectIdText: string
   remark: string
   receivePaymentUnit: string
   paymentTime: string

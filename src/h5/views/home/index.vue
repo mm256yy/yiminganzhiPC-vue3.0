@@ -26,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div class="flex-col notice-section">
+  <div class="flex-col notice-section" style="max-height: 10rem; overflow: auto">
     <div class="flex-row justify-between items-center">
       <div class="flex-col items-start">
         <span class="label-txt">通知公告</span>
@@ -38,12 +38,12 @@
       <img class="notice-group-image" :src="imageBannerNotice" />
       <div
         class="flex-col notice-group-list"
-        @click="toLink('announcementDetail')"
+        @click="toLink('announcementDetail', { id: item.id })"
         v-for="(item, index) in noticeList"
         :key="index"
       >
-        <span class="notice-content-txt">{{ item.title }}</span>
-        <span class="self-start time-txt">{{ item.time }}</span>
+        <span class="notice-content-txt" v-html="item.content"></span>
+        <span class="self-start time-txt">{{ item.releaseTime }}</span>
       </div>
     </div>
   </div>
@@ -58,33 +58,33 @@
     <div class="flex-col group-image">
       <div
         class="flex-col justify-start items-center relative group-image-section"
-        v-for="(item, index) in 2"
+        v-for="(item, index) in dataList"
         :key="index"
-        @click="toLink('homesicknessDetail')"
+        @click="toLink('homesicknessDetail', { id: item.id })"
       >
         <img
           class="shrink-zero group-image-box"
-          src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/64e83d955a7e3f0310414dfe/64e842454d98100011acce52/16929431129852885211.png"
+          :src="item.coverPic ? JSON.parse(item.coverPic)[0].url : ''"
         />
         <div class="flex-col items-start group-image-txt">
-          <span class="image-title">古茗苏遗址{{ item }}</span>
-          <span class="image-sub-title">留影·镜岭水库丨古民宿遗址</span>
+          <span class="image-title">{{ item.title }}</span>
+          <span class="image-sub-title">{{ item.author }}</span>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus'
 import bannerBgSrc from '@/h5/assets/imgs/banner_bg.png'
 import iconLaws from '@/h5/assets/imgs/icon_laws.png'
 import iconAnnouncement from '@/h5/assets/imgs/icon_announcement.png'
 import iconFace from '@/h5/assets/imgs/icon_face.png'
-import iconSituation from '@/h5/assets/imgs/icon_situation.png'
+import iconSituation from '@/h5/assets/imgs/icon_general_situation.png'
 import imageBannerNotice from '@/h5/assets/imgs/image_banner_notice.png'
 import { useRouter } from 'vue-router'
-
+import { getNewsList, getHomesickness } from './service'
 const { push } = useRouter()
 
 const toLink = (routeName: string, query = {}) => {
@@ -104,6 +104,21 @@ const noticeList = ref<any>([
     time: '2023-04-11'
   }
 ])
+let dataList: any = ref([])
+let getNewsLists = async () => {
+  let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
+  console.log(data)
+  noticeList.value = data.content
+}
+let getHomesicknesss = async () => {
+  let data = await getHomesickness()
+  console.log(data.content)
+  dataList.value = data.content
+}
+onMounted(() => {
+  getNewsLists()
+  getHomesicknesss()
+})
 </script>
 
 <style lang="less" scoped>
@@ -162,6 +177,7 @@ const noticeList = ref<any>([
   background-color: #ffffff;
   border-radius: 16px;
   filter: drop-shadow(0px 0px 14px #0000000d); // CSS 滤镜
+
   .notice-group {
     margin-top: 24px;
 

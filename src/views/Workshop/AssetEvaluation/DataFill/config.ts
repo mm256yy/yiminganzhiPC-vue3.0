@@ -1,6 +1,21 @@
 // tabs 唯一标识
 export const TabIds = [1, 2, 3, 4, 5, 6, 7, 8]
 
+export const LandlordLandTabs = [
+  {
+    name: '土地基本情况评估',
+    id: TabIds[4],
+    icon: 'mdi:land-fields',
+    active: false
+  },
+  {
+    name: '土地青苗及附着物评估',
+    id: TabIds[5],
+    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
+    active: false
+  }
+]
+
 // 居民户资产评估 tabs 列表
 export const LandlordTabs = [
   {
@@ -26,19 +41,8 @@ export const LandlordTabs = [
     id: TabIds[3],
     icon: 'mdi:pine-tree',
     active: false
-  },
-  {
-    name: '土地基本情况评估',
-    id: TabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    name: '土地青苗及附着物评估',
-    id: TabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
   }
+
   // {
   //   name: '坟墓评估',
   //   id: TabIds[6],
@@ -73,18 +77,7 @@ export const EnterpriseTabs = [
     icon: 'mdi:pine-tree',
     active: false
   },
-  {
-    name: '土地基本情况评估',
-    id: TabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    name: '土地青苗及附着物评估',
-    id: TabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
-  },
+
   {
     name: '设备设施评估',
     id: TabIds[6],
@@ -119,18 +112,7 @@ export const IndividualBTabs = [
     icon: 'mdi:pine-tree',
     active: false
   },
-  {
-    name: '土地基本情况评估',
-    id: TabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    name: '土地青苗及附着物评估',
-    id: TabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
-  },
+
   {
     name: '设备设施评估',
     id: TabIds[6],
@@ -165,18 +147,7 @@ export const VillageInfoCTabs = [
     icon: 'mdi:pine-tree',
     active: false
   },
-  {
-    name: '土地基本情况评估',
-    id: TabIds[4],
-    icon: 'mdi:land-fields',
-    active: false
-  },
-  {
-    name: '土地青苗及附着物评估',
-    id: TabIds[5],
-    icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
-  },
+
   {
     name: '小型专项及农副业设施评估',
     id: TabIds[6],
