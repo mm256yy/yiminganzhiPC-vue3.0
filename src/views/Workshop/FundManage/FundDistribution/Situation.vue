@@ -17,18 +17,18 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left max-header">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款申请记录</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金发放情况</span>
 
           <div class="text">
-            已完成：0笔
+            总金额：
             <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
           <div class="text">
-            审核中：0笔
+            待发金额：
             <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
           <div class="text">
-            待提交：0笔
+            已发金额：
             <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
         </div>
@@ -103,8 +103,8 @@ let molingData = ref<any>({
 })
 const goObject = reactive<any>({
   state: [
-    { label: '已发放', value: '1' },
-    { label: '未发放', value: '2' }
+    { label: '是', value: '1' },
+    { label: '否', value: '2' }
   ],
   batch: [
     { label: '第一批', value: '1' },
@@ -291,7 +291,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     field: 'issuedAmount',
-    label: '可发金额(元)',
+    label: '已发金额(元)',
     search: {
       show: false
     }
