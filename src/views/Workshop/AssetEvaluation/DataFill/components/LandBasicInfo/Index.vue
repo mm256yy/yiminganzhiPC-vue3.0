@@ -21,7 +21,7 @@
           </ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableData" style="width: 100%" @cell-click="cellHandleClick">
+      <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
           label="组别"
@@ -155,7 +155,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -305,13 +305,14 @@ const getList = () => {
     size: 1000
   }
   getLandBasicInfoListApi(params).then((res) => {
-    res.content.forEach((item) => {
-      item.valuationAmount = item.valuationPrice * item.landArea
-    })
     tableData.value = res.content
   })
 }
-
+// 自动计算评估金额
+const getModelValue = (row: any) => {
+  const totalPrice = Number(row.valuationPrice) * Number(row.landArea)
+  return totalPrice
+}
 // 房屋主体评估合计
 const total = () => {
   let sum = 0
@@ -376,10 +377,6 @@ const onSave = () => {
 onMounted(() => {
   getList()
 })
-//计算评估金额
-const cellHandleClick = (row: Record<string, any>) => {
-  row.valuationAmount = row.valuationPrice * row.landArea
-}
 </script>
 <style lang="less" scoped>
 .btn-txt {
