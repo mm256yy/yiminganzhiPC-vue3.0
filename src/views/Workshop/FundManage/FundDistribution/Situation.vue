@@ -189,7 +189,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'receivePaymentUnit',
+    field: 'name',
     label: '姓名',
     search: {
       show: true,
