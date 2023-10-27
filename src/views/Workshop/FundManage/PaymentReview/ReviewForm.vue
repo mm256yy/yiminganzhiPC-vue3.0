@@ -8,253 +8,195 @@
     appendToBody
     :closeOnClickModal="false"
   >
-    <ElForm class="form" ref="formRef" :model="form" label-width="124px" :label-position="'right'">
-      <ElRow>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">申请类型:</div>
-            <div class="content">{{ form.applyTypeTxt }}</div>
-          </div>
-        </ElCol>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">申请名称:</div>
-            <div class="content">{{ form.name }}</div>
-          </div>
-        </ElCol>
-      </ElRow>
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请类型:</div>
+          <div class="content">{{ form.applyType }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请名称:</div>
+          <div class="content">{{ form.applyUserName }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
 
-      <ElRow>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">申请人:</div>
-            <div class="content">{{ form.applyUserName }}</div>
-          </div>
-        </ElCol>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">付款说明:</div>
-            <div class="content">{{ form.remark }}</div>
-          </div>
-        </ElCol>
-      </ElRow>
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请人:</div>
+          <div class="content">{{ form.applyUserName }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款说明:</div>
+          <div class="content">{{ form.remark }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
 
-      <ElRow>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">概算科目:</div>
-            <div class="content">{{ form.type == 1 ? '概算内' : '概算外' }}</div>
-          </div>
-        </ElCol>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">资金科目:</div>
-            <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
-          </div>
-        </ElCol>
-      </ElRow>
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">概算科目:</div>
+          <div class="content">{{ form.type }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">资金科目:</div>
+          <div class="content">{{ form.funSubjectId }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
 
-      <ElRow>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">付款对象类型:</div>
-            <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
-          </div>
-        </ElCol>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">付款类型:</div>
-            <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
-          </div>
-        </ElCol>
-      </ElRow>
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款对象类型:</div>
+          <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">付款类型:</div>
+          <div class="content">{{ form.payType }}</div>
+        </div>
+      </ElCol>
+    </ElRow>
 
-      <ElRow>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">收款方:</div>
-            <div class="content">{{ form.payee ? fmtDict(dictObj[326], form.payee) : '-' }}</div>
-          </div>
-        </ElCol>
-        <ElCol :span="12">
-          <div class="col-wrap">
-            <div class="label">申请总金额:</div>
-            <div class="content">{{ form.amount }} 元</div>
-          </div>
-        </ElCol>
-      </ElRow>
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrap">
-            <div class="label">付款对象:</div>
-            <!-- <div class="content">境岭镇</div> -->
-          </div>
-        </ElCol>
-      </ElRow>
-      <div class="title-1">
-        <!-- <span class="main-title">专业项目合同清单</span> -->
-        申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请户数：<span
-          class="num"
-          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
-        >
-        户
-      </div>
-      <ElTable
-        :data="parmasList.paymentObjectList"
-        style="width: 100%"
-        class="mb-20"
-        :border="true"
-        v-if="form.paymentType == 2"
+    <ElRow>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">收款方:</div>
+          <div class="content">{{ form.payee }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="12">
+        <div class="col-wrap">
+          <div class="label">申请总金额:</div>
+          <div class="content">{{ form.amount }} 元</div>
+        </div>
+      </ElCol>
+    </ElRow>
+    <ElRow>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">付款对象:</div>
+          <!-- <div class="content">境岭镇</div> -->
+        </div>
+      </ElCol>
+    </ElRow>
+    <div class="title-1">
+      <!-- <span class="main-title">专业项目合同清单</span> -->
+      申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请户数：<span class="num">{{
+        parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
+      }}</span>
+      户
+    </div>
+
+    <ElTable
+      :data="parmasList.professionalContractList"
+      style="width: 100%"
+      class="mb-20"
+      :border="true"
+      v-if="form.paymentType == 1"
+    >
+      <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
+      <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
+      <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
+      <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
+      <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
+      <ElTableColumn
+        label="合同金额(万元)"
+        prop="contractAmount"
+        align="center"
+        header-align="center"
+      />
+      <ElTableColumn
+        label="支付节点"
+        prop="paymentNode"
+        align="center"
+        header-align="center"
+        width="200"
       >
-        <ElTableColumn
-          label="序号"
-          align="center"
-          width="80"
-          type="index"
-          header-align="center"
-          prop="index"
-        />
-        <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-          <!-- <template #default="{ row }">
-            {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-          </template> -->
-        </ElTableColumn>
-        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
-      </ElTable>
-      <ElTable
-        :data="parmasList.professionalContractList"
-        style="width: 100%"
-        class="mb-20"
-        :border="true"
-        v-if="form.paymentType == 1"
-      >
-        <ElTableColumn label="序号" align="center" width="80" type="index" header-align="center" />
-        <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
-        <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
-        <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-        <!-- <ElTableColumn
-          label="合同乙方"
-          prop="contractPartyB"
-          align="center"
-          header-align="center"
-        /> -->
-        <ElTableColumn
-          label="合同金额(万元)"
-          prop="contractAmount"
-          align="center"
-          header-align="center"
-        />
-        <ElTableColumn
-          label="支付节点"
-          prop="paymentNode"
-          align="center"
-          header-align="center"
-          width="200"
+        <template #default="{ row }">
+          <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+        </template>
+      </ElTableColumn>
+      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+    </ElTable>
+    <ElRow>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">付款日期</div>
+          <!-- <div class="content">境岭镇</div> -->
+          <ElDatePicker
+            v-model="form.paymentTime"
+            type="date"
+            placeholder="请选择日期"
+            :size="size"
+          />
+        </div>
+      </ElCol>
+    </ElRow>
+    <div class="col-wrapper">
+      <div class="col-label-required"> 申请凭证： </div>
+      <div class="card-img-list">
+        <ElUpload
+          :list-type="'picture-card'"
+          action="/api/file/type"
+          :data="{
+            type: 'archives'
+          }"
+          accept=".jpg,.png,jpeg,.pdf"
+          :multiple="false"
+          :file-list="relocateVerifyPic"
+          :headers="headers"
+          :on-error="onError"
+          :on-success="uploadFileChange1"
+          :before-remove="beforeRemove"
+          :on-remove="removeFile1"
+          :on-preview="imgPreview"
         >
-          <template #default="{ row }">
-            <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+          <template #trigger>
+            <div class="card-img-box">
+              <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+              <div class="card-txt">点击上传</div>
+            </div>
           </template>
-        </ElTableColumn>
-        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
-      </ElTable>
-      <div class="col-wrapper">
-        <div class="col-label-required"> 申请凭证： </div>
-        <div class="card-img-list">
-          <ElUpload
-            :list-type="'picture-card'"
-            action="/api/file/type"
-            :data="{
-              type: 'archives'
-            }"
-            accept=".jpg,.png,jpeg,.pdf"
-            :multiple="false"
-            :file-list="relocateVerifyPic"
-            :headers="headers"
-            :on-error="onError"
-            :on-success="uploadFileChange1"
-            :before-remove="beforeRemove"
-            :on-remove="removeFile1"
-            :on-preview="imgPreview"
-          >
-            <template #trigger>
-              <div class="card-img-box">
-                <img class="card-img" src="@/assets/imgs/house.png" alt="" />
-                <div class="card-txt">点击上传</div>
-              </div>
-            </template>
-          </ElUpload>
-        </div>
+        </ElUpload>
       </div>
-      <div v-if="false">
-        <ElRow>
-          <ElCol :span="24">
-            <div class="col-wrap">
-              <div class="label">付款日期</div>
-              <!-- <div class="content">境岭镇</div> -->
-              <ElDatePicker
-                v-model="formAudit.paymentTime"
-                type="date"
-                placeholder="请选择日期"
-                :size="size"
-              />
-            </div>
-          </ElCol>
-        </ElRow>
-        <div class="col-wrapper">
-          <div class="col-label-required"> 财务凭证： </div>
-          <div class="card-img-list">
-            <ElUpload
-              :list-type="'picture-card'"
-              action="/api/file/type"
-              :data="{
-                type: 'archives'
-              }"
-              accept=".jpg,.png,jpeg,.pdf"
-              :multiple="false"
-              :file-list="relocateVerifyPic"
-              :headers="headers"
-              :on-error="onError"
-              :on-success="uploadFileChange1"
-              :before-remove="beforeRemove"
-              :on-remove="removeFile1"
-              :on-preview="imgPreview"
-            >
-              <template #trigger>
-                <div class="card-img-box">
-                  <img class="card-img" src="@/assets/imgs/house.png" alt="" />
-                  <div class="card-txt">点击上传</div>
-                </div>
-              </template>
-            </ElUpload>
+    </div>
+    <ElRow v-if="actionType === 'edit'">
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">审核意见</div>
+          <div class="content">
+            <ElInput
+              v-model="form.remark"
+              :rows="4"
+              type="textarea"
+              class="!w-600px"
+              placeholder="请输入"
+            />
           </div>
         </div>
-      </div>
-      <ElRow v-if="actionType === 'edit'" style="margin-top: 20px">
-        <ElCol :span="24">
-          <div class="col-wrap">
-            <div class="label">审核意见</div>
-            <div class="content">
-              <ElInput
-                v-model="formAudit.remark"
-                :rows="4"
-                type="textarea"
-                class="!w-600px"
-                placeholder="请输入"
-              />
-            </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label"> </div>
+          <div class="content">
+            <ElButton type="primary" @click="onSubmit('1')" :loading="btnLoading">通过</ElButton>
+            <ElButton @click="onSubmit('0')" :loading="btnLoading">驳回</ElButton>
           </div>
-        </ElCol>
-        <ElCol :span="24">
-          <div class="col-wrap">
-            <div class="label"> </div>
-            <div class="content">
-              <ElButton type="primary" @click="onSubmit('1')" :loading="btnLoading">通过</ElButton>
-              <ElButton @click="onSubmit('0')" :loading="btnLoading">驳回</ElButton>
-            </div>
-          </div>
-        </ElCol>
-      </ElRow>
-    </ElForm>
+        </div>
+      </ElCol>
+    </ElRow>
+
     <div v-if="actionType === 'view'">
       <div class="title-2">审批流程</div>
 
@@ -274,12 +216,6 @@
                   width="18"
                   height="18"
                 />
-                <img
-                  v-if="item.status == 0"
-                  src="@/assets/imgs/icon_error.png"
-                  width="18"
-                  height="18"
-                />
               </div>
               <div
                 class="line"
@@ -291,14 +227,13 @@
             <div class="right">
               <div class="content-box">
                 <div class="content-1">
-                  <div class="name">{{ item.name }}</div>
+                  <div class="name">{{ item.auditor }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time">
                   审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                 </div>
-                <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
-                <div class="remark"> 审核意见: {{ item.remark }} </div>
+                <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
               </div>
             </div>
           </div>
@@ -322,23 +257,13 @@ import {
   UploadFile,
   UploadFiles,
   ElMessageBox,
-  ElDatePicker,
-  FormInstance
+  ElDatePicker
 } from 'element-plus'
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { getPaymentReviewListSSApi } from '@/api/fundManage/paymentApplication-service'
 import { useAppStore } from '@/store/modules/app'
-import { fmtDict } from '@/utils'
-import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
-const formRef = ref<FormInstance>()
-
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
-
 const size = ref<'default' | 'large' | 'small'>('default')
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'
@@ -356,7 +281,6 @@ const emit = defineEmits(['close', 'updateDistrict'])
 const btnLoading = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 const form = ref<any>({})
-const formAudit = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const appStore = useAppStore()
@@ -376,29 +300,6 @@ watch(
     deep: true
   }
 )
-const fundAccountList = ref<any[]>([]) // 资金科目
-const getFundSubjectList = () => {
-  getFundSubjectListApi().then((res: any) => {
-    if (res) {
-      fundAccountList.value = res.content
-    }
-  })
-}
-const getTreeName = (list: any, code: any) => {
-  for (let i = 0; i < list.length; i++) {
-    let a = list[i]
-    if (a.code == code) {
-      return a.name
-    } else {
-      if (a.children && a.children.length > 0) {
-        let res = getTreeName(a.children, code)
-        if (res) {
-          return res
-        }
-      }
-    }
-  }
-}
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
@@ -450,8 +351,9 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onSubmit = async (status: string) => {
   console.log(status)
   btnLoading.value = true
+  btnLoading.value = false
   let params: any = {
-    ...formAudit.value,
+    ...form.value,
     businessId: form.value.id,
     status: status,
     type: 1, //付款申请
@@ -460,22 +362,15 @@ const onSubmit = async (status: string) => {
   getPaymentReviewListSSApi(params).then(() => {
     ElMessage.success('操作成功！')
     onClose()
-    btnLoading.value = false
   })
   // ElMessage.success('操作成功！')
-  onClose()
+  // onClose()
 }
 
 // 关闭弹窗
 const onClose = () => {
   emit('close')
-  // nextTick(() => {
-  //   formRef.value?.resetFields()
-  // })
 }
-onMounted(() => {
-  getFundSubjectList()
-})
 </script>
 
 <style lang="less">
