@@ -2,7 +2,7 @@
   <div class="box-wrapper">
     <div class="search">
       <div class="search-input">
-        <input type="span" placeholder="请输入户号、联系方式" />
+        <input v-model="searchTxt" type="span" placeholder="请输入户号、联系方式" />
       </div>
       <div class="search-btn" @click="toSearch">
         <img class="search-icon" src="@/assets/imgs/icon_search_white.png" mode="aspectFit" />
@@ -12,7 +12,7 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div class="enter-item">
+      <div class="enter-item" @click="toTarget('PeasantHouseholdImp')">
         <div class="title-field" @click="toLink('householdList')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
@@ -77,7 +77,7 @@
         </div>
       </div>
       <!--企业-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('EnterpriseImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
@@ -142,7 +142,7 @@
         </div>
       </div>
       <!--个体户-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('IndividualImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
@@ -207,7 +207,7 @@
         </div>
       </div>
       <!--村集体-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('VillageImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -302,6 +302,7 @@ const { push } = useRouter()
 
 const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
 const statisticsObj = ref<StatisticsDtoType>()
+const searchTxt = ref<string>('')
 
 const toLink = (name: string) => {
   emit('toLink', name)
@@ -332,7 +333,9 @@ const getStatistics = async () => {
 }
 
 const toSearch = () => {
-  toTarget('PeasantHouseholdImp')
+  toTarget('PeasantHouseholdImp', {
+    search: searchTxt.value
+  })
 }
 
 onMounted(() => {
@@ -416,6 +419,7 @@ onMounted(() => {
       height: 163px;
       padding: 20px;
       margin-right: 60px;
+      cursor: pointer;
       background: linear-gradient(180deg, #deebf6 0%, #ffffff 100%);
       border-radius: 18px;
 
