@@ -56,7 +56,15 @@ const onTabClick = (tabItem) => {
 }
 
 const getList = () => {
-  const list = tabCurrentId.value === 1 ? reportList : otherReportList
+  let list: any = tabCurrentId.value === 1 ? reportList : otherReportList
+  list = list.reduce((pre, item) => {
+    reportData.value.forEach((res) => {
+      if (item.type == res.type) {
+        pre.push({ ...item, number: res.number })
+      }
+    })
+    return pre
+  }, [])
   return list
 }
 
