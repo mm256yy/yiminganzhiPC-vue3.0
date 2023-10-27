@@ -55,14 +55,14 @@
           <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
         </template>
         <template #action="{ row }">
+          <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <el-button
             type="primary"
             link
-            @click="onViewRow(row)"
+            @click="onEditRow(row)"
             v-if="row.statusText.toString() != '待审核' && row.statusText.toString() != '已完成'"
-            >查看</el-button
+            >编辑</el-button
           >
-          <el-button type="primary" link @click="onEditRow(row)">编辑</el-button>
           <el-button
             type="danger"
             link
