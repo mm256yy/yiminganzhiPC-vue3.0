@@ -170,7 +170,6 @@ getList()
 
 onMounted(() => {
   getFundSubjectList()
-  console.log(tableObject, '11111111')
   otherListApi()
 })
 
