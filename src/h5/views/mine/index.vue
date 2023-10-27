@@ -35,13 +35,13 @@
           </div>
         </div>
         <div class="flex-col relative section-mine-list">
-          <div class="flex-row justify-between list-item" @click="onClickItem(0)">
+          <!-- <div class="flex-row justify-between list-item" @click="onClickItem(0)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="fileSrc" />
               <span class="label-txt">档案资料</span>
             </div>
             <img class="label-icon" :src="rightSrc" />
-          </div>
+          </div> -->
           <div class="flex-row justify-between list-item" @click="onClickItem(1)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="memberSrc" />

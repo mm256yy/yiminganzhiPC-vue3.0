@@ -81,7 +81,7 @@ service.interceptors.response.use(
     if (data && (data.code === 401 || data.status === 401)) {
       // 清除用户信息
       appStore.setUserJwtInfo(null)
-      console.log(PATH_URL)
+      console.log(window.location.href)
       if (window.location.href.indexOf('h5') != -1) {
         window.location.href = 'h5.html#/login'
       } else {

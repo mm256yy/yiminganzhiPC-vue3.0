@@ -62,22 +62,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/policies',
-      name: 'policies',
-      component: () => import('../views/policies/index.vue'),
-      meta: {
-        name: '政策法规'
-      }
-    },
-    {
-      path: '/policiesDetail',
-      name: 'policiesDetail',
-      component: () => import('../views/policies/detail/index.vue'),
-      meta: {
-        name: '政策详情'
-      }
-    },
-    {
       path: '/planEffect',
       name: 'planEffect',
       component: () => import('../views/planEffect/index.vue'),
@@ -239,6 +223,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next({ path: '/phoneLogin' })
   }
-  console.log(from)
+  console.log(from, appStore.getToken)
 })
 export default router
