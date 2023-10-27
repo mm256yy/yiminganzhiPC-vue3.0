@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAppStoreWithOut } from '@/store/modules/app'
 
 // 移民端用户
 const router = createRouter({
@@ -230,5 +231,14 @@ const router = createRouter({
     }
   ]
 })
-
+const appStore = useAppStoreWithOut()
+const whiteList = ['/phoneLogin'] // 不重定向白名单
+router.beforeEach(async (to, from, next) => {
+  if (whiteList.indexOf(to.path) != -1 || appStore.getToken) {
+    next()
+  } else {
+    next({ path: '/phoneLogin' })
+  }
+  console.log(from)
+})
 export default router
