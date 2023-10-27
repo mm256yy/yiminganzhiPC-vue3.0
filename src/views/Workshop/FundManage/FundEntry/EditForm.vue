@@ -176,6 +176,7 @@ const onClose = (flag = false) => {
   emit('close', flag)
   formRef.value?.resetFields()
   form.value = {}
+  receipt.value = []
 }
 
 const submit = async (data: any) => {
@@ -192,6 +193,16 @@ const submit = async (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status: number) => {
+  if (status === 0) {
+    let params: any = {
+      ...form.value,
+      receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+    }
+    params.recordTime = dayjs(params.recordTime)
+    params.status = status
+    submit(params)
+    return
+  }
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!receipt.value.length) {

@@ -41,16 +41,17 @@
           >
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="资金科目:" required>
+      <ElFormItem label="资金科目:" required prop="funSubjectId">
         <ElTreeSelect
           class="!w-full"
           v-model="form.funSubjectId"
-          :data="fundAccountList"
+          :data="props.fundAccountList"
           node-key="code"
           :props="{ value: 'code', label: 'name' }"
           showCheckbox
           checkStrictly
           checkOnClickNode
+          :default-checked-keys="[form.funSubjectId]"
         />
       </ElFormItem>
       <ElFormItem label="付款说明:" required>
@@ -97,10 +98,11 @@
           </div>
         </div>
       </div>
-      <ElFormItem label="收款方:" v-if="form.test == 2">
-        <ElSelect class="w-350px" v-model="form.source">
+      <!-- {{ detail.payee ? fmtDict(dictObj[326], detail.payee) : '-' }} -->
+      <ElFormItem label="收款方:" v-if="form.payType == 2">
+        <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
-            v-for="item in dictObj[388]"
+            v-for="item in dictObj[326]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -258,6 +260,7 @@
                     width="18"
                     height="18"
                   />
+                  <img v-else src="@/assets/imgs/icon_error.png" width="18" height="18" />
                 </div>
                 <div
                   class="line"
@@ -337,12 +340,13 @@ import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplicatio
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
-import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+// import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row: null | undefined
   parmasList: any
+  fundAccountList: any[]
 }
 interface FileItemType {
   name: string
@@ -365,15 +369,15 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 // const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
-const fundAccountList = ref<any[]>([]) // 资金科目
+// const fundAccountList = ref<any[]>([]) // 资金科目
 // 获取资金科目选项列表
-const getFundSubjectList = () => {
-  getFundSubjectListApi().then((res: any) => {
-    if (res) {
-      fundAccountList.value = res.content
-    }
-  })
-}
+// const getFundSubjectList = () => {
+//   getFundSubjectListApi().then((res: any) => {
+//     if (res) {
+//       fundAccountList.value = res.content
+//     }
+//   })
+// }
 watch(
   () => props.row,
   (val) => {
@@ -487,7 +491,7 @@ const onSubmit = debounce((formEl, status?: number) => {
           params.paymentObjectList = toRaw(tableData.value).map((item) => {
             return {
               contractId: item.contractId,
-              amount: item.contractAmount,
+              amount: item.amount,
               nodeIds: item.nodeIds
             }
           })
@@ -557,7 +561,7 @@ const onError = () => {
 
 onMounted(() => {
   initData()
-  getFundSubjectList()
+  // getFundSubjectList()
   // onViewRow()
 })
 </script>

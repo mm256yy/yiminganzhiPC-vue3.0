@@ -3,86 +3,262 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div class="enter-item">
-        <div class="title-area">
-          <div class="item-title">居民区</div>
-          <div class="item-number">{{ statisticsObj?.peasantCount }}户</div>
+      <div class="enter-item" @click="toTarget('PeasantHouseholdImp')">
+        <div class="title-field" @click="toTarget('householdList')">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">居民户</span>
+            <div class="flex">
+              <span class="count-num"> {{ statisticsObj?.peasantCount }} </span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
         </div>
-        <div class="item-status">
-          <div class="status-special">
-            <div class="special-number success">{{ statisticsObj?.peasantCompleteCount }}</div>
-            <div class="special-status">已评估</div>
+        <div class="row-field">
+          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 0 })">
+            <div class="line-1">{{ statisticsObj?.peasantCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">已评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number error">{{ statisticsObj?.peasantUncompletedCount }}</div>
-            <div class="special-status">未评估</div>
+          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 1 })">
+            <div class="line-1">{{ statisticsObj?.peasantUncompletedCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">未评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number">{{ statisticsObj?.peasantMyCompleteCount }}</div>
-            <div class="special-status">我的评估</div>
+          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 2 })">
+            <div class="line-1">{{ statisticsObj?.peasantMyCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">我的评估</div>
+            </div>
           </div>
         </div>
       </div>
       <!--企业-->
-      <div class="enter-item">
-        <div class="title-area">
-          <div class="item-title">企业</div>
-          <div class="item-number">{{ statisticsObj?.companyCount }}户</div>
+      <div class="enter-item" @click="toTarget('EnterpriseImp')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">企业</span>
+            <div class="flex">
+              <span class="count-num"> {{ statisticsObj?.companyCount }} </span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
         </div>
-        <div class="item-status">
-          <div class="status-special">
-            <div class="special-number success">{{ statisticsObj?.companyCompleteCount }}</div>
-            <div class="special-status">已评估</div>
+        <div class="row-field">
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.companyCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">已评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number error">{{ statisticsObj?.companyUncompletedCount }}</div>
-            <div class="special-status">未评估</div>
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.companyUncompletedCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">未评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number">{{ statisticsObj?.companyMyCompleteCount }}</div>
-            <div class="special-status">我的评估</div>
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.companyMyCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">我的评估</div>
+            </div>
           </div>
         </div>
       </div>
       <!--个体户-->
-      <div class="enter-item">
-        <div class="title-area">
-          <div class="item-title">个体户</div>
-          <div class="item-number">{{ statisticsObj?.individualCount }}户</div>
+      <div class="enter-item" @click="toTarget('IndividualImp')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_gth.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">个体户</span>
+            <div class="flex">
+              <span class="count-num"> {{ statisticsObj?.individualCount }} </span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
         </div>
-        <div class="item-status">
-          <div class="status-special">
-            <div class="special-number success">{{ statisticsObj?.individualCompleteCount }}</div>
-            <div class="special-status">已评估</div>
+        <div class="row-field">
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.individualCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">已评估</div>
+            </div>
           </div>
-          <div class="status-special error">
-            <div class="special-number">{{ statisticsObj?.individualUncompletedCount }}</div>
-            <div class="special-status">未评估</div>
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.individualUncompletedCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">未评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number">{{ statisticsObj?.individualMyCompleteCount }}</div>
-            <div class="special-status">我的评估</div>
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.individualMyCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">我的评估</div>
+            </div>
           </div>
         </div>
       </div>
       <!--村集体-->
-      <div class="enter-item">
-        <div class="title-area">
-          <div class="item-title">村集体</div>
-          <div class="item-number">{{ statisticsObj?.villageCount }}户</div>
+      <div class="enter-item" @click="toTarget('VillageImp')">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_village.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">村集体</span>
+            <div class="flex">
+              <span class="count-num"> {{ statisticsObj?.villageCount }} </span>
+              <span class="count-unit"> 户 </span>
+            </div>
+          </div>
         </div>
-        <div class="item-status">
-          <div class="status-special">
-            <div class="special-number success">{{ statisticsObj?.villageCompleteCount }}</div>
-            <div class="special-status">已评估</div>
+        <div class="row-field">
+          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 0 })">
+            <div class="line-1">{{ statisticsObj?.villageCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #e43030;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">已评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number error">{{ statisticsObj?.villageUncompletedCount }}</div>
-            <div class="special-status">未评估</div>
+          <div class="field-box">
+            <div class="line-1">{{ statisticsObj?.villageUncompletedCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">未评估</div>
+            </div>
           </div>
-          <div class="status-special">
-            <div class="special-number">{{ statisticsObj?.villageMyCompleteCount }}</div>
-            <div class="special-status">我的评估</div>
+          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 2 })">
+            <div class="line-1">{{ statisticsObj?.villageMyCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">我的评估</div>
+            </div>
           </div>
         </div>
       </div>
@@ -112,6 +288,8 @@ import GroupNotice from './components/GroupNotice.vue'
 import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 import type { EvaluatorStatisticsDtoType } from '@/api/home-types'
 import { getEvaluatorStatistics } from '@/api/home-service'
+import { useRouter } from 'vue-router'
+const { push } = useRouter()
 
 const statisticsObj = ref<EvaluatorStatisticsDtoType>()
 
@@ -123,6 +301,13 @@ const getStatistics = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const toTarget = (routeName: string, query = {}) => {
+  push({
+    name: routeName,
+    query
+  })
 }
 
 onMounted(() => {
@@ -148,61 +333,99 @@ onMounted(() => {
     justify-content: center;
 
     .enter-item {
-      display: flex;
-      height: 140px;
+      width: 362px;
+      height: 163px;
       padding: 20px;
-      margin-right: 20px;
-      background: #f2f2f2;
-      border-radius: 10px;
-      flex: 1;
+      margin-right: 60px;
+      cursor: pointer;
+      background: linear-gradient(180deg, #deebf6 0%, #ffffff 100%);
+      border-radius: 18px;
 
-      .title-area {
-        width: 66px;
-        margin-top: 20px;
-        margin-right: 10px;
-        font-weight: bold;
-        color: #333333;
+      .title-field {
+        display: flex;
 
-        .item-title {
-          font-size: 20px;
+        .enter-icon {
+          width: 78px;
+          height: 78px;
+
+          .img {
+            width: 100%;
+            height: 100%;
+          }
         }
 
-        .item-number {
-          margin-top: 4px;
-          font-size: 16px;
+        .enter-title {
+          margin-left: 8px;
+
+          .title-txt {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333333;
+          }
+
+          .count-num {
+            margin-bottom: 5px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #171718;
+          }
+
+          .count-unit {
+            margin-top: 6px;
+            margin-left: 6px;
+            font-size: 16px;
+            color: #131313;
+          }
         }
       }
 
-      .item-status {
+      .row-field {
         display: flex;
-        align-items: center;
-        // margin-left: 10px;
+        font-size: 8px;
+        justify-content: space-between;
 
-        .status-special {
+        .field-box {
           display: flex;
-          margin-right: 20px;
-          font-size: 16px;
-          font-weight: bold;
+          width: 87px;
+          height: 34px;
+          background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
+          border-radius: 8px;
           flex-direction: column;
           align-items: center;
 
-          .special-number {
-            height: 30px;
-            line-height: 30px;
-            color: #333333;
+          .line-1 {
+            font-size: 20px;
+            font-weight: 400;
+            color: #171718;
+          }
 
-            &.success {
-              color: #30a952;
+          .flex {
+            display: flex;
+
+            .dot-red {
+              width: 8px;
+              height: 8px;
+              background-color: #e43030;
+              border-radius: 50%;
             }
 
-            &.error {
-              color: #e43030;
+            .dot-yellow {
+              width: 8px;
+              height: 8px;
+              background-color: #fec44c;
+            }
+
+            .dot-green {
+              width: 8px;
+              height: 8px;
+              background-color: #30a952;
             }
           }
 
-          .special-status {
-            color: #333333;
-            // width: 40px;
+          .line-2 {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(23, 23, 24, 0.6);
           }
         }
       }
@@ -216,6 +439,76 @@ onMounted(() => {
         margin-right: 0px;
       }
     }
+
+    // .enter-item {
+    //   display: flex;
+    //   height: 140px;
+    //   padding: 20px;
+    //   margin-right: 20px;
+    //   background: #f2f2f2;
+    //   border-radius: 10px;
+    //   flex: 1;
+
+    //   .title-area {
+    //     width: 66px;
+    //     margin-top: 20px;
+    //     margin-right: 10px;
+    //     font-weight: bold;
+    //     color: #333333;
+
+    //     .item-title {
+    //       font-size: 20px;
+    //     }
+
+    //     .item-number {
+    //       margin-top: 4px;
+    //       font-size: 16px;
+    //     }
+    //   }
+
+    //   .item-status {
+    //     display: flex;
+    //     align-items: center;
+    //     // margin-left: 10px;
+
+    //     .status-special {
+    //       display: flex;
+    //       margin-right: 20px;
+    //       font-size: 16px;
+    //       font-weight: bold;
+    //       flex-direction: column;
+    //       align-items: center;
+
+    //       .special-number {
+    //         height: 30px;
+    //         line-height: 30px;
+    //         color: #333333;
+
+    //         &.success {
+    //           color: #30a952;
+    //         }
+
+    //         &.error {
+    //           color: #e43030;
+    //         }
+    //       }
+
+    //       .special-status {
+    //         color: #333333;
+    //         // width: 40px;
+    //       }
+    //     }
+    //   }
+
+    //   .top {
+    //     display: flex;
+    //     flex-direction: column;
+    //   }
+
+    //   &:last-child {
+    //     margin-right: 0px;
+    //   }
+    // }
   }
 
   .group {

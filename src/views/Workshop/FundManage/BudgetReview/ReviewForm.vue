@@ -12,7 +12,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请类型:</div>
-          <div class="content">{{ form.applyType }}</div>
+          <div class="content">{{ form.applyTypeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
@@ -178,6 +178,7 @@
                   width="18"
                   height="18"
                 />
+                <img v-else src="@/assets/imgs/icon_error.png" width="18" height="18" />
               </div>
               <div
                 class="line"

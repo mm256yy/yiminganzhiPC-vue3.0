@@ -164,7 +164,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         input: {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
-          h5: resolve(__dirname, "h5.html")
+          h5: resolve(__dirname, "h5.html"),
+          ld: resolve(__dirname, "ld.html")
         }
       }
     },
@@ -180,7 +181,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: false
+          changeOrigin: true
         }
       },
       hmr: {

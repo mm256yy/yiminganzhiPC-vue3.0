@@ -75,6 +75,9 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
+        <template #signUser="{ row }">
+          <div>{{ row.signUser ? '是' : '否' }}</div>
+        </template>
         <template #reportStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
@@ -445,6 +448,14 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'reportDate',
     label: '填报时间',
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'signUser',
+    label: '是否签字',
     search: {
       show: false
     },
