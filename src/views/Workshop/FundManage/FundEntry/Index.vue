@@ -159,7 +159,10 @@ const onViewRow = (row) => {
 
 const sumAmountApi = async () => {
   try {
-    sumAmount.value = await getSumAmountApi()
+    sumAmount.value = await getSumAmountApi({
+      projectId,
+      type: '1'
+    })
   } catch (error) {}
 }
 
