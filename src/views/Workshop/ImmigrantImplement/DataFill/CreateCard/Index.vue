@@ -220,7 +220,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
 
   if (columnIndex === 0) {
     // 如果与上一个分组名称相同，被合并
-    if (rowIndex !== 0 && row.type === tableObject.tableList[rowIndex - 1].type) {
+    if (rowIndex !== 0 && row.type === feeTableData.value[rowIndex - 1].type) {
       return {
         rowspan: 0,
         colspan: 0
@@ -229,8 +229,8 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
     // 统计新的分组所占行数
     let index = rowIndex + 1
     let rowspan = 1
-    while (index < tableObject.tableList.length) {
-      if (row.type === tableObject.tableList[index].type) {
+    while (index < feeTableData.value.length) {
+      if (row.type === feeTableData.value[index].type) {
         rowspan++
         index++
       } else {

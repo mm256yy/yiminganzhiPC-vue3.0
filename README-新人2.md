@@ -102,6 +102,15 @@ feature/xxxx ----> env/production
 - `src/views`：去除 Workshop 文件夹，为后台管理系统页面
 - `src/h5`: 两个 h5 端的项目文件，注意此为独立于 pc 的，不要与 pc 项目混用
 
+- `src/views/Workshop/AssetEvaluation`: 资产评估 列表 + 填报 页面
+- `src/views/Workshop/ImmigrantImplement`: 移民实施 列表 + 填报 页面
+
+- `src/views/Workshop/DataFill`: 实物调查 填报 页面
+
+==文件名中带有 `eva` 的为资产评估相关模块==
+
+==文件名中带有 `imp` 的为移民实施相关模块==
+
 ==注意== 各个端的文件不要混乱，前端 codeReview 时重点关注
 
 ## 路由配置

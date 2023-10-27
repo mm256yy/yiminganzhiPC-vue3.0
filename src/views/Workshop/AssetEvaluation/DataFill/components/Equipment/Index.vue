@@ -2,7 +2,11 @@
   <WorkContentWrap>
     <!-- 企业/个体工商户 设备设施评估 -->
     <div class="table-wrap !py-12px !mt-0px">
-      <div class="flex items-center justify-end pb-12px">
+      <div class="flex items-center justify-between pb-12px">
+        <div>
+          备设施评估合计：
+          <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
+        </div>
         <ElSpace>
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
             填报完成
@@ -350,7 +354,17 @@ const handleClose = () => {
   deleteReason.value = ''
   dialogVisible.value = false
 }
-
+const total = () => {
+  let sum = 0
+  if (tableData.value && tableData.value.length) {
+    tableData.value.map((item: any) => {
+      if (item.compensationAmount > 0) {
+        sum += item.compensationAmount
+      }
+    })
+  }
+  return sum.toFixed(2)
+}
 onMounted(() => {
   getList()
 })

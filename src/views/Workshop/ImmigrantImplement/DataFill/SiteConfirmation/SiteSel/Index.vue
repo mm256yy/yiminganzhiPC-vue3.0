@@ -18,6 +18,7 @@
           >
             打印报表
           </ElButton> -->
+          <ElButton type="primary" @click="onBatchSave"> 保存 </ElButton>
         </ElSpace>
       </div>
       <ElTable v-if="baseInfo.houseAreaType === 'homestead'" :data="tableData" style="width: 100%">
@@ -93,13 +94,18 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn
-          label="房号"
-          width="140"
-          prop="roomNo"
-          align="center"
-          header-align="center"
-        />
+        <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+              <ElOption
+                v-for="item in row.roomNoOptions"
+                :key="item.id"
+                :label="item.code"
+                :value="item.code"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="储藏室编号"
           width="120"
@@ -221,11 +227,13 @@ import OnDocumentation from './OnDocumentation.vue'
 import EnterRoomNo from './EnterRoomNo.vue'
 import {
   getImmigrantChooseHouseApi,
-  saveImmigrantChooseHouseApi
+  saveImmigrantChooseHouseApi,
+  saveDocumentationApi
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
 // import { deepClone } from '@/utils'
+import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 
 interface PropsType {
   doorNo: string
@@ -253,7 +261,8 @@ const getList = () => {
           ...item,
           landNoOptions: [],
           storeroomNoOptions: [],
-          carNoOptions: []
+          carNoOptions: [],
+          roomNoOptions: []
         })
       })
       arr.map((item: any) => {
@@ -265,6 +274,9 @@ const getList = () => {
         })
         getcarNoList(item.settleAddress).then((res: any) => {
           item.carNoOptions = [...res]
+        })
+        getHouseConfigApi(props.baseInfo.projectId, 2, item.settleAddress).then((res: any) => {
+          item.roomNoOptions = [...res.content]
         })
       })
       tableData.value = [...arr]
@@ -380,7 +392,14 @@ const onSave = (row: any) => {
     emit('updateData')
   })
 }
-
+//批量保存
+const onBatchSave = () => {
+  saveDocumentationApi(tableData.value).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+    emit('updateData')
+  })
+}
 /**
  * 关闭归档/幢号室号弹窗
  * @param flag

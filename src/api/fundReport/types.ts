@@ -1,5 +1,17 @@
 // 资金使用情况报表
 export interface FundDetailReportType {
+  amount: number
+  apr: number
+  code: string
+  gaiInvest: number
+  gsInvest: number
+  guInvest: number
+  id: number
+  level: number
+  name: string
+  serNo: number
+  serNoStr: string
+  type: string
   [key: string]: any
 }
 

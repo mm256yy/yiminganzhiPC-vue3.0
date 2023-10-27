@@ -53,54 +53,32 @@
         </div>
       </div>
     </div>
-    <!--消息反馈-->
+    <!--信息反馈-->
     <div class="statistic-item">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_feed.png" class="icon" />
-        <div>消息反馈</div>
+        <div>信息反馈</div>
       </div>
       <div>
         <div class="top-title">
           <div>
+            <span class="title-index">序号</span>
             <span class="title-content">内容</span>
           </div>
           <span class="time">提交时间</span>
         </div>
         <div class="list">
-          <div class="item-title">
+          <div
+            class="item-title"
+            v-for="(item, index) in messageList"
+            :key="index"
+            @click="handleItemClick(item)"
+          >
             <div>
-              <span class="item-index">1</span>
-              <span class="item-content">您有5还有居民已严重滞后，请推进实施工作</span>
+              <span class="item-index">{{ index + 1 }}</span>
+              <span class="item-content">{{ item.remark }}</span>
             </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">2</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">3</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">4</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">5</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
+            <span class="item-time">{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}</span>
           </div>
         </div>
       </div>
@@ -109,21 +87,32 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { getMessageFeedback } from '@/api/home-service'
+import type { MessageDtoType } from '@/api/home-types'
+import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
 
-// const currentTab = ref(0)
-// let menuIndex = ref(0)
+const { push } = useRouter()
+const messageList = ref<MessageDtoType[]>([])
 
-// const tabChange = (id: number) => {
-//   if (currentTab.value === id) {
-//     return
-//   }
-//   currentTab.value = id
-// }
+// 获取消息
+const getMessage = async () => {
+  try {
+    const result = await getMessageFeedback()
+    messageList.value = result
+  } catch (error) {
+    console.log(error)
+  }
+}
 
-// const handleItemClick = (index: number) => {
-//   menuIndex.value = index
-// }
+const handleItemClick = (item: MessageDtoType) => {
+  push(`/Feedback/FeedbackDetail?id=${item.id}`)
+}
+
+onMounted(() => {
+  getMessage()
+})
 </script>
 
 <style lang="less" scoped>
@@ -201,6 +190,7 @@
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
+    cursor: pointer;
 
     .item-index {
       width: 28px;

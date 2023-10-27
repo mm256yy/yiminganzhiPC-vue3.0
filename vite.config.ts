@@ -107,6 +107,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
+          },
+          {
+            entry: 'src/h5/ld/main.ts',
+            filename: 'ld.html',
+            template: 'ld.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
           }
         ]
       })
@@ -163,7 +175,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
-          target: 'http://192.168.1.115:8880',
+          target: 'http://192.168.1.119:8880',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
@@ -194,7 +206,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs'
+        'dayjs' 
       ]
     }
   }

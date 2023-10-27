@@ -31,6 +31,9 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #createdDate="{ row }">
+          <div>{{ formatDateTime(row.createdDate) }}</div>
+        </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <ElButton type="primary" @click="onReviewRow(row)"> 审核 </ElButton>
@@ -63,6 +66,7 @@ import { getBudgetReviewListApi } from '@/api/fundManage/budgetReview-service'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
 import ReviewForm from './ReviewForm.vue'
+import { formatDateTime } from '@/utils/index'
 
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)

@@ -2,9 +2,9 @@
   <div class="box-wrapper">
     <div class="search">
       <div class="search-input">
-        <input type="span" placeholder="请输入户号、联系方式" />
+        <input v-model="searchTxt" type="span" placeholder="请输入户号、联系方式" />
       </div>
-      <div class="search-btn">
+      <div class="search-btn" @click="toSearch">
         <img class="search-icon" src="@/assets/imgs/icon_search_white.png" mode="aspectFit" />
         <span class="search-txt">查询</span>
       </div>
@@ -12,7 +12,7 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div class="enter-item">
+      <div class="enter-item" @click="toTarget('PeasantHouseholdImp')">
         <div class="title-field" @click="toLink('householdList')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
@@ -20,14 +20,14 @@
           <div class="enter-title">
             <span class="title-txt">居民户</span>
             <div class="flex">
-              <span class="count-num"> 20 </span>
+              <span class="count-num"> {{ statisticsObj?.peasantCount }} </span>
               <span class="count-unit"> 户 </span>
             </div>
           </div>
         </div>
         <div class="row-field">
           <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 0 })">
-            <div class="line-1">5</div>
+            <div class="line-1">{{ statisticsObj?.peasantLagCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -43,7 +43,7 @@
             </div>
           </div>
           <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 1 })">
-            <div class="line-1">5</div>
+            <div class="line-1">{{ statisticsObj?.peasantWarnCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -59,7 +59,7 @@
             </div>
           </div>
           <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 2 })">
-            <div class="line-1">10</div>
+            <div class="line-1">{{ statisticsObj?.peasantNormalCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -77,7 +77,7 @@
         </div>
       </div>
       <!--企业-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('EnterpriseImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
@@ -85,14 +85,14 @@
           <div class="enter-title">
             <span class="title-txt">企业</span>
             <div class="flex">
-              <span class="count-num"> 5 </span>
+              <span class="count-num"> {{ statisticsObj?.companyCount }} </span>
               <span class="count-unit"> 家 </span>
             </div>
           </div>
         </div>
         <div class="row-field">
           <div class="field-box">
-            <div class="line-1">1</div>
+            <div class="line-1">{{ statisticsObj?.companyLagCount }} </div>
             <div class="flex">
               <div
                 style="
@@ -108,7 +108,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">2</div>
+            <div class="line-1">{{ statisticsObj?.companyWarnCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -124,7 +124,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">2</div>
+            <div class="line-1">{{ statisticsObj?.companyNormalCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -142,7 +142,7 @@
         </div>
       </div>
       <!--个体户-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('IndividualImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
@@ -150,14 +150,14 @@
           <div class="enter-title">
             <span class="title-txt">个体户</span>
             <div class="flex">
-              <span class="count-num">5</span>
+              <span class="count-num">{{ statisticsObj?.individualCount }}</span>
               <span class="count-unit"> 户 </span>
             </div>
           </div>
         </div>
         <div class="row-field">
           <div class="field-box">
-            <div class="line-1">1</div>
+            <div class="line-1">{{ statisticsObj?.individualLagCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -173,7 +173,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">2</div>
+            <div class="line-1">{{ statisticsObj?.individualWarnCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -189,7 +189,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">2</div>
+            <div class="line-1">{{ statisticsObj?.individualNormalCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -207,7 +207,7 @@
         </div>
       </div>
       <!--村集体-->
-      <div class="enter-item" @click="toLink('householdList')">
+      <div class="enter-item" @click="toTarget('VillageImp')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -215,14 +215,14 @@
           <div class="enter-title">
             <span class="title-txt">村集体</span>
             <div class="flex">
-              <span class="count-num">2</span>
+              <span class="count-num">{{ statisticsObj?.villageCount }}</span>
               <span class="count-unit">户</span>
             </div>
           </div>
         </div>
         <div class="row-field">
           <div class="field-box">
-            <div class="line-1">0</div>
+            <div class="line-1">{{ statisticsObj?.villageLagCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -238,7 +238,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">1</div>
+            <div class="line-1">{{ statisticsObj?.villageWarnCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -254,7 +254,7 @@
             </div>
           </div>
           <div class="field-box">
-            <div class="line-1">1</div>
+            <div class="line-1">{{ statisticsObj?.villageNormalCount }}</div>
             <div class="flex">
               <div
                 style="
@@ -291,12 +291,18 @@
 </template>
 
 <script lang="ts" setup>
-// import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import Echart from './components/WorkGroupChart.vue'
 import MessageNotice from './components/MessageNotice.vue'
 import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
+import type { StatisticsDtoType } from '@/api/home-types'
+import { getImplementationStatistics } from '@/api/home-service'
+import { useRouter } from 'vue-router'
+const { push } = useRouter()
 
 const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
+const statisticsObj = ref<StatisticsDtoType>()
+const searchTxt = ref<string>('')
 
 const toLink = (name: string) => {
   emit('toLink', name)
@@ -308,6 +314,33 @@ const toLinkParams = (name: string, params: any) => {
     ...params
   })
 }
+
+const toTarget = (routeName: string, query = {}) => {
+  push({
+    name: routeName,
+    query
+  })
+}
+
+// 统计
+const getStatistics = async () => {
+  try {
+    const result = await getImplementationStatistics()
+    statisticsObj.value = result
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const toSearch = () => {
+  toTarget('PeasantHouseholdImp', {
+    search: searchTxt.value
+  })
+}
+
+onMounted(() => {
+  getStatistics()
+})
 </script>
 
 <style lang="less" scoped>
@@ -316,7 +349,7 @@ const toLinkParams = (name: string, params: any) => {
   padding-top: 40px;
   margin: -30px -20px;
   background-image: url('../../../assets/imgs/home/home_bg.png');
-  background-size: 100% auto;
+  background-size: 100% cover;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -355,6 +388,7 @@ const toLinkParams = (name: string, params: any) => {
       width: 100px;
       height: 48px;
       overflow: hidden;
+      cursor: pointer;
       background: linear-gradient(270deg, #ffb11a 0%, #ff9432 100%);
       border-radius: 0 8px 8px 0;
       justify-content: center;
@@ -385,6 +419,7 @@ const toLinkParams = (name: string, params: any) => {
       height: 163px;
       padding: 20px;
       margin-right: 60px;
+      cursor: pointer;
       background: linear-gradient(180deg, #deebf6 0%, #ffffff 100%);
       border-radius: 18px;
 
@@ -435,6 +470,7 @@ const toLinkParams = (name: string, params: any) => {
           display: flex;
           width: 87px;
           height: 34px;
+          margin-top: -6px;
           background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
           border-radius: 8px;
           flex-direction: column;

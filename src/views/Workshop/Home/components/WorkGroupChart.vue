@@ -16,7 +16,7 @@
           {{ item.name }}
         </div>
       </div>
-      <div class="bottom-wrapper">
+      <div class="bottom-wrapper" v-loading="chartLoading">
         <div class="top5-tabs">
           <div
             v-for="item in tabs"
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="echart-wrap">
-          <div class="echart-item" v-for="item in echartOptions" :key="item.index">
+          <div class="echart-item" v-for="(item, index) in echartOptions" :key="index">
             <div class="echart-item-lt">
               <img class="top-img" :src="item.img" mode="scaleToFill" />
               <text class="user-name">{{ item.name }}</text>
@@ -40,7 +40,7 @@
             </div>
 
             <div class="echart-item-rt">
-              <text class="txt">{{ item.number }}户</text>
+              <text class="txt">{{ item.progress }}&nbsp;户</text>
             </div>
           </div>
         </div>
@@ -51,6 +51,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
+import { getImplementationTopGroup } from '@/api/home-service'
 
 import top5_1 from '@/assets/imgs/Rank_1.png'
 import top5_2 from '@/assets/imgs/Rank_2.png'
@@ -70,8 +71,6 @@ import top5_15 from '@/assets/imgs/Rank_15.png'
 
 interface OptionsType {
   name: string
-  number: number
-  index?: number
   progress?: number
   img?: string
 }
@@ -81,8 +80,26 @@ interface TabType {
   name: string
 }
 
-const currentTab = ref(0)
+const imgArr = [
+  top5_1,
+  top5_2,
+  top5_3,
+  top5_4,
+  top5_5,
+  top5_6,
+  top5_7,
+  top5_8,
+  top5_9,
+  top5_10,
+  top5_11,
+  top5_12,
+  top5_13,
+  top5_14,
+  top5_15
+]
 const statusTab = ref(0)
+const currentTab = ref(0)
+const chartLoading = ref<boolean>(false)
 
 const tabStatus = ref([
   {
@@ -122,7 +139,7 @@ const tabs1 = ref<TabType[]>([
 
 const tabs2 = ref<TabType[]>([
   {
-    name: '拆迁安置',
+    name: '搬迁安置',
     id: 0
   },
   {
@@ -133,131 +150,53 @@ const tabs2 = ref<TabType[]>([
 
 const echartOptions = ref<OptionsType[]>([])
 
-const getStatisticData = () => {
-  echartOptions.value = [
-    {
-      name: '陈汉林',
-      number: 20,
-      index: 0,
-      progress: 100,
-      img: top5_1
-    },
-    {
-      name: '梁柏林',
-      number: 18,
-      index: 1,
-      progress: 95,
-      img: top5_2
-    },
-    {
-      name: '董化杰',
-      number: 15,
-      index: 2,
-      progress: 80,
-      img: top5_3
-    },
-    {
-      name: '潘永浩',
-      number: 11,
-      index: 3,
-      progress: 60,
-      img: top5_4
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_5
-    },
-    {
-      name: '董化杰',
-      number: 15,
-      index: 2,
-      progress: 80,
-      img: top5_6
-    },
-    {
-      name: '潘永浩',
-      number: 11,
-      index: 3,
-      progress: 60,
-      img: top5_7
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_8
-    },
-    {
-      name: '董化杰',
-      number: 15,
-      index: 2,
-      progress: 80,
-      img: top5_9
-    },
-    {
-      name: '潘永浩',
-      number: 11,
-      index: 3,
-      progress: 60,
-      img: top5_10
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_11
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_12
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_13
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_14
-    },
-    {
-      name: '董羽坤',
-      number: 10,
-      index: 4,
-      progress: 55,
-      img: top5_15
-    }
-  ]
-}
-
 const tabChange = (id: number) => {
   if (currentTab.value === id) {
     return
   }
   currentTab.value = id
+  getTopGroupApi()
 }
 
 const statusTabChange = (id: number) => {
   statusTab.value = id
   tabs.value = statusTab.value === 0 ? tabs1.value : tabs2.value
+  currentTab.value = 0 // 状态tab切换重置currentTab
+  getTopGroupApi()
+}
+
+/**
+ * 获取排行榜查询参数
+ * @param statusTab
+ * @param currentTab
+ */
+const getTopGroupParams = (statusTab: number, currentTab: number) => {
+  const arrStatusTab1 = ['qualification', 'arrangement', 'choose', 'excess_soar', 'agreement']
+  const arrStatusTab2 = ['relocate_arrangement', 'production_arrangement']
+  return statusTab === 0 ? arrStatusTab1[currentTab] : arrStatusTab2[currentTab]
+}
+
+// 排行榜
+const getTopGroupApi = async () => {
+  let params = getTopGroupParams(statusTab.value, currentTab.value)
+  chartLoading.value = true
+  try {
+    const result = await getImplementationTopGroup(params)
+    chartLoading.value = false
+    echartOptions.value = result.map((item, index) => ({
+      name: item.gridmanName,
+      progress: item.countComplete,
+      img: imgArr[index]
+    }))
+    console.log('result-group', result)
+  } catch {
+    chartLoading.value = false
+  }
 }
 
 onMounted(() => {
-  getStatisticData()
   statusTabChange(0)
+  getTopGroupApi()
 })
 </script>
 

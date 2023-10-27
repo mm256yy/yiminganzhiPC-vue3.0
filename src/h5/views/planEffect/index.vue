@@ -2,8 +2,9 @@
   <div class="flex-col app-container">
     <div class="header-region">
       <ElCarousel height="360px">
-        <ElCarouselItem v-for="item in 3" :key="item">
-          <ElImage :src="bannerBgSrc" fit="cover" />
+        <ElCarouselItem v-for="(item, index) in picDta" :key="index">
+          <div>{{ item }}</div>
+          <ElImage :src="item ? item : bannerBgSrc" fit="cover" />
         </ElCarouselItem>
       </ElCarousel>
     </div>
@@ -31,13 +32,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus'
 import bannerBgSrc from '@/h5/assets/imgs/banner_bg.png'
 import floorPlanBgSrc from '@/h5/assets/imgs/floor_plan_bg.png'
-
+import { useRoute } from 'vue-router'
 const currentType = ref(1)
-
+let Route = useRoute()
 interface HouseType {
   id: number
   name: string
@@ -61,6 +62,12 @@ const houseTypeList = ref<HouseType[]>([
 const tabChange = (id: number) => {
   currentType.value = id
 }
+let picDta: any = ref([])
+
+onMounted(() => {
+  picDta.value = Route.query.id
+  console.log(picDta.value)
+})
 </script>
 
 <style lang="less" scoped>
