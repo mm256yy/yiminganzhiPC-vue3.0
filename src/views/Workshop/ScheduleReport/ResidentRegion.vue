@@ -193,12 +193,15 @@
           </el-table-column>
           <el-table-column prop="agreementStatus" label="动迁协议" align="center">
             <template #default="{ row }">
-              <Icon
-                v-if="row.agreementStatus == '1'"
-                class="active-icon"
-                icon="ep:check"
-                color="#000"
-              />
+              <div>
+                <Icon
+                  v-if="row.agreementStatus == '1'"
+                  class="active-icon"
+                  icon="ep:check"
+                  color="#000"
+                />
+                <span v-else></span>
+              </div>
             </template>
           </el-table-column>
         </el-table-column>
