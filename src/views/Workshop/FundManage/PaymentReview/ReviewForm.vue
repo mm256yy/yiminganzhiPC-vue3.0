@@ -88,6 +88,7 @@
           <div class="col-wrap">
             <div class="label">付款对象:</div>
             <!-- <div class="content">境岭镇</div> -->
+            <div class="content">{{ form.type == 1 ? '支付' : '预拨' }}</div>
           </div>
         </ElCol>
       </ElRow>
