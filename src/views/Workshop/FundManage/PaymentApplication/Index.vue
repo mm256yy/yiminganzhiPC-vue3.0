@@ -59,7 +59,7 @@
             type="primary"
             link
             @click="onViewRow(row)"
-            v-if="row.status.toString() != '待审核' && row.status.toString() != '已完成'"
+            v-if="row.statusText.toString() != '待审核' && row.statusText.toString() != '已完成'"
             >查看</el-button
           >
           <el-button type="primary" link @click="onEditRow(row)">编辑</el-button>
@@ -67,7 +67,7 @@
             type="danger"
             link
             @click="onDelRow(row, false)"
-            v-if="row.status.toString() != '待审核' && row.status.toString() != '已完成'"
+            v-if="row.statusText.toString() != '待审核' && row.statusText.toString() != '已完成'"
           >
             删除
           </el-button>
@@ -482,7 +482,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'statusText',
     label: '状态',
     search: {
       show: false
