@@ -5,7 +5,6 @@
     :width="1000"
     @close="onClose"
     alignCenter
-    appendToBody
     :closeOnClickModal="false"
   >
     <ElForm class="form" ref="formRef" :model="form" label-width="124px" :label-position="'right'">
@@ -169,7 +168,7 @@
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="relocateVerifyPic"
+            :file-list="parmasList.receipt ? JSON.parse(parmasList.receipt) : []"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -186,9 +185,9 @@
           </ElUpload>
         </div>
       </div>
-      <div v-if="false">
+      <div v-if="actionType === 'edit'">
         <ElRow>
-          <ElCol :span="24">
+          <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">
               <div class="label">付款日期</div>
               <!-- <div class="content">境岭镇</div> -->
@@ -306,6 +305,9 @@
         </div>
       </div>
     </div>
+  </ElDialog>
+  <ElDialog v-model="dialogVisible" :z-index="999" appendToBody>
+    <img w-full :src="imgUrl" alt="Preview Image" />
   </ElDialog>
 </template>
 

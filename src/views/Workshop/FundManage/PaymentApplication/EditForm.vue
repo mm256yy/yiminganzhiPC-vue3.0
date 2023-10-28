@@ -100,7 +100,7 @@
       <ElFormItem label="收款方:" v-if="form.payType == 2">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
-            v-for="item in dictObj[326]"
+            v-for="item in dictObj[396]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -375,7 +375,7 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-console.log(dictObj.value[393], '111')
+// console.log(dictObj.value, '111')
 
 const form = ref<any>({})
 const parmasLists = ref<any>({})
