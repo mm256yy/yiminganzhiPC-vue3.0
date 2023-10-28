@@ -35,7 +35,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="地块名称"
+          label="地块编号"
           :width="150"
           prop="landName"
           align="center"

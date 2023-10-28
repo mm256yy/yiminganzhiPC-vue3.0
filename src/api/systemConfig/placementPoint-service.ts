@@ -39,3 +39,13 @@ export const delPlacementPointByIdApi = (id: number): Promise<void> => {
     url: `/settleAddress/delete/${id}`
   })
 }
+/**
+ * 查询单个安置点
+ * @param id 当前行专业项目 ID
+ * @returns
+ */
+export const getPlacementPointByIdApi = (id: number): Promise<void> => {
+  return request.get({
+    url: `/settleAddress/${id}`
+  })
+}
