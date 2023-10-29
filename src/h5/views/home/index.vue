@@ -42,7 +42,7 @@
         v-for="(item, index) in noticeList"
         :key="index"
       >
-        <span class="notice-content-txt" v-html="item.content"></span>
+        <span class="notice-content-txt" v-html="item.title"></span>
         <span class="self-start time-txt">{{ item.releaseTime }}</span>
       </div>
     </div>
@@ -114,6 +114,7 @@ let getHomesicknesss = async () => {
   let data = await getHomesickness()
   console.log(data.content)
   dataList.value = data.content
+  dataList.value.length = 2
 }
 onMounted(() => {
   getNewsLists()
