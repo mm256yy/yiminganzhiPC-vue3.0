@@ -78,7 +78,7 @@
 import { onMounted, ref } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
 interface PropsType {
-  placementPointInfo: any
+  placementPointInfo?: any
 }
 const props = defineProps<PropsType>()
 const map = ref<any>(null)

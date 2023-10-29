@@ -118,7 +118,7 @@ import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
   show: boolean
-  row?: LandlordDtoType | null | undefined
+  row?: LandlordDtoType
 }
 const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()

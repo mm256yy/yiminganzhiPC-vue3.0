@@ -104,8 +104,6 @@ import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capit
 import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 import dayjs from 'dayjs'
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()

@@ -89,7 +89,7 @@
 
     <EditForm
       :show="dialog"
-      :row="tableObject.currentRow"
+      :row="(tableObject.currentRow as LandlordDtoType)"
       :districtTree="districtTree"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"

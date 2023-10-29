@@ -106,7 +106,7 @@ import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 
 interface PropsType {
   show: boolean
-  row?: LandlordDtoType | null | undefined
+  row?: LandlordDtoType
 }
 
 const dictStore = useDictStoreWithOut()
