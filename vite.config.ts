@@ -21,12 +21,16 @@ function pathResolve(dir: string) {
 }
 
 export default ({ command, mode }: ConfigEnv): UserConfig => {
+  console.log(command, mode)
+  console.log(process.argv)
   let env = {} as any
+  let platform = 'pc' //  'pc' | 'h5'
   const isBuild = command === 'build'
   if (!isBuild) {
     env = loadEnv((process.argv[3] === '--mode' ? process.argv[4] : process.argv[3]), root)
   } else {
     env = loadEnv(mode, root)
+    platform = process.argv[6]
   }
   return {
     base: env.VITE_BASE_PATH,
@@ -71,7 +75,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       VueMarcos(),
       createHtmlPlugin({
-        pages: [
+        pages: platform === 'pc' ? [
           {
             entry: 'src/main.ts',
             filename: 'index.html',
@@ -96,6 +100,9 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
               }
             }
           },
+
+        ] :
+        [
           {
             entry: 'src/h5/main.ts',
             filename: 'h5.html',
@@ -151,7 +158,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     build: {
       minify: 'terser',
-      outDir: env.VITE_OUT_DIR || 'dist',
+      outDir: platform === 'pc' ? (env.VITE_OUT_DIR || 'dist') : 'dist-h5',
       sourcemap: env.VITE_SOURCEMAP === 'true' ? 'inline' : false,
       // brotliSize: false,
       terserOptions: {
@@ -161,13 +168,20 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       },
       rollupOptions: {
-        input: {
+        input: platform === 'pc' ? {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
+        } :
+        {
           h5: resolve(__dirname, "h5.html"),
           ld: resolve(__dirname, "ld.html")
+        },
+        output: {
+          assetFileNames: `${platform}[ext]/[name]-[hash].[ext]`,
+          chunkFileNames: `${platform}js/[name]-[hash].js`,
+          entryFileNames: `${platform}js/[name]-[hash].js`
         }
-      }
+      },
     },
     server: {
       port: 4000,
@@ -207,7 +221,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs' 
+        'dayjs',
+        'pinia'
       ]
     }
   }
