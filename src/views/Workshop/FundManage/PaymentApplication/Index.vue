@@ -46,7 +46,7 @@
         @register="register"
       >
         <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+          <div>{{ formatDateTime(row.createdDate) }}</div>
         </template>
         <template #paymentType="{ row }">
           <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
@@ -56,8 +56,19 @@
         </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
-          <el-button type="primary" link @click="onEditRow(row)">编辑</el-button>
-          <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row, false)">
+          <el-button
+            type="primary"
+            link
+            @click="onEditRow(row)"
+            v-if="row.statusText.toString() != '待审核' && row.statusText.toString() != '已完成'"
+            >编辑</el-button
+          >
+          <el-button
+            type="danger"
+            link
+            @click="onDelRow(row, false)"
+            v-if="row.statusText.toString() != '待审核' && row.statusText.toString() != '已完成'"
+          >
             删除
           </el-button>
         </template>
@@ -70,6 +81,7 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       :parmasList="parmasList"
+      :fundAccountList="fundAccountList"
     />
   </WorkContentWrap>
 </template>
@@ -89,7 +101,7 @@ import {
   delPaymentApplicationByIdApi,
   PaymentApplicationByIdDetailApi
 } from '@/api/fundManage/paymentApplication-service'
-import { formatDate } from '@/utils/index'
+import { formatDateTime } from '@/utils/index'
 import EditForm from './EditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
@@ -104,7 +116,12 @@ const parmasList = ref<any[]>([])
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
     if (res) {
-      fundAccountList.value = res.content
+      fundAccountList.value = res.content.reduce((pre, item) => {
+        if (item.name != '概算外费用') {
+          pre.push(item)
+        }
+        return pre
+      }, [])
       console.log(fundAccountList.value, '资金列表数据')
     }
   })
@@ -169,7 +186,6 @@ getList()
 
 onMounted(() => {
   getFundSubjectList()
-  console.log(tableObject, '11111111')
   otherListApi()
 })
 
@@ -190,6 +206,13 @@ const onAddRow = () => {
 }
 
 const onEditRow = (row: any) => {
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res
+    console.log(res.funPaymentRequestFlowNodeList, '测试')
+  })
+  tableObject.currentRow = {
+    ...row
+  }
   actionType.value = 'edit'
   tableObject.currentRow = row
   dialog.value = true
@@ -202,7 +225,6 @@ const onViewRow = (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
-    // parmasList: parmasList.value
   }
   tableObject.currentRow = row
   dialog.value = true
@@ -465,7 +487,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'statusText',
     label: '状态',
     search: {
       show: false

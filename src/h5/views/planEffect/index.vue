@@ -1,16 +1,16 @@
 <template>
   <div class="flex-col app-container">
     <div class="header-region">
-      <ElCarousel height="360px">
-        <ElCarouselItem v-for="item in 3" :key="item">
-          <ElImage :src="bannerBgSrc" fit="cover" />
+      <ElCarousel height="250px">
+        <ElCarouselItem v-for="(item, index) in picDta" :key="index">
+          <ElImage :src="item ? item : bannerBgSrc" fit="cover" />
         </ElCarouselItem>
       </ElCarousel>
     </div>
     <div class="flex-col relative section-content">
-      <div class="flex-col justify-start relative house-type"
-        ><span class="type-txt">小区户型</span></div
-      >
+      <div class="flex-col justify-start relative house-type">
+        <div class="type-txt">小区户型</div>
+      </div>
       <div class="flex-col section-house-type">
         <div class="house-type-group">
           <div
@@ -31,13 +31,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus'
 import bannerBgSrc from '@/h5/assets/imgs/banner_bg.png'
 import floorPlanBgSrc from '@/h5/assets/imgs/floor_plan_bg.png'
-
+import { useRoute } from 'vue-router'
 const currentType = ref(1)
-
+let Route: any = useRoute()
 interface HouseType {
   id: number
   name: string
@@ -61,6 +61,12 @@ const houseTypeList = ref<HouseType[]>([
 const tabChange = (id: number) => {
   currentType.value = id
 }
+let picDta: any = ref([])
+
+onMounted(() => {
+  picDta.value = JSON.parse(Route.query.id)
+  console.log(picDta.value)
+})
 </script>
 
 <style lang="less" scoped>
@@ -91,7 +97,7 @@ const tabChange = (id: number) => {
   }
 
   .section-house-type {
-    padding: 26px 30px;
+    padding: 0.1rem 30px;
 
     .house-type-group {
       display: flex;

@@ -36,6 +36,15 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #createdDate="{ row }">
+          <div>{{ formatDateTime(row.createdDate) }}</div>
+        </template>
+        <template #paymentType="{ row }">
+          <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
+        <template #funSubjectId="{ row }">
+          <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
+        </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
         </template>
@@ -72,6 +81,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getBudgetAdjustmentListApi } from '@/api/fundManage/budgetAdjustment-service'
 // import { getPaymentReviewListApi } from '@/api/fundManage/paymentApplication-service'
+import { formatDateTime } from '@/utils/index'
 
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import ViewForm from './ViewForm.vue'
@@ -311,7 +321,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'paymentTypeTxt',
+    field: 'paymentType',
     label: '付款对象类型',
     search: {
       show: false
@@ -337,7 +347,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'funSubjectTxt',
+    field: 'funSubjectId',
     label: '资金科目',
     search: {
       show: false
@@ -402,7 +412,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'status',
+    field: 'gsStatusTxt',
     label: '状态',
     search: {
       show: false
@@ -492,6 +502,22 @@ const getFundSubjectList = () => {
       fundAccountList.value = res.content
     }
   })
+}
+
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
 }
 const onViewRow = async (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {

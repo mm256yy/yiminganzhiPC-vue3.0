@@ -536,7 +536,8 @@ const getDemographicList = () => {
 const getLandlordList = (query?: string) => {
   getLandlordListApi({
     name: query,
-    type: 'PeasantHousehold'
+    type: 'PeasantHousehold',
+    status: 'implementation'
   }).then((res) => {
     let arr: any = res.content
     if (arr && arr.length) {

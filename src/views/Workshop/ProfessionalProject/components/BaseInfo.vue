@@ -9,7 +9,7 @@
       <div> </div>
     </div>
 
-    <div class="other">
+    <div class="other flex-wrap">
       <div class="info-item">
         <div class="tit">地址：</div>
         <div class="txt">{{ props.baseInfo.address || '-' }}</div>

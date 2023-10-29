@@ -1,16 +1,16 @@
 <template>
   <div class="flex-col app-container">
     <div class="flex-col flex-auto group-announcement">
-      <div class="flex-col section">
+      <div class="flex-col section" style="overflow: auto">
         <div class="flex-col">
           <div
             class="flex-col list-item"
             v-for="(item, index) in items"
             :key="index"
-            @click="toLink('announcementDetail')"
+            @click="toLink('announcementDetail', { id: item.id })"
           >
-            <span class="item-title">{{ item.title }}</span>
-            <span class="self-start item-time">{{ item.time }}</span>
+            <span class="item-title" v-html="item.title"></span>
+            <span class="self-start item-time">{{ item.releaseTime }}</span>
           </div>
         </div>
       </div>
@@ -18,8 +18,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getNewsList } from '../home/service'
 const { push } = useRouter()
 
 const items = ref<any>([
@@ -47,6 +48,14 @@ const toLink = (routeName: string, query = {}) => {
     query
   })
 }
+let getNewsLists = async () => {
+  let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
+  console.log(data)
+  items.value = data.content
+}
+onMounted(() => {
+  getNewsLists()
+})
 </script>
 
 <style lang="less" scoped>

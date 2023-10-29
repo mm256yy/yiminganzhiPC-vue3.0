@@ -23,7 +23,7 @@
         />
         <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center">
           <template #default="{ row }">
-            <ElSelect class="w-350px" v-model="row.payObject">
+            <ElSelect class="w-350px" v-model="row.contractId">
               <ElOption
                 v-for="item in dictObj[393]"
                 :key="item.value"
@@ -36,7 +36,7 @@
         <ElTableColumn label="申请金额" prop="contractName" align="center" header-align="center">
           <!-- <ElInputNumber class="!w-200px" /> -->
           <template #default="{ row }">
-            <ElInputNumber class="!w-200px" v-model="row.contractName" />
+            <ElInputNumber class="!w-200px" v-model="row.amount" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -163,11 +163,12 @@ const tableDatas = ref<any[]>([])
 const addDemo = () => {
   const d = {
     index: dataId.value++,
-    payObject: '',
-    contractName: ''
+    contractId: '',
+    amount: ''
   }
   tableDatas.value.push(d)
-  amountPrice.value = tableDatas.value.reduce((c, item) => c + item.contractName * 1, 0)
+  amountPrice.value = tableDatas.value.reduce((c, item) => c + item.amount * 1, 0)
+  console.log(tableDatas.value, amountPrice.value, '打印传递的计算值')
 }
 const delDemo = (row: any) => {
   tableDatas.value.splice(row.index, 1)

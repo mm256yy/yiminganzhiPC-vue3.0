@@ -30,11 +30,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -45,14 +41,13 @@
           </div>
           <div class="data-box">
             <span class="green">共{{ tableObject.total }}</span> 笔
-            <!-- <span class="green">10</span> 笔 <span class="green">10,000</span> 元 -->
           </div>
         </div>
-        <div class="col right">
+        <!-- <div class="col right">
           <ElButton type="primary" @click="onExport">
             <Icon icon="fluent:arrow-export-up-24-regular" class="mr-5px" /> 导出
           </ElButton>
-        </div>
+        </div> -->
       </div>
 
       <Table
@@ -69,10 +64,17 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
+        show-overflow-tooltip
         @register="register"
       >
         <template #typeTxt="{ row }">
           <div>{{ row.type === '1' ? '入账' : '出账' }}</div>
+        </template>
+        <template #recordTime="{ row }">
+          <div>{{ row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD') : '-' }}</div>
+        </template>
+        <template #createDate="{ row }">
+          <div>{{ row.createDate ? dayjs(row.createDate).format('YYYY-MM-DD') : '-' }}</div>
         </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
@@ -92,15 +94,16 @@ import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { useAppStore } from '@/store/modules/app'
+// import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
 import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
 import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
+import dayjs from 'dayjs'
 
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+// const appStore = useAppStore()
+// const projectId = appStore.currentProjectId
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
@@ -109,9 +112,12 @@ const { register, tableObject, methods } = useTable({
   getListApi: getCapitalPoolListApi
 })
 
-const { setSearchParams } = methods
+const { getList, setSearchParams } = methods
 
-setSearchParams({})
+tableObject.params = {
+  status: '1'
+}
+getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -313,14 +319,32 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-tableObject.params = {
-  projectId
+const onSearch = (data) => {
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    status: '1'
+  }
+
+  setSearchParams({})
 }
 
 const onViewRow = (row) => {
   // 点击查看进入入账详情页面
-  console.log(row)
   toLink('entrydetail')
+  console.log(row)
 }
 
 const onFormPupClose = () => {
@@ -328,7 +352,7 @@ const onFormPupClose = () => {
 }
 
 // 导出
-const onExport = () => {}
+// const onExport = () => {}
 
 onMounted(() => {
   let params: CapitalPoolDtoType = {}

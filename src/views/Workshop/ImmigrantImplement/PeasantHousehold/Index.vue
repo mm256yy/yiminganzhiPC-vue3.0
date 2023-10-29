@@ -120,6 +120,8 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
+const { currentRoute } = useRouter()
+const { search } = currentRoute.value.query as any // 从搜索入口取值
 
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
@@ -135,7 +137,8 @@ const { register, tableObject, methods } = useTable({
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  blurry: search
 }
 
 setSearchParams({ type: 'PeasantHousehold', status: 'implementation' })

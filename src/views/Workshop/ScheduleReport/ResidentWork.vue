@@ -21,13 +21,18 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户按工作分组报表 </div>
       </div>
-      <el-table :height="getHeight(tableData)" :data="tableData" border style="width: 100%">
+      <el-table
+        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
+        :data="tableData"
+        border
+        style="width: 100%"
+      >
         <el-table-column label="序号" align="center" width="60">
           <template #default="scope">
             <span> {{ scope.$index + 1 }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="gridmanName" label="工作组" align="center" width="60" />
+        <el-table-column prop="gridmanName" label="工作组" align="center" />
         <el-table-column prop="totalHouse" label="总任务数（户）" align="center" />
         <!-- 公寓房 -->
         <el-table-column label="动迁阶段(户)" align="center">
@@ -221,8 +226,8 @@ const handleCurrentChange = (val: number) => {
 const getResidentWorkList = (page, size) => {
   const params = { page, size }
   getResidentWorkListApi(params).then((res) => {
-    tableData.value = res
-    totalNum.value = tableData.value.length
+    tableData.value = res.content
+    totalNum.value = res.total
   })
 }
 /**

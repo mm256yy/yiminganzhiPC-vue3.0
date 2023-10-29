@@ -19,6 +19,7 @@
         </div>
       </div>
       <Table
+        ref="tableRef"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -34,21 +35,26 @@
         @register="register"
       >
         <template #createdDate="{ row }">
-          <div>{{ formatDate(row.createdDate) }}</div>
+          <div>{{ formatDateTime(row.createdDate) }}</div>
         </template>
 
-        <template #age="{ row }">
-          <div>{{ analyzeIDCard(row.card) }}</div>
+        <template #type="{ row }">
+          <div>{{ row.type == 1 ? '概算内' : '概算外' }}</div>
         </template>
         <template #paymentType="{ row }">
           <div>{{ row.paymentType == 1 ? '专业项目' : '其他' }}</div>
+        </template>
+        <template #funSubjectId="{ row }">
+          <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
         </template>
         <!-- <template #action="{ row }">
             <TableEditColumn :view-type="'link'" :row="row" @delete="onDelRow" @edit="onEditRow" />
           </template> -->
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
-          <el-button type="primary" link @click="onReviewRow(row)">审核</el-button>
+          <el-button type="primary" link @click="onReviewRow(row)" v-if="tabVal == 1"
+            >审核</el-button
+          >
           <!-- <el-button v-if="row.relation != 1" type="danger" link @click="onDelRow(row)">
             删除    
           </el-button> -->
@@ -85,10 +91,11 @@ import {
 } from '@/api/fundManage/paymentApplication-service'
 import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
-import { formatDate, analyzeIDCard } from '@/utils/index'
+import { formatDateTime } from '@/utils/index'
+let tableRef = ref()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-const tabVal = ref<string>('1')
+const tabVal = ref<any>(1)
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -121,6 +128,28 @@ getList()
 const tabChange = (data: string) => {
   tabVal.value = data
   setSearchParams({ businessId: 1, auditType: tabVal.value })
+  let tablecloume = useCrudSchemas(schema).allSchemas.tableColumns
+  console.log(tablecloume)
+
+  if (tabVal.value == '1') {
+    allSchemas.tableColumns = tablecloume
+  } else {
+    allSchemas.tableColumns = tablecloume.reduce((pre: any, item) => {
+      if (item.field == 'applyUserName') {
+        pre.push(item)
+        pre.push({
+          field: 'statusText',
+          label: '状态',
+          search: {
+            show: false
+          }
+        })
+      } else {
+        pre.push(item)
+      }
+      return pre
+    }, [])
+  }
 }
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()
@@ -143,6 +172,23 @@ const getFundSubjectList = () => {
     }
   })
 }
+
+// 获取树形递归数据
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
 onMounted(() => {
   getDemographicHeadInfo()
   getExcelUploadList()
@@ -155,9 +201,17 @@ onBeforeUnmount(() => {
 })
 
 const onReviewRow = async (row) => {
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  actionType.value = 'edit'
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
   tableObject.currentRow = row
   dialog.value = true
-  actionType.value = 'edit'
 }
 const onViewRow = async (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
@@ -176,6 +230,7 @@ const onViewRow = async (row: any) => {
 // 关闭审核弹窗
 const onCloseReview = () => {
   dialog.value = false
+  getList()
 }
 const schema = reactive<CrudSchema[]>([
   {
@@ -199,7 +254,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'name',
     label: '申请名称',
     search: {
       show: true,
@@ -354,7 +409,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'applyUserName',
+    field: 'name',
     label: '申请名称',
     search: {
       show: false
@@ -413,14 +468,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
 
-  {
-    width: 100,
-    field: 'statusText',
-    label: '状态',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   width: 100,
+  //   field: 'statusText',
+  //   label: '状态',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     width: 200,
     field: 'action',
@@ -438,7 +493,7 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 
-const { allSchemas } = useCrudSchemas(schema)
+let { allSchemas } = useCrudSchemas(schema)
 
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
@@ -480,7 +535,9 @@ const onSearch = (data) => {
     ...searchData
   }
   tableObject.params = {
-    projectId
+    projectId,
+    auditType: 1,
+    businessId: 1
   }
   if (params.code) {
     // 拿到对应的参数key

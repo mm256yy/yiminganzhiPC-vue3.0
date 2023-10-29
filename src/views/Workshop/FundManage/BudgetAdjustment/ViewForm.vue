@@ -12,13 +12,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请类型:</div>
-          <div class="content">{{ form.applyType }}</div>
+          <div class="content">{{ form.applyTypeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请名称:</div>
-          <div class="content">{{ form.applyUserName }}</div>
+          <div class="content">{{ form.name }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -42,13 +42,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">概算科目:</div>
-          <div class="content">{{ form.type }}</div>
+          <div class="content">{{ form.type == 1 ? '概算内' : '概算外' }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">资金科目:</div>
-          <div class="content">{{ form.funSubjectId }}</div>
+          <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -57,13 +57,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">{{ form.paymentTypeTxt }}</div>
+          <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款类型:</div>
-          <div class="content">{{ form.payType }}</div>
+          <div class="content">{{ form.payType == 1 ? '支付' : '预拨' }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -78,16 +78,35 @@
     </ElRow>
 
     <div class="title-1">
-      <span class="main-title">专业项目合同清单:</span>
+      <!-- <span class="main-title">专业项目合同清单:</span> -->
       申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请合同数：<span
         class="num"
-        >{{
-          parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
-        }}</span
+        >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
       >
       个
     </div>
-
+    <ElTable
+      :data="parmasList.paymentObjectList"
+      style="width: 100%"
+      class="mb-20"
+      :border="true"
+      v-if="form.paymentType == 2"
+    >
+      <ElTableColumn
+        label="序号"
+        align="center"
+        width="80"
+        type="index"
+        header-align="center"
+        prop="index"
+      />
+      <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
+        <!-- <template #default="{ row }">
+          {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
+        </template> -->
+      </ElTableColumn>
+      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+    </ElTable>
     <ElTable
       :data="parmasList.professionalContractList"
       style="width: 100%"
@@ -99,7 +118,7 @@
       <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
       <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-      <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
+      <!-- <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" /> -->
       <ElTableColumn
         label="合同金额(万元)"
         prop="contractAmount"
@@ -124,13 +143,13 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
-          <div class="content">{{ form.remark }}</div>
+          <div class="content">{{ form.typeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整说明:</div>
-          <div class="content">{{ form.type }}</div>
+          <div class="content">{{ form.gsRemark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -159,6 +178,12 @@
                   width="18"
                   height="18"
                 />
+                <img
+                  v-if="item.status == 0"
+                  src="@/assets/imgs/icon_error.png"
+                  width="18"
+                  height="18"
+                />
               </div>
               <div
                 class="line"
@@ -170,13 +195,14 @@
             <div class="right">
               <div class="content-box">
                 <div class="content-1">
-                  <div class="name">{{ item.auditor }}</div>
+                  <div class="name">{{ item.name }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time">
                   审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                 </div>
-                <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
+                <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
+                <div class="remark"> 审核意见: {{ item.remark }} </div>
               </div>
             </div>
           </div>
@@ -191,6 +217,9 @@ import { ElDialog, ElRow, ElCol, ElTable, ElTableColumn } from 'element-plus'
 import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
+// import { fmtDict } from '@/utils'
+
+// import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 interface PropsType {
   show: any
@@ -200,7 +229,14 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const form = ref<any>({})
-
+const fundAccountList = ref<any[]>([]) // 资金科目
+// const getFundSubjectList = () => {
+//   getFundSubjectListApi().then((res: any) => {
+//     if (res) {
+//       fundAccountList.value = res.content
+//     }
+//   })
+// }
 watch(
   () => props.row,
   (val) => {
@@ -217,122 +253,25 @@ watch(
     deep: true
   }
 )
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
 
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-//   console.log(row, column)
-//   console.log(rowIndex, columnIndex)
-//   if (columnIndex === 0) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 1) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 4,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 2) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 3) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 4) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 5) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 7) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 3) {
-//       return {
-//         rowspan: 1,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   }
-// }
-
+// onMounted(() => {
+//   getFundSubjectList()
+// })
 // 关闭弹窗
 const onClose = () => {
   emit('close')

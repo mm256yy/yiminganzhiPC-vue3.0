@@ -107,6 +107,18 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
                 injectScript: `<script src="./inject.js"></script>`,
               }
             }
+          },
+          {
+            entry: 'src/h5/ld/main.ts',
+            filename: 'ld.html',
+            template: 'ld.html',
+            injectOptions: {
+              data: {
+                title: env.VITE_APP_TITLE,
+                mapAk: env.VITE_MAP_AK,
+                injectScript: `<script src="./inject.js"></script>`,
+              }
+            }
           }
         ]
       })
@@ -152,7 +164,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         input: {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
-          h5: resolve(__dirname, "h5.html")
+          h5: resolve(__dirname, "h5.html"),
+          ld: resolve(__dirname, "ld.html")
         }
       }
     },
@@ -163,12 +176,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
-          target: 'http://192.168.1.119:8880',
+          target: 'http://ym.zdwp.local',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: false
+          changeOrigin: true
         }
       },
       hmr: {

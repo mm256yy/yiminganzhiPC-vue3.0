@@ -18,24 +18,24 @@
       <ElTableColumn label="数量" prop="number" align="center" header-align="center">
         <template #default="{ row }">
           <ElInputNumber
-            v-if="row.isUpdate === '1' && row.isVerify !== '1'"
+            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
             :min="0"
             v-model="row.number"
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
-          <div v-if="row.isUpdate !== '1'"> —— </div>
+          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
         <template #default="{ row }">
           <ElInputNumber
-            v-if="row.isUpdate === '1' && row.isVerify !== '1'"
+            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
             :min="0"
             v-model="row.price"
             :precision="2"
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
-          <div v-if="row.isUpdate !== '1'"> —— </div>
+          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn
@@ -54,11 +54,12 @@
       <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
         <template #default="{ row }">
           <ElInput
-            v-if="row.isUpdate === '1' && row.isVerify !== '1'"
+            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
             placeholder="请输入"
             v-model="row.remark"
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+          <div v-if="!showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="操作" width="180" align="center" header-align="center" fixed="right">
@@ -180,6 +181,8 @@ const onSave = (data: any, isVerify: string) => {
       loading.value = false
     })
 }
+//如果不为奖励费小计就展示输入框
+const showInput = (name) => name !== '奖励费小计'
 
 // 确认
 

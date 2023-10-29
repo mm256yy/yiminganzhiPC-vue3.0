@@ -28,7 +28,12 @@
       <div class="title">公寓房</div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
-        <ElTableColumn label="安置区" prop="settleAddress" align="center" header-align="center" />
+        <ElTableColumn
+          label="安置区"
+          prop="settleAddressText"
+          align="center"
+          header-align="center"
+        />
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
           公寓房
         </ElTableColumn>

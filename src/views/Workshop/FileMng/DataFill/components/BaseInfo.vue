@@ -64,7 +64,7 @@
       </el-row>
     </div>
 
-    <div class="other">
+    <!-- <div class="other">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
         <div class="txt">{{ props.baseInfo.areaCodeText || '-' }}</div>
@@ -81,7 +81,7 @@
         <div class="tit">法人：</div>
         <div class="txt">{{ props.baseInfo.legalPersonName || '-' }}</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 

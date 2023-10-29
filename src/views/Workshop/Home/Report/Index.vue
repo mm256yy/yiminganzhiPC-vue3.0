@@ -40,7 +40,7 @@
       </template>
 
       <template #createdDate="{ row }">
-        <div>{{ formatDate(row.createdDate) }}</div>
+        <div>{{ dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') }}</div>
       </template>
 
       <template #action="{ row }">
@@ -74,8 +74,8 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { useAppStore } from '@/store/modules/app'
 import { getReportListApi, delReportByIdApi } from '@/api/workshop/report/service'
 import { ReportUpdateType } from '@/api/workshop/report/types'
-import { formatDate } from '@/utils/index'
 import EditForm from './components/EditForm.vue'
+import dayjs from 'dayjs'
 
 const { currentRoute, back } = useRouter()
 const { query } = unref(currentRoute)
@@ -134,7 +134,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '上传时间',
     search: {
       show: false

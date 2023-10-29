@@ -1,25 +1,25 @@
 <template>
   <div class="flex-col page">
     <div class="flex-col flex-auto section-member">
-      <div class="flex-col list">
+      <div class="flex-col list" v-for="i in NameData.data" :key="i.id">
         <div class="flex-col list-item">
           <div class="flex-row row-field">
-            <span class="userName">陈画礼</span>
+            <span class="userName">{{ i.name }}</span>
             <div class="flex-col items-center role-txt">
-              <span class="role role-owner">户主</span>
+              <span class="role role-owner">{{ i.relationText }}</span>
             </div>
           </div>
           <div class="flex-row row-field">
             <span class="label-left">人口性质</span>
-            <span class="label-right">农村移民</span>
+            <span class="label-right">{{ i.censusTypeText }}</span>
           </div>
           <div class="flex-row row-field">
             <span class="label-left">性别</span>
-            <span class="label-right">男</span>
+            <span class="label-right">{{ i.sexText }}</span>
           </div>
           <div class="flex-row row-field">
             <span class="label-left">民族</span>
-            <span class="label-right">汉族</span>
+            <span class="label-right">{{ i.nationText }}</span>
           </div>
         </div>
       </div>
@@ -28,9 +28,24 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue'
+import { reactive, onMounted } from 'vue'
 // import type {MemberDtoType} from './type'
+import { getLeadershipScreen, getPersonalInformation } from './service'
+let NameData = reactive({ data: [] })
+let getPersonalInformations = async () => {
+  let data = await getPersonalInformation()
+  console.log(data.doorNo)
+  let res = await getLeadershipScreen({ doorNo: data.doorNo })
+  NameData.data = res
+  console.log(res)
+}
 
+// let getLeadershipScreens = async () => {
+//   let data = await getLeadershipScreen()
+// }
+onMounted(() => {
+  getPersonalInformations()
+})
 // const memberList = ref<MemberDtoType[]>([])
 </script>
 
