@@ -11,7 +11,7 @@
     "build:prod": "pnpm run build:prod:pc && pnpm run build:prod:h5 && pnpm run copy:dist",
     "build:prod:pc": "vite build --mode prod -d pc",
     "build:prod:h5": "vite build --mode prod -d h5",
-    "copy:dist": "node script.js",
+    "copy:dist": "node script.js --mode prod",
     "build:dev": "npm run ts:check && vite build --mode dev",
     "build:test": "npm run ts:check && vite build --mode test",
     "serve:prod": "vite preview --mode prod",

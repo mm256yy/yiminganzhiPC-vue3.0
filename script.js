@@ -10,7 +10,7 @@ const loadEnv = vite.loadEnv
 
 const root = process.cwd()
 const env = loadEnv(process.argv[3] === '--mode' ? process.argv[4] : process.argv[3], root)
-
+console.log(env, 'env')
 const startPath1 = env.VITE_OUT_DIR || 'dist'
 const startPath2 = 'dist-h5'
 
