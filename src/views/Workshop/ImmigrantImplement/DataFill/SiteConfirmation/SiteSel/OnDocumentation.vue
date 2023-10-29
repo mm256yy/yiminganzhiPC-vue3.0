@@ -19,7 +19,7 @@
       <div class="row-item" v-for="(item, index) in form" :key="index">
         <ElRow>
           <ElCol :span="24">
-            <ElFormItem label="区块："> {{ item.settleAddress }} </ElFormItem>
+            <ElFormItem label="区块："> {{ item.settleAddressText }} </ElFormItem>
           </ElCol>
         </ElRow>
 
