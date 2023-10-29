@@ -209,12 +209,12 @@ const peopleList = ref<any[]>([])
 
 const form = ref<any>({})
 
-onMounted(() => {
+onMounted(async () => {
   form.value = props.baseInfo
 
-  getMockData()
-  getRelocationInfo()
-  getPeopleList()
+  await getMockData()
+  await getRelocationInfo()
+  await getPeopleList()
 })
 
 const rules = ref()

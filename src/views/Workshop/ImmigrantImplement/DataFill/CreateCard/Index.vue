@@ -192,8 +192,8 @@ const { getList } = methods
 
 const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-  console.log(row, column)
+const objectSpanMethod = ({ row, rowIndex, columnIndex }: any) => {
+  // console.log(row, column)
   // if (columnIndex === 0) {
   //   if (rowIndex === 0) {
   //     return {

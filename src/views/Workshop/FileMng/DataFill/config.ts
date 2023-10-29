@@ -159,8 +159,8 @@ export const otherReportList = [
     checked: false
   },
   {
-    name: '安置点祥归',
-    url: '/workshop/report?type=${ReportTypes.Site}&title=安置点祥归',
+    name: '安置点规划设计',
+    url: '/workshop/report?type=${ReportTypes.Site}&title=安置点规划设计',
     type: 'Site',
     checked: false
   },

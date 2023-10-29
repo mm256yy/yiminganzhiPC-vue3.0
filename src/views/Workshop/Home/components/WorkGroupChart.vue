@@ -139,7 +139,7 @@ const tabs1 = ref<TabType[]>([
 
 const tabs2 = ref<TabType[]>([
   {
-    name: '拆迁安置',
+    name: '搬迁安置',
     id: 0
   },
   {

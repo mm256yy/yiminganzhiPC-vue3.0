@@ -18,8 +18,8 @@
     >
       <ElFormItem label="概算科目调整" prop="type">
         <el-radio-group v-model="form.type">
-          <el-radio label="1">概算内调为概算外</el-radio>
-          <el-radio label="2">概算外调为概算内</el-radio>
+          <el-radio label="2">概算内调为概算外</el-radio>
+          <el-radio label="1">概算外调为概算内</el-radio>
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="调整说明" prop="gsRemark">
@@ -63,6 +63,7 @@ import type { AdjustmentType } from '@/api/fundManage/budgetAdjustment-types'
 interface PropsType {
   show: any
   landlordIds: number[]
+  statusType: any
 }
 
 const props = defineProps<PropsType>()
@@ -115,12 +116,16 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 
 const submit = async (data: AdjustmentType) => {
-  await updateAdjustmentApi({
-    ...data,
-    projectId
-  })
-  btnLoading.value = false
-  ElMessage.success('操作成功！')
+  if (props.statusType != 2) {
+    await updateAdjustmentApi({
+      ...data,
+      projectId
+    })
+    btnLoading.value = false
+    ElMessage.success('操作成功！')
+  } else {
+    ElMessage.error('待审核状态不能调整概算')
+  }
   onClose(true)
 }
 watch(

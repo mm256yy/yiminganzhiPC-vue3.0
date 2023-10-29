@@ -19,7 +19,7 @@ export const getLandlordListApi = (
   return request.get({
     url: '/peasantHousehold',
     params: {
-      sort: ['lastModifiedDate,id,desc'],
+      sort: ['createdDate,desc'],
       ...query,
       status: globalData.currentSurveyStatus
     }

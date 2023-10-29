@@ -79,7 +79,11 @@
       </Table>
     </div>
 
-    <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" />
+    <EditForm
+      :show="dialog"
+      :row="(tableObject.currentRow as LandlordDtoType)"
+      @close="onFormPupClose"
+    />
   </WorkContentWrap>
 </template>
 <script setup lang="ts">

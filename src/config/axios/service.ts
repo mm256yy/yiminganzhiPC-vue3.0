@@ -81,6 +81,7 @@ service.interceptors.response.use(
     if (data && (data.code === 401 || data.status === 401)) {
       // 清除用户信息
       appStore.setUserJwtInfo(null)
+
       // token 无效，跳转到登录
       window.location.href = '/#/login'
     }

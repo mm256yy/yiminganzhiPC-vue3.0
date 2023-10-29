@@ -28,11 +28,9 @@
 import centerLogoSrc from '@/h5/assets/imgs/icon_reservoir_logo.png'
 import { ref } from 'vue'
 import { ElButton, ElMessage } from 'element-plus'
-import { leaderLogin } from './service'
+import { leaderLogin, currentUserApi } from './service'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '@/store/modules/app'
 
-const appStore = useAppStore()
 const userName = ref<string>('')
 const password = ref<string>('')
 const btnLoading = ref<boolean>(false)
@@ -73,8 +71,12 @@ const onConfirm = () => {
       btnLoading.value = false
       if (res) {
         const user = res.user
-        appStore.setUserJwtInfo(user)
-        appStore.setToken(res.token)
+        sessionStorage.setItem('token', res.token)
+        sessionStorage.setItem('user', res.user)
+        currentUserApi().then((res) => {
+          console.log(res.projectUsers[0].projectId, 'bbq')
+          sessionStorage.setItem('projectId', res.projectUsers[0].projectId)
+        })
         toLink('home')
       }
     },

@@ -9,7 +9,7 @@
             :key="index"
             @click="toLink('announcementDetail', { id: item.id })"
           >
-            <span class="item-title" v-html="item.content"></span>
+            <span class="item-title" v-html="item.title"></span>
             <span class="self-start item-time">{{ item.releaseTime }}</span>
           </div>
         </div>

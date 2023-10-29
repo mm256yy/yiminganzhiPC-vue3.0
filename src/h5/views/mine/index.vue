@@ -6,38 +6,42 @@
           <div class="flex-col justify-start items-center self-start image-wrapper">
             <img
               class="image-avatar"
-              src="https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/64e83d955a7e3f0310414dfe/64e842454d98100011acce52/16929431142229801130.png"
+              :src="
+                nameDta.otherPic
+                  ? JSON.parse(nameDta.otherPic)[0].url
+                  : 'https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/64e83d955a7e3f0310414dfe/64e842454d98100011acce52/16929431142229801130.png'
+              "
             />
           </div>
           <div class="flex-col flex-auto user-info">
             <div class="flex-row items-center">
-              <span class="name-txt">李迪迪</span>
+              <span class="name-txt">{{ nameDta.name }}</span>
               <div class="flex-row items-center section-door">
                 <img class="section-door-field" :src="doorImgSrc" />
                 <div class="section-door-txt">
                   <span class="special">户号：</span>
-                  <span class="special bold-txt">1010004</span>
+                  <span class="special bold-txt">{{ nameDta.doorNo }}</span>
                 </div>
               </div>
             </div>
             <div class="flex-row items-center self-start location-field">
               <img class="location-icon" :src="locationSrc" />
-              <span class="location-txt">绍兴市/新昌县/镜岭镇/小泉溪村</span>
+              <span class="location-txt">{{ nameDta.address }}</span>
             </div>
             <div class="flex-row items-center self-start location-field">
               <img class="location-icon" :src="mobileSrc" />
-              <span class="location-txt">135 8910 0001</span>
+              <span class="location-txt">{{ nameDta.phone }}</span>
             </div>
           </div>
         </div>
         <div class="flex-col relative section-mine-list">
-          <div class="flex-row justify-between list-item" @click="onClickItem(0)">
+          <!-- <div class="flex-row justify-between list-item" @click="onClickItem(0)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="fileSrc" />
               <span class="label-txt">档案资料</span>
             </div>
             <img class="label-icon" :src="rightSrc" />
-          </div>
+          </div> -->
           <div class="flex-row justify-between list-item" @click="onClickItem(1)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="memberSrc" />
@@ -52,13 +56,13 @@
             </div>
             <img class="label-icon" :src="rightSrc" />
           </div>
-          <div class="flex-row justify-between list-item" @click="onClickItem(3)">
+          <!-- <div class="flex-row justify-between list-item" @click="onClickItem(3)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="memberSrc" />
               <span class="label-txt">手机号绑定</span>
             </div>
             <img class="label-icon" :src="rightSrc" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -73,7 +77,8 @@ import memberSrc from '@/h5/assets/imgs/icon_member.png'
 import phoneSrc from '@/h5/assets/imgs/icon_phone.png'
 import fileSrc from '@/h5/assets/imgs/icon_file.png'
 import { useRouter } from 'vue-router'
-
+import { getPersonalInformation } from './service'
+import { ref, onMounted } from 'vue'
 const { push } = useRouter()
 
 const toTargetByIndex = (index: number) => {
@@ -85,11 +90,19 @@ const toTargetByIndex = (index: number) => {
   }
   return map[index]
 }
-
+let nameDta: any = ref({})
 const onClickItem = (index) => {
   push({ path: toTargetByIndex(index) })
   console.log('index', index)
 }
+let getPersonalInformations = async () => {
+  let data = await getPersonalInformation()
+  console.log(JSON.parse(data.otherPic)[0].url)
+  nameDta.value = data
+}
+onMounted(() => {
+  getPersonalInformations()
+})
 </script>
 
 <style lang="less" scoped>
