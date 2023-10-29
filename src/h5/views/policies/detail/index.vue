@@ -52,7 +52,7 @@
       </div>
     </div> -->
     <div v-html="dataList.title" style="text-align: center"></div>
-    <div v-html="dataList.content"></div>
+    <div v-html="dataList.content" style="font-size: 14px"></div>
   </div>
 </template>
 <script lang="ts" setup>

@@ -37,6 +37,24 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
+          label="是否一口价"
+          :width="100"
+          prop="houseNo"
+          align="center"
+          header-align="center"
+        >
+          <template #default>
+            <ElSelect clearable placeholder="请选择">
+              <ElOption
+                v-for="item in fixedPriceOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
           label="类别"
           :width="120"
           prop="fitUpType"
@@ -203,6 +221,16 @@ const dialogVisible = ref<boolean>(false)
 const btnLoading = ref<boolean>(false)
 const deleteReason = ref('') // 删除原因
 let rowItem = reactive({ id: '' }) // 行信息
+const fixedPriceOptions = [
+  {
+    label: '是',
+    value: '是'
+  },
+  {
+    label: '否',
+    value: '否'
+  }
+]
 
 const defaultRow = {
   doorNo: props.doorNo,

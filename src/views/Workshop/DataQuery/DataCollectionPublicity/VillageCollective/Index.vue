@@ -42,8 +42,8 @@
         <el-table-column label="附属物" header-align="center">
           <el-table-column prop="index" label="序号" align="center" header-align="center" />
           <el-table-column prop="name" label="类型" align="center" header-align="center" />
-          <el-table-column prop="unit" label="单位" align="center" header-align="center" />
-          <el-table-column prop="size" label="规格" align="center" header-align="center" />
+          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
+          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
           <el-table-column prop="number" label="数量" align="center" header-align="center" />
           <el-table-column prop="remark" label="备注" align="center" header-align="center" />
         </el-table-column>

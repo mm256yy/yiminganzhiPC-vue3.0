@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { useAppStoreWithOut } from '@/store/modules/app'
 
 // 移民端用户
 const router = createRouter({
@@ -58,22 +59,6 @@ const router = createRouter({
       component: () => import('../views/announcement/index.vue'),
       meta: {
         name: '通知公告'
-      }
-    },
-    {
-      path: '/policies',
-      name: 'policies',
-      component: () => import('../views/policies/index.vue'),
-      meta: {
-        name: '政策法规'
-      }
-    },
-    {
-      path: '/policiesDetail',
-      name: 'policiesDetail',
-      component: () => import('../views/policies/detail/index.vue'),
-      meta: {
-        name: '政策详情'
       }
     },
     {
@@ -230,5 +215,14 @@ const router = createRouter({
     }
   ]
 })
-
+const appStore = useAppStoreWithOut()
+const whiteList = ['/phoneLogin'] // 不重定向白名单
+router.beforeEach(async (to, from, next) => {
+  if (whiteList.indexOf(to.path) != -1 || appStore.getToken) {
+    next()
+  } else {
+    next({ path: '/phoneLogin' })
+  }
+  console.log(from, appStore.getToken)
+})
 export default router

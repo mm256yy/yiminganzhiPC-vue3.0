@@ -207,7 +207,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs' 
+        'dayjs'
       ]
     }
   }

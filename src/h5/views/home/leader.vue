@@ -291,7 +291,7 @@ let getLeadershipScreens = async () => {
   //   cityList.echart.z.push(item.name)
   //   return pre
   // }, [])
-  cityList.listArray.progressManagementDto.forEach((item) => {
+  cityList.listArray.progressManagementDto.reverse().forEach((item) => {
     cityList.Echarts.two.push(item.actual)
     cityList.Echarts.there.push(item.name)
     cityList.Echarts.one.push(item.plan)
@@ -411,8 +411,8 @@ onMounted(() => {
 
       .grid-display {
         display: grid;
-        height: 360px;
-        grid-template-columns: repeat(3, 1fr);
+        // height: 360px;
+        grid-template-columns: repeat(3, 2fr);
 
         .grid-item {
           padding: 10px;

@@ -1,17 +1,16 @@
 <template>
   <div class="flex-col app-container">
     <div class="header-region">
-      <ElCarousel height="360px">
+      <ElCarousel height="250px">
         <ElCarouselItem v-for="(item, index) in picDta" :key="index">
-          <div>{{ item }}</div>
           <ElImage :src="item ? item : bannerBgSrc" fit="cover" />
         </ElCarouselItem>
       </ElCarousel>
     </div>
     <div class="flex-col relative section-content">
-      <div class="flex-col justify-start relative house-type"
-        ><span class="type-txt">小区户型</span></div
-      >
+      <div class="flex-col justify-start relative house-type">
+        <div class="type-txt">小区户型</div>
+      </div>
       <div class="flex-col section-house-type">
         <div class="house-type-group">
           <div
@@ -38,7 +37,7 @@ import bannerBgSrc from '@/h5/assets/imgs/banner_bg.png'
 import floorPlanBgSrc from '@/h5/assets/imgs/floor_plan_bg.png'
 import { useRoute } from 'vue-router'
 const currentType = ref(1)
-let Route = useRoute()
+let Route: any = useRoute()
 interface HouseType {
   id: number
   name: string
@@ -65,7 +64,7 @@ const tabChange = (id: number) => {
 let picDta: any = ref([])
 
 onMounted(() => {
-  picDta.value = Route.query.id
+  picDta.value = JSON.parse(Route.query.id)
   console.log(picDta.value)
 })
 </script>
@@ -98,7 +97,7 @@ onMounted(() => {
   }
 
   .section-house-type {
-    padding: 26px 30px;
+    padding: 0.1rem 30px;
 
     .house-type-group {
       display: flex;

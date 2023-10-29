@@ -42,9 +42,9 @@
         </div>
       </div>
     </div>
-    <el-dialog v-model="dialogVisible">
+    <!-- <el-dialog v-model="dialogVisible">
       <img class="w-full" :src="imgUrl" alt="Preview Image" />
-    </el-dialog>
+    </el-dialog> -->
   </div>
   <div class="operate-region">
     <div class="quit" @click="onQuit">放弃</div>
@@ -217,7 +217,7 @@ const onQuit = () => {
 .operate-region {
   position: fixed;
   right: 0;
-  bottom: 100px;
+  bottom: 0px;
   left: 0;
   display: flex;
   height: 128px;

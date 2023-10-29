@@ -5,7 +5,6 @@
     :width="1000"
     @close="onClose"
     alignCenter
-    appendToBody
     :closeOnClickModal="false"
   >
     <ElForm class="form" ref="formRef" :model="form" label-width="124px" :label-position="'right'">
@@ -88,6 +87,7 @@
           <div class="col-wrap">
             <div class="label">付款对象:</div>
             <!-- <div class="content">境岭镇</div> -->
+            <div class="content">{{ form.type == 1 ? '支付' : '预拨' }}</div>
           </div>
         </ElCol>
       </ElRow>
@@ -95,13 +95,32 @@
         <!-- <span class="main-title">专业项目合同清单</span> -->
         申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请户数：<span
           class="num"
-          >{{
-            parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
-          }}</span
+          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
         >
         户
       </div>
-
+      <ElTable
+        :data="parmasList.paymentObjectList"
+        style="width: 100%"
+        class="mb-20"
+        :border="true"
+        v-if="form.paymentType == 2"
+      >
+        <ElTableColumn
+          label="序号"
+          align="center"
+          width="80"
+          type="index"
+          header-align="center"
+          prop="index"
+        />
+        <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
+          <!-- <template #default="{ row }">
+            {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
+          </template> -->
+        </ElTableColumn>
+        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+      </ElTable>
       <ElTable
         :data="parmasList.professionalContractList"
         style="width: 100%"
@@ -113,12 +132,12 @@
         <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
         <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
         <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="合同乙方"
           prop="contractPartyB"
           align="center"
           header-align="center"
-        />
+        /> -->
         <ElTableColumn
           label="合同金额(万元)"
           prop="contractAmount"
@@ -138,20 +157,6 @@
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
       </ElTable>
-      <ElRow>
-        <ElCol :span="24">
-          <div class="col-wrap">
-            <div class="label">付款日期</div>
-            <!-- <div class="content">境岭镇</div> -->
-            <ElDatePicker
-              v-model="formAudit.paymentTime"
-              type="date"
-              placeholder="请选择日期"
-              :size="size"
-            />
-          </div>
-        </ElCol>
-      </ElRow>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
         <div class="card-img-list">
@@ -163,7 +168,7 @@
             }"
             accept=".jpg,.png,jpeg,.pdf"
             :multiple="false"
-            :file-list="relocateVerifyPic"
+            :file-list="parmasList.receipt ? JSON.parse(parmasList.receipt) : []"
             :headers="headers"
             :on-error="onError"
             :on-success="uploadFileChange1"
@@ -178,6 +183,50 @@
               </div>
             </template>
           </ElUpload>
+        </div>
+      </div>
+      <div v-if="actionType === 'edit'">
+        <ElRow>
+          <ElCol :span="24" style="margin-top: 20px">
+            <div class="col-wrap">
+              <div class="label">付款日期</div>
+              <!-- <div class="content">境岭镇</div> -->
+              <ElDatePicker
+                v-model="formAudit.paymentTime"
+                type="date"
+                placeholder="请选择日期"
+                :size="size"
+              />
+            </div>
+          </ElCol>
+        </ElRow>
+        <div class="col-wrapper">
+          <div class="col-label-required"> 财务凭证： </div>
+          <div class="card-img-list">
+            <ElUpload
+              :list-type="'picture-card'"
+              action="/api/file/type"
+              :data="{
+                type: 'archives'
+              }"
+              accept=".jpg,.png,jpeg,.pdf"
+              :multiple="false"
+              :file-list="relocateVerifyPic"
+              :headers="headers"
+              :on-error="onError"
+              :on-success="uploadFileChange1"
+              :before-remove="beforeRemove"
+              :on-remove="removeFile1"
+              :on-preview="imgPreview"
+            >
+              <template #trigger>
+                <div class="card-img-box">
+                  <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                  <div class="card-txt">点击上传</div>
+                </div>
+              </template>
+            </ElUpload>
+          </div>
         </div>
       </div>
       <ElRow v-if="actionType === 'edit'" style="margin-top: 20px">
@@ -225,7 +274,12 @@
                   width="18"
                   height="18"
                 />
-                <img v-else src="@/assets/imgs/icon_error.png" width="18" height="18" />
+                <img
+                  v-if="item.status == 0"
+                  src="@/assets/imgs/icon_error.png"
+                  width="18"
+                  height="18"
+                />
               </div>
               <div
                 class="line"
@@ -237,20 +291,23 @@
             <div class="right">
               <div class="content-box">
                 <div class="content-1">
-                  <div class="name">{{ item.auditor }}</div>
+                  <div class="name">{{ item.name }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time">
                   审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                 </div>
-                <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
-                <div class="remark"> 审核说明: {{ item.remark }} </div>
+                <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
+                <div class="remark"> 审核意见: {{ item.remark }} </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </ElDialog>
+  <ElDialog v-model="dialogVisible" :z-index="999" appendToBody>
+    <img w-full :src="imgUrl" alt="Preview Image" />
   </ElDialog>
 </template>
 
@@ -279,6 +336,7 @@ import { useAppStore } from '@/store/modules/app'
 import { fmtDict } from '@/utils'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+
 const formRef = ref<FormInstance>()
 
 const dictStore = useDictStoreWithOut()

@@ -19,7 +19,7 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="个体工商编码" prop="doorNo">
+      <ElFormItem label="个体工商编码" prop="showDoorNo">
         <ElInput
           v-model="form.doorNo"
           :disabled="actionType === 'edit'"

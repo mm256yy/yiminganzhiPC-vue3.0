@@ -81,8 +81,15 @@ service.interceptors.response.use(
     if (data && (data.code === 401 || data.status === 401)) {
       // 清除用户信息
       appStore.setUserJwtInfo(null)
+      console.log(window.location.href)
+      if (window.location.href.indexOf('h5') != -1) {
+        window.location.href = 'h5.html#/login'
+      } else {
+        window.location.href = '/#/login'
+      }
+
       // token 无效，跳转到登录
-      window.location.href = '/#/login'
+      // window.location.href = '/#/login'
     }
     let message = data.message || error.message || '发生错误'
     if (data && data.code === 400 && data.data && data.data.length > 0) {

@@ -68,7 +68,12 @@
           <span class="time">提交时间</span>
         </div>
         <div class="list">
-          <div class="item-title" v-for="(item, index) in messageList" :key="index">
+          <div
+            class="item-title"
+            v-for="(item, index) in messageList"
+            :key="index"
+            @click="handleItemClick(item)"
+          >
             <div>
               <span class="item-index">{{ index + 1 }}</span>
               <span class="item-content">{{ item.remark }}</span>
@@ -86,22 +91,10 @@ import { ref, onMounted } from 'vue'
 import { getMessageFeedback } from '@/api/home-service'
 import type { MessageDtoType } from '@/api/home-types'
 import dayjs from 'dayjs'
+import { useRouter } from 'vue-router'
 
+const { push } = useRouter()
 const messageList = ref<MessageDtoType[]>([])
-
-// const currentTab = ref(0)
-// let menuIndex = ref(0)
-
-// const tabChange = (id: number) => {
-//   if (currentTab.value === id) {
-//     return
-//   }
-//   currentTab.value = id
-// }
-
-// const handleItemClick = (index: number) => {
-//   menuIndex.value = index
-// }
 
 // 获取消息
 const getMessage = async () => {
@@ -111,6 +104,10 @@ const getMessage = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+const handleItemClick = (item: MessageDtoType) => {
+  push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
 
 onMounted(() => {
@@ -193,6 +190,7 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
+    cursor: pointer;
 
     .item-index {
       width: 28px;
