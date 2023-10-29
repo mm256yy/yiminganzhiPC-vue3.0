@@ -63,6 +63,7 @@ import type { AdjustmentType } from '@/api/fundManage/budgetAdjustment-types'
 interface PropsType {
   show: any
   landlordIds: number[]
+  statusType: any
 }
 
 const props = defineProps<PropsType>()
@@ -115,12 +116,16 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 
 const submit = async (data: AdjustmentType) => {
-  await updateAdjustmentApi({
-    ...data,
-    projectId
-  })
-  btnLoading.value = false
-  ElMessage.success('操作成功！')
+  if (props.statusType != 2) {
+    await updateAdjustmentApi({
+      ...data,
+      projectId
+    })
+    btnLoading.value = false
+    ElMessage.success('操作成功！')
+  } else {
+    ElMessage.error('待审核状态不能调整概算')
+  }
   onClose(true)
 }
 watch(
