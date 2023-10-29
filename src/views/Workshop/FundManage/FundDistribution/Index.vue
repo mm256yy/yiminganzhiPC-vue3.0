@@ -21,7 +21,7 @@
 
           <div class="text">
             总金额：
-            <span class="num">{{ molingData.issuedAmount }}</span> 元
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
           <div class="text">
             已发放：
@@ -29,7 +29,7 @@
           </div>
           <div class="text">
             未发放：
-            <span class="num">{{ molingData.totalPrice }}</span> 元
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -387,8 +387,8 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'pendingAmount',
-    label: '可发放金额（元）',
+    field: 'totalPrice',
+    label: '发放金额',
     search: {
       show: false
     }

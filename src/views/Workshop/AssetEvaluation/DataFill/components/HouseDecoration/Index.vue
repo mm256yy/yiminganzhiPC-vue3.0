@@ -39,12 +39,12 @@
         <ElTableColumn
           label="是否一口价"
           :width="100"
-          prop="houseNo"
+          prop="isBuyItNow"
           align="center"
           header-align="center"
         >
-          <template #default>
-            <ElSelect clearable placeholder="请选择">
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.isBuyItNow">
               <ElOption
                 v-for="item in fixedPriceOptions"
                 :key="item.value"
@@ -224,11 +224,11 @@ let rowItem = reactive({ id: '' }) // 行信息
 const fixedPriceOptions = [
   {
     label: '是',
-    value: '是'
+    value: '1'
   },
   {
     label: '否',
-    value: '否'
+    value: '0'
   }
 ]
 

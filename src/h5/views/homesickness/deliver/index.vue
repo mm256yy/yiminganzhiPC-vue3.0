@@ -17,7 +17,7 @@
           <div class="divider view"></div>
           <span class="self-start warn-txt">图片最多可上传3张</span>
           <ElUpload
-            action="/api/file/type"
+            action="/api/h5/file/type"
             :data="{
               type: 'archives'
             }"
