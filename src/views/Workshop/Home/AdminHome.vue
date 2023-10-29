@@ -349,7 +349,7 @@ onMounted(() => {
   padding-top: 40px;
   margin: -30px -20px;
   background-image: url('../../../assets/imgs/home/home_bg.png');
-  background-size: 100% auto;
+  background-size: 100% cover;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -470,6 +470,7 @@ onMounted(() => {
           display: flex;
           width: 87px;
           height: 34px;
+          margin-top: -6px;
           background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
           border-radius: 8px;
           flex-direction: column;

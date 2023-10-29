@@ -32,11 +32,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -72,9 +68,9 @@
         showOverflowTooltip
         @register="register"
       >
-        <template #action="{ row }">
+        <!-- <template #action="{ row }">
           <ElButton link type="primary" @click="onCheckRow(row)">查看</ElButton>
-        </template>
+        </template> -->
       </Table>
     </div>
   </WorkContentWrap>
@@ -86,7 +82,7 @@ import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useAppStore } from '@/store/modules/app'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -109,13 +105,32 @@ const { register, tableObject, methods } = useTable({
   getListApi: getFunPayTownshipListApi
 })
 
-const { setSearchParams } = methods
+const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId
 }
 
-setSearchParams({ name: '', type: '' })
+getList()
+
+const onSearch = (data) => {
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  setSearchParams({})
+}
 
 // 导出
 const onExport = async () => {
@@ -135,7 +150,7 @@ const onExport = async () => {
   // document.body.removeChild(elink)
   // URL.revokeObjectURL(elink.href)
 }
-const { push } = useRouter()
+// const { push } = useRouter()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -291,37 +306,37 @@ const schema = reactive<CrudSchema[]>([
     search: {
       show: false
     }
-  },
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 120,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
   }
+  // {
+  //   field: 'action',
+  //   label: '操作',
+  //   fixed: 'right',
+  //   width: 120,
+  //   search: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   }
+  // }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
 
-// 查看
-const onCheckRow = (row) => {
-  push({
-    name: 'townshipFundEntryCheck',
-    query: {
-      householdId: row.id,
-      doorNo: row.doorNo,
-      type: 0
-    }
-  })
-}
+// // 查看
+// const onCheckRow = (row) => {
+//   push({
+//     name: 'townshipFundEntryCheck',
+//     query: {
+//       householdId: row.id,
+//       doorNo: row.doorNo,
+//       type: 0
+//     }
+//   })
+// }
 
 const getSumAmount = () => {
   getTownshipSumAmount().then((res) => {

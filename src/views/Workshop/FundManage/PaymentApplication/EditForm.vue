@@ -16,7 +16,7 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="申请类型:" required>
+      <ElFormItem label="申请类型:" required prop="applyType">
         <el-radio-group class="ml-4" v-model="form.applyType">
           <el-radio
             v-for="item in dictObj[381]"
@@ -27,10 +27,10 @@
           >
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="申请名称:" required>
+      <ElFormItem label="申请名称:" required prop="name">
         <ElInput v-model="form.name" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="概算科目:" required>
+      <ElFormItem label="概算科目:" required prop="type">
         <el-radio-group class="ml-4" v-model="form.type">
           <el-radio
             v-for="item in dictObj[382]"
@@ -54,10 +54,10 @@
           :default-checked-keys="[form.funSubjectId]"
         />
       </ElFormItem>
-      <ElFormItem label="付款说明:" required>
+      <ElFormItem label="付款说明:" required prop="remark">
         <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入" />
       </ElFormItem>
-      <ElFormItem label="付款对象类型:" required>
+      <ElFormItem label="付款对象类型:" required prop="paymentType">
         <el-radio-group class="ml-4" v-model="form.paymentType">
           <el-radio
             v-for="item in dictObj[384]"
@@ -69,20 +69,19 @@
         </el-radio-group>
       </ElFormItem>
       <ElFormItem label="付款类型:" required v-if="form.paymentType == 1"> 支付 </ElFormItem>
-      <ElFormItem label="付款类型:" required v-else>
+      <ElFormItem label="付款类型:" required v-else prop="payType">
         <el-radio-group class="ml-4" v-model="form.payType">
           <el-radio label="1" size="large">支付</el-radio>
           <el-radio label="2" size="large">预拨</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem>
-      <div class="table-wrap">
-        <div
-          class="flex items-center justify-between pb-12px"
-          v-if="actionType == 'view' && form.paymentType == 1"
-        >
+      <!-- <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem> -->
+      <!-- <div class="table-wrap">
+        <div class="flex items-center justify-between pb-12px" v-if="actionType != 'add'">
           <div class="table-header-left">
-            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">专业项目合同清单</span>
+            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
+              form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
+            }}</span>
 
             <div class="text">
               申请总金额:
@@ -97,12 +96,11 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- {{ detail.payee ? fmtDict(dictObj[326], detail.payee) : '-' }} -->
+      </div> -->
       <ElFormItem label="收款方:" v-if="form.payType == 2">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
-            v-for="item in dictObj[326]"
+            v-for="item in dictObj[396]"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -115,7 +113,7 @@
 
       <!-- 选择付款对象(专业项目,其他) -->
       <div class="table-wrap">
-        <div class="flex items-center justify-between pb-12px" v-if="actionType != 'view'">
+        <div class="flex items-center justify-between pb-12px">
           <div class="table-header-left">
             <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
               form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
@@ -123,21 +121,29 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{ amoutPrice }}</span>
+              <span class="num">{{
+                actionType != 'add' && targe ? parmasLists.amount : amoutPrice
+              }}</span>
               元
             </div>
             <div class="text">
               审核笔数：
-              <span class="num">{{ num }}</span>
+              <!-- actionType != 'add' ? parmasList.paymentObjectList.length :  -->
+              <span class="num">{{
+                actionType != 'add' && targe && parmasLists.paymentObjectList
+                  ? parmasLists.paymentObjectList.length
+                  : num
+              }}</span>
               笔
             </div>
           </div>
-          <ElSpace>
+          <ElSpace v-if="actionType != 'view'">
             <ElButton type="primary" @click="delRow"> 清空 </ElButton>
           </ElSpace>
         </div>
+        <!-- 付款对象其他列表 -->
         <ElTable
-          :data="otherData"
+          :data="actionType != 'add' && targe ? parmasLists.paymentObjectList : otherData"
           style="width: 100%"
           class="mb-20"
           :border="true"
@@ -151,16 +157,16 @@
             header-align="center"
             prop="index"
           />
-          <ElTableColumn label="支付对象" align="center" prop="payObject" header-align="center" />
-          <ElTableColumn
-            label="申请金额"
-            prop="contractName"
-            align="center"
-            header-align="center"
-          />
+          <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
+            <!-- <template #default="{ row }">
+              {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
+            </template> -->
+          </ElTableColumn>
+          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
         </ElTable>
+        <!-- 付款对象专业项目列表 -->
         <ElTable
-          :data="actionType == 'view' ? parmasList.professionalContractList : tableData"
+          :data="actionType != 'add' && targe ? parmasLists.professionalContractList : tableData"
           style="width: 100%"
           class="mb-20"
           :border="true"
@@ -186,12 +192,12 @@
             align="center"
             header-align="center"
           />
-          <ElTableColumn
+          <!-- <ElTableColumn
             label="合同乙方"
             prop="contractPartyB"
             align="center"
             header-align="center"
-          />
+          /> -->
           <ElTableColumn
             label="合同金额(万元)"
             prop="contractAmount"
@@ -248,7 +254,7 @@
           <div class="progress-list">
             <div
               class="progress-item"
-              v-for="(item, index) in parmasList.funPaymentRequestFlowNodeList"
+              v-for="(item, index) in parmasLists.funPaymentRequestFlowNodeList"
               :key="index"
             >
               <div class="left">
@@ -260,11 +266,16 @@
                     width="18"
                     height="18"
                   />
-                  <img v-else src="@/assets/imgs/icon_error.png" width="18" height="18" />
+                  <img
+                    v-if="item.status == 0"
+                    src="@/assets/imgs/icon_error.png"
+                    width="18"
+                    height="18"
+                  />
                 </div>
                 <div
                   class="line"
-                  v-if="index == parmasList.funPaymentRequestFlowNodeList.length - 1"
+                  v-if="index == parmasLists.funPaymentRequestFlowNodeList.length - 1"
                   style="background: white"
                 ></div>
                 <div class="line" v-else></div>
@@ -272,13 +283,14 @@
               <div class="right">
                 <div class="content-box">
                   <div class="content-1">
-                    <div class="name">{{ item.auditor }}</div>
+                    <div class="name">{{ item.name }}</div>
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time">
                     审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                   </div>
-                  <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
+                  <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
+                  <div class="remark"> 审核意见: {{ item.remark }} </div>
                 </div>
               </div>
             </div>
@@ -340,7 +352,8 @@ import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplicatio
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
-// import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+// import { fmtDict } from '@/utils'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -362,12 +375,14 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
-console.log(dictObj)
+// console.log(dictObj.value, '111')
 
 const form = ref<any>({})
+const parmasLists = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
+const targe = ref<boolean>(true)
 // const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
 // const fundAccountList = ref<any[]>([]) // 资金科目
 // 获取资金科目选项列表
@@ -394,6 +409,13 @@ watch(
     deep: true
   }
 )
+watch(
+  () => props.parmasList,
+  (val) => {
+    parmasLists.value = { ...(val as {}) }
+  },
+  { deep: true }
+)
 const otherData = ref<any[]>([])
 const amoutPrice = ref<any>()
 const num = ref<any>()
@@ -409,6 +431,10 @@ const delRow = () => {
   num.value = 0
   otherData.value = []
   tableData.value = []
+  parmasLists.value.professionalContractList = []
+  parmasLists.value.amount = 0
+  parmasLists.value.paymentObjectList = []
+  targe.value = false
 }
 // 规则校验
 const rules = reactive<FormRules>({})
@@ -427,23 +453,27 @@ const onFormPupClose = (flag: boolean) => {
 }
 const objListArr = (list: any) => {
   //其他
-  console.log(list, '测试用的')
-  otherData.value = toRaw(list)
-  num.value = otherData.value.length
-  amoutPrice.value = otherData.value.reduce((c, item) => c + item.contractName * 1, 0)
-  console.log(num.value, amoutPrice.value, '计算其他的数据')
+  if (form.value.paymentType == 2) {
+    console.log(list, '测试用的')
+    otherData.value = toRaw(list)
+    num.value = otherData.value.length
+    amoutPrice.value = otherData.value.reduce((c, item) => c + item.amount * 1, 0)
+    console.log(num.value, amoutPrice.value, '计算其他的数据')
+  }
 }
 const tableArr = (val: any) => {
   //专业项目
-  tableData.value = val
-  console.log(tableData.value, '专业项目数据')
-  tableData.value = tableData.value.filter(
-    (item, index) =>
-      tableData.value.findIndex((i) => i.contractCode === item.contractCode) === index
-  )
-  num.value = tableData.value.length
-  amoutPrice.value = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
-  console.log(num.value, amoutPrice.value, '计算专业项目的数据')
+  if (form.value.paymentType == 1) {
+    tableData.value = val
+    console.log(tableData.value, '专业项目数据')
+    tableData.value = tableData.value.filter(
+      (item, index) =>
+        tableData.value.findIndex((i) => i.contractCode === item.contractCode) === index
+    )
+    num.value = tableData.value.length
+    amoutPrice.value = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
+    console.log(num.value, amoutPrice.value, '计算专业项目的数据')
+  }
 }
 const girdList = () => {
   girdDialog.value = true
@@ -499,8 +529,8 @@ const onSubmit = debounce((formEl, status?: number) => {
           //其他
           params.paymentObjectList = toRaw(otherData.value).map((item) => {
             return {
-              contractId: item.payObject,
-              amount: item.contractName
+              contractId: item.contractId,
+              amount: item.amount
             }
           })
         }

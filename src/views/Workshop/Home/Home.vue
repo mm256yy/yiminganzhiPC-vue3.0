@@ -2,7 +2,7 @@
   <!-- 领导首页 -->
   <LeaderHome v-if="role == RoleCodeType.leaderworkbenches" />
   <!--评估人员首页-->
-  <EvaluationHome v-else-if="role == isEvaluation" />
+  <EvaluationHome v-else-if="isEvaluation" />
   <!-- 普通用户首页 -->
   <UserHome v-else />
 </template>
@@ -36,7 +36,7 @@ const currentProjectId = appStore.currentProjectId
 const role = ref<RoleCodeType>(RoleCodeType.other) // 角色代码 other为普通首页
 
 const isEvaluation = computed(() => {
-  return RoleCodeType.assessor || RoleCodeType.assessorland
+  return role.value == RoleCodeType.assessor || role.value == RoleCodeType.assessorland
 })
 
 /**
@@ -50,6 +50,7 @@ const getRole = () => {
         ? (project.roles[0].code as RoleCodeType)
         : RoleCodeType.other
     // 默认用户拥有一个角色 角色选择先不考虑
+    console.log('L-role', role)
     return role
   }
   return RoleCodeType.other
