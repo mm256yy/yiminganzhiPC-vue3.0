@@ -2,7 +2,7 @@
   <!-- 领导首页 -->
   <LeaderHome v-if="role == RoleCodeType.leaderworkbenches" />
   <!--评估人员首页-->
-  <EvaluationHome v-else-if="isEvaluation" />
+  <EvaluationHome :role="role" v-else-if="isEvaluation" />
   <!-- 普通用户首页 -->
   <UserHome v-else />
 </template>
@@ -58,5 +58,6 @@ const getRole = () => {
 
 onBeforeMount(() => {
   role.value = getRole()
+  console.log(role.value, 'bbq')
 })
 </script>

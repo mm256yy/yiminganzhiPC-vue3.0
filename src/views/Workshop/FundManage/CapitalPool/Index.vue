@@ -7,11 +7,11 @@
 
     <!-- 统计信息 -->
     <div class="statistics-wrap">
-      <div class="item" @click="toLink('townshipFundEntry')">
+      <div class="item">
         <div class="title">入账总金额(元)</div>
         <div class="content">{{ accountData?.entryAmount }}</div>
       </div>
-      <div class="item center" @click="toLink('paymentApplication')">
+      <div class="item center">
         <div class="item-1">
           <div class="title">出账总金额(元)</div>
           <div class="content">{{ accountData?.outgoingAmount }}</div>
@@ -79,8 +79,8 @@
             row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-        <template #action="{ row }">
-          <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
+        <template #action>
+          <ElButton type="primary"> 查看 </ElButton>
         </template>
       </Table>
     </div>
