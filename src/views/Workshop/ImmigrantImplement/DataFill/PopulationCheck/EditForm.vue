@@ -161,7 +161,7 @@
                   :on-preview="imgPreview"
                   :on-error="onError"
                 >
-                  <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
+                  <template #trigger v-if="actionType !== 'view'">
                     <div class="card-img-box">
                       <img class="card-img" src="@/assets/imgs/card-front.png" alt="" />
                       <div class="card-txt"> 上传正面 </div>
@@ -189,7 +189,7 @@
                   :on-remove="removeFile2"
                   :on-preview="imgPreview"
                 >
-                  <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
+                  <template #trigger v-if="actionType !== 'view'">
                     <div class="card-img-box">
                       <img class="card-img" src="@/assets/imgs/card-back.png" alt="" />
                       <div class="card-txt"> 上传背面 </div>

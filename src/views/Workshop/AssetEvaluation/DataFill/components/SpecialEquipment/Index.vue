@@ -249,8 +249,8 @@ const total = () => {
   let sum = 0
   if (tableData.value && tableData.value.length) {
     tableData.value.map((item: any) => {
-      if (item.valuationAmount > 0) {
-        sum += item.valuationAmount
+      if (item.compensationAmount > 0) {
+        sum += item.compensationAmount
       }
     })
   }

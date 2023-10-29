@@ -11,25 +11,25 @@
       <ElButton type="primary" @click="selenceTable('村集体')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left max-header">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款申请记录</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金发放</span>
 
           <div class="text">
-            已完成：0笔
-            <span class="num">{{ molingData.issuedAmount }}</span> 元
+            总金额：
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
           <div class="text">
-            审核中：0笔
+            已发放：
             <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
           <div class="text">
-            待提交：0笔
-            <span class="num">{{ molingData.totalPrice }}</span> 元
+            未发放：
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -188,31 +188,42 @@ const IssueClick = () => {
     all += item.pendingAmount
     return pre
   }, [])
-  ElMessageBox.confirm(`本次发放共${pamaers.length}户居民户，共${all}元。请确认是否发放`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消'
-  })
-    .then(() => {
-      console.log(pamaers)
-      postGrant(pamaers).then(() => {
+  if (all == 0) {
+    ElMessageBox.confirm(`发放金额为0元，请重新选择`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消'
+    })
+  } else {
+    ElMessageBox.confirm(
+      `本次发放共${pamaers.length}户居民户，共${all}元。请确认是否发放`,
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }
+    )
+      .then(() => {
+        console.log(pamaers)
+        postGrant(pamaers).then(() => {
+          ElMessage({
+            type: 'success',
+            message: '发放成功'
+          })
+          getList()
+        })
+      })
+      .catch(() => {
         ElMessage({
           type: 'success',
-          message: '发放成功'
+          message: '取消成功'
         })
-        getList()
       })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'success',
-        message: '取消成功'
-      })
-    })
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'cityCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -314,7 +325,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'datetime'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -375,8 +387,8 @@ const schema = reactive<CrudSchema[]>([
   },
 
   {
-    field: 'pendingAmount',
-    label: '可发放金额（元）',
+    field: 'totalPrice',
+    label: '发放金额',
     search: {
       show: false
     }
@@ -391,7 +403,27 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 let { allSchemas } = useCrudSchemas(schema)
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
@@ -419,7 +451,19 @@ const onSearch = (data) => {
       delete params[i]
     }
   }
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
   setSearchParams({ ...params })
+}
+let setSearchParamss = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 </script>
 

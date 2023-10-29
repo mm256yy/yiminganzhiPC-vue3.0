@@ -226,6 +226,12 @@
           :doorNo="doorNo"
           :baseInfo="baseInfo"
         />
+        <div
+          v-if="!houseTypeList?.includes(baseInfo.houseAreaType)"
+          class="flex justify-center items-center h-[200px]"
+        >
+          该户还未进行安置确认
+        </div>
       </template>
 
       <!-- 生产安置 -->
@@ -447,7 +453,7 @@ import UserInfo from './components/UserInfo.vue' // 用户基本信息
 import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
 import { deepClone } from '@/utils'
-
+const houseTypeList = ref(['homestead', 'flat', 'concentrate', 'oneself'])
 const titleMsg = (type: string, index: number) => {
   if (type == 'PeasantHousehold') {
     if (index === 1) {
@@ -491,6 +497,8 @@ const getFillingStatus = () => {
 
 // 填报状态判断
 const getStatus = (data: any) => {
+  console.log('data', data)
+
   const tabsListCopy = deepClone(tabsList.value)
   const subTabsListCopy = deepClone(subTabsList.value)
   if (type === 'PeasantHousehold') {

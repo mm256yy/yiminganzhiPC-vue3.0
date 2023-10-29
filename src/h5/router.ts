@@ -1,5 +1,4 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-
 // 领导端
 const router = createRouter({
   history: createWebHashHistory(),
@@ -70,5 +69,13 @@ const router = createRouter({
     }
   ]
 })
-
+const whiteList = ['/login'] // 不重定向白名单
+router.beforeEach(async (to, from, next) => {
+  if (whiteList.indexOf(to.path) != -1 || sessionStorage.getItem('token')) {
+    next()
+  } else {
+    next({ path: '/login' })
+  }
+  console.log(from)
+})
 export default router

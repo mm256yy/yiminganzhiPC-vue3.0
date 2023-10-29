@@ -241,7 +241,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -313,31 +313,6 @@ const tableData = ref<any[]>([])
 const reportDialog = ref<boolean>(false)
 const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
-
-// const defaultRow = {
-//   doorNo: props.doorNo,
-//   householdId: props.householdId,
-//   projectId: props.projectId,
-//   uid: props.uid,
-//   status: 'implementation',
-//   houseNo: '',
-//   hasEstimate: '',
-//   situated: '',
-//   houseType: '',
-//   constructionType: '',
-//   completedTime: '',
-//   houseHeight: 0,
-//   landArea: 0,
-//   propertyNo: '',
-//   landNo: '',
-//   constructionLevel: '',
-//   buildingHeight: 0,
-//   newnessRate: 0,
-//   valuationPrice: 0,
-//   valuationAmount: 0,
-//   compensationAmount: 0,
-//   remark: ''
-// }
 
 // 填报完成
 const onReportData = async () => {
@@ -413,6 +388,12 @@ const onSave = () => {
     getList()
     emit('updateData')
   })
+}
+
+// 自动计算评估金额
+const getModelValue = (row: any) => {
+  const totalPrice = Number(row.landArea) * Number(row.valuationPrice) * Number(row.newnessRate)
+  return totalPrice
 }
 
 onMounted(() => {

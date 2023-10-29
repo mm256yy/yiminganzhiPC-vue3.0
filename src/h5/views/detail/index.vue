@@ -1,9 +1,12 @@
 <template>
   <div class="flex-col page">
     <div class="header-region">
-      <ElCarousel height="360px">
+      <ElCarousel height="250px">
         <ElCarouselItem v-for="item in 3" :key="item">
-          <ElImage :src="bannerBgSrc" fit="cover" />
+          <ElImage
+            :src="dataList.coverPic ? JSON.parse(dataList.coverPic)[0].url : bannerBgSrc"
+            fit="cover"
+          />
         </ElCarouselItem>
       </ElCarousel>
     </div>
@@ -19,19 +22,27 @@
 import { ElCarousel, ElCarouselItem, ElImage } from 'element-plus'
 import bannerBgSrc from '@/h5/assets/imgs/banner_bg.png'
 import { useRoute } from 'vue-router'
-import { getHomesicknessId } from './service'
+import { getHomesicknessId, getNews } from './service'
 import { onMounted, ref } from 'vue'
 const { query } = useRoute()
 // const { projectId} = currentRoute.value.query as any
 // console.log('meta', query.id)
 let dataList: any = ref({})
 let getHomesicknessIds = async () => {
-  let data = await getHomesicknessId()
+  let data = await getHomesicknessId(query.id)
   console.log(data)
   dataList.value = data
 }
+let getNewss = async () => {
+  let data = await getNews({ type: 3 })
+  dataList.value = data.content[0]
+}
 onMounted(() => {
-  getHomesicknessIds()
+  if (query.id) {
+    getHomesicknessIds()
+  } else {
+    getNewss()
+  }
 })
 </script>
 

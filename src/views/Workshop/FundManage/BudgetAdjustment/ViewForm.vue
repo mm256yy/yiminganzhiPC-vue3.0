@@ -57,13 +57,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">{{ form.paymentTypeTxt }}</div>
+          <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款类型:</div>
-          <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
+          <div class="content">{{ form.payType == 1 ? '支付' : '预拨' }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -78,16 +78,35 @@
     </ElRow>
 
     <div class="title-1">
-      <span class="main-title">专业项目合同清单:</span>
+      <!-- <span class="main-title">专业项目合同清单:</span> -->
       申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请合同数：<span
         class="num"
-        >{{
-          parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
-        }}</span
+        >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
       >
       个
     </div>
-
+    <ElTable
+      :data="parmasList.paymentObjectList"
+      style="width: 100%"
+      class="mb-20"
+      :border="true"
+      v-if="form.paymentType == 2"
+    >
+      <ElTableColumn
+        label="序号"
+        align="center"
+        width="80"
+        type="index"
+        header-align="center"
+        prop="index"
+      />
+      <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
+        <!-- <template #default="{ row }">
+          {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
+        </template> -->
+      </ElTableColumn>
+      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+    </ElTable>
     <ElTable
       :data="parmasList.professionalContractList"
       style="width: 100%"
@@ -99,7 +118,7 @@
       <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
       <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-      <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
+      <!-- <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" /> -->
       <ElTableColumn
         label="合同金额(万元)"
         prop="contractAmount"
@@ -124,13 +143,13 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
-          <div class="content">{{ form.remark }}</div>
+          <div class="content">{{ form.typeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整说明:</div>
-          <div class="content">{{ form.type }}</div>
+          <div class="content">{{ form.gsRemark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -159,7 +178,12 @@
                   width="18"
                   height="18"
                 />
-                <img v-else src="@/assets/imgs/icon_error.png" width="18" height="18" />
+                <img
+                  v-if="item.status == 0"
+                  src="@/assets/imgs/icon_error.png"
+                  width="18"
+                  height="18"
+                />
               </div>
               <div
                 class="line"
@@ -171,13 +195,14 @@
             <div class="right">
               <div class="content-box">
                 <div class="content-1">
-                  <div class="name">{{ item.auditor }}</div>
+                  <div class="name">{{ item.name }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time">
                   审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
                 </div>
-                <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div>
+                <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
+                <div class="remark"> 审核意见: {{ item.remark }} </div>
               </div>
             </div>
           </div>
@@ -192,6 +217,8 @@ import { ElDialog, ElRow, ElCol, ElTable, ElTableColumn } from 'element-plus'
 import { ref, watch } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
+// import { fmtDict } from '@/utils'
+
 // import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 interface PropsType {

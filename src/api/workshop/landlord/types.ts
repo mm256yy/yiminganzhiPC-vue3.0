@@ -4,6 +4,7 @@ export interface LandlordDtoType {
   sex: string
   card: string
   doorNo: string
+  showDoorNo: string
   townCode: string
   neighborhoodCommittee: string
   villageCode: number

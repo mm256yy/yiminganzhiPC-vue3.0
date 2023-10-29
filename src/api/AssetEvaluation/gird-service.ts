@@ -10,7 +10,7 @@ export const getLandlordListApiGird = (
   return request.get({
     url: '/grid/getRgridman',
     params: {
-      sort: ['lastModifiedDate,id,desc'],
+      sort: ['createdDate,desc'],
       ...query
     }
   })

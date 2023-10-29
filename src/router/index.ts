@@ -566,7 +566,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             name: 'physicalResults',
             component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
             meta: {
-              title: '企业报表',
+              title: '基本信息',
               hidden: false
             }
           },

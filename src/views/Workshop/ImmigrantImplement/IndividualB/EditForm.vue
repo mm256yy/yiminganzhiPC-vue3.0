@@ -16,8 +16,13 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="个体工商编码" prop="doorNo">
-        <ElInput v-model="form.doorNo" class="!w-350px" placeholder="请输入个体工商编码" />
+      <ElFormItem label="个体工商编码" prop="showDoorNo">
+        <ElInput
+          v-model="form.showDoorNo"
+          class="!w-350px"
+          placeholder="请输入个体工商编码"
+          :disabled="true"
+        />
       </ElFormItem>
 
       <ElFormItem label="个体工商名称" prop="name">
@@ -113,7 +118,7 @@ import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
   show: boolean
-  row?: LandlordDtoType | null | undefined
+  row?: LandlordDtoType
 }
 const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()

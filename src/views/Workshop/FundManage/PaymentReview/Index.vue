@@ -19,6 +19,7 @@
         </div>
       </div>
       <Table
+        ref="tableRef"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -91,6 +92,7 @@ import {
 import { getDemographicHeadApi, getExcelList } from '@/api/workshop/population/service'
 import type { DemographicHeadType, ExcelListType } from '@/api/workshop/population/types'
 import { formatDateTime } from '@/utils/index'
+let tableRef = ref()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const tabVal = ref<any>(1)
@@ -126,6 +128,28 @@ getList()
 const tabChange = (data: string) => {
   tabVal.value = data
   setSearchParams({ businessId: 1, auditType: tabVal.value })
+  let tablecloume = useCrudSchemas(schema).allSchemas.tableColumns
+  console.log(tablecloume)
+
+  if (tabVal.value == '1') {
+    allSchemas.tableColumns = tablecloume
+  } else {
+    allSchemas.tableColumns = tablecloume.reduce((pre: any, item) => {
+      if (item.field == 'applyUserName') {
+        pre.push(item)
+        pre.push({
+          field: 'statusText',
+          label: '状态',
+          search: {
+            show: false
+          }
+        })
+      } else {
+        pre.push(item)
+      }
+      return pre
+    }, [])
+  }
 }
 const getDemographicHeadInfo = async () => {
   const info = await getDemographicHeadApi()
@@ -177,9 +201,17 @@ onBeforeUnmount(() => {
 })
 
 const onReviewRow = async (row) => {
+  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
+    parmasList.value = res
+    console.log(res, '测试')
+  })
+  actionType.value = 'edit'
+  tableObject.currentRow = {
+    ...row
+    // parmasList: parmasList.value
+  }
   tableObject.currentRow = row
   dialog.value = true
-  actionType.value = 'edit'
 }
 const onViewRow = async (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
@@ -198,6 +230,7 @@ const onViewRow = async (row: any) => {
 // 关闭审核弹窗
 const onCloseReview = () => {
   dialog.value = false
+  getList()
 }
 const schema = reactive<CrudSchema[]>([
   {
@@ -435,14 +468,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
 
-  {
-    width: 100,
-    field: 'statusText',
-    label: '状态',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   width: 100,
+  //   field: 'statusText',
+  //   label: '状态',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     width: 200,
     field: 'action',
@@ -460,7 +493,7 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 
-const { allSchemas } = useCrudSchemas(schema)
+let { allSchemas } = useCrudSchemas(schema)
 
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
