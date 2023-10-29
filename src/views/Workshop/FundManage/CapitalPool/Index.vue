@@ -32,8 +32,8 @@
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
+        @search="setSearchParamss"
+        @reset="setSearchParams({})"
       />
     </div>
 
@@ -74,6 +74,11 @@
         <template #typeTxt="{ row }">
           <div>{{ row.type === '1' ? '入账' : '出账' }}</div>
         </template>
+        <template #recordTime="{ row }">
+          <div>{{
+            row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
+        </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
         </template>
@@ -98,7 +103,7 @@ import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/ca
 import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
 import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
-
+import dayjs from 'dayjs'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const { push } = useRouter()
@@ -112,7 +117,14 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 setSearchParams({})
-
+let setSearchParamss = (data) => {
+  for (let i in data) {
+    if (!data[i]) {
+      delete data[i]
+    }
+  }
+  setSearchParams({ ...data })
+}
 const schema = reactive<CrudSchema[]>([
   {
     field: 'type',
@@ -170,7 +182,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -268,19 +281,19 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'createDate',
-    label: '创建时间',
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'createDate',
+  //   label: '创建时间',
+  //   search: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'createdBy',
     label: '操作人',
