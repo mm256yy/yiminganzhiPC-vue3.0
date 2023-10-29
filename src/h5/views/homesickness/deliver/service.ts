@@ -1,5 +1,5 @@
 // 接口
-import request from '@/config/axios'
+import request from '@/h5/axios'
 import { DeliverDtoType } from './type'
 
 /**

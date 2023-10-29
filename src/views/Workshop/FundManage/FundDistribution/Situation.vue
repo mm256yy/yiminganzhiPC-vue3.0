@@ -21,7 +21,7 @@
 
           <div class="text">
             总金额：
-            <span class="num">{{ molingData.issuedAmount }}</span> 元
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
           <div class="text">
             待发金额：
@@ -29,7 +29,7 @@
           </div>
           <div class="text">
             已发金额：
-            <span class="num">{{ molingData.totalPrice }}</span> 元
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
         </div>
       </div>
@@ -103,8 +103,8 @@ let molingData = ref<any>({
 })
 const goObject = reactive<any>({
   state: [
-    { label: '是', value: '1' },
-    { label: '否', value: '2' }
+    { label: '是', value: true },
+    { label: '否', value: false }
   ],
   batch: [
     { label: '第一批', value: '1' },
@@ -223,7 +223,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'hasPropertyAccount',
     label: '财产户',
     search: {
       show: true,

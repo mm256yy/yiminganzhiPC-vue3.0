@@ -56,13 +56,13 @@
             </div>
             <img class="label-icon" :src="rightSrc" />
           </div>
-          <div class="flex-row justify-between list-item" @click="onClickItem(3)">
+          <!-- <div class="flex-row justify-between list-item" @click="onClickItem(3)">
             <div class="flex-row items-center">
               <img class="label-icon" :src="memberSrc" />
               <span class="label-txt">手机号绑定</span>
             </div>
             <img class="label-icon" :src="rightSrc" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

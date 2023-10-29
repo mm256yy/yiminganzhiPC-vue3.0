@@ -1,5 +1,5 @@
 // 接口
-import request from '@/config/axios'
+import request from '@/h5/axios'
 //进度预警
 export const getWarning = (): Promise<any> => {
   return request.get({

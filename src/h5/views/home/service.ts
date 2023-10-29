@@ -1,16 +1,15 @@
 // 接口
 import request from '@/h5/axios'
-import requests from '@/config/axios'
 //领导端大屏
 export const getLeadershipScreen = (params: any): Promise<any> => {
-  return requests.get({
+  return request.get({
     url: `/leadershipScreen/getLeadershipScreen`,
     params
   })
 }
 //新政村下拉
 export const getVillageList = (): Promise<any> => {
-  return requests.get({
+  return request.get({
     url: `/leadershipScreen/getVillageList`
   })
 }

@@ -107,8 +107,8 @@ const noticeList = ref<any>([
 let dataList: any = ref([])
 let getNewsLists = async () => {
   let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
-  console.log(data)
   noticeList.value = data.content
+  noticeList.value.length = 3
 }
 let getHomesicknesss = async () => {
   let data = await getHomesickness()

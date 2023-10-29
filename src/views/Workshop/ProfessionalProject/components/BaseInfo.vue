@@ -24,7 +24,7 @@
       </div>
       <div class="info-item">
         <div class="tit">所在地区：</div>
-        <div class="txt">{{ props.baseInfo.locationType || '-' }}</div>
+        <div class="txt">{{ dictObj(props.baseInfo.locationType) || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">责任单位：</div>
@@ -44,9 +44,22 @@
 </template>
 
 <script lang="ts" setup>
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { computed } from 'vue'
 interface PropsType {
   baseInfo: any
 }
+const dictStore = useDictStoreWithOut()
+let getDictObj = dictStore.getDictObj
+const dictObj = computed(() => (e) => {
+  let n = ''
+  for (let i of getDictObj[326]) {
+    if (i['value'] == e) {
+      n = i['label']
+    }
+  }
+  return n
+})
 
 const props = defineProps<PropsType>()
 </script>

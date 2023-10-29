@@ -40,9 +40,7 @@
         @register="register"
       >
         <template #createTime="{ row }">
-          <div>{{
-            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
-          }}</div>
+          <div>{{ row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD') : '-' }}</div>
         </template>
 
         <template #paymentTime="{ row }">
@@ -390,7 +388,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createdDate',
+    field: 'createTime',
     label: '创建时间',
     search: {
       show: false

@@ -33,7 +33,7 @@
       <Search
         :schema="allSchemas.searchSchema"
         @search="setSearchParamss"
-        @reset="setSearchParams({})"
+        @reset="setSearchParams({ status: 1 })"
       />
     </div>
 
@@ -114,14 +114,14 @@ const { register, tableObject, methods } = useTable({
 
 const { getList, setSearchParams } = methods
 
-setSearchParams({})
+setSearchParams({ status: 1 })
 let setSearchParamss = (data) => {
   for (let i in data) {
     if (!data[i]) {
       delete data[i]
     }
   }
-  setSearchParams({ ...data })
+  setSearchParams({ ...data, status: 1 })
 }
 const schema = reactive<CrudSchema[]>([
   {
@@ -323,28 +323,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onSearch = (data) => {
-  let params = {
-    ...data
-  }
-
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
-  setSearchParams({ ...params })
-}
-
-const onReset = () => {
-  tableObject.params = {
-    status: '1'
-  }
-
-  setSearchParams({})
-}
 
 const onViewRow = (row) => {
   // 点击查看进入入账详情页面

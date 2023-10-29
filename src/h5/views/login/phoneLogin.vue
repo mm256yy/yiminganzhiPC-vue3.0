@@ -35,9 +35,7 @@ import { ref, onBeforeUnmount } from 'vue'
 import { ElMessage, ElButton } from 'element-plus'
 import { getVerifyCodeApi, userLogin } from './service'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '@/store/modules/app'
 
-const appStore = useAppStore()
 const phone = ref<string>('')
 const code = ref<string>('')
 const verification = ref<boolean>(true) // 获取验证码
@@ -103,7 +101,7 @@ const onConfirm = () => {
     (res) => {
       btnLoading.value = false
       if (res) {
-        appStore.setToken(res.token)
+        sessionStorage.setItem('h5token', res.token)
         toLink('home')
       }
     },
