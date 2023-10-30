@@ -62,6 +62,7 @@
       class="mb-20"
       :border="true"
       v-if="props.type == false"
+      row-key="id"
     >
       <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
       <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
@@ -145,6 +146,7 @@ const tableData = ref<any[]>([])
 const tableObj = ref<any[]>([]) //付款对象集合
 const vals = ref<any[]>([]) //付款对象ID
 const checkList = (row: any, val: any) => {
+  console.log(check, '勾选数据')
   vals.value.push(val)
   tableObj.value.push({
     projectName: row.projectName,
