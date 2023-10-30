@@ -325,7 +325,6 @@
                 :data="{
                   type: 'image'
                 }"
-                :limit="1"
                 :list-type="'picture-card'"
                 accept=".jpg,.jpeg,.png"
                 :multiple="false"
