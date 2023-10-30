@@ -19,7 +19,7 @@
       <div class="row-item" v-for="(item, index) in form" :key="index">
         <ElRow>
           <ElCol :span="24">
-            <ElFormItem label="区块："> {{ item.settleAddress }} </ElFormItem>
+            <ElFormItem label="区块："> {{ item.settleAddressText }} </ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -94,7 +94,7 @@
           <ElCol :span="12">
             <div class="col-wrapper">
               <div class="col-labels">
-                {{ item.houseAreaType === 'housestead' ? '择址顺序号凭证：' : '择房顺序号凭证：' }}
+                {{ item.houseAreaType === 'housestead' ? '择房顺序号凭证：' : '择址顺序号凭证：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload
@@ -131,7 +131,7 @@
           <ElCol :span="24">
             <div class="col-wrapper">
               <div class="col-label-required">
-                {{ item.houseAreaType === 'housestead' ? '择址确认单：' : '择房确认单：' }}
+                {{ item.houseAreaType === 'housestead' ? '择房确认单：' : '择址确认单：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload

@@ -61,22 +61,6 @@ const router = createRouter({
       }
     },
     {
-      path: '/policies',
-      name: 'policies',
-      component: () => import('../views/policies/index.vue'),
-      meta: {
-        name: '政策法规'
-      }
-    },
-    {
-      path: '/policiesDetail',
-      name: 'policiesDetail',
-      component: () => import('../views/policies/detail/index.vue'),
-      meta: {
-        name: '政策详情'
-      }
-    },
-    {
       path: '/planEffect',
       name: 'planEffect',
       component: () => import('../views/planEffect/index.vue'),
@@ -230,5 +214,13 @@ const router = createRouter({
     }
   ]
 })
-
+const whiteList = ['/phoneLogin'] // 不重定向白名单
+router.beforeEach(async (to, from, next) => {
+  if (whiteList.indexOf(to.path) != -1 || sessionStorage.getItem('h5token')) {
+    next()
+  } else {
+    next({ path: '/phoneLogin' })
+  }
+  console.log(from)
+})
 export default router

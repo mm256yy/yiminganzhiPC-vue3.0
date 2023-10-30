@@ -38,7 +38,7 @@
         <ElTreeSelect
           class="!w-full"
           v-model="form.funSubjectId"
-          :data="props.fundAccountList"
+          :data="subjectArray"
           :props="{ value: 'code', label: 'name' }"
           node-key="code"
           showCheckbox
@@ -153,7 +153,7 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 // const fundAccountList = ref<any[]>([]) // 资金科目
-
+console.log(dictObj.value[382], '382')
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -198,6 +198,7 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
+    receipt.value = []
   })
 }
 
@@ -214,11 +215,21 @@ const submit = async (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status: number) => {
+  if (status === 0) {
+    let params: any = {
+      ...form.value,
+      receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+    }
+    params.paymentTime = dayjs(params.paymentTime)
+    params.status = status
+    submit(params)
+    return
+  }
   formEl?.validate((valid: any) => {
     if (valid) {
       console.log(form.value, 'form')
       if (!receipt.value.length) {
-        ElMessage.error('请上传搬迁安置确认单')
+        ElMessage.error('请上传凭证')
         return
       } else {
         let params: any = {
@@ -293,6 +304,17 @@ const getFundSubjectList = () => {
 
 onMounted(() => {
   getFundSubjectList()
+})
+
+const subjectArray = computed(() => {
+  if (props.fundAccountList && props.fundAccountList.length) {
+    if (form.value.type === '1') {
+      // 概算内
+      return props.fundAccountList.filter((item) => item.type === '1')
+    }
+    return props.fundAccountList
+  }
+  return []
 })
 </script>
 

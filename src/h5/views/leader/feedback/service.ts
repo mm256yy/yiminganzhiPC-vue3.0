@@ -1,5 +1,5 @@
 // 接口
-import request from '@/config/axios'
+import request from '@/h5/axios'
 //信息反馈
 export const getFeedback = (params: any): Promise<any> => {
   return request.get({

@@ -22,7 +22,7 @@
             class="blue-view"
             v-for="item in resettleArea"
             :key="item.id"
-            @click="viewAreaDetail(item.id)"
+            @click="viewAreaDetail(item.name)"
           >
             地块详情
           </div>
@@ -53,7 +53,7 @@
     </div>
 
     <el-dialog v-model="areaDetailPup" title="安置点详情" width="900">
-      <AreaDetail />
+      <AreaDetail :placementPointInfo="placementPointInfo" />
     </el-dialog>
   </div>
 </template>
@@ -63,6 +63,7 @@ import { ref, computed, watch } from 'vue'
 import { ElRadioGroup, ElRadio, ElDialog } from 'element-plus'
 import { resettleArea, homesteadAreaSize, HouseType } from '../../config'
 import AreaDetail from './AreaDetail.vue'
+import { getPlacementPointByIdApi } from '@/api/systemConfig/placementPoint-service'
 
 interface PropsType {
   baseInfo: any
@@ -76,7 +77,13 @@ const props = defineProps<PropsType>()
 const areaDetailPup = ref(false)
 const settleAddress = ref('1')
 const areaType = ref('1')
-
+const placmentPointObj = ref({
+  镜岭集镇安置区: '2',
+  棠村安置区: '3',
+  麻家田安置区: '4',
+  东坪安置区: '5',
+  曙光安置点: '26'
+})
 watch(
   () => props.immigrantSettle,
   (val) => {
@@ -105,9 +112,13 @@ const areaSizeArray = computed(() => {
   console.log(sizeArray, 'sizeArray')
   return sizeArray
 })
+const placementPointInfo = ref({})
+const viewAreaDetail = async (name: string) => {
+  const id = placmentPointObj.value[name]
 
-const viewAreaDetail = (id: string) => {
-  console.log(id, 'id')
+  const res = await getPlacementPointByIdApi(id)
+  placementPointInfo.value = res as any
+
   areaDetailPup.value = true
 }
 

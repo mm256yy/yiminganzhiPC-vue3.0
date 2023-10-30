@@ -91,7 +91,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" :model-value="getValuationAmount(scope.row)" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -249,8 +249,8 @@ const total = () => {
   let sum = 0
   if (tableData.value && tableData.value.length) {
     tableData.value.map((item: any) => {
-      if (item.valuationAmount > 0) {
-        sum += item.valuationAmount
+      if (item.compensationAmount > 0) {
+        sum += item.compensationAmount
       }
     })
   }
@@ -314,7 +314,10 @@ const handleClose = () => {
   deleteReason.value = ''
   dialogVisible.value = false
 }
-
+//自动计算评估金额
+const getValuationAmount = (row: any) => {
+  return Number(row.number) * Number(row.price) * Number(row.newnessRate)
+}
 onMounted(() => {
   getList()
 })

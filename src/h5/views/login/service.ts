@@ -23,3 +23,6 @@ export const leaderLogin = (data?: any) => {
 export const userLogin = (data?: any) => {
   return request.post({ url: '/h5/login', data })
 }
+export const currentUserApi = () => {
+  return request.get({ url: '/auth/info' })
+}

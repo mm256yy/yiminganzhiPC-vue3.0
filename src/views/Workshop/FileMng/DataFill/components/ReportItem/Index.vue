@@ -7,7 +7,7 @@
         class="list-item"
         @click="handleItemClick(item.url)"
       >
-        <img :src="getImageSrc(item.isChecked)" width="25" />
+        <img :src="item.number > 0 ? reportCheckSrc : reportUnCheckSrc" width="25" />
         <span class="title">{{ item.name }}</span>
       </div>
     </div>
@@ -28,10 +28,6 @@ const emit = defineEmits(['jump'])
 
 const handleItemClick = (url: string) => {
   emit('jump', url)
-}
-
-const getImageSrc = (isChecked: boolean) => {
-  return isChecked ? reportCheckSrc : reportUnCheckSrc
 }
 </script>
 
@@ -80,5 +76,9 @@ const getImageSrc = (isChecked: boolean) => {
     color: #4154cc;
     background: linear-gradient(to right, #dde9fb, #fff);
   }
+}
+
+.active {
+  background-color: #4154cc;
 }
 </style>

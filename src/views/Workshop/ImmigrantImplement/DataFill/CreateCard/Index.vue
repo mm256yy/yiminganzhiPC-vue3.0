@@ -108,8 +108,12 @@
           >
             <template #default="{ row }">
               <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
-              <div v-else-if="row.isUpdate === '1'">{{ computedTotalPrice(row) }}</div>
-              <div v-else-if="row.isUpdate === '2'"> {{ getSummaries(row) }} </div>
+              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">{{
+                computedTotalPrice(row)
+              }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name === '奖励费小计'">
+                {{ getSummaries(row) }}
+              </div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -192,8 +196,8 @@ const { getList } = methods
 
 const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-  console.log(row, column)
+const objectSpanMethod = ({ row, rowIndex, columnIndex }: any) => {
+  // console.log(row, column)
   // if (columnIndex === 0) {
   //   if (rowIndex === 0) {
   //     return {
@@ -402,7 +406,24 @@ const getSummaries = (row: any) => {
       sumIndex = index
     }
   })
-  const arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
+  let arr: any[] = []
+  const incentivefeeArr = [
+    '签订动迁安置协议',
+    '房屋腾空奖励',
+    '签订安置村对接协议',
+    '启动建房奖励',
+    '完成建房奖励',
+    '搬迁入住奖励',
+    '随迁人口补助费奖励',
+    '应迁未迁人口补助奖励',
+    '其他奖励费'
+  ]
+  if (row.name !== '奖励费小计') {
+    arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
+  } else {
+    arr = feeTableData.value.filter((item) => incentivefeeArr.includes(item.name))
+  }
+
   sums = arr.reduce((totalPrice, currentItem) => {
     return totalPrice + computedTotalPrice(currentItem)
   }, 0)

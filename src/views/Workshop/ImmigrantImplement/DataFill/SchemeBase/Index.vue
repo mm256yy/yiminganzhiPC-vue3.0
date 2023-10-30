@@ -25,10 +25,14 @@
         <el-table :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="姓名" width="100" />
           <el-table-column prop="relationText" label="与户主关系" width="100" />
-          <el-table-column prop="sexText" label="性别" width="100" />
+          <el-table-column prop="sex" label="性别" width="100">
+            <template #default="scope">
+              {{ scope.row.sex == '1' ? '男' : '女' }}
+            </template>
+          </el-table-column>
           <el-table-column prop="card" label="身份证" width="200" />
           <el-table-column prop="censusTypeText" label="户籍类别" width="160" />
-          <el-table-column prop="populationNature" label="人口性质" width="160" />
+          <el-table-column prop="populationNatureText" label="人口性质" width="160" />
           <el-table-column prop="settingWay" label="安置方式" width="268">
             <template #default="scope">
               <el-select v-model="scope.row.settingWay" placeholder="请选择">
@@ -252,7 +256,7 @@ const filterWay = (data) => {
       notFarmer &&
       item.value === '1' &&
       immigrantSettle.value &&
-      immigrantSettle.value.settingAddress !== apartmentArea[2].id
+      immigrantSettle.value.settingAddress !== apartmentArea[1].id
     ) {
       item.disabled = true
     }

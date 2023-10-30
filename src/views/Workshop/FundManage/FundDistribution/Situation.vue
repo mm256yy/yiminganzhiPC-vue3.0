@@ -11,25 +11,25 @@
       <ElButton type="primary" @click="selenceTable('村集体')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left max-header">
-          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款申请记录</span>
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金发放情况</span>
 
           <div class="text">
-            已完成：0笔
-            <span class="num">{{ molingData.issuedAmount }}</span> 元
+            总金额：
+            <span class="num">{{ molingData.totalPrice }}</span> 元
           </div>
           <div class="text">
-            审核中：0笔
+            待发金额：
             <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
           <div class="text">
-            待提交：0笔
-            <span class="num">{{ molingData.totalPrice }}</span> 元
+            已发金额：
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
         </div>
       </div>
@@ -103,8 +103,8 @@ let molingData = ref<any>({
 })
 const goObject = reactive<any>({
   state: [
-    { label: '已发放', value: '1' },
-    { label: '未发放', value: '2' }
+    { label: '是', value: true },
+    { label: '否', value: false }
   ],
   batch: [
     { label: '第一批', value: '1' },
@@ -189,7 +189,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'receivePaymentUnit',
+    field: 'name',
     label: '姓名',
     search: {
       show: true,
@@ -223,7 +223,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'hasPropertyAccount',
     label: '财产户',
     search: {
       show: true,
@@ -291,7 +291,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     field: 'issuedAmount',
-    label: '可发金额(元)',
+    label: '已发金额(元)',
     search: {
       show: false
     }
@@ -327,7 +327,27 @@ const onSearch = (data) => {
   } else {
     delete searchData.relation
   }
+  const findRecursion = (data, code, callback) => {
+    if (!data || !Array.isArray(data)) return null
+    data.forEach((item, index, arr) => {
+      if (item.code === code) {
+        return callback(item, index, arr)
+      }
+      if (item.children) {
+        return findRecursion(item.children, code, callback)
+      }
+    })
+  }
 
+  const getParamsKey = (key: string) => {
+    const map = {
+      Country: 'areaCode',
+      Township: 'townCode',
+      Village: 'villageCode', // 行政村 code
+      NaturalVillage: 'virutalVillageCode' // 自然村 code
+    }
+    return map[key]
+  }
   // 处理参数
   let params = {
     ...searchData
@@ -335,13 +355,20 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-  if (params.code) {
-    delete params.code
-    setSearchParams({ ...params })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
+  for (let i in params) {
+    if (!params[i]) {
+      delete params[i]
+    }
   }
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
+  setSearchParams({ ...params })
 }
 let handelShowform = (e: any) => {
   dialog.value = true
@@ -353,6 +380,10 @@ const onEditFormClose = (flag: boolean) => {
     getList()
   }
   dialog.value = false
+}
+let setSearchParamss = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 </script>
 

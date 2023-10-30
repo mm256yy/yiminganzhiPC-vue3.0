@@ -30,7 +30,11 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParamss"
+        @reset="setSearchParams({ status: 1 })"
+      />
     </div>
 
     <div class="table-wrap">
@@ -71,7 +75,9 @@
           <div>{{ row.type === '1' ? '入账' : '出账' }}</div>
         </template>
         <template #recordTime="{ row }">
-          <div>{{ row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD') : '-' }}</div>
+          <div>{{
+            row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
         </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
@@ -98,9 +104,6 @@ import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capit
 import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 import dayjs from 'dayjs'
-
-// const appStore = useAppStore()
-// const projectId = appStore.currentProjectId
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
@@ -111,11 +114,15 @@ const { register, tableObject, methods } = useTable({
 
 const { getList, setSearchParams } = methods
 
-tableObject.params = {
-  status: '1'
+setSearchParams({ status: 1 })
+let setSearchParamss = (data) => {
+  for (let i in data) {
+    if (!data[i]) {
+      delete data[i]
+    }
+  }
+  setSearchParams({ ...data, status: 1 })
 }
-getList()
-
 const schema = reactive<CrudSchema[]>([
   {
     field: 'type',
@@ -173,7 +180,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -271,6 +279,19 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+  // {
+  //   field: 'createDate',
+  //   label: '创建时间',
+  //   search: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'createdBy',
     label: '操作人',
@@ -302,28 +323,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-const onSearch = (data) => {
-  let params = {
-    ...data
-  }
-
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
-  setSearchParams({ ...params })
-}
-
-const onReset = () => {
-  tableObject.params = {
-    status: '1'
-  }
-
-  setSearchParams({})
-}
 
 const onViewRow = (row) => {
   // 点击查看进入入账详情页面

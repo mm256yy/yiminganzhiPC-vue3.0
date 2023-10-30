@@ -8,11 +8,9 @@ import axios, {
 import qs from 'qs'
 import { config } from './config'
 import { ElMessage } from 'element-plus'
-import { useAppStore } from '@/store/modules/app'
 
 const { result_code, base_url } = config
 export const PATH_URL = base_url[import.meta.env.VITE_API_BASEPATH]
-const appStore = useAppStore()
 
 // 创建axios实例
 const service: AxiosInstance = axios.create({
@@ -30,12 +28,16 @@ service.interceptors.request.use(
       config.data = qs.stringify(config.data)
     }
     // 添加统一的项目id请求头
-    ;(config.headers as AxiosRequestConfig)['Project-Id'] = appStore.getCurrentProjectId
-    ;(config.headers as AxiosRequestConfig)['Project-Status'] = appStore.getProjectStatus
+    ;(config.headers as AxiosRequestConfig)['Project-Id'] = sessionStorage.getItem('projectId') || 0
+    // ;(config.headers as AxiosRequestConfig)['Project-Status'] = appStore.getProjectStatus
     // 添加 token
-    const token = appStore.getToken
-    if (token) {
-      ;(config.headers as AxiosRequestHeaders)['h5token'] = token
+    const token: any = sessionStorage.getItem('token')
+    const h5token: any = sessionStorage.getItem('h5token')
+
+    if (window.location.href.indexOf('h5') != -1) {
+      ;(config.headers as AxiosRequestHeaders)['Authorization'] = token
+    } else {
+      ;(config.headers as AxiosRequestHeaders)['h5token'] = h5token
     }
     // get参数编码
     if (config.method === 'get' && config.params) {
@@ -80,9 +82,12 @@ service.interceptors.response.use(
     const data = res?.data as any
     if (data && (data.code === 401 || data.status === 401)) {
       // 清除用户信息
-      appStore.setUserJwtInfo(null)
       // token 无效，跳转到登录
-      window.location.href = 'ld.html#/phoneLogin'
+      if (window.location.href.indexOf('h5') != -1) {
+        window.location.href = 'h5.html#/login'
+      } else {
+        window.location.href = 'ld.html#/phoneLogin'
+      }
     }
     let message = data.message || error.message || '发生错误'
     if (data && data.code === 400 && data.data && data.data.length > 0) {

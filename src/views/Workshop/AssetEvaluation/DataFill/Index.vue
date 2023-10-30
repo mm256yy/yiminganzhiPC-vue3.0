@@ -39,12 +39,7 @@
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
 
-            <Icon
-              icon="gg:check-o"
-              color="#3e73ec"
-              class="ml-[5px]"
-              v-if="baseInfo.implementFillStatus === '1'"
-            />
+            <Icon v-if="item.active" class="ml-2px" icon="gg:check-o" color=" #3e73ec" />
           </div>
         </div>
       </div>
@@ -179,7 +174,8 @@ import LandGreenSeedlings from './components/LandGreenSeedlings/Index.vue' // �
 // import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
 import Equipment from './components/Equipment/Index.vue' // 资产评估 -- (企业/个体工商户)设施设备评估
 import SpecialEquipment from './components/SpecialEquipment/Index.vue' // 资产评估 -- (村集体)小型专项及农副业设施评估
-
+import { getFillingStatusApi } from '@/api/immigrantImplement/common-service'
+import { deepClone } from '@/utils'
 // 角色代码为字典值
 enum RoleCodeType {
   assessor = 'assessor',
@@ -255,6 +251,7 @@ const onReportTabClick = (tabItem) => {
 }
 
 onMounted(() => {
+  getFillingStatus()
   role.value = getRole()
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
@@ -293,6 +290,67 @@ onMounted(() => {
 
 const onBack = () => {
   back()
+}
+// 获取填报状态
+const getFillingStatus = () => {
+  getFillingStatusApi(doorNo).then((res: any) => {
+    getStatus(res)
+  })
+}
+// 填报状态判断
+const getStatus = (data: any) => {
+  const tabsTypeCopy = deepClone(tabsType.value)
+  if (type === 'Landlord') {
+    //居民户
+    if (data.houseMainStatus === '1') {
+      tabsTypeCopy[0].active = true // 房屋主体
+    }
+    if (data.houseRenovationStatus === '1') {
+      tabsTypeCopy[1].active = true // 房屋装修评估
+    }
+    if (data.appendageStatus === '1') {
+      tabsTypeCopy[2].active = true // 房屋附属设施评估
+    }
+    if (data.treeStatus === '1') {
+      tabsTypeCopy[3].active = true // 零星林（果）木评估
+    }
+  } else if (type === 'Enterprise' || type === 'IndividualB') {
+    //企业或个体工商户
+    if (data.houseMainStatus === '1') {
+      tabsTypeCopy[0].active = true // 房屋主体
+    }
+    if (data.houseRenovationStatus === '1') {
+      tabsTypeCopy[1].active = true // 房屋装修评估
+    }
+    if (data.appendageStatus === '1') {
+      tabsTypeCopy[2].active = true // 房屋附属设施评估
+    }
+    if (data.treeStatus === '1') {
+      tabsTypeCopy[3].active = true // 零星林（果）木评估
+    }
+    if (data.deviceStatus === '1') {
+      tabsTypeCopy[4].active = true // 零星林（果）木评估
+    }
+  } else if (type === 'VillageInfoC') {
+    //村集体
+    if (data.houseMainStatus === '1') {
+      tabsTypeCopy[0].active = true // 房屋主体
+    }
+    if (data.houseRenovationStatus === '1') {
+      tabsTypeCopy[1].active = true // 房屋装修评估
+    }
+    if (data.appendageStatus === '1') {
+      tabsTypeCopy[2].active = true // 房屋附属设施评估
+    }
+    if (data.treeStatus === '1') {
+      tabsTypeCopy[3].active = true // 零星林（果）木评估
+    }
+    if (data.specialStatus === '1') {
+      tabsTypeCopy[4].active = true // 零星林（果）木评估
+    }
+  }
+
+  tabsType.value = tabsTypeCopy
 }
 </script>
 

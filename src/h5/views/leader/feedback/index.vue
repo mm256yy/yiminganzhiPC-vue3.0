@@ -31,11 +31,10 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getFeedback } from './service'
-import { useAppStore } from '@/store/modules/app'
+
 import dayjs from 'dayjs'
 const { push } = useRouter()
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+
 const toLink = (routeName: string, query = {}) => {
   push({
     name: routeName,
@@ -67,7 +66,7 @@ const onItemClick = (item: any) => {
   console.log('item', item.title)
 }
 let getFeedbacks = async () => {
-  let data = await getFeedback({ projectId: projectId, size: 10, page: page.value })
+  let data = await getFeedback({ projectId: 0, size: 10, page: page.value })
   console.log(data)
   items.value = [...items.value, ...data.content]
   console.log(items.value)

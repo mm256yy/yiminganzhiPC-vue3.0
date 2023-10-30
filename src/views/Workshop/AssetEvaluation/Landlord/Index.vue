@@ -78,7 +78,10 @@
             <span :class="[row.implementFillStatus === '0' ? 'red' : '']">
               {{ row.implementFillStatus === '0' ? '未填报' : '已填报' }}
             </span>
-            <span :class="['ml-5', row.implementEscalationStatus === '0' ? 'red' : '']">
+            <span
+              class="!hidden"
+              :class="['ml-5', row.implementEscalationStatus === '0' ? 'red' : '']"
+            >
               {{ row.implementEscalationStatus === '0' ? '未上传报告' : '已上传报告' }}
             </span>
           </div>
@@ -311,14 +314,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
+    field: 'estimateUser',
     label: '填报人',
     search: {
       show: false
     }
   },
   {
-    field: 'reportDate',
+    field: 'estimateTime',
     label: '填报时间',
     search: {
       show: false

@@ -8,34 +8,34 @@
           <div class="base-column">
             <div class="info-item">
               <div class="label">小区名称：</div>
-              <div class="value">太阳小区</div>
+              <div class="value">{{ pointInfo.residential }}</div>
             </div>
             <div class="info-item">
               <div class="label">结构类型：</div>
-              <div class="value">钢架</div>
+              <div class="value">{{ pointInfo.structure }}</div>
             </div>
             <div class="info-item">
               <div class="label">用地面积(㎡)：</div>
-              <div class="value">20,020</div>
+              <div class="value">{{ pointInfo.landSpace }}</div>
             </div>
             <div class="info-item">
               <div class="label">地理位置：</div>
-              <div class="value">浙江省龙游县石乡大力山村白岩25号</div>
+              <div class="value">{{ pointInfo.address }}</div>
             </div>
           </div>
 
           <div class="base-column">
             <div class="info-item">
               <div class="label">绿化率：</div>
-              <div class="value">25%</div>
+              <div class="value">{{ pointInfo.greeningRate }}</div>
             </div>
             <div class="info-item">
               <div class="label">建筑密度：</div>
-              <div class="value">12%</div>
+              <div class="value">{{ pointInfo.buildingDensity }}</div>
             </div>
             <div class="info-item">
               <div class="label">建筑面积(㎡)：</div>
-              <div class="value">13,500</div>
+              <div class="value">{{ pointInfo.floorSpace }}</div>
             </div>
           </div>
         </div>
@@ -45,22 +45,22 @@
         <div class="periphery">
           <div class="periphery-item">
             <div class="label">交通：</div>
-            <div class="value">直接连接市区和机场1号线，7号线</div>
+            <div class="value">{{ pointInfo.traffic }}</div>
           </div>
 
           <div class="periphery-item">
             <div class="label">商业：</div>
-            <div class="value">位于市区，各种商业配套齐全</div>
+            <div class="value">{{ pointInfo.business }}</div>
           </div>
 
           <div class="periphery-item">
             <div class="label">教育：</div>
-            <div class="value">周边有幼儿园、小学、初中、高中，教育配套齐全</div>
+            <div class="value">{{ pointInfo.education }}</div>
           </div>
 
           <div class="periphery-item">
             <div class="label">医院：</div>
-            <div class="value">镇中心医院</div>
+            <div class="value">{{ pointInfo.hospital }}</div>
           </div>
         </div>
 
@@ -77,12 +77,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
-
+interface PropsType {
+  placementPointInfo?: any
+}
+const props = defineProps<PropsType>()
 const map = ref<any>(null)
 const AMap = ref<any>(null)
 const longitude = 120.148775
 const latitude = 30.245799
-
+const pointInfo = ref<any>({})
 const init = async () => {
   AMap.value = await AMapLoader.load({
     key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
@@ -105,6 +108,7 @@ const init = async () => {
     keyboardEnable: true //键盘控制放大缩小移动旋转
   })
   map.value.setDefaultCursor('pointer')
+  pointInfo.value = { ...props.placementPointInfo }
 }
 
 onMounted(() => {

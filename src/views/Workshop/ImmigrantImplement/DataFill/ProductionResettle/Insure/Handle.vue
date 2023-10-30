@@ -252,6 +252,8 @@ const onError = () => {
 }
 
 const submit = async (data: DemographicDtoType) => {
+  // 清空之前的图片
+  productionPic.value = []
   await updateDemographicApi({
     ...data,
     productionStatus: '1'
