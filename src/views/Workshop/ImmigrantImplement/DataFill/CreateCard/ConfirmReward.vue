@@ -46,9 +46,11 @@
         header-align="center"
       >
         <template #default="{ row }">
-          <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
+          <!-- <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
           <div v-else-if="row.isUpdate === '1'">{{ computedTotalPrice(row) }}</div>
-          <div v-else-if="row.isUpdate === '2'"> {{ getSummaries(row) }} </div>
+          <div v-else-if="row.isUpdate === '2'"> {{ getSummaries(row) }} </div> -->
+          <div v-if="row.name !== '奖励费小计'">{{ computedTotalPrice(row) }}</div>
+          <div v-else>{{ getSummaries(row) }}</div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -138,6 +140,7 @@ const computedTotalPrice = (row: any) => {
  * 获取奖励小计
  * @param row 当前行信息
  */
+
 const getSummaries = (row: any) => {
   let sums = 0
   let sumIndex = 0
@@ -164,9 +167,12 @@ const onClose = () => {
  */
 const onSave = (data: any, isVerify: string) => {
   loading.value = true
+  const totalPrice = Number(data.number) * Number(data.price)
+
   let params = {
     ...data,
     doorNo: props.doorNo,
+    totalPrice,
     isVerify
   }
   saveRewardFee(params)
