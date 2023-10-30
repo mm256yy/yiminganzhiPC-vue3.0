@@ -25,12 +25,11 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn
-          label="安置方式"
-          prop="settingWayText"
-          align="center"
-          header-align="center"
-        />
+        <ElTableColumn label="安置方式" prop="settingWay" align="center" header-align="center">
+          <template #default="scope">
+            {{ scope.row.settingWay == '2' ? '养老保险' : '' }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn
           label="完成时间"
           prop="productionCompleteTime"

@@ -104,6 +104,7 @@
       :feedbackId="detail.id"
       :readerId="detail.readerId"
       :action-type="'add'"
+      :isSelf="detail.isSelf"
       @close="onEditFormClose"
     />
   </WorkContentWrap>

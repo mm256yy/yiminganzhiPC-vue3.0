@@ -20,7 +20,7 @@
       <ElFormItem label="意见描述：" prop="remark" required>
         <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.remark" />
       </ElFormItem>
-      <ElFormItem v-if="currentUserId === props.readerId" label="是否解决：" prop="status" required>
+      <ElFormItem v-if="props.isSelf == '1'" label="是否解决：" prop="status" required>
         <el-radio-group v-model="form.status" class="ml-4">
           <el-radio label="1" size="large">已解决</el-radio>
           <el-radio label="2" size="large">未解决</el-radio>
@@ -59,9 +59,12 @@ interface PropsType {
   actionType: 'add' | 'edit'
   feedbackId: number
   readerId: number
+  isSelf: string
 }
 
 const props = defineProps<PropsType>()
+console.log('1111', props)
+console.log('props.isSelf', props.isSelf)
 const emit = defineEmits(['close', 'submit'])
 const { required } = useValidator()
 const formRef = ref<FormInstance>()
@@ -70,6 +73,7 @@ const appStore = useAppStore()
 const currentUserId = computed(() => {
   return appStore.getUserInfo ? appStore.getUserInfo.id : ''
 })
+console.log(currentUserId, 'currentUserIdcurrentUserIdcurrentUserId')
 
 const defaultValue = {
   status: '',
