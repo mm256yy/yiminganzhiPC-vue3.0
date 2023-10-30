@@ -68,6 +68,9 @@
         showOverflowTooltip
         @register="register"
       >
+        <template #paymentTime="{ row }">
+          {{ formatTime(row.paymentTime, 'yyyy-MM-dd HH:mm:ss') }}
+        </template>
         <!-- <template #action="{ row }">
           <ElButton link type="primary" @click="onCheckRow(row)">查看</ElButton>
         </template> -->
@@ -93,7 +96,7 @@ import {
   getTownshipSumAmount
 } from '@/api/fundManage/townshipFundEntry-service'
 import type { AmountDtoType } from '@/api/fundManage/townshipFundEntry-types'
-
+import { formatTime } from '@/utils/index'
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
@@ -265,7 +268,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'paymentType',
+    field: 'paymentTypeText',
     label: '付款对象类别',
     width: 180,
     search: {
@@ -273,14 +276,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'typeText',
     label: '概算科目',
     search: {
       show: false
     }
   },
   {
-    field: 'funSubjectId',
+    field: 'funSubjectIdText',
     label: '资金科目',
     search: {
       show: false
@@ -294,7 +297,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'payType',
+    field: 'payTypeText',
     label: '资金类别',
     search: {
       show: false
