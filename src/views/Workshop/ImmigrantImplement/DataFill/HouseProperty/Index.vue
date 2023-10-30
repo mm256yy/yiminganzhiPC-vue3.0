@@ -28,6 +28,12 @@
             {{ standardFormatDate(row.birthday) }}
           </div>
         </template>
+        <template #ownersSituationName="{ row }">
+          <div>
+            {{ splitStr(row.ownersSituationName) }}
+          </div>
+        </template>
+
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">详情</el-button>
           <el-button type="primary" link @click="onEditRow(row)">核定</el-button>
@@ -139,14 +145,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'demographicIdText',
+    field: 'demographicIdName',
     label: '房屋产权人',
     search: {
       show: false
     }
   },
   {
-    field: 'ownersSituation',
+    field: 'ownersSituationName',
     label: '共有人情况',
     search: {
       show: false
@@ -206,6 +212,8 @@ const onFilling = () => {
     }
   })
 }
+//截取字符串
+const splitStr = (str) => str.slice(1, str.length - 1)
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {

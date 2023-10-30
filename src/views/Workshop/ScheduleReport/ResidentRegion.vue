@@ -21,16 +21,10 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户分区域报表 </div>
       </div>
-      <el-table
-        :data="tableData"
-        border
-        :span-method="objectSpanMethod"
-        style="width: 100%"
-        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
-      >
-        <el-table-column prop="number" label="序号" align="center" width="60" />
-        <el-table-column prop="doorNo" label="户号" align="center" width="60" />
-        <el-table-column prop="name" label="户主" align="center" width="60" />
+      <el-table :data="tableData" border :span-method="objectSpanMethod" style="width: 100%">
+        <el-table-column prop="number" label="序号" align="center" />
+        <el-table-column prop="doorNo" label="户号" align="center" />
+        <el-table-column prop="name" label="户主" align="center" />
         <!-- 公寓房 -->
         <el-table-column label="动迁阶段(户)" align="center">
           <el-table-column label="资格认定" align="center">
@@ -489,15 +483,15 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
  * 计算 table 的高度
  * @param arr 当前 table 的数据
  */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
+// const getHeight = (arr: any) => {
+//   if (arr.length === 0) {
+//     return 150
+//   } else if (arr.length > 9) {
+//     return 500
+//   } else {
+//     return 'auto'
+//   }
+// }
 onMounted(() => {
   getResidentRegionList('0', pageSize.value)
 })

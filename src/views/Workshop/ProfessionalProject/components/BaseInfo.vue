@@ -20,7 +20,7 @@
       </div>
       <div class="info-item">
         <div class="tit">专项类别：</div>
-        <div class="txt">{{ props.baseInfo.type || '-' }}</div>
+        <div class="txt">{{ props.baseInfo.typeText || '-' }}</div>
       </div>
       <div class="info-item">
         <div class="tit">所在地区：</div>

@@ -21,12 +21,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户按工作分组报表 </div>
       </div>
-      <el-table
-        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
-        :data="tableData"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="序号" align="center" width="60">
           <template #default="scope">
             <span> {{ scope.$index + 1 }}</span>
@@ -230,19 +225,7 @@ const getResidentWorkList = (page, size) => {
     totalNum.value = res.total
   })
 }
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
+
 onMounted(() => {
   getResidentWorkList('0', pageSize.value)
 })

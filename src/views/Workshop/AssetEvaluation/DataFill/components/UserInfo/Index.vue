@@ -13,11 +13,11 @@
         <div
           :class="{
             status: true,
-            success: props.baseInfo.implementFillStatus === '1'
+            success: props.estimateStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.baseInfo.implementFillStatus === '1' ? '已填报' : '未填报' }}
+          {{ props.estimateStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <!-- <div
           :class="{
@@ -202,6 +202,7 @@ interface PropsType {
   baseInfo: any
   type: string
   householdId: number
+  estimateStatus: string
 }
 
 const props = defineProps<PropsType>()

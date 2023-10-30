@@ -1,7 +1,11 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
+      >
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
@@ -17,53 +21,49 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
       </div>
-      <el-table
-        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
-        :span-method="objectSpanMethod"
-        :data="tableData"
-        border
-        style="width: 100%"
-      >
+      <el-table :span-method="objectSpanMethod" :data="tableData" border style="width: 100%">
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
         <el-table-column label="公寓房(套)" align="center">
-          <el-table-column label="棠村安置区" width="120" align="center">
-            <el-table-column prop="flatTC7Count" label="70" align="center" width="50" />
-            <el-table-column prop="flatTC9Count" label="90" align="center" width="50" />
-            <el-table-column prop="flatTC11Count" label="110" align="center" width="50" />
-            <el-table-column prop="flatTC13Count" label="130" align="center" width="50" />
+          <el-table-column label="曙光安置区" width="120" align="center">
+            <el-table-column prop="flatSG7Count" label="70" align="center" width="50" />
+            <el-table-column prop="flatSG9Count" label="90" align="center" width="50" />
+            <el-table-column prop="flatSG11Count" label="110" align="center" width="50" />
+            <el-table-column prop="flatSG13Count" label="130" align="center" width="50" />
           </el-table-column>
-          <el-table-column label="麻家田安置区" width="120" align="center">
-            <el-table-column prop="flatMJ7Count" label="70" align="center" width="50" />
-            <el-table-column prop="flatMJ9Count" label="90" align="center" width="50" />
-            <el-table-column prop="flatMJ11Count" label="110" align="center" width="50" />
-            <el-table-column prop="flatMJ13Count" label="130" align="center" width="50" />
-          </el-table-column>
-          <el-table-column label="东坪安置区" width="120" align="center">
-            <el-table-column prop="flatDP7Count" label="70" align="center" width="50" />
-            <el-table-column prop="flatDP9Count" label="90" align="center" width="50" />
-            <el-table-column prop="flatDP11Count" label="110" align="center" width="50" />
-            <el-table-column prop="flatDP13Count" label="130" align="center" width="50" />
+          <el-table-column label="镜岭集镇安置区" width="120" align="center">
+            <el-table-column prop="flatJL7Count" label="70" align="center" width="50" />
+            <el-table-column prop="flatJL9Count" label="90" align="center" width="50" />
+            <el-table-column prop="flatJL11Count" label="110" align="center" width="50" />
+            <el-table-column prop="flatJL13Count" label="130" align="center" width="50" />
           </el-table-column>
         </el-table-column>
 
         <!-- 宅基地(宗) -->
         <el-table-column prop="test" label="宅基地(宗)" align="center">
-          <el-table-column label="曙光安置区" align="center">
-            <el-table-column prop="homesteadSG4Count" label="48" align="center" width="50" />
-            <el-table-column prop="homesteadSG7Count" label="72" align="center" width="50" />
-            <el-table-column prop="homesteadSG9Count" label="96" align="center" width="50" />
-            <el-table-column prop="homesteadSG12Count" label="120" align="center" width="50" />
-            <el-table-column prop="homesteadSG14Count" label="144" align="center" width="50" />
-            <el-table-column prop="homesteadSG16Count" label="168" align="center" width="50" />
+          <el-table-column label="棠村安置区" align="center">
+            <el-table-column prop="homesteadTC1AreaCount" label="48" align="center" width="50" />
+            <el-table-column prop="homesteadTC2AreaCount" label="72" align="center" width="50" />
+            <el-table-column prop="homesteadTC3AreaCount" label="96" align="center" width="50" />
+            <el-table-column prop="homesteadTC4AreaCount" label="120" align="center" width="50" />
+            <el-table-column prop="homesteadTC5AreaCount" label="144" align="center" width="50" />
+            <el-table-column prop="homesteadTC6AreaCount" label="168" align="center" width="50" />
           </el-table-column>
-          <el-table-column label="镜岭集镇安置区" align="center">
-            <el-table-column prop="homesteadJL4Count" label="48" align="center" width="50" />
-            <el-table-column prop="homesteadJL7Count" label="72" align="center" width="50" />
-            <el-table-column prop="homesteadJL9Count" label="96" align="center" width="50" />
-            <el-table-column prop="homesteadJL12Count" label="120" align="center" width="50" />
-            <el-table-column prop="homesteadJL14Count" label="144" align="center" width="50" />
-            <el-table-column prop="homesteadSG16Count" label="168" align="center" width="50" />
+          <el-table-column label="麻家田安置区" align="center">
+            <el-table-column prop="homesteadMJT1AreaCount" label="48" align="center" width="50" />
+            <el-table-column prop="homesteadMJT2AreaCount" label="72" align="center" width="50" />
+            <el-table-column prop="homesteadMJT3AreaCount" label="96" align="center" width="50" />
+            <el-table-column prop="homesteadMJT4AreaCount" label="120" align="center" width="50" />
+            <el-table-column prop="homesteadMJT5AreaCount" label="144" align="center" width="50" />
+            <el-table-column prop="homesteadMJT6AreaCount" label="168" align="center" width="50" />
+          </el-table-column>
+          <el-table-column label="东坪安置区" align="center">
+            <el-table-column prop="homesteadDP1AreaCount" label="48" align="center" width="50" />
+            <el-table-column prop="homesteadDP2AreaCount" label="72" align="center" width="50" />
+            <el-table-column prop="homesteadDP3AreaCount" label="96" align="center" width="50" />
+            <el-table-column prop="homesteadDP4AreaCount" label="120" align="center" width="50" />
+            <el-table-column prop="homesteadDP5AreaCount" label="144" align="center" width="50" />
+            <el-table-column prop="homesteadDP6AreaCount" label="168" align="center" width="50" />
           </el-table-column>
         </el-table-column>
         <el-table-column prop="oneselfCount" label="自谋出路(户)" align="center">
@@ -178,19 +178,6 @@ const { setSearchParams } = methods
 const tableData = ref<any>([])
 const percent = ref() //已选占比
 
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
 const handleSearch = () => {
   getMoveHouseReportList('0', '10')
 }
@@ -207,35 +194,37 @@ const getMoveHouseReportList = (page, size) => {
     tableArr.push(
       {
         name: '合计（套/宗)',
-        flatTC7Count: totalColumn(tableArr, 'flatTC7Count'),
-        flatTC9Count: totalColumn(tableArr, 'flatTC9Count'),
-        flatTC11Count: totalColumn(tableArr, 'flatTC11Count'),
-        flatTC13Count: totalColumn(tableArr, 'flatTC13Count'),
-        flatMJ7Count: totalColumn(tableArr, 'flatMJ7Count'),
-        flatMJ9Count: totalColumn(tableArr, 'flatMJ9Count'),
-        flatMJ11Count: totalColumn(tableArr, 'flatMJ11Count'),
-        flatMJ13Count: totalColumn(tableArr, 'flatMJ13Count'),
-        flatDP7Count: totalColumn(tableArr, 'flatDP7Count'),
-        flatDP9Count: totalColumn(tableArr, 'flatDP9Count'),
-        flatDP11Count: totalColumn(tableArr, 'flatDP11Count'),
-        flatDP13Count: totalColumn(tableArr, 'flatDP13Count'),
-        homesteadSG4Count: totalColumn(tableArr, 'homesteadSG4Count'),
-        homesteadSG7Count: totalColumn(tableArr, 'homesteadSG7Count'),
-        homesteadSG9Count: totalColumn(tableArr, 'homesteadSG9Count'),
-        homesteadSG12Count: totalColumn(tableArr, 'homesteadSG12Count'),
-        homesteadSG14Count: totalColumn(tableArr, 'homesteadSG14Count'),
-        homesteadSG16Count: totalColumn(tableArr, 'homesteadSG16Count'),
-        homesteadJL4Count: totalColumn(tableArr, 'homesteadJL4Count'),
-        homesteadJL7Count: totalColumn(tableArr, 'homesteadJL7Count'),
-        homesteadJL9Count: totalColumn(tableArr, 'homesteadJL9Count'),
-        homesteadJL12Count: totalColumn(tableArr, 'homesteadJL12Count'),
-        homesteadJL14Count: totalColumn(tableArr, 'homesteadJL14Count'),
-        homesteadJL16Count: totalColumn(tableArr, 'homesteadJL16Count')
+        flatSG7Count: totalColumn(tableArr, 'flatSG7Count'),
+        flatSG9Count: totalColumn(tableArr, 'flatSG9Count'),
+        flatSG11Count: totalColumn(tableArr, 'flatSG11Count'),
+        flatSG13Count: totalColumn(tableArr, 'flatSG13Count'),
+        flatJL7Count: totalColumn(tableArr, 'flatJL7Count'),
+        flatJL9Count: totalColumn(tableArr, 'flatJL9Count'),
+        flatJL11Count: totalColumn(tableArr, 'flatJL11Count'),
+        flatJL13Count: totalColumn(tableArr, 'flatJL13Count'),
+        homesteadTC1AreaCount: totalColumn(tableArr, 'homesteadTC1AreaCount'),
+        homesteadTC2AreaCount: totalColumn(tableArr, 'homesteadTC2AreaCount'),
+        homesteadTC3AreaCount: totalColumn(tableArr, 'homesteadTC3AreaCount'),
+        homesteadTC4AreaCount: totalColumn(tableArr, 'homesteadTC4AreaCount'),
+        homesteadTC5AreaCount: totalColumn(tableArr, 'homesteadTC5AreaCount'),
+        homesteadTC6AreaCount: totalColumn(tableArr, 'homesteadTC6AreaCount'),
+        homesteadMJT1AreaCount: totalColumn(tableArr, 'homesteadMJT1AreaCount'),
+        homesteadMJT2AreaCount: totalColumn(tableArr, 'homesteadMJT2AreaCount'),
+        homesteadMJT3AreaCount: totalColumn(tableArr, 'homesteadMJT3AreaCount'),
+        homesteadMJT4AreaCount: totalColumn(tableArr, 'homesteadMJT4AreaCount'),
+        homesteadMJT5AreaCount: totalColumn(tableArr, 'homesteadMJT5AreaCount'),
+        homesteadMJT6AreaCount: totalColumn(tableArr, 'homesteadMJT6AreaCount'),
+        homesteadDP1AreaCount: totalColumn(tableArr, 'homesteadDP1AreaCount'),
+        homesteadDP2AreaCount: totalColumn(tableArr, 'homesteadDP2AreaCount'),
+        homesteadDP3AreaCount: totalColumn(tableArr, 'homesteadDP3AreaCount'),
+        homesteadDP4AreaCount: totalColumn(tableArr, 'homesteadDP4AreaCount'),
+        homesteadDP5AreaCount: totalColumn(tableArr, 'homesteadDP5AreaCount'),
+        homesteadDP6AreaCount: totalColumn(tableArr, 'homesteadDP6AreaCount')
       },
       {
         name: '合计(户)',
-        flatTC7Count: totalApparent(tableArr),
-        homesteadSG4Count: totalHomestead(tableArr),
+        flatSG7Count: totalApparent(tableArr),
+        homesteadTC1AreaCount: totalHomestead(tableArr),
         oneselfCount: totalColumn(tableArr, 'oneselfCount'),
         concentrateCount: totalColumn(tableArr, 'concentrateCount')
       }
@@ -265,24 +254,24 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
     if (columnIndex === 1) {
       return {
         rowspan: 1,
-        colspan: 12
+        colspan: 8
       }
     }
     //把被合并的单元格进行处理
-    if (columnIndex > 1 && columnIndex <= 12) {
+    if (columnIndex > 1 && columnIndex <= 8) {
       return {
         rowspan: 0,
         colspan: 0
       }
     }
-    if (columnIndex === 13) {
+    if (columnIndex === 9) {
       return {
         rowspan: 1,
-        colspan: 12
+        colspan: 18
       }
     }
     //把被合并的单元格进行处理
-    if (columnIndex > 13 && columnIndex < 25) {
+    if (columnIndex > 9 && columnIndex < 27) {
       return {
         rowspan: 0,
         colspan: 0

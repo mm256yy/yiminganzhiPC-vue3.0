@@ -26,6 +26,7 @@
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
         :type="type"
+        :estimateStatus="estimateStatus"
         @update-data="getLandlordInfo"
       />
 
@@ -210,7 +211,8 @@ const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(TabIds[0])
-const { doorNo, householdId, type, projectId, uid } = currentRoute.value.query as any
+const { doorNo, householdId, type, projectId, uid, estimateStatus } = currentRoute.value
+  .query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
