@@ -75,6 +75,15 @@
           <el-button type="primary" :icon="addIcon" @click="addRow">添加一行</el-button>
         </div>
       </ElFormItem>
+      <!-- <ElFormItem label="支付时间" prop="paymentTime">
+        <div class="node-lis">
+          <div class="node-item" v-for="(item, index) in paymentTimeList" :key="index">
+            <div class="label"> 支付时间： {{ item.paymentTime }}</div>
+            <div class="label ml-15px"> 金额： {{ item.paymentAccount }} 元</div>
+            <div class="ml-15px">凭证:</div>
+          </div>
+        </div>
+      </ElFormItem> -->
     </ElForm>
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
@@ -135,6 +144,16 @@ const defaultNodeItem: Partial<NodeDto> = {
 }
 
 const nodeList = ref<Partial<NodeDto>[]>([])
+const paymentTimeList = ref<any[]>([
+  {
+    paymentTime: '2023年2月1日',
+    paymentAccount: '10000.00'
+  },
+  {
+    paymentTime: '2023年2月2日',
+    paymentAccount: '10000.00'
+  }
+])
 
 const defaultValue: Partial<ProfessionalContractDtoType> & { time: any } = {
   ...commonParams,

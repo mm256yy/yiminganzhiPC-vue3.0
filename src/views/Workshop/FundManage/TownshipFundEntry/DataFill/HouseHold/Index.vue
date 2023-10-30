@@ -211,7 +211,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'intoAccount',
+    field: 'amount',
     label: '到账（元）',
     search: {
       show: false
@@ -225,7 +225,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'toIssued',
+    field: 'pendingAmount',
     label: '待发放',
     search: {
       show: false

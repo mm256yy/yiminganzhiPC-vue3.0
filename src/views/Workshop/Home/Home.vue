@@ -50,7 +50,6 @@ const getRole = () => {
         ? (project.roles[0].code as RoleCodeType)
         : RoleCodeType.other
     // 默认用户拥有一个角色 角色选择先不考虑
-    console.log('L-role', role)
     return role
   }
   return RoleCodeType.other
