@@ -1,12 +1,16 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
+      >
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">居民户分区域</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
@@ -28,25 +32,20 @@
         <!-- 公寓房 -->
         <el-table-column label="动迁阶段(户)" align="center">
           <el-table-column label="资格认定" align="center">
-            <el-table-column
-              prop="populationStatusCount"
-              label="人口核定"
-              align="center"
-              width="90"
-            >
+            <el-table-column prop="populationStatus" label="人口核定" align="center" width="90">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.populationStatusCount == '1'"
+                  v-if="row.populationStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
                 />
               </template>
             </el-table-column>
-            <el-table-column prop="propertyStatusCount" label="房屋产权" align="center" width="90">
+            <el-table-column prop="propertyStatus" label="房屋产权" align="center" width="90">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.propertyStatusCount == '1'"
+                  v-if="row.propertyStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -57,7 +56,7 @@
             <el-table-column prop="appendageStatus" label="房屋/附属物" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.appendageStatus == '1'"
+                  v-if="row.appendageStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -67,7 +66,7 @@
             <el-table-column prop="landStatus" label="土地/附着物" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.landStatus == '1'"
+                  v-if="row.landStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -80,7 +79,7 @@
             <el-table-column prop="productionArrangementStatus" label="生产安置" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.productionArrangementStatus == '1'"
+                  v-if="row.productionArrangementStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -91,7 +90,7 @@
             <el-table-column prop="relocateArrangementStatus" label="搬迁安置" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.relocateArrangementStatus == '1'"
+                  v-if="row.relocateArrangementStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -99,10 +98,10 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="graveStatus" label="坟墓确认" align="center">
+            <el-table-column prop="graveArrangementStatus" label="坟墓确认" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.graveStatus == '1'"
+                  v-if="row.graveArrangementStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -115,7 +114,7 @@
             <el-table-column prop="landUseStatus" label="生产用地" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.landUseStatus == '1'"
+                  v-if="row.landUseStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -125,7 +124,7 @@
             <el-table-column prop="chooseHouseStatus" label="选房择址" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.chooseHouseStatus == '1'"
+                  v-if="row.chooseHouseStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -135,7 +134,7 @@
             <el-table-column prop="chooseGraveStatus" label="坟墓择址" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.chooseGraveStatus == '1'"
+                  v-if="row.chooseGraveStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -143,10 +142,10 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column prop="cardStatusCount" label="移民建卡" align="center">
+          <el-table-column prop="cardStatus" label="移民建卡" align="center">
             <template #default="{ row }">
               <Icon
-                v-if="row.cardStatusCount == '1'"
+                v-if="row.cardStatus == '1' && row.number !== '合计'"
                 class="active-icon"
                 icon="ep:check"
                 color="#000"
@@ -157,7 +156,7 @@
             <el-table-column prop="houseSoarStatus" label="房屋腾空" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.houseSoarStatus == '1'"
+                  v-if="row.houseSoarStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -167,7 +166,7 @@
             <el-table-column prop="landSoarStatus" label="土地腾让" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.landSoarStatus == '1'"
+                  v-if="row.landSoarStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -177,7 +176,7 @@
             <el-table-column prop="excessStatus" label="过渡安置" align="center">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.excessStatus == '1'"
+                  v-if="row.excessStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -187,15 +186,12 @@
           </el-table-column>
           <el-table-column prop="agreementStatus" label="动迁协议" align="center">
             <template #default="{ row }">
-              <div>
-                <Icon
-                  v-if="row.agreementStatus == '1'"
-                  class="active-icon"
-                  icon="ep:check"
-                  color="#000"
-                />
-                <span v-else></span>
-              </div>
+              <Icon
+                v-if="row.agreementStatus == '1' && row.number !== '合计'"
+                class="active-icon"
+                icon="ep:check"
+                color="#000"
+              />
             </template>
           </el-table-column>
         </el-table-column>
@@ -204,7 +200,7 @@
             <el-table-column prop="buildOneselfStatus" label="自建房" align="center" width="120">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.buildOneselfStatus == '1'"
+                  v-if="row.buildOneselfStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -215,7 +211,7 @@
             <el-table-column prop="flatsStatus" label="公寓房" align="center" width="120">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.flatsStatus == '1'"
+                  v-if="row.flatsStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -230,7 +226,7 @@
             >
               <template #default="{ row }">
                 <Icon
-                  v-if="row.centralizedSupportStatus == '1'"
+                  v-if="row.centralizedSupportStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -240,7 +236,7 @@
             <el-table-column prop="selfSeekingStatus" label="自谋出路" align="center" width="120">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.selfSeekingStatus == '1'"
+                  v-if="row.selfSeekingStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -258,7 +254,7 @@
             >
               <template #default="{ row }">
                 <Icon
-                  v-if="row.aricutureArrangementStatus == '1'"
+                  v-if="row.aricutureArrangementStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -268,7 +264,7 @@
             <el-table-column prop="retirementStatus" label="养老保险" align="center" width="120">
               <template #default="{ row }">
                 <Icon
-                  v-if="row.retirementStatus == '1'"
+                  v-if="row.retirementStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -282,7 +278,7 @@
             >
               <template #default="{ row }">
                 <Icon
-                  v-if="row.selfEmploymentStatus == '1'"
+                  v-if="row.selfEmploymentStatus == '1' && row.number !== '合计'"
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
@@ -299,7 +295,7 @@
           >
             <template #default="{ row }">
               <Icon
-                v-if="row.proceduresStatus == '1'"
+                v-if="row.proceduresStatus == '1' && row.number !== '合计'"
                 class="active-icon"
                 icon="ep:check"
                 color="#000"
@@ -424,43 +420,50 @@ const getResidentRegionList = (page, size) => {
       item.number = index + 1
     })
     //添加合计行
-    const totalData = totalRow(tableData.value)
+
     if (tableData.value.length >= 1) {
       tableData.value.push({
         number: '合计',
-        populationStatusCount: totalData,
-        propertyStatusCount: totalData,
-        appendageStatus: totalData,
-        landStatus: totalData,
-        productionArrangementStatus: totalData,
-        relocateArrangementStatus: totalData,
-        graveStatus: totalData,
-        landUseStatus: totalData,
-        chooseHouseStatus: totalData,
-        chooseGraveStatus: totalData,
-        cardStatusCount: totalData,
-        houseSoarStatus: totalData,
-        landSoarStatus: totalData,
-        excessStatus: totalData,
-        agreementStatus: totalData,
-        buildOneselfStatus: totalData,
-        flatsStatus: totalData,
-        centralizedSupportStatus: totalData,
-        selfSeekingStatus: totalData,
-        aricutureArrangementStatus: totalData,
-        retirementStatus: totalData,
-        selfEmploymentStatus: totalData,
-        proceduresStatus: totalData
+        populationStatus: totalColumn(tableData.value, 'populationStatus'),
+        propertyStatus: totalColumn(tableData.value, 'propertyStatus'),
+        appendageStatus: totalColumn(tableData.value, 'appendageStatus'),
+        landStatus: totalColumn(tableData.value, 'landStatus'),
+        productionArrangementStatus: totalColumn(tableData.value, 'productionArrangementStatus'),
+        relocateArrangementStatus: totalColumn(tableData.value, 'relocateArrangementStatus'),
+        graveArrangementStatus: totalColumn(tableData.value, 'graveArrangementStatus'),
+        landUseStatus: totalColumn(tableData.value, 'landUseStatus'),
+        chooseHouseStatus: totalColumn(tableData.value, 'chooseHouseStatus'),
+        chooseGraveStatus: totalColumn(tableData.value, 'chooseGraveStatus'),
+        cardStatus: totalColumn(tableData.value, 'cardStatus'),
+        houseSoarStatus: totalColumn(tableData.value, 'houseSoarStatus'),
+        landSoarStatus: totalColumn(tableData.value, 'landSoarStatus'),
+        excessStatus: totalColumn(tableData.value, 'excessStatus'),
+        agreementStatus: totalColumn(tableData.value, 'agreementStatus'),
+        buildOneselfStatus: totalColumn(tableData.value, 'buildOneselfStatus'),
+        flatsStatus: totalColumn(tableData.value, 'flatsStatus'),
+        centralizedSupportStatus: totalColumn(tableData.value, 'centralizedSupportStatus'),
+        selfSeekingStatus: totalColumn(tableData.value, 'selfSeekingStatus'),
+        aricutureArrangementStatus: totalColumn(tableData.value, 'aricutureArrangementStatus'),
+        retirementStatus: totalColumn(tableData.value, 'retirementStatus'),
+        selfEmploymentStatus: totalColumn(tableData.value, 'selfEmploymentStatus'),
+        proceduresStatus: totalColumn(tableData.value, 'proceduresStatus')
       })
     }
 
     totalNum.value = res.total
   })
 }
-//表格合计行数
-const totalRow = (data) => {
-  const len = data.length
-  return len / pageSize.value >= 1 ? pageSize.value : len
+
+//完成状态合计
+const totalColumn = (arr, key) => {
+  let s = 0
+  arr.forEach((item) => {
+    const num = item[key] == '1' ? 1 : 0
+    if (!isNaN(num)) {
+      s += num
+    }
+  })
+  return s
 }
 //合并合计户单元格
 const objectSpanMethod = ({ row, columnIndex }: any) => {

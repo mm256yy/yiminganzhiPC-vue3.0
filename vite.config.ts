@@ -21,13 +21,70 @@ function pathResolve(dir: string) {
 }
 
 export default ({ command, mode }: ConfigEnv): UserConfig => {
+  console.log(command, mode)
+  console.log(process.argv)
   let env = {} as any
+  let platform = 'pc' //  'pc' | 'h5'
   const isBuild = command === 'build'
   if (!isBuild) {
     env = loadEnv((process.argv[3] === '--mode' ? process.argv[4] : process.argv[3]), root)
   } else {
     env = loadEnv(mode, root)
+    platform = process.argv[6]
   }
+  console.log(env)
+  // pc 模版
+  const pcHmtlEntrys = [
+    {
+      entry: 'src/main.ts',
+      filename: 'index.html',
+      template: 'index.html',
+      injectOptions: {
+        data: {
+          title: env.VITE_APP_TITLE,
+          mapAk: env.VITE_MAP_AK,
+          injectScript: `<script src="./inject.js"></script>`,
+        }
+      }
+    },
+    {
+      entry: 'src/admin/main.ts',
+      filename: 'admin.html',
+      template: 'admin.html',
+      injectOptions: {
+        data: {
+          title: env.VITE_APP_TITLE,
+          mapAk: env.VITE_MAP_AK,
+          injectScript: `<script src="./inject.js"></script>`,
+        }
+      }
+    }
+  ]
+  // h5模版
+  const h5HmtlEntrys = [{
+    entry: 'src/h5/main.ts',
+    filename: 'h5.html',
+    template: 'h5.html',
+    injectOptions: {
+      data: {
+        title: env.VITE_APP_TITLE,
+        mapAk: env.VITE_MAP_AK,
+        injectScript: `<script src="./inject.js"></script>`,
+      }
+    }
+  },
+  {
+    entry: 'src/h5/ld/main.ts',
+    filename: 'ld.html',
+    template: 'ld.html',
+    injectOptions: {
+      data: {
+        title: env.VITE_APP_TITLE,
+        mapAk: env.VITE_MAP_AK,
+        injectScript: `<script src="./inject.js"></script>`,
+      }
+    }
+  }]
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
@@ -71,56 +128,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       VueMarcos(),
       createHtmlPlugin({
-        pages: [
-          {
-            entry: 'src/main.ts',
-            filename: 'index.html',
-            template: 'index.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          },
-          {
-            entry: 'src/admin/main.ts',
-            filename: 'admin.html',
-            template: 'admin.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          },
-          {
-            entry: 'src/h5/main.ts',
-            filename: 'h5.html',
-            template: 'h5.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          },
-          {
-            entry: 'src/h5/ld/main.ts',
-            filename: 'ld.html',
-            template: 'ld.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          }
-        ]
+        pages: env.VITE_USER_NODE_ENV === 'development' ?
+        [
+         ...pcHmtlEntrys,
+         ...h5HmtlEntrys
+        ] :
+        platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
       })
     ],
 
@@ -151,7 +164,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     },
     build: {
       minify: 'terser',
-      outDir: env.VITE_OUT_DIR || 'dist',
+      outDir: platform === 'pc' ? (env.VITE_OUT_DIR || 'dist') : 'dist-h5',
       sourcemap: env.VITE_SOURCEMAP === 'true' ? 'inline' : false,
       // brotliSize: false,
       terserOptions: {
@@ -161,13 +174,20 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       },
       rollupOptions: {
-        input: {
+        input: platform === 'pc' ? {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
+        } :
+        {
           h5: resolve(__dirname, "h5.html"),
           ld: resolve(__dirname, "ld.html")
+        },
+        output: {
+          assetFileNames: `${platform}[ext]/[name]-[hash].[ext]`,
+          chunkFileNames: `${platform}js/[name]-[hash].js`,
+          entryFileNames: `${platform}js/[name]-[hash].js`
         }
-      }
+      },
     },
     server: {
       port: 4000,
@@ -181,7 +201,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: true
+          changeOrigin: false
         }
       },
       hmr: {
@@ -207,7 +227,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         '@wangeditor/editor-for-vue',
         'print-js',
         '@amap/amap-jsapi-loader',
-        'dayjs'
+        'dayjs',
+        'pinia'
       ]
     }
   }

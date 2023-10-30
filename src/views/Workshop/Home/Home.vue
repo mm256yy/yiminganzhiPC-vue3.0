@@ -1,10 +1,14 @@
 <template>
+  <!-- 实物调查首页 -->
+  <InvestigationHome v-if="role === RoleCodeType.investigator || role === RoleCodeType.reviewer" />
   <!-- 领导首页 -->
-  <LeaderHome v-if="role == RoleCodeType.leaderworkbenches" />
+  <LeaderHome v-else-if="role === RoleCodeType.leaderworkbenches" />
   <!--评估人员首页-->
   <EvaluationHome v-else-if="isEvaluation" />
-  <!-- 普通用户首页 -->
-  <UserHome v-else />
+  <!-- 实施人员首页 -->
+  <UserHome v-else-if="role === RoleCodeType.implementation" />
+  <!-- 其他首页 -->
+  <OtherHome v-else />
 </template>
 
 <script lang="ts" setup>
@@ -19,10 +23,15 @@ import { computed, onBeforeMount, ref } from 'vue'
 import UserHome from './AdminHome.vue'
 import LeaderHome from '../ExternalLink/LeaderSide.vue'
 import EvaluationHome from './EvaluationHome.vue'
+import InvestigationHome from './Index.vue'
+import OtherHome from './Other.vue'
 import { useAppStore } from '@/store/modules/app'
 
 // 角色代码
 enum RoleCodeType {
+  investigator = 'investigator', // 实物调查
+  reviewer = 'reviewer', // 实物复核
+  implementation = 'implementation', // 移民实施
   leaderworkbenches = 'leaderworkbenches', // 读的字典366配置的 为领导工作台
   assessor = 'assessor', // 房屋评估
   assessorland = 'assessorland', // 土地评估

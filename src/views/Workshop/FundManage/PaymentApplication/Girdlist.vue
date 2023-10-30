@@ -62,12 +62,12 @@
       class="mb-20"
       :border="true"
       v-if="props.type == false"
+      row-key="id"
     >
       <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
       <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
       <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-      <ElTableColumn label="合同乙方" prop="contractPartyB" align="center" header-align="center" />
       <ElTableColumn
         label="合同金额(万元)"
         prop="contractAmount"
@@ -146,6 +146,7 @@ const tableData = ref<any[]>([])
 const tableObj = ref<any[]>([]) //付款对象集合
 const vals = ref<any[]>([]) //付款对象ID
 const checkList = (row: any, val: any) => {
+  console.log(check, '勾选数据')
   vals.value.push(val)
   tableObj.value.push({
     projectName: row.projectName,

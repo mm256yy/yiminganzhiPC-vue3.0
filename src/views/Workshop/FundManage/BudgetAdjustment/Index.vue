@@ -65,6 +65,7 @@
       :selectionIds="selectionIds"
       @close="onCloseAdjust"
       :landlordIds="landlordIds"
+      :statusType="statusType"
     />
   </WorkContentWrap>
 </template>
@@ -96,6 +97,7 @@ const adjustDialog = ref(false) // 调整概算弹窗标识
 const fundAccountList = ref<any[]>([]) // 资金科目
 const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 const landlordIds = ref<number[]>([])
+const statusType = ref<any>()
 const parmasList = ref<any[]>([])
 const { register, tableObject, methods } = useTable({
   getListApi: getBudgetAdjustmentListApi
@@ -538,6 +540,7 @@ const onAdjust = async () => {
   if (res && res.length) {
     adjustDialog.value = true
     landlordIds.value = res.map((item) => item.id)
+    statusType.value = res.map((item) => item.gsStatus)
     console.log('landlordIds', toRaw(landlordIds.value))
   } else {
     ElMessage.info('请先勾选列表数据')

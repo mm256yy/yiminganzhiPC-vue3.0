@@ -238,7 +238,8 @@ const doRoute = async () => {
   projects.value = appStore.getUserInfo?.projectUsers[0].roles
   if (projects.value[0].code == 'leaderworkbenches') {
     setTimeout(() => {
-      window.location.href = '#/workshop/leaderSide'
+      // window.location.href = '#/workshop/leaderSide'
+      window.location.href = '/#/workshop/home'
     }, 0)
   } else {
     setTimeout(() => {

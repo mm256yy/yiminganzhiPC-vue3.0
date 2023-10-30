@@ -314,14 +314,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
+    field: 'estimateUser',
     label: '填报人',
     search: {
       show: false
     }
   },
   {
-    field: 'reportDate',
+    field: 'estimateTime',
     label: '填报时间',
     search: {
       show: false

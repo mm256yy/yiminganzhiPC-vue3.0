@@ -31,7 +31,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="card" label="身份证" width="200" />
-          <el-table-column prop="censusType" label="户籍类别" width="160" />
+          <el-table-column prop="censusTypeText" label="户籍类别" width="160" />
           <el-table-column prop="populationNatureText" label="人口性质" width="160" />
           <el-table-column prop="settingWay" label="安置方式" width="268">
             <template #default="scope">
@@ -256,7 +256,7 @@ const filterWay = (data) => {
       notFarmer &&
       item.value === '1' &&
       immigrantSettle.value &&
-      immigrantSettle.value.settingAddress !== apartmentArea[2].id
+      immigrantSettle.value.settingAddress !== apartmentArea[1].id
     ) {
       item.disabled = true
     }

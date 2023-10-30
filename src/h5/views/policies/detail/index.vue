@@ -53,7 +53,7 @@
     </div> -->
     <div style="padding: 0.4rem; overflow: hidden">
       <div v-html="dataList.title" style="text-align: center"></div>
-      <div v-html="dataList.content" style=" overflow: hidden;font-size: 14px"></div
+      <div v-html="dataList.content" style="overflow: hidden; font-size: 14px"></div
     ></div>
   </div>
 </template>

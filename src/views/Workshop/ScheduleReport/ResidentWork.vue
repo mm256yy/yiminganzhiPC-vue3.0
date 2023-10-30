@@ -1,12 +1,16 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
+      >
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">居民户按工作分组</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>

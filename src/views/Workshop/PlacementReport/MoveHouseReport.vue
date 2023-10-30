@@ -6,6 +6,11 @@
         :icon="BackIcon"
         class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
       >
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
+      >
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
@@ -30,7 +35,17 @@
             <el-table-column prop="flatSG9Count" label="90" align="center" width="50" />
             <el-table-column prop="flatSG11Count" label="110" align="center" width="50" />
             <el-table-column prop="flatSG13Count" label="130" align="center" width="50" />
+          <el-table-column label="曙光安置区" width="120" align="center">
+            <el-table-column prop="flatSG7Count" label="70" align="center" width="50" />
+            <el-table-column prop="flatSG9Count" label="90" align="center" width="50" />
+            <el-table-column prop="flatSG11Count" label="110" align="center" width="50" />
+            <el-table-column prop="flatSG13Count" label="130" align="center" width="50" />
           </el-table-column>
+          <el-table-column label="镜岭集镇安置区" width="120" align="center">
+            <el-table-column prop="flatJL7Count" label="70" align="center" width="50" />
+            <el-table-column prop="flatJL9Count" label="90" align="center" width="50" />
+            <el-table-column prop="flatJL11Count" label="110" align="center" width="50" />
+            <el-table-column prop="flatJL13Count" label="130" align="center" width="50" />
           <el-table-column label="镜岭集镇安置区" width="120" align="center">
             <el-table-column prop="flatJL7Count" label="70" align="center" width="50" />
             <el-table-column prop="flatJL9Count" label="90" align="center" width="50" />
@@ -255,9 +270,11 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
       return {
         rowspan: 1,
         colspan: 8
+        colspan: 8
       }
     }
     //把被合并的单元格进行处理
+    if (columnIndex > 1 && columnIndex <= 8) {
     if (columnIndex > 1 && columnIndex <= 8) {
       return {
         rowspan: 0,
@@ -267,6 +284,7 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
     if (columnIndex === 9) {
       return {
         rowspan: 1,
+        colspan: 18
         colspan: 18
       }
     }
