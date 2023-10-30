@@ -98,7 +98,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         name: 'WorkshopHome',
         component: () => import('@/views/Workshop/Home/Home.vue'),
         meta: {
-          title: '实施人员首页',
+          title: '首页',
           icon: 'ant-design:home-outlined'
         }
       },
