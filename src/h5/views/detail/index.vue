@@ -80,6 +80,10 @@ onMounted(() => {
       &.indent {
         text-indent: 56px;
       }
+
+      :deep(img) {
+        width: 100%;
+      }
     }
   }
 }

@@ -192,7 +192,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'typeTxt',
+    field: 'funSubjectIdText',
     label: '概算科目',
     search: {
       show: false
@@ -270,7 +270,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: false

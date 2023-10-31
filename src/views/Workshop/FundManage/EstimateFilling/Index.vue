@@ -149,6 +149,14 @@ const initData = () => {
       if (res) {
         tableLoading.value = false
         tableData.value = res.content
+        // 调估投资
+        showAdjustedInvestment.value = tableData.value.some((item) => {
+          return item.guInvest
+        })
+        // 调概投资
+        showAdjustingInvestment.value = tableData.value.some((item) => {
+          return item.gaiInvest
+        })
       }
     },
     (err: any) => {

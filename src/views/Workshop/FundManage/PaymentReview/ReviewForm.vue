@@ -63,7 +63,7 @@
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">付款类型:</div>
-            <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
+            <div class="content">{{ form.paymentType == 1 ? '支付' : '预拔' }}</div>
           </div>
         </ElCol>
       </ElRow>
@@ -72,7 +72,7 @@
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">收款方:</div>
-            <div class="content">{{ form.payee ? fmtDict(dictObj[326], form.payee) : '-' }}</div>
+            <div class="content">{{ form.payee ? fmtDict(dictObj[396], form.payee) : '-' }}</div>
           </div>
         </ElCol>
         <ElCol :span="12">
@@ -151,8 +151,8 @@
           header-align="center"
           width="200"
         >
-          <template #default="{ row }">
-            <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+          <template #default="scope">
+            <div v-for="(item, index) in scope.row.paymentNode" :key="index">{{ item }}</div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
@@ -185,7 +185,7 @@
           </ElUpload>
         </div>
       </div>
-      <div v-if="actionType === 'edit'">
+      <div v-if="parmasList.funPaymentRequestFlowNodeList[6].status">
         <ElRow>
           <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">
@@ -249,7 +249,7 @@
             <div class="label"> </div>
             <div class="content">
               <ElButton type="primary" @click="onSubmit('1')" :loading="btnLoading">通过</ElButton>
-              <ElButton @click="onSubmit('0')" :loading="btnLoading">驳回</ElButton>
+              <!-- <ElButton @click="onSubmit('0')" :loading="btnLoading" >驳回</ElButton> -->
             </div>
           </div>
         </ElCol>
@@ -294,11 +294,17 @@
                   <div class="name">{{ item.name }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-                <div class="time">
-                  审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
+                <div class="time" v-if="item.status">
+                  审核时间：{{
+                    index == 0
+                      ? dayjs(parmasList.createdDate).format('YYYY-MM-DD')
+                      : dayjs(item.createdDate).format('YYYY-MM-DD')
+                  }}
                 </div>
                 <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
-                <div class="remark"> 审核意见: {{ item.remark }} </div>
+                <div class="remark" v-if="item.status">
+                  审核意见: {{ index == 0 ? '发起申请' : item.remark }}
+                </div>
               </div>
             </div>
           </div>

@@ -7,8 +7,8 @@
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
+        @search="setSearchParams({ entryType: 2 })"
+        @reset="setSearchParams({ entryType: 2 })"
       />
     </div>
 
@@ -117,13 +117,13 @@ const { register, tableObject, methods } = useTable({
   delListApi: deleteFundEntryApi
 })
 
-const { getList, setSearchParams } = methods
+const { setSearchParams } = methods
 
 tableObject.params = {
   projectId
 }
 // 获取列表
-getList()
+setSearchParams({ entryType: 2 })
 
 const onDelRow = async (row: any, multiple: boolean) => {
   tableObject.currentRow = row
@@ -160,7 +160,8 @@ const sumAmountApi = async () => {
   try {
     sumAmount.value = await getSumAmountApi({
       projectId,
-      type: '1'
+      type: '1',
+      entryType: 2
     })
   } catch (error) {}
 }
@@ -360,7 +361,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
     sumAmountApi()
-    getList()
+    setSearchParams({ entryType: 2 })
   }
   dialog.value = false
 }

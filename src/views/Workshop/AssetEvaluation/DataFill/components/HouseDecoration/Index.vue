@@ -62,7 +62,12 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.fitUpType">
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="row.fitUpType"
+              v-if="row.isBuyItNow == '0'"
+            >
               <ElOption
                 v-for="item in dictObj[323]"
                 :key="item.value"
@@ -70,6 +75,7 @@
                 :value="item.value"
               />
             </ElSelect>
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -80,12 +86,22 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.fitUpName" />
+            <ElInput
+              placeholder="请输入"
+              v-model="scope.row.fitUpName"
+              v-if="scope.row.isBuyItNow == '0'"
+            />
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.unit">
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="row.unit"
+              v-if="row.isBuyItNow == '0'"
+            >
               <ElOption
                 v-for="item in dictObj[268]"
                 :key="item.value"
@@ -93,16 +109,29 @@
                 :value="item.value"
               />
             </ElSelect>
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.number"
+              :precision="2"
+              v-if="scope.row.isBuyItNow == '0'"
+            />
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.price"
+              :precision="2"
+              v-if="scope.row.isBuyItNow == '0'"
+            />
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -113,7 +142,13 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.discountRate"
+              :precision="2"
+              v-if="scope.row.isBuyItNow == '0'"
+            />
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -124,7 +159,13 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              :model-value="getModelValue(scope.row)"
+              :precision="2"
+              v-if="scope.row.isBuyItNow == '0'"
+            />
+            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn

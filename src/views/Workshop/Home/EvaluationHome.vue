@@ -3,7 +3,14 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div class="enter-item" @click="toTarget('PeasantHouseholdImp')">
+      <div
+        class="enter-item"
+        @click="
+          toTarget(
+            role == 'assessor' || role == 'assessorland' ? 'Household' : 'PeasantHouseholdImp'
+          )
+        "
+      >
         <div class="title-field" @click="toTarget('householdList')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
@@ -68,7 +75,14 @@
         </div>
       </div>
       <!--企业-->
-      <div class="enter-item" @click="toTarget('EnterpriseImp')">
+      <div
+        class="enter-item"
+        @click="
+          toTarget(
+            role == 'assessor' || role == 'assessorland' ? 'FileEnterprise' : 'EnterpriseImp'
+          )
+        "
+      >
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
@@ -133,7 +147,12 @@
         </div>
       </div>
       <!--个体户-->
-      <div class="enter-item" @click="toTarget('IndividualImp')">
+      <div
+        class="enter-item"
+        @click="
+          toTarget(role == 'assessor' || role == 'assessorland' ? 'Individual' : 'IndividualImp')
+        "
+      >
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
@@ -198,7 +217,12 @@
         </div>
       </div>
       <!--村集体-->
-      <div class="enter-item" @click="toTarget('VillageImp')">
+      <div
+        class="enter-item"
+        @click="
+          toTarget(role == 'assessor' || role == 'assessorland' ? 'VillageFile' : 'VillageImp')
+        "
+      >
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -289,6 +313,10 @@ import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 import type { EvaluatorStatisticsDtoType } from '@/api/home-types'
 import { getEvaluatorStatistics } from '@/api/home-service'
 import { useRouter } from 'vue-router'
+interface PropsType {
+  role?: string
+}
+const props = defineProps<PropsType>()
 const { push } = useRouter()
 
 const statisticsObj = ref<EvaluatorStatisticsDtoType>()

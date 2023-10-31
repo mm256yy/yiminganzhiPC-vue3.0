@@ -76,15 +76,17 @@
       />
       <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
         <template #default="{ row }">
-          <ElCheckboxGroup v-model="check">
-            <ElCheckbox
-              :label="formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'"
-              :value="item.id"
-              v-for="(item, index) in row.nodeDtoList"
-              :key="index"
-              v-model="checkType"
-              @change="checkList(row, item.id)"
-            />
+          <ElCheckboxGroup
+            v-model:model-value="check"
+            @change="
+              (val) => {
+                checkList(val, row, row.id)
+              }
+            "
+          >
+            <ElCheckbox v-for="item in row.nodeDtoList" :label="item.id" :key="item.id">{{
+              formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+            }}</ElCheckbox>
           </ElCheckboxGroup>
         </template>
       </ElTableColumn>
@@ -103,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import {
   ElTable,
   ElTableColumn,
@@ -124,6 +126,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   show: any
   type: any
+  selence?: any
 }
 // const formRef = ref<any>()
 const props = defineProps<PropsType>()
@@ -131,9 +134,20 @@ const emit = defineEmits(['close', 'updateDistrict', 'objlist', 'tableList'])
 // const payObject = ref()
 // 关闭弹窗
 const onClose = (flag: boolean) => {
+  check.value = []
   emit('close', flag)
 }
 const addSubmit = (flag: boolean) => {
+  tableObj.value = tableData.value.reduce((pre, item) => {
+    let nevArr = item.nodeDtoList.filter((res) => check.value.indexOf(res.id) != -1)
+
+    if (nevArr.length > 0) {
+      pre.push({ ...item, nodeDtoList: nevArr })
+    }
+    return pre
+  }, [])
+  console.log(tableObj.value)
+
   emit('objlist', tableDatas.value)
   emit('tableList', tableObj.value)
   emit('close', flag)
@@ -141,23 +155,12 @@ const addSubmit = (flag: boolean) => {
 const dataId = ref<number>(0)
 const amountPrice = ref<number>(0)
 const check = ref<any>()
-const checkType = ref<boolean>()
 const tableData = ref<any[]>([])
 const tableObj = ref<any[]>([]) //付款对象集合
 const vals = ref<any[]>([]) //付款对象ID
-const checkList = (row: any, val: any) => {
-  console.log(check, '勾选数据')
-  vals.value.push(val)
-  tableObj.value.push({
-    projectName: row.projectName,
-    contractName: row.contractName,
-    contractCode: row.contractCode,
-    contractAmount: row.contractAmount,
-    paymentNode: check,
-    amount: row.amount,
-    contractId: row.id,
-    nodeIds: vals.value.join()
-  })
+const checkList = (res: any, row: any, val: any) => {
+  // vals.value.push(val)
+  console.log(res, row, val)
   console.log(tableObj.value, '测试传递的数据')
 }
 const tableDatas = ref<any[]>([])
@@ -196,9 +199,17 @@ const ppsList = () => {
   })
 }
 
-onMounted(() => {
-  ppsList()
-})
+watch(
+  () => props.show,
+  () => {
+    if (props.show) {
+      check.value = props.selence
+      ppsList()
+      console.log(props)
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="less">

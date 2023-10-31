@@ -66,5 +66,6 @@ const getRole = () => {
 
 onBeforeMount(() => {
   role.value = getRole()
+  console.log(role.value, 'bbq')
 })
 </script>

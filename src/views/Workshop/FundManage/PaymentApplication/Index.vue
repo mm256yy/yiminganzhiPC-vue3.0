@@ -202,7 +202,7 @@ const onDelRow = async (row: any, multiple: boolean) => {
 
 const onAddRow = () => {
   actionType.value = 'add'
-  tableObject.currentRow = null
+  tableObject.currentRow = {}
   dialog.value = true
   vill.value.refresh()
 }
@@ -223,12 +223,13 @@ const onViewRow = (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
     parmasList.value = res
     console.log(res.funPaymentRequestFlowNodeList, '测试')
+    tableObject.currentRow = res
   })
   actionType.value = 'view'
-  tableObject.currentRow = {
-    ...row
-  }
-  tableObject.currentRow = row
+  // tableObject.currentRow = {
+  //   ...row
+  // }
+  // tableObject.currentRow = row
   dialog.value = true
 }
 const schema = reactive<CrudSchema[]>([
