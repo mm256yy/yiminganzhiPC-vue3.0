@@ -147,14 +147,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'unit',
+    field: 'unitText',
     label: '单位',
     search: {
       show: false
     }
   },
   {
-    field: 'size',
+    field: 'sizeText',
     label: '规格',
     width: 100,
     search: {

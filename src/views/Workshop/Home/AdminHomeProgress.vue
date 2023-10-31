@@ -30,8 +30,8 @@
           <div class="strong">工作组进度</div></div
         >
         <ElTabs class="demo-tabs news" v-if="flag" @tab-click="handleClick">
-          <ElTabPane label="房产" name="房产">安置概况</ElTabPane>
-          <ElTabPane label="土地" name="土地">水库风采</ElTabPane>
+          <ElTabPane label="房产" name="房产" />
+          <ElTabPane label="土地" name="土地" />
         </ElTabs>
         <tabButton @tab="tab" :tabList="tabList" />
         <div class="echart-wrap">
@@ -462,6 +462,19 @@ const onBack = () => {
 </script>
 
 <style lang="less" scoped>
+/deep/ .el-tabs__nav .el-tabs__item {
+  width: 80%;
+  height: 22px;
+  font-size: 16px;
+  font-family: PingFang SC-Bold, PingFang SC;
+  text-align: center;
+  font-weight: bold;
+  // color: #3e73ec;
+  line-height: 19px;
+  // -webkit-background-clip: text;
+  // -webkit-text-fill-color: transparent;
+}
+
 .data-fill {
   width: 100%;
 }
@@ -493,6 +506,9 @@ const onBack = () => {
 .aliam-center {
   display: flex;
   align-items: center;
+}
+.demo-tabs {
+  margin-top: 20px;
 }
 
 .strong {

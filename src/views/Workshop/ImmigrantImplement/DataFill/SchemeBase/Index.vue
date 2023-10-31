@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-lone-template -->
 <template>
   <div>
     <!-- 模拟安置 -->
@@ -35,7 +36,11 @@
           <el-table-column prop="populationNatureText" label="人口性质" width="160" />
           <el-table-column prop="settingWay" label="安置方式" width="268">
             <template #default="scope">
-              <el-select v-model="scope.row.settingWay" placeholder="请选择">
+              <el-select
+                v-model="scope.row.settingWay"
+                placeholder="请选择"
+                v-if="isShow(scope.row)"
+              >
                 <el-option
                   v-for="item in filterWay(scope.row)"
                   :key="item.value"
@@ -48,7 +53,11 @@
           </el-table-column>
           <el-table-column prop="settingRemark" label="备注" width="288">
             <template #default="scope">
-              <el-input v-model="scope.row.settingRemark" placeholder="请输入" />
+              <el-input
+                v-model="scope.row.settingRemark"
+                placeholder="请输入"
+                v-if="isShow(scope.row)"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -308,6 +317,9 @@ const immigrantSettleSubmit = async (params: any) => {
     ElMessage.success('搬迁安置保存成功!')
     stepIndex.value += 1
   }
+}
+const isShow = (row) => {
+  return row.populationNatureText != '增计人口'
 }
 </script>
 

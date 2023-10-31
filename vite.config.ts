@@ -102,32 +102,32 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           },
 
         ] :
-        [
-          {
-            entry: 'src/h5/main.ts',
-            filename: 'h5.html',
-            template: 'h5.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
+          [
+            {
+              entry: 'src/h5/main.ts',
+              filename: 'h5.html',
+              template: 'h5.html',
+              injectOptions: {
+                data: {
+                  title: env.VITE_APP_TITLE,
+                  mapAk: env.VITE_MAP_AK,
+                  injectScript: `<script src="./inject.js"></script>`,
+                }
+              }
+            },
+            {
+              entry: 'src/h5/ld/main.ts',
+              filename: 'ld.html',
+              template: 'ld.html',
+              injectOptions: {
+                data: {
+                  title: env.VITE_APP_TITLE,
+                  mapAk: env.VITE_MAP_AK,
+                  injectScript: `<script src="./inject.js"></script>`,
+                }
               }
             }
-          },
-          {
-            entry: 'src/h5/ld/main.ts',
-            filename: 'ld.html',
-            template: 'ld.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          }
-        ]
+          ]
       })
     ],
 
@@ -172,10 +172,10 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
         } :
-        {
-          h5: resolve(__dirname, "h5.html"),
-          ld: resolve(__dirname, "ld.html")
-        },
+          {
+            h5: resolve(__dirname, "h5.html"),
+            ld: resolve(__dirname, "ld.html")
+          },
         output: {
           assetFileNames: `${platform}[ext]/[name]-[hash].[ext]`,
           chunkFileNames: `${platform}js/[name]-[hash].js`,
@@ -195,7 +195,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
-          changeOrigin: true
+          changeOrigin: false
         }
       },
       hmr: {

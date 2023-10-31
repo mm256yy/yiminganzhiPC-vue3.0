@@ -316,10 +316,10 @@
             <div>提交时间</div>
             <!-- </div> -->
           </div>
-          <div class="question-list">
+          <div class="question-list" @click="handleClickItem(5)">
             <div class="item" v-for="item in questionList" :key="item.id">
               <div class="name">{{ item.remark }}</div>
-              <!-- <div class="name">{{ item.creater }}</div> -->
+              <div class="names">{{ item.creater }}</div>
               <div class="time">{{ renderTime(item.createdDate) }}</div>
             </div>
           </div>
@@ -656,7 +656,7 @@ const impProgressOption = ref({
     left: '3%',
     right: '4%',
     bottom: '0%',
-    top: 30,
+    top: '10%',
     containLabel: true
   },
   xAxis: {
@@ -1167,7 +1167,9 @@ const questionList = ref<any>([
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap;
     }
-
+    .names {
+      margin-left: 70px;
+    }
     .time {
       font-size: 14px;
       color: rgba(19, 19, 19, 0.4);

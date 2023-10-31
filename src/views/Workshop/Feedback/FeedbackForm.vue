@@ -142,6 +142,7 @@ const onSubmit = debounce((formEl) => {
       }
       data.feedbackPic = JSON.stringify(feedbackPic.value)
       submit(data)
+      console.log(data, '6666666')
     } else {
       return false
     }
