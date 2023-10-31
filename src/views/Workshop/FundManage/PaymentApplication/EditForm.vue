@@ -411,7 +411,7 @@ watch(
       // 处理行政区划
       form.value = { ...(val as {}) }
       console.log(form.value, 'bbq')
-      relocateVerifyPic.value = form.value ? JSON.parse(form.value?.receipt) : ''
+      relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
       // if (props.actionType === 'edit') {{
       //   form.value.nodeDtoList=
       // }
