@@ -45,7 +45,7 @@
         <div class="row">
           <div class="label">入账时间：</div>
           <div class="value">{{
-            detail.recordTime ? dayjs(detail.recordTime).format('YYYY-MM-DD') : '-'
+            detail.createdDate ? dayjs(detail.createdDate).format('YYYY-MM-DD') : '-'
           }}</div>
         </div>
 

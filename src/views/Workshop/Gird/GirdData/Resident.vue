@@ -66,6 +66,9 @@
             }}
           </div>
         </template>
+        <template #hasPropertyAccount="{ row }">
+          <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
+        </template>
         <!-- <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template> -->

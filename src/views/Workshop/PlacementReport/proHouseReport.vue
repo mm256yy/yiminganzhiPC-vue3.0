@@ -21,14 +21,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title">生产安置意愿报表</div>
       </div>
-      <el-table
-        class="flex-col flex-1"
-        :data="tableData"
-        border
-        show-summary
-        style="width: 100%"
-        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
-      >
+      <el-table class="flex-col flex-1" :data="tableData" border show-summary style="width: 100%">
         <el-table-column label="序号" align="center">
           <template #default="scope">
             {{ scope.$index + 1 }}
@@ -141,19 +134,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const tableData = ref([])
 //百分比
 const percent = ref()
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
+
 //格式化百分比
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 //获取列表数据

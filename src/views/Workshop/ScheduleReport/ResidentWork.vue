@@ -25,12 +25,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户按工作分组报表 </div>
       </div>
-      <el-table
-        :height="tableData.length > 0 ? getHeight(tableData) : '300'"
-        :data="tableData"
-        border
-        style="width: 100%"
-      >
+      <el-table :data="tableData" border style="width: 100%">
         <el-table-column label="序号" align="center" width="60">
           <template #default="scope">
             <span> {{ scope.$index + 1 }}</span>
@@ -55,62 +50,85 @@
             />
           </el-table-column>
           <el-table-column label="资产评估" width="120" align="center">
-            <el-table-column prop="appendageStatus" label="房屋/附属物" align="center" />
-            <el-table-column prop="landStatus" label="土地/附着物" align="center" />
+            <el-table-column prop="appendageStatusCount" label="房屋/附属物" align="center" />
+            <el-table-column prop="landStatusCount" label="土地/附着物" align="center" />
           </el-table-column>
 
           <el-table-column label="安置确认" align="center">
-            <el-table-column prop="productionArrangementStatus" label="生产安置" align="center" />
+            <el-table-column
+              prop="productionArrangementStatusCount"
+              label="生产安置"
+              align="center"
+            />
 
-            <el-table-column prop="relocateArrangementStatus" label="搬迁安置" align="center" />
+            <el-table-column
+              prop="relocateArrangementStatusCount"
+              label="搬迁安置"
+              align="center"
+            />
 
-            <el-table-column prop="graveStatus" label="坟墓确认" align="center" />
+            <el-table-column prop="graveArrangementStatusCount" label="坟墓确认" align="center" />
           </el-table-column>
 
           <el-table-column label="择址确认" align="center">
-            <el-table-column prop="landUseStatus" label="生产用地" align="center" />
-            <el-table-column prop="chooseHouseStatus" label="选房择址" align="center" />
-            <el-table-column prop="chooseGraveStatus" label="坟墓择址" align="center" />
+            <el-table-column prop="landUseStatusCount" label="生产用地" align="center" />
+            <el-table-column prop="chooseHouseStatusCount" label="选房择址" align="center" />
+            <el-table-column prop="chooseGraveStatusCount" label="坟墓择址" align="center" />
           </el-table-column>
           <el-table-column label="腾空过渡" align="center">
-            <el-table-column prop="houseSoarStatus" label="房屋腾空" align="center" />
-            <el-table-column prop="landSoarStatus" label="土地腾让" align="center" />
-            <el-table-column prop="excessStatus" label="过渡安置" align="center" />
+            <el-table-column prop="houseSoarStatusCount" label="房屋腾空" align="center" />
+            <el-table-column prop="landSoarStatusCount" label="土地腾让" align="center" />
+            <el-table-column prop="excessStatusCount" label="过渡安置" align="center" />
           </el-table-column>
-          <el-table-column prop="agreementStatus" label="动迁协议" align="center" />
+          <el-table-column prop="agreementStatusCount" label="动迁协议" align="center" />
         </el-table-column>
         <el-table-column label="安置阶段(户)" align="center">
           <el-table-column label="搬迁安置" align="center">
-            <el-table-column prop="buildOneselfStatus" label="自建房" align="center" width="120" />
-
-            <el-table-column prop="flatsStatus" label="公寓房" align="center" width="120" />
             <el-table-column
-              prop="centralizedSupportStatus"
+              prop="buildOneselfStatusCount"
+              label="自建房"
+              align="center"
+              width="120"
+            />
+
+            <el-table-column prop="flatsStatusCount" label="公寓房" align="center" width="120" />
+            <el-table-column
+              prop="centralizedSupportStatusCount"
               label="集中供养"
               align="center"
               width="120"
             />
-            <el-table-column prop="selfSeekingStatus" label="自谋出路" align="center" width="120" />
+            <el-table-column
+              prop="selfSeekingStatusCount"
+              label="自谋出路"
+              align="center"
+              width="120"
+            />
           </el-table-column>
 
           <el-table-column label="生产安置" align="center">
             <el-table-column
-              prop="aricutureArrangementStatus"
+              prop="agricultureArrangementStatusCount"
               label="农业安置"
               align="center"
               width="120"
             />
 
-            <el-table-column prop="retirementStatus" label="养老保险" align="center" width="120" />
             <el-table-column
-              prop="selfEmploymentStatus"
+              prop="retirementStatusCount"
+              label="养老保险"
+              align="center"
+              width="120"
+            />
+            <el-table-column
+              prop="selfEmploymentStatusCount"
               label="自谋职业"
               align="center"
               width="120"
             />
           </el-table-column>
           <el-table-column
-            prop="proceduresStatus"
+            prop="proceduresStatusCount"
             label="相关手续
 "
             align="center"
@@ -234,19 +252,7 @@ const getResidentWorkList = (page, size) => {
     totalNum.value = res.total
   })
 }
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
+
 onMounted(() => {
   getResidentWorkList('0', pageSize.value)
 })

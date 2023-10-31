@@ -71,10 +71,10 @@
         <template #implementFillStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
-              :class="['status', row.implementFillStatus === '1' ? 'status-suc' : 'status-err']"
+              :class="['status', row.estimateStatus === '1' ? 'status-suc' : 'status-err']"
             ></span>
-            <span :class="[row.implementFillStatus === '0' ? 'red' : '']">
-              {{ row.implementFillStatus === '0' ? '未填报' : '已填报' }}
+            <span :class="[row.estimateStatus === '1' ? '' : 'red']">
+              {{ row.estimateStatus === '1' ? '已填报' : '未填报' }}
             </span>
             <span
               class="!hidden"
@@ -85,7 +85,7 @@
           </div>
         </template>
         <template #reportDate="{ row }">
-          <div>{{ formatDate(row.reportDate) }}</div>
+          <div>{{ formatTime(row.reportDate, 'yyyy-MM-dd HH:mm:ss') }}</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
@@ -108,7 +108,7 @@ import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/se
 import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
-import { formatDate } from '@/utils/index'
+import { formatTime } from '@/utils/index'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
