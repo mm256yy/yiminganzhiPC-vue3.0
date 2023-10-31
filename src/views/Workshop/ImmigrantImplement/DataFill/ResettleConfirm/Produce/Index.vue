@@ -222,7 +222,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settingWayText',
+    field: 'settingWay',
     label: '安置方式',
     search: {
       show: false

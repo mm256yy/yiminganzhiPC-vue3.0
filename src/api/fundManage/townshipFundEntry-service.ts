@@ -30,8 +30,8 @@ export const getFundGrantById = (id: number) => {
  * @param doorNo
  * @returns
  */
-export const getFundGrantFindByDoorNo = (doorNo: any) => {
-  return request.get({ url: `/funGrant/findByDoorNo?doorNo/${doorNo}` })
+export const getFundGrantFindByDoorNo = (doorNo: string) => {
+  return request.get({ url: '/funGrant/findByDoorNo', params: { doorNo } })
 }
 
 // 新增乡镇资金发放

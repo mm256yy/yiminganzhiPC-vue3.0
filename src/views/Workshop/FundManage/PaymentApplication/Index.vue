@@ -82,6 +82,7 @@
       :row="tableObject.currentRow"
       :parmasList="parmasList"
       :fundAccountList="fundAccountList"
+      ref="vill"
     />
   </WorkContentWrap>
 </template>
@@ -108,7 +109,7 @@ import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
+const vill = ref<any>()
 const fundAccountList = ref<any[]>([]) // 资金科目
 const otherList = ref<any>({})
 const parmasList = ref<any[]>([])
@@ -203,6 +204,7 @@ const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = {}
   dialog.value = true
+  vill.value.refresh()
 }
 
 const onEditRow = (row: any) => {
@@ -252,7 +254,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'gsStatus',
+    field: 'status',
     label: '状态',
     search: {
       show: true,
@@ -299,16 +301,12 @@ const schema = reactive<CrudSchema[]>([
       component: 'DatePicker',
       componentProps: {
         type: 'daterange',
-        valueFormat: 'YYYY-MM-DD'
+        valueFormat: 'YYYY-MM-DD',
+        startPlaceholder: '请选择开始时间',
+        endPlaceholder: '请选择结束时间'
       }
     },
     table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
       show: false
     }
   },
@@ -372,7 +370,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUser',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: true,
@@ -480,7 +478,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: false

@@ -415,7 +415,8 @@ onMounted(() => {
         .field-box {
           display: flex;
           width: 87px;
-          height: 34px;
+          padding-bottom: 10px;
+          margin-top: -6px;
           background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
           border-radius: 8px;
           flex-direction: column;
