@@ -6,11 +6,6 @@
         :icon="BackIcon"
         class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
       >
-      <ElButton
-        @click="onBack"
-        :icon="BackIcon"
-        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
-      >
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
@@ -35,17 +30,7 @@
             <el-table-column prop="flatSG9Count" label="90" align="center" width="50" />
             <el-table-column prop="flatSG11Count" label="110" align="center" width="50" />
             <el-table-column prop="flatSG13Count" label="130" align="center" width="50" />
-          <el-table-column label="曙光安置区" width="120" align="center">
-            <el-table-column prop="flatSG7Count" label="70" align="center" width="50" />
-            <el-table-column prop="flatSG9Count" label="90" align="center" width="50" />
-            <el-table-column prop="flatSG11Count" label="110" align="center" width="50" />
-            <el-table-column prop="flatSG13Count" label="130" align="center" width="50" />
           </el-table-column>
-          <el-table-column label="镜岭集镇安置区" width="120" align="center">
-            <el-table-column prop="flatJL7Count" label="70" align="center" width="50" />
-            <el-table-column prop="flatJL9Count" label="90" align="center" width="50" />
-            <el-table-column prop="flatJL11Count" label="110" align="center" width="50" />
-            <el-table-column prop="flatJL13Count" label="130" align="center" width="50" />
           <el-table-column label="镜岭集镇安置区" width="120" align="center">
             <el-table-column prop="flatJL7Count" label="70" align="center" width="50" />
             <el-table-column prop="flatJL9Count" label="90" align="center" width="50" />
@@ -270,11 +255,9 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
       return {
         rowspan: 1,
         colspan: 8
-        colspan: 8
       }
     }
     //把被合并的单元格进行处理
-    if (columnIndex > 1 && columnIndex <= 8) {
     if (columnIndex > 1 && columnIndex <= 8) {
       return {
         rowspan: 0,
@@ -284,7 +267,6 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
     if (columnIndex === 9) {
       return {
         rowspan: 1,
-        colspan: 18
         colspan: 18
       }
     }
@@ -313,18 +295,14 @@ const totalApparent = (arr) => {
   let s = 0
   arr.forEach((item) => {
     let total =
-      Number(item.flatTC7Count) +
-      Number(item.flatTC9Count) +
-      Number(item.flatTC11Count) +
-      Number(item.flatTC13Count) +
-      Number(item.flatMJ7Count) +
-      Number(item.flatMJ9Count) +
-      Number(item.flatMJ11Count) +
-      Number(item.flatMJ13Count) +
-      Number(item.flatDP7Count) +
-      Number(item.flatDP9Count) +
-      Number(item.flatDP11Count) +
-      Number(item.flatDP13Count)
+      Number(item.flatSG7Count) +
+      Number(item.flatSG9Count) +
+      Number(item.flatSG11Count) +
+      Number(item.flatSG13Count) +
+      Number(item.flatJL7Count) +
+      Number(item.flatJL9Count) +
+      Number(item.flatJL11Count) +
+      Number(item.flatJL13Count)
     if (total >= 1) {
       total = 1
       s++
@@ -337,18 +315,24 @@ const totalHomestead = (arr) => {
   let s = 0
   arr.forEach((item) => {
     let total =
-      Number(item.homesteadSG4Count) +
-      Number(item.homesteadSG7Count) +
-      Number(item.homesteadSG9Count) +
-      Number(item.homesteadSG12Count) +
-      Number(item.homesteadSG14Count) +
-      Number(item.homesteadSG16Count) +
-      Number(item.homesteadJL4Count) +
-      Number(item.homesteadJL7Count) +
-      Number(item.homesteadJL9Count) +
-      Number(item.homesteadJL12Count) +
-      Number(item.homesteadJL14Count) +
-      Number(item.homesteadJL16Count)
+      Number(item.homesteadTC1AreaCount) +
+      Number(item.homesteadTC2AreaCount) +
+      Number(item.homesteadTC3AreaCount) +
+      Number(item.homesteadTC4AreaCount) +
+      Number(item.homesteadTC5AreaCount) +
+      Number(item.homesteadTC6AreaCount) +
+      Number(item.homesteadMJT1AreaCount) +
+      Number(item.homesteadMJT2AreaCount) +
+      Number(item.homesteadMJT3AreaCount) +
+      Number(item.homesteadMJT4AreaCount) +
+      Number(item.homesteadMJT5AreaCount) +
+      Number(item.homesteadMJT6AreaCount) +
+      Number(item.homesteadDP1AreaCount) +
+      Number(item.homesteadDP2AreaCount) +
+      Number(item.homesteadDP3AreaCount) +
+      Number(item.homesteadDP4AreaCount) +
+      Number(item.homesteadDP5AreaCount) +
+      Number(item.homesteadDP6AreaCount)
     if (total >= 1) {
       total = 1
       s++

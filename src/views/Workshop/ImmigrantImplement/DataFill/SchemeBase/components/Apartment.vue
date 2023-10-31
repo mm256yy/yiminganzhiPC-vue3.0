@@ -56,14 +56,14 @@
 
             <tr>
               <td rowspan="4" class="column-w1 bold">套数</td>
-              <td class="column-w2">65</td>
+              <td class="column-w2">70</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
                 {{ item.typeOneNum }}
               </td>
             </tr>
 
             <tr>
-              <td class="column-w2">85</td>
+              <td class="column-w2">90</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
                 {{ item.typeTwoNum }}
               </td>
@@ -77,7 +77,7 @@
             </tr>
 
             <tr>
-              <td class="column-w2">140</td>
+              <td class="column-w2">130</td>
               <td class="column-w3" v-for="item in tableData" :key="item.id">
                 {{ item.typeFourNum }}
               </td>
@@ -124,7 +124,7 @@
                 <div
                   class="select-btn"
                   :class="{ active: item.isSelected }"
-                  @click="selectPlan(item.type)"
+                  @click="selectPlan(item.type, item)"
                 >
                   <div class="icon" v-if="!item.isSelected"></div>
                   <Icon v-else icon="ant-design:check-circle-filled" size="16" color="#3E73EC" />
@@ -330,7 +330,11 @@ const exceedArea = computed(() => {
 })
 
 // 选择该方案
-const selectPlan = (type: string) => {
+const selectPlan = (type: string, item: any) => {
+  areaSize.value[0].num = item.typeOneNum
+  areaSize.value[1].num = item.typeTwoNum
+  areaSize.value[2].num = item.typeThreeNum
+  areaSize.value[3].num = item.typeFourNum
   const real = tableData.value.map((item: any) => {
     if (item.type === type) {
       item.isSelected = !item.isSelected

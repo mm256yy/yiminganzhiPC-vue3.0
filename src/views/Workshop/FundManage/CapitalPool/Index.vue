@@ -325,9 +325,9 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 const onViewRow = (row) => {
+  const { id } = row
   // 点击查看进入入账详情页面
-  toLink('entrydetail')
-  console.log(row)
+  toLink('FundEntryDetail', id)
 }
 
 const onFormPupClose = () => {
@@ -348,8 +348,8 @@ onMounted(() => {
  * 跳转至指定页面
  * @param name 路由名称
  */
-const toLink = (name: string) => {
-  push({ name: name })
+const toLink = (name: string, id?: string | number) => {
+  push({ name: name, query: { id } })
 }
 </script>
 
