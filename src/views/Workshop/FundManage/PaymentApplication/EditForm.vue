@@ -115,9 +115,7 @@
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px">
           <div class="table-header-left">
-            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
-              form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
-            }}</span>
+            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款对象</span>
 
             <div class="text">
               申请总金额:
