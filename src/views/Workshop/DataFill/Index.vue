@@ -24,7 +24,12 @@
         <ElSpace>
           <ElButton
             :icon="printIcon"
-            v-if="type == 'Landlord' || type == 'Enterprise' || type == 'IndividualB'"
+            v-if="
+              type == 'Landlord' ||
+              type == 'Enterprise' ||
+              type == 'IndividualB' ||
+              type == 'villageInfoC'
+            "
             type="primary"
             class="!bg-[#30A952] !border-[#30A952]"
             @click="onPrint"

@@ -30,6 +30,7 @@
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         :showOverflowTooltip="true"
+        :default-sort="{ prop: 'createdDate', order: 'descending' }"
         tableLayout="auto"
         row-key="id"
         headerAlign="center"
@@ -95,6 +96,10 @@ const projectId = appStore.currentProjectId
 const { register, tableObject, methods } = useTable({
   getListApi: getFeedBackListApi
 })
+
+// const { register, tableObject, methods } = useTable({
+//   getListApi: (params: any) => getFeedBackListApi(params, 'createdDate')
+// })
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
@@ -236,6 +241,9 @@ const schema = reactive<CrudSchema[]>([
     },
     detail: {
       show: false
+    },
+    sortable: {
+      show: true
     }
   },
   {
@@ -296,4 +304,11 @@ const onSearch = (data) => {
 
   setSearchParams({ ...params })
 }
+// onMounted(() => {
+//   // 页面加载时手动触发排序操作
+//   handleSortChange({
+//     prop: 'createdDate',
+//     order: 'descending'
+//   })
+// })
 </script>
