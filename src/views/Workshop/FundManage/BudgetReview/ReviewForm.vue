@@ -57,7 +57,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">{{ form.paymentType }}</div>
+          <div class="content">{{ form.paymentTypeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
@@ -149,7 +149,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整说明:</div>
-          <div class="content">{{ form.remark }}</div>
+          <div class="content">{{ form.gsRemark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -160,7 +160,7 @@
           <div class="label">审核意见:</div>
           <div class="content">
             <ElInput
-              v-model="form.remark"
+              v-model="form.gsNode"
               :rows="4"
               type="textarea"
               class="!w-600px"
