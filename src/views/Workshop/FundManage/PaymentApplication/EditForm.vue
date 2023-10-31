@@ -97,7 +97,7 @@
           </div>
         </div>
       </div> -->
-      <ElFormItem label="收款方:" v-if="form.payType == 2">
+      <ElFormItem label="收款方:" v-if="form.payType == 2" prop="payee">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[396]"
@@ -206,13 +206,15 @@
           />
           <ElTableColumn
             label="支付节点"
-            prop="paymentNode"
+            prop="nodeDtoList"
             align="center"
             header-align="center"
             width="200"
           >
             <template #default="{ row }">
-              <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+              <div v-for="(item, index) in row.nodeDtoList" :key="index">{{
+                formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+              }}</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
@@ -317,6 +319,7 @@
       :type="type"
       @objlist="objListArr"
       @tableList="tableArr"
+      :selence="selence"
     />
   </ElDialog>
 </template>
@@ -352,6 +355,7 @@ import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplicatio
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
+import { formatDate } from '@/utils/index'
 // import { fmtDict } from '@/utils'
 
 interface PropsType {
@@ -367,10 +371,10 @@ interface FileItemType {
 }
 const girdDialog = ref(false)
 const type = ref(false)
-
+let selence = ref([])
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
-const formRef = ref<FormInstance>()
+const formRef = ref()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
@@ -399,6 +403,8 @@ watch(
     if (val) {
       // 处理行政区划
       form.value = { ...(val as {}) }
+      console.log(form.value, 'bbq')
+
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address
@@ -416,6 +422,7 @@ watch(
   },
   { deep: true }
 )
+
 const otherData = ref<any[]>([])
 const amoutPrice = ref<any>()
 const num = ref<any>()
@@ -443,10 +450,15 @@ const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
+  formRef.value?.resetFields()
+  tableData.value = []
+  num.value = 0
+  amoutPrice.value = 0
+  parmasLists.value.paymentObjectList = []
+  parmasLists.value.amount = 0
+  console.log(formRef.value.resetFields())
+
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
 }
 const onFormPupClose = (flag: boolean) => {
   girdDialog.value = flag
@@ -466,18 +478,20 @@ const tableArr = (val: any) => {
   if (form.value.paymentType == 1) {
     tableData.value = val
     console.log(tableData.value, '专业项目数据')
-    tableData.value = tableData.value.filter(
-      (item, index) =>
-        tableData.value.findIndex((i) => i.contractCode === item.contractCode) === index
-    )
     num.value = tableData.value.length
-    amoutPrice.value = tableData.value.reduce((c, item) => c + item.amount * 1, 0)
+    amoutPrice.value = tableData.value.reduce((c, item) => c + (item.amount * 1 || 0), 0)
     console.log(num.value, amoutPrice.value, '计算专业项目的数据')
   }
 }
 const girdList = () => {
   girdDialog.value = true
   form.value.paymentType == 2 ? (type.value = true) : (type.value = false)
+  selence.value = tableData.value.reduce((pre, item) => {
+    item.nodeDtoList.forEach((res) => {
+      pre.push(res.id)
+    })
+    return pre
+  }, [])
 }
 const submit = (data: any, status?: number) => {
   if (props.actionType === 'add') {
