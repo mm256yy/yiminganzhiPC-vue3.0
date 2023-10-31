@@ -82,6 +82,7 @@
       :row="tableObject.currentRow"
       :parmasList="parmasList"
       :fundAccountList="fundAccountList"
+      ref="vill"
     />
   </WorkContentWrap>
 </template>
@@ -108,7 +109,7 @@ import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
+const vill = ref<any>()
 const fundAccountList = ref<any[]>([]) // 资金科目
 const otherList = ref<any>({})
 const parmasList = ref<any[]>([])
@@ -203,6 +204,7 @@ const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = null
   dialog.value = true
+  vill.value.refresh()
 }
 
 const onEditRow = (row: any) => {

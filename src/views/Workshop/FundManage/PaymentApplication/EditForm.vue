@@ -374,7 +374,10 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-
+const otherData = ref<any[]>([])
+const amoutPrice = ref<any>()
+const num = ref<any>()
+const tableData = ref<any[]>([])
 // console.log(dictObj.value, '111')
 
 const form = ref<any>({})
@@ -412,15 +415,22 @@ watch(
 watch(
   () => props.parmasList,
   (val) => {
-    parmasLists.value = { ...(val as {}) }
+    if (val) {
+      parmasLists.value = { ...(val as {}) }
+    }
   },
   { deep: true }
 )
-const otherData = ref<any[]>([])
-const amoutPrice = ref<any>()
-const num = ref<any>()
-const tableData = ref<any[]>([])
 
+//刷新清空
+const refresh = () => {
+  amoutPrice.value = 0
+  num.value = 0
+  parmasLists.value = {}
+  relocateVerifyPic.value = []
+  form.value = {}
+}
+defineExpose({ refresh })
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
