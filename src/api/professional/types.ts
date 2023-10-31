@@ -47,6 +47,7 @@ export interface ProfessionalContractDtoType {
   startDate: string
   endDate: string
   nodeDtoList: NodeDto[]
+  paymentNodeList: PaymentNode[]
   [key: string]: any
 }
 
@@ -58,5 +59,12 @@ export interface NodeDto {
   contractId?: number
   amount: number
   paymentDate: string
+  [key: string]: any
+}
+
+export interface PaymentNode {
+  createdDate: string
+  receipt: string
+  amount: Number
   [key: string]: any
 }

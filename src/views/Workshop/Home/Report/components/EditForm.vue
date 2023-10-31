@@ -133,22 +133,18 @@ const emit = defineEmits(['close'])
 
 watch(
   () => props.show,
-  () => {
-    // 处理表单数据
-    form.value = {
-      ...props.row
-    }
-    try {
-      if (form.value.fileUrl) {
-        fileUrl.value = JSON.parse(form.value.fileUrl)
+  (val) => {
+    if (val) {
+      if (props.actionType !== 'add') {
+        form.value = { ...props.row }
+        if (form.value.fileUrl) {
+          fileUrl.value = JSON.parse(form.value.fileUrl)
+        }
+      } else {
+        form.value = { ...defaultValue }
+        fileUrl.value = []
       }
-    } catch (error) {
-      console.log(error)
     }
-  },
-  {
-    immediate: true,
-    deep: true
   }
 )
 
