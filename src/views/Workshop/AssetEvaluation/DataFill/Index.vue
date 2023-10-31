@@ -255,6 +255,8 @@ const onReportTabClick = (tabItem) => {
 onMounted(() => {
   getFillingStatus()
   role.value = getRole()
+  // console.log('t-type', type)
+  // console.log('t-role', role.value)
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs

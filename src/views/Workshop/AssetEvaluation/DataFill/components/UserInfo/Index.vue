@@ -11,6 +11,7 @@
       <ElSpace>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
         <div
+          v-if="props.baseInfo.status === 'implementation'"
           :class="{
             status: true,
             success: props.estimateStatus === '1'
@@ -18,6 +19,16 @@
         >
           <span class="point"></span>
           {{ props.estimateStatus === '1' ? '已填报' : '未填报' }}
+        </div>
+        <div
+          v-else
+          :class="{
+            status: true,
+            success: props.baseInfo.implementEscalationStatus === '1'
+          }"
+        >
+          <span class="point"></span>
+          {{ props.baseInfo.implementEscalationStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <!-- <div
           :class="{

@@ -44,7 +44,7 @@
       </ElFormItem>
 
       <ElFormItem label="支付节点" prop="nodeDtoList">
-        <div class="node-lis">
+        <div class="node-list">
           <div class="node-item" v-for="(item, index) in nodeList" :key="index">
             <div class="label"> 支付日期： </div>
             <ElDatePicker
@@ -75,20 +75,33 @@
           <el-button type="primary" :icon="addIcon" @click="addRow">添加一行</el-button>
         </div>
       </ElFormItem>
-      <!-- <ElFormItem label="支付时间" prop="paymentTime">
-        <div class="node-lis">
+      <ElFormItem label="支付时间" prop="paymentNodeList">
+        <div class="node-list">
           <div class="node-item" v-for="(item, index) in paymentTimeList" :key="index">
-            <div class="label"> 支付时间： {{ item.paymentTime }}</div>
-            <div class="label ml-15px"> 金额： {{ item.paymentAccount }} 元</div>
+            <div class="label"> {{ item.createdDate }}</div>
+            <div class="label ml-15px"> 金额： {{ item.amount }} 元</div>
             <div class="ml-15px">凭证:</div>
+            <div class="item-receipt">
+              <div
+                class="receipt-url"
+                v-for="(i, j) in getImageUrlItem(item.receipt)"
+                :key="j"
+                @click="onImageClick(i.url)"
+              >
+                <ElImage :src="getImageUrl(i.url)" fit="cover" alt="凭证图片" />
+              </div>
+            </div>
           </div>
         </div>
-      </ElFormItem> -->
+      </ElFormItem>
     </ElForm>
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)" :loading="btnLoading">确认</ElButton>
     </template>
+    <el-dialog title="查看图片" append-to-body :width="350" v-model="dialogVisible">
+      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+    </el-dialog>
   </ElDialog>
 </template>
 
@@ -103,14 +116,15 @@ import {
   FormRules,
   ElMessage,
   ElDatePicker,
-  ElInputNumber
+  ElInputNumber,
+  ElImage
 } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
 import { editProfessionalContractApi } from '@/api/professional/service'
-import type { ProfessionalContractDtoType, NodeDto } from '@/api/professional/types'
+import type { ProfessionalContractDtoType, NodeDto, PaymentNode } from '@/api/professional/types'
 import { useIcon } from '@/hooks/web/useIcon'
 import dayjs from 'dayjs'
 
@@ -130,6 +144,8 @@ const projectId = appStore.currentProjectId
 const btnLoading = ref(false)
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const minusIcon = useIcon({ icon: 'ant-design:minus-outlined' })
+const imgUrl = ref<string>('')
+const dialogVisible = ref<boolean>(false)
 
 const commonParams = {
   projectId,
@@ -144,16 +160,37 @@ const defaultNodeItem: Partial<NodeDto> = {
 }
 
 const nodeList = ref<Partial<NodeDto>[]>([])
-const paymentTimeList = ref<any[]>([
-  {
-    paymentTime: '2023年2月1日',
-    paymentAccount: '10000.00'
-  },
-  {
-    paymentTime: '2023年2月2日',
-    paymentAccount: '10000.00'
-  }
-])
+
+//   "createdDate" : "2023年10月30日",
+// "receipt" : "[{\"name\":\"7.jpg\",\"url\":\"https://oss.zdwp.tech/migrate/files/archives/aa2d4ab5-127b-44b5-9b51-192e08146c23.jpg\",\"uid\":1698634802851,\"status\":\"success\"}]",
+//   "amount" : 6000.00
+// const paymentTimeList = ref<any[]>([
+//   {
+//     paymentTime: '2023年2月1日',
+//     paymentAccount: '10000.00'
+//   },
+//   {
+//     paymentTime: '2023年2月2日',
+//     paymentAccount: '10000.00'
+//   }
+// ])
+
+const getImageUrlItem = (data: string) => {
+  const imgItem = data ? JSON.parse(data) : {}
+  return imgItem
+}
+
+const getImageUrl = (url: string) => {
+  console.log('img-url', url)
+  return url
+}
+
+const onImageClick = (url) => {
+  imgUrl.value = url
+  dialogVisible.value = true
+}
+
+const paymentTimeList = ref<PaymentNode[]>([])
 
 const defaultValue: Partial<ProfessionalContractDtoType> & { time: any } = {
   ...commonParams,
@@ -172,9 +209,10 @@ watch(
     btnLoading.value = false
     if (val) {
       if (props.actionType !== 'add') {
-        const { startDate, endDate, nodeDtoList } = props.row as any
+        const { startDate, endDate, nodeDtoList, paymentNodeList } = props.row as any
         form.value = { ...props.row, time: [dayjs(startDate), dayjs(endDate)] }
         nodeList.value = nodeDtoList || []
+        paymentTimeList.value = paymentNodeList || []
       } else {
         form.value = { ...defaultValue, time: [] }
       }
@@ -263,12 +301,23 @@ const submit = async (data: ProfessionalContractDtoType) => {
   }
 }
 
-.node-lis {
+.node-list {
   .node-item {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+
+    .item-receipt {
+      margin-left: 20px;
+      overflow-y: auto;
+      cursor: pointer;
+
+      .receipt-url {
+        width: 60px;
+        height: 60px;
+      }
+    }
   }
 }
 </style>
