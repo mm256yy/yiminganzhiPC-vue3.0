@@ -175,12 +175,6 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
       rollupOptions: {
         input: 
-        mode === 'dev' ? {
-          main: resolve(__dirname, "index.html"),
-          admin: resolve(__dirname, "admin.html"),
-          h5: resolve(__dirname, "h5.html"),
-          ld: resolve(__dirname, "ld.html")
-        } :
         platform === 'pc' ? {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
