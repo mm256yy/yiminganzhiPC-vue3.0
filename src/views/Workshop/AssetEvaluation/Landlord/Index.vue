@@ -86,8 +86,8 @@
             </span>
           </div>
         </template>
-        <template #reportDate="{ row }">
-          <div>{{ formatTime(row.reportDate, 'yyyy-MM-dd HH:mm:ss') }}</div>
+        <template #estimateTime="{ row }">
+          <div>{{ formatTime(row.estimateTime, 'yyyy-MM-dd HH:mm:ss') }}</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
