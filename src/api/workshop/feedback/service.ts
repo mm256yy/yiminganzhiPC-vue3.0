@@ -10,6 +10,7 @@ export const getFeedBackListApi = (
   return request.get({
     url: '/feedback',
     params: {
+      sort: ['createdDate,desc'],
       ...query
     }
   })

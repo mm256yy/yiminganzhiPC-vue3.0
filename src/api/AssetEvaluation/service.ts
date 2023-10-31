@@ -17,7 +17,7 @@ export const getLandlordListApi = (
   return request.get({
     url: '/peasantHousehold',
     params: {
-      sort: ['createdDate,desc'],
+      sort: ['lastModifiedDate,id,desc'],
       ...query
     }
   })
