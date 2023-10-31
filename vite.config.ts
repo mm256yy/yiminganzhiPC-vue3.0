@@ -128,7 +128,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       VueMarcos(),
       createHtmlPlugin({
-        pages: env.VITE_USER_NODE_ENV === 'development' ?
+        pages: mode === 'dev' ?
         [
          ...pcHmtlEntrys,
          ...h5HmtlEntrys
@@ -174,7 +174,8 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       },
       rollupOptions: {
-        input: platform === 'pc' ? {
+        input: 
+        platform === 'pc' ? {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
         } :
