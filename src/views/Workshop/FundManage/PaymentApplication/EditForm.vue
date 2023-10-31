@@ -215,7 +215,11 @@
               }}</div>
             </template>
           </ElTableColumn>
-          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+          <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div>
+            </template>
+          </ElTableColumn>
         </ElTable>
       </div>
       <!--  -->
@@ -407,6 +411,11 @@ watch(
       // 处理行政区划
       form.value = { ...(val as {}) }
       console.log(form.value, 'bbq')
+      relocateVerifyPic.value = form.value ? JSON.parse(form.value?.receipt) : ''
+      // if (props.actionType === 'edit') {{
+      //   form.value.nodeDtoList=
+      // }
+      // }
 
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
@@ -527,6 +536,7 @@ const submit = (data: any, status?: number) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
+  console.log(tableData.value, '提交测试')
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!relocateVerifyPic.value.length) {
@@ -541,13 +551,41 @@ const onSubmit = debounce((formEl, status?: number) => {
         console.log(tableData.value, '提交测试')
         if (form.value.paymentType == 1) {
           // 付款对象
-          params.paymentObjectList = toRaw(tableData.value).map((item) => {
-            return {
-              contractId: item.contractId,
-              amount: item.amount,
-              nodeIds: item.nodeIds
+          // params.paymentObjectList = toRaw(tableData.value).map((item) => {
+          //   return {
+          //     contractId: item.contractId,
+          //     amount: item.amount,
+          //     nodeIds: item.nodeIds
+          //   }
+          // })
+          let m = toRaw(tableData.value).reduce((pre, item) => {
+            item.nodeDtoList.forEach((res) => {
+              pre.push({
+                contractId: item.id,
+                amount: res.amount,
+                nodeIds: res.id
+              })
+            })
+            return pre
+          }, [])
+
+          let dataInfo = {}
+          m.forEach((item) => {
+            let { contractId, amount } = item
+            if (!dataInfo[contractId]) {
+              dataInfo[contractId] = {
+                contractId,
+                amount,
+                nodeIds: []
+              }
             }
+            dataInfo[contractId].nodeIds.push(item.nodeIds)
           })
+          params.paymentObjectList = Object.values(dataInfo) // list 转换成功的数据
+          params.paymentObjectList.forEach((item) => {
+            item.nodeIds = item.nodeIds.join(',')
+          })
+          console.log(params.paymentObjectList, 'bbq')
         } else {
           //其他
           params.paymentObjectList = toRaw(otherData.value).map((item) => {

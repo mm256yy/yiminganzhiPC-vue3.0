@@ -146,6 +146,7 @@ const addSubmit = (flag: boolean) => {
     }
     return pre
   }, [])
+  console.log(tableObj.value)
 
   emit('objlist', tableDatas.value)
   emit('tableList', tableObj.value)
