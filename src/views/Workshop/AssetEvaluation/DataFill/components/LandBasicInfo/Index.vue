@@ -75,7 +75,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="地块面积(㎡)"
+          label="地块面积(亩)"
           :width="180"
           prop="landArea"
           align="center"
@@ -137,7 +137,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="评估单价(元/㎡)"
+          label="评估单价(亩)"
           :width="180"
           prop="valuationPrice"
           align="center"

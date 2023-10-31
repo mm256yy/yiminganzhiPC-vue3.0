@@ -141,7 +141,7 @@
           </div>
         </div>
       </div>
-      <!--个体户-->
+      <!--个体户-->`
       <div class="enter-item" @click="toTarget('IndividualImp')">
         <div class="title-field">
           <div class="enter-icon">
@@ -469,8 +469,9 @@ onMounted(() => {
         .field-box {
           display: flex;
           width: 87px;
-          height: 34px;
+          padding-bottom: 10px;
           margin-top: -6px;
+          // margin-bottom: 10px;
           background: linear-gradient(180deg, #ffffff 0%, #e9f5ff 100%);
           border-radius: 8px;
           flex-direction: column;

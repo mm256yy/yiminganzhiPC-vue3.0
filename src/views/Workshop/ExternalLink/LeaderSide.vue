@@ -643,7 +643,7 @@ const impProgressOption = ref({
         params.map((item: any) => {
           nameStr = item.name
           str = str.concat(`
-            <div>${item.seriesName}：${item.value}%</div>
+            <div>${item.seriesName}：${item.value * 100}%</div>
           `)
         })
       return nameStr + str

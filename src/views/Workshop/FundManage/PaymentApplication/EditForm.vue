@@ -115,9 +115,7 @@
       <div class="table-wrap">
         <div class="flex items-center justify-between pb-12px">
           <div class="table-header-left">
-            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
-              form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
-            }}</span>
+            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">付款对象</span>
 
             <div class="text">
               申请总金额:
@@ -286,11 +284,13 @@
                     <div class="name">{{ item.name }}</div>
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-                  <div class="time">
-                    审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
+                  <div class="time" v-if="item.status">
+                    审核时间：{{
+                      item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD') : ''
+                    }}
                   </div>
                   <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
-                  <div class="remark"> 审核意见: {{ item.remark }} </div>
+                  <div class="remark" v-if="item.status"> 审核意见: {{ item.remark }} </div>
                 </div>
               </div>
             </div>
@@ -374,7 +374,10 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-
+const otherData = ref<any[]>([])
+const amoutPrice = ref<any>()
+const num = ref<any>()
+const tableData = ref<any[]>([])
 // console.log(dictObj.value, '111')
 
 const form = ref<any>({})
@@ -412,15 +415,22 @@ watch(
 watch(
   () => props.parmasList,
   (val) => {
-    parmasLists.value = { ...(val as {}) }
+    if (val) {
+      parmasLists.value = { ...(val as {}) }
+    }
   },
   { deep: true }
 )
-const otherData = ref<any[]>([])
-const amoutPrice = ref<any>()
-const num = ref<any>()
-const tableData = ref<any[]>([])
 
+//刷新清空
+const refresh = () => {
+  amoutPrice.value = 0
+  num.value = 0
+  parmasLists.value = {}
+  relocateVerifyPic.value = []
+  form.value = {}
+}
+defineExpose({ refresh })
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken

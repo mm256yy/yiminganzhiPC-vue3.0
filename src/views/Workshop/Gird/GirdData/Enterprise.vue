@@ -416,6 +416,7 @@ const onSearch = (data) => {
 
 const adjust = (row) => {
   dialogVisible.value = true
+  reason.value = row.gridmanName
   tableObject.currentRow = row
 }
 const onClose = () => {

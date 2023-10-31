@@ -140,10 +140,12 @@ watch(
   (val) => {
     if (val) {
       form.value = props.row
-      getFundGrantFindByDoorNo(props.row?.doorNo).then((res) => {
-        tableObject.tableList = res.data
-        relocateOtherPic.value = res.data?.receipt ? JSON.parse(res.data?.receipt) : []
-      })
+      if (props.row) {
+        getFundGrantFindByDoorNo(props.row.doorNo).then((res) => {
+          tableObject.tableList = res.data
+          relocateOtherPic.value = res.data?.receipt ? JSON.parse(res.data?.receipt) : []
+        })
+      }
     }
   }
 )

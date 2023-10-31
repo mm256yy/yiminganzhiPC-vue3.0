@@ -32,6 +32,59 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
     env = loadEnv(mode, root)
     platform = process.argv[6]
   }
+  console.log(env)
+  // pc 模版
+  const pcHmtlEntrys = [
+    {
+      entry: 'src/main.ts',
+      filename: 'index.html',
+      template: 'index.html',
+      injectOptions: {
+        data: {
+          title: env.VITE_APP_TITLE,
+          mapAk: env.VITE_MAP_AK,
+          injectScript: `<script src="./inject.js"></script>`,
+        }
+      }
+    },
+    {
+      entry: 'src/admin/main.ts',
+      filename: 'admin.html',
+      template: 'admin.html',
+      injectOptions: {
+        data: {
+          title: env.VITE_APP_TITLE,
+          mapAk: env.VITE_MAP_AK,
+          injectScript: `<script src="./inject.js"></script>`,
+        }
+      }
+    }
+  ]
+  // h5模版
+  const h5HmtlEntrys = [{
+    entry: 'src/h5/main.ts',
+    filename: 'h5.html',
+    template: 'h5.html',
+    injectOptions: {
+      data: {
+        title: env.VITE_APP_TITLE,
+        mapAk: env.VITE_MAP_AK,
+        injectScript: `<script src="./inject.js"></script>`,
+      }
+    }
+  },
+  {
+    entry: 'src/h5/ld/main.ts',
+    filename: 'ld.html',
+    template: 'ld.html',
+    injectOptions: {
+      data: {
+        title: env.VITE_APP_TITLE,
+        mapAk: env.VITE_MAP_AK,
+        injectScript: `<script src="./inject.js"></script>`,
+      }
+    }
+  }]
   return {
     base: env.VITE_BASE_PATH,
     plugins: [
@@ -75,59 +128,12 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       VueMarcos(),
       createHtmlPlugin({
-        pages: platform === 'pc' ? [
-          {
-            entry: 'src/main.ts',
-            filename: 'index.html',
-            template: 'index.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          },
-          {
-            entry: 'src/admin/main.ts',
-            filename: 'admin.html',
-            template: 'admin.html',
-            injectOptions: {
-              data: {
-                title: env.VITE_APP_TITLE,
-                mapAk: env.VITE_MAP_AK,
-                injectScript: `<script src="./inject.js"></script>`,
-              }
-            }
-          },
-
+        pages: env.VITE_USER_NODE_ENV === 'development' ?
+        [
+         ...pcHmtlEntrys,
+         ...h5HmtlEntrys
         ] :
-          [
-            {
-              entry: 'src/h5/main.ts',
-              filename: 'h5.html',
-              template: 'h5.html',
-              injectOptions: {
-                data: {
-                  title: env.VITE_APP_TITLE,
-                  mapAk: env.VITE_MAP_AK,
-                  injectScript: `<script src="./inject.js"></script>`,
-                }
-              }
-            },
-            {
-              entry: 'src/h5/ld/main.ts',
-              filename: 'ld.html',
-              template: 'ld.html',
-              injectOptions: {
-                data: {
-                  title: env.VITE_APP_TITLE,
-                  mapAk: env.VITE_MAP_AK,
-                  injectScript: `<script src="./inject.js"></script>`,
-                }
-              }
-            }
-          ]
+        platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
       })
     ],
 
