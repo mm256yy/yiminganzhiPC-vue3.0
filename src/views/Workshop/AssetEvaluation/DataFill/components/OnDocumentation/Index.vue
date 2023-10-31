@@ -164,7 +164,13 @@
       <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
-      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+      <img
+        class="block w-full"
+        v-if="imgUrl.indexOf('pdf') == -1"
+        :src="imgUrl"
+        alt="Preview Image"
+      />
+      <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"> </iframe>
     </el-dialog>
   </ElDialog>
 </template>
@@ -394,6 +400,8 @@ const beforeRemove = (uploadFile: UploadFile) => {
 
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
+  console.log(uploadFile.url?.indexOf('pdf'))
+
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
@@ -439,5 +447,10 @@ onMounted(() => {
   .el-upload--picture-card {
     display: none;
   }
+}
+
+#inlineFrameExample {
+  width: 100%;
+  height: 700px;
 }
 </style>

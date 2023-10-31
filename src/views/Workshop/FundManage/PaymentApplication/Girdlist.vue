@@ -76,14 +76,20 @@
       />
       <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
         <template #default="{ row }">
-          <ElCheckboxGroup v-model="check">
+          <ElCheckboxGroup
+            v-model="check"
+            @change="
+              (val) => {
+                checkList(val, row, row.id)
+              }
+            "
+          >
             <ElCheckbox
               :label="formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'"
               :value="item.id"
               v-for="(item, index) in row.nodeDtoList"
               :key="index"
               v-model="checkType"
-              @change="checkList(row, item.id)"
             />
           </ElCheckboxGroup>
         </template>
@@ -145,14 +151,16 @@ const checkType = ref<boolean>()
 const tableData = ref<any[]>([])
 const tableObj = ref<any[]>([]) //付款对象集合
 const vals = ref<any[]>([]) //付款对象ID
-const checkList = (row: any, val: any) => {
+const checkList = (res: any, row: any, val: any) => {
   vals.value.push(val)
+  console.log(val, row)
+
   tableObj.value.push({
     projectName: row.projectName,
     contractName: row.contractName,
     contractCode: row.contractCode,
     contractAmount: row.contractAmount,
-    paymentNode: check,
+    paymentNode: res,
     amount: row.amount,
     contractId: row.id,
     nodeIds: vals.value.join()
