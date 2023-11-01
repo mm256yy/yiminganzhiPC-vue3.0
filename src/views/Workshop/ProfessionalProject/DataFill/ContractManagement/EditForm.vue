@@ -161,20 +161,6 @@ const defaultNodeItem: Partial<NodeDto> = {
 
 const nodeList = ref<Partial<NodeDto>[]>([])
 
-//   "createdDate" : "2023年10月30日",
-// "receipt" : "[{\"name\":\"7.jpg\",\"url\":\"https://oss.zdwp.tech/migrate/files/archives/aa2d4ab5-127b-44b5-9b51-192e08146c23.jpg\",\"uid\":1698634802851,\"status\":\"success\"}]",
-//   "amount" : 6000.00
-// const paymentTimeList = ref<any[]>([
-//   {
-//     paymentTime: '2023年2月1日',
-//     paymentAccount: '10000.00'
-//   },
-//   {
-//     paymentTime: '2023年2月2日',
-//     paymentAccount: '10000.00'
-//   }
-// ])
-
 const getImageUrlItem = (data: string) => {
   const imgItem = data ? JSON.parse(data) : {}
   return imgItem

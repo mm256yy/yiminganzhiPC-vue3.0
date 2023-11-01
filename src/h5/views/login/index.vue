@@ -74,7 +74,6 @@ const onConfirm = () => {
         sessionStorage.setItem('token', res.token)
         sessionStorage.setItem('user', res.user)
         currentUserApi().then((res) => {
-          console.log(res.projectUsers[0].projectId, 'bbq')
           sessionStorage.setItem('projectId', res.projectUsers[0].projectId)
         })
         toLink('home')

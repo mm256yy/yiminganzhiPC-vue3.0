@@ -86,7 +86,7 @@ service.interceptors.response.use(
       if (window.location.href.indexOf('h5') != -1) {
         window.location.href = 'h5.html#/login'
       } else {
-        window.location.href = 'ld.html#/phoneLogin'
+        window.location.href = 'ld.html#/login'
       }
     }
     let message = data.message || error.message || '发生错误'
