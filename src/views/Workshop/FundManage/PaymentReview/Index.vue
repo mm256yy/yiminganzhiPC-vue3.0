@@ -201,10 +201,10 @@ onBeforeUnmount(() => {
 })
 
 const onReviewRow = async (row) => {
-  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res
-    console.log(res, '测试')
-  })
+  let res: any = await PaymentApplicationByIdDetailApi(row.id, 1)
+  parmasList.value = res
+  console.log(res, '测试')
+
   actionType.value = 'edit'
   tableObject.currentRow = {
     ...row
@@ -214,10 +214,10 @@ const onReviewRow = async (row) => {
   dialog.value = true
 }
 const onViewRow = async (row: any) => {
-  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res
-    console.log(res, '测试')
-  })
+  let res: any = await PaymentApplicationByIdDetailApi(row.id, 1)
+  parmasList.value = res
+  console.log(res, '测试')
+
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
