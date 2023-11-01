@@ -42,13 +42,13 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">概算科目:</div>
-          <div class="content">{{ form.type }}</div>
+          <div class="content">{{ form.typeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">资金科目:</div>
-          <div class="content">{{ form.funSubjectId }}</div>
+          <div class="content">{{ form.funSubjectIdText }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -63,7 +63,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款类型:</div>
-          <div class="content">{{ form.payType }}</div>
+          <div class="content">{{ form.payType == 1 ? '支付' : '预拨' }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -143,7 +143,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
-          <div class="content">{{ form.type }}</div>
+          <div class="content">{{ form.typeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -293,7 +293,7 @@ const onSubmit = async (status: string) => {
     // ],
     businessId: form.value.id,
     status: status,
-    type: 2 //概算申请
+    type: 2 //概算申请申请
     // receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
   }
   getPaymentReviewListSSApi(params).then(() => {
