@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/home',
       name: 'home',
-      component: () => import('../views/home/leader.vue'),
+      component: () => import('../views/home/index.vue'),
       meta: {
         name: '镜岭水库'
       }

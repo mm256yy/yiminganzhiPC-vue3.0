@@ -193,7 +193,7 @@
           </ElUpload>
         </div>
       </div>
-      <div v-if="parmasList?.funPaymentRequestFlowNodeList[6].status">
+      <div v-if="parmasList?.funPaymentRequestFlowNodeList[5].status && actionType == 'edit'">
         <ElRow>
           <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">

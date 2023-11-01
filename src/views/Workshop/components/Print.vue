@@ -404,6 +404,7 @@ const onPrint = async () => {
 }
 
 const onPreview = async (item) => {
+  landlords.value = undefined
   if (!window.pdfMake || !window.pdfMake.fonts) {
     ElMessage.info('正在加载字体文件，请稍后')
     return

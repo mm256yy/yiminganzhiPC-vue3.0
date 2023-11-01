@@ -297,6 +297,8 @@ const onExportDialogClose = () => {
 
 const onPrint = async () => {
   const res = await getSelections()
+  console.log(res)
+
   if (res && res.length) {
     landlordIds.value = res.map((item) => item.id)
     printDialog.value = true
