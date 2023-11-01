@@ -297,7 +297,7 @@
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time" v-if="item.status">
                     审核时间：{{
-                      item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD') : ''
+                      item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
                     }}
                   </div>
                   <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
@@ -446,6 +446,7 @@ watch(
 const refresh = () => {
   amoutPrice.value = 0
   num.value = 0
+  otherData.value = []
   parmasLists.value = {}
   relocateVerifyPic.value = []
   form.value = {}
