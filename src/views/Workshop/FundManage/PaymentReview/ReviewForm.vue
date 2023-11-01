@@ -146,16 +146,23 @@
         />
         <ElTableColumn
           label="支付节点"
-          prop="paymentNode"
+          prop="nodeDtoList"
           align="center"
           header-align="center"
           width="200"
         >
           <template #default="scope">
-            <div v-for="(item, index) in scope.row.paymentNode" :key="index">{{ item }}</div>
+            <div v-for="(item, index) in scope.row.nodeDtoList" :key="index">{{
+              formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+            }}</div>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+        <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
+          <template #default="{ $index }">
+            <!-- <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div> -->
+            <div> {{ parmasList.paymentObjectList[$index]?.amount }} </div>
+          </template>
+        </ElTableColumn>
       </ElTable>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -175,6 +182,7 @@
             :before-remove="beforeRemove"
             :on-remove="removeFile1"
             :on-preview="imgPreview"
+            :disabled="true"
           >
             <template #trigger>
               <div class="card-img-box">
@@ -185,7 +193,7 @@
           </ElUpload>
         </div>
       </div>
-      <div v-if="parmasList.funPaymentRequestFlowNodeList[6].status">
+      <div v-if="parmasList?.funPaymentRequestFlowNodeList[6].status">
         <ElRow>
           <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">
@@ -297,8 +305,8 @@
                 <div class="time" v-if="item.status">
                   审核时间：{{
                     index == 0
-                      ? dayjs(parmasList.createdDate).format('YYYY-MM-DD')
-                      : dayjs(item.createdDate).format('YYYY-MM-DD')
+                      ? dayjs(parmasList.createdDate).format('YYYY-MM-DD HH:mm:ss')
+                      : dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss')
                   }}
                 </div>
                 <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
@@ -342,7 +350,7 @@ import { useAppStore } from '@/store/modules/app'
 import { fmtDict } from '@/utils'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
-
+import { formatDate } from '@/utils/index'
 const formRef = ref<FormInstance>()
 
 const dictStore = useDictStoreWithOut()
