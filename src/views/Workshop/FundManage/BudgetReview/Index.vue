@@ -218,7 +218,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'funSubjectTxt',
+    field: 'funSubjectIdText',
     label: '资金科目',
     search: {
       show: false
