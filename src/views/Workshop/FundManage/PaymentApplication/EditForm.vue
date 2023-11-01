@@ -15,6 +15,7 @@
       label-width="150px"
       :label-position="'right'"
       :rules="rules"
+      :disabled="actionType !== 'add'"
     >
       <ElFormItem label="申请类型:" required prop="applyType">
         <el-radio-group class="ml-4" v-model="form.applyType">
@@ -216,8 +217,11 @@
             </template>
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
-            <template #default="{ row }">
-              <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div>
+            <template #default="{ row, $index }">
+              <!-- <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div> -->
+
+              <div v-if="actionType == 'add'">{{ row.amount }}</div>
+              <div v-else> {{ parmasLists.paymentObjectList[$index]?.amount }} </div>
             </template>
           </ElTableColumn>
         </ElTable>
@@ -241,6 +245,7 @@
             :before-remove="beforeRemove"
             :on-remove="removeFile1"
             :on-preview="imgPreview"
+            :disabled="actionType !== 'add'"
           >
             <template #trigger>
               <div class="card-img-box">
@@ -410,7 +415,6 @@ watch(
     if (val) {
       // 处理行政区划
       form.value = { ...(val as {}) }
-      console.log(form.value, 'bbq')
       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
       // if (props.actionType === 'edit') {{
       //   form.value.nodeDtoList=
@@ -432,6 +436,7 @@ watch(
   (val) => {
     if (val) {
       parmasLists.value = { ...(val as {}) }
+      console.log(val, 'bbq')
     }
   },
   { deep: true }
@@ -536,7 +541,7 @@ const submit = (data: any, status?: number) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
-  console.log(tableData.value, '提交测试')
+  // console.log(parmasLists.value.professionalContractList, '提交测试')
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!relocateVerifyPic.value.length) {
@@ -550,19 +555,23 @@ const onSubmit = debounce((formEl, status?: number) => {
         }
         console.log(tableData.value, '提交测试')
         if (form.value.paymentType == 1) {
-          // 付款对象
-          // params.paymentObjectList = toRaw(tableData.value).map((item) => {
-          //   return {
-          //     contractId: item.contractId,
-          //     amount: item.amount,
-          //     nodeIds: item.nodeIds
-          //   }
-          // })
-          let m = toRaw(tableData.value).reduce((pre, item) => {
+          if (props.actionType == 'edit') {
+            parmasLists.value.professionalContractList.forEach((item, index) => {
+              toRaw(parmasLists.value).professionalContractList[index] = {
+                ...item,
+                amount: parmasLists.value.paymentObjectList[index].amount
+              }
+            })
+          }
+          let m = toRaw(
+            props.actionType == 'edit'
+              ? parmasLists.value.professionalContractList
+              : tableData.value
+          ).reduce((pre, item) => {
             item.nodeDtoList.forEach((res) => {
               pre.push({
                 contractId: item.id,
-                amount: res.amount,
+                amount: item.amount,
                 nodeIds: res.id
               })
             })
