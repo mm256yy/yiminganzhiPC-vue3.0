@@ -115,9 +115,9 @@
           prop="index"
         />
         <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-          <!-- <template #default="{ row }">
-            {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-          </template> -->
+          <template #default="{ row }">
+            {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+          </template>
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
       </ElTable>

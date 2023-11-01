@@ -57,7 +57,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">付款对象类型:</div>
-          <div class="content">{{ form.paymentType }}</div>
+          <div class="content">{{ form.paymentTypeTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="12">
@@ -101,9 +101,9 @@
         prop="index"
       />
       <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-        <!-- <template #default="{ row }">
-          {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-        </template> -->
+        <template #default="{ row }">
+          {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+        </template>
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
     </ElTable>
@@ -149,7 +149,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整说明:</div>
-          <div class="content">{{ form.remark }}</div>
+          <div class="content">{{ form.gsRemark }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -160,7 +160,7 @@
           <div class="label">审核意见:</div>
           <div class="content">
             <ElInput
-              v-model="form.remark"
+              v-model="form.gsNode"
               :rows="4"
               type="textarea"
               class="!w-600px"
@@ -243,11 +243,12 @@ import {
   ElMessage,
   ElButton
 } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { getPaymentReviewListSSApi } from '@/api/fundManage/budgetAdjustment-service'
-// import { fmtDict } from '@/utils'
+import { fmtDict } from '@/utils'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'
@@ -259,6 +260,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const btnLoading = ref<boolean>(false)
 const form = ref<any>({})
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 watch(
   () => props.row,
   (val) => {

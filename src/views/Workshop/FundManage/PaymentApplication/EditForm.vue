@@ -156,9 +156,9 @@
             prop="index"
           />
           <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-            <!-- <template #default="{ row }">
-              {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-            </template> -->
+            <template #default="{ row }">
+              {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+            </template>
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
         </ElTable>
@@ -359,7 +359,7 @@ import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplicatio
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
-import { formatDate } from '@/utils/index'
+import { formatDate, fmtDict } from '@/utils'
 // import { fmtDict } from '@/utils'
 
 interface PropsType {
@@ -533,7 +533,6 @@ const submit = (data: any, status?: number) => {
   }
   onClose(true)
 }
-
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
   console.log(tableData.value, '提交测试')
