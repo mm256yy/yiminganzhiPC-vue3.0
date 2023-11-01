@@ -157,9 +157,9 @@
             prop="index"
           />
           <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-            <!-- <template #default="{ row }">
-              {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-            </template> -->
+            <template #default="{ row }">
+              {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+            </template>
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
         </ElTable>
@@ -364,7 +364,7 @@ import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplicatio
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
-import { formatDate } from '@/utils/index'
+import { formatDate, fmtDict } from '@/utils'
 // import { fmtDict } from '@/utils'
 
 interface PropsType {
@@ -415,6 +415,7 @@ watch(
     if (val) {
       // 处理行政区划
       form.value = { ...(val as {}) }
+      console.log(form.value, 'bbq')
       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
       // if (props.actionType === 'edit') {{
       //   form.value.nodeDtoList=
@@ -539,7 +540,6 @@ const submit = (data: any, status?: number) => {
   }
   onClose(true)
 }
-
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
   // console.log(parmasLists.value.professionalContractList, '提交测试')

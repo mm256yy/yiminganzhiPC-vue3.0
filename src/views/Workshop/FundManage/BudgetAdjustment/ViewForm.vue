@@ -101,9 +101,9 @@
         prop="index"
       />
       <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-        <!-- <template #default="{ row }">
-          {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-        </template> -->
+        <template #default="{ row }">
+          {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+        </template>
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
     </ElTable>
@@ -216,10 +216,11 @@
 
 <script setup lang="ts">
 import { ElDialog, ElRow, ElCol, ElTable, ElTableColumn } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
-// import { fmtDict } from '@/utils'
+import { fmtDict } from '@/utils'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 // import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 
@@ -232,6 +233,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const form = ref<any>({})
 const fundAccountList = ref<any[]>([]) // 资金科目
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 // const getFundSubjectList = () => {
 //   getFundSubjectListApi().then((res: any) => {
 //     if (res) {

@@ -101,9 +101,9 @@
         prop="index"
       />
       <ElTableColumn label="支付对象" align="center" prop="contractId" header-align="center">
-        <!-- <template #default="{ row }">
-          {{ row.contractId ? fmtDict(dictObj[393], row.contractId) : '-' }}
-        </template> -->
+        <template #default="{ row }">
+          {{ fmtDict(dictObj[393], row.contractId.toString()) }}
+        </template>
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
     </ElTable>
@@ -243,11 +243,12 @@ import {
   ElMessage,
   ElButton
 } from 'element-plus'
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import dayjs from 'dayjs'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { getPaymentReviewListSSApi } from '@/api/fundManage/budgetAdjustment-service'
-// import { fmtDict } from '@/utils'
+import { fmtDict } from '@/utils'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'
@@ -259,6 +260,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const btnLoading = ref<boolean>(false)
 const form = ref<any>({})
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 watch(
   () => props.row,
   (val) => {
