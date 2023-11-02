@@ -232,7 +232,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const form = ref<any>({})
-const fundAccountList = ref<any[]>([]) // 资金科目
+// const fundAccountList = ref<any[]>([]) // 资金科目
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 // const getFundSubjectList = () => {
