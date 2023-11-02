@@ -48,7 +48,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">资金科目:</div>
-          <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
+          <div class="content">{{ form.funSubjectIdText }}</div>
         </div>
       </ElCol>
     </ElRow>
@@ -143,7 +143,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
-          <div class="content">{{ form.typeTxt }}</div>
+          <div class="content">{{ form.gsAdjustTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -258,21 +258,21 @@ watch(
     deep: true
   }
 )
-const getTreeName = (list: any, code: any) => {
-  for (let i = 0; i < list.length; i++) {
-    let a = list[i]
-    if (a.code == code) {
-      return a.name
-    } else {
-      if (a.children && a.children.length > 0) {
-        let res = getTreeName(a.children, code)
-        if (res) {
-          return res
-        }
-      }
-    }
-  }
-}
+// const getTreeName = (list: any, code: any) => {
+//   for (let i = 0; i < list.length; i++) {
+//     let a = list[i]
+//     if (a.code == code) {
+//       return a.name
+//     } else {
+//       if (a.children && a.children.length > 0) {
+//         let res = getTreeName(a.children, code)
+//         if (res) {
+//           return res
+//         }
+//       }
+//     }
+//   }
+// }
 
 // onMounted(() => {
 //   getFundSubjectList()
