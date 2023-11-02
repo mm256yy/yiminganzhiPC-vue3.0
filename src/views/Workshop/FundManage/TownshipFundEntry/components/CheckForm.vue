@@ -65,9 +65,15 @@
           highlightCurrentRow
           @register="register"
         >
-          <template #receipt>
-            <div class="proof-container" v-for="(item, index) in relocateOtherPic" :key="index">
-              <ElImage :src="item.url" @click="onShowImage" alt="相关凭证"
+          <template #paymentTime="{ row }">
+            <div> {{ dayjs(row.paymentTime).format('YYYY-MM-DD HH:mm:ss') }}</div>
+          </template>
+          <template #receipt="{ row }">
+            <div class="proof-container">
+              <ElImage
+                :src="row.receipt ? JSON.parse(row.receipt).url : ''"
+                @click="onShowImage"
+                alt="相关凭证"
             /></div>
           </template>
         </Table>
@@ -81,13 +87,13 @@
 
 <script setup lang="ts">
 import { ElDialog, ElForm, ElFormItem, FormInstance, FormRules, ElImage } from 'element-plus'
-import { ref, reactive, nextTick, computed, watch } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import type { TownshipFundEntryDtoType } from '@/api/fundManage/townshipFundEntry-types'
 import { getFundGrantFindByDoorNo } from '@/api/fundManage/townshipFundEntry-service'
-
+import dayjs from 'dayjs'
 interface PropsType {
   show: boolean
   row?: TownshipFundEntryDtoType | null | undefined
@@ -123,28 +129,24 @@ const onShowImage = () => {
   dialogVisible.value = true
 }
 
-const { register, tableObject } = useTable()
+const { register, tableObject, methods } = useTable()
 
 // 规则校验
 const rules = reactive<FormRules>({})
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
 }
 
 watch(
   () => props.show,
-  (val) => {
+  async (val) => {
     if (val) {
       form.value = props.row
       if (props.row) {
-        getFundGrantFindByDoorNo(props.row.doorNo).then((res) => {
-          tableObject.tableList = res.data
-          relocateOtherPic.value = res.data?.receipt ? JSON.parse(res.data?.receipt) : []
-        })
+        let res = await getFundGrantFindByDoorNo(props.row['doorNo'])
+        tableObject.tableList = res
+        console.log(tableObject.tableList)
       }
     }
   }

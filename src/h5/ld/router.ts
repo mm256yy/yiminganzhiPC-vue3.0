@@ -205,8 +205,8 @@ const router = createRouter({
       }
     },
     {
-      path: '/phoneLogin',
-      name: 'phoneLogin',
+      path: '/login',
+      name: 'login',
       component: () => import('../views/login/phoneLogin.vue'),
       meta: {
         name: '登录'
