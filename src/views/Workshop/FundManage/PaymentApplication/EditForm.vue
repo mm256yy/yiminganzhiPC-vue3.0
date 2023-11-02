@@ -15,7 +15,7 @@
       label-width="150px"
       :label-position="'right'"
       :rules="rules"
-      :disabled="actionType !== 'add'"
+      :disabled="actionType == 'view'"
     >
       <ElFormItem label="申请类型:" required prop="applyType">
         <el-radio-group class="ml-4" v-model="form.applyType">

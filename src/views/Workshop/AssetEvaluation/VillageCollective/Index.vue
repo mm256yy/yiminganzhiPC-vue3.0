@@ -82,11 +82,16 @@
             </span>
           </div>
         </template>
-        <template #reportDate="{ row }">
-          <div>{{ formatTime(row.reportDate, 'yyyy-MM-dd HH:mm:ss') }}</div>
+        <template #estimateTime="{ row }">
+          <div>{{ formatTime(row.estimateTime, 'yyyy-MM-dd HH:mm:ss') }}</div>
         </template>
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
+        </template>
+        <template #estimateStatus="{ row }">
+          <div :class="['ml-5', row.estimateStatus == 1 ? '' : 'red']">{{
+            row.estimateStatus == 1 ? '已评估' : '未评估'
+          }}</div>
         </template>
 
         <template #filling="{ row }">
@@ -282,22 +287,22 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
-    label: '填报人',
+    field: 'estimateUser',
+    label: '评估人',
     search: {
       show: false
     }
   },
   {
-    field: 'implementFillStatus',
-    label: '填报状态',
+    field: 'estimateStatus',
+    label: '评估状态',
     search: {
       show: false
     }
   },
   {
-    field: 'reportDate',
-    label: '填报时间',
+    field: 'estimateTime',
+    label: '评估时间',
     search: {
       show: false
     },
