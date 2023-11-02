@@ -481,7 +481,6 @@ const onClose = (flag = false) => {
   amoutPrice.value = 0
   parmasLists.value.paymentObjectList = []
   parmasLists.value.amount = 0
-  console.log(formRef.value.resetFields())
 
   emit('close', flag)
 }

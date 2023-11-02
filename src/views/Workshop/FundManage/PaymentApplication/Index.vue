@@ -76,6 +76,7 @@
     </div>
 
     <EditForm
+      v-if="dialog"
       :show="dialog"
       @close="onEditFormClose"
       :actionType="actionType"
