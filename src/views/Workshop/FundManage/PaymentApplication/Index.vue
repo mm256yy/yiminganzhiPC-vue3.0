@@ -118,12 +118,7 @@ const parmasList = ref<any[]>([])
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
     if (res) {
-      fundAccountList.value = res.content.reduce((pre, item) => {
-        if (item.name != '概算外费用') {
-          pre.push(item)
-        }
-        return pre
-      }, [])
+      fundAccountList.value = res.content
       console.log(fundAccountList.value, '资金列表数据')
     }
   })
