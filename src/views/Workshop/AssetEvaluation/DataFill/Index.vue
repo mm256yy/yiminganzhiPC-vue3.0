@@ -240,6 +240,8 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
+    getRefresh()
+    console.log('baseInfo', baseInfo)
   })
 }
 
@@ -253,10 +255,12 @@ const onReportTabClick = (tabItem) => {
 }
 
 onMounted(() => {
+  getRefresh()
+})
+
+const getRefresh = () => {
   getFillingStatus()
   role.value = getRole()
-  // console.log('t-type', type)
-  // console.log('t-role', role.value)
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
@@ -290,7 +294,7 @@ onMounted(() => {
       tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
     }
   }
-})
+}
 
 const onBack = () => {
   back()
