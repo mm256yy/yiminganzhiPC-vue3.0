@@ -325,7 +325,7 @@
             >
               <div class="name">{{ item.remark }}</div>
               <div class="names">{{ item.creater }}</div>
-              <div class="time">{{ renderTime(item.createdDate) }}</div>
+              <div class="time">{{ dayjs(item.createdDate).format('YYYY-MM-DD hh:mm:ss') }}</div>
             </div>
           </div>
         </div>
