@@ -126,9 +126,10 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
+  console.log(data)
 
   for (let key in params) {
-    if (!params[key]) {
+    if (!params[key] && params[key] !== 0) {
       delete params[key]
     }
   }
