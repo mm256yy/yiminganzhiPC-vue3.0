@@ -66,13 +66,13 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #implementFillStatus="{ row }">
+        <template #estimateStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="['status', row.estimateStatus === '1' ? 'status-suc' : 'status-err']"
             ></span>
             <span :class="[row.estimateStatus === '1' ? '' : 'red']">
-              {{ row.estimateStatus === '1' ? '已填报' : '未填报' }}
+              {{ row.estimateStatus === '1' ? '已评估' : '未评估' }}
             </span>
             <span
               class="!hidden"
@@ -88,14 +88,9 @@
         <template #locationType="{ row }">
           <div>{{ getLocationText(row.locationType) }}</div>
         </template>
-        <template #estimateStatus="{ row }">
-          <div :class="['ml-5', row.estimateStatus == 1 ? '' : 'red']">{{
-            row.estimateStatus == 1 ? '已评估' : '未评估'
-          }}</div>
-        </template>
 
         <template #filling="{ row }">
-          <div class="filling-btn" @click="fillData(row)">数据填报</div>
+          <div class="filling-btn" @click="fillData(row)">数据评估</div>
         </template>
       </Table>
     </div>
@@ -396,7 +391,8 @@ const fillData = (row) => {
       projectId,
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'VillageInfoC'
+      type: 'VillageInfoC',
+      estimateStatus: row.estimateStatus
     }
   })
 }
