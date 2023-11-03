@@ -240,8 +240,7 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
-    getRefresh()
-    console.log('baseInfo', baseInfo)
+    getFillingStatus()
   })
 }
 
@@ -321,6 +320,12 @@ const getStatus = (data: any) => {
     }
     if (data.treeStatus === '1') {
       tabsTypeCopy[3].active = true // 零星林（果）木评估
+    }
+    if (data.landStatus === '1') {
+      tabsTypeCopy[4].active = true // 土地
+    }
+    if (data.landSeedlingStatus === '1') {
+      tabsTypeCopy[5].active = true // 土地
     }
   } else if (type === 'Enterprise' || type === 'IndividualB') {
     //企业或个体工商户

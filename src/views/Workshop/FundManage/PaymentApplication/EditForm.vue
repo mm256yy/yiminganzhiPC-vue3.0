@@ -15,7 +15,7 @@
       label-width="150px"
       :label-position="'right'"
       :rules="rules"
-      :disabled="actionType !== 'add'"
+      :disabled="actionType == 'view'"
     >
       <ElFormItem label="申请类型:" required prop="applyType">
         <el-radio-group class="ml-4" v-model="form.applyType">
@@ -46,7 +46,7 @@
         <ElTreeSelect
           class="!w-full"
           v-model="form.funSubjectId"
-          :data="props.fundAccountList"
+          :data="form.type == '1' ? fundAccountLists : props.fundAccountList"
           node-key="code"
           :props="{ value: 'code', label: 'name' }"
           showCheckbox
@@ -391,6 +391,7 @@ const otherData = ref<any[]>([])
 const amoutPrice = ref<any>()
 const num = ref<any>()
 const tableData = ref<any[]>([])
+let fundAccountLists = ref([])
 // console.log(dictObj.value, '111')
 
 const form = ref<any>({})
@@ -417,6 +418,12 @@ watch(
       form.value = { ...(val as {}) }
       console.log(form.value, 'bbq')
       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
+      fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
+        if (item.name != '概算外费用') {
+          pre.push(item)
+        }
+        return pre
+      }, [])
       // if (props.actionType === 'edit') {{
       //   form.value.nodeDtoList=
       // }
@@ -481,7 +488,6 @@ const onClose = (flag = false) => {
   amoutPrice.value = 0
   parmasLists.value.paymentObjectList = []
   parmasLists.value.amount = 0
-  console.log(formRef.value.resetFields())
 
   emit('close', flag)
 }
