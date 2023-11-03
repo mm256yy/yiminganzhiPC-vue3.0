@@ -24,6 +24,7 @@ export const getNewsListId = (id) => {
 //乡愁列表
 export const getHomesickness = (): Promise<any> => {
   return request.get({
-    url: `/h5/getHomesicknessList?size=9999`
+    url: `/h5/getHomesicknessList`,
+    params: { sort: ['createdDate,desc'], size: 9999 }
   })
 }
