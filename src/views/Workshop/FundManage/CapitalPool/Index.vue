@@ -30,11 +30,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParamss"
-        @reset="setSearchParams({ status: 1 })"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -79,8 +75,8 @@
             row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-        <template #action>
-          <ElButton type="primary"> 查看 </ElButton>
+        <template #action="{ row }">
+          <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
         </template>
       </Table>
     </div>
@@ -114,15 +110,33 @@ const { register, tableObject, methods } = useTable({
 
 const { getList, setSearchParams } = methods
 
-setSearchParams({ status: 1 })
-let setSearchParamss = (data) => {
-  for (let i in data) {
-    if (!data[i]) {
-      delete data[i]
+tableObject.params = {
+  status: 1
+}
+
+getList()
+
+const onSearch = (data) => {
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
     }
   }
-  setSearchParams({ ...data, status: 1 })
+
+  setSearchParams({ ...params })
 }
+
+const onReset = () => {
+  tableObject.params = {
+    status: 1
+  }
+  setSearchParams({})
+}
+
 const schema = reactive<CrudSchema[]>([
   {
     field: 'type',

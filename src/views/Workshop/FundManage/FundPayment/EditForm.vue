@@ -312,6 +312,7 @@ const subjectArray = computed(() => {
       // 概算内
       return props.fundAccountList.filter((item) => item.type === '1')
     }
+
     return props.fundAccountList
   }
   return []

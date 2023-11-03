@@ -316,11 +316,16 @@
             <div>提交时间</div>
             <!-- </div> -->
           </div>
-          <div class="question-list" @click="handleClickItem(5)">
-            <div class="item" v-for="item in questionList" :key="item.id">
+          <div class="question-list">
+            <div
+              class="item"
+              v-for="item in questionList"
+              :key="item.id"
+              @click="onViewFeedBack(item)"
+            >
               <div class="name">{{ item.remark }}</div>
               <div class="names">{{ item.creater }}</div>
-              <div class="time">{{ renderTime(item.createdDate) }}</div>
+              <div class="time">{{ dayjs(item.createdDate).format('YYYY-MM-DD hh:mm:ss') }}</div>
             </div>
           </div>
         </div>
@@ -717,6 +722,10 @@ const handleClickItem = (type: number) => {
     6: 'SmartReport' // 智慧报表
   }
   push({ name: pathMap[type] })
+}
+
+const onViewFeedBack = (item: any) => {
+  push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
 
 const renderTime = (date: any) => {
@@ -1167,9 +1176,11 @@ const questionList = ref<any>([
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap;
     }
+
     .names {
       margin-left: 70px;
     }
+
     .time {
       font-size: 14px;
       color: rgba(19, 19, 19, 0.4);

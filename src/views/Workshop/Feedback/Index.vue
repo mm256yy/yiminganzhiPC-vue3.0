@@ -45,7 +45,7 @@
           <div>{{ row.status === '0' ? '未处理' : row.status === '1' ? '已解决' : '未解决' }}</div>
         </template>
         <template #createdDate="{ row }">
-          <div>{{ dayjs(row.createdDate).format('YYYY-MM-DD') }}</div>
+          <div>{{ dayjs(row.createdDate).format('YYYY-MM-DD hh:mm:ss') }}</div>
         </template>
         <template #action="{ row }">
           <TableEditColumn

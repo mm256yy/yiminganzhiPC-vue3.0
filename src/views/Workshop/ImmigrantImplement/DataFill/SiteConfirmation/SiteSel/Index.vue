@@ -169,7 +169,7 @@
         <ElTableColumn label="操作" width="200" align="center" header-align="center" fixed="right">
           <template #default="{ row }">
             <ElButton type="primary" @click="enterRoomNo(row)">录入房号</ElButton>
-            <ElButton type="primary" @click="onSave(row)"> 保存 </ElButton>
+            <!-- <ElButton type="primary" @click="onSave(row)"> 保存 </ElButton> -->
           </template>
         </ElTableColumn>
       </ElTable>

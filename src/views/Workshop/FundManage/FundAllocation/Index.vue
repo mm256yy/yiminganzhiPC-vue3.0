@@ -5,11 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">资金预拨</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams({ entryType: 2 })"
-        @reset="setSearchParams({ entryType: 2 })"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -38,6 +34,7 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
+        show-overflow-tooltip
         @register="register"
       >
         <template #recordTime="{ row }">
@@ -125,6 +122,27 @@ tableObject.params = {
 // 获取列表
 setSearchParams({ entryType: 2 })
 
+const onSearch = (data) => {
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+  sumAmountApi()
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  setSearchParams({ entryType: 2 })
+  sumAmountApi()
+}
+
 const onDelRow = async (row: any, multiple: boolean) => {
   tableObject.currentRow = row
   const { delList, getSelections } = methods
@@ -161,7 +179,8 @@ const sumAmountApi = async () => {
     sumAmount.value = await getSumAmountApi({
       projectId,
       type: '1',
-      entryType: 2
+      entryType: 2,
+      ...tableObject.params
     })
   } catch (error) {}
 }
@@ -316,7 +335,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    width: 160,
+    width: 250,
     field: 'createdDate',
     label: '创建时间',
     search: {
