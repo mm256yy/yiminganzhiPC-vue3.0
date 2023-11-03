@@ -348,6 +348,30 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'signStatus',
+    label: '是否签字',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        placeholder: '请选择',
+        options: [
+          {
+            label: '是',
+            value: '1'
+          },
+          {
+            label: '否',
+            value: '2'
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
     field: 'reportStatus',
     label: '填报状态',
     search: {

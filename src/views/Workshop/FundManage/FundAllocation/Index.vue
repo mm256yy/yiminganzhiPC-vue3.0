@@ -134,11 +134,13 @@ const onSearch = (data) => {
   }
 
   setSearchParams({ ...params })
+  sumAmountApi()
 }
 
 const onReset = () => {
   tableObject.params = {}
   setSearchParams({ entryType: 2 })
+  sumAmountApi()
 }
 
 const onDelRow = async (row: any, multiple: boolean) => {
@@ -177,7 +179,8 @@ const sumAmountApi = async () => {
     sumAmount.value = await getSumAmountApi({
       projectId,
       type: '1',
-      entryType: 2
+      entryType: 2,
+      ...tableObject.params
     })
   } catch (error) {}
 }
