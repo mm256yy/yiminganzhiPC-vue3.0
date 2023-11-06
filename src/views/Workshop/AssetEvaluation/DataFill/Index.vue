@@ -260,7 +260,6 @@ onMounted(() => {
 const getRefresh = () => {
   getFillingStatus()
   role.value = getRole()
-
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
