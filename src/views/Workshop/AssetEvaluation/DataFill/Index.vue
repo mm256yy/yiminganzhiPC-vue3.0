@@ -293,6 +293,8 @@ const getRefresh = () => {
       tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
     }
   }
+  // 初始化tab页面显示
+  tabCurrentId.value = tabsType.value[0].id
 }
 
 const onBack = () => {
