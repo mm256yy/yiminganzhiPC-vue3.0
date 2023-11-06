@@ -99,6 +99,7 @@ const onTabClick = (tabItem) => {
     return
   }
   tabCurrentId.value = tabItem.id
+  tabListId.value = 0
   console.log(tabCurrentId.value, '11111')
 }
 const onTabList = (tabItem) => {

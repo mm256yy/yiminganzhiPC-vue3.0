@@ -68,13 +68,13 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #implementFillStatus="{ row }">
+        <template #estimateStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
               :class="['status', row.estimateStatus === '1' ? 'status-suc' : 'status-err']"
             ></span>
             <span :class="[row.estimateStatus === '1' ? '' : 'red']">
-              {{ row.estimateStatus === '1' ? '已填报' : '未填报' }}
+              {{ row.estimateStatus === '1' ? '已评估' : '未评估' }}
             </span>
             <span
               class="!hidden"
@@ -84,11 +84,11 @@
             </span>
           </div>
         </template>
-        <template #reportDate="{ row }">
-          <div>{{ formatTime(row.reportDate, 'yyyy-MM-dd HH:mm:ss') }}</div>
+        <template #estimateTime="{ row }">
+          <div>{{ formatTime(row.estimateTime, 'yyyy-MM-dd HH:mm:ss') }}</div>
         </template>
         <template #filling="{ row }">
-          <div class="filling-btn" @click="fillData(row)">数据填报</div>
+          <div class="filling-btn" @click="fillData(row)">数据评估</div>
         </template>
       </Table>
     </div>
@@ -275,22 +275,22 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
-    label: '填报人',
+    field: 'estimateUser',
+    label: '评估人',
     search: {
       show: false
     }
   },
   {
-    field: 'implementFillStatus',
-    label: '填报状态',
+    field: 'estimateStatus',
+    label: '评估状态',
     search: {
       show: false
     }
   },
   {
-    field: 'reportDate',
-    label: '填报时间',
+    field: 'estimateTime',
+    label: '评估时间',
     search: {
       show: false
     },
@@ -298,7 +298,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'filling',
-    label: '填报',
+    label: '评估',
     fixed: 'right',
     width: 115,
     search: {
@@ -384,7 +384,8 @@ const fillData = (row) => {
       projectId,
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'IndividualB'
+      type: 'IndividualB',
+      estimateStatus: row.estimateStatus
     }
   })
 }

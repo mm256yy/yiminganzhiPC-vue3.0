@@ -240,6 +240,7 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
+    getFillingStatus()
   })
 }
 
@@ -253,10 +254,13 @@ const onReportTabClick = (tabItem) => {
 }
 
 onMounted(() => {
+  getRefresh()
+})
+
+const getRefresh = () => {
   getFillingStatus()
   role.value = getRole()
-  // console.log('t-type', type)
-  // console.log('t-role', role.value)
+
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
@@ -290,7 +294,9 @@ onMounted(() => {
       tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
     }
   }
-})
+  // 初始化tab页面显示
+  tabCurrentId.value = tabsType.value[0].id
+}
 
 const onBack = () => {
   back()
@@ -317,6 +323,12 @@ const getStatus = (data: any) => {
     }
     if (data.treeStatus === '1') {
       tabsTypeCopy[3].active = true // 零星林（果）木评估
+    }
+    if (data.landStatus === '1') {
+      tabsTypeCopy[4].active = true // 土地
+    }
+    if (data.landSeedlingStatus === '1') {
+      tabsTypeCopy[5].active = true // 土地
     }
   } else if (type === 'Enterprise' || type === 'IndividualB') {
     //企业或个体工商户
