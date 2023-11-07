@@ -34,7 +34,7 @@
 
           <div class="common-form-item">
             <div class="common-label">工作阶段：</div>
-            <div class="common-value"> {{ detail.type }} </div>
+            <div class="common-value"> {{ detail.typeText }} </div>
           </div>
 
           <div class="common-form-item">

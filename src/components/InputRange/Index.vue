@@ -54,10 +54,8 @@ const emit = defineEmits(['update:modelValue'])
 watch(
   () => props.modelValue,
   (val: Array<number | undefined>) => {
-    if (val && Array.isArray(val) && val.length === 2) {
-      val1.value = val[0]
-      val2.value = val[1]
-    }
+    val1.value = val[0] || undefined
+    val2.value = val[1] || undefined
   }
 )
 
@@ -69,7 +67,6 @@ watch([val1, val2], ([value1, value2]) => {
       emit('update:modelValue', [undefined, undefined])
       return
     } else {
-      console.log([value1, value2], '值')
       emit('update:modelValue', [value1, value2])
     }
   } else {
