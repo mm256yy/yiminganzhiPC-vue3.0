@@ -5,14 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        expand
-        :defaultExpand="false"
-        :expand-field="'card'"
-        @search="onSearch"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" expand @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -265,7 +258,7 @@ tableObject.params = {
   projectId
 }
 
-// getList()
+getList()
 setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
@@ -288,6 +281,13 @@ const onUpdateDistrict = () => {
 const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({ type: 'PeasantHousehold' })
   headInfo.value = info
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({ type: 'PeasantHousehold' })
 }
 
 onMounted(() => {
@@ -358,11 +358,11 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '是',
-            value: '1'
+            value: 'Sign'
           },
           {
             label: '否',
-            value: '2'
+            value: 'UnSign'
           }
         ]
       }
@@ -599,6 +599,7 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
+  console.log()
   // 处理参数
   let params = {
     ...data

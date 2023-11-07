@@ -40,7 +40,7 @@
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
 
-            <Icon v-if="item.active" class="ml-2px" icon="gg:check-o" color=" #3e73ec" />
+            <Icon v-if="item.active" class="ml-2px" icon="gg:check-o" color="#3e73ec" />
           </div>
         </div>
       </div>
