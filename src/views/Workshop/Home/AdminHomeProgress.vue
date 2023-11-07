@@ -160,7 +160,7 @@ const getVillageScheduleList = async () => {
     incompleteNumberList.value.push(item.incompleteNumber)
     completeNumberList.value.push(item.completeNumber)
   })
-  // householdOption.value.xAxis.data = dataList.value
+  householdOption.value.xAxis.data = dataList.value
   console.log(householdOption.value.xAxis.data, '11111')
   householdOption.value.series[0].data = completeNumberList.value
   householdOption.value.series[1].data = incompleteNumberList.value
@@ -380,23 +380,23 @@ const householdOption = ref({
   xAxis: {
     type: 'category',
     data: [
-      '殿前村',
-      '大畈村',
-      '后染村',
-      '里镜村',
-      '潭角村',
-      '下潘村',
-      '小泉村',
-      '竹潭村',
-      '安山村',
-      '荷塘村',
-      '市中社',
-      '钟楼社',
-      '桐中井',
-      '里东村',
-      '姚宫村',
-      '琅珂村',
-      '大塘坑'
+      // '殿前村',
+      // '大畈村',
+      // '后染村',
+      // '里镜村',
+      // '潭角村',
+      // '下潘村',
+      // '小泉村',
+      // '竹潭村',
+      // '安山村',
+      // '荷塘村',
+      // '市中社',
+      // '钟楼社',
+      // '桐中井',
+      // '里东村',
+      // '姚宫村',
+      // '琅珂村',
+      // '大塘坑'
     ]
   },
   yAxis: {
@@ -406,7 +406,7 @@ const householdOption = ref({
   series: [
     {
       name: '已完成',
-      data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      data: [],
       type: 'bar',
       barWidth: 18,
       // stack: 'all',
@@ -430,7 +430,7 @@ const householdOption = ref({
     },
     {
       name: '未完成',
-      data: [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      data: [],
 
       type: 'bar',
       barWidth: 18,
@@ -465,12 +465,12 @@ const onBack = () => {
 /deep/ .el-tabs__nav .el-tabs__item {
   width: 80%;
   height: 22px;
-  font-size: 16px;
   font-family: PingFang SC-Bold, PingFang SC;
-  text-align: center;
+  font-size: 16px;
   font-weight: bold;
   // color: #3e73ec;
   line-height: 19px;
+  text-align: center;
   // -webkit-background-clip: text;
   // -webkit-text-fill-color: transparent;
 }
@@ -507,6 +507,7 @@ const onBack = () => {
   display: flex;
   align-items: center;
 }
+
 .demo-tabs {
   margin-top: 20px;
 }
