@@ -59,10 +59,7 @@ export const updateFwHouseApi = (data: HouseDtoType): Promise<HouseDtoType> => {
  */
 export const delHouseByIdApi = (id: number, reason?: string): Promise<void> => {
   return request.post({
-    url: `/immigrant_house/delete/${id}`,
-    data: {
-      reason
-    }
+    url: `/immigrant_house/delete/${id}?reason=${reason}`
   })
 }
 

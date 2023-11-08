@@ -300,6 +300,7 @@
             :on-remove="removeFile1"
             :on-preview="imgPreview"
             :class="[actionType === 'view' ? 'upload' : '']"
+            :on-change="onchange"
           >
             <template #trigger v-if="actionType !== 'view'">
               <div class="card-img-box">
@@ -354,6 +355,7 @@
             :on-remove="removeFile2"
             :on-preview="imgPreview"
             :class="[actionType === 'view' ? 'upload' : '']"
+            :on-change="onchange"
           >
             <template #trigger v-if="actionType !== 'view'">
               <div class="card-img-box">
@@ -384,6 +386,7 @@
             :on-remove="removeFile3"
             :class="[actionType === 'view' ? 'upload' : '']"
             :on-preview="imgPreview"
+            :on-change="onchange"
           >
             <template #trigger v-if="actionType !== 'view'">
               <div class="card-img-box">
@@ -415,6 +418,7 @@
             :before-remove="beforeRemove"
             :on-remove="removeFile4"
             :on-preview="imgPreview"
+            :on-change="onchange"
           >
             <template #trigger v-if="actionType !== 'view'">
               <div class="card-img-box">
@@ -766,6 +770,26 @@ const submit = async (data: HouseDtoType) => {
   }
   ElMessage.success('操作成功！')
   onClose(true)
+}
+let onchange = (file, fileList) => {
+  let fileName = file.name
+  let uid = file.uid
+  let pos = fileName.lastIndexOf('.')
+  let lastName = fileName.substring(pos, fileName.length)
+  if (
+    lastName.toLowerCase() !== '.jpg' &&
+    lastName.toLowerCase() !== '.jpeg' &&
+    lastName.toLowerCase() !== '.png'
+  ) {
+    ElMessage.error('文件必须为.jpg,.jpeg,.png类型')
+    // this.resetCompressData()
+    for (var i = 0; i < fileList.length; i++) {
+      if (fileList[i].uid == uid) {
+        fileList.splice(i, 1)
+      }
+    }
+    return
+  }
 }
 </script>
 <style lang="less">
