@@ -252,7 +252,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-const { getList, setSearchParams, getSelections } = methods
+const { setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId
