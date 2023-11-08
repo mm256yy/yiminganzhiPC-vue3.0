@@ -258,7 +258,7 @@ tableObject.params = {
   projectId
 }
 
-getList()
+// getList()
 setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
@@ -567,7 +567,7 @@ const onEditRow = (row: LandlordDtoType) => {
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
-    getList()
+    setSearchParams({ type: 'PeasantHousehold' })
   }
   getLandlordHeadInfo()
 }
