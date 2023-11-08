@@ -567,7 +567,7 @@ const onEditRow = (row: LandlordDtoType) => {
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
-    getList()
+    setSearchParams({ type: 'PeasantHousehold' })
   }
   getLandlordHeadInfo()
 }
@@ -620,7 +620,7 @@ const onSearch = (data) => {
   }
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(districtTree.value, params.code, (item) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
