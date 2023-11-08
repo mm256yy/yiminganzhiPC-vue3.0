@@ -377,7 +377,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '企业编码',
     width: 100,
     search: {

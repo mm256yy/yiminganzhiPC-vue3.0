@@ -53,8 +53,8 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #doorNo="{ row }">
-          {{ filterViewDoorNo(row) }}
+        <template #showDoorNo="{ row }">
+          {{ filterViewDoorNos(row) }}
         </template>
         <template #regionText="{ row }">
           <div>
@@ -196,7 +196,7 @@ import type {
   LandlordHeadInfoType,
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
-import { filterViewDoorNo, formatDate } from '@/utils/index'
+import { filterViewDoorNos, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
 const router = useRouter()
@@ -426,7 +426,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {
