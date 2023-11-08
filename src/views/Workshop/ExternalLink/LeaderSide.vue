@@ -716,7 +716,7 @@ const handleClickItem = (type: number) => {
     5: 'Feedback', //反馈管理
     6: 'SmartReport' // 智慧报表
   }
-  push({ name: pathMap[type] })
+  push({ name: pathMap[type], query: { actualList: impProgressOption.value.series[0].data } })
 }
 
 const renderTime = (date: any) => {
@@ -1167,9 +1167,11 @@ const questionList = ref<any>([
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap;
     }
+
     .names {
       margin-left: 70px;
     }
+
     .time {
       font-size: 14px;
       color: rgba(19, 19, 19, 0.4);
