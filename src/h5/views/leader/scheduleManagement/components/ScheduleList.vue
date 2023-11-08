@@ -2,19 +2,19 @@
   <div class="flex-col section">
     <div class="flex-row items-center">
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="资格认定" />
+        <LiquidBall title="资格认定" :value="datas.progressManagementDto[0]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowRight" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="资产评估" />
+        <LiquidBall title="资产评估" :value="datas.progressManagementDto[1]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowRight" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="安置确认" />
+        <LiquidBall title="安置确认" :value="datas.progressManagementDto[2]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowRight" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="择址确认" />
+        <LiquidBall title="择址确认" :value="datas.progressManagementDto[3]?.actual" />
       </div>
     </div>
     <div class="right-arrow">
@@ -22,19 +22,19 @@
     </div>
     <div class="flex-row items-center">
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="生产安置" />
+        <LiquidBall title="生产安置" :value="datas.progressManagementDto[4]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowLeft" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="搬迁安置" />
+        <LiquidBall title="搬迁安置" :value="datas.progressManagementDto[5]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowLeft" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="动迁协议" />
+        <LiquidBall title="动迁协议" :value="datas.progressManagementDto[6]?.actual" />
       </div>
       <img class="image-arrow" :src="iconArrowLeft" />
       <div class="flex-col items-center section-schedule">
-        <LiquidBall title="腾空过渡" />
+        <LiquidBall title="腾空过渡" :value="datas.progressManagementDto[7]?.actual" />
       </div>
     </div>
     <!--进度预警-->
@@ -88,7 +88,7 @@ import iconArrowBottom from '@/h5/assets/imgs/icon_arrow_bottom.png'
 import iconArrowLeft from '@/h5/assets/imgs/icon_arrow_left.png'
 import iconArrowRight from '@/h5/assets/imgs/icon_arrow_right.png'
 import LiquidBall from './LiquidBall.vue'
-import { getWarning } from '../service'
+import { getWarning, getLeadershipScreen } from '../service'
 import { ref, onMounted } from 'vue'
 
 const items = ref<any[]>([
@@ -110,9 +110,14 @@ let getWarnings = async () => {
   console.log(data)
   items.value = data
 }
+let datas: any = ref({ progressManagementDto: [] })
 onMounted(() => {
   getWarnings()
+  getLeadershipScreens()
 })
+let getLeadershipScreens = async () => {
+  datas.value = await getLeadershipScreen({})
+}
 </script>
 
 <style lang="less" scoped>
