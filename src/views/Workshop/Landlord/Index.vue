@@ -258,7 +258,6 @@ tableObject.params = {
   projectId
 }
 
-// getList()
 setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
