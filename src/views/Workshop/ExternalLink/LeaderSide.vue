@@ -721,7 +721,7 @@ const handleClickItem = (type: number) => {
     5: 'Feedback', //反馈管理
     6: 'SmartReport' // 智慧报表
   }
-  push({ name: pathMap[type] })
+  push({ name: pathMap[type], query: { actualList: impProgressOption.value.series[0].data } })
 }
 
 const onViewFeedBack = (item: any) => {

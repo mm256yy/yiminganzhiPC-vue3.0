@@ -52,7 +52,7 @@
 
       <ElTable
         :data="tableData"
-        :loading="tableLoading"
+        v-loading="tableLoading"
         row-key="id"
         style="width: 100%"
         class="mt-5"
@@ -174,10 +174,9 @@ const onSearch = () => {
 
 // 重置
 const onReset = () => {
+  tableData.value = []
+  formRef.value?.resetFields()
   initData()
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
 }
 
 /**

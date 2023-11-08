@@ -11,17 +11,17 @@
     <div class="between">
       <div class="between" @click="checktab(-1)">
         <div class="header-list">
-          <img :src="water_first" />
-          资格认定
-        </div></div
-      >
-      <div class="between" @click="checktab(index)" v-for="(item, index) in headList" :key="index">
+          <!-- <img :src="water_first" />
+          资格认定 -->
+          <LiquidBall title="资格认定" :values="actualList[0]" /> </div
+      ></div>
+      <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
         <div class="arrow"><img :src="arrow" /></div>
         <div class="header-list">
-          <img :src="item.url" />
-          {{ item.name }}
-        </div></div
-      >
+          <!-- <img :src="item.url" /> -->
+          <!-- {{ item.name }} -->
+          <LiquidBall :title="item.name" :values="item.values" /> </div
+      ></div>
     </div>
     <div class="between">
       <div class="common-color background-l">
@@ -108,16 +108,16 @@
 
 <script lang="ts" setup>
 import Echart from '@/components/Echart/src/Echart.vue'
-import water_first from '@/assets/imgs/water_first.png'
-import water_two from '@/assets/imgs/water_two.png'
-import water_three from '@/assets/imgs/water_three.png'
-import water_four from '@/assets/imgs/water_four.png'
-import water_five from '@/assets/imgs/water_five.png'
-import water_six from '@/assets/imgs/water_six.png'
-import water_seven from '@/assets/imgs/water_seven.png'
-import water_eight from '@/assets/imgs/water_eight.png'
+// import water_first from '@/assets/imgs/water_first.png'
+// import water_two from '@/assets/imgs/water_two.png'
+// import water_three from '@/assets/imgs/water_three.png'
+// import water_four from '@/assets/imgs/water_four.png'
+// import water_five from '@/assets/imgs/water_five.png'
+// import water_six from '@/assets/imgs/water_six.png'
+// import water_seven from '@/assets/imgs/water_seven.png'
+// import water_eight from '@/assets/imgs/water_eight.png'
 import arrow from '@/assets/imgs/arrow.png'
-
+import LiquidBall from './LiquidBall.vue'
 // import icon_first from '@/assets/imgs/home/icon_first.png' // 引入工作粗比拼晾晒 No.1 icon
 // import icon_second from '@/assets/imgs/home/icon_second.png' // 引入工作粗比拼晾晒 No.2 icon
 // import icon_third from '@/assets/imgs/home/icon_third.png' // 引入工作粗比拼晾晒 No.3 icon
@@ -140,7 +140,8 @@ import {
 import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-
+const { currentRoute } = useRouter()
+const { actualList } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
@@ -160,7 +161,7 @@ const getVillageScheduleList = async () => {
     incompleteNumberList.value.push(item.incompleteNumber)
     completeNumberList.value.push(item.completeNumber)
   })
-  // householdOption.value.xAxis.data = dataList.value
+  householdOption.value.xAxis.data = dataList.value
   console.log(householdOption.value.xAxis.data, '11111')
   householdOption.value.series[0].data = completeNumberList.value
   householdOption.value.series[1].data = incompleteNumberList.value
@@ -172,8 +173,12 @@ const getScheduleRankList = async () => {
     return Object.assign({}, { name: item.name, number: item.completeNumber })
   })
 }
-
+const newarr = ref<any>([])
 onMounted(() => {
+  actualList.shift()
+  newarr.value = actualList.map((v, index) => {
+    return { name: headList.value[index].name, values: v }
+  })
   getWarningList()
   getVillageScheduleList()
   getScheduleRankList()
@@ -347,16 +352,16 @@ const workGroupOptions = ref<any>([
   // { index: 4, name: '潘永浩', progress: 70, number: 98, url: icon_four },
   // { index: 5, name: '董羽坤', progress: 65, number: 85, url: icon_five }
 ])
-const headList = [
+const headList = ref([
   // { url: water_first, name: '资格认定' },
-  { url: water_two, name: '资产评估' },
-  { url: water_three, name: '安置确认' },
-  { url: water_four, name: '择址确认' },
-  { url: water_five, name: '腾空过渡' },
-  { url: water_six, name: '动迁协议' },
-  { url: water_seven, name: '搬迁安置' },
-  { url: water_eight, name: '生产安置' }
-]
+  { name: '资产评估' },
+  { name: '安置确认' },
+  { name: '择址确认' },
+  { name: '腾空过渡' },
+  { name: '动迁协议' },
+  { name: '搬迁安置' },
+  { name: '生产安置' }
+])
 const householdOption = ref({
   tooltip: {
     trigger: 'item'
@@ -380,23 +385,23 @@ const householdOption = ref({
   xAxis: {
     type: 'category',
     data: [
-      '殿前村',
-      '大畈村',
-      '后染村',
-      '里镜村',
-      '潭角村',
-      '下潘村',
-      '小泉村',
-      '竹潭村',
-      '安山村',
-      '荷塘村',
-      '市中社',
-      '钟楼社',
-      '桐中井',
-      '里东村',
-      '姚宫村',
-      '琅珂村',
-      '大塘坑'
+      // '殿前村',
+      // '大畈村',
+      // '后染村',
+      // '里镜村',
+      // '潭角村',
+      // '下潘村',
+      // '小泉村',
+      // '竹潭村',
+      // '安山村',
+      // '荷塘村',
+      // '市中社',
+      // '钟楼社',
+      // '桐中井',
+      // '里东村',
+      // '姚宫村',
+      // '琅珂村',
+      // '大塘坑'
     ]
   },
   yAxis: {
@@ -406,7 +411,7 @@ const householdOption = ref({
   series: [
     {
       name: '已完成',
-      data: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      data: [],
       type: 'bar',
       barWidth: 18,
       // stack: 'all',
@@ -430,7 +435,7 @@ const householdOption = ref({
     },
     {
       name: '未完成',
-      data: [1, 1, 1, 1, 1, 1, 1, 1, 1],
+      data: [],
 
       type: 'bar',
       barWidth: 18,
@@ -465,12 +470,12 @@ const onBack = () => {
 /deep/ .el-tabs__nav .el-tabs__item {
   width: 80%;
   height: 22px;
-  font-size: 16px;
   font-family: PingFang SC-Bold, PingFang SC;
-  text-align: center;
+  font-size: 16px;
   font-weight: bold;
   // color: #3e73ec;
   line-height: 19px;
+  text-align: center;
   // -webkit-background-clip: text;
   // -webkit-text-fill-color: transparent;
 }
@@ -507,6 +512,7 @@ const onBack = () => {
   display: flex;
   align-items: center;
 }
+
 .demo-tabs {
   margin-top: 20px;
 }
