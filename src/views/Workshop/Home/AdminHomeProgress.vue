@@ -308,10 +308,15 @@ const checktab = (index) => {
   if (index == -1) {
     type.value = 1
     getVillageScheduleList()
+    parmas.value = { type: type.value }
+    getScheduleRankList()
+    flag.value = false
   } else {
     type.value = index + 2
     console.log(type.value)
     getVillageScheduleList()
+    parmas.value = { type: type.value }
+    getScheduleRankList()
     if (index == 0) {
       flag.value = true
     } else {
