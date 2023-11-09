@@ -14,17 +14,17 @@
       >
         <ElRow>
           <ElCol :span="6">
-            <ElFormItem label="开户名" prop="relation">
+            <ElFormItem label="开户名" prop="accountName">
               <ElInput v-model="form.accountName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="开户行" prop="relation">
+            <ElFormItem label="开户行" prop="bankName">
               <ElInput v-model="form.bankName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="开户账号" prop="relation">
+            <ElFormItem label="开户账号" prop="bankAccount">
               <ElInput v-model="form.bankAccount" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
@@ -345,7 +345,9 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
+})
 
 // 获取费用补偿情况列表
 const getRewardFeeList = () => {
