@@ -211,8 +211,7 @@ const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(TabIds[0])
-const { doorNo, householdId, type, projectId, uid, estimateStatus } = currentRoute.value
-  .query as any
+let { doorNo, householdId, type, projectId, uid, estimateStatus } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
@@ -240,6 +239,7 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
+    estimateStatus = res.estimateStatus
     getFillingStatus()
   })
 }
@@ -308,63 +308,14 @@ const getFillingStatus = () => {
 }
 // 填报状态判断
 const getStatus = (data: any) => {
-  const tabsTypeCopy = deepClone(tabsType.value)
-  if (type === 'Landlord') {
-    //居民户
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-    if (data.landStatus === '1') {
-      tabsTypeCopy[4].active = true // 土地
-    }
-    if (data.landSeedlingStatus === '1') {
-      tabsTypeCopy[5].active = true // 土地
-    }
-  } else if (type === 'Enterprise' || type === 'IndividualB') {
-    //企业或个体工商户
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-    if (data.deviceStatus === '1') {
-      tabsTypeCopy[4].active = true // 零星林（果）木评估
-    }
-  } else if (type === 'VillageInfoC') {
-    //村集体
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-    if (data.specialStatus === '1') {
-      tabsTypeCopy[4].active = true // 零星林（果）木评估
-    }
-  }
+  let tabsTypeCopy = deepClone(tabsType.value)
+  console.log(data, type, tabsTypeCopy)
 
+  tabsTypeCopy.forEach((item) => {
+    if (data[item.key] == '1') {
+      item.active = true
+    }
+  })
   tabsType.value = tabsTypeCopy
 }
 </script>

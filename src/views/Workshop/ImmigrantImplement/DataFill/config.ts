@@ -61,14 +61,16 @@ export const HouseholdSubTabs = [
     name: '人口核定',
     id: TabIds[0],
     icon: 'mdi:user-details',
-    active: false
+    active: false,
+    key: 'populationStatus'
   },
   {
     type: 1,
     name: '房屋产权',
     id: TabIds[1],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'propertyStatus'
   },
 
   // 资产评估
@@ -77,14 +79,16 @@ export const HouseholdSubTabs = [
     name: '房屋附属物评估报告',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     type: 2,
     name: '土地附着物评估报告',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'landStatus'
   },
 
   // 安置确认
@@ -93,21 +97,24 @@ export const HouseholdSubTabs = [
     name: '搬迁安置',
     id: TabIds[0],
     icon: 'mdi:lorry',
-    active: false
+    active: false,
+    key: 'relocateArrangementStatus'
   },
   {
     type: 4,
     name: '生产安置',
     id: TabIds[1],
     icon: 'pixelarticons:buildings',
-    active: false
+    active: false,
+    key: 'productionArrangementStatus'
   },
   {
     type: 4,
     name: '坟墓确认',
     id: TabIds[2],
     icon: 'tabler:grave-2',
-    active: false
+    active: false,
+    key: 'graveArrangementStatus'
   },
 
   // 择址确认
@@ -116,21 +123,24 @@ export const HouseholdSubTabs = [
     name: '生产用地',
     id: TabIds[0],
     icon: 'mdi:land-fields',
-    active: false
+    active: false,
+    key: 'landUseStatus'
   },
   {
     type: 5,
     name: '选房择址',
     id: TabIds[1],
     icon: 'mdi:house-clock-outline',
-    active: false
+    active: false,
+    key: 'chooseHouseStatus'
   },
   {
     type: 5,
     name: '坟墓择址',
     id: TabIds[2],
     icon: 'tabler:grave-2',
-    active: false
+    active: false,
+    key: 'chooseGraveStatus'
   },
 
   // 腾空过渡
@@ -139,21 +149,24 @@ export const HouseholdSubTabs = [
     name: '房屋腾空',
     id: TabIds[0],
     icon: 'material-symbols:emoji-transportation',
-    active: false
+    active: false,
+    key: 'houseSoarStatus'
   },
   {
     type: 8,
     name: '土地腾让',
     id: TabIds[1],
     icon: 'mdi:land-fields',
-    active: false
+    active: false,
+    key: 'landSoarStatus'
   },
   {
     type: 8,
     name: '过渡安置',
     id: TabIds[2],
     icon: 'ic:baseline-cabin',
-    active: false
+    active: false,
+    key: 'excessStatus'
   },
 
   // 生产安置
@@ -162,21 +175,24 @@ export const HouseholdSubTabs = [
     name: '农业安置',
     id: TabIds[0],
     icon: 'maki:wetland',
-    active: false
+    active: false,
+    key: 'agricultureArrangementStatus'
   },
   {
     type: 10,
     name: '养老保险',
     id: TabIds[1],
     icon: 'fa6-solid:hospital-user',
-    active: false
+    active: false,
+    key: 'retirementStatus'
   },
   {
     type: 10,
     name: '自谋职业',
     id: TabIds[2],
     icon: 'pepicons-print:people-off',
-    active: false
+    active: false,
+    key: 'selfEmploymentStatus'
   }
 ]
 
@@ -212,21 +228,24 @@ export const EnterpriseSubTabs = [
     name: '房屋附属物评估报告',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     type: 0,
     name: '土地附着物评估报告',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'landStatus'
   },
   {
     type: 0,
     name: '设施设备评估报告',
     id: TabIds[2],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'deviceStatus'
   },
 
   // 腾空
@@ -235,14 +254,16 @@ export const EnterpriseSubTabs = [
     name: '房屋腾空',
     id: TabIds[0],
     icon: 'material-symbols:emoji-transportation',
-    active: false
+    active: false,
+    key: 'houseSoarStatus'
   },
   {
     type: 2,
     name: '土地腾让',
     id: TabIds[1],
     icon: 'mdi:land-fields',
-    active: false
+    active: false,
+    key: 'landSoarStatus'
   }
 ]
 
@@ -278,21 +299,24 @@ export const IndividualSubTabs = [
     name: '房屋附属物评估报告',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     type: 0,
     name: '土地附着物评估报告',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'landStatus'
   },
   {
     type: 0,
     name: '设施设备评估报告',
     id: TabIds[2],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'deviceStatus'
   },
 
   // 腾空
@@ -301,14 +325,16 @@ export const IndividualSubTabs = [
     name: '房屋腾空',
     id: TabIds[0],
     icon: 'material-symbols:emoji-transportation',
-    active: false
+    active: false,
+    key: 'houseSoarStatus'
   },
   {
     type: 2,
     name: '土地腾让',
     id: TabIds[1],
     icon: 'mdi:land-fields',
-    active: false
+    active: false,
+    key: 'landSoarStatus'
   }
 ]
 
@@ -340,21 +366,24 @@ export const VillageSubTabs = [
     name: '房屋附属物评估报告',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     type: 0,
     name: '土地附着物评估报告',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'landStatus'
   },
   {
     type: 0,
     name: '小型专项及农副业设施评估报告',
     id: TabIds[2],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'specialStatus'
   }
 ]
 

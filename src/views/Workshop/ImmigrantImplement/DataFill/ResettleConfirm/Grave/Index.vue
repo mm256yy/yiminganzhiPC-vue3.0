@@ -93,7 +93,7 @@ interface PropsType {
   doorNo: string
   baseInfo: any
 }
-
+const emit = defineEmits(['updateData'])
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 编辑弹窗标识
 const documentDialog = ref(false) // 档案上传弹窗标识
@@ -240,6 +240,7 @@ const onFilling = () => {
   }).then((res: any) => {
     if (res) {
       ElMessage.success('操作成功')
+      emit('updateData')
     }
   })
 }

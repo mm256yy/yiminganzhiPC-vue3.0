@@ -89,6 +89,7 @@
           :baseInfo="baseInfo"
           @refresh="getLandlordInfo"
           v-if="subTabCurrentId === TabIds[0]"
+          @update-data="getLandlordInfo"
         />
 
         <!-- 房屋产权 -->
@@ -97,6 +98,7 @@
           :baseInfo="baseInfo"
           :householdId="householdId"
           v-if="subTabCurrentId === TabIds[1]"
+          @update-data="getLandlordInfo"
         />
       </template>
 
@@ -118,7 +120,12 @@
       </template>
 
       <!-- 模拟安置 -->
-      <scheme-base :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 3" />
+      <scheme-base
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId === 3"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 安置确认 -->
       <template v-if="tabCurrentId === 4">
@@ -134,12 +141,17 @@
         <produce-arrange
           :doorNo="doorNo"
           :baseInfo="baseInfo"
-          @refresh="getLandlordInfo"
+          @update-data="getLandlordInfo"
           v-if="subTabCurrentId === TabIds[1]"
         />
 
         <!-- 坟墓确认 -->
-        <grave-arrange :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[2]" />
+        <grave-arrange
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[2]"
+          @update-data="getLandlordInfo"
+        />
       </template>
 
       <!-- 择址确认 -->
@@ -170,7 +182,11 @@
       </template>
 
       <!-- 居民户 -- 协议签订 -->
-      <household-agreement-sign :doorNo="doorNo" v-if="tabCurrentId === 6" />
+      <household-agreement-sign
+        :doorNo="doorNo"
+        v-if="tabCurrentId === 6"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 居民户 -- 移民建卡 -->
       <create-card
@@ -203,6 +219,7 @@
           v-if="baseInfo.houseAreaType === HouseType.homestead"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
+          @update-data="getLandlordInfo"
         />
 
         <!-- 公寓房 -->
@@ -218,6 +235,7 @@
           v-if="baseInfo.houseAreaType === HouseType.concentrate"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
+          @update-data="getLandlordInfo"
         />
 
         <!-- 自谋出路 -->
@@ -225,6 +243,7 @@
           v-if="baseInfo.houseAreaType === HouseType.oneself"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
+          @update-data="getLandlordInfo"
         />
         <div
           v-if="!houseTypeList?.includes(baseInfo.houseAreaType)"
@@ -241,6 +260,7 @@
           :doorNo="doorNo"
           :baseInfo="baseInfo"
           v-if="subTabCurrentId === TabIds[0]"
+          @update-data="getLandlordInfo"
         />
 
         <!-- 养老保险 -->
@@ -248,14 +268,25 @@
           :doorNo="doorNo"
           :baseInfo="baseInfo"
           v-if="subTabCurrentId === TabIds[1]"
+          @update-data="getLandlordInfo"
         />
 
         <!-- 自谋职业 -->
-        <self-resettle :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[2]" />
+        <self-resettle
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[2]"
+          @update-data="getLandlordInfo"
+        />
       </template>
 
       <!-- 相关手续 -->
-      <Procedures :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId == 11" />
+      <Procedures
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        v-if="tabCurrentId == 11"
+        @update-data="getLandlordInfo"
+      />
     </div>
 
     <!-- 企业 -->
@@ -382,7 +413,7 @@
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -560,56 +591,6 @@ const getStatus = (data: any) => {
     if (data.proceduresStatus === '1') {
       tabsListCopy[11].active = true // 相关手续
     }
-
-    // 第二层 Tab
-    if (data.populationStatus === '1') {
-      subTabsListCopy[0].active = true // 人口核定
-    }
-    if (data.propertyStatus === '1') {
-      subTabsListCopy[1].active = true // 房屋产权
-    }
-    if (data.appendageStatus === '1') {
-      subTabsListCopy[2].active = true // 房屋附属物评估报告
-    }
-    if (data.landStatus === '1') {
-      subTabsListCopy[3].active = true // 土地附着物评估报告
-    }
-    if (data.relocateArrangementStatus === '1') {
-      subTabsListCopy[4].active = true // 搬迁安置
-    }
-    if (data.productionArrangementStatus === '1') {
-      subTabsListCopy[5].active = true // 生产安置
-    }
-    if (data.graveArrangementStatus === '1') {
-      subTabsListCopy[6].active = true // 坟墓确认
-    }
-    if (data.landUseStatus === '1') {
-      subTabsListCopy[7].active = true // 生产用地
-    }
-    if (data.chooseHouseStatus === '1') {
-      subTabsListCopy[8].active = true // 选房择址
-    }
-    if (data.chooseGraveStatus === '1') {
-      subTabsListCopy[9].active = true // 坟墓择址
-    }
-    if (data.houseSoarStatus === '1') {
-      subTabsListCopy[10].active = true // 房屋腾空
-    }
-    if (data.landSoarStatus === '1') {
-      subTabsListCopy[11].active = true // 土地腾让
-    }
-    if (data.excessStatus === '1') {
-      subTabsListCopy[12].active = true // 过渡安置
-    }
-    if (data.agricultureArrangementStatus === '1') {
-      subTabsListCopy[13].active = true // 农业安置
-    }
-    if (data.retirementStatus === '1') {
-      subTabsListCopy[14].active = true // 养老保险
-    }
-    if (data.selfEmploymentStatus === '1') {
-      subTabsListCopy[15].active = true // 自谋职业
-    }
   } else if (type === 'Enterprise') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
@@ -638,23 +619,6 @@ const getStatus = (data: any) => {
     }
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true // 相关手续
-    }
-
-    // 第二层 Tab
-    if (data.appendageStatus === '1') {
-      subTabsListCopy[0].active = true // 房屋附属物评估报告
-    }
-    if (data.landStatus === '1') {
-      subTabsListCopy[1].active = true // 土地附着物评估报告
-    }
-    if (data.deviceStatus === '1') {
-      subTabsListCopy[2].active = true // 设施设备评估报告
-    }
-    if (data.houseSoarStatus === '1') {
-      subTabsListCopy[3].active = true // 房屋腾空
-    }
-    if (data.landSoarStatus === '1') {
-      subTabsListCopy[4].active = true // 土地腾让
     }
   } else if (type === 'IndividualB') {
     if (tabCurrentId.value === 0) {
@@ -685,23 +649,6 @@ const getStatus = (data: any) => {
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true
     }
-
-    // 第二层 Tab
-    if (data.appendageStatus === '1') {
-      subTabsListCopy[0].active = true // 房屋附属物评估报告
-    }
-    if (data.landStatus === '1') {
-      subTabsListCopy[1].active = true // 土地附着物评估报告
-    }
-    if (data.deviceStatus === '1') {
-      subTabsListCopy[2].active = true // 设施设备评估报告
-    }
-    if (data.houseSoarStatus === '1') {
-      subTabsListCopy[3].active = true // 房屋腾空
-    }
-    if (data.landSoarStatus === '1') {
-      subTabsListCopy[4].active = true // 土地腾让
-    }
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
@@ -726,26 +673,14 @@ const getStatus = (data: any) => {
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[3].active = true // 集体资产处置方法
     }
-
-    // 第二层 Tab
-    if (data.appendageStatus === '1') {
-      subTabsListCopy[0].active = true // 房屋附属物评估报告
-    }
-    if (data.landStatus === '1') {
-      subTabsListCopy[1].active = true // 土地附着物评估报告
-    }
-    if (data.specialStatus === '1') {
-      subTabsListCopy[2].active = true // 小型专项及农副业设施评估报告
-    }
-    if (data.houseSoarStatus === '1') {
-      subTabsListCopy[3].active = true // 动迁安置
-    }
-    if (data.landSoarStatus === '1') {
-      subTabsListCopy[4].active = true // 过渡安置
-    }
   }
 
   // 触发重新渲染
+  subTabsListCopy.forEach((item) => {
+    if (data[item.key] == '1') {
+      item.active = true
+    }
+  })
   subTabsList.value = subTabsListCopy
   tabsList.value = tabsListCopy
 }
@@ -775,7 +710,7 @@ const onSubTabClick = (tabItem) => {
   }
   subTabCurrentId.value = tabItem.id
 }
-
+let times = ref()
 onMounted(() => {
   if (type == 'PeasantHousehold') {
     tabsList.value = HouseholdTabs
@@ -790,10 +725,16 @@ onMounted(() => {
     tabsList.value = VillageTabs
     subTabsList.value = VillageSubTabs
   }
-
   getLandlordInfo()
+  times.value = setInterval(() => {
+    getLandlordInfo()
+  }, 5000)
 })
-
+onBeforeUnmount(() => {
+  clearInterval(times.value)
+  times.value = null
+  console.log(1)
+})
 const onBack = () => {
   back()
 }

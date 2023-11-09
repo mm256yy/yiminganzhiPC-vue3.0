@@ -112,11 +112,12 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onHandle = () => {
   showHandle.value = true
 }
-
+const emit = defineEmits(['updateData'])
 const close = (flag: boolean) => {
   showHandle.value = false
   if (flag === true) {
     initData()
+    emit('updateData')
   }
 }
 

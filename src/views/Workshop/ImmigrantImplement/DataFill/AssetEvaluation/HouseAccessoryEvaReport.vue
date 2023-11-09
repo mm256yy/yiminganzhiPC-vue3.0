@@ -28,7 +28,13 @@
       资产评估还未完成，无法查看评估报告
     </div>
     <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
-      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+      <img
+        class="block w-full"
+        v-if="imgUrl.indexOf('pdf') == -1"
+        :src="imgUrl"
+        alt="Preview Image"
+      />
+      <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
     </ElDialog>
   </WorkContentWrap>
 </template>
@@ -138,5 +144,10 @@ onMounted(() => {
   .el-upload--picture-card {
     display: none;
   }
+}
+
+#inlineFrameExample {
+  width: 100%;
+  height: 700px;
 }
 </style>

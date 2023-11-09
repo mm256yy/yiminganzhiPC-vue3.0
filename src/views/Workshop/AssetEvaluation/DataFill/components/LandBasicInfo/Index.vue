@@ -63,7 +63,7 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="种植户"
           :width="150"
           prop="growers"
@@ -73,7 +73,7 @@
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.growers" />
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn
           label="地块面积(亩)"
           :width="180"
