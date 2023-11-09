@@ -229,6 +229,7 @@ import {
   saveImmigrantChooseHouseApi,
   saveDocumentationApi
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
 // import { deepClone } from '@/utils'
@@ -388,7 +389,12 @@ const onSave = (row: any) => {
   saveImmigrantChooseHouseApi(row).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    emit('updateData')
+    saveFillingCompleteApi({
+      doorNo: props.doorNo,
+      chooseHouseStatus: '1'
+    }).then(() => {
+      emit('updateData')
+    })
   })
 }
 //批量保存
@@ -396,7 +402,12 @@ const onBatchSave = () => {
   saveDocumentationApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    emit('updateData')
+    saveFillingCompleteApi({
+      doorNo: props.doorNo,
+      chooseHouseStatus: '1'
+    }).then(() => {
+      emit('updateData')
+    })
   })
 }
 /**

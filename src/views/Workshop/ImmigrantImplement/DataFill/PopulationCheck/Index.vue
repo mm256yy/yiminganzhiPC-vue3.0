@@ -108,7 +108,7 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-const emit = defineEmits(['refresh'])
+const emit = defineEmits(['refresh', 'updateData'])
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -229,7 +229,6 @@ const onClose = () => {
   reason.value = ''
   dialogVisible.value = false
 }
-
 const onSubmit = () => {
   if (!reason.value) {
     ElMessage.warning('请选择删除原因')
@@ -298,6 +297,7 @@ const onFilling = () => {
   }).then((res: any) => {
     if (res) {
       ElMessage.success('操作成功')
+      emit('updateData')
     }
   })
 }

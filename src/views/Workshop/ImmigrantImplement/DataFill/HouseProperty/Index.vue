@@ -202,6 +202,7 @@ const onViewRow = (row: any) => {
 }
 
 // 填报完成
+const emit = defineEmits(['updateData'])
 const onFilling = () => {
   saveFillingCompleteApi({
     doorNo: props.doorNo,
@@ -209,6 +210,7 @@ const onFilling = () => {
   }).then((res: any) => {
     if (res) {
       ElMessage.success('操作成功')
+      emit('updateData')
     }
   })
 }

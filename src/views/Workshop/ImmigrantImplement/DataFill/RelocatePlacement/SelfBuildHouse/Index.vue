@@ -114,11 +114,12 @@ const initData = () => {
 const onDocumentation = () => {
   dialog.value = true
 }
-
+const emit = defineEmits(['updateData'])
 // 关闭弹窗
 const close = (params: any[], type: string) => {
   if (type === 'documentation') {
     dialog.value = false
+    emit('updateData')
   } else if (type === 'fill') {
     fillDialog.value = false
   }

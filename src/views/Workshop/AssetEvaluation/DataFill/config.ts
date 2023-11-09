@@ -6,13 +6,15 @@ export const LandlordLandTabs = [
     name: '土地基本情况评估',
     id: TabIds[4],
     icon: 'mdi:land-fields',
-    active: false
+    active: false,
+    key: 'landStatus'
   },
   {
     name: '土地青苗及附着物评估',
     id: TabIds[5],
     icon: 'fluent-emoji-high-contrast:sheaf-of-rice',
-    active: false
+    active: false,
+    key: 'landSeedlingStatus'
   }
 ]
 
@@ -22,25 +24,29 @@ export const LandlordTabs = [
     name: '房屋主体评估',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'houseMainStatus'
   },
   {
     name: '房屋装修评估',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'houseRenovationStatus'
   },
   {
     name: '房屋附属设施评估',
     id: TabIds[2],
     icon: 'bi:device-hdd-fill',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     name: '零星林（果）木评估',
     id: TabIds[3],
     icon: 'mdi:pine-tree',
-    active: false
+    active: false,
+    key: 'treeStatus'
   }
 
   // {
@@ -57,32 +63,37 @@ export const EnterpriseTabs = [
     name: '房屋主体评估',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'houseMainStatus'
   },
   {
     name: '房屋装修评估',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'houseRenovationStatus'
   },
   {
     name: '房屋附属设施评估',
     id: TabIds[2],
     icon: 'bi:device-hdd-fill',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     name: '零星林（果）木评估',
     id: TabIds[3],
     icon: 'mdi:pine-tree',
-    active: false
+    active: false,
+    key: 'treeStatus'
   },
 
   {
     name: '设备设施评估',
     id: TabIds[6],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'deviceStatus'
   }
 ]
 
@@ -92,32 +103,37 @@ export const IndividualBTabs = [
     name: '房屋主体评估',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'houseMainStatus'
   },
   {
     name: '房屋装修评估',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'houseRenovationStatus'
   },
   {
     name: '房屋附属设施评估',
     id: TabIds[2],
     icon: 'bi:device-hdd-fill',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     name: '零星林（果）木评估',
     id: TabIds[3],
     icon: 'mdi:pine-tree',
-    active: false
+    active: false,
+    key: 'treeStatus'
   },
 
   {
     name: '设备设施评估',
     id: TabIds[6],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'deviceStatus'
   }
 ]
 
@@ -127,32 +143,37 @@ export const VillageInfoCTabs = [
     name: '房屋主体评估',
     id: TabIds[0],
     icon: 'clarity:house-solid',
-    active: false
+    active: false,
+    key: 'houseMainStatus'
   },
   {
     name: '房屋装修评估',
     id: TabIds[1],
     icon: 'mdi:house-city',
-    active: false
+    active: false,
+    key: 'houseRenovationStatus'
   },
   {
     name: '房屋附属设施评估',
     id: TabIds[2],
     icon: 'bi:device-hdd-fill',
-    active: false
+    active: false,
+    key: 'appendageStatus'
   },
   {
     name: '零星林（果）木评估',
     id: TabIds[3],
     icon: 'mdi:pine-tree',
-    active: false
+    active: false,
+    key: 'treeStatus'
   },
 
   {
     name: '小型专项及农副业设施评估',
     id: TabIds[6],
     icon: 'fluent-mdl2:product-variant',
-    active: false
+    active: false,
+    key: 'specialStatus'
   }
 ]
 

@@ -157,7 +157,7 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const dialog = ref<boolean>(false)
-
+const emit = defineEmits(['updateData'])
 // 属实
 const mockList = ref<any>([])
 
@@ -305,6 +305,7 @@ const onDocumentation = () => {
 // 关闭档案上传弹窗
 const closeDocumentation = () => {
   dialog.value = false
+  emit('updateData')
 }
 
 const onClose = () => {

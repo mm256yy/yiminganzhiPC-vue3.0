@@ -91,9 +91,11 @@ const getList = () => {
 }
 
 // 关闭归档弹窗
+const emit = defineEmits(['updateData'])
 const close = () => {
   dialog.value = false
   getList()
+  emit('updateData')
 }
 
 /**

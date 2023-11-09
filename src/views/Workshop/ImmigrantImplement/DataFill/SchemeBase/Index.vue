@@ -199,7 +199,7 @@ const stepArray = ref([
 const stepIndex = ref(1)
 
 // 表格数据
-const tableData = ref<DemographicDtoType[]>([])
+const tableData: any = ref([])
 const immigrantSettle = ref<any>()
 const houseType = ref<HouseType>(HouseType.homestead)
 
@@ -260,20 +260,36 @@ const filterHouseType = () => {
 const filterWay = (data) => {
   const arr = cloneDeep(dictObj.value[375]).map((item) => {
     // 农村移民的 其他性质
-    const notFarmer = data.populationNature !== '1'
-    if (
-      notFarmer &&
-      item.value === '1' &&
-      immigrantSettle.value &&
-      immigrantSettle.value.settingAddress !== apartmentArea[1].id
-    ) {
+    // const notFarmer = data.populationNature !== '1'
+    // if (
+    //   notFarmer &&
+    //   item.value === '1' &&
+    //   immigrantSettle.value &&
+    //   immigrantSettle.value.settingAddress !== apartmentArea[1].id
+    // ) {
+    //   item.disabled = true
+    // }
+    // if (data.age < 14 && item.value !== '3') {
+    //   item.disabled = true
+    // }
+    // if (item.value == '1' && !notFarmer) {
+    //   item.disabled = true
+    // }
+    // return item
+    item.disabled = false
+    if (data.populationNature != '1' && item.value == '1') {
       item.disabled = true
     }
-    if (data.age < 14 && item.value !== '3') {
+    if (data.age < 14 && item.value == '2') {
+      item.disabled = true
+    }
+    if (data.age < 14 && item.value != '3') {
       item.disabled = true
     }
     return item
   })
+  console.log(arr, data)
+
   return arr
 }
 
@@ -284,7 +300,7 @@ const stepClick = (id) => {
 /**
  * 生产安置确认
  */
-
+const emit = defineEmits(['updateData'])
 const stepNext = async () => {
   // 校验数据
   const notFillArray = tableData.value.filter((item) => !item.settingWay)
@@ -292,18 +308,19 @@ const stepNext = async () => {
     ElMessage.info('请选择安置方式')
     return
   }
-  const data = tableData.value.map((item) => {
-    return {
-      id: item.id,
-      demographicId: item.demographicId,
-      settingWay: item.settingWay,
-      settingRemark: item.settingRemark
-    }
-  })
-  const res = await saveSimulateDemographicApi(data)
+  // const data = tableData.value.map((item) => {
+  //   return {
+  //     id: item.id,
+  //     demographicId: item.demographicId,
+  //     settingWay: item.settingWay,
+  //     settingRemark: item.settingRemark
+  //   }
+  // })
+  const res = await saveSimulateDemographicApi(tableData.value)
   console.log('安置方式更新结果', res)
   if (res) {
     ElMessage.success('生产安置保存成功!')
+    emit('updateData')
   }
 }
 

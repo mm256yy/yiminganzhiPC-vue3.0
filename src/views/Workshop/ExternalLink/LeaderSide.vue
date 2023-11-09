@@ -1179,6 +1179,8 @@ const questionList = ref<any>([
 
     .names {
       margin-left: 70px;
+      overflow: hidden;
+      font-size: 14px;
     }
 
     .time {
