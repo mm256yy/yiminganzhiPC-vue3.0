@@ -108,13 +108,17 @@ let dataList: any = ref([])
 let getNewsLists = async () => {
   let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
   noticeList.value = data.content
-  noticeList.value.length = 3
+  if (noticeList.value.length > 3) {
+    noticeList.value.length = 3
+  }
 }
 let getHomesicknesss = async () => {
   let data = await getHomesickness()
   console.log(data.content)
   dataList.value = data.content
-  dataList.value.length = 2
+  if (dataList.value.length > 2) {
+    dataList.value.length = 2
+  }
 }
 onMounted(() => {
   getNewsLists()

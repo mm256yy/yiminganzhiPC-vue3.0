@@ -89,7 +89,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="户型/套型"
-          width="120"
+          width="170"
           prop="area"
           align="center"
           header-align="center"
@@ -108,7 +108,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="储藏室编号"
-          width="120"
+          width="200"
           prop="storeroomNo"
           align="center"
           header-align="center"
@@ -127,7 +127,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="车位编号"
-          width="120"
+          width="200"
           prop="carNo"
           align="center"
           header-align="center"
@@ -146,7 +146,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="摇号顺序号"
-          width="180"
+          width="200"
           prop="lotteryOrder"
           align="center"
           header-align="center"
@@ -157,7 +157,7 @@
         </ElTableColumn>
         <ElTableColumn
           label="择房顺序号"
-          width="180"
+          width="200"
           prop="placeOrder"
           align="center"
           header-align="center"
@@ -166,12 +166,11 @@
             <ElInputNumber placeholder="请输入" :min="0" v-model="row.placeOrder" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" width="200" align="center" header-align="center" fixed="right">
+        <!-- <ElTableColumn label="操作" width="200" align="center" header-align="center" fixed="right">
           <template #default="{ row }">
             <ElButton type="primary" @click="enterRoomNo(row)">录入房号</ElButton>
-            <ElButton type="primary" @click="onSave(row)"> 保存 </ElButton>
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
       </ElTable>
     </div>
 
@@ -230,6 +229,7 @@ import {
   saveImmigrantChooseHouseApi,
   saveDocumentationApi
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea, apartmentArea } from '../../config'
 // import { deepClone } from '@/utils'
@@ -389,7 +389,12 @@ const onSave = (row: any) => {
   saveImmigrantChooseHouseApi(row).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    emit('updateData')
+    saveFillingCompleteApi({
+      doorNo: props.doorNo,
+      chooseHouseStatus: '1'
+    }).then(() => {
+      emit('updateData')
+    })
   })
 }
 //批量保存
@@ -397,7 +402,12 @@ const onBatchSave = () => {
   saveDocumentationApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    emit('updateData')
+    saveFillingCompleteApi({
+      doorNo: props.doorNo,
+      chooseHouseStatus: '1'
+    }).then(() => {
+      emit('updateData')
+    })
   })
 }
 /**

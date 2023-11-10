@@ -414,7 +414,7 @@ interface NavType {
   name: string
   active: boolean
 }
-
+const emit = defineEmits(['updateData'])
 const dialog = ref<boolean>(false)
 const navList = ref<NavType[]>([
   {
@@ -631,8 +631,11 @@ const onDocumentation = () => {
   dialog.value = true
 }
 
-const close = () => {
+const close = (e) => {
   dialog.value = false
+  if (e) {
+    emit('updateData')
+  }
 }
 </script>
 

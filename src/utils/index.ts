@@ -324,7 +324,23 @@ export const filterViewDoorNo = (data: any): string => {
   }
   return doorNo
 }
-
+// 显示showdoorNo
+export const filterViewDoorNos = (data: any): string => {
+  const { showDoorNo, type } = data || {}
+  if (!showDoorNo) {
+    return ''
+  }
+  // 6、8、9、11、12、13、14、15、16
+  if (type && type === 'PeasantHousehold' && showDoorNo.length === 16) {
+    const before = filterViewDoorNoWithBefore(showDoorNo)
+    const lastSix = showDoorNo.slice(
+      showDoorNo.length - 6 < 0 ? 0 : showDoorNo.length - 6,
+      showDoorNo.length
+    )
+    return `${before}${lastSix}`
+  }
+  return showDoorNo
+}
 /**
  * 获取字典对应的 label
  * @param arr  字典数据

@@ -12,3 +12,9 @@ export const getVillageSchedule = (): Promise<any> => {
     url: `/leadershipScreen/villageSchedule?type=1`
   })
 }
+export const getLeadershipScreen = (params: any): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/getLeadershipScreen`,
+    params
+  })
+}

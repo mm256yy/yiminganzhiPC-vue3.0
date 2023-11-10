@@ -42,10 +42,7 @@ export const updateDemographicApi = (data: DemographicDtoType): Promise<Demograp
  */
 export const delDemographicByIdApi = (id: number, reason?: string): Promise<void> => {
   return request.post({
-    url: `/demographic/delete/${id}`,
-    data: {
-      reason
-    }
+    url: `/demographic/delete/${id}?reason=${reason}`
   })
 }
 

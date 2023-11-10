@@ -274,6 +274,7 @@
                 :on-remove="removeFile1"
                 :on-preview="imgPreview"
                 :on-error="onError"
+                :on-change="onchange"
               >
                 <template #trigger v-if="cardFront.length === 0 && actionType !== 'view'">
                   <div class="card-img-box">
@@ -302,6 +303,7 @@
                 :before-remove="beforeRemove"
                 :on-remove="removeFile2"
                 :on-preview="imgPreview"
+                :on-change="onchange"
               >
                 <template #trigger v-if="cardEnd.length === 0 && actionType !== 'view'">
                   <div class="card-img-box">
@@ -334,6 +336,7 @@
                 :before-remove="beforeRemove"
                 :on-remove="removeFile3"
                 :on-preview="imgPreview"
+                :on-change="onchange"
               >
                 <template #trigger v-if="actionType !== 'view'">
                   <div class="card-img-box">
@@ -366,6 +369,7 @@
             :before-remove="beforeRemove"
             :on-remove="removeFile4"
             :on-preview="imgPreview"
+            :on-change="onchange"
           >
             <template #trigger v-if="actionType !== 'view'">
               <div class="card-img-box">
@@ -579,8 +583,12 @@ const submit = async (data: DemographicDtoType) => {
       ...data,
       doorNo: props.doorNo
     })
-      .then(() => {
+      .then((res) => {
+        console.log(res)
+
         loading.value = false
+        ElMessage.success('操作成功！')
+        onClose(true)
       })
       .catch(() => {
         loading.value = false
@@ -592,13 +600,13 @@ const submit = async (data: DemographicDtoType) => {
     })
       .then(() => {
         loading.value = false
+        ElMessage.success('操作成功！')
+        onClose(true)
       })
       .catch(() => {
         loading.value = false
       })
   }
-  ElMessage.success('操作成功！')
-  onClose(true)
 }
 
 // 提交表单
@@ -695,7 +703,26 @@ const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
-
+let onchange = (file, fileList) => {
+  let fileName = file.name
+  let uid = file.uid
+  let pos = fileName.lastIndexOf('.')
+  let lastName = fileName.substring(pos, fileName.length)
+  if (
+    lastName.toLowerCase() !== '.jpg' &&
+    lastName.toLowerCase() !== '.jpeg' &&
+    lastName.toLowerCase() !== '.png'
+  ) {
+    ElMessage.error('文件必须为.jpg,.jpeg,.png类型')
+    // this.resetCompressData()
+    for (var i = 0; i < fileList.length; i++) {
+      if (fileList[i].uid == uid) {
+        fileList.splice(i, 1)
+      }
+    }
+    return
+  }
+}
 onMounted(() => {
   getOccupationOptions()
 })

@@ -404,18 +404,17 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
+  let searchData = JSON.parse(JSON.stringify(data))
+  console.log(searchData)
   // 处理参数
   let params = {
-    ...data
-  }
-  if (!data.fillStatus) {
-    Reflect.deleteProperty(params, 'fillStatus')
+    ...searchData
   }
 
   // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
+  // tableObject.params = {
+  //   projectId
+  // }
   if (!params.hasPropertyAccount) {
     delete params.hasPropertyAccount
   }
@@ -424,7 +423,9 @@ const onSearch = (data) => {
   }
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(districtTree.value, params.code, (item) => {
+      console.log(item)
+
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }

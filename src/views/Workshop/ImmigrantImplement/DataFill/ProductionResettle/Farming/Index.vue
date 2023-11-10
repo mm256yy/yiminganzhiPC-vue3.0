@@ -122,13 +122,14 @@ onMounted(() => {
   getList()
   getFarming()
 })
-
+const emit = defineEmits(['updateData'])
 const onSortSave = () => {
   farmingArchivesPup.value = true
 }
 
 const farmingArchivesClose = () => {
   farmingArchivesPup.value = false
+  emit('updateData')
 }
 </script>
 

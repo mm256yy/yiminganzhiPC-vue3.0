@@ -20,7 +20,7 @@
       <ElFormItem label="意见描述：" prop="remark" required>
         <ElInput clearable type="textarea" :maxlength="20" v-model.trim="form.remark" />
       </ElFormItem>
-      <ElFormItem v-if="props.isSelf == '1'" label="是否解决：" prop="status" required>
+      <ElFormItem v-if="props.isSelf === '1'" label="是否解决：" prop="status" required>
         <el-radio-group v-model="form.status" class="ml-4">
           <el-radio label="1" size="large">已解决</el-radio>
           <el-radio label="2" size="large">未解决</el-radio>

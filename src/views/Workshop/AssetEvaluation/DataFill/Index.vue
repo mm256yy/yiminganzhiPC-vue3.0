@@ -40,7 +40,7 @@
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
 
-            <Icon v-if="item.active" class="ml-2px" icon="gg:check-o" color=" #3e73ec" />
+            <Icon v-if="item.active" class="ml-2px" icon="gg:check-o" color="#3e73ec" />
           </div>
         </div>
       </div>
@@ -211,8 +211,7 @@ const { currentRoute, back } = useRouter()
 const baseInfo = ref<any>({})
 const tabsType = ref<any>([])
 const tabCurrentId = ref<number>(TabIds[0])
-const { doorNo, householdId, type, projectId, uid, estimateStatus } = currentRoute.value
-  .query as any
+let { doorNo, householdId, type, projectId, uid, estimateStatus } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
@@ -240,6 +239,8 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
+    estimateStatus = res.estimateStatus
+    getFillingStatus()
   })
 }
 
@@ -253,10 +254,12 @@ const onReportTabClick = (tabItem) => {
 }
 
 onMounted(() => {
+  getRefresh()
+})
+
+const getRefresh = () => {
   getFillingStatus()
   role.value = getRole()
-  // console.log('t-type', type)
-  // console.log('t-role', role.value)
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
@@ -290,7 +293,9 @@ onMounted(() => {
       tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
     }
   }
-})
+  // 初始化tab页面显示
+  tabCurrentId.value = tabsType.value[0].id
+}
 
 const onBack = () => {
   back()
@@ -303,57 +308,14 @@ const getFillingStatus = () => {
 }
 // 填报状态判断
 const getStatus = (data: any) => {
-  const tabsTypeCopy = deepClone(tabsType.value)
-  if (type === 'Landlord') {
-    //居民户
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-  } else if (type === 'Enterprise' || type === 'IndividualB') {
-    //企业或个体工商户
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-    if (data.deviceStatus === '1') {
-      tabsTypeCopy[4].active = true // 零星林（果）木评估
-    }
-  } else if (type === 'VillageInfoC') {
-    //村集体
-    if (data.houseMainStatus === '1') {
-      tabsTypeCopy[0].active = true // 房屋主体
-    }
-    if (data.houseRenovationStatus === '1') {
-      tabsTypeCopy[1].active = true // 房屋装修评估
-    }
-    if (data.appendageStatus === '1') {
-      tabsTypeCopy[2].active = true // 房屋附属设施评估
-    }
-    if (data.treeStatus === '1') {
-      tabsTypeCopy[3].active = true // 零星林（果）木评估
-    }
-    if (data.specialStatus === '1') {
-      tabsTypeCopy[4].active = true // 零星林（果）木评估
-    }
-  }
+  let tabsTypeCopy = deepClone(tabsType.value)
+  console.log(data, type, tabsTypeCopy)
 
+  tabsTypeCopy.forEach((item) => {
+    if (data[item.key] == '1') {
+      item.active = true
+    }
+  })
   tabsType.value = tabsTypeCopy
 }
 </script>

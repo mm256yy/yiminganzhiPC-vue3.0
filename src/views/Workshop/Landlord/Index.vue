@@ -5,14 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">居民户信息{{ titleStatus }}</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        expand
-        :defaultExpand="false"
-        :expand-field="'card'"
-        @search="onSearch"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" expand @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -53,8 +46,8 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #doorNo="{ row }">
-          {{ filterViewDoorNo(row) }}
+        <template #showDoorNo="{ row }">
+          {{ filterViewDoorNos(row) }}
         </template>
         <template #regionText="{ row }">
           <div>
@@ -196,7 +189,7 @@ import type {
   LandlordHeadInfoType,
   SurveyInfoType
 } from '@/api/workshop/landlord/types'
-import { filterViewDoorNo, formatDate } from '@/utils/index'
+import { filterViewDoorNos, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
 const router = useRouter()
@@ -259,13 +252,12 @@ const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
-const { getList, setSearchParams, getSelections } = methods
+const { setSearchParams, getSelections } = methods
 
 tableObject.params = {
   projectId
 }
 
-// getList()
 setSearchParams({ type: 'PeasantHousehold' })
 
 const getVillageTree = async () => {
@@ -288,6 +280,13 @@ const onUpdateDistrict = () => {
 const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({ type: 'PeasantHousehold' })
   headInfo.value = info
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({ type: 'PeasantHousehold' })
 }
 
 onMounted(() => {
@@ -341,6 +340,30 @@ const schema = reactive<CrudSchema[]>([
       component: 'Input',
       componentProps: {
         placeholder: '请输入身份证号'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'signStatus',
+    label: '是否签字',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        placeholder: '请选择',
+        options: [
+          {
+            label: '是',
+            value: 'Sign'
+          },
+          {
+            label: '否',
+            value: 'UnSign'
+          }
+        ]
       }
     },
     table: {
@@ -402,7 +425,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {
@@ -543,7 +566,7 @@ const onEditRow = (row: LandlordDtoType) => {
 const onFormPupClose = (flag: boolean) => {
   dialog.value = false
   if (flag === true) {
-    getList()
+    setSearchParams({ type: 'PeasantHousehold' })
   }
   getLandlordHeadInfo()
 }
@@ -575,6 +598,7 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
+  console.log()
   // 处理参数
   let params = {
     ...data
@@ -595,7 +619,7 @@ const onSearch = (data) => {
   }
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(districtTree.value, params.code, (item) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }

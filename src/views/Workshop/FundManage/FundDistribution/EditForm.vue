@@ -2,7 +2,7 @@
   <ElDialog
     title="详情"
     :model-value="props.show"
-    :width="1000"
+    :width="1400"
     @close="onClose"
     alignCenter
     appendToBody
@@ -116,7 +116,6 @@ const schema = reactive<CrudSchema[]>([
     label: '类型'
   },
   {
-    width: 160,
     field: 'name',
     label: '指标名称',
     search: {
@@ -124,7 +123,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    width: 160,
     field: 'totalPrice',
     label: '金额（元）',
     search: {
@@ -132,7 +130,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    width: 160,
     field: 'grantStatus',
     label: '是否发放',
     search: {
@@ -140,7 +137,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    width: 160,
     field: 'grantTime',
     label: '发放日期',
     search: {

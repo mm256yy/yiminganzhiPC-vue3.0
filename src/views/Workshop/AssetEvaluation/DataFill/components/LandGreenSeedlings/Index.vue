@@ -288,7 +288,7 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
+  const totalPrice = Number(row.number) * Number(row.price) * Number(row.rate)
   return totalPrice
 }
 

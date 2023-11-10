@@ -48,14 +48,14 @@
           <div class="node-item" v-for="(item, index) in nodeList" :key="index">
             <div class="label"> 支付日期： </div>
             <ElDatePicker
-              class="!w-150px"
+              class="!w-175px"
               v-model="item.paymentDate"
               type="date"
               placeholder="请选择日期"
             />
             <div class="label ml-15px"> 支付金额： </div>
             <ElInputNumber
-              class="!w-150px"
+              class="!w-175px"
               v-model="item.amount"
               placeholder="请输入金额"
               :precision="2"
@@ -64,6 +64,7 @@
             />
 
             <el-button
+              v-if="actionType !== 'view'"
               type="primary"
               class="ml-10px"
               :icon="minusIcon"
@@ -72,7 +73,9 @@
             />
           </div>
 
-          <el-button type="primary" :icon="addIcon" @click="addRow">添加一行</el-button>
+          <el-button v-if="actionType !== 'view'" type="primary" :icon="addIcon" @click="addRow"
+            >添加一行</el-button
+          >
         </div>
       </ElFormItem>
       <ElFormItem label="支付时间" prop="paymentNodeList">
@@ -95,7 +98,7 @@
         </div>
       </ElFormItem>
     </ElForm>
-    <template #footer>
+    <template v-if="actionType !== 'view'" #footer>
       <ElButton @click="onClose">取消</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef)" :loading="btnLoading">确认</ElButton>
     </template>
@@ -288,6 +291,8 @@ const submit = async (data: ProfessionalContractDtoType) => {
 }
 
 .node-list {
+  overflow-y: auto;
+
   .node-item {
     display: flex;
     align-items: center;

@@ -203,7 +203,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
 import { fmtStr } from '@/utils/index'
 import OnDocumentation from '../OnDocumentation/Index.vue'
@@ -245,6 +245,13 @@ onMounted(() => {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })
+watch(
+  () => props.baseInfo.implementEscalationStatus,
+  (val) => {
+    console.log(val)
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="less" scoped>

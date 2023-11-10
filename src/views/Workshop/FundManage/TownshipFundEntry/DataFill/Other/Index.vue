@@ -1,3 +1,4 @@
+<!-- 其他 -->
 <template>
   <!-- 搜素 -->
   <div class="search-form-wrap">
@@ -37,7 +38,13 @@
       </template>
     </Table>
     <!--发放-->
-    <EditForm :show="editDialog" :row="itemRow" @close="onEditFormClose" :type="props.type" />
+    <EditForm
+      :show="editDialog"
+      :row="itemRow"
+      @close="onEditFormClose"
+      :type="props.type"
+      ref="childRef"
+    />
     <!--查看-->
     <CheckForm :show="checkDialog" :row="itemRow" @close="onCheckFormClose" :type="props.type" />
   </div>
@@ -65,7 +72,7 @@ interface PropsType {
 }
 
 const props = defineProps<PropsType>()
-
+const childRef = ref<any>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const districtTree = ref<any[]>([])
@@ -183,6 +190,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const onIssue = (row: any) => {
   itemRow.value = row
   editDialog.value = true
+  childRef.value.refresh()
 }
 // 查看
 const onCheckRow = (row: any) => {
@@ -193,6 +201,7 @@ const onCheckRow = (row: any) => {
 const onEditFormClose = (flag) => {
   if (flag) {
     getAmount()
+    setSearchParams({ type: 'other' })
   }
   editDialog.value = false
 }

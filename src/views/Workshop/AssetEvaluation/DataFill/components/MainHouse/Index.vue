@@ -392,7 +392,10 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.landArea) * Number(row.valuationPrice) * Number(row.newnessRate)
+  const totalPrice =
+    Number(row.landArea) *
+    Number(row.valuationPrice) *
+    (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate))
   return totalPrice
 }
 
