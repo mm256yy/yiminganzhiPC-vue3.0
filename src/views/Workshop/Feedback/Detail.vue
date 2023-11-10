@@ -55,7 +55,13 @@
           </div>
 
           <div class="flex items-center pb-12px pl-140px">
-            <ElButton type="primary" :icon="editIcon" @click="addReason">填写意见</ElButton>
+            <ElButton
+              type="primary"
+              :icon="editIcon"
+              @click="addReason"
+              v-show="detail.status !== '1'"
+              >填写意见</ElButton
+            >
           </div>
         </div>
       </div>
