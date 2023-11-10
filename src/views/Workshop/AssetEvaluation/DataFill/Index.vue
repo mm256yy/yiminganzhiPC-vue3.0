@@ -22,10 +22,12 @@
 
     <div class="data-fill-head">
       <UserInfo
+        :role="role"
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         :householdId="Number(householdId)"
         :type="type"
+        :datarole="datarole"
         :estimateStatus="estimateStatus"
         @update-data="getLandlordInfo"
       />
@@ -217,7 +219,7 @@ const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
 const currentProjectId = appStore.currentProjectId
 const role = ref<RoleCodeType>(RoleCodeType.assessor) // 角色代码 assessor 房屋评估的 assessorland 土地评估的
-
+let datarole: any = ref()
 /**
  * 判断角色
  */
@@ -260,6 +262,8 @@ onMounted(() => {
 const getRefresh = () => {
   getFillingStatus()
   role.value = getRole()
+  console.log('角色', role.value)
+
   if (type === 'Landlord') {
     if (role.value === RoleCodeType.assessor) {
       tabsType.value = LandlordTabs
@@ -303,6 +307,7 @@ const onBack = () => {
 // 获取填报状态
 const getFillingStatus = () => {
   getFillingStatusApi(doorNo).then((res: any) => {
+    datarole.value = res
     getStatus(res)
   })
 }
