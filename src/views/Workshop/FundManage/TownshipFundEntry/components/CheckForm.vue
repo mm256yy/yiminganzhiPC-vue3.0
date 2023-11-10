@@ -44,9 +44,7 @@
         }}
       </ElFormItem>
 
-      <ElFormItem label="到账金额" prop="issuedAmount">
-        {{ form.issuedAmount }}&nbsp;元
-      </ElFormItem>
+      <ElFormItem label="到账金额" prop="amount"> {{ form.amount }}&nbsp;元 </ElFormItem>
       <ElFormItem label="已发放金额" prop="issuedAmount">
         {{ form.issuedAmount }}&nbsp;元
       </ElFormItem>

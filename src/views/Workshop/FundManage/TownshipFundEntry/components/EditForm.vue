@@ -45,17 +45,16 @@
               `
         }}
       </ElFormItem>
-      <ElFormItem label="到账金额" prop="amountReceived">
-        {{ form.issuedAmount }}&nbsp;元
-      </ElFormItem>
+      <!-- <ElFormItem label="到账金额"> {{ allamount }}&nbsp;元 </ElFormItem> -->
+      <ElFormItem label="到账金额" prop="amount"> {{ form.amount }}&nbsp;元 </ElFormItem>
       <ElFormItem label="已发放金额" prop="issuedAmount">
         {{ form.issuedAmount }}&nbsp;元</ElFormItem
       >
       <ElFormItem label="待发放" prop="pendingAmount">
         {{ form.pendingAmount }}&nbsp;元
       </ElFormItem>
-      <ElFormItem label="发放金额" prop="amount" required>
-        <ElInputNumber v-model="form.amount" placeholder="请输入" />
+      <ElFormItem label="发放金额" required>
+        <ElInputNumber v-model="allamount" placeholder="请输入" />
         <span>&nbsp;&nbsp;元</span>
       </ElFormItem>
       <ElFormItem label="发放日期" prop="paymentTime" required>
@@ -146,7 +145,9 @@ const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
-
+const allamount = ref<any>()
+console.log(form.value, '111')
+// allamount.value = JSON.parse(JSON.stringify(form.value.amount))
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
@@ -185,8 +186,8 @@ watch(
   (val) => {
     if (val) {
       form.value = {
-        ...props.row,
-        amount: null
+        ...props.row
+        // amount: null
       }
     }
   }
@@ -207,6 +208,13 @@ const submit = (data: any) => {
   })
   onClose(true)
 }
+//刷新清空
+const refresh = () => {
+  relocateOtherPic.value = []
+  form.value = {}
+  allamount.value = null
+}
+defineExpose({ refresh })
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
@@ -215,7 +223,11 @@ const onSubmit = debounce((formEl) => {
       if (!relocateOtherPic.value.length) {
         ElMessage.error('请上传相关凭证')
         return
+      } else if (allamount.value > form.value.pendingAmount) {
+        ElMessage.error('请勿超额发放')
+        return
       } else {
+        form.value.amount = allamount.value
         let params: any = {
           ...form.value,
           relocateOtherPic: JSON.stringify(relocateOtherPic.value || []), // 其他附件

@@ -1,3 +1,4 @@
+<!-- 居民户 -->
 <template>
   <!-- 搜素 -->
   <div class="search-form-wrap">
@@ -57,7 +58,13 @@
       </template>
     </Table>
     <!--发放-->
-    <EditForm :show="editDialog" :type="props.type" :row="itemRow" @close="onEditFormClose" />
+    <EditForm
+      :show="editDialog"
+      :type="props.type"
+      :row="itemRow"
+      @close="onEditFormClose"
+      ref="childRef"
+    />
     <!--查看-->
     <CheckForm :show="checkDialog" :type="props.type" :row="itemRow" @close="onCheckFormClose" />
   </div>
@@ -91,6 +98,7 @@ const projectId = appStore.currentProjectId
 const districtTree = ref<any[]>([])
 // const selectionIds = ref<any[]>([]) // 选择的项 id 集合
 const itemRow = ref<any>({})
+const childRef = ref<any>()
 
 const editDialog = ref<boolean>(false)
 const checkDialog = ref<boolean>(false)
@@ -254,6 +262,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const onIssue = (row: TownshipFundEntryDtoType) => {
   itemRow.value = row
   editDialog.value = true
+  childRef.value.refresh()
 }
 // 查看
 const onCheckRow = (row: TownshipFundEntryDtoType) => {
@@ -264,6 +273,7 @@ const onCheckRow = (row: TownshipFundEntryDtoType) => {
 const onEditFormClose = (flag) => {
   if (flag) {
     getAmount()
+    setSearchParams({ type: 'PeasantHousehold' })
   }
   editDialog.value = false
 }
