@@ -29,8 +29,10 @@
         {{ form.villageCode }}
       </ElFormItem>
 
-      <ElFormItem v-if="isOther" label="名称" prop="household"> 张三 </ElFormItem>
-      <ElFormItem v-if="isOther" label="资金科目" prop="accountNumber"> aaaa </ElFormItem>
+      <ElFormItem v-if="isOther" label="名称" prop="household"> {{ form.name }} </ElFormItem>
+      <ElFormItem v-if="isOther" label="资金科目" prop="accountNumber">
+        {{ form.funSubjectName }}
+      </ElFormItem>
 
       <ElFormItem v-if="!isOther" label="所属区域" prop="area">
         {{
