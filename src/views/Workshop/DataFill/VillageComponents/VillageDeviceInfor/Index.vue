@@ -22,6 +22,9 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #facilitiesName="{ row }">
+          {{ fmtDict(dictObj[235], row.facilitiesName.toString()) }}
+        </template>
         <template #completedTime="{ row }">
           <div>
             {{ standardFormatDate(row.completedTime) }}
@@ -64,7 +67,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -79,6 +82,10 @@ import {
 // import { DemographicDtoType } from '@/api/workshop/population/types'
 // import { formatDate } from '@/utils/index'
 import { locationTypes } from '@/views/Workshop/components/config'
+import { fmtDict } from '@/utils'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   doorNo: string
   householdId

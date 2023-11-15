@@ -20,7 +20,21 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="设施名称" prop="facilitiesName">
-            <ElInput v-model="form.facilitiesName" placeholder="设施名称" class="!w-full" />
+            <!-- <ElInput v-model="form.facilitiesName" placeholder="设施名称" class="!w-full" /> -->
+            <ElSelect
+              clearable
+              filterable
+              v-model="form.facilitiesName"
+              class="!w-full"
+              placeholder="请选择设施类别"
+            >
+              <ElOption
+                v-for="item in dictObj[235]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
