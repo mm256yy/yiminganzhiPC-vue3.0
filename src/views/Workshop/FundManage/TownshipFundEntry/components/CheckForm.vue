@@ -71,7 +71,7 @@
           <template #receipt="{ row }">
             <div class="proof-container">
               <ElImage
-                :src="row.receipt ? JSON.parse(row.receipt).url : ''"
+                :src="row.receipt ? JSON.parse(row.receipt)[0].url : ''"
                 @click="onShowImage"
                 alt="相关凭证"
             /></div>
@@ -137,7 +137,6 @@ const rules = reactive<FormRules>({})
 const onClose = (flag = false) => {
   emit('close', flag)
 }
-
 watch(
   () => props.show,
   async (val) => {
@@ -146,7 +145,6 @@ watch(
       if (props.row) {
         let res = await getFundGrantFindByDoorNo(props.row['doorNo'])
         tableObject.tableList = res
-        console.log(tableObject.tableList)
       }
     }
   }
