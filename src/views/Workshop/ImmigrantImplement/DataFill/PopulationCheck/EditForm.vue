@@ -398,13 +398,33 @@ watch(
 )
 
 const { required } = useValidator()
-
+const checkIdNum = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('身份证不能为空'))
+  }
+  if (!/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/.test(value)) {
+    callback(new Error('请输入正确的身份证号码'))
+  } else {
+    callback()
+  }
+  console.log(rule)
+}
 // 规则校验
 const rules = reactive<FormRules>({
   addReason: props.actionType === 'add' ? [required()] : [],
   name: [required()],
   sex: [required()],
-  card: [required()],
+  card: [
+    {
+      required: true,
+      message: '身份证号码不能为空',
+      trigger: 'blur'
+    },
+    {
+      validator: checkIdNum,
+      trigger: 'blur'
+    }
+  ],
   relation: [required()],
   marital: [required()],
   censusType: [required()],
