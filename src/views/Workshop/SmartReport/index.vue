@@ -102,11 +102,6 @@ let navList = reactive<any>([
             active: false
           },
           {
-            label: '土地',
-            value: 'Land',
-            active: false
-          },
-          {
             label: '坟墓',
             value: 'Grave',
             active: false
@@ -324,6 +319,16 @@ let navList = reactive<any>([
                 active: false
               }
             ]
+          }
+        ]
+      },
+      {
+        label: '土地',
+        children: [
+          {
+            label: '土地信息',
+            value: 'Land',
+            active: false
           }
         ]
       }
