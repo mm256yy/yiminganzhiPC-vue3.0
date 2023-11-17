@@ -66,8 +66,9 @@
         </div>
       </div>
 
-      <div v-if="tabCurrentId !== 0" class="flex align-center pt-20px justify-end">
-        <ElButton type="primary" @click="onFeedback">信息反馈</ElButton>
+      <div style="display: flex; flex-direction: row-reverse; gap: 10px; margin-top: 20px">
+        <ElButton v-if="tabCurrentId !== 0" type="primary" @click="onFeedback">信息反馈</ElButton>
+        <!-- <ElButton v-if="comdbe()" @click="handenoe" type="primary">打印</ElButton> -->
       </div>
     </div>
 
@@ -414,7 +415,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -708,6 +709,8 @@ const onSubTabClick = (tabItem) => {
   if (subTabCurrentId.value === tabItem.id) {
     return
   }
+  console.log(tabItem.id)
+
   subTabCurrentId.value = tabItem.id
 }
 let times = ref()
