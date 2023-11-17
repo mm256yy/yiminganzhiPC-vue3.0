@@ -49,6 +49,7 @@
         :tabCurrentId="tabCurrentId"
         :fillingStatus="fillingStatus"
         @update-data="getLandlordInfo"
+        v-if="tabCurrentId != 1"
       />
 
       <!-- Tabs -->
@@ -313,7 +314,12 @@
       </template>
 
       <!-- 企业建卡 -->
-      <ent-card-establishment v-if="tabCurrentId === 1" />
+      <ent-card-establishment
+        v-if="tabCurrentId === 1"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 腾空 -->
       <template v-if="tabCurrentId === 2">
@@ -354,7 +360,12 @@
       </template>
 
       <!-- 个体户建卡 -->
-      <individual-card-establishment v-if="tabCurrentId === 1" />
+      <individual-card-establishment
+        v-if="tabCurrentId === 1"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 腾空 -->
       <template v-if="tabCurrentId === 2">
