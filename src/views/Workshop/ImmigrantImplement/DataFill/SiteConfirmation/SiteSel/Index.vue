@@ -9,6 +9,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
           <!-- <ElButton
             class="!bg-[#30A952] !border-[#30A952]"
@@ -424,7 +425,9 @@ const close = (params: any[], type: string) => {
     getList()
   }
 }
-
+let comdbe = () => {
+  ElMessage.error('待业主提供模板')
+}
 onMounted(() => {
   getList()
 })

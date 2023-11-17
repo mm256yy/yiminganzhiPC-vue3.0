@@ -46,6 +46,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="comdbe" style="margin-top: 17px"> 打印 </ElButton>
           <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
             档案上传
           </ElButton>
@@ -410,6 +411,9 @@ const onEditSubmit = async (params: any) => {
     immigrantSettle.value = res
     ElMessage.success('保存成功！')
   }
+}
+let comdbe = () => {
+  ElMessage.error('待业主提供模板')
 }
 </script>
 
