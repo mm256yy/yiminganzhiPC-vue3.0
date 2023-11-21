@@ -669,6 +669,24 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'UploadsReport',
+        name: 'workshopUploadsReport',
+        component: () => import('@/views/Workshop/Home/UploadsReport/Index.vue'),
+        meta: {
+          title: '监评单位上传文档',
+          hidden: true
+        }
+      },
+      {
+        path: 'UpReport',
+        name: 'workshopUpReport',
+        component: () => import('@/views/Workshop/Home/UpReport/Index.vue'),
+        meta: {
+          title: '监评单位子类上传文档',
+          hidden: true
+        }
+      },
+      {
         path: 'professionalReport',
         name: 'workshopProfessionalReport',
         component: () => import('@/views/Workshop/Home/ProfessionalReport/Index.vue'),
