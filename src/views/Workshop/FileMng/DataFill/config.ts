@@ -126,6 +126,12 @@ export const reportList = [
     checked: false
   },
   {
+    name: '监督评估报告',
+    url: `/workshop/uploadsReport?type=${ReportTypes.uploads}&title=监督评估报告`,
+    type: 'Change',
+    checked: false
+  },
+  {
     name: '导截流验收设计报告',
     url: `/workshop/report?type=${ReportTypes.Models}&title=导截流验收设计报告`,
     type: 'Models',
