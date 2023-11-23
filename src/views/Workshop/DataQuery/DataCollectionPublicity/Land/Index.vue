@@ -1,79 +1,86 @@
 <template>
   <WorkContentWrap>
     <div class="search-form-wrap">
-      <Search
+      <!-- <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
         @reset="resetSearch"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
+      <ElButton type="primary" @click="onExport">数据导出</ElButton> -->
+      镜岭水库工程土地调查表
     </div>
 
-    <div class="line"></div>
+    <!-- <div class="line"></div> -->
 
     <div class="table-wrap" v-loading="loading">
-      <el-table :data="tableDataList" border :height="getHeight(tableDataList)" style="width: 100%">
-        <el-table-column
-          prop="householdName"
-          label="村集体名称"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column prop="type" label="类型" align="center" header-align="center" />
-        <el-table-column prop="plowland" label="耕地(亩)" align="center" header-align="center" />
-        <el-table-column prop="gardenPlot" label="园地(亩)" align="center" header-align="center" />
-        <el-table-column prop="forestLand" label="林地(亩)" align="center" header-align="center" />
-        <el-table-column
-          prop="trafficLand"
-          label="交通运输用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="watersLand"
-          label="水域及水利设施用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column prop="meadow" label="草地(亩)" align="center" header-align="center" />
-        <el-table-column
-          prop="commerceLand"
-          label="商业服务业设施用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="mineLand"
-          label="工矿用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="dwellingLand"
-          label="住宅用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="serviceLand"
-          label="公共管理与公共服务用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="facilityLand"
-          label="公共设施用地(亩)"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="specialLand"
-          label="特殊用地(亩)"
-          align="center"
-          header-align="center"
-        />
+      <el-table
+        :data="tableDataList"
+        border
+        :height="getHeight(tableDataList)"
+        style="width: 100%"
+        :span-method="objectSpanMethod"
+      >
+        <el-table-column prop="householdName" label="功能区" align="center" header-align="center" />
+        <el-table-column prop="type" label="地块号" align="center" header-align="center" />
+        <el-table-column prop="plowland" label="权属单位" align="center" header-align="center">
+          <el-table-column prop="type" label="乡(镇、街道)" align="center" header-align="center" />
+          <el-table-column prop="type" label="单位名称" align="center" header-align="center" />
+        </el-table-column>
+        <el-table-column prop="gardenPlot" label="土地性质" align="center" header-align="center" />
+        <el-table-column prop="forestLand" label="总面积" align="center" header-align="center" />
+        <el-table-column label="农用地" align="center">
+          <el-table-column
+            v-for="(item1, index1) in tableColData"
+            :key="index1"
+            align="center"
+            prop=""
+            :label="item1.label"
+          >
+            <el-table-column
+              v-for="(item2, index2) in item1.children"
+              :key="index2"
+              :prop="item2.prop"
+              :label="item2.label"
+              align="center"
+            />
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="建设用地" align="center">
+          <el-table-column
+            v-for="(item1, index1) in tableColBuildData"
+            :key="index1"
+            align="center"
+            prop=""
+            :label="item1.label"
+          >
+            <el-table-column
+              v-for="(item2, index2) in item1.children"
+              :key="index2"
+              :prop="item2.prop"
+              :label="item2.label"
+              align="center"
+            />
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="未利用地" align="center">
+          <el-table-column
+            v-for="(item1, index1) in tableColNoneData"
+            :key="index1"
+            align="center"
+            prop=""
+            :label="item1.label"
+          >
+            <el-table-column
+              v-for="(item2, index2) in item1.children"
+              :key="index2"
+              :prop="item2.prop"
+              :label="item2.label"
+              align="center"
+            />
+          </el-table-column>
+        </el-table-column>
       </el-table>
     </div>
   </WorkContentWrap>
@@ -82,9 +89,9 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElTable, ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
+// import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
@@ -106,7 +113,364 @@ const { tableObject } = useTable({
 tableObject.params = {
   projectId
 }
-
+const tableColData = ref<any>([
+  {
+    label: '合计'
+  },
+  {
+    label: '耕地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '水田'
+      },
+      {
+        prop: 'liveDays0',
+        label: '旱地'
+      }
+    ]
+  },
+  {
+    label: '园地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '果园'
+      },
+      {
+        prop: 'liveDays0',
+        label: '茶园'
+      },
+      {
+        prop: 'liveDays0',
+        label: '其他园地'
+      }
+    ]
+  },
+  {
+    label: '林地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '乔木林地'
+      },
+      {
+        prop: 'liveDays0',
+        label: '竹林地'
+      },
+      {
+        prop: 'liveDays0',
+        label: '灌木林地'
+      },
+      {
+        prop: 'liveDays0',
+        label: '其他林地'
+      }
+    ]
+  },
+  {
+    label: '草地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'liveDays0',
+        label: '其他草地'
+      }
+    ]
+  },
+  {
+    label: '交通用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'liveDays0',
+        label: '农村道路'
+      }
+    ]
+  },
+  {
+    label: '水域及水利设施用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'livePerson0',
+        label: '坑塘水面'
+      },
+      {
+        prop: 'liveDays0',
+        label: '沟渠'
+      }
+    ]
+  },
+  {
+    label: '其他用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'liveDays0',
+        label: '田坎'
+      },
+      {
+        prop: 'liveDays0',
+        label: '设施农用地'
+      }
+    ]
+  }
+])
+const tableColBuildData = ref<any>([
+  {
+    label: '合计'
+  },
+  {
+    label: '商服用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '零售商业用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '批发市场用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '餐饮用地'
+      // },
+      // {
+      //   prop: 'livePerson0',
+      //   label: '旅馆用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '商务金融用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '娱乐用地'
+      // },
+      {
+        prop: 'liveDays0',
+        label: '其他商服用地'
+      }
+    ]
+  },
+  {
+    label: '工矿仓储用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '采矿用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '盐田'
+      // },
+      {
+        prop: 'livePerson0',
+        label: '仓储用地'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '工业用地'
+      }
+    ]
+  },
+  {
+    label: '住宅用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '城镇住宅用地'
+      // },
+      {
+        prop: 'liveDays0',
+        label: '农村宅基地'
+      }
+    ]
+  },
+  {
+    label: '公共管理与公共服务用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '机关团体新闻出版用地'
+      },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '新闻出版用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '教育用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '科研用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '医疗卫生用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '社会福利用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '文化设施用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '体育用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '公园与绿地'
+      // },
+      {
+        prop: 'liveDays0',
+        label: '公用设施用地'
+      }
+    ]
+  },
+  {
+    label: '特殊用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '军事设施工地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '领事馆用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '监教场所用地'
+      // },
+      {
+        prop: 'liveDays0',
+        label: '特殊用地'
+      }
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '宗教用地'
+      // },
+      // {
+      //   prop: 'liveDays0',
+      //   label: '殡葬用地'
+      // },
+      // {
+      //   prop: 'roomNumber0',
+      //   label: '风景名胜设施用地'
+      // }
+    ]
+  },
+  {
+    label: '交通运输用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '公路用地'
+      },
+      {
+        prop: 'liveDays0',
+        label: '城镇村道路用地'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '交通服务场站用地'
+      }
+    ]
+  },
+  {
+    label: '水域及水利设施用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '水工建筑用地'
+      }
+    ]
+  }
+])
+const tableColNoneData = ref<any>([
+  {
+    label: '合计'
+  },
+  {
+    label: '水域及水利设施用地',
+    children: [
+      {
+        prop: 'livePerson0',
+        label: '小计'
+      },
+      {
+        prop: 'roomNumber0',
+        label: '河流水面'
+      },
+      {
+        prop: 'liveDays0',
+        label: '水库水面'
+      },
+      {
+        prop: 'liveDays0',
+        label: '内陆滩涂'
+      }
+    ]
+  }
+])
 const schema = reactive<CrudSchema[]>([
   {
     field: 'villageCode',
@@ -171,7 +535,45 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
+const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
+  if (columnIndex === 1) {
+    if (rowIndex == 2 || rowIndex == 3) {
+      return {
+        rowspan: 1,
+        colspan: 3
+      }
+    } else {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    }
+  } else if (columnIndex === 2) {
+    if (rowIndex == 2 || rowIndex == 3) {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    } else {
+      return {
+        rowspan: 1,
+        colspan: 1
+      }
+    }
+  } else if (columnIndex === 3) {
+    if (rowIndex == 2 || rowIndex == 3) {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    } else {
+      return {
+        rowspan: 0,
+        colspan: 0
+      }
+    }
+  }
+}
 /**
  * 计算 table 的高度
  * @param arr 当前 table 的数据
@@ -208,6 +610,11 @@ const getTableList = (params: ParamsType) => {
     .then((res: any) => {
       if (res) {
         tableDataList.value = [...res]
+        tableDataList.value.forEach((item) => {
+          console.log(item.type, '111111111111111111111')
+          if (item.type) {
+          }
+        })
       }
     })
     .finally(() => {
@@ -215,40 +622,40 @@ const getTableList = (params: ParamsType) => {
     })
 }
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = {
-    ...data
-  }
+// const onSearch = (data) => {
+//   // 处理参数
+//   let params = {
+//     ...data
+//   }
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.type) {
-    delete params.type
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      getTableList({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    getTableList({ ...params })
-  }
-}
+//   // 需要重置一次params
+//   tableObject.params = {
+//     projectId
+//   }
+//   if (!params.householdName) {
+//     delete params.householdName
+//   }
+//   if (!params.type) {
+//     delete params.type
+//   }
+//   if (params.villageCode) {
+//     // 拿到对应的参数key
+//     findRecursion(villageTree.value, params.villageCode, (item) => {
+//       if (item) {
+//         params[getParamsKey(item.districtType)] = params.villageCode
+//       }
+//       getTableList({ ...params })
+//     })
+//   } else {
+//     delete params.villageCode
+//     getTableList({ ...params })
+//   }
+// }
 
 // 重置
-const resetSearch = () => {
-  getTableList({})
-}
+// const resetSearch = () => {
+//   getTableList({})
+// }
 
 // 数据导出
 const onExport = () => {
@@ -283,7 +690,9 @@ onMounted(() => {
 <style lang="less" scoped>
 .search-form-wrap {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
 }
 
 .table-wrap {
