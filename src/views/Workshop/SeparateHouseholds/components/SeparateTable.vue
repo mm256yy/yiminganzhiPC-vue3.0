@@ -5,6 +5,15 @@
     </div>
 
     <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div style="color: red">
+          分户说明：人口分户；房屋、附属物和零星林果木等实物成果仍登记在原户主处!
+        </div>
+        <ElSpace>
+          <ElButton type="primary"> 提交 </ElButton>
+        </ElSpace>
+      </div>
+
       <Table
         ref="tabalRef"
         :loading="tableObject.loading"
