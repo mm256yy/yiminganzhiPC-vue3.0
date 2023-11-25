@@ -16,7 +16,7 @@
         </template>
       </ElTableColumn>
       <ElTableColumn label="数量" prop="number" align="center" header-align="center">
-        <template #default="{ row }">
+        <!-- <template #default="{ row }">
           <ElInputNumber
             v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
             :min="0"
@@ -24,10 +24,14 @@
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
           <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
+        </template> -->
+        <template #default="{ row }">
+          <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
+          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
-        <template #default="{ row }">
+        <!-- <template #default="{ row }">
           <ElInputNumber
             v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
             :min="0"
@@ -36,21 +40,26 @@
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
           <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
+        </template> -->
+        <template #default="{ row }">
+          <!-- {{ row.price ? row.number : '——' }} -->
+          <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
+          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
-      <ElTableColumn
-        label="补偿金额"
-        width="100"
-        prop="totalPrice"
-        align="center"
-        header-align="center"
-      >
+      <ElTableColumn label="补偿金额" prop="totalPrice" align="center" header-align="center">
         <template #default="{ row }">
           <!-- <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
           <div v-else-if="row.isUpdate === '1'">{{ computedTotalPrice(row) }}</div>
           <div v-else-if="row.isUpdate === '2'"> {{ getSummaries(row) }} </div> -->
-          <div v-if="row.name !== '奖励费小计'">{{ computedTotalPrice(row) }}</div>
-          <div v-else>{{ getSummaries(row) }}</div>
+          <!-- <div v-if="row.name !== '奖励费小计'">{{ computedTotalPrice(row) }}</div>
+          <div v-else>{{ getSummaries(row) }}</div> -->
+          <ElInputNumber
+            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
+            :min="0"
+            v-model="row.totalPrice"
+            :precision="2"
+          />
         </template>
       </ElTableColumn>
       <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -167,12 +176,12 @@ const onClose = () => {
  */
 const onSave = (data: any, isVerify: string) => {
   loading.value = true
-  const totalPrice = Number(data.number) * Number(data.price)
+  // const totalPrice = Number(data.number) * Number(data.price)
 
   let params = {
     ...data,
     doorNo: props.doorNo,
-    totalPrice,
+    // totalPrice,
     isVerify
   }
   saveRewardFee(params)

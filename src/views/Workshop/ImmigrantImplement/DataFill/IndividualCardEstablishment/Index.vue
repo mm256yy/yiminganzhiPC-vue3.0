@@ -122,6 +122,8 @@
           class="mb-20"
           :row-class-name="tableRowClassName"
           :border="true"
+          show-summary
+          :summary-method="getSummar"
         >
           <ElTableColumn label="类型" align="center" prop="type" header-align="center">
             <template #default="{ row }">
@@ -172,13 +174,11 @@
       </div>
       <div class="pb-12px mt-20px">
         <div class="title"> 备注</div>
-        <div class="text">1. 补偿费、异地搬迁补助费、奖励费等拨付至甲方指定银行</div>
-        <div class="text mt-20px">
-          2. 搬迁补助费、过渡资金补助费、其他补助费、临时安置补助费拨付至乙方指定银行。
-        </div>
-        <div class="text mt-20px">
+        <div class="text">1. 补偿费、奖励费等拨付至甲方指定银行</div>
+        <div class="text mt-20px"> 2. 补助费拨付至乙方指定银行。 </div>
+        <!-- <div class="text mt-20px">
           3.临时安置补助费首次发放时间为乙方腾空被拆迁房屋并办理交付手续之日起十五日内，每半年发放一次，截止时间为安置房选房的当月。
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -294,7 +294,32 @@ const objectSpanMethod = ({ row, rowIndex, columnIndex }: any) => {
     }
   }
 }
-
+// 做合计动作
+const getSummar = (param: any) => {
+  const { columns, data } = param
+  const sums: any = []
+  columns.forEach((column: any, index: any) => {
+    // 设置第一列想显示的字
+    if (index === 0) {
+      sums[index] = '合计'
+      return
+    }
+    const values = data.map((item) => Number(item[column.property]))
+    if (index == 5) {
+      sums[index] = `${values.reduce((prev, curr) => {
+        const value = Number(curr)
+        if (!Number.isNaN(value)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)}`
+    } else {
+      sums[index] = '——'
+    }
+  })
+  return sums
+}
 // 根据户号来做筛选
 tableObject.params = {
   doorNo: props.doorNo,
@@ -418,9 +443,9 @@ const getTypeStr = (type: string) => {
     case '3':
       return '奖励费'
       break
-    case '4':
-      return '其他费用'
-      break
+    // case '4':
+    //   return '其他费用'
+    //   break
     default:
       return ''
   }
