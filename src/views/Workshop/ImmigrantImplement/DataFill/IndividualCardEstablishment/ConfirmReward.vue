@@ -8,7 +8,7 @@
     appendToBody
     :closeOnClickModal="false"
   >
-    <ElTable :data="tableData" :loading="loading" border style="width: 100%">
+    <ElTable :data="tableData" v-loading="loading" border style="width: 100%">
       <ElTableColumn label="指标名称" prop="name" align="center" header-align="center" />
       <ElTableColumn label="单位" width="100" prop="unit" align="center" header-align="center">
         <template #default="{ row }">
@@ -60,6 +60,7 @@
             v-model="row.totalPrice"
             :precision="2"
           />
+          <div v-if="row.name == '奖励费小计'">{{ getSummaries(row) }}</div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
@@ -75,21 +76,13 @@
       </ElTableColumn>
       <ElTableColumn label="操作" width="180" align="center" header-align="center" fixed="right">
         <template #default="{ row }">
-          <ElButton
-            v-if="row.isVerify !== '1' && row.unit"
-            type="primary"
-            @click="onSave(row, '0')"
-          >
+          <ElButton v-if="row.isVerify !== '1'" type="primary" @click="onSave(row, '0')">
             保存
           </ElButton>
-          <ElButton
-            v-if="row.isVerify !== '1' && row.unit"
-            type="primary"
-            @click="onSave(row, '1')"
-          >
+          <ElButton v-if="row.isVerify !== '1'" type="primary" @click="onSave(row, '1')">
             确认
           </ElButton>
-          <div v-if="row.isVerify === '1' && row.unit">已确认</div>
+          <div v-if="row.isVerify === '1'">已确认</div>
         </template>
       </ElTableColumn>
     </ElTable>
@@ -123,8 +116,11 @@ const emit = defineEmits(['close'])
 const initData = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
     if (res && res.length) {
-      tableData.value = res.filter((item: any) => item.type === '3')
+      tableData.value = res.filter(
+        (item: any) => item.isUpdate == '1' && item.phType == 'IndividualHousehold'
+      )
     }
+    loading.value = false
   })
 }
 
@@ -189,7 +185,6 @@ const onSave = (data: any, isVerify: string) => {
       if (res) {
         ElMessage.success('操作成功')
         initData()
-        loading.value = false
       }
     })
     .catch(() => {
