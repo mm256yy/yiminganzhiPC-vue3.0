@@ -17,21 +17,32 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 宗教基本信息报表 </div>
       </div>
-      <img src="@/assets/imgs/report/religious_information.png" alt="" />
+      <ElTable :data="tableData" style="width: 100%">
+        <ElTableColumn type="index" label="序号" width="100" align="center" />
+        <ElTableColumn prop="projectName" label="项目名称" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="doorMaster" label="宗教" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="region" label="所在村" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="region" label="详细地址" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="region" label="负责人" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="region" label="登记证号" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="region" label="主管部门" show-overflow-tooltip align="center" />
+      </ElTable>
+      <!-- <img src="@/assets/imgs/report/religious_information.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
 
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+const tableData = ref<any>([])
 const { back } = useRouter()
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })

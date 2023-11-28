@@ -1,3 +1,4 @@
+<!--零星果木变更-->
 <template>
   <WorkContentWrap>
     <div class="search-form-wrap">
@@ -8,53 +9,23 @@
         @search="onSearch"
         @reset="resetSearch"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
+      <ElButton type="primary" @click="onExport">导出</ElButton>
     </div>
 
     <div class="line"></div>
     <div class="table-wrap" v-loading="loading">
-      <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
-        <el-table-column label="房屋" header-align="center">
-          <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
-          <el-table-column
-            prop="storeyNumber"
-            label="房屋层数"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column
-            prop="constructionTypeText"
-            label="结构"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column
-            prop="landArea"
-            label="房屋建筑面积（m²）"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
-        </el-table-column>
-      </el-table>
-      <el-table :data="appendantList" :height="getHeight(appendantList)" style="width: 100%">
-        <el-table-column label="附属物" header-align="center">
-          <el-table-column prop="index" label="序号" align="center" header-align="center" />
-          <el-table-column prop="name" label="类型" align="center" header-align="center" />
-          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
-          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
-          <el-table-column prop="number" label="数量" align="center" header-align="center" />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
-        </el-table-column>
-      </el-table>
-      <el-table :data="treeList" :height="getHeight(treeList)" style="width: 100%">
-        <el-table-column label="零星林果木" header-align="center">
-          <el-table-column prop="index" label="序号" align="center" header-align="center" />
-          <el-table-column prop="name" label="品种" align="center" header-align="center" />
-          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
-          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
-          <el-table-column prop="number" label="数量" align="center" header-align="center" />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
+      <el-table :data="houseList" style="width: 100%">
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="doorNo" label="户号" show-overflow-tooltip />
+        <el-table-column prop="doorMaster" label="户主" show-overflow-tooltip />
+        <el-table-column prop="region" label="所属区域" show-overflow-tooltip />
+        <el-table-column prop="doorNo" label="操作">
+          <template #default="scope">
+            <el-button size="small" @click="handleCollection(scope.row)">查看采集成果</el-button>
+            <el-button size="small" type="danger" @click="handleReviewers(scope.row)"
+              >查看复核成果</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -72,7 +43,6 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCollective-service'
 import { ParamsType } from '@/api/workshop/dataQuery/villageCollective-types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -117,12 +87,26 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'householdName',
-    label: '村集体名称',
+    label: '户主',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入村集体名称'
+        placeholder: '请输入户主名称'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNumber',
+    label: '户号',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入户号'
       }
     },
     table: {
@@ -209,9 +193,14 @@ const resetSearch = () => {
   getTableList({})
 }
 
-// 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.village)
+// 查看采集人员
+const handleCollection = (row: any) => {
+  console.log('row1', row)
+}
+
+// 查看复核人员
+const handleReviewers = (row: any) => {
+  console.log('row2', row)
 }
 
 // 获取所属区域数据(行政村列表)
@@ -236,7 +225,6 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
-  getTableList({})
 })
 </script>
 <style lang="less" scoped>

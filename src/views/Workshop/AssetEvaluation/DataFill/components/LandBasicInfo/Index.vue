@@ -93,14 +93,15 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.landType">
+            <ElCascader class="!w-full" v-model="row.landType" :options="landTypeOptions" />
+            <!-- <ElSelect clearable placeholder="请选择" v-model="row.landType">
               <ElOption
                 v-for="item in dictObj[233]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
+            </ElSelect> -->
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -219,7 +220,8 @@ import {
   ElOption,
   ElDialog,
   ElFormItem,
-  ElMessage
+  ElMessage,
+  ElCascader
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
@@ -228,6 +230,7 @@ import {
   deleteLandBasicInfoApi
 } from '@/api/AssetEvaluation/landBasicInfo-service'
 import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
+import { getDictByName } from '@/api/workshop/population/service'
 
 interface PropsType {
   doorNo: string
@@ -240,6 +243,7 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
+const landTypeOptions = ref<any>([]) // 地类选项
 
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
@@ -306,6 +310,14 @@ const getList = () => {
   }
   getLandBasicInfoListApi(params).then((res) => {
     tableData.value = res.content
+  })
+}
+
+// 获取地类选项列表
+const getLandTypeOptions = () => {
+  getDictByName('土地类型').then((res: any) => {
+    landTypeOptions.value = res
+    console.log('土地类型', res)
   })
 }
 // 自动计算评估金额
@@ -376,6 +388,7 @@ const onSave = () => {
 
 onMounted(() => {
   getList()
+  getLandTypeOptions()
 })
 </script>
 <style lang="less" scoped>

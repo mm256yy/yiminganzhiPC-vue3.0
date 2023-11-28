@@ -90,6 +90,11 @@ let navList = reactive<any>([
             label: '实物成果汇总',
             value: 'Achievements',
             active: false
+          },
+          {
+            label: '实物成果变更',
+            value: 'OutcomeChange',
+            active: false
           }
         ]
       },
@@ -547,7 +552,6 @@ const deepChooseItem = (item, query = {}) => {
 }
 
 const goLink = (routerName: string, query: any) => {
-  console.log('路由名称:', routerName, query)
   if (!routerName) return
   // router.push({
   //   name: routerName

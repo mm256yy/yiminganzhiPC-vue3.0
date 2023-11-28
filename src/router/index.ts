@@ -530,6 +530,16 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           },
           {
+            path: 'OutcomeChange',
+            name: 'OutcomeChange',
+            component: () =>
+              import('@/views/Workshop/DataQuery/DataCollectionPublicity/OutcomeChange/Index.vue'),
+            meta: {
+              title: '实物成果变更',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
             path: 'VillageCollective',
             name: 'VillageCollective',
             component: () =>
