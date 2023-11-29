@@ -65,6 +65,29 @@
       <ElFormItem label="监理单位" prop="supervisionCompany">
         <ElInput v-model="form.supervisionCompany" class="!w-350px" placeholder="请输入监理单位" />
       </ElFormItem>
+      <ElFormItem label="高程" prop="altitude">
+        <ElInput v-model="form.altitude" class="!w-350px" placeholder="请输入高程" />
+      </ElFormItem>
+      <ElFormItem label="施工单位" prop="constructionCompany">
+        <ElInput v-model="form.constructionCompany" class="!w-350px" placeholder="请输入施工单位" />
+      </ElFormItem>
+      <ElFormItem label="经度" prop="longitude">
+        <ElInput v-model="form.longitude" class="!w-350px" placeholder="请输入经度" />
+      </ElFormItem>
+      <ElFormItem label="纬度" prop="latitude">
+        <ElInput v-model="form.latitude" class="!w-350px" placeholder="请输入纬度" />
+      </ElFormItem>
+      <ElFormItem label="简介" prop="introduction">
+        <!-- 简介字段需与后端重新定义 -->
+        <ElInput
+          v-model="form.introduction"
+          class="!w-350px"
+          placeholder="请输入简介"
+          type="textarea"
+          maxlength="255"
+          show-word-limit
+        />
+      </ElFormItem>
     </ElForm>
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
