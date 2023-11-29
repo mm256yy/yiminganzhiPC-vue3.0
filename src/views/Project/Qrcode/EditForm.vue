@@ -217,6 +217,7 @@ const onSubmit = debounce((formEl) => {
           ...form.value,
           pic: JSON.stringify(relocateVerifyPic.value || []) // 二维码
         }
+        console.log(params, '111111111111')
         submit(params)
       } else {
         let params: any = {
@@ -224,6 +225,7 @@ const onSubmit = debounce((formEl) => {
           pic: JSON.stringify(relocateVerifyPic.value || []), // 二维码
           id: form.value.id
         }
+        console.log(params, '22222222222')
         submit(params)
       }
     } else {

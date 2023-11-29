@@ -121,22 +121,22 @@ watch(
   () => props.show,
   (val) => {
     if (val) {
-      if (props.actionType === 'edit') {
-        // 编辑
-        form.value = {
-          ...props.row
-        }
-        if (props.row.receipt) {
-          receipt.value = JSON.parse(props.row.receipt)
-        }
-        if (form.value.recordTime) {
-          form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
-        }
-      } else {
-        // 新增
-        form.value = {}
-        receipt.value = []
+      // if (props.actionType === 'edit') {
+      // 编辑
+      form.value = {
+        ...props.row
       }
+      // if (props.row.receipt) {
+      //   receipt.value = JSON.parse(props.row.receipt)
+      // }
+      // if (form.value.recordTime) {
+      //   form.value.recordTime = dayjs(form.value.recordTime).format('YYYY-MM-DD')
+      // }
+      // } else {
+      // 新增
+      //   form.value = {}
+      //   receipt.value = []
+      // }
     }
   },
   {

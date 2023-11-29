@@ -132,7 +132,6 @@ const query: ProjectQueryType = reactive({
   page: tableObject.currentPage,
   size: tableObject.size
 })
-
 tableObject.params = {
   name: null,
   townCode: null,
@@ -155,17 +154,17 @@ const reset = () => {
   getList()
 }
 
-// onMounted(() => {
-//   if (!appStore.getIsSysAdmin && !appStore.getIsProjectAdmin) {
-//     ElMessageBox.confirm('你在当前项目中无权限')
-//       .then(() => {
-//         window.location.href = '/#/dashboard/home'
-//       })
-//       .catch(() => {})
-//   } else {
-//     getList()
-//   }
-// })
+onMounted(() => {
+  if (!appStore.getIsSysAdmin && !appStore.getIsProjectAdmin) {
+    ElMessageBox.confirm('你在当前项目中无权限')
+      .then(() => {
+        window.location.href = '/#/dashboard/home'
+      })
+      .catch(() => {})
+  } else {
+    getList()
+  }
+})
 
 const loadDistrictNode = async (node: any, resolve: any) => {
   if (node.level === 3) {
