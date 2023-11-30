@@ -243,6 +243,10 @@ const exportList = ref<exportListType[]>([
   {
     name: '家庭收入统计表',
     value: 'exportImmigrantIncome'
+  },
+  {
+    name: '安置意愿表',
+    value: 'exportImmigrantWill'
   }
 ])
 const surveyDialog = ref(false)
@@ -407,7 +411,20 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
+  {
+    field: 'leaveMessageLocation',
+    label: '所在位置',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入所在位置'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
   // table字段 分割
   {
     field: 'index',

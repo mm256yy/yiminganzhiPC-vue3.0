@@ -29,17 +29,21 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #recordTime="{ row }">
-          <div>{{ row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD') : '-' }}</div>
-        </template>
-
-        <template #createdDate="{ row }">
+        <template #createTime="{ row }">
           <div>{{
-            row.createdDate ? dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-        <template #status="{ row }">
-          <div>{{ row.status === 0 ? '草稿' : '正常' }}</div>
+        <template #auditStatus="{ row }">
+          <div>{{
+            row.auditStatus === 1
+              ? '未审核'
+              : row.auditStatus === 2
+              ? '审核通过'
+              : row.auditStatus === 3
+              ? '未通过'
+              : '未知状态'
+          }}</div>
         </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
@@ -70,11 +74,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import dayjs from 'dayjs'
 import EditForm from './EditForm.vue'
-import {
-  getFundEntryListApi,
-  deleteFundEntryApi,
-  getSumAmountApi
-} from '@/api/fundManage/fundEntry-service'
+import { getMessageApi, delMessageByIdApi } from '@/api/project/LeaveMessage/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
 
@@ -88,11 +88,11 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
-const sumAmount = ref<string>('')
+// const sumAmount = ref<string>('')
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getFundEntryListApi,
-  delListApi: deleteFundEntryApi
+  getListApi: getMessageApi,
+  delListApi: delMessageByIdApi
 })
 
 const { getList, setSearchParams } = methods
@@ -136,22 +136,22 @@ const onViewRow = (row) => {
 //   // 无接口
 // }
 
-const sumAmountApi = async () => {
-  try {
-    sumAmount.value = await getSumAmountApi({
-      projectId,
-      type: '1'
-    })
-  } catch (error) {}
-}
+// const sumAmountApi = async () => {
+//   try {
+//     sumAmount.value = await getSumAmountApi({
+//       projectId,
+//       type: '1'
+//     })
+//   } catch (error) {}
+// }
 
 onMounted(() => {
-  sumAmountApi()
+  // sumAmountApi()
 })
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'name',
+    field: 'content',
     label: '留言内容',
     search: {
       show: true,
@@ -168,7 +168,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'leaveMessagePeopleName',
     label: '留言提交人',
     search: {
       show: true,
@@ -194,7 +194,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'name',
+    field: 'content',
     label: '留言内容',
     search: {
       show: false
@@ -202,7 +202,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'sourceText',
+    field: 'targetTypeStr',
     label: '被留言对象类型',
     search: {
       show: false
@@ -210,7 +210,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'amount',
+    field: 'targetId',
     label: '被留言对象ID',
     search: {
       show: false
@@ -218,7 +218,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 200,
-    field: 'recordTime',
+    field: 'leaveMessagePeopleName',
     label: '留言提交人',
     search: {
       show: false
@@ -226,14 +226,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'createdDate',
+    field: 'leaveMessagePeopleId',
     label: '留言人ID',
     search: {
       show: false
     }
   },
   {
-    field: 'createdBy',
+    field: 'leaveMessagePeopleVillageName',
     label: '留言人所在村',
     search: {
       show: false
@@ -242,15 +242,15 @@ const schema = reactive<CrudSchema[]>([
 
   {
     width: 100,
-    field: 'status',
+    field: 'leaveMessageLocation',
     label: '留言位置',
     search: {
       show: false
     }
   },
   {
-    width: 160,
-    field: 'createdDate',
+    width: 180,
+    field: 'createTime',
     label: '提交时间',
     search: {
       show: false
@@ -258,7 +258,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
-    field: 'createdDate',
+    field: 'auditStatus',
     label: '审核状态',
     search: {
       show: false
@@ -285,7 +285,7 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const onEditFormClose = (flag: boolean) => {
   if (flag) {
-    sumAmountApi()
+    // sumAmountApi()
     getList()
   }
   dialog.value = false

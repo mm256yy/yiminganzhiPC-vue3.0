@@ -16,13 +16,11 @@
           :style="{ width: '320px', 'margin-right': '10px' }"
           placeholder="请选择行政区域"
         />
-        <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="searchProject">
-          查询
-        </ElButton>
-        <ElButton v-if="appStore.getIsSysAdmin" @click="reset">重置</ElButton>
+        <ElButton type="primary" @click="searchProject"> 查询 </ElButton>
+        <ElButton @click="reset">重置</ElButton>
       </div>
       <!-- <Search :schema="searchSchema" @search="searchProject" /> -->
-      <ElButton v-if="appStore.getIsSysAdmin" type="primary" @click="onAddProject">新增</ElButton>
+      <ElButton type="primary" @click="onAddProject">新增</ElButton>
     </div>
     <div>
       <ContentWrap>

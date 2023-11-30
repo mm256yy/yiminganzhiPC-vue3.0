@@ -17,28 +17,28 @@
       :rules="rules"
     >
       <ElFormItem label="被留言对象类型:">
-        {{ form.amount }}
+        {{ form.targetTypeStr }}
       </ElFormItem>
       <ElFormItem label="被留言对象id:">
-        {{ form.amount }}
+        {{ form.targetId }}
       </ElFormItem>
       <ElFormItem label="留言提交人:">
-        {{ form.amount }}
+        {{ form.leaveMessagePeopleName }}
       </ElFormItem>
       <ElFormItem label="留言提交人id:">
-        {{ form.amount }}
+        {{ form.leaveMessagePeopleId }}
       </ElFormItem>
       <ElFormItem label="留言人所在行政村:">
-        {{ form.amount }}
+        {{ form.leaveMessagePeopleVillageName }}
       </ElFormItem>
       <ElFormItem label="留言位置:">
-        {{ form.amount }}
+        {{ form.leaveMessageLocation }}
       </ElFormItem>
       <ElFormItem label="提交时间:">
-        {{ form.amount }}
+        {{ form.createTime ? dayjs(form.createTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
       </ElFormItem>
       <ElFormItem label="留言内容:">
-        {{ form.amount }}
+        {{ form.content }}
       </ElFormItem>
     </ElForm>
 
@@ -75,7 +75,7 @@ import { ref, reactive, watch, computed } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
+import { passMessageApi, notMessageApi } from '@/api/project/LeaveMessage/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useValidator } from '@/hooks/web/useValidator'
 import dayjs from 'dayjs'
@@ -86,10 +86,10 @@ interface PropsType {
   row?: any
 }
 
-interface FileItemType {
-  name: string
-  url: string
-}
+// interface FileItemType {
+//   name: string
+//   url: string
+// }
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
@@ -102,7 +102,7 @@ const { required } = useValidator()
 const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const receipt = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
+// const receipt = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -150,32 +150,34 @@ const onClose = (flag = false) => {
   emit('close', flag)
   formRef.value?.resetFields()
   form.value = {}
-  receipt.value = []
+  // receipt.value = []
 }
 
-const submit = async (data: any) => {
-  if (props.actionType === 'edit') {
-    await addFundEntryApi(data)
+const submit = async (data: any, status: number) => {
+  if (status === 0) {
+    await passMessageApi(data)
+    ElMessage.success('通过审核！')
+    onClose(true)
+  } else if (status === 1) {
+    await notMessageApi(data)
+    ElMessage.warning('驳回审核！')
+    onClose(true)
   }
-  ElMessage.success('操作成功！')
-  onClose(true)
 }
 
 // 提交表单
 const onSubmit = debounce((formEl, status: number) => {
-  if (status === 0) {
-    let params: any = {
-      ...form.value
-    }
-    submit(params)
-    return
-  }
+  // if (status === 0) {
+  //   let params: any = {
+  //     ...form.value
+  //   }
+  //   submit(params)
+  //   return
+  // }
   formEl?.validate((valid: any) => {
     if (valid) {
-      let params: any = {
-        ...form.value
-      }
-      submit(params)
+      let params: any = form.value.id
+      submit(params, status)
     } else {
       return false
     }

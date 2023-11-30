@@ -248,20 +248,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'card',
-    label: '所在位置',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入所在位置'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
 
   // table字段 分割
   {
