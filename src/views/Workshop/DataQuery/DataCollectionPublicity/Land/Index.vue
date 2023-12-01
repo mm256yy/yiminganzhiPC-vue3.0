@@ -35,16 +35,19 @@
             v-for="(item1, index1) in tableColData"
             :key="index1"
             align="center"
-            prop=""
+            :prop="item1.prop"
             :label="item1.label"
           >
-            <el-table-column
-              v-for="(item2, index2) in item1.children"
-              :key="index2"
-              :prop="item2.prop"
-              :label="item2.label"
-              align="center"
-            />
+            <!-- <el-table-column prop="livePerson" label="合计" align="center" header-align="center" /> -->
+            <template v-if="item1.children">
+              <el-table-column
+                v-for="(item2, index2) in item1.children"
+                :key="index2"
+                :prop="item2.prop"
+                :label="item2.label"
+                align="center"
+              />
+            </template>
           </el-table-column>
         </el-table-column>
         <el-table-column label="建设用地" align="center">
@@ -52,7 +55,7 @@
             v-for="(item1, index1) in tableColBuildData"
             :key="index1"
             align="center"
-            prop=""
+            :prop="item1.prop"
             :label="item1.label"
           >
             <el-table-column
@@ -69,7 +72,7 @@
             v-for="(item1, index1) in tableColNoneData"
             :key="index1"
             align="center"
-            prop=""
+            :prop="item1.prop"
             :label="item1.label"
           >
             <el-table-column
@@ -115,6 +118,7 @@ tableObject.params = {
 }
 const tableColData = ref<any>([
   {
+    prop: 'livePerson',
     label: '合计'
   },
   {
@@ -536,37 +540,41 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
-  if (columnIndex === 1) {
-    if (rowIndex == 2 || rowIndex == 3) {
+  if (columnIndex === 0) {
+    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
       return {
         rowspan: 1,
-        colspan: 3
+        colspan: 5
       }
     } else {
       return {
         rowspan: 1,
         colspan: 1
+      }
+    }
+  } else if (columnIndex === 1) {
+    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+      return {
+        rowspan: 0,
+        colspan: 0
       }
     }
   } else if (columnIndex === 2) {
-    if (rowIndex == 2 || rowIndex == 3) {
+    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
       return {
         rowspan: 0,
         colspan: 0
-      }
-    } else {
-      return {
-        rowspan: 1,
-        colspan: 1
       }
     }
   } else if (columnIndex === 3) {
-    if (rowIndex == 2 || rowIndex == 3) {
+    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
       return {
         rowspan: 0,
         colspan: 0
       }
-    } else {
+    }
+  } else if (columnIndex === 4) {
+    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
       return {
         rowspan: 0,
         colspan: 0
@@ -609,12 +617,90 @@ const getTableList = (params: ParamsType) => {
   getLandInfoApi(params)
     .then((res: any) => {
       if (res) {
-        tableDataList.value = [...res]
-        tableDataList.value.forEach((item) => {
-          console.log(item.type, '111111111111111111111')
-          if (item.type) {
+        tableDataList.value = [
+          {
+            gardenPlot: '集体',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          },
+          {
+            gardenPlot: '集体',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          },
+          {
+            gardenPlot: '集体',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          },
+          {
+            gardenPlot: '集体',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          },
+          {
+            gardenPlot: '国有',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          },
+          {
+            gardenPlot: '集体',
+            forestLand: 10,
+            livePerson: 5,
+            livePerson0: 1,
+            roomNumber0: 2,
+            liveDays0: 3
+          }
+        ]
+        let result = tableDataList.value.reduce((total, value, index, arr) => {
+          if (arr[index].gardenPlot == '集体') {
+            for (let i in tableDataList.value[0]) {
+              total[i] = value[i] + (total[i] ? total[i] : 0)
+            }
+          }
+          return total
+        }, [])
+        let result1 = tableDataList.value.reduce((total, value, index, arr) => {
+          if (arr[index].gardenPlot == '国有') {
+            for (let i in tableDataList.value[0]) {
+              total[i] = value[i] + (total[i] ? total[i] : 0)
+            }
+          }
+          return total
+        }, [])
+        let result2 = tableDataList.value.reduce((total, value) => {
+          for (let i in tableDataList.value[0]) {
+            total[i] = value[i] + (total[i] ? total[i] : 0)
+          }
+          return total
+        }, [])
+
+        tableDataList.value.push(result, result1, result2)
+        tableDataList.value.forEach((item, index) => {
+          if (index == tableDataList.value.length - 3) {
+            item.householdName = '集体总计'
+          } else if (index == tableDataList.value.length - 2) {
+            item.householdName = '国有总计'
+          } else if (index == tableDataList.value.length - 1) {
+            item.householdName = '总计'
           }
         })
+        console.log(result, result1, result2, '11111111111111111')
       }
     })
     .finally(() => {
