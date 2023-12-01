@@ -105,6 +105,24 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
+          label="土地性质"
+          :width="200"
+          prop="landNature"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.landNature">
+              <ElOption
+                v-for="item in dictObj[222]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
           label="土地权属"
           :width="180"
           prop="landOwner"
@@ -269,6 +287,7 @@ const defaultRow = {
   growers: '',
   landArea: 0,
   landType: '',
+  landNature: '',
   landOwner: '',
   getType: '',
   landSea: '',
@@ -296,7 +315,11 @@ const onReportData = async () => {
 
 // 添加行
 const onAddRow = () => {
-  tableData.value.push({ ...defaultRow })
+  const params = {
+    ...defaultRow
+  }
+  console.log('UOP', params)
+  tableData.value.push(params)
 }
 
 // 获取列表数据
@@ -379,7 +402,13 @@ const handleClose = () => {
 
 // 保存
 const onSave = () => {
-  saveLandBasicInfoApi(tableData.value).then(() => {
+  const tableList = tableData.value.map((item) => {
+    return {
+      ...item,
+      landType: item.landType ? JSON.stringify(item.landType) : ''
+    }
+  })
+  saveLandBasicInfoApi(tableList).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')

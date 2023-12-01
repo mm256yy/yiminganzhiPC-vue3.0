@@ -165,6 +165,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/rehouse',
+      name: 'rehouse',
+      component: () => import('../views/placement/index.vue'),
+      meta: {
+        name: '安置概览'
+      }
+    },
+    {
       path: '/homesickness',
       name: 'homesickness',
       component: () => import('../views/homesickness/index.vue'),

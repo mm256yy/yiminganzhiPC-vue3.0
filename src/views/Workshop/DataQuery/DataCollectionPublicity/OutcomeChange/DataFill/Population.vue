@@ -13,20 +13,43 @@
     </div>
 
     <div class="line"></div>
-    <div class="table-wrap" v-loading="loading">
-      <el-table :data="houseList" style="width: 100%">
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="doorNo" label="户号" show-overflow-tooltip />
-        <el-table-column prop="doorMaster" label="户主" show-overflow-tooltip />
-        <el-table-column prop="region" label="所属区域" show-overflow-tooltip />
-        <el-table-column prop="population" label="实物采集人口数" show-overflow-tooltip />
-        <el-table-column prop="difference" label="变动差值" />
-        <el-table-column prop="doorNo" label="增计人口" />
-        <el-table-column prop="doorNo" label="变动原因" />
-        <el-table-column prop="doorNo" label="操作">
+    <div class="table-wrap">
+      <el-table :data="tableData" v-loading="loading" style="width: 100%">
+        <el-table-column type="index" width="50" align="center" />
+        <el-table-column prop="doorNo" label="户号" show-overflow-tooltip align="center" />
+        <el-table-column prop="householder" label="户主" show-overflow-tooltip align="center" />
+        <el-table-column prop="area" label="所属区域" show-overflow-tooltip align="center" />
+        <el-table-column
+          prop="entityGatherData"
+          label="实物采集人口数（人）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <el-table-column
+          prop="entityRecheckData"
+          label="实物复核人口数（人）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <el-table-column
+          prop="differenceVal"
+          label="变动差值"
+          show-overflow-tooltip
+          align="center"
+        />
+        <el-table-column
+          prop="populationIncrement"
+          label="增计人口"
+          show-overflow-tooltip
+          align="center"
+        />
+        <el-table-column prop="cause" label="变动原因" show-overflow-tooltip align="center" />
+        <el-table-column prop="operation" label="操作" width="250" align="center">
           <template #default="scope">
-            <el-button size="small" @click="handleCollection(scope.row)">查看采集人员</el-button>
-            <el-button size="small" type="danger" @click="handleReviewers(scope.row)"
+            <el-button size="small" type="primary" text @click="handleCollection(scope.row)"
+              >查看采集人员</el-button
+            >
+            <el-button size="small" type="primary" text @click="handleReviewers(scope.row)"
               >查看复核人员</el-button
             >
           </template>
@@ -42,33 +65,32 @@ import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
-import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCollective-service'
-import { ParamsType } from '@/api/workshop/dataQuery/villageCollective-types'
+import {
+  getPhysicalChangesListApi,
+  getChangeExport
+} from '@/api/workshop/dataQuery/outcomeChange-service'
+import type { OutcomeChangeDtoType } from '@/api/workshop/dataQuery/outcomeChange-types'
 import { screeningTree } from '@/api/workshop/village/service'
+import { useRouter } from 'vue-router'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const { push } = useRouter()
 
-const houseList = ref<any[]>([])
-const appendantList = ref<any[]>([])
-const treeList = ref<any[]>([])
+const tableData = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
-
-const { tableObject } = useTable({
-  getListApi: getVillageCollectiveListApi
+let searchParams = reactive({
+  area: undefined,
+  doorNo: undefined,
+  householder: undefined
 })
-
-tableObject.params = {
-  projectId
-}
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
+    field: 'area',
     label: '所属区域',
     search: {
       show: true,
@@ -90,7 +112,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householdName',
+    field: 'householder',
     label: '户主',
     search: {
       show: true,
@@ -104,7 +126,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNumber',
+    field: 'doorNo',
     label: '户号',
     search: {
       show: true,
@@ -120,44 +142,17 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
 
 /**
  * 获取表格数据
- * @param params 查询参数
- * villageCode 所属区域 code
- * householdName 村集体名称
  */
-const getTableList = (params: ParamsType) => {
+const getTableList = () => {
+  const params = getSearchParams()
   loading.value = true
-  getVillageCollectiveListApi(params)
-    .then((res: any) => {
+  getPhysicalChangesListApi(params)
+    .then((res: OutcomeChangeDtoType[]) => {
       if (res) {
-        houseList.value = res.houseList
-        appendantList.value = res.appendantList
-        treeList.value = res.treeList
+        tableData.value = res
       }
     })
     .finally(() => {
@@ -165,46 +160,65 @@ const getTableList = (params: ParamsType) => {
     })
 }
 
+const getSearchParams = () => {
+  return {
+    type: '1',
+    pId: '36',
+    ...searchParams
+  }
+}
+
+// 导出
+const onExport = async () => {
+  const res = await getChangeExport(getSearchParams())
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
+}
+
 const onSearch = (data) => {
   // 处理参数
-  let params = {
-    ...data
-  }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      getTableList({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    getTableList({ ...params })
-  }
+  searchParams = data
+  getTableList()
 }
 
 // 重置
 const resetSearch = () => {
-  getTableList({})
+  searchParams = {
+    area: undefined,
+    doorNo: undefined,
+    householder: undefined
+  }
+  getTableList()
 }
 
 // 查看采集人员
 const handleCollection = (row: any) => {
   console.log('row1', row)
+  push({
+    name: 'Landlord',
+    query: {}
+  })
 }
 
 // 查看复核人员
 const handleReviewers = (row: any) => {
   console.log('row2', row)
+  push({
+    name: 'LandlordCheck',
+    query: {}
+  })
 }
 
 // 获取所属区域数据(行政村列表)
@@ -214,21 +228,9 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
-
 onMounted(() => {
   getVillageTree()
+  getTableList()
 })
 </script>
 <style lang="less" scoped>

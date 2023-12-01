@@ -10,7 +10,6 @@
         >
           {{ item.name }}
         </div>
-        <ElButton @click="handleExport" type="primary" class="ml-20px"> 导出 </ElButton>
       </div>
     </div>
   </div>
@@ -30,9 +29,8 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElTable, ElTableColumn, ElButton } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
-import { WorkContentWrap } from '@/components/ContentWrap'
 import ChangeIndex from './DataFill/ChangeIndex.vue'
 import Appendant from './DataFill/Appendant.vue'
 import FruitTree from './DataFill/FruitTree.vue'
@@ -65,31 +63,12 @@ const tabsList = [
   }
 ]
 
-// 处理导出
-const handleExport = () => {}
-
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
     return
   }
   tabCurrentId.value = tabItem.id
 }
-
-const tableRowClassName = ({ row }: any) => {
-  if (
-    row.proName &&
-    (row.proName.includes('小计') || row.proName.includes('合计')) &&
-    row.proName !== '其他费用/专项费小计'
-  ) {
-    return 'gray-row'
-  } else {
-    return ''
-  }
-}
-// const { allSchemas } = useCrudSchemas(schema)
-
-// const formRef = ref<FormInstance>()
-// const form = ref<any>({ ...props.baseInfo })
 
 // 获取费用补偿情况列表
 const getRewardFeeList = () => {

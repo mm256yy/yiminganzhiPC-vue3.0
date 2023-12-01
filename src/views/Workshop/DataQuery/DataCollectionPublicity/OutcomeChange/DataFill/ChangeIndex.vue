@@ -1,91 +1,98 @@
 <template>
-  <div class="table-wrap !py-12px !mt-0px">
-    <div class="change-list">
-      <ElTable
-        :data="feeTableData"
-        style="width: 100%"
-        class="mb-20"
-        :row-class-name="tableRowClassName"
-        :border="true"
-      >
-        <ElTableColumn label="序号" align="center" prop="serNo" header-align="center" />
-        <ElTableColumn label="项目" prop="proName" align="center" header-align="center" />
-        <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
-          <template #default="{ row }">
-            {{ row.unit ? row.unit : '——' }}
-          </template>
-        </ElTableColumn>
-
-        <!-- <ElTableColumn label="实物采集" prop="collection" align="center" header-align="center"> -->
-        <ElTableColumn label="水库枢纽工程区" prop="unit" align="center" header-align="center">
-          <ElTableColumn
-            label="水库淹没区"
-            width="100"
-            prop="inundatedArea"
-            align="center"
-            header-align="center"
-          >
-            <template #default="{ row }">
-              {{ row.inundatedArea ? row.inundatedArea : '——' }}
-            </template>
-          </ElTableColumn>
-          <ElTableColumn
-            label="水库影响区"
-            prop="influenceArea"
-            align="center"
-            header-align="center"
-          >
-            <template #default="{ row }">
-              {{ row.influenceArea ? row.influenceArea : '——' }}
-            </template>
-          </ElTableColumn>
-          <ElTableColumn
-            label="枢纽工程建设区"
-            prop="buildArea"
-            align="center"
-            header-align="center"
-          >
-            <template #default="{ row }">
-              {{ row.buildArea ? row.buildArea : '——' }}
-            </template>
-          </ElTableColumn>
-          <ElTableColumn label="小计" prop="subtotal" align="center" header-align="center">
-            <template #default="{ row }">
-              {{ row.subtotal ? row.subtotal : '——' }}
-            </template>
-          </ElTableColumn>
-        </ElTableColumn>
-        <ElTableColumn
-          label="输水工程区"
-          prop="waterProjectArea"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            {{ row.waterProjectArea ? row.waterProjectArea : '——' }}
-          </template>
-        </ElTableColumn>
-        <!-- </ElTableColumn> -->
-        <ElTableColumn label="合计" prop="total" align="center" header-align="center">
-          <template #default="{ row }">
-            {{ row.total ? row.total : '——' }}
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="实物复核合计" prop="total" align="center" header-align="center">
-          <template #default="{ row }">
-            {{ row.total ? row.total : '——' }}
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="差额" prop="difference" align="center" header-align="center" />
-      </ElTable>
+  <WorkContentWrap>
+    <div class="search-form-wrap">
+      <ElButton type="primary" @click="onExport">导出</ElButton>
     </div>
-  </div>
+    <div class="table-wrap !py-12px !mt-0px">
+      <div class="change-list">
+        <ElTable
+          :data="feeTableData"
+          style="width: 100%"
+          class="mb-20"
+          :row-class-name="tableRowClassName"
+          :border="true"
+        >
+          <ElTableColumn label="序号" align="center" prop="serNo" header-align="center" />
+          <ElTableColumn label="项目" prop="proName" align="center" header-align="center" />
+          <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.unit ? row.unit : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="水库枢纽工程区" prop="unit" align="center" header-align="center">
+            <ElTableColumn
+              label="水库淹没区"
+              width="100"
+              prop="inundatedArea"
+              align="center"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                {{ row.inundatedArea ? row.inundatedArea : '——' }}
+              </template>
+            </ElTableColumn>
+            <ElTableColumn
+              label="水库影响区"
+              prop="influenceArea"
+              align="center"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                {{ row.influenceArea ? row.influenceArea : '——' }}
+              </template>
+            </ElTableColumn>
+            <ElTableColumn
+              label="枢纽工程建设区"
+              prop="buildArea"
+              align="center"
+              header-align="center"
+            >
+              <template #default="{ row }">
+                {{ row.buildArea ? row.buildArea : '——' }}
+              </template>
+            </ElTableColumn>
+            <ElTableColumn label="小计" prop="subtotal" align="center" header-align="center">
+              <template #default="{ row }">
+                {{ row.subtotal ? row.subtotal : '——' }}
+              </template>
+            </ElTableColumn>
+          </ElTableColumn>
+          <ElTableColumn
+            label="输水工程区"
+            prop="waterProjectArea"
+            align="center"
+            header-align="center"
+          >
+            <template #default="{ row }">
+              {{ row.waterProjectArea ? row.waterProjectArea : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="合计" prop="total" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.total ? row.total : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="实物复核合计" prop="total" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.reviewTotal ? row.reviewTotal : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="差额" prop="differenceValue" align="center" header-align="center" />
+        </ElTable>
+      </div>
+    </div>
+  </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
-import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
+import { ElButton, ElTable, ElTableColumn } from 'element-plus'
+import {
+  getPhysicalChangesBaseListApi,
+  getChangeExport
+} from '@/api/workshop/dataQuery/outcomeChange-service'
+import { WorkContentWrap } from '@/components/ContentWrap'
+
 const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const tableRowClassName = ({ row }: any) => {
@@ -100,11 +107,30 @@ const tableRowClassName = ({ row }: any) => {
   }
 }
 
-// 获取费用补偿情况列表
+// 获取基础列表
 const getRewardFeeList = () => {
-  getsummaryApi({}).then((res: any) => {
+  getPhysicalChangesBaseListApi().then((res: any) => {
     feeTableData.value = res
   })
+}
+
+// 导出
+const onExport = async () => {
+  const res = await getChangeExport({ type: '0' })
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {
@@ -119,6 +145,11 @@ onMounted(() => {
 
 :deep(.el-form-item) {
   padding: 0 10px;
+}
+
+.search-form-wrap {
+  display: flex;
+  justify-content: space-between;
 }
 
 .title {
