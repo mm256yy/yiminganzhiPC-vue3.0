@@ -11,7 +11,7 @@
         <ElBreadcrumbItem class="text-size-12px">广播电视工程</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div v-if="false" class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">

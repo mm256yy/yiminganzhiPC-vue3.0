@@ -10,7 +10,7 @@
         <ElBreadcrumbItem class="text-size-12px">专业项目（交通工程设施）公示表</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div v-if="false" class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">

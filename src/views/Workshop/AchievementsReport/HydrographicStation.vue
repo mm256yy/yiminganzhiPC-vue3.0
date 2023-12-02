@@ -10,7 +10,7 @@
         <ElBreadcrumbItem class="text-size-12px">水文站房屋及附属物设备汇总表</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div v-if="false" class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">
@@ -19,7 +19,7 @@
       </div>
       <div>
         <ElTable :data="tableData" style="width: 100%">
-          <ElTableColumn type="index" label="序号" align="center" />
+          <ElTableColumn type="index" width="100" label="序号" align="center" />
           <ElTableColumn prop="doorNo" label="项目名称" show-overflow-tooltip align="center" />
           <ElTableColumn prop="doorMaster" label="单位" show-overflow-tooltip align="center" />
           <ElTableColumn prop="region" label="数量" show-overflow-tooltip align="center" />

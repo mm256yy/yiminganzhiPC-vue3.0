@@ -10,7 +10,7 @@
         <ElBreadcrumbItem class="text-size-12px">宗教设施房屋及其附属建筑物</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap">
+    <div v-if="false" class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">
