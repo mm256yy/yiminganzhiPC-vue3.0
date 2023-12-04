@@ -22,14 +22,21 @@
         style="width: 100%"
         :span-method="objectSpanMethod"
       >
-        <el-table-column prop="householdName" label="功能区" align="center" header-align="center" />
-        <el-table-column prop="type" label="地块号" align="center" header-align="center" />
+        <el-table-column prop="locationType" label="功能区" align="center" header-align="center" />
+        <el-table-column prop="plotNo" label="地块号" align="center" header-align="center" />
         <el-table-column prop="plowland" label="权属单位" align="center" header-align="center">
-          <el-table-column prop="type" label="乡(镇、街道)" align="center" header-align="center" />
-          <el-table-column prop="type" label="单位名称" align="center" header-align="center" />
+          <el-table-column prop="town" label="乡(镇、街道)" align="center" header-align="center" />
+          <el-table-column
+            prop="companyName"
+            label="单位名称"
+            align="center"
+            header-align="center"
+          />
         </el-table-column>
-        <el-table-column prop="gardenPlot" label="土地性质" align="center" header-align="center" />
-        <el-table-column prop="forestLand" label="总面积" align="center" header-align="center" />
+        <el-table-column prop="landType" label="土地性质" align="center" header-align="center">
+          <!-- {{ landType == '5' ? '集体' : '-' }} -->
+        </el-table-column>
+        <el-table-column prop="totalArea" label="总面积" align="center" header-align="center" />
         <el-table-column label="农用地" align="center">
           <el-table-column
             v-for="(item1, index1) in tableColData"
@@ -58,13 +65,15 @@
             :prop="item1.prop"
             :label="item1.label"
           >
-            <el-table-column
-              v-for="(item2, index2) in item1.children"
-              :key="index2"
-              :prop="item2.prop"
-              :label="item2.label"
-              align="center"
-            />
+            <template v-if="item1.children">
+              <el-table-column
+                v-for="(item2, index2) in item1.children"
+                :key="index2"
+                :prop="item2.prop"
+                :label="item2.label"
+                align="center"
+              />
+            </template>
           </el-table-column>
         </el-table-column>
         <el-table-column label="未利用地" align="center">
@@ -75,13 +84,15 @@
             :prop="item1.prop"
             :label="item1.label"
           >
-            <el-table-column
-              v-for="(item2, index2) in item1.children"
-              :key="index2"
-              :prop="item2.prop"
-              :label="item2.label"
-              align="center"
-            />
+            <template v-if="item1.children">
+              <el-table-column
+                v-for="(item2, index2) in item1.children"
+                :key="index2"
+                :prop="item2.prop"
+                :label="item2.label"
+                align="center"
+              />
+            </template>
           </el-table-column>
         </el-table-column>
       </el-table>
@@ -118,22 +129,22 @@ tableObject.params = {
 }
 const tableColData = ref<any>([
   {
-    prop: 'livePerson',
+    prop: 'summationAgricultural',
     label: '合计'
   },
   {
     label: '耕地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalPlowland',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'paddy',
         label: '水田'
       },
       {
-        prop: 'liveDays0',
+        prop: 'dryLand',
         label: '旱地'
       }
     ]
@@ -142,19 +153,19 @@ const tableColData = ref<any>([
     label: '园地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalGarden',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'orchard',
         label: '果园'
       },
       {
-        prop: 'liveDays0',
+        prop: 'teaPlantation',
         label: '茶园'
       },
       {
-        prop: 'liveDays0',
+        prop: 'otherGardens',
         label: '其他园地'
       }
     ]
@@ -163,23 +174,23 @@ const tableColData = ref<any>([
     label: '林地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalWoodlands',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'arborLand',
         label: '乔木林地'
       },
       {
-        prop: 'liveDays0',
+        prop: 'bambooForestLand',
         label: '竹林地'
       },
       {
-        prop: 'liveDays0',
+        prop: 'bushland',
         label: '灌木林地'
       },
       {
-        prop: 'liveDays0',
+        prop: 'otherWoodlands',
         label: '其他林地'
       }
     ]
@@ -188,11 +199,11 @@ const tableColData = ref<any>([
     label: '草地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalGrassland',
         label: '小计'
       },
       {
-        prop: 'liveDays0',
+        prop: 'otherGrassland',
         label: '其他草地'
       }
     ]
@@ -201,11 +212,11 @@ const tableColData = ref<any>([
     label: '交通用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalTraffic',
         label: '小计'
       },
       {
-        prop: 'liveDays0',
+        prop: 'ruralRoad',
         label: '农村道路'
       }
     ]
@@ -214,15 +225,15 @@ const tableColData = ref<any>([
     label: '水域及水利设施用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalWater',
         label: '小计'
       },
       {
-        prop: 'livePerson0',
+        prop: 'pondSurface',
         label: '坑塘水面'
       },
       {
-        prop: 'liveDays0',
+        prop: 'ditch',
         label: '沟渠'
       }
     ]
@@ -231,15 +242,15 @@ const tableColData = ref<any>([
     label: '其他用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalOther',
         label: '小计'
       },
       {
-        prop: 'liveDays0',
+        prop: 'fieldRidge',
         label: '田坎'
       },
       {
-        prop: 'liveDays0',
+        prop: 'facilityAgriculturalLand',
         label: '设施农用地'
       }
     ]
@@ -247,13 +258,14 @@ const tableColData = ref<any>([
 ])
 const tableColBuildData = ref<any>([
   {
-    label: '合计'
+    label: '合计',
+    prop: 'summationConstruction'
   },
   {
     label: '商服用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalCommercial',
         label: '小计'
       },
       // {
@@ -281,7 +293,7 @@ const tableColBuildData = ref<any>([
       //   label: '娱乐用地'
       // },
       {
-        prop: 'liveDays0',
+        prop: 'otherCommercialLand',
         label: '其他商服用地'
       }
     ]
@@ -290,7 +302,7 @@ const tableColBuildData = ref<any>([
     label: '工矿仓储用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalStorage',
         label: '小计'
       },
       // {
@@ -302,11 +314,11 @@ const tableColBuildData = ref<any>([
       //   label: '盐田'
       // },
       {
-        prop: 'livePerson0',
+        prop: 'storageLand',
         label: '仓储用地'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'industrialLand',
         label: '工业用地'
       }
     ]
@@ -315,7 +327,7 @@ const tableColBuildData = ref<any>([
     label: '住宅用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalDwelling',
         label: '小计'
       },
       // {
@@ -323,7 +335,7 @@ const tableColBuildData = ref<any>([
       //   label: '城镇住宅用地'
       // },
       {
-        prop: 'liveDays0',
+        prop: 'homestead',
         label: '农村宅基地'
       }
     ]
@@ -332,11 +344,11 @@ const tableColBuildData = ref<any>([
     label: '公共管理与公共服务用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalPublic',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'governmentPublicationLand',
         label: '机关团体新闻出版用地'
       },
       // {
@@ -372,7 +384,7 @@ const tableColBuildData = ref<any>([
       //   label: '公园与绿地'
       // },
       {
-        prop: 'liveDays0',
+        prop: 'publicFacilitiesLand',
         label: '公用设施用地'
       }
     ]
@@ -381,7 +393,7 @@ const tableColBuildData = ref<any>([
     label: '特殊用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalSpecial',
         label: '小计'
       },
       // {
@@ -397,7 +409,7 @@ const tableColBuildData = ref<any>([
       //   label: '监教场所用地'
       // },
       {
-        prop: 'liveDays0',
+        prop: 'specialLand',
         label: '特殊用地'
       }
       // {
@@ -418,19 +430,19 @@ const tableColBuildData = ref<any>([
     label: '交通运输用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalConstructionTraffic',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'constructionHighway',
         label: '公路用地'
       },
       {
-        prop: 'liveDays0',
+        prop: 'constructionVillageRoad',
         label: '城镇村道路用地'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'constructionTransportationService',
         label: '交通服务场站用地'
       }
     ]
@@ -439,11 +451,11 @@ const tableColBuildData = ref<any>([
     label: '水域及水利设施用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalConstructionWater',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'constructionWaterBuildind',
         label: '水工建筑用地'
       }
     ]
@@ -451,25 +463,26 @@ const tableColBuildData = ref<any>([
 ])
 const tableColNoneData = ref<any>([
   {
-    label: '合计'
+    label: '合计',
+    prop: 'summationUnused'
   },
   {
     label: '水域及水利设施用地',
     children: [
       {
-        prop: 'livePerson0',
+        prop: 'subtotalUnused',
         label: '小计'
       },
       {
-        prop: 'roomNumber0',
+        prop: 'unusedRiver',
         label: '河流水面'
       },
       {
-        prop: 'liveDays0',
+        prop: 'unusedReservoir',
         label: '水库水面'
       },
       {
-        prop: 'liveDays0',
+        prop: 'unusedInland',
         label: '内陆滩涂'
       }
     ]
@@ -617,58 +630,60 @@ const getTableList = (params: ParamsType) => {
   getLandInfoApi(params)
     .then((res: any) => {
       if (res) {
-        tableDataList.value = [
-          {
-            gardenPlot: '集体',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          },
-          {
-            gardenPlot: '集体',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          },
-          {
-            gardenPlot: '集体',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          },
-          {
-            gardenPlot: '集体',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          },
-          {
-            gardenPlot: '国有',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          },
-          {
-            gardenPlot: '集体',
-            forestLand: 10,
-            livePerson: 5,
-            livePerson0: 1,
-            roomNumber0: 2,
-            liveDays0: 3
-          }
-        ]
+        tableDataList.value = res
+        console.log(tableDataList.value, '111111111111111')
+        // tableDataList.value = [
+        //   {
+        //     gardenPlot: '集体',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   },
+        //   {
+        //     gardenPlot: '集体',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   },
+        //   {
+        //     gardenPlot: '集体',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   },
+        //   {
+        //     gardenPlot: '集体',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   },
+        //   {
+        //     gardenPlot: '国有',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   },
+        //   {
+        //     gardenPlot: '集体',
+        //     forestLand: 10,
+        //     livePerson: 5,
+        //     livePerson0: 1,
+        //     roomNumber0: 2,
+        //     liveDays0: 3
+        //   }
+        // ]
         let result = tableDataList.value.reduce((total, value, index, arr) => {
-          if (arr[index].gardenPlot == '集体') {
+          if (arr[index].landType == '5') {
             for (let i in tableDataList.value[0]) {
               total[i] = value[i] + (total[i] ? total[i] : 0)
             }
@@ -676,7 +691,7 @@ const getTableList = (params: ParamsType) => {
           return total
         }, [])
         let result1 = tableDataList.value.reduce((total, value, index, arr) => {
-          if (arr[index].gardenPlot == '国有') {
+          if (arr[index].landType == '4') {
             for (let i in tableDataList.value[0]) {
               total[i] = value[i] + (total[i] ? total[i] : 0)
             }
