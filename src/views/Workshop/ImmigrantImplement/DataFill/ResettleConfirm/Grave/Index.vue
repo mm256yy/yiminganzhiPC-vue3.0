@@ -5,6 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <ElButton type="primary" @click="onFilling">填报完成</ElButton>
           <ElButton type="primary" @click="onDocumentation">档案上传</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
@@ -243,6 +244,9 @@ const onFilling = () => {
       emit('updateData')
     }
   })
+}
+let comdbe = () => {
+  ElMessage.error('待业主提供模板')
 }
 </script>
 <style lang="less" scoped>

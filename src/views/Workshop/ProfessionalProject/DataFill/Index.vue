@@ -34,7 +34,7 @@
   <div class="data-fill-body">
     <!-- 协议签订 -->
     <signing-agreement
-      v-if="tabCurrentId == 1"
+      v-if="tabCurrentId === 1"
       :baseInfo="baseInfo"
       @update-data="getProfessionalInfo"
     />

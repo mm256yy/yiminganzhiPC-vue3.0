@@ -11,24 +11,24 @@
       <ElSpace>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
         <div
-          v-if="props.baseInfo.status === 'implementation'"
+          v-if="props.role === 'assessor'"
           :class="{
             status: true,
-            success: props.estimateStatus === '1'
+            success: props.datarole?.houseAllStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.estimateStatus === '1' ? '已填报' : '未填报' }}
+          {{ props.datarole?.houseAllStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <div
           v-else
           :class="{
             status: true,
-            success: props.baseInfo.implementEscalationStatus === '1'
+            success: props.datarole?.landAllStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.baseInfo.implementEscalationStatus === '1' ? '已填报' : '未填报' }}
+          {{ props.datarole?.landAllStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <!-- <div
           :class="{
@@ -214,6 +214,8 @@ interface PropsType {
   type: string
   householdId: number
   estimateStatus: string
+  role: string
+  datarole: any
 }
 
 const props = defineProps<PropsType>()

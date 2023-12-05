@@ -18,7 +18,6 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left max-header">
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金发放</span>
-
           <div class="text">
             总金额：
             <span class="num">{{ molingData.totalPrice }}</span> 元

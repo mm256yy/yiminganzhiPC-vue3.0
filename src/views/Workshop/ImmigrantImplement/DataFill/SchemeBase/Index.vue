@@ -24,17 +24,17 @@
       <!-- 生产安置 step -->
       <div class="step-cont-production" v-if="stepIndex === 2">
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="name" label="姓名" width="100" />
-          <el-table-column prop="relationText" label="与户主关系" width="100" />
-          <el-table-column prop="sex" label="性别" width="100">
+          <el-table-column prop="name" label="姓名" />
+          <el-table-column prop="relationText" label="与户主关系" />
+          <el-table-column prop="sex" label="性别">
             <template #default="scope">
               {{ scope.row.sex == '1' ? '男' : '女' }}
             </template>
           </el-table-column>
-          <el-table-column prop="card" label="身份证" width="200" />
-          <el-table-column prop="censusTypeText" label="户籍类别" width="160" />
-          <el-table-column prop="populationNatureText" label="人口性质" width="160" />
-          <el-table-column prop="settingWay" label="安置方式" width="268">
+          <el-table-column prop="card" label="身份证" />
+          <el-table-column prop="censusTypeText" label="户籍类别" />
+          <el-table-column prop="populationNatureText" label="人口性质" />
+          <el-table-column prop="settingWay" label="安置方式">
             <template #default="scope">
               <el-select
                 v-model="scope.row.settingWay"
@@ -49,9 +49,10 @@
                   :disabled="item.disabled"
                 />
               </el-select>
+              <div v-else></div>
             </template>
           </el-table-column>
-          <el-table-column prop="settingRemark" label="备注" width="288">
+          <el-table-column prop="settingRemark" label="备注">
             <template #default="scope">
               <el-input
                 v-model="scope.row.settingRemark"
@@ -168,7 +169,7 @@ import FindSelf from './components/FindSelf.vue'
 import CenterSupport from './components/CenterSupport.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { cloneDeep } from 'lodash-es'
-
+import { getPlacementPointByIdApi } from '@/api/systemConfig/placementPoint-service'
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
@@ -277,6 +278,9 @@ const filterWay = (data) => {
     // }
     // return item
     item.disabled = false
+    if (isProductionLand.value != '1' && item.value == '1') {
+      item.disabled = true
+    }
     if (data.populationNature != '1' && item.value == '1') {
       item.disabled = true
     }
@@ -327,6 +331,7 @@ const stepNext = async () => {
 /**
  * 搬迁安置确认
  */
+let isProductionLand = ref()
 const immigrantSettleSubmit = async (params: any) => {
   const res = await saveSimulateImmigrantSettleApi(params)
   console.log('搬迁安置确认结果', res)
@@ -334,9 +339,12 @@ const immigrantSettleSubmit = async (params: any) => {
     ElMessage.success('搬迁安置保存成功!')
     stepIndex.value += 1
   }
+  const datas: any = await getPlacementPointByIdApi(params.settleAddress)
+  isProductionLand.value = datas.isProductionLand
+  console.log(datas.isProductionLand, 'bbq')
 }
 const isShow = (row) => {
-  return row.populationNatureText != '增计人口'
+  return row.populationNatureText != '增计人口' && row.populationNatureText
 }
 </script>
 
