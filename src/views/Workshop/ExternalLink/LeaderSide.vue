@@ -463,7 +463,8 @@ const landScreenDtoListObjs = ref<any>({})
 const paramsValue = ref<any>({})
 const arr = ref<any>([])
 const goLink = () => {
-  let url = 'http://test-jinglingtoc.jldt.top/'
+  // let url = 'http://test-jinglingtoc.jldt.top/'
+  let url = 'http://test-jingling.jldt.top/'
   window.open(url)
 }
 // 路由跳转

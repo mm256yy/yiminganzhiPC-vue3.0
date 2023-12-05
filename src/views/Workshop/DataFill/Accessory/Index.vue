@@ -4,7 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
@@ -85,7 +85,12 @@
             :width="180"
           >
             <template #default="scope">
-              <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+              <ElInputNumber
+                :min="0"
+                v-model="scope.row.number"
+                :precision="2"
+                :disabled="!isEdit"
+              />
             </template>
           </ElTableColumn>
           <!-- <ElTableColumn label="高程" prop="altitude" align="center" header-align="center">
@@ -108,7 +113,7 @@
 
           <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
             <template #default="scope">
-              <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+              <ElInput placeholder="请输入内容" v-model="scope.row.remark" :disabled="!isEdit" />
             </template>
           </ElTableColumn>
         </ElTable>
@@ -179,6 +184,7 @@
                 :min="0"
                 v-model="scope.row.number"
                 :precision="scope.row.number > 0 ? 2 : 0"
+                :disabled="!isEdit"
               />
             </template>
           </ElTableColumn>
@@ -202,7 +208,7 @@
 
           <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
             <template #default="scope">
-              <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+              <ElInput placeholder="请输入内容" v-model="scope.row.remark" :disabled="!isEdit" />
             </template>
           </ElTableColumn>
         </ElTable>
@@ -248,6 +254,7 @@ interface PropsType {
   householdId: string
   doorNo: string
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
 
 const props = defineProps<PropsType>()
@@ -257,6 +264,11 @@ const tableData = ref<any[]>([])
 const tableDataLeft = ref<any>([])
 const tableDataRight = ref<any>([])
 const dictStore = useDictStoreWithOut()
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const dictObj = computed(() => dictStore.getDictObj)
 const recordShow = ref(false)

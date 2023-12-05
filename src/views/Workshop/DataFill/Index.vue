@@ -57,7 +57,6 @@
       </div>
 
       <UserInfo :baseInfo="baseInfo" :type="type" />
-      <!-- EnterpriseTabs -->
       <div class="report-tabs">
         <div
           :class="['report-tab-item', reportTabCurrentId === item.id ? 'active' : '']"
@@ -76,6 +75,7 @@
         :doorNo="doorNo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
+        :classifyType="classifyType"
         @refresh="getLandlordInfo"
         @update-info="getLandlordInfo"
       />
@@ -85,6 +85,7 @@
         :doorNo="doorNo"
         :householdId="householdId"
         :type="type"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
@@ -93,6 +94,7 @@
       <Accessory
         :doorNo="doorNo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[2]"
         :surveyStatus="surveyStatus"
       />
@@ -101,6 +103,7 @@
       <Fruitwood
         :doorNo="doorNo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
@@ -109,6 +112,7 @@
       <FamilyIncome
         :doorNo="doorNo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[5]"
         :surveyStatus="surveyStatus"
       />
@@ -118,6 +122,7 @@
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
         :surveyStatus="surveyStatus"
       />
@@ -127,6 +132,7 @@
         :name="name"
         :doorNo="doorNo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
@@ -135,6 +141,7 @@
       <Enclosure
         :doorNo="doorNo"
         :householdId="householdId"
+        :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[7]"
         :surveyStatus="surveyStatus"
       />
@@ -352,7 +359,6 @@ import { globalData } from '@/config/fill'
 
 export default defineComponent({
   beforeRouteEnter(to, _from, next) {
-    console.log(to, 'to')
     if (to.path === '/Workshop/DataFill') {
       // 实物采集
       globalData.currentSurveyStatus = SurveyStatusEnum.Survey
@@ -379,7 +385,6 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ReportTabs,
-  // FlowTabs,
   ReportTabIds,
   EnterpriseTabs,
   IndividualBTabs,
@@ -430,7 +435,7 @@ const titleMsg = (type: string) => {
   }
 }
 const { currentRoute, back } = useRouter()
-const { doorNo, householdId, type, name } = currentRoute.value.query as any
+const { doorNo, householdId, type, name, classifyType } = currentRoute.value.query as any
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>({})

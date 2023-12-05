@@ -47,7 +47,7 @@
         </template>
         <template #trigger>
           <div class="trigger">
-            <ElButton :icon="addIcon" type="default">上传附件</ElButton>
+            <ElButton :icon="addIcon" type="default" :disabled="disabled">上传附件</ElButton>
           </div>
         </template>
       </ElUpload>
@@ -75,6 +75,7 @@ interface FileItemType {
 interface PropsType {
   title: string
   fileList: FileItemType[]
+  disabled?: boolean
 }
 
 const appStore = useAppStore()

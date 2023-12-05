@@ -3,7 +3,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton
             :icon="saveIcon"
             :loading="loading"
@@ -70,6 +70,7 @@
               type="number"
               min="0"
               v-model="row.amount"
+              :disabled="!isEdit"
               oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             />
           </template>
@@ -79,7 +80,7 @@
           <template #default="{ row }">
             <div v-if="row.subtotal" class="total-item"></div>
             <div v-else-if="row.total" class="total-item"></div>
-            <ElInput v-else placeholder="请输入内容" v-model="row.remark" />
+            <ElInput v-else placeholder="请输入内容" v-model="row.remark" :disabled="!isEdit" />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -120,6 +121,7 @@ interface PropsType {
   householdId: string
   doorNo: string
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
 
 interface TotalItemType {
@@ -135,6 +137,11 @@ const tableData = ref<any[]>([])
 const cateTypes = ref<string[]>([])
 const recordShow = ref(false)
 const loading = ref(false)
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const recordClose = () => {
   recordShow.value = false

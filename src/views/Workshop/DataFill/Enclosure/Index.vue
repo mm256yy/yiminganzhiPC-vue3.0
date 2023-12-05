@@ -12,6 +12,7 @@
       </div>
       <ElSpace>
         <ElButton
+          v-if="isEdit"
           :icon="saveIcon"
           :loading="loading"
           type="primary"
@@ -23,12 +24,17 @@
       </ElSpace>
     </div>
 
-    <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
+    <UploadItem
+      :fileList="otherPic"
+      title="其他附件上传"
+      @change="fileChange"
+      :disabled="!isEdit"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import UploadItem from './UploadItem.vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { ElMessage, ElSpace, ElButton } from 'element-plus'
@@ -46,6 +52,7 @@ interface FileItemType {
 interface PropsType {
   householdId: string
   doorNo: string
+  classifyType?: string // 角色分类类型
 }
 
 const props = defineProps<PropsType>()
@@ -70,6 +77,11 @@ const getList = () => {
 }
 
 getList()
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const fileChange = (list: FileItemType[]) => {
   otherPic.value = list

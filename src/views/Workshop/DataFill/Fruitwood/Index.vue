@@ -4,7 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -175,7 +175,13 @@ interface PropsType {
   householdId: string
   doorNo: string
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const props = defineProps<PropsType>()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })

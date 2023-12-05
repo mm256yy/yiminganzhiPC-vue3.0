@@ -178,19 +178,29 @@ const resetSearch = () => {
 
 // 查看采集人员
 const handleCollection = (row: any) => {
-  console.log('row1', row)
   push({
-    name: 'Landlord',
-    query: {}
+    name: 'DataFill',
+    query: {
+      name: row.urlParamName,
+      householdId: row.urlParamHouseholdId,
+      doorNo: row.urlParamDoorNo,
+      type: 'Landlord',
+      classifyType: 'check'
+    }
   })
 }
 
 // 查看复核人员
 const handleReviewers = (row: any) => {
-  console.log('row2', row)
   push({
-    name: 'LandlordCheck',
-    query: {}
+    name: 'DataFillCheck',
+    query: {
+      name: row.urlParamName,
+      householdId: row.urlParamHouseholdId,
+      doorNo: row.urlParamDoorNo,
+      type: 'Landlord',
+      classifyType: 'check'
+    }
   })
 }
 // 获取所属区域数据(行政村列表)
