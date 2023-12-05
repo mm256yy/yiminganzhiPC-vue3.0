@@ -153,7 +153,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElButton,
@@ -191,7 +191,9 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { filterViewDoorNos, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
-
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
   ? router.currentRoute.value?.meta?.title?.split('-')[1]
@@ -412,13 +414,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'leaveMessageLocation',
+    field: 'locationType',
     label: '所在位置',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入所在位置'
+        options: dictObj.value[326]
       }
     },
     table: {

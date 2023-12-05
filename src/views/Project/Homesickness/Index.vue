@@ -29,14 +29,26 @@
       <template #coverPic="{ row }">
         <img :src="row.coverPic" alt="封面" style="height: 80px" />
       </template>
+      <!-- <template #coverPic>
+        <img
+          src="http://192.168.1.128:4000/src/assets/imgs/logo.png"
+          alt="封面"
+          style="height: 80px"
+        />
+      </template> -->
       <template #type="{ row }">
         <div> {{ getTypeText(row.type) }} </div>
       </template>
-      <template #hasTop="{ row }">
-        <div> {{ row.hasTop ? '是' : '否' }} </div>
+      <template #top="{ row }">
+        <div> {{ row.top == '1' ? '是' : '否' }} </div>
       </template>
-      <template #hasShow="{ row }">
-        <div> {{ row.hasShow ? '是' : '否' }} </div>
+      <template #showable="{ row }">
+        <div> {{ row.showable == '1' ? '是' : '否' }} </div>
+      </template>
+      <template #publishTime="{ row }">
+        <div>
+          {{ row.publishTime ? dayjs(row.publishTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div
+        >
       </template>
       <template #content="{ row }">
         <div class="cursor-pointer text-[#409eff]" @click="viewNews(row)"> 查看 </div>
@@ -74,10 +86,11 @@ import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getNewsListApi, delNewsByIdApi } from '@/api/project/news/service'
+import { getNewsListApi, delNewsByIdApi } from '@/api/project/Homesickness/service'
 import type { NewsDtoType } from '@/api/project/news/types'
 import { useRouter } from 'vue-router'
 import { listDictDetailApi } from '@/api/sys/index'
+import dayjs from 'dayjs'
 // import { useAppStoreWithOut } from '@/store/modules/app'
 
 // const appStore2 = useAppStoreWithOut()
@@ -97,11 +110,10 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 
-tableObject.params = {
-  sort: ['releaseTime', 'desc']
-}
-
-getList()
+;(tableObject.params = {
+  sort: ['publishTime', 'desc']
+}),
+  getList()
 
 const changTableList = (list) => {
   return list.map((item) => {
@@ -160,7 +172,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createdName',
+    field: 'author',
     label: '发布者',
     search: {
       show: true,
@@ -168,7 +180,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'releaseTime',
+    field: 'publishTime',
     label: '发布时间',
     search: {
       show: false
@@ -180,14 +192,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'hasShow',
+    field: 'showable',
     label: '是否展示',
     search: {
       show: false
     }
   },
   {
-    field: 'hasTop',
+    field: 'top',
     label: '是否置顶',
     search: {
       show: false
@@ -251,11 +263,11 @@ const onDelRow = async (row: any, multiple: boolean) => {
   )
 }
 const onAddRow = () => {
-  push('/Project/News/Detail')
+  push('/Project/Homesickness/Detail')
 }
 
 const onEditRow = (row: NewsDtoType) => {
-  push(`/Project/News/Detail?id=${row.id}`)
+  push(`/Project/Homesickness/Detail?id=${row.id}`)
 }
 
 const viewNews = (row: NewsDtoType) => {

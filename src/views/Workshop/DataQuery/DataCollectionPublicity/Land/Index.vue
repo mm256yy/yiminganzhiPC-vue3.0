@@ -22,7 +22,9 @@
         style="width: 100%"
         :span-method="objectSpanMethod"
       >
-        <el-table-column prop="locationType" label="功能区" align="center" header-align="center" />
+        <el-table-column prop="locationType" label="功能区" align="center" header-align="center">
+          <template #default="{ row }"> {{ getLocationText(row.locationType) }}</template>
+        </el-table-column>
         <el-table-column prop="plotNo" label="地块号" align="center" header-align="center" />
         <el-table-column prop="plowland" label="权属单位" align="center" header-align="center">
           <el-table-column prop="town" label="乡(镇、街道)" align="center" header-align="center" />
@@ -34,7 +36,9 @@
           />
         </el-table-column>
         <el-table-column prop="landType" label="土地性质" align="center" header-align="center">
-          <!-- {{ landType == '5' ? '集体' : '-' }} -->
+          <template #default="{ row }">{{
+            row.landType == '5' ? '集体' : row.landType == '4' ? '国家' : '-'
+          }}</template>
         </el-table-column>
         <el-table-column prop="totalArea" label="总面积" align="center" header-align="center" />
         <el-table-column label="农用地" align="center">
@@ -112,6 +116,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
 import { ParamsType } from '@/api/workshop/dataQuery/landInfo-types'
 import { exportTypes } from '../config'
+import { locationTypes } from '@/views/Workshop/components/config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -119,7 +124,9 @@ const tableDataList = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
 const emit = defineEmits(['export'])
-
+const getLocationText = (key: string) => {
+  return locationTypes.find((item) => item.value === key)?.label
+}
 const { tableObject } = useTable({
   getListApi: getLandInfoApi
 })
@@ -553,8 +560,8 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
-  if (columnIndex === 0) {
-    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+  if (columnIndex === 1) {
+    if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
       return {
         rowspan: 1,
         colspan: 5
@@ -565,29 +572,29 @@ const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
         colspan: 1
       }
     }
-  } else if (columnIndex === 1) {
-    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+  } else if (columnIndex === 0) {
+    if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
       return {
         rowspan: 0,
         colspan: 0
       }
     }
   } else if (columnIndex === 2) {
-    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+    if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
       return {
         rowspan: 0,
         colspan: 0
       }
     }
   } else if (columnIndex === 3) {
-    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+    if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
       return {
         rowspan: 0,
         colspan: 0
       }
     }
   } else if (columnIndex === 4) {
-    if (rowIndex == 6 || rowIndex == 7 || rowIndex == 8) {
+    if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
       return {
         rowspan: 0,
         colspan: 0
@@ -689,7 +696,7 @@ const getTableList = (params: ParamsType) => {
             }
           }
           return total
-        }, [])
+        }, {})
         let result1 = tableDataList.value.reduce((total, value, index, arr) => {
           if (arr[index].landType == '4') {
             for (let i in tableDataList.value[0]) {
@@ -697,23 +704,41 @@ const getTableList = (params: ParamsType) => {
             }
           }
           return total
-        }, [])
+        }, {})
         let result2 = tableDataList.value.reduce((total, value) => {
           for (let i in tableDataList.value[0]) {
             total[i] = value[i] + (total[i] ? total[i] : 0)
           }
           return total
-        }, [])
+        }, {})
 
         tableDataList.value.push(result, result1, result2)
         tableDataList.value.forEach((item, index) => {
+          // for (const key in item) {
+          //   if (typeof item[key] === 'number') {
+          //     console.log(item[key].toFixed(2), '测试')
+          //   }
+          // }
           if (index == tableDataList.value.length - 3) {
-            item.householdName = '集体总计'
+            item.plotNo = '集体总计'
+            item.companyName = ''
+            item.town = ''
+            item.plowland = ''
+            item.landType = ''
           } else if (index == tableDataList.value.length - 2) {
-            item.householdName = '国有总计'
+            item.plotNo = '国有总计'
+            item.companyName = ''
+            item.town = ''
+            item.plowland = ''
+            item.landType = ''
           } else if (index == tableDataList.value.length - 1) {
-            item.householdName = '总计'
+            item.plotNo = '总计'
+            item.companyName = ''
+            item.town = ''
+            item.plowland = ''
+            item.landType = ''
           }
+          console.log(tableDataList.value, '数据')
         })
         console.log(result, result1, result2, '11111111111111111')
       }

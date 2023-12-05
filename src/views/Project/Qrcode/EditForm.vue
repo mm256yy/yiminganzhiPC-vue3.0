@@ -16,8 +16,8 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="水库项目:" prop="buildingDensity">
-        <ElInput type="text" v-model="form.buildingDensity" placeholder="请输入水库项目" />
+      <ElFormItem label="水库项目:" prop="projectName">
+        <ElInput type="text" v-model="form.projectName" placeholder="请输入水库项目" />
       </ElFormItem>
       <ElFormItem label="所属行政区域:" prop="landSpace">
         <ElTreeSelect
@@ -32,11 +32,11 @@
           placeholder="请选择行政区域"
         />
       </ElFormItem>
-      <ElFormItem label="URL:" required prop="address">
-        <ElInput type="text" v-model="form.address" placeholder="请输入URL" />
+      <ElFormItem label="URL:" required prop="url">
+        <ElInput type="text" v-model="form.url" placeholder="请输入URL" />
       </ElFormItem>
-      <ElFormItem label="备注:" required prop="address">
-        <ElInput type="text" v-model="form.address" placeholder="请输入备注" />
+      <ElFormItem label="备注:" required prop="remark">
+        <ElInput type="text" v-model="form.remark" placeholder="请输入备注" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 二维码： </div>
@@ -70,7 +70,12 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
+      <ElButton type="primary" @click="onSubmit(formRef, 0)" v-if="actionType == 'edit'"
+        >保存</ElButton
+      >
+      <ElButton type="primary" @click="onSubmit(formRef, 1)" v-if="actionType == 'add'"
+        >保存</ElButton
+      >
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -105,7 +110,8 @@ import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { editPlacementPointApi } from '@/api/systemConfig/placementPoint-service'
+// import { editPlacementPointApi } from '@/api/systemConfig/placementPoint-service'
+import { addQrcodeApi, updateQrcodeApi } from '@/api/project/qrCode/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
 import { getDistrictChildrenApi } from '@/api/district'
@@ -201,32 +207,43 @@ const onClose = (flag = false) => {
   })
 }
 
-const submit = (data: any) => {
-  editPlacementPointApi(data).then(() => {
-    ElMessage.success('操作成功！')
-    onClose(true)
-  })
+const submit = (data: any, status: number) => {
+  // editPlacementPointApi(data).then(() => {
+  //   ElMessage.success('操作成功！')
+  //   onClose(true)
+  // })
+  if (status === 0) {
+    updateQrcodeApi(data).then(() => {
+      ElMessage.success('操作成功！')
+      onClose(true)
+    })
+  } else if (status === 1) {
+    addQrcodeApi(data).then(() => {
+      ElMessage.success('操作成功！')
+      onClose(true)
+    })
+  }
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
+const onSubmit = debounce((formEl, status: number) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (props.actionType === 'add') {
         let params: any = {
           ...form.value,
-          pic: JSON.stringify(relocateVerifyPic.value || []) // 二维码
+          fileUrl: JSON.stringify(relocateVerifyPic.value || []) // 二维码
         }
-        console.log(params, '111111111111')
-        submit(params)
+        console.log(params, status)
+        submit(params, status)
       } else {
         let params: any = {
           ...form.value,
-          pic: JSON.stringify(relocateVerifyPic.value || []), // 二维码
+          fileUrl: JSON.stringify(relocateVerifyPic.value || []), // 二维码
           id: form.value.id
         }
-        console.log(params, '22222222222')
-        submit(params)
+        console.log(params, status)
+        submit(params, status)
       }
     } else {
       return false

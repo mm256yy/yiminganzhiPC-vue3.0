@@ -63,7 +63,7 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import { ContentWrap } from '@/components/ContentWrap'
 import { IEditorConfig } from '@wangeditor/editor'
 import { useAppStore } from '@/store/modules/app'
-import { addNewsApi, updateNewsApi, getNewsByIdApi } from '@/api/project/news/service'
+import { addNewsApi, updateNewsApi, getNewsByIdApi } from '@/api/project/Homesickness/service'
 import { useRouter } from 'vue-router'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -91,7 +91,6 @@ const coverPic = ref<FileItemType[]>([])
 const enclosure = ref<FileItemType[]>([])
 const dialogVisible = ref<boolean>(false)
 const imgUrl = ref<string>('')
-
 enum BucketType {
   IMAGE = 'image',
   VIDEO = 'video',
@@ -155,8 +154,9 @@ onMounted(() => {
   getNewsByIdApi(id).then((res) => {
     if (res) {
       coverPic.value = JSON.parse(res.coverPic)
-      enclosure.value = JSON.parse(res.enclosure)
-
+      enclosure.value = JSON.parse(res.otherPic)
+      res.showable = res.showable == '1' ? true : false
+      res.top = res.top == '1' ? true : false
       methods.setValues({
         ...res,
         coverPic: coverPic.value,
@@ -208,7 +208,7 @@ const schema = reactive<FormSchema[]>([
     label: '附件上传'
   },
   {
-    field: 'releaseTime',
+    field: 'publishTime',
     label: '发布时间',
     component: 'DatePicker',
     componentProps: {
@@ -216,13 +216,13 @@ const schema = reactive<FormSchema[]>([
     }
   },
   {
-    field: 'hasTop',
+    field: 'top',
     label: '是否置顶',
     component: 'Switch',
     value: false
   },
   {
-    field: 'hasShow',
+    field: 'showable',
     label: '是否展示',
     component: 'Switch',
     value: true
@@ -234,7 +234,7 @@ const rules = {
   type: [required()],
   author: [required()],
   content: [required()],
-  releaseTime: [required()]
+  publishTime: [required()]
 }
 
 const onSave = async () => {
@@ -252,7 +252,9 @@ const onSave = async () => {
 const onSubmit = async () => {
   const data: NewsDtoType = (await methods.getFormData()) || {}
   data.coverPic = JSON.stringify(coverPic.value)
-  data.enclosure = JSON.stringify(enclosure.value)
+  data.otherPic = JSON.stringify(enclosure.value)
+  data.showable = data.showable == true ? '1' : '0'
+  data.top = data.top == true ? '1' : '0'
   if (!id) {
     await addNewsApi({
       ...data
