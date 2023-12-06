@@ -124,3 +124,24 @@ export const getIndividualHouseholdTree = (params?: any): Promise<TableResponse<
     params
   })
 }
+//分户列表
+export const getSeparateList = (params?: any): Promise<any> => {
+  return request.get({
+    url: '/peasantHousehold/separateList',
+    params
+  })
+}
+//分户提交
+export const postSeparate = (data: Partial<FunPayType>): Promise<any> => {
+  return request.post({
+    url: '/peasantHousehold/separate',
+    data
+  })
+}
+// 合户
+export const postMerge = (data: any): Promise<any> => {
+  return request.post({
+    url: '/peasantHousehold/merge',
+    data
+  })
+}

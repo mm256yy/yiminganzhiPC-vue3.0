@@ -10,7 +10,7 @@
           分户说明：人口分户；房屋、附属物和零星林果木等实物成果仍登记在原户主处!
         </div>
         <ElSpace>
-          <ElButton type="primary"> 提交 </ElButton>
+          <ElButton type="primary" @click="submit"> 提交 </ElButton>
         </ElSpace>
       </div>
 
@@ -29,13 +29,19 @@
         :cell-style="handelCellStyle"
       >
         <template #name="{ row }">
-          <el-select v-model="row.name" class="m-2" placeholder="Select">
+          <el-select
+            v-model="row.name"
+            class="m-2"
+            placeholder="Select"
+            @change="(val) => handelSelectchange(row, val)"
+          >
             <el-option
-              v-for="item in row.datalist"
-              :key="item"
-              :value="item"
+              v-for="item in row.familyMembers"
+              :key="item.id"
+              :value="item.name"
               :disabled="handelselenceKey(row, item)"
-            />
+              >{{ item.name }}
+            </el-option>
           </el-select>
         </template>
         <template #doorNo="{ row }">
@@ -45,16 +51,20 @@
             placeholder="填入户号"
             type="textnumber"
             :disabled="!row.pid"
-          />
+          >
+            <template #prepend v-if="row.pid">{{ row.noDoor }}</template>
+          </el-input>
         </template>
         <template #totalPrice="{ row }">
           <el-checkbox-group v-model="row.listBoy" @change="(val) => handelchange(row, val)">
             <el-checkbox
-              v-for="i in row.datalist"
-              :label="i"
-              :key="i"
+              v-for="i in row.familyMembers"
+              :label="i.name"
+              :key="i.id"
+              :disabled="handelCheckboxKey(row, i)"
               @change="(val) => handelchanges(row, val, i)"
-            />
+              >{{ i.name }}
+            </el-checkbox>
           </el-checkbox-group>
         </template>
         <template #action="{ row }">
@@ -77,28 +87,22 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { deleteFunPayApi, getDetailsList } from '@/api/fundManage/fundPayment-service'
+import { getSeparateList, postSeparate } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
 const districtTree = ref<any[]>([])
 const { register, tableObject, methods } = useTable({
-  getListApi: getDetailsList,
-  delListApi: deleteFunPayApi
+  getListApi: getSeparateList,
+  delListApi: getSeparateList
 })
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  type: 'PeasantHousehold'
 }
-
-getList().then(() => {
-  tableObject.tableList.forEach((item: any) => {
-    item.datalist = ['吕亚连', 2, 3, 4, 5]
-    item.listBoy = ['吕亚连', 2, 3, 4, 5]
-  })
-})
 
 const getdistrictTree = async () => {
   const list = await getVillageTreeApi(projectId)
@@ -107,11 +111,20 @@ const getdistrictTree = async () => {
 }
 onMounted(() => {
   getdistrictTree()
+
+  getList().then(() => {
+    tableObject.tableList.forEach((item: any) => {
+      item.listBoy = []
+      item.familyMembers.forEach((i: any) => {
+        item.listBoy.push(i.name)
+      })
+    })
+  })
 })
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'name',
+    field: 'blurry',
     label: '输入待拆分农户',
     search: {
       show: true,
@@ -161,6 +174,7 @@ const schema = reactive<CrudSchema[]>([
     label: '序号'
   },
   {
+    width: 340,
     field: 'name',
     label: '拟任户主姓名',
     search: {
@@ -175,7 +189,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'villageText',
+    field: 'villageName',
     label: '选定行政村',
     search: {
       show: false
@@ -258,37 +272,58 @@ const onSearch = (data) => {
     })
     delete params.code
   }
-  setSearchParams({ ...params })
+  tableObject.params = { ...params, type: 'PeasantHousehold' }
+  getList().then(() => {
+    tableObject.tableList.forEach((item: any) => {
+      item.listBoy = []
+      item.familyMembers.forEach((i: any) => {
+        item.listBoy.push(i.name)
+      })
+    })
+  })
 }
 let setSearchParamss = () => {
-  tableObject.params = {}
-  setSearchParams({})
+  tableObject.params = { type: 'PeasantHousehold', projectId }
+  getList().then(() => {
+    tableObject.tableList.forEach((item: any) => {
+      item.listBoy = []
+      item.familyMembers.forEach((i: any) => {
+        item.listBoy.push(i.name)
+      })
+    })
+  })
 }
 let handleEdit = (row) => {
   tableObject.tableList.forEach((item: any) => {
-    if (item.id === row.id) {
+    if (item.showDoorNo === row.showDoorNo) {
       let index = item.children ? item.children.length + 1 : 1
       item.children
         ? item.children.push({
-            id: row.id + index,
-            name: index + 1,
-            doorNo: row.doorNo,
-            villageText: row.villageText,
+            showDoorNo: row.showDoorNo + index,
+            name: '',
+            doorNo: '',
+            villageName: row.villageName,
+            villageCode: row.villageCode,
             totalPrice: row.totalPrice,
             action: '删除',
-            pid: row.id,
-            datalist: ['吕亚连', 2, 3, 4, 5]
+            pid: row.showDoorNo,
+            familyMembers: row.familyMembers,
+            listBoy: [],
+            noDoor: row.doorNo.slice(0, 5)
           })
         : (item.children = [
             {
-              id: row.id + index,
-              name: index + 1,
-              doorNo: row.doorNo,
-              villageText: row.villageText,
+              showDoorNo: row.showDoorNo + index,
+              name: '',
+              doorNo: '',
+              villageName: row.villageName,
+              villageCode: row.villageCode,
               totalPrice: row.totalPrice,
               action: '删除',
-              pid: row.id,
-              datalist: ['吕亚连', 2, 3, 4, 5]
+              pid: row.showDoorNo,
+              familyMembers: row.familyMembers,
+              listBoy: [],
+              noDoor: row.doorNo.slice(0, 5)
             }
           ])
     }
@@ -297,9 +332,9 @@ let handleEdit = (row) => {
 }
 let handleDel = (row) => {
   tableObject.tableList.forEach((item: any) => {
-    if (item.id === row.pid) {
+    if (item.showDoorNo === row.pid) {
       item.children.splice(
-        item.children.findIndex((i: any) => i.id === row.id),
+        item.children.findIndex((i: any) => i.showDoorNo === row.showDoorNo),
         1
       )
     }
@@ -320,7 +355,7 @@ let handelCellStyle = ({ columnIndex }) => {
 let handelselenceKey = (row: any, value) => {
   let nameList: any = []
   if (row.pid) {
-    let list = tableObject.tableList.filter((item) => item.id == row.pid)
+    let list = tableObject.tableList.filter((item) => item.showDoorNo == row.pid)
     nameList = list.reduce((pre: any, cur: any) => {
       pre.push(cur.name)
       if (cur.children) {
@@ -338,13 +373,13 @@ let handelselenceKey = (row: any, value) => {
     }, [])
   }
 
-  return nameList.indexOf(value) != -1 ? true : false
+  return nameList.indexOf(value.name) != -1 ? true : false
 }
 let handelchange = (row, val) => {
   let nameList: any = []
   let list: any = []
   if (row.pid) {
-    list = tableObject.tableList.filter((item) => item.id == row.pid)
+    list = tableObject.tableList.filter((item) => item.showDoorNo == row.pid)
   } else {
     list = [row]
   }
@@ -358,11 +393,11 @@ let handelchange = (row, val) => {
     }
     return pre
   }, [])
-  if (nameList.length > 5) {
-    val[val.length - 1]
+
+  if (nameList.length > list[0].familyMembers.length) {
     if (row.pid) {
       tableObject.tableList.forEach((item: any) => {
-        if (item.id === row.pid) {
+        if (item.showDoorNo === row.pid) {
           if (item.listBoy.indexOf(val[val.length - 1]) != -1) {
             item.listBoy.splice(item.listBoy.indexOf(val[val.length - 1]), 1)
           } else {
@@ -376,7 +411,7 @@ let handelchange = (row, val) => {
       })
     } else {
       tableObject.tableList.forEach((item: any) => {
-        if (item.id === row.id) {
+        if (item.showDoorNo === row.showDoorNo) {
           item.children.forEach((res) => {
             if (res.listBoy.indexOf(val[val.length - 1]) != -1) {
               res.listBoy.splice(res.listBoy.indexOf(val[val.length - 1]), 1)
@@ -391,21 +426,83 @@ let handelchanges = (row, val, i) => {
   console.log(row, val, i)
   if (row.pid && !val) {
     tableObject.tableList.forEach((item: any) => {
-      if (item.id === row.pid) {
+      if (item.showDoorNo === row.pid) {
         item.children.forEach((res) => {
-          if (res.id == row.id) {
-            res.listBoy.push(i)
+          if (res.showDoorNo == row.showDoorNo) {
+            res.listBoy.push(i.name)
           }
         })
       }
     })
   } else if (!val) {
     tableObject.tableList.forEach((item: any) => {
-      if (item.id === row.id) {
-        item.listBoy.push(i)
+      if (item.showDoorNo === row.showDoorNo) {
+        item.listBoy.push(i.name)
       }
     })
   }
+}
+let handelCheckboxKey = (row, key) => {
+  let list: any = []
+  let nameList: any = []
+  if (row.pid) {
+    list = tableObject.tableList.filter((item) => item.showDoorNo == row.pid)
+  } else {
+    list = [row]
+  }
+  list.forEach((item: any) => {
+    nameList.push(item.name)
+    if (item.children) {
+      item.children.forEach((i: any) => {
+        nameList.push(i.name)
+      })
+    }
+  })
+
+  return nameList.indexOf(key.name) != -1 ? true : false
+}
+let handelSelectchange = (row, key) => {
+  if (row.listBoy.indexOf(key) == -1) {
+    row.listBoy.push(key)
+    handelchange(row, row.listBoy)
+  }
+}
+let submit = () => {
+  let list: any = []
+  let parent: any = []
+  list = tableObject.tableList.filter((item) => item.children)
+  console.log(list)
+  parent = list.reduce((pre: any, cur: any) => {
+    let m: any = { oldHousehold: {}, newHouseholdList: [] }
+    m.oldHousehold = {
+      householderId: cur.familyMembers.filter((item: any) => item.name === cur.name)[0].id,
+      familyIds: valueKey(cur.familyMembers, cur.listBoy),
+      doorNo: cur.doorNo,
+      villageCode: cur.villageCode
+    }
+    cur.children.forEach((item: any) => {
+      m.newHouseholdList.push({
+        householderId: item.familyMembers.filter((b: any) => b.name === item.name)[0].id,
+        familyIds: valueKey(item.familyMembers, item.listBoy),
+        doorNo: item.doorNo,
+        villageCode: item.villageCode
+      })
+    })
+    pre.push(m)
+    return pre
+  }, [])
+  console.log(parent)
+  postSeparate(parent).then((res: any) => {
+    console.log(res)
+    setSearchParams({ type: 'PeasantHousehold' })
+  })
+}
+let valueKey = (arr, value) => {
+  let m = value.reduce((pre: any, cur: any) => {
+    pre.push(arr.filter((item: any) => item.name === cur)[0].id)
+    return pre
+  }, [])
+  return m
 }
 </script>
 
