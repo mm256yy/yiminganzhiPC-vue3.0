@@ -109,19 +109,18 @@ onMounted(() => {
 
       .step {
         display: flex;
-        align-items: center;
         width: 270px;
         height: 104px;
+        padding: 30px;
         background: #3e73ec;
         border-radius: 16px;
-        padding: 30px;
+        align-items: center;
 
         .step-word {
+          margin-left: 24px;
           font-size: 34px;
-          font-family: PingFang SC, PingFang SC;
           font-weight: 400;
           line-height: 40px;
-          margin-left: 24px;
         }
       }
     }

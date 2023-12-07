@@ -4,7 +4,7 @@ export enum ReportTypes {
   PlanningOutline = 'PlanningOutline', // 规划大纲
   PlanningReport = 'PlanningReport', // 规划报告
   Change = 'Change', // 设计变更报告
-  uploads = 'Change', //档案上传
+  uploads = 'Evaluation', //档案上传
   changeSon = 'ChangeSon', // 设计变更报告子项
   Models = 'Models', // 导截流验收设计报告
   WaterStorage = 'WaterStorage', // 蓄水验收设计报告

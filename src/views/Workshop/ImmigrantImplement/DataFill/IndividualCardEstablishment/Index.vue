@@ -1,4 +1,4 @@
-<!-- 个体户建卡 -->
+<!-- 企业建卡 -->
 <template>
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
@@ -15,18 +15,18 @@
       >
         <ElRow>
           <ElCol :span="6">
-            <ElFormItem label="迁前厂址" prop="accountName">
-              <ElInput v-model="form.accountName" placeholder="请输入" />
+            <ElFormItem label="迁前厂址" prop="beforeAddress">
+              <ElInput v-model="form.beforeAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="安置厂址" prop="bankName">
-              <ElInput v-model="form.bankName" placeholder="请输入" />
+            <ElFormItem label="安置厂址" prop="afterAddress">
+              <ElInput v-model="form.afterAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="企业总人数" prop="bankAccount">
-              <ElInput v-model="form.bankAccount" placeholder="请输入" />
+            <ElFormItem label="企业总人数" prop="peopleNumber">
+              <ElInput v-model="form.peopleNumber" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
@@ -80,32 +80,36 @@
         <div class="row-cont">
           <div class="row">
             <span class="label">营业执照编号：</span>
-            <span class="value">111</span>
+            <span class="value">无</span>
           </div>
 
           <div class="row">
             <span class="label">税务登记编号：</span>
-            <span class="value">111</span>
+            <span class="value">{{ formList?.taxLicenceNo || '无' }}</span>
           </div>
         </div>
         <div class="row-cont">
           <div class="row">
             <span class="label">注册资金（万元）：</span>
-            <span class="value">111</span>
+            <span class="value">{{ formList?.registeredAmount || '无' }}</span>
           </div>
 
           <div class="row">
             <span class="label">登记注册类型：</span>
-            <span class="value">111</span>
+            <span class="value">{{ formList?.registerTypeText || '无' }}</span>
           </div>
           <div class="row">
             <span class="label">成立日期：</span>
-            <span class="value">111</span>
+            <span class="value">{{
+              formList?.establishDate
+                ? dayjs(formList?.establishDate).format('YYYY-MM-DD HH:mm:ss')
+                : '-'
+            }}</span>
           </div>
         </div>
         <div class="row">
           <span class="label">经营范围：</span>
-          <span class="value">111</span>
+          <span class="value">{{ formList?.natureBusiness || '无' }}</span>
         </div>
       </div>
       <div class="flex items-center justify-between pb-12px mt-20px">
@@ -217,14 +221,15 @@ import { standardFormatDate } from '@/utils/index'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import {
   updatePeasantHouseholdInfo,
-  getCompensationCardList
+  getCompensationCardList,
+  getcompanyList
 } from '@/api/immigrantImplement/createCard/service'
-
+import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted } from 'vue'
-
+import { useRouter } from 'vue-router'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -418,7 +423,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
 const rules = reactive<FormRules>({
-  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
+  beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
 })
 
 // 获取费用补偿情况列表
@@ -552,9 +557,22 @@ const onSubmit = debounce((formEl) => {
     }
   })
 }, 600)
-
+const formList = ref<any>({})
+const { currentRoute, back } = useRouter()
 onMounted(() => {
   getRewardFeeList()
+  getcompanyList({
+    size: 10,
+    page: 0,
+    status: 'review',
+    doorNo: currentRoute.value.query.doorNo
+  }).then((res: any) => {
+    if (res) {
+      formList.value = res.content[0]
+      console.log(res.content[0], 'bbq')
+    }
+  })
+  console.log(form)
 })
 </script>
 <style lang="less" scoped>

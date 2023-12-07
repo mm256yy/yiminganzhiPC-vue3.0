@@ -35,3 +35,9 @@ export const saveRewardFee = (data: CreateCardType) => {
     data
   })
 }
+export const getcompanyList = (params) => {
+  return request.get({
+    url: `/company`,
+    params
+  })
+}

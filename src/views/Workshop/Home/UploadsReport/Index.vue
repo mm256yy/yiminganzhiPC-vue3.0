@@ -194,7 +194,7 @@ const onDelRow = async (row: ReportUpdateType) => {
 
 // 跳转至子项列表
 const toLink = (row: ReportUpdateType) => {
-  push(`/workshop/UpReport?changeId=${row.id}&type=ChangeSon`)
+  push(`/workshop/UpReport?changeId=${row.id}&type=EvaluationSon`)
 }
 
 // 关闭 新增/编辑 弹框

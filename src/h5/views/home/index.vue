@@ -112,8 +112,8 @@ let dataList: any = ref([])
 let getNewsLists = async () => {
   let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
   noticeList.value = data.content
-  if (noticeList.value.length > 3) {
-    noticeList.value.length = 3
+  if (noticeList.value.length > 2) {
+    noticeList.value.length = 2
   }
 }
 let getHomesicknesss = async () => {
@@ -185,9 +185,10 @@ onMounted(() => {
 }
 
 .rehouse-box {
-  padding: 20px 30px;
   display: flex;
+  padding: 20px 30px;
   justify-content: center;
+
   .rehouse-section {
     height: 140px;
   }
