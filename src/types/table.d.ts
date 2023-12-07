@@ -1,7 +1,7 @@
 import { ButtonType } from 'element-plus'
 
 export type TableColumn = {
-  field: string
+  field: any
   label?: string
   children?: TableColumn[]
 } & Recordable

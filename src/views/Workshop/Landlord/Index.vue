@@ -25,13 +25,14 @@
           </div>
         </div>
         <ElSpace>
+          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton>
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
         </ElSpace>
       </div>
       <Table
-        selection
+        ref="tableRef"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{
@@ -43,6 +44,7 @@
         row-key="id"
         headerAlign="center"
         align="center"
+        selection
         highlightCurrentRow
         @register="register"
       >
@@ -153,7 +155,7 @@ export default defineComponent({
 </script>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElButton,
@@ -191,7 +193,9 @@ import type {
 } from '@/api/workshop/landlord/types'
 import { filterViewDoorNos, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
-
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
   ? router.currentRoute.value?.meta?.title?.split('-')[1]
@@ -203,8 +207,10 @@ const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
+const deleteIcon = useIcon({ icon: 'ant-design:delete-outlined' })
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
+const tableRef = ref()
 
 const landlordIds = ref<number[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
@@ -243,6 +249,10 @@ const exportList = ref<exportListType[]>([
   {
     name: '家庭收入统计表',
     value: 'exportImmigrantIncome'
+  },
+  {
+    name: '安置意愿表',
+    value: 'exportImmigrantWill'
   }
 ])
 const surveyDialog = ref(false)
@@ -407,7 +417,20 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
+  {
+    field: 'locationType',
+    label: '所在位置',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: dictObj.value[326]
+      }
+    },
+    table: {
+      show: false
+    }
+  },
   // table字段 分割
   {
     field: 'index',
@@ -649,6 +672,18 @@ const onPrint = async () => {
 
 const onPrintDialogClose = () => {
   printDialog.value = false
+}
+
+// 批量删除
+const onBatchDelete = () => {
+  // console.log('delete', tableRef.value.selections)
+
+  if (tableRef.value.selections?.length <= 0) {
+    ElMessage.error('请至少选中一条记录')
+    return
+  }
+
+  //const doorNoStr = tableRef.value.selections.map((item) => item.doorNo).join()
 }
 
 const onExport = () => {

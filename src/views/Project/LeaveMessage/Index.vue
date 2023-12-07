@@ -1,206 +1,274 @@
 <template>
-  <ContentWrap title="留言审核管理">
-    <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
-
-    <div class="flex items-center justify-between pb-18px">
-      <div class="text-size-14px"> 留言审核列表 </div>
-      <ElSpace>
-        <!-- v-hasPermi="['news:add']" -->
-        <ElButton :icon="addIcon" type="primary" @click="onAddRow">新增文章</ElButton>
-      </ElSpace>
+  <WorkContentWrap>
+    <div class="search-form-wrap">
+      <Search
+        :schema="allSchemas.searchSchema"
+        @search="setSearchParams"
+        @reset="setSearchParams"
+      />
     </div>
-    <Table
-      border
-      v-model:pageSize="tableObject.size"
-      v-model:currentPage="tableObject.currentPage"
-      :pagination="{
-        total: tableObject.total
-      }"
-      :loading="tableObject.loading"
-      :data="changTableList(tableObject.tableList)"
-      :columns="allSchemas.tableColumns"
-      tableLayout="auto"
-      row-key="id"
-      headerAlign="center"
-      align="center"
-      highlightCurrentRow
-      @register="register"
-    >
-      <template #coverPic="{ row }">
-        <img :src="row.coverPic" alt="封面" style="height: 80px" />
-      </template>
-      <template #type="{ row }">
-        <div> {{ getTypeText(row.type) }} </div>
-      </template>
-      <template #hasTop="{ row }">
-        <div> {{ row.hasTop ? '是' : '否' }} </div>
-      </template>
-      <template #hasShow="{ row }">
-        <div> {{ row.hasShow ? '是' : '否' }} </div>
-      </template>
-      <template #content="{ row }">
-        <div class="cursor-pointer text-[#409eff]" @click="viewNews(row)"> 查看 </div>
-      </template>
-      <!-- v-hasPermi="['news:delete']" -->
-      <template #action="{ row }">
-        <TableEditColumn :row="row" @edit="onEditRow(row)" @delete="onDelRow" />
-      </template>
-    </Table>
 
-    <ElDialog
-      title="文章内容查看"
-      :model-value="dialog"
-      :width="800"
-      @close="dialog = false"
-      alignCenter
-      appendToBody
-    >
-      <div v-html="content"></div>
-    </ElDialog>
-  </ContentWrap>
+    <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-header-left">
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">实景留言</span>
+        </div>
+      </div>
+      <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
+        :pagination="{
+          total: tableObject.total
+        }"
+        :loading="tableObject.loading"
+        :data="tableObject.tableList"
+        :columns="allSchemas.tableColumns"
+        row-key="id"
+        headerAlign="center"
+        align="center"
+        highlightCurrentRow
+        @register="register"
+      >
+        <template #createTime="{ row }">
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
+        </template>
+        <template #auditStatus="{ row }">
+          <div>{{
+            row.auditStatus === 1
+              ? '未审核'
+              : row.auditStatus === 2
+              ? '审核通过'
+              : row.auditStatus === 3
+              ? '未通过'
+              : '未知状态'
+          }}</div>
+        </template>
+        <template #action="{ row }">
+          <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
+          <el-button type="primary" link @click="onEditRow(row)">审核</el-button>
+          <el-button type="danger" link @click="onDelRow(row, false)"> 删除 </el-button>
+        </template>
+      </Table>
+    </div>
+
+    <EditForm
+      :show="dialog"
+      :actionType="actionType"
+      :row="tableObject.currentRow"
+      @close="onEditFormClose"
+    />
+  </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElDialog, ElSpace } from 'element-plus'
-import { ContentWrap } from '@/components/ContentWrap'
+import { ElButton, ElSpace, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table, TableEditColumn } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getNewsListApi, delNewsByIdApi } from '@/api/project/news/service'
-import type { NewsDtoType } from '@/api/project/news/types'
+import dayjs from 'dayjs'
+import EditForm from './EditForm.vue'
+import { getMessageApi, delMessageByIdApi } from '@/api/project/LeaveMessage/service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
-import { listDictDetailApi } from '@/api/sys/index'
-// import { useAppStoreWithOut } from '@/store/modules/app'
 
-// const appStore2 = useAppStoreWithOut()
-// const permissions = appStore2.getPermissions
-const appStore = useAppStore()
 const { push } = useRouter()
+const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+const projectId = appStore.currentProjectId
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
-const content = ref('')
-const dialog = ref(false)
-const newsTypes = ref<any[]>([])
+// const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 
-const dictName = 'news' // 字典名称
+const actionType = ref<'view' | 'add' | 'edit'>('add')
+const dialog = ref<boolean>(false)
+// const sumAmount = ref<string>('')
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getNewsListApi,
-  delListApi: delNewsByIdApi
+  getListApi: getMessageApi,
+  delListApi: delMessageByIdApi
 })
+
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  sort: ['releaseTime', 'desc']
+  projectId
 }
 
 getList()
 
-const changTableList = (list) => {
-  return list.map((item) => {
-    try {
-      item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-      return item
-    } catch (err) {
-      return item
-    }
-  })
+const onDelRow = async (row: any, multiple: boolean) => {
+  tableObject.currentRow = row
+  const { delList, getSelections } = methods
+  const selections = await getSelections()
+  await delList(
+    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
+    multiple
+  )
 }
 
-const getNewsDict = async () => {
-  const res = await listDictDetailApi({
-    name: dictName,
-    projectId: appStore.getCurrentProjectId
-  })
-  if (res && res.dictValList) {
-    newsTypes.value = res.dictValList
-    console.log(res, 'res')
-  }
+const onAddRow = () => {
+  actionType.value = 'add'
+  tableObject.currentRow = null
+  dialog.value = true
 }
 
-getNewsDict()
+const onEditRow = (row: any) => {
+  actionType.value = 'edit'
+  tableObject.currentRow = row
+  dialog.value = true
+}
+
+const onViewRow = (row) => {
+  actionType.value = 'view'
+  tableObject.currentRow = row
+  dialog.value = true
+}
+
+// const onExport = () => {
+//   console.log('导出')
+//   // 无接口
+// }
+
+// const sumAmountApi = async () => {
+//   try {
+//     sumAmount.value = await getSumAmountApi({
+//       projectId,
+//       type: '1'
+//     })
+//   } catch (error) {}
+// }
+
+onMounted(() => {
+  // sumAmountApi()
+})
 
 const schema = reactive<CrudSchema[]>([
   {
+    field: 'content',
+    label: '留言内容',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
+    field: 'leaveMessagePeopleName',
+    label: '留言提交人',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+
+  // table
+  {
+    width: 80,
     field: 'index',
     type: 'index',
     label: '序号'
   },
   {
-    field: 'title',
-    label: '标题',
-    search: {
-      show: true,
-      component: 'Input'
-    }
-  },
-  {
-    field: 'coverPic',
-    label: '封面图',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'type',
-    label: '类型',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: newsTypes as any
-      }
-    }
-  },
-  {
-    field: 'createdName',
-    label: '发布者',
-    search: {
-      show: false,
-      component: 'Input'
-    }
-  },
-  {
-    field: 'releaseTime',
-    label: '发布时间',
-    search: {
-      show: false
-      // component: 'DatePicker',
-      // componentProps: {
-      //   type: 'daterange',
-      //   valueFormat: 'YYYY-MM-DD'
-      // }
-    }
-  },
-  {
-    field: 'hasShow',
-    label: '是否展示',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'hasTop',
-    label: '是否置顶',
-    search: {
-      show: false
-    }
-  },
-  {
+    width: 160,
     field: 'content',
-    label: '详情',
+    label: '留言内容',
     search: {
       show: false
     }
   },
   {
+    width: 160,
+    field: 'targetTypeStr',
+    label: '被留言对象类型',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
+    field: 'targetId',
+    label: '被留言对象ID',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 200,
+    field: 'leaveMessagePeopleName',
+    label: '留言提交人',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
+    field: 'leaveMessagePeopleId',
+    label: '留言人ID',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'leaveMessagePeopleVillageName',
+    label: '留言人所在村',
+    search: {
+      show: false
+    }
+  },
+
+  {
+    width: 100,
+    field: 'leaveMessageLocation',
+    label: '留言位置',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 180,
+    field: 'createTime',
+    label: '提交时间',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
+    field: 'auditStatus',
+    label: '审核状态',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 200,
     field: 'action',
     label: '操作',
     fixed: 'right',
-    width: '100px',
     search: {
       show: false
     },
@@ -214,53 +282,63 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-// const deletBtn = ref()
-// const editBtn = ref()
-// onMounted(() => {
-//   if (
-//     permissions.find((item) => {
-//       return item == 'news:delete'
-//     })
-//   ) {
-//     deletBtn.value = true
-//   } else {
-//     deletBtn.value = false
-//   }
 
-//   if (
-//     permissions.find((item) => {
-//       return item == 'news:update'
-//     })
-//   ) {
-//     editBtn.value = true
-//   } else {
-//     editBtn.value = false
-//   }
-// })
-const onDelRow = async (row: NewsDtoType | null, multiple: boolean) => {
-  tableObject.currentRow = row
-  const { delList, getSelections } = methods
-  const selections = await getSelections()
-  await delList(
-    multiple ? selections.map((v) => v.id) : [tableObject.currentRow?.id as number],
-    multiple
-  )
-}
-
-const onAddRow = () => {
-  push('/Project/News/Detail')
-}
-
-const onEditRow = (row: NewsDtoType) => {
-  push(`/Project/News/Detail?id=${row.id}`)
-}
-
-const viewNews = (row: NewsDtoType) => {
-  content.value = row.content
-  dialog.value = true
-}
-
-const getTypeText = (val) => {
-  return newsTypes.value.find((item) => item.value === val)?.label || ''
+const onEditFormClose = (flag: boolean) => {
+  if (flag) {
+    // sumAmountApi()
+    getList()
+  }
+  dialog.value = false
 }
 </script>
+
+<style lang="less" scoped>
+.view-upload {
+  display: flex;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color-1);
+  white-space: nowrap;
+  cursor: default;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
+  align-items: center;
+}
+
+.file-list {
+  height: 210px;
+  overflow-y: scroll;
+
+  .file-item {
+    display: flex;
+    padding: 5px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color-1);
+    border-bottom: 1px solid #ebebeb;
+    align-items: center;
+
+    .m-lr-20px {
+      margin: 0 20px;
+    }
+
+    .file-name {
+      text-align: justify;
+      word-break: break-all;
+    }
+
+    .number {
+      font-weight: 500;
+      color: var(--el-color-primary);
+    }
+
+    .flex-none {
+      flex: none;
+    }
+  }
+}
+</style>

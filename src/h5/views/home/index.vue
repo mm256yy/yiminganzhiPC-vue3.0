@@ -26,6 +26,9 @@
       </div>
     </div>
   </div>
+  <div class="rehouse-box" @click="toRehouse">
+    <ElImage class="rehouse-section" :src="iconRehouseSrc" alt="安置概览" />
+  </div>
   <div class="flex-col notice-section" style="max-height: 10rem; overflow: auto">
     <div class="flex-row justify-between items-center">
       <div class="flex-col items-start">
@@ -83,6 +86,7 @@ import iconAnnouncement from '@/h5/assets/imgs/icon_announcement.png'
 import iconFace from '@/h5/assets/imgs/icon_face.png'
 import iconSituation from '@/h5/assets/imgs/icon_general_situation.png'
 import imageBannerNotice from '@/h5/assets/imgs/image_banner_notice.png'
+import iconRehouseSrc from '@/h5/assets/imgs/icon_rehouse.png'
 import { useRouter } from 'vue-router'
 import { getNewsList, getHomesickness } from './service'
 const { push } = useRouter()
@@ -114,12 +118,17 @@ let getNewsLists = async () => {
 }
 let getHomesicknesss = async () => {
   let data = await getHomesickness()
-  console.log(data.content)
   dataList.value = data.content
   if (dataList.value.length > 2) {
     dataList.value.length = 2
   }
 }
+
+// 安置概览
+const toRehouse = () => {
+  toLink('rehouse')
+}
+
 onMounted(() => {
   getNewsLists()
   getHomesicknesss()
@@ -172,6 +181,16 @@ onMounted(() => {
       font-size: 28px;
       color: #171718;
     }
+  }
+}
+
+.rehouse-box {
+  display: flex;
+  padding: 20px 30px;
+  justify-content: center;
+
+  .rehouse-section {
+    height: 140px;
   }
 }
 

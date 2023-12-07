@@ -12,7 +12,6 @@
     </div>
 
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="loading">
       <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
