@@ -611,7 +611,6 @@ const getTableList = (params: ParamsType) => {
       if (res) {
         tableDataList.value = [...res]
         tableDataList.value.forEach((item) => {
-          console.log(item.type, '111111111111111111111')
           if (item.type) {
           }
         })

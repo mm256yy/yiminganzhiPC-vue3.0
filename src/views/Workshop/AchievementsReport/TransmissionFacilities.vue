@@ -19,32 +19,51 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn prop="lineName" label="线路名称" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="doorMaster" label="权属" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="region" label="电压等级（kV）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="region" label="导线类型、规格" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="region" label="导线截面（mm²）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="ownershipCompany" label="权属" show-overflow-tooltip align="center" />
         <ElTableColumn
-          prop="region"
+          prop="voltageClasses"
+          label="电压等级（kV）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="wireType"
+          label="导线类型、规格"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="wireCrossSection"
+          label="导线截面（mm²）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="submergeEnthesis"
           label="淹没以及征（占）起止点"
           show-overflow-tooltip
           align="center"
         />
         <ElTableColumn
-          prop="region"
+          prop="submergeWidth"
           label="淹没以及征（占）长度（km）"
           show-overflow-tooltip
           align="center"
         />
         <ElTableColumn
-          prop="region"
+          prop="concreteRoad"
           label="混凝土杆数（根）"
           show-overflow-tooltip
           align="center"
         />
-        <ElTableColumn prop="region" label="铁塔数（基）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="region" label="变压器（台）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="ironTower" label="铁塔数（基）" show-overflow-tooltip align="center" />
+        <ElTableColumn
+          prop="transformer"
+          label="变压器（台）"
+          show-overflow-tooltip
+          align="center"
+        />
       </ElTable>
-      <!-- <img src="@/assets/imgs/report/Transmission_facilities.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -56,13 +75,19 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const getList = async () => {
+  const result = await getCommonReportApi(6)
+  tableData.value = result
+}
+
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义

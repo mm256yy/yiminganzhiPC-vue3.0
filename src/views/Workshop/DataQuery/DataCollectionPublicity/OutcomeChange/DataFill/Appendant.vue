@@ -161,7 +161,7 @@ const resetSearch = () => {
 // 查看采集人员
 const handleCollection = (row: any) => {
   push({
-    name: 'DataFill',
+    name: 'Collection',
     query: {
       name: row.urlParamName,
       householdId: row.urlParamHouseholdId,

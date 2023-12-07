@@ -45,3 +45,8 @@ export const uploadFileApi = (file) => {
 export const downloadFileApi = (fileName: string) => {
   return request.get({ url: `/file/download/${fileName}` })
 }
+
+// 获取用户token
+export const getTokenApi = () => {
+  return request.post({ url: `/leader/getToken` })
+}

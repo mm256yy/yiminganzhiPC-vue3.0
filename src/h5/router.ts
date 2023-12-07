@@ -4,11 +4,32 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      path: '/home',
+      path: '/',
       name: 'home',
-      component: () => import('./views/home/leader.vue'),
+      component: () => import('./views/index.vue'),
+      redirect: '/home',
+      children: [
+        {
+          path: '/home',
+          name: 'home',
+          component: () => import('./views/home/leader.vue'),
+          meta: {
+            name: '镜岭水库'
+          }
+        },
+        {
+          path: '/roam',
+          name: 'roam',
+          component: () => import('./views/roam/index.vue'),
+          meta: {
+            name: '库区漫游',
+            type: 'leader'
+          }
+        }
+      ],
       meta: {
-        name: '镜岭水库'
+        name: '领导端首页',
+        type: 'leader'
       }
     },
     {

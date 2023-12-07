@@ -136,6 +136,12 @@ const handleSendSMS = () => {
     // 开始倒计时
     countDown()
   })
+
+  // 跳转第三方
+  const toThirdParty = () => {
+    const h5Token = sessionStorage.getItem('h5token')
+    window.location.href = `http://test-jingling.jldt.top?h5token=${h5Token}`
+  }
 }
 </script>
 

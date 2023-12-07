@@ -1,5 +1,5 @@
 <template>
-  <ContentWrap title="菜单1管理">
+  <ContentWrap title="菜单管理">
     <div class="flex justify-between">
       <Search
         :schema="allSchemas.searchSchema"

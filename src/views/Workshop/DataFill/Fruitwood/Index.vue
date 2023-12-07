@@ -33,6 +33,7 @@
               placeholder="请输入品种名称"
               v-model="row.name"
               filterable
+              :disabled="!isEdit"
             >
               <ElOption
                 v-for="item in dictObj[250]"
@@ -48,7 +49,12 @@
         </ElTableColumn>
         <ElTableColumn label="用途" prop="usageType" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择用途" v-model="row.usageType">
+            <ElSelect
+              clearable
+              placeholder="请选择用途"
+              v-model="row.usageType"
+              :disabled="!isEdit"
+            >
               <ElOption
                 v-for="item in dictObj[325]"
                 :key="item.value"
@@ -63,7 +69,7 @@
         </ElTableColumn>
         <ElTableColumn label="规格" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择规格" v-model="row.size">
+            <ElSelect clearable placeholder="请选择规格" v-model="row.size" :disabled="!isEdit">
               <ElOption
                 v-for="item in dictObj[269]"
                 :key="item.value"
@@ -79,7 +85,7 @@
         </ElTableColumn>
         <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择单位" v-model="row.unit">
+            <ElSelect clearable placeholder="请选择单位" v-model="row.unit" :disabled="!isEdit">
               <ElOption
                 v-for="item in dictObj[264]"
                 :key="item.value"
@@ -94,7 +100,7 @@
         </ElTableColumn>
         <ElTableColumn label="数量" prop="number" :width="180" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" :disabled="!isEdit" />
           </template>
         </ElTableColumn>
         <!-- <ElTableColumn
@@ -110,7 +116,7 @@
         </ElTableColumn> -->
         <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
           <template #default="scope">
-            <ElSelect clearable v-model="scope.row.inundationRange">
+            <ElSelect clearable v-model="scope.row.inundationRange" :disabled="!isEdit">
               <ElOption
                 v-for="item in dictObj[346]"
                 :key="item.value"
@@ -122,10 +128,10 @@
         </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="scope">
-            <ElInput placeholder="请输入内容" v-model="scope.row.remark" />
+            <ElInput placeholder="请输入内容" v-model="scope.row.remark" :disabled="!isEdit" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn v-if="isEdit" label="操作" prop="action">
           <template #default="scope">
             <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
               删除

@@ -28,3 +28,8 @@ export const getHomesickness = (): Promise<any> => {
     params: { sort: ['createdDate,desc'], size: 9999 }
   })
 }
+
+// 获取用户token
+export const getTokenApi = () => {
+  return request.post({ url: `/leader/getToken` })
+}

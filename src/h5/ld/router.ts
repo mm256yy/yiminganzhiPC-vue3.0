@@ -23,7 +23,8 @@ const router = createRouter({
           name: 'roam',
           component: () => import('../views/roam/index.vue'),
           meta: {
-            name: '库区漫游'
+            name: '库区漫游',
+            type: 'leader'
           }
         },
         {
@@ -42,7 +43,11 @@ const router = createRouter({
             name: '我的'
           }
         }
-      ]
+      ],
+      meta: {
+        name: '移民端首页',
+        type: 'migrate'
+      }
     },
     {
       path: '/announcementDetail',

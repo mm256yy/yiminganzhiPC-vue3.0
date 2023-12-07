@@ -19,20 +19,39 @@
       </div>
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn type="index" label="序号" width="100" align="center" />
-        <ElTableColumn prop="project" label="项目" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="projectName" label="项目" show-overflow-tooltip align="center" />
         <ElTableColumn label="杆路" header-align="center">
-          <ElTableColumn prop="doorMaster" label="规格" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="doorMaster" label="长度(km)" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="根数(个)" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="poleSpecification"
+            label="规格"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn prop="poleWidth" label="长度(km)" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="poleQuantity"
+            label="根数(个)"
+            show-overflow-tooltip
+            align="center"
+          />
         </ElTableColumn>
         <ElTableColumn label="光缆" header-align="center">
-          <ElTableColumn prop="doorMaster" label="规格" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="doorMaster" label="长度(km)" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="opticalCableSpecification"
+            label="规格"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn
+            prop="opticalCableWidth"
+            label="长度(km)"
+            show-overflow-tooltip
+            align="center"
+          />
         </ElTableColumn>
-        <ElTableColumn prop="doorMaster" label="基站（座）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="region" label="机房（座）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="baseStation" label="基站（座）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="machineRoom" label="机房（座）" show-overflow-tooltip align="center" />
       </ElTable>
-      <!-- <img src="@/assets/imgs/report/move_facilities.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -44,13 +63,19 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const getList = async () => {
+  const result = await getCommonReportApi(10)
+  tableData.value = result
+}
+
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
