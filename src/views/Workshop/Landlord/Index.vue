@@ -25,7 +25,13 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton>
+          <ElButton
+            v-if="globalData.currentSurveyStatus === SurveyStatusEnum.Survey"
+            :icon="deleteIcon"
+            type="primary"
+            @click="onBatchDelete"
+            >批量删除</ElButton
+          >
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
@@ -180,7 +186,8 @@ import {
   getLandlordListApi,
   delLandlordByIdApi,
   getLandlordHeadApi,
-  getLandlordSurveyByIdApi
+  getLandlordSurveyByIdApi,
+  batchDeleteApi
 } from '@/api/workshop/landlord/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
@@ -675,15 +682,22 @@ const onPrintDialogClose = () => {
 }
 
 // 批量删除
-const onBatchDelete = () => {
-  // console.log('delete', tableRef.value.selections)
-
+const onBatchDelete = async () => {
   if (tableRef.value.selections?.length <= 0) {
     ElMessage.error('请至少选中一条记录')
     return
   }
 
-  //const doorNoStr = tableRef.value.selections.map((item) => item.doorNo).join()
+  const idList = tableRef.value.selections.map((item) => item.id)
+  tableObject.loading = true
+  try {
+    await batchDeleteApi(idList)
+    ElMessage.success('批量删除成功')
+    tableObject.loading = false
+    setSearchParams({ type: 'PeasantHousehold' })
+  } catch {
+    tableObject.loading = false
+  }
 }
 
 const onExport = () => {
