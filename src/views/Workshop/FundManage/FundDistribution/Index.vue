@@ -5,10 +5,16 @@
       <ElBreadcrumbItem class="text-size-12px">资金发放</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="ElButton-form-wrap">
-      <ElButton type="primary" @click="selenceTable('居民户')"> 居民户 </ElButton>
-      <ElButton type="primary" @click="selenceTable('企（事）业单位')"> 企（事）业单位 </ElButton>
-      <ElButton type="primary" @click="selenceTable('个体户')"> 个体户 </ElButton>
-      <ElButton type="primary" @click="selenceTable('村集体')"> 村集体 </ElButton>
+      <ElButton type="primary" @click="selenceTable('居民户', 'PeasantHousehold')">
+        居民户
+      </ElButton>
+      <ElButton type="primary" @click="selenceTable('企（事）业单位', 'Company')">
+        企（事）业单位
+      </ElButton>
+      <ElButton type="primary" @click="selenceTable('个体户', 'IndividualHousehold')">
+        个体户
+      </ElButton>
+      <ElButton type="primary" @click="selenceTable('村集体', 'Village')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
@@ -129,7 +135,8 @@ const { register, tableObject, methods } = useTable({
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  type: 'PeasantHousehold'
 }
 
 getList()
@@ -163,7 +170,7 @@ onMounted(() => {
   console.log(tableObject)
 })
 
-const selenceTable = (e: string) => {
+const selenceTable = (e: string, value: any) => {
   console.log(e)
   schema.forEach((item: any) => {
     if (item.field == 'name') {
@@ -174,6 +181,8 @@ const selenceTable = (e: string) => {
   allSchemas = useCrudSchemas(schema).allSchemas
   console.log(allSchemas)
   tabalRef.value.setColumns(allSchemas.tableColumns)
+  tableObject.params.type = value
+  getList()
 }
 const IssueClick = () => {
   console.log(tabalRef.value.selections)
@@ -439,9 +448,6 @@ const onSearch = (data) => {
   let params = {
     ...searchData
   }
-  tableObject.params = {
-    projectId
-  }
   if (params.grantTime) {
     params.grantTime = [params.grantTime]
   }
@@ -461,8 +467,7 @@ const onSearch = (data) => {
   setSearchParams({ ...params })
 }
 let setSearchParamss = () => {
-  tableObject.params = {}
-  setSearchParams({})
+  setSearchParams({ projectId: tableObject.params.projectId, type: tableObject.params.type })
 }
 </script>
 
