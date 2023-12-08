@@ -2,6 +2,7 @@ import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
 import { GraveType, LandlordType } from '@/types/print'
 import { globalData } from '@/config/fill'
+import { isWindow } from '../../../utils/is'
 
 /**
  * 查询居民户信息列表
@@ -213,5 +214,17 @@ export const downloadPrintPdfApi = (data: any[]): Promise<any> => {
 export const signLandlordApi = (id: number): Promise<any> => {
   return request.post({
     url: `/peasantHousehold/sginComplete/${id}`
+  })
+}
+
+/**
+ *
+ * @param ids
+ * @returns
+ */
+export const batchDeleteApi = (data: any): Promise<any> => {
+  return request.post({
+    url: `/peasantHousehold/batchelete`,
+    data
   })
 }

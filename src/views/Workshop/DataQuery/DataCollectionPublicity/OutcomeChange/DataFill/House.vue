@@ -16,7 +16,7 @@
     <div class="table-wrap" v-loading="loading">
       <el-table :data="houseList" style="width: 100%">
         <el-table-column type="index" width="50" />
-        <el-table-column prop="doorNo" label="户号" show-overflow-tooltip />
+        <el-table-column prop="showDoorNo" label="户号" show-overflow-tooltip />
         <el-table-column prop="householder" label="户主" show-overflow-tooltip />
         <el-table-column prop="area" label="所属区域" show-overflow-tooltip />
         <el-table-column
@@ -119,7 +119,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -138,7 +138,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const getSearchParams = () => {
   return {
     type: '2',
-    pId: '36',
+    pId: projectId,
     ...searchParams
   }
 }
@@ -162,7 +162,17 @@ const getTableList = () => {
 
 const onSearch = (data) => {
   // 处理参数
-  searchParams = data
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  searchParams = { ...params }
   getTableList()
 }
 
