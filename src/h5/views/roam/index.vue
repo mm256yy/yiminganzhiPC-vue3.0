@@ -31,6 +31,8 @@ onMounted(() => {
 .page {
   width: 100%;
   height: 100vh;
+
+
   overflow-y: auto;
   font-size: 16px;
 }

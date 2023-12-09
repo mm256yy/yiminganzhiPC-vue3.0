@@ -360,8 +360,6 @@ import { globalData } from '@/config/fill'
 export default defineComponent({
   beforeRouteEnter(to, _from, next) {
     // 实物采集
-    console.log(to)
-
     globalData.currentSurveyStatus = SurveyStatusEnum.Survey
     next()
   }
