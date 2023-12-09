@@ -17,7 +17,7 @@
       <ElButton type="primary" @click="selenceTable('村集体', 'Village')"> 村集体 </ElButton>
     </div>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -78,8 +78,6 @@
         </template>
       </Table>
     </div>
-
-    <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
   </WorkContentWrap>
 </template>
 
@@ -101,11 +99,8 @@ import {
   getSumAmount,
   postGrant
 } from '@/api/fundManage/fundPayment-service'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 const appStore = useAppStore()
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
 const headInfo = ref<any>()
@@ -171,7 +166,6 @@ onMounted(() => {
 })
 
 const selenceTable = (e: string, value: any) => {
-  console.log(e)
   schema.forEach((item: any) => {
     if (item.field == 'name') {
       item.label = e
@@ -185,7 +179,6 @@ const selenceTable = (e: string, value: any) => {
   getList()
 }
 const IssueClick = () => {
-  console.log(tabalRef.value.selections)
   let all = 0
   let pamaers = tabalRef.value.selections.reduce((pre, item) => {
     pre.push({
@@ -211,7 +204,6 @@ const IssueClick = () => {
       }
     )
       .then(() => {
-        console.log(pamaers)
         postGrant(pamaers).then(() => {
           ElMessage({
             type: 'success',
@@ -466,6 +458,16 @@ const onSearch = (data) => {
   }
   setSearchParams({ ...params })
 }
+
+const onReset = () => {
+  tableObject.params = {
+    projectId,
+    type: 'PeasantHousehold'
+  }
+
+  getList()
+}
+
 let setSearchParamss = () => {
   setSearchParams({ projectId: tableObject.params.projectId, type: tableObject.params.type })
 }

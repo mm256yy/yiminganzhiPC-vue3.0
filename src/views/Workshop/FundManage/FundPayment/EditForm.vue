@@ -98,7 +98,7 @@
         <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
       </template>
       <template v-else>
-        <ElButton type="primary" @click="onSubmit(formRef)">确认提交</ElButton>
+        <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
       </template>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
@@ -133,6 +133,7 @@ import { addFunPayApi, updateFunPayApi } from '@/api/fundManage/fundPayment-serv
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import dayjs from 'dayjs'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { useValidator } from '@/hooks/web/useValidator'
 
 interface PropsType {
   show: boolean
@@ -158,6 +159,7 @@ const form = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const receipt = ref<FileItemType[]>([]) // 凭证
+const { required } = useValidator()
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -165,7 +167,14 @@ const headers = {
 }
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  applyType: [required()],
+  name: [required()],
+  type: [required()],
+  funSubjectId: [required()],
+  remark: [required()],
+  paymentTime: [required()]
+})
 
 watch(
   () => props.row,
@@ -215,19 +224,20 @@ const submit = async (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status: number) => {
-  if (status === 0) {
-    let params: any = {
-      ...form.value,
-      receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
-    }
-    params.paymentTime = dayjs(params.paymentTime)
-    params.status = status
-    submit(params)
-    return
-  }
-  formEl?.validate((valid: any) => {
+  // if (status === 0) {
+  //   let params: any = {
+  //     ...form.value,
+  //     receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+  //   }
+  //   params.paymentTime = dayjs(params.paymentTime)
+  //   params.status = status
+  //   submit(params)
+  //   return
+  // }
+
+  if (!formEl) return
+  formEl.validate((valid, fields) => {
     if (valid) {
-      console.log(form.value, 'form')
       if (!receipt.value.length) {
         ElMessage.error('请上传凭证')
         return
@@ -241,9 +251,29 @@ const onSubmit = debounce((formEl, status: number) => {
         submit(params)
       }
     } else {
-      return false
+      console.log('error submit!', fields)
     }
   })
+
+  // formEl?.validate((valid: any) => {
+  //   if (valid) {
+  //     console.log(form.value, 'form')
+  //     if (!receipt.value.length) {
+  //       ElMessage.error('请上传凭证')
+  //       return
+  //     } else {
+  //       let params: any = {
+  //         ...form.value,
+  //         receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+  //       }
+  //       params.paymentTime = dayjs(params.paymentTime)
+  //       params.status = status
+  //       submit(params)
+  //     }
+  //   } else {
+  //     return false
+  //   }
+  // })
 })
 
 // 处理函数

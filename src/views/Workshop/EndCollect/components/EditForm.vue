@@ -213,7 +213,9 @@ const onError = () => {
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  type: [required()]
+  source: [required()],
+  amount: [required()],
+  recordTime: [required()]
 })
 
 // 提交表单 - 表单校验

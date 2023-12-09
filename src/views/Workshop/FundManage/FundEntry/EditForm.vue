@@ -16,10 +16,10 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="资金名称:" required>
+      <ElFormItem label="资金名称:" prop="name" required>
         <ElInput type="text" v-model="form.name" />
       </ElFormItem>
-      <ElFormItem label="资金来源:" required>
+      <ElFormItem label="资金来源:" prop="source" required>
         <ElSelect class="w-350px" v-model="form.source">
           <ElOption
             v-for="item in dictObj[388]"
@@ -30,10 +30,10 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="金额(元):" required>
+      <ElFormItem label="金额(元):" prop="amount" required>
         <ElInputNumber v-model="form.amount" />
       </ElFormItem>
-      <ElFormItem label="入账时间:" required>
+      <ElFormItem label="入账时间:" prop="recordTime" required>
         <ElDatePicker type="date" v-model="form.recordTime" />
       </ElFormItem>
       <ElFormItem label="说明:">
@@ -193,17 +193,8 @@ const submit = async (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl, status: number) => {
-  if (status === 0) {
-    let params: any = {
-      ...form.value,
-      receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
-    }
-    params.recordTime = dayjs(params.recordTime)
-    params.status = status
-    submit(params)
-    return
-  }
-  formEl?.validate((valid: any) => {
+  if (!formEl) return
+  formEl.validate((valid, fields) => {
     if (valid) {
       if (!receipt.value.length) {
         ElMessage.error('请上传凭证')
@@ -217,7 +208,7 @@ const onSubmit = debounce((formEl, status: number) => {
       params.status = status
       submit(params)
     } else {
-      return false
+      console.log('error submit!', fields)
     }
   })
 })

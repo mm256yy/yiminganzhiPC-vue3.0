@@ -61,6 +61,8 @@
               }
             ]"
             :row="row"
+            :edit="row.status === 0"
+            :delete="row.status === 0"
             @delete="onDelRow"
             @edit="onEditRow"
           />
