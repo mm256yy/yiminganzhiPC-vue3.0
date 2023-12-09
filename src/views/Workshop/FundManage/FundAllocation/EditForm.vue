@@ -115,6 +115,7 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { addFundEntryApi, updateFundEntryApi } from '@/api/fundManage/fundEntry-service'
+import { useValidator } from '@/hooks/web/useValidator'
 
 interface PropsType {
   show: boolean
@@ -133,6 +134,7 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
+const { required } = useValidator()
 
 const form = ref<any>({
   name: '',
@@ -152,7 +154,13 @@ const headers = {
 }
 
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  name: [required()],
+  source: [required()],
+  payee: [required()],
+  amount: [required()],
+  recordTime: [required()]
+})
 
 watch(
   () => props.row,

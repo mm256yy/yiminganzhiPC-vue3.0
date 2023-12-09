@@ -16,7 +16,9 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <template v-if="role === RoleCodeType.assessor || role === RoleCodeType.other">
+      <template
+        v-if="role === RoleCodeType.assessor || role === RoleCodeType.other || role === 'tester'"
+      >
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
@@ -412,6 +414,7 @@ const onError = () => {
 
 onMounted(() => {
   role.value = getRole()
+  console.log('role-T', role.value)
   initData()
 })
 </script>

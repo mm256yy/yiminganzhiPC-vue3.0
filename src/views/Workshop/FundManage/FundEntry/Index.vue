@@ -5,11 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -64,6 +60,8 @@
                 action: () => onViewRow(row)
               }
             ]"
+            :edit="row.status === 0"
+            :delete="row.status === 0"
             :row="row"
             @delete="onDelRow"
             @edit="onEditRow"
@@ -156,6 +154,28 @@ const onViewRow = (row) => {
 //   console.log('导出')
 //   // 无接口
 // }
+
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams(tableObject.params)
+}
 
 const sumAmountApi = async () => {
   try {

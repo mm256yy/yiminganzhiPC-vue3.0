@@ -19,7 +19,6 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-header-left">
           <span style="margin: 0 10px; font-size: 16px; font-weight: 600">企业列表</span>
-
           <div class="icon">
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>

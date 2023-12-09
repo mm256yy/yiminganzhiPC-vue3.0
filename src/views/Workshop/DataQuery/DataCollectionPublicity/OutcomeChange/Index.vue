@@ -29,7 +29,6 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElButton } from 'element-plus'
 import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import ChangeIndex from './DataFill/ChangeIndex.vue'
 import Appendant from './DataFill/Appendant.vue'
