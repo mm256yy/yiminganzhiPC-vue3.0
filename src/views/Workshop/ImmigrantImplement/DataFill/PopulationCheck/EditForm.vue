@@ -606,7 +606,7 @@ onMounted(() => {
 }
 
 .upload {
-  .el-upload--picture-card {
+  /deep/ .el-upload {
     display: none;
   }
 }

@@ -188,7 +188,7 @@ const onSave = (data: any, isVerify: string) => {
     })
 }
 //如果不为奖励费小计就展示输入框
-const showInput = (name) => name !== '奖励费小计'
+const showInput = (name) => name !== '奖励费小计' && name !== '其他奖励费'
 
 // 确认
 

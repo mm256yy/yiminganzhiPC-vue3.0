@@ -540,8 +540,6 @@ const getFillingStatus = () => {
 
 // 填报状态判断
 const getStatus = (data: any) => {
-  console.log('data', data)
-
   const tabsListCopy = deepClone(tabsList.value)
   const subTabsListCopy = deepClone(subTabsList.value)
   if (type === 'PeasantHousehold') {
@@ -741,7 +739,7 @@ onMounted(() => {
   }
   getLandlordInfo()
   times.value = setInterval(() => {
-    getLandlordInfo()
+    getFillingStatus()
   }, 5000)
 })
 onBeforeUnmount(() => {

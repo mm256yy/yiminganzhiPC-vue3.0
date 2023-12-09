@@ -101,8 +101,9 @@
               <ElOption
                 v-for="item in row.roomNoOptions"
                 :key="item.id"
-                :label="item.code"
+                :label="item.showName"
                 :value="item.code"
+                :disabled="item.isOccupy === '1'"
               />
             </ElSelect>
           </template>
@@ -276,11 +277,13 @@ const getList = () => {
         getcarNoList(item.settleAddress).then((res: any) => {
           item.carNoOptions = [...res]
         })
-        getHouseConfigApi(props.baseInfo.projectId, 2, item.settleAddress).then((res: any) => {
+        getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress).then((res: any) => {
           item.roomNoOptions = [...res.content]
         })
       })
-      tableData.value = [...arr]
+      setTimeout(() => {
+        tableData.value = [...arr]
+      }, 2000)
     }
   })
 }
@@ -403,12 +406,6 @@ const onBatchSave = () => {
   saveDocumentationApi(tableData.value).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    saveFillingCompleteApi({
-      doorNo: props.doorNo,
-      chooseHouseStatus: '1'
-    }).then(() => {
-      emit('updateData')
-    })
   })
 }
 /**

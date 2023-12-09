@@ -40,7 +40,9 @@
         @register="register"
       >
         <template #createTime="{ row }">
-          <div>{{ row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD') : '-' }}</div>
+          <div>{{
+            row.createTime ? dayjs(row.createTime).format('YYYY-MM-DD  HH:mm:ss') : '-'
+          }}</div>
         </template>
 
         <template #paymentTime="{ row }">
@@ -62,6 +64,8 @@
                 action: () => onViewRow(row)
               }
             ]"
+            :edit="row.status === 0"
+            :delete="row.status === 0"
             :row="row"
             @delete="onDelRow"
             @edit="onEditRow"

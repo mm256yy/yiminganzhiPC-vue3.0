@@ -20,6 +20,9 @@
             :before-remove="beforeRemove"
             :on-remove="removeFile"
             :on-preview="imgPreview"
+            :class="{
+              reached_the_limit: true
+            }"
           />
         </div>
       </ElCol>
@@ -149,5 +152,11 @@ onMounted(() => {
 #inlineFrameExample {
   width: 100%;
   height: 700px;
+}
+
+.reached_the_limit {
+  /deep/ .el-upload {
+    display: none;
+  }
 }
 </style>

@@ -253,7 +253,7 @@ watch(
         resettlePic.value = JSON.parse(form.value.resettlePic)
       }
     } catch (error) {
-      console.log(error)
+      console.log(error, 'bbq')
     }
   },
   {

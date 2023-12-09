@@ -40,7 +40,7 @@
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="金额(元):" required>
-        <ElInput type="text" v-model="form.amount" />
+        <ElInput type="text" v-model="form.amount" oninput="value=value.replace(/[^0-9.]/g,'')" />
       </ElFormItem>
       <ElFormItem label="付款日期:" required>
         <ElDatePicker type="date" v-model="form.recordTime" />

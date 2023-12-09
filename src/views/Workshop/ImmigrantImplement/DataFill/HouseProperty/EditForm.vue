@@ -40,14 +40,14 @@
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="层数" prop="storeyNumber">
-            <ElInput v-model="form.storeyNumber" class="!w-full" placeholder="请输入">
+            <ElInput v-model="form.storeyNumber" class="!w-full" type="number" placeholder="请输入">
               <template #append> 层 </template>
             </ElInput>
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
           <ElFormItem label="建筑面积" prop="landArea">
-            <ElInput v-model="form.landArea" class="!w-full" placeholder="请输入">
+            <ElInput v-model="form.landArea" class="!w-full" type="number" placeholder="请输入">
               <template #append>
                 m<span style="position: absolute; top: -4px; right: 12px; font-size: 1px">2</span>
               </template>

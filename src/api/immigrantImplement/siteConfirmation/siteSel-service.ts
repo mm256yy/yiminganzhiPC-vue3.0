@@ -31,7 +31,7 @@ export const getHouseConfigApi = (
     params: {
       projectId,
       level,
-      parentCode,
+      settleAddress: parentCode,
       name,
       size: 1000
     }

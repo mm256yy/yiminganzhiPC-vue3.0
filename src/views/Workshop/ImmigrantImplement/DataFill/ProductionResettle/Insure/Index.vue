@@ -56,7 +56,10 @@
         </ElTableColumn>
         <ElTableColumn label="操作" width="120" align="center" header-align="center" fixed="right">
           <template #default="{ row }">
-            <ElButton type="primary" @click="handleClick(row)">办理</ElButton>
+            <ElButton type="primary" @click="handleClick(row)" v-if="row.productionStatus !== '1'"
+              >办理</ElButton
+            >
+            <div v-else>-</div>
           </template>
         </ElTableColumn>
       </ElTable>

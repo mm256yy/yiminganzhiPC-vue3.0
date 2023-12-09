@@ -30,11 +30,11 @@
           </div>
           <div class="text">
             已发放：
-            <span class="num">{{ molingData.pendingAmount }}</span> 元
+            <span class="num">{{ molingData.issuedAmount }}</span> 元
           </div>
           <div class="text">
             未发放：
-            <span class="num">{{ molingData.issuedAmount }}</span> 元
+            <span class="num">{{ molingData.pendingAmount }}</span> 元
           </div>
         </div>
         <ElSpace>
@@ -218,6 +218,7 @@ const IssueClick = () => {
             message: '发放成功'
           })
           getList()
+          moneyList()
         })
       })
       .catch(() => {
