@@ -16,7 +16,7 @@
     <div class="table-wrap" v-loading="loading">
       <el-table :data="tableData" style="width: 100%">
         <el-table-column type="index" width="50" align="center" />
-        <el-table-column prop="doorNo" label="户号" show-overflow-tooltip align="center" />
+        <el-table-column prop="showDoorNo" label="户号" show-overflow-tooltip align="center" />
         <el-table-column prop="householder" label="户主" show-overflow-tooltip align="center" />
         <el-table-column prop="area" label="所属区域" show-overflow-tooltip align="center" />
         <el-table-column prop="operation" label="操作" width="250" align="center">
@@ -57,6 +57,7 @@ const { push } = useRouter()
 const tableData = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
+
 let searchParams = reactive({
   area: undefined,
   doorNo: undefined,
@@ -101,7 +102,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -138,14 +139,24 @@ const getTableList = () => {
 const getSearchParams = () => {
   return {
     type: '4',
-    pId: '36',
+    pId: projectId,
     ...searchParams
   }
 }
 
 const onSearch = (data) => {
   // 处理参数
-  searchParams = data
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  searchParams = { ...params }
   getTableList()
 }
 
@@ -161,19 +172,29 @@ const resetSearch = () => {
 
 // 查看采集人员
 const handleCollection = (row: any) => {
-  console.log('row1', row)
   push({
-    name: 'Landlord',
-    query: {}
+    name: 'Collection',
+    query: {
+      name: row.urlParamName,
+      householdId: row.urlParamHouseholdId,
+      doorNo: row.urlParamDoorNo,
+      type: 'Landlord',
+      classifyType: 'check'
+    }
   })
 }
 
 // 查看复核人员
 const handleReviewers = (row: any) => {
-  console.log('row2', row)
   push({
-    name: 'LandlordCheck',
-    query: {}
+    name: 'DataFillCheck',
+    query: {
+      name: row.urlParamName,
+      householdId: row.urlParamHouseholdId,
+      doorNo: row.urlParamDoorNo,
+      type: 'Landlord',
+      classifyType: 'check'
+    }
   })
 }
 

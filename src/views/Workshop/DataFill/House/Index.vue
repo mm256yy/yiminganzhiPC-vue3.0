@@ -3,7 +3,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
           <ElButton
             @click="recordClick"
@@ -53,6 +53,8 @@
             ]"
             :view-type="'link'"
             :row="row"
+            :edit="isEdit"
+            :delete="isEdit"
             @edit="onEditRow(row)"
             @delete="onDelRow"
           />
@@ -76,7 +78,7 @@
 <script lang="ts" setup>
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -95,6 +97,7 @@ interface PropsType {
   doorNo: string
   surveyStatus: SurveyStatusEnum
   type?: string
+  classifyType?: string // 角色分类类型
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
@@ -116,6 +119,9 @@ tableObject.params = {
 const { getList } = methods
 
 const recordShow = ref(false)
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const recordClose = () => {
   recordShow.value = false

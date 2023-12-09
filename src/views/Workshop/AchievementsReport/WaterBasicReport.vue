@@ -18,56 +18,73 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 水电站 </div>
       </div>
-      <!-- <img src="@/assets/imgs/report/hydropower_station.png" style="max-width: none" alt="" /> -->
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn type="index" label="序号" width="100" align="center" />
-        <ElTableColumn prop="position" label="所在地点" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="location" label="所在地点" show-overflow-tooltip align="center" />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="legalPerson" label="法人代表" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="ownership" label="权属性质" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="ownershipUnit" label="权属单位" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="landUse" label="用地性质" show-overflow-tooltip align="center" />
         <ElTableColumn
-          prop="representative"
-          label="法人代表"
+          prop="completionDate"
+          label="建成年月"
           show-overflow-tooltip
           align="center"
         />
-        <ElTableColumn prop="tenure" label="权属性质" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="权属单位" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="用地性质" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="建成年月" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="规模" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="库容（万m³）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="引水来源" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="杨程（m）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="渠（管）道（m）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="scale" label="规模" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="volume" label="库容（万m³）" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="drinkingWater" label="引水来源" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="lift" label="杨程（m）" show-overflow-tooltip align="center" />
         <ElTableColumn
-          prop="tenure"
+          prop="channel"
+          label="渠（管）道（m）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="yearGeneratedEnergy"
           label="年发电量（万KW.h）"
           show-overflow-tooltip
           align="center"
         />
-        <ElTableColumn prop="tenure" label="库容（万m³）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="主要建筑物" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="tenure" label="工商证" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="volume_t" label="库容（万m³）" show-overflow-tooltip align="center" />
         <ElTableColumn
-          prop="tenure"
+          prop="mainStructure"
+          label="主要建筑物"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="businessCertificate"
+          label="工商证"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="registeredCapital"
           label="注册资金（万元）"
           show-overflow-tooltip
           align="center"
         />
         <ElTableColumn
-          prop="tenure"
+          prop="yearProductionValue"
           label="年产总值（万元）"
           show-overflow-tooltip
           align="center"
         />
-        <ElTableColumn prop="tenure" label="年利润（万元）" show-overflow-tooltip align="center" />
         <ElTableColumn
-          prop="tenure"
+          prop="annualProfit"
+          label="年利润（万元）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="grossAnnualWages"
           label="年工资总额（万元）"
           show-overflow-tooltip
           align="center"
         />
-
-        <ElTableColumn label="法人代表" show-overflow-tooltip header-align="center" />
       </ElTable>
     </div>
   </WorkContentWrap>
@@ -80,6 +97,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
@@ -87,6 +105,13 @@ const { back } = useRouter()
 const tableData = ref<any>([])
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+const getList = async () => {
+  const result = await getCommonReportApi(1)
+  tableData.value = result
+}
+
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
@@ -124,7 +149,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   {
     field: 'name',
     label: '姓名',

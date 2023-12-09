@@ -57,3 +57,8 @@ export const getVillageReportListApi = (
 ): Promise<TableResponse<VillageReportType>> => {
   return request.get({ url: '/news', params: query })
 }
+
+// 资金管理报告
+export const getCardReportApi = (type: string): Promise<void> => {
+  return request.get({ url: `/immigrantCompensationCardReport/feeStatistics?type=${type}` })
+}

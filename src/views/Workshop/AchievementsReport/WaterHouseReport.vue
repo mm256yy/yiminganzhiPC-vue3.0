@@ -23,14 +23,13 @@
         <ElTableColumn prop="village" label="行政村" show-overflow-tooltip align="center" />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip align="center" />
         <ElTableColumn label="房屋面积（m³）" header-align="center">
-          <ElTableColumn prop="brick" label="砖混" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="wood" label="砖木" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="wood" label="土木" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="brickStructure" label="砖混" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="brickJoisted" label="砖木" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="construction" label="土木" show-overflow-tooltip align="center" />
           <ElTableColumn prop="simple" label="简易" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="count" label="小计" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="subtotal" label="小计" show-overflow-tooltip align="center" />
         </ElTableColumn>
       </ElTable>
-      <!-- <img src="@/assets/imgs/report/hydropower_house.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -42,11 +41,19 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+
 const { back } = useRouter()
 const tableData = ref<any>([])
+
+const getList = async () => {
+  const result = await getCommonReportApi(2)
+  tableData.value = result
+}
+
+getList()
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 

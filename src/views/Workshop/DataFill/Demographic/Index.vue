@@ -3,7 +3,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
           <ElButton @click="recordClick" v-if="surveyStatus === SurveyStatusEnum.Review">
             修改日志
@@ -70,7 +70,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -86,6 +86,7 @@ import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 interface PropsType {
   doorNo: string
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
 
 const props = defineProps<PropsType>()
@@ -104,6 +105,10 @@ const { getList } = methods
 tableObject.params = {
   doorNo: props.doorNo
 }
+
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 getList()
 const recordClose = () => {

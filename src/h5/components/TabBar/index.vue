@@ -2,7 +2,7 @@
   <div class="tab-warp">
     <div class="warp">
       <TabItem
-        v-for="(item, index) in tabBarList"
+        v-for="(item, index) in getTabs"
         :key="index"
         :txt="item.txt"
         :url="item.url"
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import TabItem from './components/TabItem.vue'
 import type { TabItemType } from '@/h5/types/home'
 import homeNormalImg from '@/h5/assets/imgs/icon_home_normal.png'
@@ -28,8 +28,16 @@ import gardenActiveImg from '@/h5/assets/imgs/icon_garden_checked.png'
 import mineActiveImg from '@/h5/assets/imgs/icon_mine_checked.png'
 import mineNormalImg from '@/h5/assets/imgs/icon_mine_normal.png'
 
+interface ProjectType {
+  type: string
+}
+
+const props = defineProps<ProjectType>()
+
 // 选中路由
 const selected = ref<string>('/')
+
+// 移民端tabs
 const tabBarList = ref<TabItemType[]>([
   {
     txt: '首页',
@@ -56,6 +64,27 @@ const tabBarList = ref<TabItemType[]>([
     activeImg: mineActiveImg
   }
 ])
+
+//领导端tabs
+const leaderTabBarList = ref<TabItemType[]>([
+  {
+    txt: '首页',
+    url: '/home',
+    normalImg: homeNormalImg,
+    activeImg: homeActiveImg
+  },
+  {
+    txt: '库区漫游',
+    url: '/roam',
+    normalImg: roamNormalImg,
+    activeImg: roamActiveImg
+  }
+])
+
+// 获取tab
+const getTabs = computed(() => {
+  return props.type === 'leader' ? leaderTabBarList.value : tabBarList.value
+})
 
 const tabChange = (tabSelect) => {
   selected.value = tabSelect

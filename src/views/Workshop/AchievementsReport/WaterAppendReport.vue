@@ -25,48 +25,72 @@
 
         <ElTableColumn label="附属物" header-align="center">
           <ElTableColumn
-            prop="radical"
+            prop="cableTelevision"
             label="有限电视（处）"
             show-overflow-tooltip
             align="center"
           />
           <ElTableColumn
-            prop="radical"
+            prop="networkBroadband"
             label="网络宽带（处）"
             show-overflow-tooltip
             align="center"
           />
-          <ElTableColumn prop="radical" label="电话（处）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="空调（处）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="phone" label="电话（处）" show-overflow-tooltip align="center" />
           <ElTableColumn
-            prop="radical"
+            prop="airConditioner"
+            label="空调（处）"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn
+            prop="powerMeter"
             label="动力电表（只）"
             show-overflow-tooltip
             align="center"
           />
           <ElTableColumn
-            prop="radical"
+            prop="solarWaterHeater"
             label="太阳能热水器（只）"
             show-overflow-tooltip
             align="center"
           />
-          <ElTableColumn prop="radical" label="台阶（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="花坛（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="水井（口）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="蓄水池（口）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="围墙（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="台门（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="便桥（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="柴灶（座）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="水塔（个）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="棚（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="地坪（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="洗衣台（㎡）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="渠道（km）" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="radical" label="道路（km）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="step" label="台阶（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="flowerBed" label="花坛（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="well" label="水井（口）" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="impoundingReservoir"
+            label="蓄水池（口）"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn prop="wall" label="围墙（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="gate" label="台门（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="makeshiftBridge"
+            label="便桥（㎡）"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn prop="firewood" label="柴灶（座）" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="waterTower"
+            label="水塔（个）"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn prop="shed" label="棚（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="terrace" label="地坪（㎡）" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="laundryTable"
+            label="洗衣台（㎡）"
+            show-overflow-tooltip
+            align="center"
+          />
+          <ElTableColumn prop="channel" label="渠道（km）" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="way" label="道路（km）" show-overflow-tooltip align="center" />
         </ElTableColumn>
       </ElTable>
-      <!-- <img style="max-width: none" src="@/assets/imgs/report/hydropower_appendage.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -78,13 +102,20 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+const getList = async () => {
+  const result = await getCommonReportApi(3)
+  tableData.value = result
+}
+
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义

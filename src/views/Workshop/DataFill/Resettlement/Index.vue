@@ -4,7 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton
             :icon="saveIcon"
             type="primary"
@@ -37,14 +37,26 @@
 
             <div class="family-item">
               <div class="tit">其中：农村移民人数</div>
-              <ElInput v-model="form.countryNum" type="number" :min="0" placeholder="请输入人数">
+              <ElInput
+                v-model="form.countryNum"
+                type="number"
+                :min="0"
+                placeholder="请输入人数"
+                :disabled="!isEdit"
+              >
                 <template #append>人</template>
               </ElInput>
             </div>
 
             <div class="family-item">
               <div class="tit">其中：非农村移民人数</div>
-              <ElInput v-model="form.unCountryNum" type="number" :min="0" placeholder="请输入人数">
+              <ElInput
+                v-model="form.unCountryNum"
+                type="number"
+                :min="0"
+                placeholder="请输入人数"
+                :disabled="!isEdit"
+              >
                 <template #append>人</template>
               </ElInput>
             </div>
@@ -69,7 +81,13 @@
               <div class="tit" style="width: 150px; text-align: right">{{
                 item.productionType
               }}</div>
-              <ElInput v-model="item.number" type="number" :min="0" placeholder="请输入">
+              <ElInput
+                v-model="item.number"
+                type="number"
+                :min="0"
+                placeholder="请输入"
+                :disabled="!isEdit"
+              >
                 <template #append>人</template>
               </ElInput>
             </div>
@@ -81,7 +99,7 @@
           <div class="common-cont">
             <div class="radio-item" v-if="!length">
               <div>默认：</div>
-              <ElRadioGroup v-model="form.removalType">
+              <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
                 <ElRadio v-for="item in morenData" :key="item.label" :label="item.value">{{
                   item.label
                 }}</ElRadio>
@@ -91,7 +109,7 @@
             <div v-else>
               <div class="radio-item">
                 <div>宅基地安置：</div>
-                <ElRadioGroup v-model="form.removalType">
+                <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
                   <ElRadio v-for="item in Homestead" :key="item.label" :label="item.value">{{
                     item.label
                   }}</ElRadio>
@@ -100,7 +118,7 @@
 
               <div class="radio-item">
                 <div>公寓房安置：</div>
-                <ElRadioGroup v-model="form.removalType">
+                <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
                   <ElRadio v-for="item in flats" :key="item.label" :label="item.value">{{
                     item.label
                   }}</ElRadio>
@@ -135,7 +153,7 @@
 <script lang="ts" setup>
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, unref, onMounted } from 'vue'
+import { ref, unref, onMounted, computed } from 'vue'
 import { ElButton, ElRadioGroup, ElRadio, ElSpace, ElInput, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -153,6 +171,7 @@ interface PropsType {
   doorNo: string
   baseInfo: any
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
 
 const recordShow = ref(false)
@@ -163,6 +182,12 @@ const recordClose = () => {
 const recordClick = () => {
   recordShow.value = true
 }
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
+
 const Homestead = ref<any>([])
 const flats = ref<any>([])
 // way 1 宅基地安置 2 公寓安置

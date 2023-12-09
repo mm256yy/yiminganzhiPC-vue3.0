@@ -3,7 +3,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
-        <ElSpace>
+        <ElSpace v-if="isEdit">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
           <ElButton
             :icon="saveIcon"
@@ -160,6 +160,7 @@ interface PropsType {
   doorNo: string
   name: string
   surveyStatus: SurveyStatusEnum
+  classifyType?: string // 角色分类类型
 }
 
 const props = defineProps<PropsType>()
@@ -176,6 +177,11 @@ const recordClose = () => {
 const recordClick = () => {
   recordShow.value = true
 }
+
+// 是否可编辑
+const isEdit = computed(() => {
+  return props.classifyType !== 'check'
+})
 
 const defaultRow = {
   registrantId: props.householdId, // 登记人 ID

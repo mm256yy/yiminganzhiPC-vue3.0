@@ -36,6 +36,7 @@ import { getCompanyListApi, delCompanyByIdApi } from '@/api/workshop/enterprise/
 interface PropsType {
   doorNo: string
   householdId
+  classifyType?: string // 角色分类类型
 }
 
 const emptyShow = ref<boolean>(false)

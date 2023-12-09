@@ -21,12 +21,11 @@
       <div>
         <ElTable :data="tableData" style="width: 100%">
           <ElTableColumn type="index" label="序号" width="100" align="center" />
-          <ElTableColumn prop="doorNo" label="项目名称" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="doorMaster" label="单位" show-overflow-tooltip align="center" />
-          <ElTableColumn prop="region" label="数量" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="projectName" label="项目名称" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="unit" label="单位" show-overflow-tooltip align="center" />
+          <ElTableColumn prop="quantity" label="数量" show-overflow-tooltip align="center" />
         </ElTable>
       </div>
-      <!-- <img src="@/assets/imgs/report/broadcasting_appurtenance.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
@@ -38,12 +37,26 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
+const tableLoading = ref<boolean>(false)
+
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+const getList = async () => {
+  tableLoading.value = true
+  try {
+    const result = await getCommonReportApi(16)
+    tableData.value = result
+    tableLoading.value = false
+  } catch {
+    tableLoading.value = false
+  }
+}
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义

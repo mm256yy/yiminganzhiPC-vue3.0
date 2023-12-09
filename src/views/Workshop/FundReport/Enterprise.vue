@@ -5,234 +5,122 @@
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">企业</ElBreadcrumbItem>
     </ElBreadcrumb>
-    <div class="search-form-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
-    </div>
-
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 居民户报表 </div>
+        <div class="table-left-title"> 企业报表 </div>
         <div></div>
       </div>
-      <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
-        :loading="tableObject.loading"
-        :data="tableObject.tableList"
-        :columns="allSchemas.tableColumns"
-        :showOverflowTooltip="true"
-        tableLayout="auto"
-        row-key="id"
-        headerAlign="center"
-        align="center"
-        highlightCurrentRow
-        @register="register"
-      />
+      <ElTable v-loading="tableLoading" :data="tableData" style="width: 100%">
+        <ElTableColumn prop="name" label="名称" align="center" show-overflow-tooltip />
+        <!--补偿费-->
+        <ElTableColumn label="补偿费" header-align="center">
+          <ElTableColumn header-align="center" label="房屋结构补偿费" align="center">
+            <ElTableColumn prop="fwjgFee" label="应发" align="center" />
+            <ElTableColumn prop="fwjgFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="房屋装修补偿费" align="center">
+            <ElTableColumn prop="fwzxFee" label="应发" align="center" />
+            <ElTableColumn prop="fwzxFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="附属物补偿费" align="center">
+            <ElTableColumn prop="fswFee" label="应发" align="center" />
+            <ElTableColumn prop="fswFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="零星果木补偿费" align="center">
+            <ElTableColumn prop="lxgmFee" label="应发" align="center" />
+            <ElTableColumn prop="lxgmFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="土地补偿费" align="center">
+            <ElTableColumn prop="tdFee" label="应发" align="center" />
+            <ElTableColumn prop="tdFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="建设用地补偿费" align="center">
+            <ElTableColumn prop="jsydFee" label="应发" align="center" />
+            <ElTableColumn prop="jsydFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="基础设施补偿费" align="center">
+            <ElTableColumn prop="jcssFee" label="应发" align="center" />
+            <ElTableColumn prop="jcssFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="设施、设备搬迁损失补偿费" align="center">
+            <ElTableColumn prop="sbbqFee" label="应发" align="center" />
+            <ElTableColumn prop="sbbqFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="固定设施、设备补偿费" align="center">
+            <ElTableColumn prop="gdsbFee" label="应发" align="center" />
+            <ElTableColumn prop="gdsbFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="其他补偿费" align="center">
+            <ElTableColumn prop="qtFee" label="应发" align="center" />
+            <ElTableColumn prop="qtFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="补偿费小计" align="center">
+            <ElTableColumn prop="bcfSum" label="应发" align="center" />
+            <ElTableColumn prop="bcfSumPay" label="已发" align="center" />
+          </ElTableColumn>
+        </ElTableColumn>
+        <!--补助费-->
+        <ElTableColumn label="补助费" header-align="center">
+          <ElTableColumn header-align="center" label="搬迁补助费" align="center">
+            <ElTableColumn prop="bqbzFee" label="应发" align="center" />
+            <ElTableColumn prop="bqbzFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="其他补助费" align="center">
+            <ElTableColumn prop="qtbzFee" label="应发" align="center" />
+            <ElTableColumn prop="qtbzFeePay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="补助费小计" align="center">
+            <ElTableColumn prop="bzfSum" label="应发" align="center" />
+            <ElTableColumn prop="bzfSumPay" label="已发" align="center" />
+          </ElTableColumn>
+        </ElTableColumn>
+        <!--奖励费-->
+        <ElTableColumn label="奖励费" header-align="center">
+          <ElTableColumn header-align="center" label="签约奖" align="center">
+            <ElTableColumn prop="fyj" label="应发" align="center" />
+            <ElTableColumn prop="fyjPay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="腾空奖" align="center">
+            <ElTableColumn prop="tkj" label="应发" align="center" />
+            <ElTableColumn prop="tkjPay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="其他奖励费" align="center">
+            <ElTableColumn prop="qtj" label="应发" align="center" />
+            <ElTableColumn prop="qtjPay" label="已发" align="center" />
+          </ElTableColumn>
+          <ElTableColumn header-align="center" label="奖励费小计" align="center">
+            <ElTableColumn prop="jlfSum" label="应发" align="center" />
+            <ElTableColumn prop="jlfSumPay" label="已发" align="center" />
+          </ElTableColumn>
+        </ElTableColumn>
+      </ElTable>
     </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { reactive, watch } from 'vue'
-import { useAppStore } from '@/store/modules/app'
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ref, onMounted } from 'vue'
+import { ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
-import { Table } from '@/components/Table'
-import { useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { useTable } from '@/hooks/web/useTable'
-import { getHouseholdReportListApi } from '@/api/fundReport/service'
+import { getCardReportApi } from '@/api/fundReport/service'
 
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+const tableData = ref<any>([])
+const tableLoading = ref<boolean>(false)
 
-const { register, tableObject } = useTable()
-
-const commonTableItemSchema = {
-  search: {
-    show: false
-  },
-  form: {
-    show: false
-  },
-  detail: {
-    show: false
+const requestCardReport = async () => {
+  tableLoading.value = true
+  try {
+    // 企业
+    const type = '1'
+    const result = await getCardReportApi(type)
+    tableData.value = result
+    tableLoading.value = false
+  } catch {
+    tableLoading.value = false
   }
 }
 
-let allSchemas = reactive<any>({})
-
-/**
- * 处理表头
- * 表格数据
- * @param nameLink
- * @param list
- */
-const getTableHeaderAndData = (nameLink: any[], list: any[]) => {
-  let nameList: any[] = []
-  let dataList: any[] = []
-
-  const fieldKey = 'field'
-  if (nameLink && nameLink.length) {
-    let count = 0
-    nameList = nameLink.map((item, index) => {
-      const oneLevTit =
-        index === 0 ? '补偿费' : index === 1 ? '补助费' : index === 2 ? '奖励费' : '其他'
-      const fields: {
-        [key: string]: any
-      } = {
-        label: oneLevTit,
-        children: [],
-        ...commonTableItemSchema
-      }
-
-      if (item.length) {
-        item.forEach((ytem, yDex) => {
-          fields.children.push({
-            label: ytem,
-            children: [
-              {
-                label: '应发',
-                field: `${fieldKey}_${yDex * 2 + count}`,
-                ...commonTableItemSchema
-              },
-              {
-                label: '已发',
-                field: `${fieldKey}_${yDex * 2 + 1 + count}`,
-                ...commonTableItemSchema
-              }
-            ],
-            ...commonTableItemSchema
-          })
-        })
-      }
-
-      count += item.length * 2
-
-      return fields
-    })
-
-    // 表头
-    nameList = [
-      {
-        field: 'doorNo',
-        label: '户号',
-        search: {
-          show: true,
-          component: 'Input'
-        },
-        table: {
-          show: false
-        },
-        form: {
-          show: false
-        },
-        detail: {
-          show: false
-        }
-      },
-      {
-        field: 'name',
-        label: '名称',
-        search: {
-          show: true,
-          component: 'Input'
-        },
-        table: {
-          show: false
-        },
-        form: {
-          show: false
-        },
-        detail: {
-          show: false
-        }
-      },
-      {
-        label: '户主',
-        field: 'name',
-        fixed: true,
-        ...commonTableItemSchema
-      },
-      ...nameList
-    ]
-  }
-
-  // key-value 数组
-  if (list && list.length) {
-    list.forEach((item) => {
-      const obj = {}
-      item.forEach((ytem, dex) => {
-        if (dex > 2) {
-          obj['name'] = item[1]
-          obj[`${fieldKey}_${dex - 3}`] = ytem
-        }
-      })
-      dataList.push(obj)
-    })
-  }
-
-  return {
-    nameList,
-    dataList
-  }
-}
-
-const getTableList = async (params?: any) => {
-  tableObject.loading = true
-  const res = await getHouseholdReportListApi({
-    projectId: projectId,
-    size: tableObject.size,
-    page: tableObject.currentPage - 1,
-    ...params
-  }).finally(() => {
-    tableObject.loading = false
-  })
-  if (res) {
-    const { nameLink, list } = res as any
-    // 拿到表头
-    const { nameList, dataList } = getTableHeaderAndData(nameLink, list.content)
-
-    const schemas = useCrudSchemas(nameList)
-    allSchemas = schemas.allSchemas
-    // 赋值表格数据
-    tableObject.total = list.total
-    tableObject.tableList = dataList || []
-  }
-}
-
-// 搜索
-const setSearchParams = (data: any) => {
-  console.log(data, 'data')
-  getTableList(data)
-}
-
-getTableList()
-
-watch(
-  () => tableObject.currentPage,
-  () => {
-    getTableList()
-  }
-)
-
-watch(
-  () => tableObject.size,
-  () => {
-    // 当前页不为1时，修改页数后会导致多次调用getList方法
-    if (tableObject.currentPage === 1) {
-      getTableList()
-    } else {
-      tableObject.currentPage = 1
-      getTableList()
-    }
-  }
-)
+onMounted(() => {
+  requestCardReport()
+})
 </script>

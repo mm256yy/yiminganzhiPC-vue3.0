@@ -246,8 +246,10 @@ import Echart from '@/h5/components/Echarts/index.vue'
 import { ref, reactive, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElSelect, ElOption } from 'element-plus'
-import { getVillageList, getLeadershipScreen } from './service'
+import { getVillageList, getLeadershipScreen, getTokenApi } from './service'
+
 const { push } = useRouter()
+const tokenStr = ref<string>('')
 
 const toLink = (routeName: string, query = {}) => {
   push({
@@ -255,6 +257,13 @@ const toLink = (routeName: string, query = {}) => {
     query
   })
 }
+
+// 第三方跳转
+const toThirdParty = () => {
+  const url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+  window.location.href = url
+}
+
 let cityList: any = reactive({
   data: [],
   value: '',
@@ -375,10 +384,20 @@ let getLeadershipScreens = async () => {
     ]
   }
 }
+
+const requestToken = async () => {
+  try {
+    const result = await getTokenApi()
+    console.log('T-Api', result)
+    tokenStr.value = result.token
+  } catch {}
+}
+
 let getVillageLists = async () => {
   let data = await getVillageList()
   cityList.data = data
 }
+
 onMounted(() => {
   getVillageLists()
   nextTick(() => {

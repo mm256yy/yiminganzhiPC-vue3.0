@@ -17,36 +17,73 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 铁塔工程设施汇总表 </div>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
+      <ElTable v-loading="tableLoading" :data="tableData" style="width: 100%">
         <ElTableColumn type="index" label="序号" width="100" align="center" />
-        <ElTableColumn prop="projectName" label="基站名称" show-overflow-tooltip align="center" />
+        <ElTableColumn
+          prop="baseStationName"
+          label="基站名称"
+          show-overflow-tooltip
+          align="center"
+        />
         <ElTableColumn label="机房" align="center">
-          <ElTableColumn prop="number" label="数量（座）" show-overflow-tooltip align="center" />
+          <ElTableColumn
+            prop="machineRooms"
+            label="数量（座）"
+            show-overflow-tooltip
+            align="center"
+          />
         </ElTableColumn>
-        <ElTableColumn prop="area" label="房屋面积（㎡）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="structure" label="房屋结构" show-overflow-tooltip align="center" />
+        <ElTableColumn
+          prop="machineRoomsFloorSpace"
+          label="房屋面积（㎡）"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="floorSpaceConstruction"
+          label="房屋结构"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn
+          prop="baseStationUser"
+          label="基站使用单位"
+          show-overflow-tooltip
+          align="center"
+        />
+        <ElTableColumn prop="facility" label="设施设备" show-overflow-tooltip align="center" />
       </ElTable>
-      <ElTableColumn prop="useUnit" label="基站使用单位" show-overflow-tooltip align="center" />
-      <ElTableColumn prop="equipment" label="设施设备" show-overflow-tooltip align="center" />
-      <!-- <img src="@/assets/imgs/report/iron_facilities.png" alt="" /> -->
     </div>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
-
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-
+import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
+const tableLoading = ref<boolean>(false)
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+const getList = async () => {
+  tableLoading.value = true
+  try {
+    const result = await getCommonReportApi(14)
+    tableData.value = result
+    tableLoading.value = false
+  } catch {
+    tableLoading.value = false
+  }
+}
+
+getList()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义

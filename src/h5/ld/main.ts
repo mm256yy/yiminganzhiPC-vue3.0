@@ -7,7 +7,6 @@ import '../assets/reset.css'
 import '../assets/main.css'
 
 const app = createApp(App)
-console.log(app, 'bbq1')
 
 app.use(router)
 app.mount('#app')

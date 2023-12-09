@@ -208,18 +208,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="icon-back back-color-o">
-            <Icon icon="ph:buildings-fill" style="color: #97b7ff"
-          /></div>
-          <div class="icon-back back-color-t"
-            ><Icon icon="solar:buildings-3-bold" style="color: #fd8746"
-          /></div>
-          <div class="icon-back back-color-s"
-            ><Icon icon="icon-park-solid:building-four" style="color: #fd8746"
-          /></div>
-          <div class="icon-back back-color-f">
-            <Icon icon="fluent:building-mosque-48-filled" style="color: #1ac5ab"
-          /></div> -->
         </div>
       </div>
       <!-- 中间内容 -->
@@ -427,8 +415,6 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-// import fund from '@/assets/imgs/icon_fund.png'
-// import Hydrograph from '@/assets/imgs/icon_Hydrograph.png'
 import Analysis from '@/assets/imgs/Big_Data_Analysis.png'
 import Reports from '@/assets/imgs/Smart_Reports.png'
 import qiye from '@/assets/imgs/qiye.png'
@@ -448,6 +434,8 @@ import {
 } from '@/api/AssetEvaluation/leader-side'
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 import { getNewsList, getPolicyListApi } from '@/api/home'
+import { getTokenApi } from '@/api/common/index'
+
 import { useAppStore } from '@/store/modules/app'
 import dayjs from 'dayjs'
 const appStore = useAppStore()
@@ -462,19 +450,23 @@ const landScreenDtoListObj = ref<any>({})
 const landScreenDtoListObjs = ref<any>({})
 const paramsValue = ref<any>({})
 const arr = ref<any>([])
-const goLink = () => {
-  let url = 'http://test-jinglingtoc.jldt.top/'
-  window.open(url)
+const tokenStr = ref<string>('')
+
+const goLink = async () => {
+  try {
+    const result = await getTokenApi()
+    tokenStr.value = result.token
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+    console.log('openUrl', url)
+    // window.open(url)
+    window.location.href = url
+  } catch {}
 }
 // 路由跳转
 const routerJump = (path: string) => {
   push(path)
 }
-// const golink = () => {
-//   push({
-//     name: 'NewsList'
-//   })
-// }
+
 // 点击新闻跳转
 const newsHandleClick = () => {}
 // 初始化获取新闻通知 -- 水库要闻列表数据
@@ -562,7 +554,6 @@ const villageList = async () => {
   villageLists.value = await getVillageList({})
 }
 const tabVillage = async () => {
-  console.log(reason.value, '选中的code')
   appStore.setVillageCoder(reason.value)
   getList()
 }
@@ -625,12 +616,22 @@ const clearInput = async () => {
     }
   })
 }
+
+const getToken = async () => {
+  try {
+    const result = await getTokenApi()
+    console.log('L-Api', result)
+    tokenStr.value = result.token
+  } catch {}
+}
+
 onMounted(() => {
   clearInput()
   initNewsData()
   initPolicyData()
   feedback()
   villageList()
+  //getToken()
 })
 
 const impProgressOption = ref({
