@@ -211,7 +211,8 @@ interface FileItemType {
 enum RoleCodeType {
   assessor = 'assessor', // 房屋
   assessorland = 'assessorland', // 土地
-  other = 'other'
+  other = 'other',
+  tester = 'tester'
 }
 
 const props = defineProps<PropsType>()

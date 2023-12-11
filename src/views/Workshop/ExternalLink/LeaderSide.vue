@@ -587,8 +587,10 @@ const clearInput = async () => {
   const professionalList = ref<any>([])
   const companyDtoList = ref<any>([])
   const houseScreenDtoList = ref<any>([])
-  professionalList.value = Object.values(list.professionalProjectsDto)
-  companyDtoList.value = Object.values(list.companyDto)
+  professionalList.value = list.professionalProjectsDto
+    ? Object.values(list.professionalProjectsDto)
+    : []
+  companyDtoList.value = list.companyDto ? Object.values(list.companyDto) : []
   houseScreenDtoList.value = Object.values(list.houseScreenDto)
   populationScreenDtoList.value = Object.values(list.populationScreenDto)
   landScreenDtoListObj.value = JSON.parse(JSON.stringify(list.landScreenDto))
