@@ -11,8 +11,8 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">入账详情</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金预拨</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">预拨详情</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
 
@@ -32,10 +32,10 @@
           <div class="value">{{ detail.sourceText }}</div>
         </div>
 
-        <div class="row">
+        <!-- <div class="row">
           <div class="label">收款方：</div>
           <div class="value">{{ detail.payee ? fmtDict(dictObj[395], detail.payee) : '-' }}</div>
-        </div>
+        </div> -->
 
         <div class="row">
           <div class="label">金额(元)：</div>

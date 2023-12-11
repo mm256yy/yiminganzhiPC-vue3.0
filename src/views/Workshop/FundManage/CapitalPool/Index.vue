@@ -75,6 +75,11 @@
             row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
+        <template #createdDate="{ row }">
+          <div>{{
+            row.createdDate ? dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
+          }}</div>
+        </template>
         <template #action="{ row }">
           <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
         </template>
@@ -293,19 +298,19 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'createDate',
-  //   label: '创建时间',
-  //   search: {
-  //     show: false
-  //   },
-  //   form: {
-  //     show: false
-  //   },
-  //   detail: {
-  //     show: false
-  //   }
-  // },
+  {
+    field: 'createdDate',
+    label: '创建时间',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
   {
     field: 'createdBy',
     label: '操作人',

@@ -158,7 +158,7 @@
               <div v-for="item in houseList" :key="item.id" class="land-list">
                 <div class="sub-title" style="margin-top: 20px">{{ item.name }}</div>
                 <div class="amount" style="padding-top: 10px"
-                  >{{ (item.num / 10000).toFixed(2) }}<span class="sub-title">万m²</span></div
+                  >{{ item.num }}<span class="sub-title">万m²</span></div
                 >
               </div>
             </div>
@@ -511,7 +511,7 @@ const getList = async () => {
     const companyDtoList = ref<any>([])
     const houseScreenDtoList = ref<any>([])
     professionalList.value = Object.values(list.professionalProjectsDto)
-    companyDtoList.value = Object.values(list.companyDto)
+    companyDtoList.value = list.companyDto ? Object.values(list.companyDto) : []
     houseScreenDtoList.value = Object.values(list.houseScreenDto)
     populationScreenDtoList.value = Object.values(list.populationScreenDto)
 
@@ -537,7 +537,9 @@ const getList = async () => {
     landScreenDtoList.value.forEach((item, index) => {
       delete landScreenDtoList.value[0]
       delete landScreenDtoList.value[4]
-      landList.value[index].num = item
+      if (landList.value[index]) {
+        landList.value[index].num = item
+      }
     })
   }
 }

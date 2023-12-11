@@ -93,7 +93,14 @@
       </template>
     </el-dialog>
 
-    <el-dialog title="搬迁安置" v-model="editDialogVisible" width="900" @close="onEditClose">
+    <el-dialog
+      title="搬迁安置"
+      v-model="editDialogVisible"
+      width="900"
+      @close="onEditClose"
+      :show-close="false"
+      :close-on-click-modal="false"
+    >
       <div class="common-cont">
         <div class="common-form-item">
           <div class="common-label">户型类型：</div>

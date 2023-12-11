@@ -16,10 +16,10 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="资金名称:" required>
+      <ElFormItem label="资金名称:" required prop="name">
         <ElInput type="text" v-model="form.name" />
       </ElFormItem>
-      <ElFormItem label="资金来源:" required>
+      <ElFormItem label="资金来源:" required prop="source">
         <ElSelect class="w-350px" v-model="form.source">
           <ElOption
             v-for="item in dictObj[388]"
@@ -29,7 +29,7 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="收款方:" required>
+      <ElFormItem label="收款方:" required prop="payee">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[395]"
@@ -39,10 +39,10 @@
           />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="金额(元):" required>
+      <ElFormItem label="金额(元):" required prop="amount">
         <ElInput type="text" v-model="form.amount" oninput="value=value.replace(/[^0-9.]/g,'')" />
       </ElFormItem>
-      <ElFormItem label="付款日期:" required>
+      <ElFormItem label="付款日期:" required prop="recordTime">
         <ElDatePicker type="date" v-model="form.recordTime" />
       </ElFormItem>
       <ElFormItem label="说明:">

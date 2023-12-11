@@ -186,13 +186,18 @@ const IssueClick = () => {
       doorNo: item.doorNo,
       status: '1'
     })
-    all += item.pendingAmount
+    all += item.totalPrice
     return pre
   }, [])
   if (all == 0) {
     ElMessageBox.confirm(`发放金额为0元，请重新选择`, '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消'
+    }).then(() => {
+      ElMessage({
+        type: 'info',
+        message: '发放失败，金额至少大于0元'
+      })
     })
   } else {
     ElMessageBox.confirm(
