@@ -527,6 +527,14 @@ const getDemographicList = () => {
       demographicList.value = arr.map((item: any) => {
         return { value: `${item.id}`, label: `${item.name}` }
       })
+      console.log(demographicList.value, 'bbq')
+
+      demographicList.value = demographicList.value.reduce((pre: Array<any>, item: any) => {
+        if (item.label != 'null') {
+          pre.push(item)
+        }
+        return pre
+      }, [])
     }
   })
 }

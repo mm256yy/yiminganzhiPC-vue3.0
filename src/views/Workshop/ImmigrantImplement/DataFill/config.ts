@@ -28,13 +28,14 @@ export const HouseholdTabs = [
     name: '择址确认'
   },
   {
-    id: 6,
-    name: '协议签订'
-  },
-  {
     id: 7,
     name: '移民建卡'
   },
+  {
+    id: 6,
+    name: '协议签订'
+  },
+
   {
     id: 8,
     name: '腾空过渡'

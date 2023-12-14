@@ -6,7 +6,9 @@
   <!--评估人员首页-->
   <EvaluationHome v-else-if="isEvaluation" />
   <!-- 实施人员首页 -->
-  <UserHome v-else-if="role === RoleCodeType.implementation" />
+  <UserHome
+    v-else-if="role === RoleCodeType.implementation || role === RoleCodeType.implementleader"
+  />
   <!-- 其他首页 -->
   <OtherHome v-else />
 </template>
@@ -35,7 +37,8 @@ enum RoleCodeType {
   leaderworkbenches = 'leaderworkbenches', // 读的字典366配置的 为领导工作台
   assessor = 'assessor', // 房屋评估
   assessorland = 'assessorland', // 土地评估
-  other = 'other' // 其他 注意不是字典 用作区别 领导角色的
+  other = 'other', // 其他 注意不是字典 用作区别 领导角色的,
+  implementleader = 'implementleader' //实施组长
 }
 
 const appStore = useAppStore()

@@ -448,7 +448,7 @@
               </div>
             </div>
           </ElTabPane>
-          <ElTabPane label="实采批复" name="实采批复">
+          <ElTabPane label="实物成果" name="实采批复">
             <div class="tabs-box">
               <div class="tabs-box-left">
                 <div
@@ -465,7 +465,7 @@
                     width="15"
                   />
                   <img v-else src="@/assets/imgs/Icon_Report_disabled.png" width="15" />
-                  <span>实物采集确认批复</span>
+                  <span>实物成果确认函</span>
                   <img
                     v-if="!reportResult.ConfirmPhysicalApproval"
                     src="@/assets/imgs/Icon_Upload.png"

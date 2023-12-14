@@ -165,12 +165,12 @@ export const villageInfoCTabs = [
     icon: 'fluent-mdl2:product-variant',
     active: false
   },
-  {
-    name: '土地信息',
-    id: ReportTabIds[6],
-    icon: 'bi:bounding-box-circles',
-    active: false
-  },
+  // {
+  //   name: '土地信息',
+  //   id: ReportTabIds[6],
+  //   icon: 'bi:bounding-box-circles',
+  //   active: false
+  // },
   {
     name: '坟墓调查信息',
     id: ReportTabIds[4],

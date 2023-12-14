@@ -144,6 +144,157 @@
       :door-no="props.doorNo"
       @close="close('rewardConfirm')"
     />
+
+    <div
+      style="
+        position: fixed;
+        display: flex;
+        width: 340mm;
+        padding: 0 10px 0 10px;
+        border: 1px solid black;
+      "
+      id="print"
+    >
+      <div style="width: 50%">
+        <h1 style="font-size: 24px; text-align: center">移民协议补偿登记卡</h1>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 20px 0 20px 0;
+          "
+        >
+          <div style="width: 30%">
+            <span style="font-weight: bold">户主姓名:</span>
+            <span style="margin-left: 5px">{{ baseInfo.name }}</span>
+          </div>
+          <div style="width: 30%">
+            <span style="font-weight: bold">户号:</span>
+            <span style="margin-left: 5px">{{ doorNo }}</span>
+          </div>
+          <div style="width: 30%">
+            <span style="font-weight: bold">联系方式:</span>
+            <span style="margin-left: 5px">{{ baseInfo.phone }}</span>
+          </div>
+        </div>
+        <ElDescriptions class="margin-top" :column="2" border>
+          <ElDescriptionsItem
+            label="迁前地址："
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            kooriookami
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="迁后地址："
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            18100000000
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="开户名：" label-class-name="my-label" class-name="my-content">
+            {{ form.accountName }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="开户行：" label-class-name="my-label" class-name="my-content"
+            >{{ form.bankName }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="银行账号："
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ form.bankAccount }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="家庭总人数："
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ tableObject.tableList.length }}
+          </ElDescriptionsItem>
+        </ElDescriptions>
+        <h2 style=" margin: 20px;font-size: 18px; text-align: center">家庭基本情况</h2>
+        <el-table
+          :data="tableObject.tableList"
+          style="width: 100%"
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+          border
+        >
+          <el-table-column
+            :prop="item.field"
+            :label="item.label"
+            v-for="item in allSchemass"
+            :key="item.field"
+          />
+        </el-table>
+        <div
+          style="
+            display: flex;
+            width: 100%;
+            height: 55%;
+            border: 1px solid black;
+            align-items: center;
+          "
+        >
+          <div style="padding-left: 20px">制发单位（盖章）：</div>
+        </div></div
+      >
+      <div style="width: 50%">
+        <ElTable
+          :data="feeTableData"
+          :span-method="objectSpanMethod"
+          style="width: 100%"
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+          show-summary
+          :summary-method="getSummariese"
+          border
+        >
+          <ElTableColumn label="类型" align="center" prop="type" header-align="center">
+            <template #default="{ row }">
+              <b>{{ getTypeStr(row.type) }}</b>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="指标名称" prop="name" align="center" header-align="center" />
+          <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.unit ? row.unit : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="补偿金额" prop="totalPrice" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">{{
+                computedTotalPrice(row)
+              }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name === '奖励费小计'">
+                {{ getSummaries(row) }}
+              </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+            </template>
+          </ElTableColumn>
+        </ElTable>
+        <div style=" padding: 5px;font-size: 8px">移民户主：</div>
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 
@@ -160,7 +311,9 @@ import {
   ElCol,
   ElButton,
   ElInput,
-  ElMessage
+  ElMessage,
+  ElDescriptions,
+  ElDescriptionsItem
 } from 'element-plus'
 import { debounce } from 'lodash-es'
 import { Table } from '@/components/Table'
@@ -177,7 +330,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted } from 'vue'
-
+import { htmlToPdf } from '@/utils/ptf'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -342,6 +495,9 @@ const tableRowClassName = ({ row }: any) => {
   }
 }
 const { allSchemas } = useCrudSchemas(schema)
+let allSchemass = allSchemas.tableColumns.filter((item: any) => {
+  return item.label !== '序号'
+})
 
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
@@ -440,6 +596,7 @@ const onDocumentation = () => {
 // 打印报表
 const onPrint = () => {
   console.log('打印报表')
+  htmlToPdf('#print')
 }
 
 // 奖励费确认
@@ -484,6 +641,31 @@ const onSubmit = debounce((formEl) => {
 onMounted(() => {
   getRewardFeeList()
 })
+const getSummariese = (param) => {
+  const { columns, data } = param
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = '合计'
+      return
+    }
+    const values = data.map((item) => Number(item[column.property]))
+    if (index == 5) {
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr)
+        if (!Number.isNaN(value)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)
+    } else {
+      sums[index] = '/'
+    }
+  })
+
+  return sums
+}
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {
@@ -550,5 +732,56 @@ onMounted(() => {
 
 :deep(.fylist .el-table--border .el-table__inner-wrapper::after) {
   background: #fff;
+}
+
+:deep(.el-descriptions) {
+  --el-descriptions-table-border: 1px solid black;
+
+  .el-descriptions__body {
+    .el-descriptions__table {
+      // border-color: #171718;
+      tbody {
+        tr {
+          .my-label {
+            font-weight: bold;
+            background: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+#print {
+  :deep(.table-headers) {
+    font-size: 8px;
+    font-weight: bold;
+    background: none;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 7px;
+      background: none;
+    }
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(
+      .el-table__footer-wrapper tbody td.el-table__cell,
+      .el-table__header-wrapper tbody td.el-table__cell
+    ) {
+    font-size: 7px;
+    font-weight: bold;
+    background: none;
+  }
+
+  :deep(.el-table .el-table__cell) {
+    padding: 0px;
+  }
 }
 </style>

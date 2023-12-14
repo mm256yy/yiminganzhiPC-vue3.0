@@ -39,7 +39,9 @@
 
           <div class="common-form-item">
             <div class="common-label">提交时间：</div>
-            <div class="common-value"> {{ dayjs(detail.createdDate).format('YYYY-MM-DD') }} </div>
+            <div class="common-value">
+              {{ dayjs(detail.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
+            </div>
           </div>
 
           <div class="common-form-item">
