@@ -162,7 +162,7 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
-    <div style=" position: fixed; left: -1000px;width: 210mm; padding: 0 40px 0 40px" id="anztable">
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
       <div
         style="
