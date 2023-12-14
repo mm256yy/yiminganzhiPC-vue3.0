@@ -66,55 +66,55 @@ const deepChildren = ref<any[]>([])
  */
 let navList = reactive<any>([
   {
-    header: '实物成果',
+    header: '实物成果报表集',
     body: [
       {
-        label: '居民户',
+        label: '居民户类',
         children: [
           {
-            label: '人口房屋',
+            label: '人口房屋统计表',
             value: 'PopulationHousing',
             active: false
           },
           {
-            label: '附属物',
+            label: '附属物统计表',
             value: 'Accessory',
             active: false
           },
           {
-            label: '零星林(果)木',
+            label: '零星林(果)木统计表',
             value: 'FruitWood',
             active: false
           },
           {
-            label: '实物成果汇总',
+            label: '实物成果汇总统计表',
             value: 'Achievements',
             active: false
           },
           {
-            label: '实物成果变更',
+            label: '实物成果变更统计表',
             value: 'OutcomeChange',
             active: false
           }
         ]
       },
       {
-        label: '村集体',
+        label: '村集体类',
         children: [
           {
-            label: '房屋/附属物/零星林(果)木',
+            label: '房屋/附属物/零星林(果)木统计表',
             value: 'VillageCollective',
             active: false
           },
           {
-            label: '坟墓',
+            label: '坟墓统计表',
             value: 'Grave',
             active: false
           }
         ]
       },
       {
-        label: '企(事)业单位',
+        label: '企(事)业单位类',
         openTabs: false,
         tabs: true,
         children: [
@@ -124,19 +124,19 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '基本情况',
+                label: '基本情况统计表',
                 value: 'physicalResults',
                 query: '1',
                 active: false
               },
               {
-                label: '房屋及其附属物',
+                label: '房屋及其附属物统计表',
                 value: 'PhysicaFrom',
                 query: '2',
                 active: false
               },
               {
-                label: '零星林(果)木',
+                label: '零星林(果)木统计表',
                 value: 'PhysicaFrom',
                 query: '3',
                 active: false
@@ -149,13 +149,13 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '基本情况',
+                label: '基本情况统计表',
                 value: 'physicalResults',
                 query: '4',
                 active: false
               },
               {
-                label: '附属物',
+                label: '附属物统计表',
                 value: 'PhysicaFrom',
                 query: '5',
                 active: false
@@ -168,17 +168,17 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '基本情况',
+                label: '基本情况统计表',
                 value: 'waterbasicreport',
                 active: false
               },
               {
-                label: '房屋',
+                label: '房屋统计表',
                 value: 'waterhousereport',
                 active: false
               },
               {
-                label: '附属物',
+                label: '附属物统计表',
                 value: 'waterappendreport',
                 active: false
               }
@@ -190,7 +190,7 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '探矿权汇总表',
+                label: '探矿权汇总表统计表',
                 value: 'explorationRight',
                 active: false
               }
@@ -199,20 +199,20 @@ let navList = reactive<any>([
         ]
       },
       {
-        label: '专业项目',
+        label: '专业项目类',
         children: [
           {
-            label: '交通工程设施',
+            label: '交通工程设施统计表',
             value: 'transportationFacilities',
             active: false
           },
           {
-            label: '输变电工程设施',
+            label: '输变电工程设施统计表',
             value: 'transmissionFacilities',
             active: false
           },
           {
-            label: '文物古迹',
+            label: '文物古迹统计表',
             value: 'culturalRelic',
             active: false
           }
@@ -228,12 +228,12 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '设施汇总',
+                label: '设施汇总统计表',
                 value: 'telecomfacilitreport',
                 active: false
               },
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'telecomhousereport',
                 active: false
               }
@@ -244,12 +244,12 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '设施汇总',
+                label: '设施汇总统计表',
                 value: 'moveFacilities',
                 active: false
               },
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'moveAppendage',
                 active: false
               }
@@ -260,12 +260,12 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '设施汇总',
+                label: '设施汇总统计表',
                 value: 'uniconfacilityreport',
                 active: false
               },
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'unicomappendreport',
                 active: false
               }
@@ -276,7 +276,7 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '设施汇总',
+                label: '设施汇总统计表',
                 value: 'ironFacilities',
                 active: false
               }
@@ -287,12 +287,12 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '设施汇总',
+                label: '设施汇总统计表',
                 value: 'broadeacilityreport',
                 active: false
               },
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'broadappendreport',
                 active: false
               }
@@ -303,7 +303,7 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'hydrographicStation',
                 active: false
               }
@@ -314,12 +314,12 @@ let navList = reactive<any>([
             openTabs: false,
             children: [
               {
-                label: '基本情况',
+                label: '基本情况统计表',
                 value: 'religiousInformation',
                 active: false
               },
               {
-                label: '房屋及其附属物设备汇总',
+                label: '房屋及其附属物设备汇总统计表',
                 value: 'religiousAppendage',
                 active: false
               }
@@ -328,10 +328,10 @@ let navList = reactive<any>([
         ]
       },
       {
-        label: '土地',
+        label: '土地类',
         children: [
           {
-            label: '土地信息',
+            label: '土地信息统计表',
             value: 'Land',
             active: false
           }
@@ -340,88 +340,88 @@ let navList = reactive<any>([
     ]
   },
   {
-    header: '资金管理',
+    header: '资金管理报表集',
     body: [
       {
-        label: '居民户',
+        label: '居民户类',
         children: [
           {
-            label: '居民户',
+            label: '居民户统计表',
             value: 'FundPeople',
             active: false
           },
           {
-            label: '资金使用详细',
+            label: '资金使用详细统计表',
             value: 'FundUseDetail',
             active: false
           }
         ]
       },
+      // {
+      //   label: '村集体类',
+      //   children: [
+      //     {
+      //       label: '村集体统计表',
+      //       value: 'FundVillage',
+      //       active: false
+      //     }
+      //   ]
+      // },
       {
-        label: '村集体',
+        label: '企(事)业单位类',
         children: [
           {
-            label: '村集体',
-            value: 'FundVillage',
-            active: false
-          }
-        ]
-      },
-      {
-        label: '企(事)业单位',
-        children: [
-          {
-            label: '企业',
+            label: '企业统计表',
             value: 'FundEnterprise',
             active: false
           },
           {
-            label: '个体户',
+            label: '个体户统计表',
             value: 'FundIndividualB',
             active: false
           },
           {
-            label: '水电站',
+            label: '水电站统计表',
             value: 'FundHydropower',
             active: false
           }
         ]
       },
       {
-        label: '专业项目',
+        label: '专业项目类',
         children: [
           {
-            label: '电信工程',
+            label: '电信工程统计表',
             value: 'telecommunication',
             active: false
           },
           {
-            label: '移动工程',
+            label: '移动工程统计表',
             value: 'moveExcel',
             active: false
           },
           {
-            label: '联通工程',
+            label: '联通工程统计表',
             value: 'unicom',
             active: false
           },
           {
-            label: '铁打工程',
+            label: '铁塔工程统计表',
             value: 'Irontower',
             active: false
           },
           {
-            label: '广播电视工程',
+            label: '广播电视工程统计表',
             value: 'radioExcel',
             active: false
           },
           {
-            label: '水文站',
+            label: '水文站统计表',
             value: 'hydrology',
             active: false
           },
           {
-            label: '宗教',
+            label: '宗教统计表',
             value: 'religion',
             active: false
           }
@@ -430,18 +430,18 @@ let navList = reactive<any>([
     ]
   },
   {
-    header: '安置意愿',
+    header: '安置意愿报表集',
     body: [
       {
-        label: '安置意愿',
+        label: '安置意愿类',
         children: [
           {
-            label: '生产安置意愿',
+            label: '生产安置意愿统计表',
             value: 'proHouseReport',
             active: false
           },
           {
-            label: '搬迁安置意愿',
+            label: '搬迁安置意愿统计表',
             value: 'moveHouseReport',
             active: false
           }
@@ -450,48 +450,48 @@ let navList = reactive<any>([
     ]
   },
   {
-    header: '进度管理',
+    header: '进度管理报表集',
     body: [
       {
-        label: '居民户',
+        label: '居民户类',
         children: [
           {
-            label: '居民户按区域',
+            label: '居民户按区域统计表',
             value: 'residentRegion',
             active: false
           },
           {
-            label: '居民户按工作组',
+            label: '居民户按工作组统计表',
             value: 'residentWork',
             active: false
           }
         ]
       },
       {
-        label: '企(事)业单位',
+        label: '企(事)业单位类',
         children: [
           {
-            label: '企业',
+            label: '企业统计表',
             value: 'enterprisereport',
             active: false
           },
           {
-            label: '个体户按区域',
+            label: '个体户按区域统计表',
             value: 'individualregionreport',
             active: false
           },
           {
-            label: '个体户按工作区',
+            label: '个体户按工作区统计表',
             value: 'individualworkreport',
             active: false
           }
         ]
       },
       {
-        label: '专业项目',
+        label: '专业项目类',
         children: [
           {
-            label: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站',
+            label: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站统计表',
             value: 'comprehensivereport',
             active: false
           }
@@ -547,21 +547,23 @@ const deepChooseItem = (item, query = {}) => {
   }
   item.active = true
   // 路由跳转
-
   goLink(item.value, query)
 }
 
 const goLink = (routerName: string, query: any) => {
   if (!routerName) return
-  // router.push({
-  //   name: routerName
-  // })
 
-  const linkObj = router.resolve({
+  // const linkObj = router.resolve({
+  //   name: routerName,
+  //   query: query
+  // })
+  // 修改跳转方式为本页跳转
+  router.push({
     name: routerName,
     query: query
   })
-  window.open(linkObj.href, '_blank')
+
+  //window.open(linkObj.href, '_blank')
 }
 </script>
 
@@ -609,8 +611,9 @@ const goLink = (routerName: string, query: any) => {
         border-bottom: 1px dashed #ebebeb;
 
         .left {
-          width: 94px;
+          width: 100px;
           line-height: 29px;
+          text-align: right;
           text-align: right;
         }
 

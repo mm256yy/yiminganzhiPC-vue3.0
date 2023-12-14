@@ -1,17 +1,14 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">村集体</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <MigrateCrumb :titles="titles" />
     <div class="tips">敬请期待...</div>
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+const titles = ['智能报表', '资金管理', '村集体']
 </script>
 
 <style lang="less" scoped>

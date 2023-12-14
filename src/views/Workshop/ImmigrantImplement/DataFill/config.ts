@@ -80,7 +80,7 @@ export const HouseholdSubTabs = [
     id: TabIds[0],
     icon: 'clarity:house-solid',
     active: false,
-    key: 'appendageStatus'
+    key: 'houseAllStatus'
   },
   {
     type: 2,
@@ -88,7 +88,7 @@ export const HouseholdSubTabs = [
     id: TabIds[1],
     icon: 'mdi:house-city',
     active: false,
-    key: 'landStatus'
+    key: 'landAllStatus'
   },
 
   // 安置确认

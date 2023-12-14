@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center">
-    <!-- <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
       返回
-    </ElButton> -->
+    </ElButton>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
@@ -67,7 +67,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRaw, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -182,7 +182,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'type',
+    field: 'typeText',
     label: '专项类别',
     search: {
       show: false

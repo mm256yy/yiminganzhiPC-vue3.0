@@ -50,9 +50,6 @@
         highlightCurrentRow
         @register="register"
       >
-        <!-- <template #doorNo="{ row }">
-          {{ filterViewDoorNo(row) }}
-        </template> -->
         <template #regionText="{ row }">
           <div>
             {{
@@ -162,7 +159,7 @@ const uploadLoading = ref(false)
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })
-const { setSearchParams } = methods
+const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId,
@@ -195,7 +192,7 @@ const getdistrictTree = async () => {
 
 const girdLists = ref<any>({})
 
-const getList = async () => {
+const requestList = async () => {
   const list = await getLandlordListApiGird({
     projectId,
     status: 'implementation'
@@ -205,8 +202,7 @@ const getList = async () => {
 onMounted(() => {
   getVillageTree()
   getdistrictTree()
-  // getLandlordHeadInfo()
-  getList()
+  requestList()
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -426,7 +422,16 @@ const onSubmit = () => {
   }
   updateLandlordApi(params).then(() => {
     ElMessage.success('操作成功')
-    setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+    // const params = {
+    //   type: 'PeasantHousehold',
+    //   status: SurveyStatusEnum.Implementation,
+    //   ...tableObject.params
+    // }
+
+    // console.log('OPO', params)
+
+    // setSearchParams(params)
+    getList()
   })
   dialogVisible.value = false
 }

@@ -80,7 +80,6 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-
       <ElButton type="primary" @click="onSubmit(formRef, 0)">保存草稿</ElButton>
       <ElButton type="primary" @click="onSubmit(formRef, 1)">确认提交</ElButton>
     </template>

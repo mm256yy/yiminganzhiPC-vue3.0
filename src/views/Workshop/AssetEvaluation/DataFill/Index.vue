@@ -241,6 +241,7 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = { ...res }
+    console.log('B-I', baseInfo)
     estimateStatus = res.estimateStatus
     getFillingStatus()
   })

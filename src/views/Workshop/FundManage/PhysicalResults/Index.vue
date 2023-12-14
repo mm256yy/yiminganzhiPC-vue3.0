@@ -1,9 +1,6 @@
 <template>
   <WorkContentWrap>
-    <!-- <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
-    </div> -->
-
+    <MigrateCrumb :titles="titles" />
     <div class="table-wrap">
       <ElTable :data="tableData1.tableList" style="width: 100%" :span-method="objectSpanMethod1">
         <ElTableColumn type="index" label="序号" />
@@ -46,12 +43,16 @@ import {
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+
 const appStore = useAppStore()
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
 const projectId = appStore.currentProjectId
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
+const titles = ['智能报表', '实物成果', '企业', '基本情况']
+
 let tableData1 = reactive<any>({
   tableList: [],
   pageSizeRef: 10,

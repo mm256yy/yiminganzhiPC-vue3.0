@@ -1,6 +1,15 @@
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="flex items-center">
+      <!-- <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">居民户</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">人口房屋</ElBreadcrumbItem>
+      </ElBreadcrumb> -->
+      <MigrateCrumb :titles="titles" />
+    </div>
+    <div v-if="false" class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -45,6 +54,7 @@ import { exportTypes } from '../config'
 import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -56,6 +66,7 @@ interface SpanMethodProps {
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const titles = ['智能报表', '实物成果', '居民户', '人口房屋']
 
 const { register, tableObject, methods } = useTable({
   getListApi: getPopulationHousingListApi

@@ -1,10 +1,6 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">居民户</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <MigrateCrumb :titles="titles" />
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -42,16 +38,17 @@
 <script lang="ts" setup>
 import { reactive, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getHouseholdReportListApi } from '@/api/fundReport/service'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const titles = ['智能报表', '资金管理', '居民户']
 
 const { register, tableObject } = useTable()
 

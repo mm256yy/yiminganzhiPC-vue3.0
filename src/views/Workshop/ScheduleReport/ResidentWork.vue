@@ -1,11 +1,7 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
-      <ElButton
-        @click="onBack"
-        :icon="BackIcon"
-        class="px-9px py-0px !h-28px mr-8px !text-12px !hidden"
-      >
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
         返回
       </ElButton>
       <ElBreadcrumb separator="/">

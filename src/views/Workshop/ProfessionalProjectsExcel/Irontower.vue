@@ -1,7 +1,18 @@
 <!-- 铁塔工程表格 -->
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">专业项目</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">铁塔工程</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
+    <div v-if="false" class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -34,6 +45,7 @@
 </template>
 
 <script lang="ts" setup>
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 // import { ElButton } from 'element-plus'
@@ -46,6 +58,11 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getProfessionalProjectsPageApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { back } = useRouter()
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -289,6 +306,10 @@ const onSearch = (data) => {
     delete params.villageCode
     setSearchParams({ ...params })
   }
+}
+
+const onBack = () => {
+  back()
 }
 
 // // 数据导出
