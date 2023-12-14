@@ -352,14 +352,14 @@
               <img class="img" src="@/assets/imgs/home/icon_gszj.png" />
               <div class="content">
                 <div class="sub-title">概算资金(万元)</div>
-                <div class="amount">642,103</div>
+                <div class="amount">{{ fundScreenDto.gszj }}</div>
               </div>
             </div>
             <div class="item" style="background-color: white">
               <img class="img" src="@/assets/imgs/icon_Hydrograph.png" />
               <div class="content">
                 <div class="sub-title">累计使用(万元)</div>
-                <div class="amount">380,000</div>
+                <div class="amount">{{ fundScreenDto.ljsyzj }}</div>
               </div>
             </div>
           </div>
@@ -369,16 +369,16 @@
             </div> -->
             <div class="chart-2">
               <div class="sub-title">本年计划资金(万元)</div>
-              <div class="amount">100,000</div>
+              <div class="amount">{{ fundScreenDto.bnjhzj }}</div>
               <div class="sub-title">本年使用资金(万元)</div>
-              <div class="amount">98,000</div>
+              <div class="amount">{{ fundScreenDto.bnsyzj }}</div>
             </div>
             <div class="chart-3 land land-fill">
               <div class="sub-title">概算内(万元)</div>
-              <div class="amount">642,103</div>
+              <div class="amount">{{ fundScreenDto.gsnzj }}</div>
               <div class="line"></div>
               <div class="sub-title">概算外(万元)</div>
-              <div class="amount">80,000</div>
+              <div class="amount">{{ fundScreenDto.gswzj }}</div>
             </div>
           </div>
         </div>
@@ -444,6 +444,7 @@ const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
 const policyList = ref<any>([])
 const leadershipScreenList = ref<any>({})
+const fundScreenDto = ref<any>({})
 const populationScreenDtoList = ref<any>([])
 const landScreenDtoList = ref<any>([])
 const landScreenDtoListObj = ref<any>({})
@@ -479,6 +480,7 @@ const initNewsData = () => {
     // console.log('newsList：', newsList.value)
   })
 }
+
 // 初始化获取新闻通知 -- 政策法规列表数据
 const initPolicyData = () => {
   getPolicyListApi({ size: 9999 }).then((res: any) => {
@@ -560,6 +562,8 @@ const tabVillage = async () => {
 const clearInput = async () => {
   const list = await getLeadershipScreen({ code: undefined })
   leadershipScreenList.value = list
+  fundScreenDto.value = list.fundScreenDto
+  console.log('==================fundScreenDto.value=============', fundScreenDto.value)
   const planList = ref<any>([])
   const actualList = ref<any>([])
   arr.value = []
@@ -635,7 +639,6 @@ onMounted(() => {
   villageList()
   //getToken()
 })
-
 const impProgressOption = ref({
   color: ['#4892FB', '#F89DA0'],
   tooltip: {
