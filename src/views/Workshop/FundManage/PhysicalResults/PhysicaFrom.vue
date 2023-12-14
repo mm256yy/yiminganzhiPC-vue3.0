@@ -1,5 +1,16 @@
 <template>
   <WorkContentWrap>
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">企业</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px"> {{ getTitle }}</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> {{ titles }}</div>
@@ -20,18 +31,29 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted, ref, computed } from 'vue'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { useIcon } from '@/hooks/web/useIcon'
 import {
   getEnterpriseAppendant,
   getEnterpriseTree,
-  getIndividualHouseholdAppendant,
   getIndividualHouseholdTree
 } from '@/api/fundManage/fundPayment-service'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { back } = useRouter()
+
+const { currentRoute } = useRouter()
+const { id } = currentRoute.value.query as any
+
+const getTitle = computed(() => {
+  return id === '2' ? '房屋及其附属物' : '零星林（果）木'
+})
+
 let Route = useRoute()
 // interface SpanMethodProps {
 //   row: any
@@ -48,6 +70,11 @@ const projectId = appStore.currentProjectId
 let tableObject = reactive({
   tableList: []
 })
+
+const onBack = () => {
+  back()
+}
+
 const commonTableItemSchema = {
   search: {
     show: false

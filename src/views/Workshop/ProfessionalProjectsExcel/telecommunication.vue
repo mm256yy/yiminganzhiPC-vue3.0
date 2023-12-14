@@ -1,15 +1,25 @@
 <!-- 电信表格 -->
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">专业项目</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">电信工程</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
+    <div v-if="false" class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
@@ -46,6 +56,12 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getProfessionalProjectsPageApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { back } = useRouter()
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -56,7 +72,6 @@ interface SpanMethodProps {
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-// const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getProfessionalProjectsPageApi
@@ -222,14 +237,8 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
+const onBack = () => {
+  back()
 }
 
 /**
@@ -269,26 +278,25 @@ const onSearch = (data) => {
 
   // 需要重置一次params
   tableObject.params = {
-    projectId
+    projectId,
+    type: 23
   }
-  if (!params.householdName) {
-    delete params.householdName
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
   }
-  if (!params.doorNo) {
-    delete params.doorNo
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId,
+    type: 23
   }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+  setSearchParams({})
 }
 
 // 数据导出

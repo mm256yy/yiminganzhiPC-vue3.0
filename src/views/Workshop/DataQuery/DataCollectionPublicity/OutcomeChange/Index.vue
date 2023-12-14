@@ -1,4 +1,7 @@
 <template>
+  <div class="flex items-center">
+    <MigrateCrumb :titles="titles" />
+  </div>
   <div class="data-fill-head">
     <div class="head-top">
       <div class="tabs">
@@ -35,6 +38,9 @@ import Appendant from './DataFill/Appendant.vue'
 import FruitTree from './DataFill/FruitTree.vue'
 import House from './DataFill/House.vue'
 import Population from './DataFill/Population.vue'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+
+const titles = ['智能报表', '实物成果', '居民户', '实物成果变更']
 
 const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 const tabCurrentId = ref<number>(0)

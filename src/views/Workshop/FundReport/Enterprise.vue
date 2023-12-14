@@ -1,10 +1,6 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <MigrateCrumb :titles="titles" />
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 企业报表 </div>
@@ -100,9 +96,10 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { getCardReportApi } from '@/api/fundReport/service'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+const titles = ['智能报表', '资金管理', '企业']
 
 const tableData = ref<any>([])
 const tableLoading = ref<boolean>(false)

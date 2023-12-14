@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+    <MigrateCrumb :titles="titles" />
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -46,10 +47,12 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { exportTypes } from '../config'
 import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
 import { screeningTree } from '@/api/workshop/village/service'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const titles = ['智能报表', '实物成果', '村集体', '坟墓']
 
 const { register, tableObject, methods } = useTable({
   getListApi: getGraveListApi

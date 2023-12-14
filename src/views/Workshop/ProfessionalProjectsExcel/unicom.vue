@@ -1,7 +1,18 @@
-<!-- 联通表格 -->
+<!-- 联通工程 -->
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">专业项目</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">联通工程</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
+    <div v-if="false" class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -35,6 +46,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 // import { ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -46,6 +58,8 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getProfessionalProjectsPageApi } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
 
 interface SpanMethodProps {
   row: PopulationHousingDtoType
@@ -54,6 +68,8 @@ interface SpanMethodProps {
   columnIndex: number
 }
 
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { back } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // const emit = defineEmits(['export'])
@@ -314,6 +330,10 @@ const findRecursion = (data, code, callback) => {
       return findRecursion(item.children, code, callback)
     }
   })
+}
+
+const onBack = () => {
+  back()
 }
 
 onMounted(() => {
