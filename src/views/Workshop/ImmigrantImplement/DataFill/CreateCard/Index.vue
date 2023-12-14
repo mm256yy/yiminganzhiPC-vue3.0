@@ -214,7 +214,7 @@
             {{ tableObject.tableList.length }}
           </ElDescriptionsItem>
         </ElDescriptions>
-        <h2 style=" margin: 20px;font-size: 18px; text-align: center">家庭基本情况</h2>
+        <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>
         <el-table
           :data="tableObject.tableList"
           style="width: 100%"
@@ -292,7 +292,7 @@
             </template>
           </ElTableColumn>
         </ElTable>
-        <div style=" padding: 5px;font-size: 8px">移民户主：</div>
+        <div style="padding: 5px; font-size: 8px">移民户主：</div>
       </div>
     </div>
   </WorkContentWrap>

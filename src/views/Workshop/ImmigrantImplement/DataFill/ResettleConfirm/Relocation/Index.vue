@@ -162,6 +162,7 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+    <!-- <div style="width: 210mm; padding: 0 10px 0 10px; border: 1px solid black"></div> -->
   </WorkContentWrap>
 </template>
 

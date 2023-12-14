@@ -220,6 +220,7 @@ const getPeopleList = async () => {
       return item
     })
   }
+  console.log(tableData.value)
 }
 
 // 查询安置信息
