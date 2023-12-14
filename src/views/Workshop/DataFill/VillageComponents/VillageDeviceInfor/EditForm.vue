@@ -165,14 +165,15 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="高程" prop="altitude">
-            <ElInput
+            <ElInputNumber :min="0" v-model="form.altitude" :precision="2" />
+            <!-- <
               clearable
               filterable
               placeholder="请输入高程"
               type="text"
               class="!w-full"
               v-model="form.altitude"
-            />
+            /> -->
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
