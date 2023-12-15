@@ -34,7 +34,7 @@
     </template>
   </Dialog>
 </template>
-<script setup lang="ts11">
+<script setup lang="ts">
 import gcoord from 'gcoord'
 import { computed, reactive, unref, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
