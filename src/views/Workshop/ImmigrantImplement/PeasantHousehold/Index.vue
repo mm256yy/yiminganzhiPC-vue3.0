@@ -8,9 +8,11 @@
       <Search
         :schema="allSchemas.searchSchema"
         expand
+        :showFhHh="true"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
+        @fhhh="toTargetNew"
         @reset="setSearchParams"
       />
     </div>
@@ -173,7 +175,15 @@ onMounted(() => {
   getdistrictTree()
   getLandlordHeadInfo()
 })
-
+const toTarget = (routeName: string, query = {}) => {
+  push({
+    name: routeName,
+    query
+  })
+}
+const toTargetNew = () => {
+  push('/WorkshopEffect/separateHouseholds')
+}
 const schema = reactive<CrudSchema[]>([
   {
     field: 'code',
@@ -418,6 +428,7 @@ const getLocationText = (key: string) => {
 }
 
 const onSearch = (data) => {
+  console.log('======================================')
   let searchData = JSON.parse(JSON.stringify(data))
   console.log(searchData)
   // 处理参数
