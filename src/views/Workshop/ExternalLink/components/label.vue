@@ -7,7 +7,7 @@
     <div class="title">
       <slot name="title"></slot>
     </div>
-    <div class="right_info">
+    <div>
       <slot name="info"></slot>
     </div>
   </div>
@@ -36,10 +36,10 @@
     background: #3e73ec;
     border-radius: 4px 4px 4px 4px;
     opacity: 1;
-    display: block;
+    display: inline-block;
     color: #3e73ec;
     position: absolute;
-    top: 16px;
+    top: 14px;
     left: 12px;
   }
 }

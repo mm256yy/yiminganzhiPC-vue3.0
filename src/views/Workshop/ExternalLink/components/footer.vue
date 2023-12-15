@@ -22,7 +22,7 @@
   font-weight: 400;
   color: rgba(19, 19, 19, 0.4);
   line-height: 16px;
-  margin-top: 15px;
+  margin-top: 10px;
   .text_a {
     margin: 0 45px 0 16px;
   }

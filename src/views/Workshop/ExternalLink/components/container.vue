@@ -8,14 +8,32 @@
     <div class="con_box">
       <Label>
         <template #title>
-          <img class="xm_img" src="../../../../assets/imgs/homes/news.png" alt="" /> </template
-      ></Label>
+          <img class="xm_img" src="../../../../assets/imgs/homes/news.png" alt="" />
+        </template>
+        <template #info>
+          <view class="right_slot">
+            <view class="right_text">查看更多</view>
+            <view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
+            /></view>
+          </view>
+        </template>
+      </Label>
     </div>
     <div class="con_bom">
       <Label>
         <template #title>
-          <img class="xm_img" src="../../../../assets/imgs/homes/xx.png" alt="" /> </template
-      ></Label>
+          <img class="xm_img" src="../../../../assets/imgs/homes/xx.png" alt="" />
+        </template>
+        <template #info>
+          <view class="right_slot">
+            <view class="right_text">查看更多</view>
+            <view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
+            /></view>
+          </view>
+        </template>
+      </Label>
     </div>
   </div>
 </template>
@@ -27,8 +45,24 @@ import Label from './label.vue'
 .container_box {
   .xm_img {
     width: 74px;
-    height: 20px;
+    height: 15px;
     // margin-top: 2px;
+  }
+  .right_text {
+    font-size: 14px;
+    font-family: PingFang SC, PingFang SC;
+    font-weight: 400;
+    color: #666666;
+    line-height: 20px;
+  }
+  .right_slot {
+    display: flex;
+    cursor: pointer;
+    .look_icon {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+    }
   }
   .cin_top {
     width: 620px;

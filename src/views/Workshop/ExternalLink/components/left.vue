@@ -86,6 +86,7 @@ const clearInput = () => {}
     .w-full {
       width: 80px;
       height: 24px;
+      margin-top: -6px;
     }
     .con_box {
       padding: 16px;
@@ -98,8 +99,7 @@ const clearInput = () => {}
   }
   .xm_img {
     width: 74px;
-    height: 20px;
-    // margin-top: 2px;
+    height: 15px;
   }
   .contain {
     width: 620px;

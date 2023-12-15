@@ -43,6 +43,8 @@ onBeforeUnmount(() => {
   background: #e7edfd;
   .container {
     display: flex;
+    padding-top: 10px;
+
     .left_info,
     .containerInfo {
       margin-right: 14px;

@@ -7,14 +7,24 @@
     <div class="right_info_top">
       <Label>
         <template #title>
-          <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" /> </template
-      ></Label>
+          <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" />
+        </template>
+      </Label>
     </div>
     <div class="right_info_con">
       <Label>
         <template #title>
-          <img class="xm_img" src="../../../../assets/imgs/homes/jd.png" alt="" /> </template
-      ></Label>
+          <img class="xm_img" src="../../../../assets/imgs/homes/jd.png" alt="" />
+        </template>
+        <template #info>
+          <view class="right_slot">
+            <view class="right_text">查看更多</view>
+            <view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
+            /></view>
+          </view>
+        </template>
+      </Label>
     </div>
     <div class="right_info_bom">
       <div class="bom_box_top">
@@ -34,7 +44,16 @@ import Label from './label.vue'
 .right_info {
   .xm_img {
     width: 74px;
-    height: 20px;
+    height: 15px;
+  }
+  .right_slot {
+    display: flex;
+    cursor: pointer;
+    .look_icon {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+    }
   }
   .right_info_top {
     width: 620px;
