@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessageBox } from 'element-plus'
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessageBox, ElDialog } from 'element-plus'
+import { ref } from 'vue'
 import { useCache } from '@/hooks/web/useCache'
 import { resetRouter } from '@/router'
 import { logoutApi } from '@/api/login'
 import { useDesign } from '@/hooks/web/useDesign'
 import { useTagsViewStore } from '@/store/modules/tagsView'
 import { useAppStore } from '@/store/modules/app'
-
+import Edit from './Edit.vue'
 const tagsViewStore = useTagsViewStore()
 const { getPrefixCls } = useDesign()
 const prefixCls = getPrefixCls('user-info')
 const { wsCache } = useCache()
 const appStore = useAppStore()
-
+const dialogVisible = ref(false)
 const nickName = (appStore.getUserJwtInfo && appStore.getUserJwtInfo.nickName) || '用户'
 
 const loginOut = () => {
@@ -31,6 +32,13 @@ const loginOut = () => {
     })
     .catch(() => {})
 }
+
+const edit = () => {
+  dialogVisible.value = true
+}
+const onFormPupClose = () => {
+  dialogVisible.value = false
+}
 </script>
 
 <template>
@@ -44,7 +52,11 @@ const loginOut = () => {
         <ElDropdownItem>
           <div @click="loginOut">{{ '退出系统' }}</div>
         </ElDropdownItem>
+        <ElDropdownItem>
+          <div @click="edit">{{ '修改密码' }}</div>
+        </ElDropdownItem>
       </ElDropdownMenu>
+      <Edit :show="dialogVisible" @close="onFormPupClose" />
     </template>
   </ElDropdown>
 </template>

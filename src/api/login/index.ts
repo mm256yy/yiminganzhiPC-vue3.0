@@ -20,3 +20,12 @@ export const loginCaptchaApi = (): Promise<CaptchaType> => {
 export const getPermissionApi = (): Promise<string[]> => {
   return request.get({ url: '/auth/permission' })
 }
+
+/**
+ * 修改密码
+ * @param data
+ * @returns
+ */
+export const modifyPasswordApi = (data: any): Promise<string[]> => {
+  return request.post({ url: '/user/pass', data })
+}
