@@ -4,6 +4,7 @@
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_notice.png" class="icon" />
         <div>消息通知</div>
+        <div class="more-box">更多</div>
       </div>
       <!--消息通知-->
       <div>
@@ -15,7 +16,7 @@
           <span class="time">发送时间</span>
         </div>
         <div class="list">
-          <div class="item-title">
+          <!-- <div class="item-title">
             <div>
               <span class="item-index">1</span>
               <span class="item-content">您有5还有居民已严重滞后，请推进实施工作</span>
@@ -49,7 +50,7 @@
               <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
             </div>
             <span class="item-time">2023-05-11</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -58,6 +59,7 @@
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_feed.png" class="icon" />
         <div>信息反馈</div>
+        <div class="more-box" @click="more">更多</div>
       </div>
       <div>
         <div class="top-title">
@@ -95,7 +97,9 @@ import { useRouter } from 'vue-router'
 
 const { push } = useRouter()
 const messageList = ref<MessageDtoType[]>([])
-
+const more = () => {
+  push('/Feedback/FeedbackIndex')
+}
 // 获取消息
 const getMessage = async () => {
   try {
@@ -116,6 +120,13 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+.more-box {
+  margin-left: 251px;
+  cursor: pointer;
+  color: #171718;
+  font-weight: 400;
+  font-size: 17px;
+}
 .statistic {
   width: 456px;
 
@@ -139,7 +150,6 @@ onMounted(() => {
   background: #ffffff;
   align-items: center;
   border-radius: 8px;
-
   &.active {
     color: #ffffff;
     background: linear-gradient(135deg, #1a63ff 0%, rgba(255, 255, 255, 0) 100%);
