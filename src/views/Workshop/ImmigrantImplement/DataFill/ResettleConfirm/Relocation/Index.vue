@@ -408,6 +408,7 @@ const onEditOpen = () => {
 }
 
 const onEditClose = () => {
+  getRelocationInfo()
   editDialogVisible.value = false
 }
 

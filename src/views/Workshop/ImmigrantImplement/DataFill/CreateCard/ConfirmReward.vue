@@ -15,27 +15,33 @@
           {{ row.unit ? row.unit : '——' }}
         </template>
       </ElTableColumn>
-      <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+      <ElTableColumn label="数量" width="180px" prop="number" align="center" header-align="center">
         <template #default="{ row }">
           <ElInputNumber
-            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
+            v-if="row.isUpdate === '0' && showInput(row.name)"
             :min="0"
             v-model="row.number"
           />
-          <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
-          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
+          <div v-if="row.isUpdate === '1'">{{ row.number }}</div>
+          <div v-if="!showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
-      <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
+      <ElTableColumn
+        label="补偿单价"
+        width="180px"
+        prop="price"
+        align="center"
+        header-align="center"
+      >
         <template #default="{ row }">
           <ElInputNumber
-            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
+            v-if="row.isUpdate === '0' && showInput(row.name)"
             :min="0"
             v-model="row.price"
             :precision="2"
           />
           <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
-          <div v-if="row.isUpdate !== '1' || !showInput(row.name)"> —— </div>
+          <div v-if="!showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn
@@ -53,34 +59,27 @@
           <div v-else>{{ getSummaries(row) }}</div>
         </template>
       </ElTableColumn>
+      <ElTableColumn label="确认状态" prop="price" align="center" header-align="center">
+        <template #default="{ row }">
+          <div v-if="row.isVerify === '1' && row.unit">已确认</div>
+          <div v-else>未确认</div>
+        </template>
+      </ElTableColumn>
       <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
         <template #default="{ row }">
           <ElInput
-            v-if="row.isUpdate === '1' && row.isVerify !== '1' && showInput(row.name)"
+            v-if="row.isUpdate === '0' && showInput(row.name)"
             placeholder="请输入"
             v-model="row.remark"
           />
-          <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+          <div v-if="row.isUpdate === '1'">{{ row.remark }}</div>
           <div v-if="!showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
       <ElTableColumn label="操作" width="180" align="center" header-align="center" fixed="right">
         <template #default="{ row }">
-          <ElButton
-            v-if="row.isVerify !== '1' && row.unit"
-            type="primary"
-            @click="onSave(row, '0')"
-          >
-            保存
-          </ElButton>
-          <ElButton
-            v-if="row.isVerify !== '1' && row.unit"
-            type="primary"
-            @click="onSave(row, '1')"
-          >
-            确认
-          </ElButton>
-          <div v-if="row.isVerify === '1' && row.unit">已确认</div>
+          <ElButton type="success" @click="onSave(row, '0')"> 编辑 </ElButton>
+          <ElButton type="primary" @click="onSave(row, '1')"> 确认 </ElButton>
         </template>
       </ElTableColumn>
     </ElTable>
@@ -110,6 +109,7 @@ const props = defineProps<PropsType>()
 const tableData = ref<any[]>([])
 const loading = ref<boolean>(false)
 const emit = defineEmits(['close'])
+//const isEdite = ref<boolean>(false)
 
 const initData = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
@@ -169,23 +169,29 @@ const onSave = (data: any, isVerify: string) => {
   loading.value = true
   const totalPrice = Number(data.number) * Number(data.price)
 
-  let params = {
-    ...data,
-    doorNo: props.doorNo,
-    totalPrice,
-    isVerify
-  }
-  saveRewardFee(params)
-    .then((res: any) => {
-      if (res) {
-        ElMessage.success('操作成功')
-        initData()
+  if (isVerify === '0') {
+    data.isUpdate = '0'
+  } else {
+    data.isUpdate = '1'
+    let params = {
+      ...data,
+      doorNo: props.doorNo,
+      totalPrice,
+      isVerify
+    }
+    console.log(params)
+    saveRewardFee(params)
+      .then((res: any) => {
+        if (res) {
+          ElMessage.success('操作成功')
+          initData()
+          loading.value = false
+        }
+      })
+      .catch(() => {
         loading.value = false
-      }
-    })
-    .catch(() => {
-      loading.value = false
-    })
+      })
+  }
 }
 //如果不为奖励费小计就展示输入框
 const showInput = (name) => name !== '奖励费小计' && name !== '其他奖励费'
