@@ -10,7 +10,7 @@
           <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" />
         </template>
         <template #info>
-          <view class="right_slot">
+          <view @click="handleClickItem(2)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
@@ -36,7 +36,7 @@
             </div>
             <div class="round">
               <div class="round_top">占比</div>
-              <div class="round_bom">98%</div>
+              <div class="round_bom">{{ isNaN(computedProperty) ? 0 : computedProperty }}%</div>
             </div>
           </div>
           <div class="management_r_bom">
@@ -64,7 +64,7 @@
           <img class="xm_img" src="../../../../assets/imgs/homes/jd.png" alt="" />
         </template>
         <template #info>
-          <view class="right_slot">
+          <view @click="handleClickItem(3)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
@@ -75,30 +75,30 @@
 
       <div class="progress">
         <div class="progoress_ridio">
-          <div class="cur_b"> </div>
+          <div class="cur_b"></div>
           <div class="ridio_text">实际进度</div>
-          <div class="cur_jd"> </div>
+          <div class="cur_jd"></div>
           <div>实际进度</div>
         </div>
         <div class="progress_list">
-          <div v-for="item in progressList" :key="item.id" class="progress_li">
+          <div v-for="item in progressList" :key="item.img" class="progress_li">
             <div class="li_img">
               <img class="logo_li" :src="item.img" alt="" />
             </div>
             <div class="li_right">
-              <div class="li_title"> {{ item.name }} </div>
-              <ElProgress :color="customColor_a" class="progress_top" :percentage="50" />
-              <ElProgress :color="customColor" class="progress_top" :percentage="50" />
+              <div class="li_title">{{ item.name }}</div>
+              <ElProgress :color="customColor_a" class="progress_top" :percentage="item.actual" />
+              <ElProgress :color="customColor" class="progress_top" :percentage="item.plan" />
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="right_info_bom">
-      <div class="bom_box_top">
+      <div @click="handleClickItem(6)" class="bom_box_top">
         <img class="img_box" src="../../../../assets/imgs/homes/zh.png" alt="" />
       </div>
-      <div class="bom_box_top">
+      <div @click="handleClickItem(1)" class="bom_box_top">
         <img class="img_box" src="../../../../assets/imgs/homes/dsj.png" alt="" />
       </div>
     </div>
@@ -108,7 +108,7 @@
 import Label from './label.vue'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 import { useRouter } from 'vue-router'
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import { ElProgress } from 'element-plus'
 const { emitter } = useEmitt()
@@ -119,56 +119,11 @@ const fundScreenDto = ref<any>({})
 const customColor = ref('#CADAFF')
 const customColor_a = ref('#3E73EC')
 
-const progressList = ref([
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_1.png', import.meta.url).href,
-    key: '20',
-    name: '资格认定',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_2.png', import.meta.url).href,
-    name: '资产评估',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_3.png', import.meta.url).href,
-    name: '安置确认',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_4.png', import.meta.url).href,
-    name: '择址确认',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_5.png', import.meta.url).href,
-    name: '腾空过渡',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_6.png', import.meta.url).href,
-    name: '动迁协议',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_7.png', import.meta.url).href,
-    name: '搬迁安置',
-    key: '20',
-    value: '30'
-  },
-  {
-    img: new URL('../../../../assets/imgs/homes/logo_8.png', import.meta.url).href,
-    name: '生产安置',
-    key: '20',
-    value: '30'
-  }
-])
+const progressList = ref([])
+
+const computedProperty = computed(() => {
+  return (fundScreenDto.value.ljsyzj / fundScreenDto.value.gszj) * 100
+})
 
 onMounted(() => {
   emitter.on('getHomeInfo_list', getInfo)
@@ -176,6 +131,28 @@ onMounted(() => {
 // 触发
 const getInfo = (e: any) => {
   fundScreenDto.value = e.fundScreenDto
+
+  progressList.value = e.progressManagementDto.map((item: any, index: number) => {
+    item.img = new URL(`../../../../assets/imgs/homes/logo_${index + 1}.png`, import.meta.url).href
+    if (item.actual != 0) {
+      item.actual = item.actual * 100
+    }
+    if (item.plan != 0) {
+      item.plan = item.plan * 100
+    }
+    return item
+  })
+}
+const handleClickItem = (type: number) => {
+  const pathMap = {
+    1: 'adminSecondHome', // 大数据分析
+    2: 'adminhomefund', //资金管理
+    3: 'adminhomeprogress', //进度管理 //新闻管理
+    4: 'Project', //新闻管理
+    5: 'Feedback', //反馈管理
+    6: 'SmartReport' // 智慧报表
+  }
+  push({ name: pathMap[type] })
 }
 </script>
 
@@ -433,6 +410,7 @@ const getInfo = (e: any) => {
     .img_box {
       width: 100%;
       height: 100%;
+      cursor: pointer;
     }
   }
 }

@@ -4,14 +4,25 @@
 -->
 <template>
   <div class="container_box">
-    <div class="cin_top"></div>
+    <div class="cin_top">
+      <div class="seach_select">
+        <ElSelect placeholder=" " clearable filterable v-model="reason" class="s_full">
+          <ElOption v-for="item in option" :key="item.code" :label="item.name" :value="item.code" />
+        </ElSelect>
+      </div>
+      <div class="search">
+        <ElInput v-model="input" class="ipt" />
+        <div class="seach_icon"></div>
+      </div>
+      <div @click="goLink" class="screen"></div>
+    </div>
     <div class="con_box">
       <Label>
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/news.png" alt="" />
         </template>
         <template #info>
-          <view class="right_slot">
+          <view @click="handleClickItem(4)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
@@ -51,7 +62,7 @@
           <img class="xm_img" src="../../../../assets/imgs/homes/xx.png" alt="" />
         </template>
         <template #info>
-          <view class="right_slot">
+          <view @click="handleClickItem(5)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
@@ -86,18 +97,24 @@
 <script lang="ts" setup>
 import Label from './label.vue'
 import { ref, onMounted } from 'vue'
-import { ElTabs, ElTabPane } from 'element-plus'
+import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput } from 'element-plus'
 
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { feedbackList } from '@/api/AssetEvaluation/leader-side'
 import { getNewsList, getPolicyListApi } from '@/api/home'
+import { getTokenApi } from '@/api/common/index'
 
 const { push } = useRouter()
 
 const questionList = ref<any>([])
 const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
+const option = ref<any>([])
+
+const input = ref('')
+const reason = ref('111')
+const tokenStr = ref<string>('')
 
 onMounted(() => {
   initNewsData()
@@ -135,6 +152,27 @@ const onViewFeedBack = (item: any) => {
 const routerJump = (path: string) => {
   push(path)
 }
+
+const goLink = async () => {
+  try {
+    const result = await getTokenApi()
+    tokenStr.value = result.token
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+    window.location.href = url
+  } catch {}
+}
+
+const handleClickItem = (type: number) => {
+  const pathMap = {
+    1: 'adminSecondHome', // 大数据分析
+    2: 'adminhomefund', //资金管理
+    3: 'adminhomeprogress', //进度管理 //新闻管理
+    4: 'Project', //新闻管理
+    5: 'Feedback', //反馈管理
+    6: 'SmartReport' // 智慧报表
+  }
+  push({ name: pathMap[type] })
+}
 </script>
 
 <style lang="less" scoped>
@@ -169,6 +207,74 @@ const routerJump = (path: string) => {
     background-position: center center;
     border-radius: 8px 8px 8px 8px;
     margin-bottom: 12px;
+    display: flex;
+    padding: 16px 24px;
+    position: relative;
+    .screen {
+      width: 31px;
+      height: 30px;
+      background: url('../../../../assets/imgs/homes/qb.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      position: absolute;
+      right: 9px;
+      bottom: 9px;
+      cursor: pointer;
+    }
+    .seach_select {
+      width: 96px;
+      height: 40px;
+      background: url('../../../../assets/imgs/homes/seach_select.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      .s_full {
+        /deep/ .el-input__wrapper {
+          background: #3578f2 !important;
+          padding: 4px 11px !important;
+          font-weight: 500;
+          border-color: #3578f2;
+          outline: none;
+          box-shadow: none;
+        }
+        /deep/ .el-input__inner {
+          color: #ffffff !important;
+          outline: none;
+          box-shadow: none;
+        }
+        /deep/ .el-icon svg {
+          color: #ffffff;
+          font-weight: bold;
+        }
+      }
+    }
+    .search {
+      width: 476px;
+      height: 40px;
+      background: url('../../../../assets/imgs/homes/seach.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+      margin-left: -2px;
+      position: relative;
+      .ipt {
+        width: 476px;
+        height: 40px;
+      }
+      .seach_icon {
+        width: 21px;
+        height: 20px;
+        background: url('../../../../assets/imgs/homes/search_icon.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+        position: absolute;
+        right: 16px;
+        top: 10px;
+        cursor: pointer;
+      }
+    }
   }
   .con_box {
     width: 620px;
