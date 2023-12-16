@@ -44,6 +44,7 @@
           <img class="icon" src="../../../../assets/imgs/homes/Polygon.png" alt="" />
           <div class="left_text">永久用地</div>
           <div class="right_tip_box">
+            <img class="icons" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
             共
             <span>{{ landScreenDtoListObj.totalArea }}</span>
             亩
@@ -408,6 +409,15 @@ const getList = async () => {
           color: #333333;
           line-height: 16px;
           margin-top: -2px;
+          position: relative;
+          margin-left: 6px;
+          .icons {
+            width: 7px;
+            height: 9px;
+            position: absolute;
+            left: -7px;
+            top: 5px;
+          }
           span {
             font-weight: 600;
             color: #3e73ec;

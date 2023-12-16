@@ -46,7 +46,7 @@
             </div>
             <div class="bom_box_l">
               <div class="top_text">概算外(万元)</div>
-              <div class="bom_text">{{ fundScreenDto.gswzj }}s</div>
+              <div class="bom_text">{{ fundScreenDto.gswzj }}</div>
             </div>
           </div>
         </div>
