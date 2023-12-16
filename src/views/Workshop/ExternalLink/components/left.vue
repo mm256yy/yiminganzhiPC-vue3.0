@@ -127,7 +127,7 @@
           </div>
           <div class="business_li">
             <div class="business_li_l">
-              <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
+              <img class="ico_a" src="../../../../assets/imgs/homes/sdz.png" alt="" />
             </div>
             <div class="business_li_r">
               <div>水电站</div>
@@ -136,7 +136,7 @@
           </div>
           <div class="business_li">
             <div class="business_li_l">
-              <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
+              <img class="ico_a" src="../../../../assets/imgs/homes/icon_c.png" alt="" />
             </div>
             <div class="business_li_r">
               <div>个体工商户</div>
@@ -145,7 +145,7 @@
           </div>
           <div class="business_li">
             <div class="business_li_l">
-              <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
+              <img class="ico_a" src="../../../../assets/imgs/homes/tkq.png" alt="" />
             </div>
             <div class="business_li_r">
               <div>探矿权</div>
