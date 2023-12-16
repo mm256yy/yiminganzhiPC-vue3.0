@@ -474,11 +474,11 @@ export const resettleArea = [
 // 公寓安置地块
 export const apartmentArea = [
   {
-    id: '1',
+    id: '6',
     name: '曙光安置区'
   },
   {
-    id: '2',
+    id: '7',
     name: '镜岭集镇安置区'
   }
 ]
