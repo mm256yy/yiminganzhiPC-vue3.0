@@ -79,7 +79,6 @@ import Label from './label.vue'
     margin-bottom: 12px;
     box-sizing: border-box;
     border-radius: 8px 8px 8px 8px;
-
     opacity: 1;
     border: 2px solid rgba(62, 115, 236, 0.7);
   }
@@ -89,7 +88,6 @@ import Label from './label.vue'
     background: #ffffff;
     box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
-
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
     border: 2px solid rgba(62, 115, 236, 0.7);

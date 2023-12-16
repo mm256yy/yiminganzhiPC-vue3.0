@@ -39,17 +39,16 @@
           <img class="xm_img" src="../../../../assets/imgs/homes/ym.png" alt="" />
         </template>
       </Label>
+
+      <view class="contain_ym_box" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
 import Label from './label.vue'
+
 import { ref, onMounted } from 'vue'
-import {
-  getLeadershipScreen,
-  feedbackList,
-  getVillageList
-} from '@/api/AssetEvaluation/leader-side'
+import { getVillageList } from '@/api/AssetEvaluation/leader-side'
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 
 onMounted(() => {
@@ -109,6 +108,8 @@ const clearInput = () => {}
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
     border: 2px solid rgba(62, 115, 236, 0.7);
+    .contain_ym_box {
+    }
   }
 }
 </style>

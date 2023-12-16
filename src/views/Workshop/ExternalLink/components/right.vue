@@ -9,6 +9,14 @@
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" />
         </template>
+        <template #info>
+          <view class="right_slot">
+            <view class="right_text">查看更多</view>
+            <view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
+            /></view>
+          </view>
+        </template>
       </Label>
     </div>
     <div class="right_info_con">
