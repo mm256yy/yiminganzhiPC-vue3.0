@@ -72,6 +72,27 @@
           </view>
         </template>
       </Label>
+
+      <div class="progress">
+        <div class="progoress_ridio">
+          <div class="cur_b"> </div>
+          <div class="ridio_text">实际进度</div>
+          <div class="cur_jd"> </div>
+          <div>实际进度</div>
+        </div>
+        <div class="progress_list">
+          <div v-for="item in progressList" :key="item.id" class="progress_li">
+            <div class="li_img">
+              <img class="logo_li" :src="item.img" alt="" />
+            </div>
+            <div class="li_right">
+              <div class="li_title"> {{ item.name }} </div>
+              <ElProgress :color="customColor_a" class="progress_top" :percentage="50" />
+              <ElProgress :color="customColor" class="progress_top" :percentage="50" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="right_info_bom">
       <div class="bom_box_top">
@@ -89,11 +110,65 @@ import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, watchEffect } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
-
+import { ElProgress } from 'element-plus'
 const { emitter } = useEmitt()
 
 const { push } = useRouter()
 const fundScreenDto = ref<any>({})
+
+const customColor = ref('#CADAFF')
+const customColor_a = ref('#3E73EC')
+
+const progressList = ref([
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_1.png', import.meta.url).href,
+    key: '20',
+    name: '资格认定',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_2.png', import.meta.url).href,
+    name: '资产评估',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_3.png', import.meta.url).href,
+    name: '安置确认',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_4.png', import.meta.url).href,
+    name: '择址确认',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_5.png', import.meta.url).href,
+    name: '腾空过渡',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_6.png', import.meta.url).href,
+    name: '动迁协议',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_7.png', import.meta.url).href,
+    name: '搬迁安置',
+    key: '20',
+    value: '30'
+  },
+  {
+    img: new URL('../../../../assets/imgs/homes/logo_8.png', import.meta.url).href,
+    name: '生产安置',
+    key: '20',
+    value: '30'
+  }
+])
 
 onMounted(() => {
   emitter.on('getHomeInfo_list', getInfo)
@@ -282,6 +357,67 @@ const getInfo = (e: any) => {
     box-sizing: border-box;
 
     border: 2px solid rgba(62, 115, 236, 0.7);
+    .progress {
+      padding: 0px 30px;
+      .progoress_ridio {
+        display: flex;
+        font-size: 12px;
+        font-family: PingFang SC, PingFang SC;
+        font-weight: 400;
+        color: #1d2129;
+        line-height: 20px;
+        // margin-bottom: 10px;
+        .cur_b {
+          width: 8px;
+          height: 8px;
+          background: #165dff;
+          border-radius: 100px 100px 100px 100px;
+          margin-top: 7px;
+          margin-right: 4px;
+        }
+        .ridio_text {
+          margin-right: 16px;
+        }
+        .cur_jd {
+          width: 8px;
+          height: 8px;
+          background: #cadaff;
+          margin-right: 4px;
+          margin-top: 7px;
+          border-radius: 100px 100px 100px 100px;
+        }
+      }
+      .progress_list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .progress_li {
+          display: flex;
+          margin-top: 15px;
+          .logo_li {
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+          }
+          .li_title {
+            font-size: 14px;
+            font-family: PingFang SC, PingFang SC;
+            font-weight: 500;
+            color: #131313;
+            line-height: 14px;
+            margin-bottom: 10px;
+          }
+          .progress_top {
+            width: 204px;
+            margin-bottom: 6px;
+          }
+          /deep/ .el-progress-bar__outer {
+            height: 10px !important;
+          }
+        }
+      }
+    }
   }
   .bom_box_top {
     margin-top: 12px;
