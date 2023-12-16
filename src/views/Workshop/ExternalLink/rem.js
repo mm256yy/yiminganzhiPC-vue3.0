@@ -1,3 +1,4 @@
+// 实现一屏适配
 export function changeScale() {
   const normalBox = document.getElementById('LeaderSide_work_home_rem')
   const widthScale = window.innerWidth / 1920

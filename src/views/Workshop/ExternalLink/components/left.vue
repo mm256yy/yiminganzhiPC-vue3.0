@@ -29,8 +29,7 @@
         </template>
       </Label>
       <div class="con_box">
-        工程永久用地总面积为14375.60亩(国有土地2146.65亩、集体土地12228.95亩)，其中工程建设区和水库淹没区共14087.30亩，涉及绍兴市柯桥区69.73亩，嵊州市28.61亩，新昌县13969.13亩，磐安县19.82亩。
-        工程管理区范围内补偿土地总面积288.30亩，涉及绍兴市柯桥区8.99亩，嵊州市13.14亩，新昌县266.17亩。
+        {{ landScreenDtoListObj.overview }}
       </div>
     </div>
     <div class="contain">
@@ -46,22 +45,16 @@
           <div class="left_text">永久用地</div>
           <div class="right_tip_box">
             共
-            <span>14,375.6 </span>
+            <span>{{ landScreenDtoListObj.totalArea }}</span>
             亩
           </div>
         </div>
         <div class="permanent">
-          <div class="permanent_box">
-            <div class="permanent_box_top">水库淹没区</div>
-            <div class="permanent_box_bom">13643.97<span> 亩</span></div>
-          </div>
-          <div class="permanent_box">
-            <div class="permanent_box_top">枢纽工程建设区</div>
-            <div class="permanent_box_bom">13643.97<span> 亩</span></div>
-          </div>
-          <div class="permanent_box">
-            <div class="permanent_box_top">输水工程建设区</div>
-            <div class="permanent_box_bom">13643.97<span> 亩</span></div>
+          <div v-for="item in landList" :key="item.id" class="permanent_box">
+            <div class="permanent_box_top">{{ item.name }}</div>
+            <div class="permanent_box_bom">
+              {{ landScreenDtoListObj[item.num] }}<span> 亩</span>
+            </div>
           </div>
         </div>
         <div class="tip_box people_tip">
@@ -75,13 +68,13 @@
             </div>
             <div class="people_con">
               <span class="people_text">总户数</span>
-              <span class="num">4,961 </span>
+              <span class="num">{{ populationScreenDtoList.houseNum }} </span>
               <span>户</span>
             </div>
             <div class="people_right">
               <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
               <span>财产户</span>
-              144户
+              {{ populationScreenDtoList.cchNum }}户
             </div>
           </div>
         </div>
@@ -92,16 +85,18 @@
             </div>
             <div class="people_con">
               <span class="people_text">总人数</span>
-              <span class="num">4,961 </span>
-              <span>人</span>s
+              <span class="num">
+                {{ populationScreenDtoList.peopleNum }}
+              </span>
+              <span>人</span>
             </div>
             <div class="people_right">
               <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
               <span>农业</span>
-              144人
+              {{ populationScreenDtoList.nongNum }}人
               <span class="people_border"></span>
               <span>非农</span>
-              144人
+              {{ populationScreenDtoList.unNongNum }}人
             </div>
           </div>
         </div>
@@ -110,17 +105,9 @@
           <div class="left_text">房屋</div>
         </div>
         <div class="permanent">
-          <div class="permanent_box">
-            <div class="permanent_box_top">总房屋面积</div>
-            <div class="permanent_box_bom">13643.97<span> ㎡</span></div>
-          </div>
-          <div class="permanent_box">
-            <div class="permanent_box_top">住宅房屋</div>
-            <div class="permanent_box_bom">13643.97<span> ㎡</span></div>
-          </div>
-          <div class="permanent_box">
-            <div class="permanent_box_top">村集体房屋</div>
-            <div class="permanent_box_bom">13643.97<span> ㎡</span></div>
+          <div v-for="item in houseList" :key="item.id" class="permanent_box">
+            <div class="permanent_box_top">{{ item.name }}</div>
+            <div class="permanent_box_bom">{{ houseScreenDto[item.num] }}<span> ㎡</span></div>
           </div>
         </div>
         <div class="tip_box">
@@ -134,7 +121,7 @@
             </div>
             <div class="business_li_r">
               <div>企业</div>
-              <div class="bom_text">476 <span>家</span></div>
+              <div class="bom_text">{{ companyDto.qyNum }} <span>家</span></div>
             </div>
           </div>
           <div class="business_li">
@@ -142,8 +129,8 @@
               <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
             </div>
             <div class="business_li_r">
-              <div>企业</div>
-              <div class="bom_text">476 <span>家</span></div>
+              <div>水电站</div>
+              <div class="bom_text">{{ companyDto.gtNum }} <span>家</span></div>
             </div>
           </div>
           <div class="business_li">
@@ -151,8 +138,8 @@
               <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
             </div>
             <div class="business_li_r">
-              <div>企业</div>
-              <div class="bom_text">476 <span>家</span></div>
+              <div>个体工商户</div>
+              <div class="bom_text">{{ companyDto.tkqNum }} <span>家</span></div>
             </div>
           </div>
           <div class="business_li">
@@ -160,8 +147,8 @@
               <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
             </div>
             <div class="business_li_r">
-              <div>企业</div>
-              <div class="bom_text">476 <span>家</span></div>
+              <div>探矿权</div>
+              <div class="bom_text">{{ companyDto.qyNum }} <span>家</span></div>
             </div>
           </div>
         </div>
@@ -171,15 +158,15 @@
         </div>
         <div class="project">
           <div class="project_table">
-            <div class="table_li">
-              <div class="table_name"><span class="table_cur"></span> 四级公路</div>
-              <div class="tabel_value">32.24 km</div>
+            <div v-for="item in projectsList" :key="item.id" class="table_li">
+              <div class="table_name"><span class="table_cur"></span> {{ item.name }}</div>
+              <div class="tabel_value">{{ professionalProjectsDto[item.num] }}km</div>
             </div>
           </div>
           <div class="project_table_r">
-            <div class="table_li">
-              <div class="table_name"><span class="table_cur"></span> 四级公路</div>
-              <div class="tabel_value">32.24 km</div>
+            <div v-for="item in projectArr" :key="item.id" class="table_li">
+              <div class="table_name"><span class="table_cur"></span> {{ item.name }}</div>
+              <div class="tabel_value">{{ professionalProjectsDto[item.num] }}{{ item.type }}</div>
             </div>
           </div>
         </div>
@@ -190,25 +177,167 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import Label from './label.vue'
-import { getVillageList } from '@/api/AssetEvaluation/leader-side'
+import { getVillageList, getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
+import { useAppStore } from '@/store/modules/app'
+import { useEmitt } from '@/hooks/web/useEmitt'
 
 onMounted(() => {
   villageList()
+  getList()
   //getToken()
 })
-
+const appStore = useAppStore()
+const { emitter } = useEmitt()
 const reason = ref()
 const villageLists = ref<any>([])
 const landScreenDtoListObj = ref<any>({})
+const paramsValue = ref<any>({})
+const leadershipScreenList = ref<any>({})
+const arr = ref<any>([])
+const tokenStr = ref<string>('')
+const populationScreenDtoList = ref<any>({})
+const houseScreenDto = ref<any>({})
+const companyDto = ref<any>({})
+const fundScreenDto = ref<any>({})
+
+const professionalProjectsDto = ref<any>({})
+
+const landList = ref<any>([
+  {
+    id: 1,
+    name: '水库淹没区',
+    num: 'totalSkymqArea'
+  },
+  {
+    id: 2,
+    name: '枢纽工程建设区',
+    num: 'totalSnjsqArea'
+  },
+  {
+    id: 3,
+    name: '翰水工程建设区',
+    num: 'totalSsjsqArea'
+  }
+])
+
+const houseList = ref<any>([
+  {
+    id: 1,
+    name: '总房屋面积',
+    num: 'totalArea'
+  },
+  {
+    id: 2,
+    name: '住宅房屋',
+    num: 'zzArea'
+  },
+  {
+    id: 3,
+    name: '村集体房屋',
+    num: 'cjtArea'
+  }
+])
+
+const projectsList = ref<any>([
+  {
+    id: 1,
+    name: '四级公路',
+    num: 'road',
+    type: 'km'
+  },
+  {
+    id: 2,
+    name: '35KV电力线路',
+    num: 'electricity',
+    type: 'km'
+  },
+  {
+    id: 3,
+    name: '电信杆路',
+    num: 'dxLine',
+    type: 'km'
+  },
+  {
+    id: 4,
+    name: '移动杆路',
+    num: 'ydLine',
+    type: 'km'
+  },
+  {
+    id: 5,
+    name: '联通杆路',
+    num: 'ltLine',
+    type: 'km'
+  }
+])
+
+const projectArr = ref<any>([
+  {
+    id: 6,
+    name: '铁塔基站',
+    num: 'gdLine',
+    type: '座'
+  },
+  {
+    id: 7,
+    name: '广电杆路',
+    num: 'ttjz',
+    type: 'km'
+  },
+  {
+    id: 8,
+    name: '溪西水文站',
+    num: 'swz',
+    type: '处'
+  },
+  {
+    id: 9,
+    name: '县级文保点',
+    num: 'wbd',
+    type: '处'
+  },
+  {
+    id: 10,
+    name: '宗教设施',
+    num: 'zjss',
+    type: '处'
+  }
+])
 
 const villageList = async () => {
   villageLists.value = await getVillageList({})
 }
 
-const tabVillage = () => {}
+const tabVillage = async () => {
+  appStore.setVillageCoder(reason.value)
+  getList()
+}
 
 const clearInput = () => {}
+
+const getList = async () => {
+  paramsValue.value = { code: reason.value || undefined }
+  const list = await getLeadershipScreen(paramsValue.value)
+  // 项目概览
+  landScreenDtoListObj.value = list.landScreenDto
+
+  //人口
+  populationScreenDtoList.value = list.populationScreenDto
+
+  // 房屋
+  houseScreenDto.value = list.houseScreenDto
+
+  // 企(事业单位)
+  companyDto.value = list.companyDto
+
+  // 主要专业项目
+  professionalProjectsDto.value = list.professionalProjectsDto
+
+  // fundScreenDto.value = list.fundScreenDto
+
+  emitter.emit('getHomeInfo_list', list)
+}
 </script>
 
 <style lang="less" scoped>
