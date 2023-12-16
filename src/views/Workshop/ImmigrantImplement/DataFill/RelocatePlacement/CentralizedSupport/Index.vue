@@ -26,6 +26,7 @@
           align="center"
           header-align="center"
         />
+        <ElTableColumn label="养老院" prop="nursingHomeText" align="center" header-align="center" />
         <!-- <ElTableColumn
           label="安置方式"
           prop="settingWayText"
