@@ -28,13 +28,14 @@ export const HouseholdTabs = [
     name: '择址确认'
   },
   {
-    id: 6,
-    name: '协议签订'
-  },
-  {
     id: 7,
     name: '移民建卡'
   },
+  {
+    id: 6,
+    name: '协议签订'
+  },
+
   {
     id: 8,
     name: '腾空过渡'
@@ -457,15 +458,15 @@ export const ProductionPlaceWay = [
 // 宅基地安置区块
 export const resettleArea = [
   {
-    id: '3',
+    id: '1',
     name: '棠村安置区'
   },
   {
-    id: '4',
+    id: '2',
     name: '麻家田安置区'
   },
   {
-    id: '5',
+    id: '3',
     name: '东坪安置区'
   }
 ]

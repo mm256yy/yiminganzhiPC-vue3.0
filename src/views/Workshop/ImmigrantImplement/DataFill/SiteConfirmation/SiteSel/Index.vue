@@ -393,12 +393,7 @@ const onSave = (row: any) => {
   saveImmigrantChooseHouseApi(row).then(() => {
     ElMessage.success('操作成功！')
     getList()
-    saveFillingCompleteApi({
-      doorNo: props.doorNo,
-      chooseHouseStatus: '1'
-    }).then(() => {
-      emit('updateData')
-    })
+    emit('updateData')
   })
 }
 //批量保存

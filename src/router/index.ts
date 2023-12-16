@@ -491,9 +491,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             path: 'PopulationHousing',
             name: 'PopulationHousing',
             component: () =>
-              import(
-                '@/views/Workshop/DataQuery/DataCollectionPublicity/PopulationHousing/Index.vue'
-              ),
+              import('@/views/Workshop/DataQuery/SmartReport/PopulationHousing/Index.vue'),
             meta: {
               title: '人口房屋',
               icon: 'ant-design:home-outlined'
@@ -502,8 +500,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           {
             path: 'Accessory',
             name: 'Accessory',
-            component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Accessory/Index.vue'),
+            component: () => import('@/views/Workshop/DataQuery/SmartReport/Accessory/Index.vue'),
             meta: {
               title: '附属物',
               icon: 'ant-design:home-outlined'
@@ -512,8 +509,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           {
             path: 'FruitWood',
             name: 'FruitWood',
-            component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/FruitWood/Index.vue'),
+            component: () => import('@/views/Workshop/DataQuery/SmartReport/FruitWood/Index.vue'),
             meta: {
               title: '零星林(果)木',
               icon: 'ant-design:home-outlined'
@@ -523,7 +519,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             path: 'Achievements',
             name: 'Achievements',
             component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Achievements/Index.vue'),
+              import('@/views/Workshop/DataQuery/SmartReport/Achievements/Index.vue'),
             meta: {
               title: '实物成果汇总',
               icon: 'ant-design:home-outlined'
@@ -533,7 +529,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             path: 'OutcomeChange',
             name: 'OutcomeChange',
             component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/OutcomeChange/Index.vue'),
+              import('@/views/Workshop/DataQuery/SmartReport/OutcomeChange/Index.vue'),
             meta: {
               title: '实物成果变更',
               icon: 'ant-design:home-outlined'
@@ -543,9 +539,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             path: 'VillageCollective',
             name: 'VillageCollective',
             component: () =>
-              import(
-                '@/views/Workshop/DataQuery/DataCollectionPublicity/VillageCollective/Index.vue'
-              ),
+              import('@/views/Workshop/DataQuery/SmartReport/VillageCollective/Index.vue'),
             meta: {
               title: '房屋/附属物/零星林(果)木',
               icon: 'ant-design:home-outlined'
@@ -554,8 +548,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           {
             path: 'Land',
             name: 'Land',
-            component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Land/Index.vue'),
+            component: () => import('@/views/Workshop/DataQuery/SmartReport/Land/Index.vue'),
             meta: {
               title: '土地',
               icon: 'ant-design:home-outlined'
@@ -564,8 +557,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
           {
             path: 'Grave',
             name: 'Grave',
-            component: () =>
-              import('@/views/Workshop/DataQuery/DataCollectionPublicity/Grave/Index.vue'),
+            component: () => import('@/views/Workshop/DataQuery/SmartReport/Grave/Index.vue'),
             meta: {
               title: '坟墓',
               icon: 'ant-design:home-outlined'

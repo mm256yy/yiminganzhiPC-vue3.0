@@ -26,12 +26,12 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="安置方式"
           prop="settingWayText"
           align="center"
           header-align="center"
-        />
+        /> -->
         <ElTableColumn
           label="完成时间"
           prop="relocateCompleteTime"
@@ -39,7 +39,9 @@
           header-align="center"
         >
           <template #default="{ row }">
-            {{ dayjs(row.relocateCompleteTime).format('YYYY-MM-DD') }}
+            {{
+              row.relocateCompleteTime ? dayjs(row.relocateCompleteTime).format('YYYY-MM-DD') : '-'
+            }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="办理状态" prop="relocateStatus" align="center" header-align="center">

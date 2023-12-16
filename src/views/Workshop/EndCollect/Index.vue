@@ -15,11 +15,11 @@
         </div>
         <el-button v-if="statisticalInfo.uploadStatus" type="success">
           <Icon icon="material-symbols:check-circle-outline" class="mr-5px" style="color: white" />
-          实物采集确认批复
+          实物成果确认函
         </el-button>
         <el-button v-else @click="btnClick" type="danger">
           <Icon icon="mingcute:folder-upload-line" class="mr-5px" style="color: white" />
-          实物采集确认批复
+          实物成果确认函
         </el-button>
       </div>
       <div class="contentBox">

@@ -97,6 +97,8 @@ import {
 } from '@/api/fundManage/townshipFundEntry-service'
 import type { AmountDtoType } from '@/api/fundManage/townshipFundEntry-types'
 import { formatTime } from '@/utils/index'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
@@ -107,7 +109,7 @@ const amountItem = ref<AmountDtoType>()
 const { register, tableObject, methods } = useTable({
   getListApi: getFunPayTownshipListApi
 })
-
+let fundAccountList = ref<any[]>([])
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
@@ -189,9 +191,17 @@ const schema = reactive<CrudSchema[]>([
     label: '资金科目',
     search: {
       show: true,
-      component: 'Select',
+      component: 'TreeSelect',
       componentProps: {
-        options: dictObj.value[382]
+        data: fundAccountList,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -205,7 +215,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -346,9 +357,19 @@ const getSumAmount = () => {
     amountItem.value = res
   })
 }
+// 获取资金科目选项列表
 
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+      console.log(fundAccountList, '资金测试')
+    }
+  })
+}
 onMounted(() => {
   getSumAmount()
+  getFundSubjectList()
 })
 </script>
 

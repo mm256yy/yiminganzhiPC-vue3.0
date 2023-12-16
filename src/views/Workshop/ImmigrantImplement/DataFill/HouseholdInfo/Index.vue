@@ -29,7 +29,7 @@
           </div>
 
           <ElRow>
-            <ElCol :span="24">
+            <ElCol :span="12">
               <div class="col-wrapper">
                 <div class="col-label">户主照片：</div>
                 <div class="card-img-list">
@@ -61,10 +61,7 @@
                 </div>
               </div>
             </ElCol>
-          </ElRow>
-
-          <ElRow>
-            <ElCol :span="24">
+            <ElCol :span="12">
               <ElFormItem label="全家福照片：">
                 <div class="card-img-list">
                   <ElUpload
@@ -98,7 +95,7 @@
           </ElRow>
 
           <ElRow>
-            <ElCol :span="24">
+            <ElCol :span="12">
               <ElFormItem label="库区房屋照片：">
                 <div class="card-img-list">
                   <ElUpload
@@ -129,10 +126,7 @@
                 </div>
               </ElFormItem>
             </ElCol>
-          </ElRow>
-
-          <ElRow>
-            <ElCol :span="24">
+            <ElCol :span="12">
               <ElFormItem label="安置房照片：">
                 <div class="card-img-list">
                   <ElUpload

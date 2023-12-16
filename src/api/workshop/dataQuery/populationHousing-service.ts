@@ -20,3 +20,16 @@ export const getProfessionalProjectsPageApi = (
     params
   })
 }
+
+// 区域报表
+export const getAreaHouseReportApi = (params: any): Promise<void> => {
+  return request.get({
+    url: '/resultForms/queryAreaHouse',
+    params
+  })
+}
+
+// 导出报表
+export const exportReportApi = (data: any) => {
+  return request.get({ url: `/resultForms/export/queryAreaHouse`, data, responseType: 'blob' })
+}

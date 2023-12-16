@@ -1,7 +1,6 @@
 <template>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -47,7 +46,7 @@ import { exportTypes } from '../config'
 import { getFruitWoodListApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import { FruitWoodDtoType } from '@/api/workshop/dataQuery/fruitWood-types'
 import { screeningTree } from '@/api/workshop/village/service'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface SpanMethodProps {
   row: FruitWoodDtoType
@@ -59,7 +58,6 @@ interface SpanMethodProps {
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
-const titles = ['智能报表', '实物成果', '居民户', '零星林(果)木']
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFruitWoodListApi
@@ -70,7 +68,8 @@ const { setSearchParams } = methods
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: SurveyStatusEnum.Survey
 }
 
 const schema = reactive<CrudSchema[]>([

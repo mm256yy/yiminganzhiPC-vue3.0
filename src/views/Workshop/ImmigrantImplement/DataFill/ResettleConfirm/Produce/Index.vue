@@ -172,7 +172,8 @@ const { getList } = methods
 tableObject.params = {
   doorNo: props.doorNo,
   projectId: props.baseInfo.projectId,
-  status: props.baseInfo.status
+  status: props.baseInfo.status,
+  populationNature: '5'
 }
 
 getList()

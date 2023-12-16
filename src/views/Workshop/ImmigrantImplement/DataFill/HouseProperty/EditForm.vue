@@ -146,7 +146,9 @@
                 style="display: flex; height: 88px"
                 :class="[housePic.length == 0 ? 'CADuplogd' : '']"
               >
-                <span style="padding: 0 12px; color: #606266">房屋平面示意图CAD格式:</span>
+                <span style="padding: 0 12px; color: #606266" v-if="actionType !== 'view'"
+                  >房屋平面示意图CAD格式:
+                </span>
                 <ElUpload
                   :file-list="CADfile"
                   :data="{
@@ -525,6 +527,14 @@ const getDemographicList = () => {
       demographicList.value = arr.map((item: any) => {
         return { value: `${item.id}`, label: `${item.name}` }
       })
+      console.log(demographicList.value, 'bbq')
+
+      demographicList.value = demographicList.value.reduce((pre: Array<any>, item: any) => {
+        if (item.label != 'null') {
+          pre.push(item)
+        }
+        return pre
+      }, [])
     }
   })
 }
@@ -719,7 +729,7 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .upload {
-  .el-upload--picture-card {
+  /deep/ .el-upload {
     display: none;
   }
 }
