@@ -174,7 +174,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         }
       },
       rollupOptions: {
-        input: 
+        input:
         platform === 'pc' ? {
           main: resolve(__dirname, "index.html"),
           admin: resolve(__dirname, "admin.html"),
@@ -197,6 +197,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
+          // target: 'http://localhost:8880',
           target: 'http://192.168.1.119:8880',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',

@@ -162,7 +162,45 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
-    <!-- <div style="width: 210mm; padding: 0 10px 0 10px; border: 1px solid black"></div> -->
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
+      <div
+        style="
+          display: flex;
+          margin: 20px 0 20px 0;
+          font-size: 18px;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          {{
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+          }}</div
+        >
+
+        <div>{{ data }}</div>
+      </div>
+      <el-table
+        :data="tableData"
+        style="width: 100%"
+        border
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+      >
+        <el-table-column type="index" label="序号" width="100" align="center" />
+        <el-table-column prop="settleAddressText" label="区块" align="center" />
+        <el-table-column prop="houseAreaTypeText" label="类型" align="center" />
+        <el-table-column prop="area" label="户型/套型" align="center" />
+        <el-table-column label="备注" align="center">
+          <template #default></template>
+        </el-table-column>
+      </el-table>
+      <div style="display: flex; justify-content: space-between; height: 50px">
+        <div style="flex: 1; border: 1px solid black; border-top: 0px"
+          >户主代表或收委托人(签名)：</div
+        ><div style="flex: 1; border: 1px solid black; border-top: 0px"> 联系移民干部(签名)：</div>
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 
@@ -198,7 +236,8 @@ import Apartment from '../../SchemeBase/components/Apartment.vue'
 import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-
+import { htmlToPdf } from '@/utils/ptf'
+import dayjs from 'dayjs'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -408,6 +447,7 @@ const onEditOpen = () => {
 }
 
 const onEditClose = () => {
+  getRelocationInfo()
   editDialogVisible.value = false
 }
 
@@ -420,8 +460,12 @@ const onEditSubmit = async (params: any) => {
     ElMessage.success('保存成功！')
   }
 }
+let data = ref()
 let comdbe = () => {
-  ElMessage.error('待业主提供模板')
+  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+  setTimeout(() => {
+    htmlToPdf('#anztable')
+  }, 3000)
 }
 </script>
 
@@ -456,6 +500,26 @@ let comdbe = () => {
       color: #171718;
 
       border-left: 4px solid rgba(62, 115, 236, 1) !important;
+    }
+  }
+}
+
+#anztable {
+  :deep(.table-headers) {
+    font-size: 12px;
+    font-weight: bold;
+    background: none;
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 10px;
+      background: none;
     }
   }
 }
