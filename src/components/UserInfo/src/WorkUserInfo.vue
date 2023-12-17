@@ -50,10 +50,10 @@ const onFormPupClose = () => {
     <template #dropdown>
       <ElDropdownMenu>
         <ElDropdownItem>
-          <div @click="loginOut">{{ '退出系统' }}</div>
+          <div @click="edit">{{ '修改密码' }}</div>
         </ElDropdownItem>
         <ElDropdownItem>
-          <div @click="edit">{{ '修改密码' }}</div>
+          <div @click="loginOut">{{ '退出系统' }}</div>
         </ElDropdownItem>
       </ElDropdownMenu>
       <Edit :show="dialogVisible" @close="onFormPupClose" />

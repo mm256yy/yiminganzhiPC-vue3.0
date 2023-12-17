@@ -14,6 +14,9 @@
 
     <div class="line"></div>
     <div class="table-wrap" v-loading="loading">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 房屋/附属物/零星林(果)木 </div>
+      </div>
       <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
         <el-table-column label="房屋" header-align="center">
           <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />

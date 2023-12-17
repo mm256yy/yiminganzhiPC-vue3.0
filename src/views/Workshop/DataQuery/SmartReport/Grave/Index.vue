@@ -15,6 +15,9 @@
     <div class="line"></div>
 
     <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 坟墓统计表 </div>
+      </div>
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
