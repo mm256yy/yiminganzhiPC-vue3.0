@@ -27,11 +27,11 @@
       <div class="con_list">
         <div class="li">
           <div class="li_name">国有土地</div>
-          <div class="li_value">{{ detail.gyNum }}</div>
+          <div class="li_value">{{ detail.gytd }}</div>
         </div>
         <div class="li">
           <div class="li_name">集体土地</div>
-          <div class="li_value">{{ detail.jtNum }}</div>
+          <div class="li_value">{{ detail.jttd }}</div>
         </div>
       </div>
       <div class="con_tilte"> 工程建设区和水库淹没区 </div>
