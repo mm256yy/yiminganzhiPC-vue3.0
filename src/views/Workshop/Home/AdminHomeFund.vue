@@ -156,7 +156,7 @@ const householdOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#65A4FE' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -180,7 +180,7 @@ const householdOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#51CE94  ' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -247,7 +247,7 @@ const villageOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#65A4FE ' // 0% 处的颜色
+            color: '#5E8AEF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -271,7 +271,7 @@ const villageOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#51CE94  ' // 0% 处的颜色
+            color: '#D2DFFF  ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -332,7 +332,7 @@ const enterpriseOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FF8E8E ' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -356,7 +356,7 @@ const enterpriseOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#8EBBFF' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -423,7 +423,7 @@ const specialityOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#6599FE' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -447,7 +447,7 @@ const specialityOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FAAD14 ' // 0% 处的颜色
+            color: '#D2DFFF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -511,7 +511,7 @@ const otherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#7C7AF4 ' // 0% 处的颜色
+            color: '#5E8AEF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -535,7 +535,7 @@ const otherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#EBD870 ' // 0% 处的颜色
+            color: '#D2DFFF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -591,7 +591,7 @@ const taxationOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FF9F6D' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -615,7 +615,7 @@ const taxationOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#50E192 ' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,

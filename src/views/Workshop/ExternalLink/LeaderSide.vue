@@ -3,9 +3,9 @@
  * @LastEditors: baike
 -->
 <template>
-  <div id="LeaderSide_work_home_rem" class="LeaderSide">
+  <div v-loading="loading" id="LeaderSide_work_home_rem" class="LeaderSide">
     <div class="container">
-      <LeftInfo class="left_info" />
+      <LeftInfo v-model:loading="loading" class="left_info" />
       <ContainerInfo class="containerInfo" />
       <RightInfo />
     </div>
@@ -28,7 +28,7 @@ onMounted(() => {
   changeScale()
   window.addEventListener('resize', changeScale)
 })
-
+const loading = ref(false)
 onBeforeUnmount(() => {
   init()
   window.removeEventListener('resize', changeScale)

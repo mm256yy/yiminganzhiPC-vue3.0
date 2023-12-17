@@ -190,7 +190,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
 import Label from './label.vue'
 import Siderbar from './siderbar.vue'
 
@@ -198,6 +198,15 @@ import { getVillageList, getLeadershipScreen } from '@/api/AssetEvaluation/leade
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { useEmitt } from '@/hooks/web/useEmitt'
+
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['update:loading'])
 
 onMounted(() => {
   villageList()
@@ -345,25 +354,31 @@ const tabVillage = async () => {
 
 const getList = async () => {
   paramsValue.value = { code: reason.value || undefined }
-  const list = await getLeadershipScreen(paramsValue.value)
-  // 项目概览
-  landScreenDtoListObj.value = list.landScreenDto
+  try {
+    emit('update:loading', true)
+    const list = await getLeadershipScreen(paramsValue.value)
+    emit('update:loading', false)
+    // 项目概览
+    landScreenDtoListObj.value = list.landScreenDto
 
-  //人口
-  populationScreenDtoList.value = list.populationScreenDto
+    //人口
+    populationScreenDtoList.value = list.populationScreenDto
 
-  // 房屋
-  houseScreenDto.value = list.houseScreenDto
+    // 房屋
+    houseScreenDto.value = list.houseScreenDto
 
-  // 企(事业单位)
-  companyDto.value = list.companyDto
+    // 企(事业单位)
+    companyDto.value = list.companyDto
 
-  // 主要专业项目
-  professionalProjectsDto.value = list.professionalProjectsDto
+    // 主要专业项目
+    professionalProjectsDto.value = list.professionalProjectsDto
 
-  // fundScreenDto.value = list.fundScreenDto
+    // fundScreenDto.value = list.fundScreenDto
 
-  emitter.emit('getHomeInfo_list', list)
+    emitter.emit('getHomeInfo_list', list)
+  } catch (error) {
+    emit('update:loading', false)
+  }
 }
 </script>
 

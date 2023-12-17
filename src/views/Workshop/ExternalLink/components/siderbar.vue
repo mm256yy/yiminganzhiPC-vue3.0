@@ -3,7 +3,7 @@
  * @LastEditors: baike
 -->
 <template>
-  <div class="sider_info" :id="idName">
+  <div v-loading="loading" class="sider_info" :id="idName">
     <div class="seder_head">
       <div v-if="index == 3" class="tab_list">
         <div class="list_li"> 企（事）业单位 </div>
@@ -123,7 +123,7 @@ const list = ref([
     id: 2
   }
 ])
-
+const loading = ref(false)
 const detail = ref<any>({})
 
 const tableJosn = ref({
@@ -188,6 +188,7 @@ const hanldeClick = (e: any) => {
 }
 
 const init = async () => {
+  loading.value = true
   let res = await getLeadershipScreenDetail({
     code: props.code || ''
   })
@@ -210,8 +211,9 @@ const init = async () => {
   if (index.value == 3) {
     questionList.value = res.companyDto.detail
   }
+  loading.value = false
 
-  console.log('-0000', res)
+  // console.log('-0000', res)
 }
 
 const close = () => {
