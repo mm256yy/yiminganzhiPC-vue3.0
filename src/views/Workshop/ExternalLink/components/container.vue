@@ -113,7 +113,7 @@ const newsList = ref<any>([])
 const option = ref<any>([])
 
 const input = ref('')
-const reason = ref('')
+const reason = ref('移民户')
 const tokenStr = ref<string>('')
 
 onMounted(() => {
