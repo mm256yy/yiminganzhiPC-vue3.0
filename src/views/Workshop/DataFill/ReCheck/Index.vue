@@ -389,7 +389,7 @@ import {
   EnterpriseTabs,
   IndividualBTabs,
   villageInfoCTabs
-} from './config'
+} from '../config'
 
 import {
   getLandlordByIdApi,
@@ -399,25 +399,25 @@ import {
 import { ReportStatus, SignStatus } from '@/views/Workshop/DataFill/config'
 import { useAppStore } from '@/store/modules/app'
 
-import Demographic from './Demographic/Index.vue' // 人口信息
-import House from './House/Index.vue' // 房屋信息
-import Accessory from './Accessory/Index.vue' // 附属物信息
-import Fruitwood from './Fruitwood/Index.vue' // 零星(林)果木信息
-import Grave from './Grave/Index.vue' // 居民户 -- 坟墓信息
-import Enclosure from './Enclosure/Index.vue' // 附件上传
-import FamilyIncome from './FamilyIncome/Index.vue' // 家庭收入
-import VillageGrave from './VillageComponents/Grave/Index.vue' // 村集体 -- 坟墓信息
-import BusinessStatus from './EnterpriseInfoComponents/BusinessStatus/Index.vue' // 企业信息 -- 经营现状
-import EnterpriseInfor from './EnterpriseInfoComponents/EnterpriseInfor/Index.vue' // 企业基本情况
-import DeviceInfor from './EnterpriseInfoComponents/DeviceInfor/Index.vue' // 设施设备信息
+import Demographic from '../Demographic/Index.vue' // 人口信息
+import House from '../House/Index.vue' // 房屋信息
+import Accessory from '../Accessory/Index.vue' // 附属物信息
+import Fruitwood from '../Fruitwood/Index.vue' // 零星(林)果木信息
+import Grave from '../Index.vue' // 居民户 -- 坟墓信息
+import Enclosure from '../Enclosure/Index.vue' // 附件上传
+import FamilyIncome from '../FamilyIncome/Index.vue' // 家庭收入
+import VillageGrave from '../VillageComponents/Grave/Index.vue' // 村集体 -- 坟墓信息
+import BusinessStatus from '../EnterpriseInfoComponents/BusinessStatus/Index.vue' // 企业信息 -- 经营现状
+import EnterpriseInfor from '../EnterpriseInfoComponents/EnterpriseInfor/Index.vue' // 企业基本情况
+import DeviceInfor from '../EnterpriseInfoComponents/DeviceInfor/Index.vue' // 设施设备信息
 
-import IndividualBInfor from './IndividualBComponents/IndividualBInfor/Index.vue' // 个体工商户基本情况
-import VillageDeviceInfor from './VillageComponents/VillageDeviceInfor/Index.vue' // 农村小型专项及农副业设施信息
-import LandInfo from './LandInfo/Index.vue' // 土地信息
+import IndividualBInfor from '../IndividualBComponents/IndividualBInfor/Index.vue' // 个体工商户基本情况
+import VillageDeviceInfor from '../VillageComponents/VillageDeviceInfor/Index.vue' // 农村小型专项及农副业设施信息
+import LandInfo from '../LandInfo/Index.vue' // 土地信息
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
-import Resettlement from './Resettlement/Index.vue'
-import UserInfo from './components/UserInfo.vue'
-import Print from './components/Print.vue'
+import Resettlement from '../Resettlement/Index.vue'
+import UserInfo from '../components/UserInfo.vue'
+import Print from '../components/Print.vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
