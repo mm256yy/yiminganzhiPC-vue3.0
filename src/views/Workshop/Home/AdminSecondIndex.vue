@@ -329,6 +329,7 @@ const insuredOption = ref({
   //     text: 'Tangential Polar Bar Label Position (middle)'
   //   }
   // ],
+  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
     data: ['商业保险', '医疗保险', '养老保险', '其他'],
@@ -452,6 +453,7 @@ const careerOption = ref({
   //   subtext: 'Fake Data',
   //   left: 'center'
   // },
+  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
     data: [
@@ -577,6 +579,7 @@ const fundOption = ref({
   //   subtext: 'Fake Data',
   //   left: 'center'
   // },
+  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
     data: ['奖励费', '补偿费', '补助费'],
@@ -838,6 +841,7 @@ const immigrationOption = ref({
   tooltip: {
     trigger: 'item'
   },
+  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   // legend: {
   //   //   指示框名字  注意！要和下方series中的name一起改
   //   data: ['未采集', '已采集'],
@@ -983,7 +987,7 @@ const genderOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#8EBBFF' // 0% 处的颜色
+            color: '#3E73EC' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -1007,7 +1011,7 @@ const genderOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FF8E8E ' // 0% 处的颜色
+            color: '#0041D7 ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -1126,12 +1130,11 @@ const onBack = () => {
 
       .progress {
         height: 9px;
-        background: linear-gradient(90deg, rgba(255, 197, 61, 0.3) 0%, #faad14 100%);
+        background: linear-gradient(90deg, #0041d7 0%, #d4e1ff 100%);
         transform: skewX(-30deg);
         transform-origin: 0% 0%;
       }
     }
-
     .echart-item-rt {
       display: flex;
       align-items: center;
