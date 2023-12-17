@@ -3,7 +3,7 @@
  * @LastEditors: baike
 -->
 <template>
-  <div id="smart_report_info_rem" class="smart_report">
+  <div id="LeaderSide_work_home_rem" class="smart_report">
     <ElButton @click="onBack" :icon="BackIcon" class="goBack"> 返回 </ElButton>
     <div class="conatiner">
       <div v-for="item in listArray" :key="item.id" class="smart_border">
@@ -31,7 +31,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { changeScale } from '../ExternalLink/rem'
+import { changeScale, init } from '../ExternalLink/rem'
 import Label from '../ExternalLink/components/label.vue'
 import Footer from '../ExternalLink/components/footer.vue'
 import { useRouter } from 'vue-router'
@@ -348,11 +348,12 @@ const goLink = (routerName: string, query: any) => {
 }
 
 onMounted(() => {
-  changeScale('smart_report_info_rem')
+  changeScale()
   window.addEventListener('resize', changeScale)
 })
 
 onBeforeUnmount(() => {
+  init()
   window.removeEventListener('resize', changeScale)
 })
 </script>

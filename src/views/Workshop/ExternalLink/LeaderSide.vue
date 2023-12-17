@@ -25,7 +25,7 @@ import Footer from './components/footer.vue'
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 
 onMounted(() => {
-  changeScale('LeaderSide_work_home_rem')
+  changeScale()
   window.addEventListener('resize', changeScale)
 })
 

@@ -63,3 +63,19 @@ export const getVillageAnalysisList = (query: any): Promise<any> => {
     params: query
   })
 }
+
+// t土地
+export const getLand = (query: any): Promise<any> => {
+  return request.get({
+    url: `/h5/getLand`,
+    params: query
+  })
+}
+
+export const getLeadershipScreenDetail = (query: any): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/getLeadershipScreenDetail`,
+    params: query
+  })
+}
+// api/
