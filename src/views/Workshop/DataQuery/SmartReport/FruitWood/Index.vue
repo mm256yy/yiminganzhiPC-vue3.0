@@ -1,6 +1,7 @@
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <MigrateCrumb :titles="titles" />
+    <div v-if="false" class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -8,12 +9,12 @@
         @search="onSearch"
         @reset="setSearchParams"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
+      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="tableObject.loading">
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -21,14 +22,13 @@
           total: tableObject.total
         }"
         :data="tableObject.tableList"
-        :loading="tableObject.loading"
         :columns="allSchemas.tableColumns"
+        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
         border
         @register="register"
-        :span-method="arraySpanMethod"
       />
     </div>
   </WorkContentWrap>
@@ -44,16 +44,25 @@ import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { exportTypes } from '../config'
-import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
+import { getFruitWoodListApi } from '@/api/workshop/dataQuery/fruitWood-service'
+import { FruitWoodDtoType } from '@/api/workshop/dataQuery/fruitWood-types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+
+interface SpanMethodProps {
+  row: FruitWoodDtoType
+  column: FruitWoodDtoType
+  rowIndex: number
+  columnIndex: number
+}
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const titles = ['智能报表', '实物成果', '居民户', '零星林(果)木']
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getGraveListApi
+  getListApi: getFruitWoodListApi
 })
 
 const { setSearchParams } = methods
@@ -61,8 +70,7 @@ const { setSearchParams } = methods
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
-  projectId,
-  status: SurveyStatusEnum.Survey
+  projectId
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -82,6 +90,20 @@ const schema = reactive<CrudSchema[]>([
         showCheckbox: false,
         checkStrictly: false,
         checkOnClickNode: false
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '户号',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入户号'
       }
     },
     table: {
@@ -119,15 +141,29 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'number',
-    label: '数量（穴）',
+    field: 'name',
+    label: '品种',
     search: {
       show: false
     }
   },
   {
-    field: 'materials',
-    label: '材料',
+    field: 'size',
+    label: '规格',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'unit',
+    label: '单位',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'number',
+    label: '数量',
     search: {
       show: false
     }
@@ -160,10 +196,14 @@ const getParamsKey = (key: string) => {
  * @param{Object} rowIndex 当前行下标
  * @param{Object} columnInex 当前列下标
  */
-const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
+const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
+  const num = tableObject.tableList.filter(
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+  ).length
+  const index = tableObject.tableList.findIndex(
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+  )
   if (column && columnIndex < 2) {
-    const num = tableObject.tableList.filter((item) => item.doorNo === row.doorNo)?.length
-    const index = tableObject.tableList.findIndex((item) => item.doorNo === row.doorNo)
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -188,9 +228,11 @@ const onSearch = (data) => {
   tableObject.params = {
     projectId
   }
-
   if (!params.householdName) {
     delete params.householdName
+  }
+  if (!params.doorNo) {
+    delete params.doorNo
   }
   if (params.villageCode) {
     // 拿到对应的参数key
@@ -208,12 +250,12 @@ const onSearch = (data) => {
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value, exportTypes.grave)
+  emit('export', villageTree.value, exportTypes.tree)
 }
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'amdinVillage')
+  const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
 }

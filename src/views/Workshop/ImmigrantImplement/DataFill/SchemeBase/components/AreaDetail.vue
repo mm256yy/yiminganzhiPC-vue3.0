@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineExpose } from 'vue'
 import AMapLoader from '@amap/amap-jsapi-loader'
 interface PropsType {
   placementPointInfo?: any
@@ -86,6 +86,7 @@ const AMap = ref<any>(null)
 const longitude = 120.148775
 const latitude = 30.245799
 const pointInfo = ref<any>({})
+
 const init = async () => {
   AMap.value = await AMapLoader.load({
     key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
@@ -100,19 +101,29 @@ const init = async () => {
     zoom: 13, //初始化地图层级
     viewMode: '3D', //是否为3D地图模式
     //初始化地图中心点位置
-
     center: [longitude, latitude],
     dragEnable: true, //禁止鼠标拖拽
     scrollWheel: true, //鼠标滚轮放大缩小
     doubleClickZoom: true, //双击放大缩小
     keyboardEnable: true //键盘控制放大缩小移动旋转
   })
+  //显示标记点
+  new AMap.value.Marker({
+    position: [longitude, latitude],
+    map: map.value
+  })
   map.value.setDefaultCursor('pointer')
+  // marker
   pointInfo.value = { ...props.placementPointInfo }
 }
 
-onMounted(() => {
-  init()
+// onMounted(() => {
+//   console.log('执行几次')
+
+//   init()
+// })
+defineExpose({
+  init
 })
 </script>
 

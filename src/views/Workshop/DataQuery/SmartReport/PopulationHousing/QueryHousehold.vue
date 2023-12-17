@@ -1,3 +1,4 @@
+<!--按户查询-->
 <template>
   <WorkContentWrap>
     <div class="search-form-wrap">
@@ -6,14 +7,14 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
+      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
 
     <div class="line"></div>
 
-    <div class="table-wrap">
+    <div class="table-wrap" v-loading="tableObject.loading">
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -21,14 +22,12 @@
           total: tableObject.total
         }"
         :data="tableObject.tableList"
-        :loading="tableObject.loading"
         :columns="allSchemas.tableColumns"
+        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
-        border
         @register="register"
-        :span-method="arraySpanMethod"
       />
     </div>
   </WorkContentWrap>
@@ -43,17 +42,27 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { exportTypes } from '../config'
-import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
+import {
+  getPopulationHousingListApi,
+  exportReportApi
+} from '@/api/workshop/dataQuery/populationHousing-service'
+import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
+interface SpanMethodProps {
+  row: PopulationHousingDtoType
+  column: PopulationHousingDtoType
+  rowIndex: number
+  columnIndex: number
+}
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getGraveListApi
+  getListApi: getPopulationHousingListApi
 })
 
 const { setSearchParams } = methods
@@ -62,7 +71,7 @@ const villageTree = ref<any[]>([])
 
 tableObject.params = {
   projectId,
-  status: SurveyStatusEnum.Survey
+  status: SurveyStatusEnum.Implementation
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -89,6 +98,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'doorNo',
+    label: '户号',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入户号'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
     field: 'householdName',
     label: '户主姓名',
     search: {
@@ -105,29 +128,94 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
+    field: 'index',
+    type: 'index',
+    label: '序号'
+  },
+  {
+    field: 'area',
+    label: '行政村',
+    width: 180,
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'doorNo',
     label: '户号',
+    width: 180,
     search: {
       show: false
     }
   },
   {
     field: 'householdName',
-    label: '户主姓名',
+    label: '户主',
     search: {
       show: false
     }
   },
   {
-    field: 'number',
-    label: '数量（穴）',
+    field: '',
+    label: '人口(人)',
+    search: {
+      show: false
+    },
+    children: [
+      {
+        field: 'inCount',
+        label: '册内人口',
+        search: {
+          show: false
+        }
+      },
+      {
+        field: 'outCount',
+        label: '册外人口',
+        search: {
+          show: false
+        }
+      },
+      {
+        field: 'sumCount',
+        label: '合计',
+        search: {
+          show: false
+        }
+      }
+    ]
+  },
+  {
+    field: 'houseNo',
+    label: '幢号',
     search: {
       show: false
     }
   },
   {
-    field: 'materials',
-    label: '材料',
+    field: 'storeyNumber',
+    label: '层数',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'constructionTypeText',
+    label: '结构类型',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'landArea',
+    label: '房屋建筑面积(㎡)',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'locationTypeText',
+    label: '所在位置',
     search: {
       show: false
     }
@@ -143,16 +231,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 /**
  * 合并单元行
  * @param{Object} row 当前行
@@ -160,10 +238,14 @@ const getParamsKey = (key: string) => {
  * @param{Object} rowIndex 当前行下标
  * @param{Object} columnInex 当前列下标
  */
-const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
-  if (column && columnIndex < 2) {
-    const num = tableObject.tableList.filter((item) => item.doorNo === row.doorNo)?.length
-    const index = tableObject.tableList.findIndex((item) => item.doorNo === row.doorNo)
+const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
+  const num = tableObject.tableList.filter(
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+  ).length
+  const index = tableObject.tableList.findIndex(
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+  )
+  if (column && columnIndex < 5) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -184,36 +266,48 @@ const onSearch = (data) => {
     ...data
   }
 
-  // 需要重置一次params
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
   tableObject.params = {
     projectId
   }
-
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+  setSearchParams({})
 }
 
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.grave)
+const onExport = async () => {
+  const params = {
+    exportType: '1',
+    ...tableObject.params
+  }
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'amdinVillage')
+  const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
 }

@@ -24,6 +24,19 @@
           {{ baseInfo.phone || '' }}
         </div>
       </div>
+      <div class="common-form-item">
+        <div class="common-label"><span style="color: red"> *</span>养老院：</div>
+        <div class="common-value">
+          <el-select v-model="nursingHome" class="m-2" placeholder="请选择养老院" size="large">
+            <el-option
+              v-for="item in nursingHomeList[416]"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
+      </div>
     </div>
 
     <div class="common-form-item">
@@ -41,18 +54,37 @@
 
 <script lang="ts" setup>
 import { HouseType } from '../../config'
-
+import { ElSelect, ElOption, ElMessage } from 'element-plus'
+import { ref, computed, onMounted } from 'vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getSimulateImmigrantSettleApi } from '@/api/workshop/datafill/mockResettle-service'
 interface PropsType {
   baseInfo: any
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
 }
+onMounted(() => {
+  getSimulateImmigrantSettle()
+})
+// 查询安置信息
+const getSimulateImmigrantSettle = async () => {
+  const res = await getSimulateImmigrantSettleApi(props.doorNo)
+  nursingHome.value = res.nursingHome.toString()
+}
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
+const nursingHome = ref('')
 
+const dictStore = useDictStoreWithOut()
+
+const nursingHomeList = computed(() => dictStore.getDictObj)
+const open = () => {
+  ElMessage('请选择养老院')
+}
 const submitResettle = async () => {
+  if (!nursingHome.value) return open()
   const params: any = {
     houseAreaType: HouseType.concentrate,
     doorNo: props.doorNo
@@ -60,6 +92,9 @@ const submitResettle = async () => {
   if (props.immigrantSettle && props.immigrantSettle.id) {
     params.id = props.immigrantSettle.id
   }
+
+  const ScreeningObj = nursingHomeList.value[416].find((item) => item.value === nursingHome.value)
+  params.nursingHome = ScreeningObj && ScreeningObj.value
   emit('submit', params)
 }
 </script>
@@ -68,6 +103,7 @@ const submitResettle = async () => {
 .common-form-group {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .common-form-item {
