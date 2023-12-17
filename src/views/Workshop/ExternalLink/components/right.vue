@@ -162,40 +162,44 @@ const handleClickItem = (type: number) => {
     width: 74px;
     height: 15px;
   }
+
   .right_slot {
     display: flex;
     cursor: pointer;
+
     .look_icon {
       width: 16px;
       height: 16px;
       margin-top: 2px;
     }
   }
+
   .right_info_top {
     width: 620px;
     height: 312px;
+    margin-bottom: 12px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
-    border: 2px solid rgba(62, 115, 236, 0.7);
-    margin-bottom: 12px;
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
 
     .management {
-      padding: 16px 16px 0px 16px;
       display: flex;
+      padding: 16px 16px 0px 16px;
 
       .management_left {
         width: 220px;
         height: 181px;
+        padding-top: 24px;
+        margin-right: 25px;
+        text-align: center;
         background: #ffffff;
+        border: 1px solid rgba(62, 115, 236, 0.2);
         border-radius: 4px 4px 4px 4px;
         opacity: 1;
-        border: 1px solid rgba(62, 115, 236, 0.2);
-        margin-right: 25px;
-        padding-top: 24px;
-        text-align: center;
+
         .left_logo {
           width: 60px;
           height: 60px;
@@ -203,167 +207,187 @@ const handleClickItem = (type: number) => {
           margin-bottom: 16px;
         }
       }
+
       .left_lable {
-        font-size: 14px;
-        font-family: Microsoft YaHei, Microsoft YaHei;
-        font-weight: 400;
-        color: #666666;
-        line-height: 21px;
         margin-bottom: 8px;
-      }
-      .left_num {
-        font-size: 30px;
-        font-family: DIN Medium, DIN Medium;
+        font-size: 14px;
         font-weight: 400;
-        color: #333333;
-        line-height: 35px;
+        line-height: 21px;
+        color: #666666;
       }
+
+      .left_num {
+        font-family: DIN Medium, DIN Medium;
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 35px;
+        color: #333333;
+      }
+
       .management_right {
+        position: relative;
         width: 343px;
         height: 181px;
+        padding: 20px 16px;
         background: #f2f6ff;
         border-radius: 4px 4px 4px 4px;
         opacity: 1;
-        position: relative;
-        padding: 20px 16px;
+
         .right_icon {
           position: absolute;
           top: 72px;
+          left: -15px;
           width: 16px;
           height: 32px;
-          left: -15px;
         }
+
         .management_r_top {
           display: flex;
           margin-bottom: 10px;
+
           .icon_b {
             width: 60px;
             height: 60px;
             margin-right: 10px;
           }
+
           .top_info {
             width: 170px;
             margin-right: 10px;
           }
+
           .round {
             width: 60px;
             height: 60px;
+            text-align: center;
             background: #ffffff;
+            border: 2px solid #3e73ec;
             border-radius: 50%;
             opacity: 1;
-            border: 2px solid #3e73ec;
-            text-align: center;
+
             .round_top {
-              font-size: 10px;
-              font-family: DIN Medium, DIN Medium;
-              font-weight: 400;
-              color: #3e73ec;
-              line-height: 12px;
-              margin-bottom: 5px;
               margin-top: 10px;
-            }
-            .round_bom {
-              font-size: 18px;
+              margin-bottom: 5px;
               font-family: DIN Medium, DIN Medium;
+              font-size: 10px;
               font-weight: 400;
+              line-height: 12px;
               color: #3e73ec;
+            }
+
+            .round_bom {
+              font-family: DIN Medium, DIN Medium;
+              font-size: 18px;
+              font-weight: 400;
               line-height: 18px;
+              color: #3e73ec;
             }
           }
         }
+
         .management_r_bom {
+          display: flex;
           width: 310px;
           height: 70px;
+          padding: 8px 16px;
           background: #ffffff;
           border-radius: 8px 8px 8px 8px;
-          display: flex;
-          padding: 8px 16px;
+
           .bom_box_l {
             flex: 1;
             text-align: center;
           }
+
           .top_text {
             margin-bottom: 3px;
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
             font-weight: 400;
-            color: #737475;
             line-height: 22px;
+            color: #737475;
           }
+
           .bom_text {
-            font-size: 20px;
             font-family: DIN Medium, DIN Medium;
+            font-size: 20px;
             font-weight: 400;
-            color: #454647;
             line-height: 28px;
+            color: #454647;
           }
         }
       }
     }
+
     .management_foot {
       margin-top: 25px;
       font-size: 14px;
-      font-family: PingFang SC, PingFang SC;
       font-weight: 500;
-      color: #666666;
       line-height: 20px;
+      color: #666666;
+
       .text_a {
         margin-right: 8px;
         margin-left: 39px;
       }
+
       .text_num {
-        font-size: 20px;
         font-family: DIN Medium, DIN Medium;
+        font-size: 20px;
         font-weight: 400;
-        color: #333333;
         line-height: 23px;
+        color: #333333;
       }
+
       .text_b {
-        margin-left: 98px;
         margin-right: 8px;
+        margin-left: 98px;
       }
     }
   }
+
   .right_info_con {
     width: 620px;
     height: 402px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
-    border-radius: 8px 8px 8px 8px;
-    opacity: 1;
-    box-sizing: border-box;
 
     border: 2px solid rgba(62, 115, 236, 0.7);
+    border-radius: 8px 8px 8px 8px;
+    opacity: 1;
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    box-sizing: border-box;
+
     .progress {
       padding: 0px 30px;
+
       .progoress_ridio {
         display: flex;
         font-size: 12px;
-        font-family: PingFang SC, PingFang SC;
         font-weight: 400;
-        color: #1d2129;
         line-height: 20px;
+        color: #1d2129;
         // margin-bottom: 10px;
         .cur_b {
           width: 8px;
           height: 8px;
-          background: #165dff;
-          border-radius: 100px 100px 100px 100px;
           margin-top: 7px;
           margin-right: 4px;
+          background: #165dff;
+          border-radius: 100px 100px 100px 100px;
         }
+
         .ridio_text {
           margin-right: 16px;
         }
+
         .cur_jd {
           width: 8px;
           height: 8px;
-          background: #cadaff;
-          margin-right: 4px;
           margin-top: 7px;
+          margin-right: 4px;
+          background: #cadaff;
           border-radius: 100px 100px 100px 100px;
         }
       }
+
       .progress_list {
         display: flex;
         flex-wrap: wrap;
@@ -372,23 +396,26 @@ const handleClickItem = (type: number) => {
         .progress_li {
           display: flex;
           margin-top: 15px;
+
           .logo_li {
             width: 40px;
             height: 40px;
             margin-right: 16px;
           }
+
           .li_title {
-            font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
-            font-weight: 500;
-            color: #131313;
-            line-height: 14px;
             margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 14px;
+            color: #131313;
           }
+
           .progress_top {
             width: 204px;
             margin-bottom: 6px;
           }
+
           /deep/ .el-progress-bar__outer {
             height: 10px !important;
           }
@@ -396,17 +423,19 @@ const handleClickItem = (type: number) => {
       }
     }
   }
+
   .bom_box_top {
-    margin-top: 12px;
     width: 620px;
     height: 100px;
+    padding: 8px;
+    margin-top: 12px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
-    padding: 8px;
-    border: 2px solid rgba(62, 115, 236, 0.7);
+
     .img_box {
       width: 100%;
       height: 100%;
