@@ -17,7 +17,7 @@
             class="w-full"
             @change="tabVillage"
             placeholder="全域"
-            @clear="clearInput"
+            @clear="getList"
           >
             <ElOption
               v-for="item in villageLists"
@@ -50,7 +50,7 @@
             亩
           </div>
         </div>
-        <div class="permanent">
+        <div @click="onChange(0)" class="permanent">
           <div v-for="item in landList" :key="item.id" class="permanent_box">
             <div class="permanent_box_top">{{ item.name }}</div>
             <div class="permanent_box_bom">
@@ -62,42 +62,44 @@
           <img class="icon" src="../../../../assets/imgs/homes/Polygon.png" alt="" />
           <div class="left_text">人口</div>
         </div>
-        <div class="people_info">
-          <div class="people_box">
-            <div>
-              <img class="prople_img" src="../../../../assets/imgs/homes/ico_left.png" alt="" />
-            </div>
-            <div class="people_con">
-              <span class="people_text">总户数</span>
-              <span class="num">{{ populationScreenDtoList.houseNum }} </span>
-              <span>户</span>
-            </div>
-            <div class="people_right">
-              <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
-              <span>财产户</span>
-              {{ populationScreenDtoList.cchNum }}户
+        <div @click="onChange(1)" class="peoole_list">
+          <div class="people_info">
+            <div class="people_box">
+              <div>
+                <img class="prople_img" src="../../../../assets/imgs/homes/ico_left.png" alt="" />
+              </div>
+              <div class="people_con">
+                <span class="people_text">总户数</span>
+                <span class="num">{{ populationScreenDtoList.houseNum }} </span>
+                <span>户</span>
+              </div>
+              <div class="people_right">
+                <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
+                <span>财产户</span>
+                {{ populationScreenDtoList.cchNum }}户
+              </div>
             </div>
           </div>
-        </div>
-        <div class="people_info">
-          <div class="people_box">
-            <div>
-              <img class="prople_img" src="../../../../assets/imgs/homes/ico_bom.png" alt="" />
-            </div>
-            <div class="people_con">
-              <span class="people_text">总人数</span>
-              <span class="num">
-                {{ populationScreenDtoList.peopleNum }}
-              </span>
-              <span>人</span>
-            </div>
-            <div class="people_right">
-              <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
-              <span>农业</span>
-              {{ populationScreenDtoList.nongNum }}人
-              <span class="people_border"></span>
-              <span>非农</span>
-              {{ populationScreenDtoList.unNongNum }}人
+          <div class="people_info">
+            <div class="people_box">
+              <div>
+                <img class="prople_img" src="../../../../assets/imgs/homes/ico_bom.png" alt="" />
+              </div>
+              <div class="people_con">
+                <span class="people_text">总人数</span>
+                <span class="num">
+                  {{ populationScreenDtoList.peopleNum }}
+                </span>
+                <span>人</span>
+              </div>
+              <div class="people_right">
+                <img class="right_icon" src="../../../../assets/imgs/homes/Polygons.png" alt="" />
+                <span>农业</span>
+                {{ populationScreenDtoList.nongNum }}人
+                <span class="people_border"></span>
+                <span>非农</span>
+                {{ populationScreenDtoList.unNongNum }}人
+              </div>
             </div>
           </div>
         </div>
@@ -105,17 +107,17 @@
           <img class="icon" src="../../../../assets/imgs/homes/Polygon.png" alt="" />
           <div class="left_text">房屋</div>
         </div>
-        <div class="permanent">
+        <div @click="onChange(2)" class="permanent">
           <div v-for="item in houseList" :key="item.id" class="permanent_box">
             <div class="permanent_box_top">{{ item.name }}</div>
-            <div class="permanent_box_bom">{{ houseScreenDto[item.num] }}<span> ㎡</span></div>
+            <div class="permanent_box_bom"> {{ houseScreenDto[item.num] }}<span> ㎡</span> </div>
           </div>
         </div>
         <div class="tip_box">
           <img class="icon" src="../../../../assets/imgs/homes/Polygon.png" alt="" />
           <div class="left_text">企（事）业单位</div>
         </div>
-        <div class="business">
+        <div @click="onChange(3)" class="business">
           <div class="business_li">
             <div class="business_li_l">
               <img class="ico_a" src="../../../../assets/imgs/homes/ico_a.png" alt="" />
@@ -160,28 +162,51 @@
         <div class="project">
           <div class="project_table">
             <div v-for="item in projectsList" :key="item.id" class="table_li">
-              <div class="table_name"><span class="table_cur"></span> {{ item.name }}</div>
+              <div class="table_name"> <span class="table_cur"></span> {{ item.name }} </div>
               <div class="tabel_value">{{ professionalProjectsDto[item.num] }}km</div>
             </div>
           </div>
           <div class="project_table_r">
             <div v-for="item in projectArr" :key="item.id" class="table_li">
-              <div class="table_name"><span class="table_cur"></span> {{ item.name }}</div>
-              <div class="tabel_value">{{ professionalProjectsDto[item.num] }}{{ item.type }}</div>
+              <div class="table_name"> <span class="table_cur"></span> {{ item.name }} </div>
+              <div class="tabel_value">
+                {{ professionalProjectsDto[item.num] }}{{ item.type }}
+              </div>
             </div>
           </div>
+        </div>
+
+        <div v-if="isClose" class="siderbar_box_house">
+          <Siderbar
+            @on-close="(e) => (isClose = e)"
+            :isClose="isClose"
+            :isType="isType"
+            @handle-change="handleChange"
+            :code="reason"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
 import Label from './label.vue'
+import Siderbar from './siderbar.vue'
+
 import { getVillageList, getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { useEmitt } from '@/hooks/web/useEmitt'
+
+const props = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const emit = defineEmits(['update:loading'])
 
 onMounted(() => {
   villageList()
@@ -201,6 +226,10 @@ const populationScreenDtoList = ref<any>({})
 const houseScreenDto = ref<any>({})
 const companyDto = ref<any>({})
 const fundScreenDto = ref<any>({})
+
+const isType = ref('0')
+
+const isClose = ref(false)
 
 const professionalProjectsDto = ref<any>({})
 
@@ -306,6 +335,10 @@ const projectArr = ref<any>([
   }
 ])
 
+const onChange = (e: any) => {
+  isClose.value = true
+  isType.value = e
+}
 const villageList = async () => {
   villageLists.value = await getVillageList({})
 }
@@ -315,29 +348,37 @@ const tabVillage = async () => {
   getList()
 }
 
-const clearInput = () => {}
+// const clearInput = () => {
+//   console.log(reason.value)
+// }
 
 const getList = async () => {
   paramsValue.value = { code: reason.value || undefined }
-  const list = await getLeadershipScreen(paramsValue.value)
-  // 项目概览
-  landScreenDtoListObj.value = list.landScreenDto
+  try {
+    emit('update:loading', true)
+    const list = await getLeadershipScreen(paramsValue.value)
+    emit('update:loading', false)
+    // 项目概览
+    landScreenDtoListObj.value = list.landScreenDto
 
-  //人口
-  populationScreenDtoList.value = list.populationScreenDto
+    //人口
+    populationScreenDtoList.value = list.populationScreenDto
 
-  // 房屋
-  houseScreenDto.value = list.houseScreenDto
+    // 房屋
+    houseScreenDto.value = list.houseScreenDto
 
-  // 企(事业单位)
-  companyDto.value = list.companyDto
+    // 企(事业单位)
+    companyDto.value = list.companyDto
 
-  // 主要专业项目
-  professionalProjectsDto.value = list.professionalProjectsDto
+    // 主要专业项目
+    professionalProjectsDto.value = list.professionalProjectsDto
 
-  // fundScreenDto.value = list.fundScreenDto
+    // fundScreenDto.value = list.fundScreenDto
 
-  emitter.emit('getHomeInfo_list', list)
+    emitter.emit('getHomeInfo_list', list)
+  } catch (error) {
+    emit('update:loading', false)
+  }
 }
 </script>
 
@@ -382,6 +423,9 @@ const getList = async () => {
     border: 2px solid rgba(62, 115, 236, 0.7);
     .contain_ym_box {
       padding: 16px;
+      position: relative;
+      .siderbar_box_house {
+      }
       .tip_box {
         display: flex;
 
@@ -430,6 +474,7 @@ const getList = async () => {
       }
       .permanent {
         width: 100%;
+        cursor: pointer;
         height: 72px;
         border-radius: 4px 4px 4px 4px;
         opacity: 1;
@@ -438,6 +483,13 @@ const getList = async () => {
         display: flex;
         justify-content: space-between;
         margin-bottom: 18px;
+        position: relative;
+        .siderbar_box {
+          position: absolute;
+          top: 15px;
+          right: -430px;
+          z-index: 999;
+        }
 
         .permanent_box {
           font-size: 14px;
@@ -462,6 +514,16 @@ const getList = async () => {
             font-size: 14px;
             font-weight: none;
           }
+        }
+      }
+      .peoole_list {
+        position: relative;
+        cursor: pointer;
+        .siderbar_people {
+          position: absolute;
+          top: 15px;
+          right: -430px;
+          z-index: 999;
         }
       }
       .people_info {
@@ -541,6 +603,7 @@ const getList = async () => {
         margin-top: 11px;
         padding-left: 13px;
         margin-bottom: 18px;
+        cursor: pointer;
         .business_li {
           display: flex;
           flex: 1;

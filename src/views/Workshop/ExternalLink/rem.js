@@ -15,3 +15,10 @@ export function changeScale() {
   normalBox.style.marginBottom = `-${bottom}px`
   normalBox.style.transform = `scale(${widthScale}, ${heightScale})`
 }
+
+// 去除一屏
+export function init() {
+  document.body.style.width = '100%'
+  document.body.style.height = '100%'
+  document.body.style.overflow = 'auto'
+}

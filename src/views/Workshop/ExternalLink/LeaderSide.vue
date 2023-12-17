@@ -3,9 +3,9 @@
  * @LastEditors: baike
 -->
 <template>
-  <div id="LeaderSide_work_home_rem" class="LeaderSide">
+  <div v-loading="loading" id="LeaderSide_work_home_rem" class="LeaderSide">
     <div class="container">
-      <LeftInfo class="left_info" />
+      <LeftInfo v-model:loading="loading" class="left_info" />
       <ContainerInfo class="containerInfo" />
       <RightInfo />
     </div>
@@ -16,7 +16,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { changeScale } from './rem'
+import { changeScale, init } from './rem'
 import LeftInfo from './components/left.vue'
 import ContainerInfo from './components/container.vue'
 import RightInfo from './components/right.vue'
@@ -28,8 +28,9 @@ onMounted(() => {
   changeScale()
   window.addEventListener('resize', changeScale)
 })
-
+const loading = ref(false)
 onBeforeUnmount(() => {
+  init()
   window.removeEventListener('resize', changeScale)
 })
 </script>
