@@ -12,7 +12,7 @@
       </div>
       <div class="search">
         <ElInput v-model="input" class="ipt" />
-        <div class="seach_icon"></div>
+        <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
     </div>

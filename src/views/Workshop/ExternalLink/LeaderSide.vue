@@ -16,7 +16,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { changeScale } from './rem'
+import { changeScale, init } from './rem'
 import LeftInfo from './components/left.vue'
 import ContainerInfo from './components/container.vue'
 import RightInfo from './components/right.vue'
@@ -30,6 +30,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  init()
   window.removeEventListener('resize', changeScale)
 })
 </script>
