@@ -1,6 +1,14 @@
 <template>
   <WorkContentWrap>
     <div class="flex items-center">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        type="default"
+        class="px-9px py-0px !h-28px mr-8px !text-12px"
+      >
+        返回
+      </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">分户合户</ElBreadcrumbItem>
@@ -32,11 +40,14 @@
 // import { reactive } from 'vue'
 // import { useAppStore } from '@/store/modules/app'
 import { ref } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import SeparateTable from './components/SeparateTable.vue'
 import MergeTable from './components/MergeTable.vue'
-
+import { useRouter } from 'vue-router'
+import { useIcon } from '@/hooks/web/useIcon'
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const { back } = useRouter()
 const tabCurrentId = ref<number>(0)
 const vill = ref<any>()
 const tabsList = [
@@ -49,7 +60,9 @@ const tabsList = [
     name: '合户'
   }
 ]
-
+const onBack = () => {
+  back()
+}
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
     return
