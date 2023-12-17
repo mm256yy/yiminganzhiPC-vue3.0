@@ -2,14 +2,17 @@
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
     <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 企业基本信息表 </div>
+      </div>
       <ElTable :data="tableData1.tableList" style="width: 100%" :span-method="objectSpanMethod1">
         <ElTableColumn type="index" label="序号" />
         <ElTableColumn prop="townCodeText" label="行政村" />
         <ElTableColumn prop="name" label="名称" />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
-        <ElTableColumn prop="licenceNo" label="工商证" />
         <ElTableColumn prop="landUseNature" label="用地性质" />
         <ElTableColumn prop="industryType" label="所属行业" />
+        <ElTableColumn prop="licenceNo" label="工商证" />
         <ElTableColumn prop="productCategory" label="主要产品" />
         <ElTableColumn prop="averageAnnualOutputValue" label="年产值（万元）" />
         <ElTableColumn prop="averageAnnualProfit" label="年利润（万元）" />

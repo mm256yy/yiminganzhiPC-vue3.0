@@ -9,6 +9,7 @@
       返回
     </ElButton>
     <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px"> 智慧报表 </ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px"> 实物成果 </ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px"> 人口房屋 </ElBreadcrumbItem>
     </ElBreadcrumb>

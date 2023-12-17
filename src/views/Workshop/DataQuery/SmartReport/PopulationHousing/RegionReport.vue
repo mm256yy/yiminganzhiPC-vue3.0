@@ -13,7 +13,7 @@
     </div>
 
     <div class="line"></div>
-
+    <div class="title-hint">人口房屋统计表（区域报表）</div>
     <div class="table-wrap">
       <Table
         ref="tableRef"
@@ -264,5 +264,10 @@ onMounted(() => {
   width: 100%;
   height: 10px;
   background-color: #e7edfd;
+}
+
+.title-hint {
+  padding: 15px 0 0 15px;
+  color: 14px;
 }
 </style>

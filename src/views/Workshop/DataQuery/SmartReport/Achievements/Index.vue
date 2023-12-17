@@ -2,6 +2,9 @@
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
     <div class="table-wrap !py-12px !mt-0px">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 实物成果汇总表 </div>
+      </div>
       <div class="fylist">
         <ElTable
           :data="feeTableData"
