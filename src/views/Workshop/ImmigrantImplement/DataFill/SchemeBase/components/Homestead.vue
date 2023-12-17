@@ -76,7 +76,7 @@ const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
 const areaDetailPup = ref(false)
 const settleAddress = ref('1')
-const AreaDetailRef = ref(null)
+const AreaDetailRef: any = ref(null)
 const areaType = ref('1')
 const placmentPointObj = ref({
   镜岭集镇安置区: '2',

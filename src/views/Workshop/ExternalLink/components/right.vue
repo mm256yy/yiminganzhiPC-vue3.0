@@ -1,6 +1,6 @@
 <!--
  * @Author: baike
- * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div class="right_info">
@@ -119,7 +119,7 @@ const fundScreenDto = ref<any>({})
 const customColor = ref('#CADAFF')
 const customColor_a = ref('#3E73EC')
 
-const progressList = ref([])
+const progressList: any = ref([])
 
 const computedProperty = computed(() => {
   return (fundScreenDto.value.ljsyzj / fundScreenDto.value.gszj) * 100
