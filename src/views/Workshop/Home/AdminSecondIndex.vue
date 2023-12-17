@@ -74,8 +74,8 @@
         </div>
         <tabButton @tab-person="tabPerson" :tabList="tabListHouse" />
         <div class="between gender-list">
-          <div>户均住房面积</div>
-          <div>2000,000m²</div>
+          <div>{{ tabPersonName }}住房面积</div>
+          <div>{{ tabPersonName == '人均' ? perPersonMapTotal : perHouseholdTotal }}m²</div>
         </div>
         <Echart :options="houseOption" :height="300" />
       </div>
@@ -185,8 +185,12 @@ const typeNumber = ref<number>(1)
 const numberMan = ref<number>()
 const numberWoman = ref<number>()
 const tag = ref<boolean>(true)
+const perPersonMapTotal = ref<string>()
+const perHouseholdTotal = ref<string>()
 const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
+  perPersonMapTotal.value = list.perPersonMapTotal[0].areaTotal
+  perHouseholdTotal.value = list.perHouseholdTotal[0].areaTotal
   console.log(list, '1111')
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
@@ -252,7 +256,13 @@ const tabVillage = async () => {
   getVillageAnalysisLists()
   getChartScreenLists()
 }
+const tabPersonName = ref<string>('')
+if (tabPersonName.value) {
+} else {
+  tabPersonName.value = '户均'
+}
 const tabPerson = (index) => {
+  tabPersonName.value = tabListHouse[index].title
   if (index == 0) {
     tag.value = true
     getChartScreenLists()
@@ -269,7 +279,7 @@ onMounted(() => {
 })
 const tabListCareer = [
   {
-    title: '学历分布'
+    title: '文化程度分布'
   },
   {
     title: '职业分布'
