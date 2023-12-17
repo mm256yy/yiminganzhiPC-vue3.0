@@ -98,6 +98,10 @@ const props = defineProps({
   isClose: {
     type: Boolean,
     default: false
+  },
+  code: {
+    type: String,
+    default: ''
   }
 })
 
@@ -185,7 +189,7 @@ const hanldeClick = (e: any) => {
 
 const init = async () => {
   let res = await getLeadershipScreenDetail({
-    code: ''
+    code: props.code || ''
   })
   //永久用地
   if (index.value == 0) {

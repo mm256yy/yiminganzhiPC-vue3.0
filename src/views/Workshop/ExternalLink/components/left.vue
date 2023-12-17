@@ -17,7 +17,7 @@
             class="w-full"
             @change="tabVillage"
             placeholder="全域"
-            @clear="clearInput"
+            @clear="getList"
           >
             <ElOption
               v-for="item in villageLists"
@@ -182,6 +182,7 @@
             :isClose="isClose"
             :isType="isType"
             @handle-change="handleChange"
+            :code="reason"
           />
         </div>
       </div>
@@ -338,7 +339,9 @@ const tabVillage = async () => {
   getList()
 }
 
-const clearInput = () => {}
+// const clearInput = () => {
+//   console.log(reason.value)
+// }
 
 const getList = async () => {
   paramsValue.value = { code: reason.value || undefined }

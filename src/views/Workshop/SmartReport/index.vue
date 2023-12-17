@@ -9,7 +9,7 @@
       <div v-for="item in listArray" :key="item.id" class="smart_border">
         <Label height="50px">
           <template #title>
-            <img class="xm_img" src="@/assets/imgs/homes/ym.png" alt="" />
+            <img class="xm_img" :src="item.icon" alt="" />
           </template>
         </Label>
 
@@ -46,10 +46,10 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const listArray = ref([
   {
     id: '1',
-    icon: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/a.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -75,7 +75,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
         name: '村集体',
         list: [
           {
@@ -96,7 +96,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -114,7 +114,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
@@ -160,7 +160,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
         name: '土地',
         list: [
           {
@@ -173,10 +173,10 @@ const listArray = ref([
   },
   {
     id: '2',
-    icon: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/b.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -190,7 +190,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
         name: '村集体',
         list: [
           {
@@ -200,7 +200,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -218,7 +218,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
@@ -255,10 +255,10 @@ const listArray = ref([
   },
   {
     id: '3',
-    icon: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/c.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
         name: '安置意愿',
         list: [
           {
@@ -275,10 +275,10 @@ const listArray = ref([
   },
   {
     id: '4',
-    icon: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/d.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -293,7 +293,7 @@ const listArray = ref([
       },
 
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -311,7 +311,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smart/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
