@@ -1,7 +1,6 @@
 <template>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <!-- <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -118,7 +117,7 @@ import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
 import { ParamsType } from '@/api/workshop/dataQuery/landInfo-types'
 import { exportTypes } from '../config'
 import { locationTypes } from '@/views/Workshop/components/config'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -126,8 +125,6 @@ const tableDataList = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
 const emit = defineEmits(['export'])
-const titles = ['智能报表', '实物成果', '土地信息']
-
 const getLocationText = (key: string) => {
   return locationTypes.find((item) => item.value === key)?.label
 }
@@ -136,7 +133,8 @@ const { tableObject } = useTable({
 })
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: SurveyStatusEnum.Survey
 }
 const tableColData = ref<any>([
   {

@@ -1,6 +1,5 @@
 <template>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -65,7 +64,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElTable, ElTableColumn, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElButton, ElTable, ElTableColumn } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
@@ -74,9 +73,7 @@ import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCol
 import { ParamsType } from '@/api/workshop/dataQuery/villageCollective-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../config'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
-
-const titles = ['智能报表', '实物成果', '村集体', '房屋/附属物/零星林(果)木']
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -93,7 +90,8 @@ const { tableObject } = useTable({
 })
 
 tableObject.params = {
-  projectId
+  projectId,
+  status: SurveyStatusEnum.Survey
 }
 
 const schema = reactive<CrudSchema[]>([

@@ -1,6 +1,5 @@
 <template>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
     <div class="table-wrap !py-12px !mt-0px">
       <div class="fylist">
         <ElTable
@@ -89,9 +88,7 @@ import { ElTable, ElTableColumn } from 'element-plus'
 // import { getCompensationCardList } from '@/api/immigrantImplement/createCard/service'
 import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
-
-const titles = ['智能报表', '实物成果', '居民户', '实物成果汇总']
+// import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 const feeTableData = ref<any[]>([
   // {
   //   doorNo: null,
