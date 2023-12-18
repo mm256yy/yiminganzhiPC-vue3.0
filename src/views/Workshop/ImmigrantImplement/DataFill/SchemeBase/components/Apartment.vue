@@ -350,7 +350,6 @@ const placementPointInfo = ref({})
 const viewAreaDetail = async (id: any) => {
   const res = await getPlacementPointByIdApi(id)
   placementPointInfo.value = res as any
-
   areaDetailPup.value = true
 }
 /*const viewAreaDetail = (id: string) => {

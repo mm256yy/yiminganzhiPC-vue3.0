@@ -117,13 +117,9 @@ const init = async () => {
   pointInfo.value = { ...props.placementPointInfo }
 }
 
-// onMounted(() => {
-//   console.log('执行几次')
-
-//   init()
-// })
-defineExpose({
-  init
+onMounted(() => {
+  //   console.log('执行几次')
+  init()
 })
 </script>
 
