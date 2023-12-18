@@ -11,52 +11,68 @@
     <!-- 上面区域 -->
     <div class="between">
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">居民户</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">居民户</div></div
+          >
+        </div>
+
         <Echart :options="householdOption" :height="300" />
       </div>
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">村集体</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">村集体</div></div
+          >
+        </div>
+
         <Echart :options="villageOption" :height="300" />
       </div>
     </div>
     <!-- 中间区域 -->
     <div class="between">
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">企(事)业单位</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">企(事)业单位</div></div
+          >
+        </div>
+
         <tabButton @tab="tab" :tabList="tabList" />
         <Echart :options="enterpriseOption" :height="300" />
       </div>
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">专业项目</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">专业项目</div></div
+          >
+        </div>
         <Echart :options="specialityOption" :height="350" />
       </div>
     </div>
     <!-- 下面区域 -->
     <div class="between">
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">其他费用</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">其他费用</div></div
+          >
+        </div>
+
         <Echart :options="otherOption" :height="300" />
       </div>
       <div class="common-color background">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">有关税费</div></div
-        >
+        <div class="border_box">
+          <div class="aliam-center">
+            <div class="line"></div>
+            <div class="strong">有关税费</div></div
+          >
+        </div>
         <Echart :options="taxationOption" :height="300" />
       </div>
     </div>
@@ -140,7 +156,7 @@ const householdOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#65A4FE' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -164,7 +180,7 @@ const householdOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#51CE94  ' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -231,7 +247,7 @@ const villageOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#65A4FE ' // 0% 处的颜色
+            color: '#5E8AEF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -255,7 +271,7 @@ const villageOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#51CE94  ' // 0% 处的颜色
+            color: '#D2DFFF  ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -316,7 +332,7 @@ const enterpriseOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FF8E8E ' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -340,7 +356,7 @@ const enterpriseOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#8EBBFF' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -407,7 +423,7 @@ const specialityOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#6599FE' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -431,7 +447,7 @@ const specialityOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FAAD14 ' // 0% 处的颜色
+            color: '#D2DFFF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -495,7 +511,7 @@ const otherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#7C7AF4 ' // 0% 处的颜色
+            color: '#5E8AEF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -519,7 +535,7 @@ const otherOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#EBD870 ' // 0% 处的颜色
+            color: '#D2DFFF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -575,7 +591,7 @@ const taxationOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#FF9F6D' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -599,7 +615,7 @@ const taxationOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#50E192 ' // 0% 处的颜色
+            color: '#D2DFFF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
@@ -647,6 +663,7 @@ const onBack = () => {
 .aliam-center {
   display: flex;
   align-items: center;
+  z-index: 99;
 }
 
 .strong {
@@ -668,5 +685,19 @@ const onBack = () => {
 .background {
   width: 49.5%;
   background-color: white;
+  position: relative;
+  .border_box {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    border-radius: 8px 8px 0px 0px;
+    opacity: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    border: 4px solid #ffffff;
+    padding: 10px;
+  }
 }
 </style>

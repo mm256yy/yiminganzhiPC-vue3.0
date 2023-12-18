@@ -26,6 +26,7 @@
           align="center"
           header-align="center"
         />
+        <ElTableColumn label="养老院" prop="nursingHomeText" align="center" header-align="center" />
         <!-- <ElTableColumn
           label="安置方式"
           prop="settingWayText"
@@ -88,7 +89,7 @@ const getList = () => {
     size: 50,
     doorNo: props.doorNo
   }).then((res) => {
-    tableData.value = res.content
+    tableData.value = res.content.filter((item: any) => item.addReason !== '3')
   })
 }
 

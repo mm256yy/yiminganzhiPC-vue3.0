@@ -28,6 +28,7 @@ const props = defineProps({
     .validate((v: string) => ['left', 'center', 'right'].includes(v))
     .def('center'),
   showSearch: propTypes.bool.def(true),
+  showFhHh: propTypes.bool.def(false),
   showReset: propTypes.bool.def(true),
   // 是否显示伸缩
   expand: propTypes.bool.def(false),
@@ -38,7 +39,7 @@ const props = defineProps({
   inline: propTypes.bool.def(true)
 })
 
-const emit = defineEmits(['search', 'reset'])
+const emit = defineEmits(['search', 'reset', 'fhhh'])
 
 const visible = ref(props.defaultExpand)
 
@@ -75,7 +76,9 @@ const search = async () => {
     }
   })
 }
-
+const fhhh = () => {
+  emit('fhhh')
+}
 const reset = async () => {
   unref(elFormRef)?.resetFields()
   const { getFormData } = methods
@@ -112,6 +115,7 @@ const setVisible = () => {
           <Icon icon="ep:search" class="mr-5px" />
           {{ t('common.query') }}
         </ElButton>
+        <ElButton v-if="showFhHh" type="primary" @click="fhhh"> 合户/分户 </ElButton>
         <ElButton v-if="showReset" @click="reset">
           <Icon icon="ep:refresh-right" class="mr-5px" />
           {{ t('common.reset') }}

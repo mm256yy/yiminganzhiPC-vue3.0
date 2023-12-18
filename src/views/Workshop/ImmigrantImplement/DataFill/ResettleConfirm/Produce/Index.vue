@@ -257,8 +257,11 @@ const filterWay = (data) => {
     if (notFarmer && item.value === '1') {
       item.disabled = true
     }
+    if (item.value === '1' && data.isProductionLand != '1') {
+      item.disabled = true
+    }
     data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : 0
-    if (+data.age < 14 && item.value !== '3') {
+    if (+data.age < 14 && item.value !== '3' && item.value != '1') {
       item.disabled = true
     }
     return item
@@ -287,7 +290,6 @@ const onImportDataPre = async () => {
 const onImportData = async () => {
   // 拿到模拟安置的配置
   if (mockList.value && mockList.value.length) {
-    console.log(mockList.value, '导入的内容')
     // 模拟数据和当前数据做融合
     tableObject.tableList = tableObject.tableList.map((item) => {
       const current = mockList.value.find((mockItem) => mockItem.demographicId === item.id)

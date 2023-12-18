@@ -1,499 +1,321 @@
+<!--
+ * @Author: baike
+ * @LastEditors: baike
+-->
 <template>
-  <div style="margin-bottom: 30px">
-    <div class="smart_report">
-      <div class="card" v-for="(item, index) of navList" :key="index">
-        <div class="header">
-          <div class="left"></div>
-          <b class="label">{{ item.header }}</b>
-        </div>
-        <div class="children">
-          <div class="item" v-for="(twoItem, twoIndex) of item.body" :key="twoIndex">
-            <div class="left" v-if="twoItem.label !== 'project'"> {{ twoItem.label }}:</div>
-            <div class="left" v-else></div>
-            <div class="right">
-              <div class="right_top">
-                <div
-                  :class="{
-                    right_item: true,
-                    right_tabs: twoItem.tabs,
-                    tabs_click: threeItem.active && twoItem.tabs,
-                    active: threeItem.active && !twoItem.tabs
-                  }"
-                  v-for="(threeItem, threeIndex) of twoItem.children"
-                  :key="threeIndex"
-                  @click="chooseItem(threeItem, twoItem)"
-                >
-                  <span>{{ threeItem.label }}</span>
-                  <template v-if="twoItem.tabs">
-                    <Icon icon="formkit:up" width="16" height="16" v-if="threeItem.active" />
-                    <Icon icon="formkit:down" width="16" height="16" v-else />
-                  </template>
-                </div>
-              </div>
-              <div class="right_bottom" v-show="twoItem.openTabs">
-                <div
-                  :class="{
-                    right_item: true,
-                    active: deepItem.active
-                  }"
-                  v-for="(deepItem, deepIndex) of deepChildren"
-                  :key="deepIndex"
-                  @click="deepChooseItem(deepItem, { id: deepItem.query })"
-                >
-                  <span>{{ deepItem.label }}</span>
-                </div>
-              </div>
+  <div id="LeaderSide_work_home_rem" class="smart_report">
+    <ElButton @click="onBack" :icon="BackIcon" class="goBack"> 返回 </ElButton>
+    <div class="conatiner">
+      <div v-for="item in listArray" :key="item.id" class="smart_border">
+        <Label height="50px">
+          <template #title>
+            <img class="xm_img" :src="item.icon" alt="" />
+          </template>
+        </Label>
+
+        <div class="con_list">
+          <div v-for="i in item.conArray" :key="i.url" class="list_li">
+            <img class="img_icon" :src="i.url" alt="" />
+            <div class="list_name">{{ i.name }} </div>
+            <div class="list_value">
+              <div v-for="ite in i.list" @click="handleClick(ite)" :key="ite.text" class="value">
+                {{ ite.text }}</div
+              >
             </div>
           </div>
         </div>
       </div>
     </div>
+    <Footer />
   </div>
 </template>
-
-<script setup lang="ts">
+<script lang="ts" setup>
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { changeScale, init } from '../ExternalLink/rem'
+import Label from '../ExternalLink/components/label.vue'
+import Footer from '../ExternalLink/components/footer.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { useIcon } from '@/hooks/web/useIcon'
 
 const router = useRouter()
-const deepChildren = ref<any[]>([])
+const { back } = useRouter()
 
-/**
- * 以下为路由配置
- * value 即为路由名
- * 所有路由都为管理系统配置产生
- * 此处的路由名 对应 配置的路由名
- */
-let navList = reactive<any>([
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+
+const listArray = ref([
   {
-    header: '实物成果报表集',
-    body: [
+    id: '1',
+    icon: new URL('../../../assets/imgs/smarts/a.png', import.meta.url).href,
+    conArray: [
       {
-        label: '居民户类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        name: '居民户',
+        list: [
           {
-            label: '人口房屋统计表',
-            value: 'PopulationHousing',
-            active: false
+            text: '人口房屋',
+            value: 'PopulationHousing'
           },
           {
-            label: '附属物统计表',
             value: 'Accessory',
-            active: false
+            text: '附属物'
           },
           {
-            label: '零星林(果)木统计表',
             value: 'FruitWood',
-            active: false
+            text: '零星林(果)木'
           },
           {
-            label: '实物成果汇总统计表',
             value: 'Achievements',
-            active: false
+            text: '实物成果汇总'
           },
           {
-            label: '实物成果变更统计表',
             value: 'OutcomeChange',
-            active: false
+            text: '实物成果变更'
           }
         ]
       },
       {
-        label: '村集体类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        name: '村集体',
+        list: [
           {
-            label: '房屋/附属物/零星林(果)木统计表',
-            value: 'VillageCollective',
-            active: false
+            text: '房屋'
           },
           {
-            label: '坟墓统计表',
-            value: 'Grave',
-            active: false
+            text: '附属物'
+          },
+          {
+            text: '零星林(果)木'
+          },
+          {
+            text: '坟墓'
+          },
+          {
+            text: '小型专项及农副业设施'
           }
         ]
       },
       {
-        label: '企(事)业单位类',
-        openTabs: false,
-        tabs: true,
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        name: '企(事)业单位',
+        list: [
           {
-            label: '企业',
-            active: false,
-            openTabs: false,
-            children: [
-              {
-                label: '基本情况统计表',
-                value: 'physicalResults',
-                query: '1',
-                active: false
-              },
-              {
-                label: '房屋及其附属物统计表',
-                value: 'PhysicaFrom',
-                query: '2',
-                active: false
-              },
-              {
-                label: '零星林(果)木统计表',
-                value: 'PhysicaFrom',
-                query: '3',
-                active: false
-              }
-            ]
+            text: '企业'
           },
           {
-            label: '个体户',
-            active: false,
-            openTabs: false,
-            children: [
-              {
-                label: '基本情况统计表',
-                value: 'physicalResults',
-                query: '4',
-                active: false
-              },
-              {
-                label: '附属物统计表',
-                value: 'PhysicaFrom',
-                query: '5',
-                active: false
-              }
-            ]
+            text: '个体户'
           },
           {
-            label: '水电站',
-            active: false,
-            openTabs: false,
-            children: [
-              {
-                label: '基本情况统计表',
-                value: 'waterbasicreport',
-                active: false
-              },
-              {
-                label: '房屋统计表',
-                value: 'waterhousereport',
-                active: false
-              },
-              {
-                label: '附属物统计表',
-                value: 'waterappendreport',
-                active: false
-              }
-            ]
+            text: '水电站'
           },
           {
-            label: '探矿权',
-            active: false,
-            openTabs: false,
-            children: [
-              {
-                label: '探矿权汇总表统计表',
-                value: 'explorationRight',
-                active: false
-              }
-            ]
+            text: '探矿权'
           }
         ]
       },
       {
-        label: '专业项目类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
+        name: '专业项目',
+        list: [
           {
-            label: '交通工程设施统计表',
             value: 'transportationFacilities',
-            active: false
+            text: '交通工程设施'
           },
           {
-            label: '输变电工程设施统计表',
             value: 'transmissionFacilities',
-            active: false
+            text: '输变电工程设施'
           },
           {
-            label: '文物古迹统计表',
             value: 'culturalRelic',
-            active: false
-          }
-        ]
-      },
-      {
-        label: 'project',
-        openTabs: false,
-        tabs: true,
-        children: [
-          {
-            label: '电信工程',
-            openTabs: false,
-            children: [
-              {
-                label: '设施汇总统计表',
-                value: 'telecomfacilitreport',
-                active: false
-              },
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'telecomhousereport',
-                active: false
-              }
-            ]
+            text: '文物古迹'
           },
           {
-            label: '移动工程',
-            openTabs: false,
-            children: [
-              {
-                label: '设施汇总统计表',
-                value: 'moveFacilities',
-                active: false
-              },
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'moveAppendage',
-                active: false
-              }
-            ]
-          },
-          {
-            label: '联通工程',
-            openTabs: false,
-            children: [
-              {
-                label: '设施汇总统计表',
-                value: 'uniconfacilityreport',
-                active: false
-              },
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'unicomappendreport',
-                active: false
-              }
-            ]
-          },
-          {
-            label: '铁塔工程',
-            openTabs: false,
-            children: [
-              {
-                label: '设施汇总统计表',
-                value: 'ironFacilities',
-                active: false
-              }
-            ]
-          },
-          {
-            label: '广播电视工程',
-            openTabs: false,
-            children: [
-              {
-                label: '设施汇总统计表',
-                value: 'broadeacilityreport',
-                active: false
-              },
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'broadappendreport',
-                active: false
-              }
-            ]
-          },
-          {
-            label: '水文站',
-            openTabs: false,
-            children: [
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'hydrographicStation',
-                active: false
-              }
-            ]
-          },
-          {
-            label: '宗教',
-            openTabs: false,
-            children: [
-              {
-                label: '基本情况统计表',
-                value: 'religiousInformation',
-                active: false
-              },
-              {
-                label: '房屋及其附属物设备汇总统计表',
-                value: 'religiousAppendage',
-                active: false
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: '土地类',
-        children: [
-          {
-            label: '土地信息统计表',
-            value: 'Land',
-            active: false
-          }
-        ]
-      }
-    ]
-  },
-  {
-    header: '资金管理报表集',
-    body: [
-      {
-        label: '居民户类',
-        children: [
-          {
-            label: '居民户统计表',
-            value: 'FundPeople',
-            active: false
-          },
-          {
-            label: '资金使用详细统计表',
-            value: 'FundUseDetail',
-            active: false
-          }
-        ]
-      },
-      // {
-      //   label: '村集体类',
-      //   children: [
-      //     {
-      //       label: '村集体统计表',
-      //       value: 'FundVillage',
-      //       active: false
-      //     }
-      //   ]
-      // },
-      {
-        label: '企(事)业单位类',
-        children: [
-          {
-            label: '企业统计表',
-            value: 'FundEnterprise',
-            active: false
-          },
-          {
-            label: '个体户统计表',
-            value: 'FundIndividualB',
-            active: false
-          },
-          {
-            label: '水电站统计表',
-            value: 'FundHydropower',
-            active: false
-          }
-        ]
-      },
-      {
-        label: '专业项目类',
-        children: [
-          {
-            label: '电信工程统计表',
             value: 'telecommunication',
-            active: false
+            text: '电信工程'
           },
           {
-            label: '移动工程统计表',
             value: 'moveExcel',
-            active: false
+            text: '移动工程'
           },
           {
-            label: '联通工程统计表',
             value: 'unicom',
-            active: false
+            text: '联通工程'
           },
           {
-            label: '铁塔工程统计表',
             value: 'Irontower',
-            active: false
+            text: '铁塔工程'
           },
           {
-            label: '广播电视工程统计表',
             value: 'radioExcel',
-            active: false
+            text: '广播电视工程'
           },
           {
-            label: '水文站统计表',
             value: 'hydrology',
-            active: false
+            text: '水文站'
           },
           {
-            label: '宗教统计表',
             value: 'religion',
-            active: false
+            text: '宗教'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
+        name: '土地',
+        list: [
+          {
+            value: 'Land',
+            text: '土地信息'
           }
         ]
       }
     ]
   },
   {
-    header: '安置意愿报表集',
-    body: [
+    id: '2',
+    icon: new URL('../../../assets/imgs/smarts/b.png', import.meta.url).href,
+    conArray: [
       {
-        label: '安置意愿类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        name: '居民户',
+        list: [
           {
-            label: '生产安置意愿统计表',
+            value: 'FundPeople',
+            text: '居民户'
+          },
+          {
+            value: 'FundUseDetail',
+            text: '资金使用详细'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        name: '村集体',
+        list: [
+          {
+            value: 'FundVillage',
+            text: '村集体'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
+        name: '企(事)业单位',
+        list: [
+          {
+            value: 'FundEnterprise',
+            text: '企业'
+          },
+          {
+            value: 'FundIndividualB',
+            text: '个体户'
+          },
+          {
+            value: 'FundHydropower',
+            text: '水电站'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
+        name: '专业项目',
+        list: [
+          {
+            value: 'telecommunication',
+            text: '电信工程'
+          },
+          {
+            value: 'moveExcel',
+            text: '移动工程'
+          },
+          {
+            value: 'unicom',
+            text: '联通工程'
+          },
+          {
+            value: 'Irontower',
+            text: '铁塔工程'
+          },
+          {
+            value: 'radioExcel',
+            text: '广播电视工程'
+          },
+          {
+            value: 'hydrology',
+            text: '水文站'
+          },
+          {
+            value: 'religion',
+            text: '宗教'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: '3',
+    icon: new URL('../../../assets/imgs/smarts/c.png', import.meta.url).href,
+    conArray: [
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        name: '安置意愿',
+        list: [
+          {
             value: 'proHouseReport',
-            active: false
+            text: '生产安置意愿'
           },
           {
-            label: '搬迁安置意愿统计表',
             value: 'moveHouseReport',
-            active: false
+            text: '搬迁安置意愿'
           }
         ]
       }
     ]
   },
   {
-    header: '进度管理报表集',
-    body: [
+    id: '4',
+    icon: new URL('../../../assets/imgs/smarts/d.png', import.meta.url).href,
+    conArray: [
       {
-        label: '居民户类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        name: '居民户',
+        list: [
           {
-            label: '居民户按区域统计表',
             value: 'residentRegion',
-            active: false
+            text: '居民户按区域组'
           },
           {
-            label: '居民户按工作组统计表',
             value: 'residentWork',
-            active: false
+            text: '居民户按工作组'
           }
         ]
       },
+
       {
-        label: '企(事)业单位类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        name: '企(事)业单位',
+        list: [
           {
-            label: '企业统计表',
             value: 'enterprisereport',
-            active: false
+            text: '企业'
           },
           {
-            label: '个体户按区域统计表',
             value: 'individualregionreport',
-            active: false
+            text: '个体户按区域'
           },
           {
-            label: '个体户按工作区统计表',
             value: 'individualworkreport',
-            active: false
+            text: '个体户按工作区'
           }
         ]
       },
       {
-        label: '专业项目类',
-        children: [
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        name: '专业项目',
+        list: [
           {
-            label: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站统计表',
-            value: 'comprehensivereport',
-            active: false
+            text: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站'
           }
         ]
       }
@@ -501,53 +323,12 @@ let navList = reactive<any>([
   }
 ])
 
-function chooseItem(item: any, x: any) {
-  // 重置
-  for (let a of navList) {
-    for (let b of a.body) {
-      b.openTabs = false
-      for (let c of b.children) {
-        c.openTabs = false
-        c.active = false
-        if (c.children) {
-          for (let d of c.children) {
-            d.active = false
-          }
-        }
-      }
-    }
-  }
-  // 高亮
-  item.active = true
-  // 有子项
-  if (x.tabs) {
-    if (!x.openTabs) {
-      x.openTabs = true
-    }
-    // 三级赋值
-    deepChildren.value = item.children || []
-  } else {
-    // 路由跳转
-
-    goLink(item.value, {})
-  }
+const handleClick = (item: any) => {
+  goLink(item.value, {})
 }
 
-const deepChooseItem = (item, query = {}) => {
-  for (let a of navList) {
-    for (let b of a.body) {
-      for (let c of b.children) {
-        if (c.children) {
-          for (let d of c.children) {
-            d.active = false
-          }
-        }
-      }
-    }
-  }
-  item.active = true
-  // 路由跳转
-  goLink(item.value, query)
+const onBack = () => {
+  back()
 }
 
 const goLink = (routerName: string, query: any) => {
@@ -565,116 +346,103 @@ const goLink = (routerName: string, query: any) => {
 
   //window.open(linkObj.href, '_blank')
 }
+
+onMounted(() => {
+  changeScale()
+  window.addEventListener('resize', changeScale)
+})
+
+onBeforeUnmount(() => {
+  init()
+  window.removeEventListener('resize', changeScale)
+})
 </script>
 
 <style lang="less" scoped>
 .smart_report {
-  padding: 16px;
-  background-color: white;
-  border-radius: 4px;
+  padding-top: 10px;
 
-  .card {
-    margin-bottom: 16px;
-    border: 1px solid #ebebeb;
-    border-radius: 4px;
-
-    .header {
-      display: flex;
-      height: 32px;
-      background-color: #f6f6f6;
-      border-bottom: 1px solid #ebebeb;
-      align-items: center;
-
-      .left {
-        width: 4px;
-        height: 16px;
-        margin-right: 8px;
-        margin-left: 16px;
-        background: linear-gradient(90deg, #3e73ec 0%, #ffffff 100%);
-        border-radius: 3px 3px 3px 3px;
+  .goBack {
+    width: 72px;
+    height: 32px;
+    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    border: 1px solid #3e73ec;
+    font-size: 14px;
+    font-family: PingFang SC, PingFang SC;
+    font-weight: 500;
+    color: #3e73ec;
+    text-align: center;
+    cursor: pointer;
+    line-height: 32px;
+  }
+  .conatiner {
+    display: flex;
+    flex-wrap: wrap;
+    .smart_border {
+      width: 936px;
+      height: 443px;
+      background: #ffffff;
+      box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+      border-radius: 8px 8px 8px 8px;
+      opacity: 1;
+      border: 2px solid rgba(62, 115, 236, 0.7);
+      margin-top: 16px;
+      .xm_img {
+        width: 74px;
+        height: 15px;
+        margin-top: 1px;
       }
-
-      .label {
-        font-size: 14px;
-        color: #131313;
-      }
-    }
-
-    .children {
-      padding: 0 16px;
-
-      .item {
-        display: flex;
-        padding: 16px 0;
-        font-size: 14px;
-        color: #131313;
-        border-bottom: 1px dashed #ebebeb;
-
-        .left {
-          width: 100px;
-          line-height: 29px;
-          text-align: right;
-          text-align: right;
-        }
-
-        .right {
-          padding-left: 6px;
-          flex: 1;
-
-          .right_top {
-            display: flex;
+      .con_list {
+        padding: 0px 28px;
+        .list_li {
+          display: flex;
+          width: 100%;
+          border-bottom: 1px solid #ebebeb;
+          padding: 18px 0 12px 0;
+          .img_icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
           }
-
-          .right_bottom {
-            display: flex;
-            padding: 16px;
-            border: 1px solid #ebebeb;
-            border-radius: 0px 4px 4px 4px;
-          }
-
-          .right_item {
-            padding: 4px 16px;
-            margin-right: 16px;
+          .list_name {
+            font-size: 14px;
+            font-family: PingFang SC, PingFang SC;
+            font-weight: 400;
+            color: #131313;
+            width: 118px;
             cursor: pointer;
+            line-height: 24px;
           }
-
-          .right_item:last-child {
-            margin-right: 0;
+          .list_value {
+            display: flex;
+            flex-wrap: wrap;
+            width: 744px;
+            .value {
+              font-size: 14px;
+              font-family: PingFang SC, PingFang SC;
+              cursor: pointer;
+              font-weight: 500;
+              color: #131313;
+              line-height: 24px;
+              margin-right: 48px;
+              margin-bottom: 6px;
+            }
           }
         }
-      }
-
-      .item:last-child {
-        border-bottom: none;
+        .list_li:last-child {
+          border: none !important;
+        }
       }
     }
-  }
-
-  .card:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.active {
-  color: #3e73ec;
-  background-color: #f2f6ff;
-  border-radius: 4px;
-}
-
-.tabs_click {
-  margin-bottom: -1px;
-  background-color: #fff;
-  border: 1px solid #ebebeb;
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-}
-
-.right_tabs {
-  display: flex;
-  align-items: center;
-
-  span {
-    margin-right: 4px;
+    .smart_border:nth-child(1) {
+      margin-right: 16px;
+    }
+    .smart_border:nth-child(3) {
+      margin-right: 16px;
+    }
   }
 }
 </style>

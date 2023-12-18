@@ -53,13 +53,13 @@
     </div>
 
     <el-dialog v-model="areaDetailPup" title="安置点详情" width="900">
-      <AreaDetail :placementPointInfo="placementPointInfo" />
+      <AreaDetail :placementPointInfo="placementPointInfo" ref="AreaDetailRef" />
     </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, nextTick } from 'vue'
 import { ElRadioGroup, ElRadio, ElDialog } from 'element-plus'
 import { resettleArea, homesteadAreaSize, HouseType } from '../../config'
 import AreaDetail from './AreaDetail.vue'
@@ -76,6 +76,7 @@ const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
 const areaDetailPup = ref(false)
 const settleAddress = ref('1')
+const AreaDetailRef: any = ref(null)
 const areaType = ref('1')
 const placmentPointObj = ref({
   镜岭集镇安置区: '2',
@@ -117,9 +118,13 @@ const viewAreaDetail = async (name: string) => {
   const id = placmentPointObj.value[name]
 
   const res = await getPlacementPointByIdApi(id)
+
   placementPointInfo.value = res as any
 
   areaDetailPup.value = true
+  nextTick(() => {
+    AreaDetailRef.value.init()
+  })
 }
 
 const submitResettle = async () => {

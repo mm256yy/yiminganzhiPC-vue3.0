@@ -21,7 +21,7 @@
           <div class="base-item">
             <div class="label">区块：</div>
             <div class="value">
-              {{ productionLandInfo ? productionLandInfo.settleAddressText : '' }}
+              {{ productionLandInfo ? getSettleAddress(productionLandInfo.settleAddress) : '' }}
             </div>
           </div>
           <div class="base-item">
@@ -83,7 +83,7 @@ const productionLandInfo = ref<any>(null)
 const hasFarmingResettle = ref<boolean>(false) // 是否存在 农业安置的人
 const farmingResettleStatus = ref<'0' | '1'>('0')
 const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
-
+import { resettleArea, apartmentArea } from '../../config'
 // 获取档案数据
 const getFarming = () => {
   getDocumentationApi(props.doorNo).then((res: any) => {
@@ -93,7 +93,34 @@ const getFarming = () => {
     }
   })
 }
-
+/**
+ * 获取安置区块
+ * @param data
+ */
+const getSettleAddress = (data: string) => {
+  if (data) {
+    // 选择了公寓房的安置方式
+    if (props.baseInfo.houseAreaType === 'flat') {
+      let str = ''
+      apartmentArea.map((item: any) => {
+        if (item.id === data) {
+          str = item.name
+        }
+      })
+      return str
+    } else {
+      let str = ''
+      resettleArea.map((item: any) => {
+        if (item.id === data) {
+          str = item.name
+        }
+      })
+      return str
+    }
+  } else {
+    return ''
+  }
+}
 // 获取列表数据
 const getList = () => {
   getDemographicListApi({

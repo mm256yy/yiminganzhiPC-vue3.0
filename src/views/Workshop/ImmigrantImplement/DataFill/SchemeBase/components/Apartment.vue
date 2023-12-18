@@ -213,7 +213,7 @@
     </div>
 
     <el-dialog class="detail-pup" v-model="areaDetailPup" title="安置点详情" width="900">
-      <AreaDetail />
+      <AreaDetail :placementPointInfo="placementPointInfo" />
     </el-dialog>
 
     <el-dialog v-model="housePicPup" title="户型图" width="900">
@@ -240,7 +240,7 @@ import AreaDetail from './AreaDetail.vue'
 import HousePic from './HousePic.vue'
 import FindSelf from './FindSelf.vue'
 import BuyHousePrice from './BuyHousePrice.vue'
-
+import { getPlacementPointByIdApi } from '@/api/systemConfig/placementPoint-service'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -346,11 +346,17 @@ const selectPlan = (type: string, item: any) => {
   console.log(real)
   tableData.value = [...real]
 }
+const placementPointInfo = ref({})
+const viewAreaDetail = async (id: any) => {
+  const res = await getPlacementPointByIdApi(id)
+  placementPointInfo.value = res as any
 
-const viewAreaDetail = (id: string) => {
-  console.log(id, 'id')
   areaDetailPup.value = true
 }
+/*const viewAreaDetail = (id: string) => {
+  console.log(id, 'id')
+  areaDetailPup.value = true
+}*/
 
 // 补偿补助明细
 const viewSubsidyClick = (id: number) => {

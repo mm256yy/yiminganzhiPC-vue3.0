@@ -98,7 +98,7 @@
       v-model="editDialogVisible"
       width="900"
       @close="onEditClose"
-      :show-close="false"
+      :show-close="true"
       :close-on-click-modal="false"
     >
       <div class="common-cont">
@@ -269,7 +269,6 @@ const rules = ref()
 const dialogVisible = ref(false)
 const tableData = ref<any>([])
 const emit = defineEmits(['updateData'])
-console.log(tableData, '////////')
 const houseTypeText = {
   oneself: '自谋出路',
   concentrate: '集中供养'
@@ -453,7 +452,6 @@ const onEditClose = () => {
 
 const onEditSubmit = async (params: any) => {
   const res = await saveRelocationInfoApi(params)
-  console.log(res, '保存结果')
   if (res) {
     editDialogVisible.value = false
     immigrantSettle.value = res

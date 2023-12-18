@@ -78,7 +78,7 @@
       </ElTableColumn>
       <ElTableColumn label="操作" width="180" align="center" header-align="center" fixed="right">
         <template #default="{ row }">
-          <ElButton type="success" @click="onSave(row, '0')"> 编辑 </ElButton>
+          <ElButton @click="onSave(row, '0')"> 编辑 </ElButton>
           <ElButton type="primary" @click="onSave(row, '1')"> 确认 </ElButton>
         </template>
       </ElTableColumn>
@@ -179,12 +179,11 @@ const onSave = (data: any, isVerify: string) => {
       totalPrice,
       isVerify
     }
-    console.log(params)
     saveRewardFee(params)
       .then((res: any) => {
         if (res) {
           ElMessage.success('操作成功')
-          initData()
+          //initData()
           loading.value = false
         }
       })
