@@ -10,12 +10,11 @@
         @reset="resetSearch"
       />
       <ElButton type="primary" @click="onExport">数据导出</ElButton> -->
-      镜岭水库工程土地调查表
     </div>
-
-    <!-- <div class="line"></div> -->
-
     <div class="table-wrap" v-loading="loading">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title">土地信息统计表</div>
+      </div>
       <el-table
         :data="tableDataList"
         border
