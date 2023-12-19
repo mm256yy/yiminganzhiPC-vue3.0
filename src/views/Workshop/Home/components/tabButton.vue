@@ -1,8 +1,12 @@
 <template>
   <div class="btn">
-    <ElButton v-for="(item, index) in props.tabList" :key="index" @click="onTab(index)">{{
-      item.title
-    }}</ElButton>
+    <ElButton
+      v-for="(item, index) in props.tabList"
+      :key="index"
+      @click="onTab(index)"
+      :text="link"
+      >{{ item.title }}</ElButton
+    >
   </div>
 </template>
 
@@ -10,7 +14,9 @@
 import { ElButton } from 'element-plus'
 interface PropsType {
   tabList: any
+  link?: boolean
 }
+
 const props = defineProps<PropsType>()
 const emit = defineEmits(['tab', 'tabVillageAnalysis', 'tabHouse', 'tabCareer', 'tabPerson'])
 const onTab = (index) => {

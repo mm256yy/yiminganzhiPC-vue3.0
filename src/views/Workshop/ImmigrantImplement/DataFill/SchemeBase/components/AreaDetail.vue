@@ -117,19 +117,15 @@ const init = async () => {
   pointInfo.value = { ...props.placementPointInfo }
 }
 
-// onMounted(() => {
-//   console.log('执行几次')
-
-//   init()
-// })
-defineExpose({
-  init
+onMounted(() => {
+  //   console.log('执行几次')
+  init()
 })
 </script>
 
 <style lang="less" scoped>
 .area-detail-wrap {
-  width: 900px;
+  width: 100%;
   background: #ffffff;
   border-radius: 4px;
 
