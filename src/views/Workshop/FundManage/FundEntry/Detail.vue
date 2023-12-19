@@ -11,8 +11,8 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金预拨</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">预拨详情</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金入账详情</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
 
