@@ -18,7 +18,7 @@
           >
         </div>
 
-        <Echart :options="householdOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="householdOption" :height="300" />
       </div>
       <div class="common-color background">
         <div class="border_box">
@@ -28,7 +28,7 @@
           >
         </div>
 
-        <Echart :options="villageOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="villageOption" :height="300" />
       </div>
     </div>
     <!-- 中间区域 -->
@@ -42,7 +42,7 @@
         </div>
 
         <tabButton @tab="tab" :tabList="tabList" />
-        <Echart :options="enterpriseOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="enterpriseOption" :height="300" />
       </div>
       <div class="common-color background">
         <div class="border_box">
@@ -51,7 +51,7 @@
             <div class="strong">专业项目</div></div
           >
         </div>
-        <Echart :options="specialityOption" :height="350" />
+        <Echart style="padding-top: 20px" :options="specialityOption" :height="350" />
       </div>
     </div>
     <!-- 下面区域 -->
@@ -64,7 +64,7 @@
           >
         </div>
 
-        <Echart :options="otherOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="otherOption" :height="300" />
       </div>
       <div class="common-color background">
         <div class="border_box">
@@ -73,7 +73,7 @@
             <div class="strong">有关税费</div></div
           >
         </div>
-        <Echart :options="taxationOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="taxationOption" :height="300" />
       </div>
     </div>
     <bottomTarg />
@@ -103,7 +103,23 @@ const tab = (index) => {
 //居民户视图
 const householdOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -115,6 +131,7 @@ const householdOption = ref({
       color: '#666666 ' //字体颜色
     }
   },
+
   grid: {
     left: '3%',
     right: '4%',
@@ -137,7 +154,8 @@ const householdOption = ref({
     ]
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    name: '单位(元)'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
   series: [
@@ -194,7 +212,22 @@ const householdOption = ref({
 //村集体视图
 const villageOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -228,6 +261,7 @@ const villageOption = ref({
     ]
   },
   yAxis: {
+    name: '单位(元)',
     type: 'value'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
@@ -285,7 +319,22 @@ const villageOption = ref({
 //企(事)业单位视图
 const enterpriseOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -313,6 +362,7 @@ const enterpriseOption = ref({
     ]
   },
   yAxis: {
+    name: '单位(元)',
     type: 'value'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
@@ -370,7 +420,22 @@ const enterpriseOption = ref({
 //专业项目视图
 const specialityOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -404,6 +469,7 @@ const specialityOption = ref({
     ]
   },
   yAxis: {
+    name: '单位(元)',
     type: 'value'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
@@ -461,7 +527,22 @@ const specialityOption = ref({
 //其他费用视图
 const otherOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -492,6 +573,7 @@ const otherOption = ref({
     ]
   },
   yAxis: {
+    name: '单位(元)',
     type: 'value'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
@@ -549,7 +631,22 @@ const otherOption = ref({
 //有关税费视图
 const taxationOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'axis',
+    formatter: function (params) {
+      return (
+        params[0].name +
+        '<br/>' +
+        params[0].seriesName +
+        ':' +
+        params[0].value +
+        '元' +
+        '<br/>' +
+        params[1].seriesName +
+        ':' +
+        params[1].value +
+        '元'
+      )
+    }
   },
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
@@ -572,6 +669,7 @@ const taxationOption = ref({
     data: ['耕地占用费', '耕地开垦费', '森林植被恢复费', '养老保险缴费补贴']
   },
   yAxis: {
+    name: '单位(元)',
     type: 'value'
     // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
@@ -661,9 +759,9 @@ const onBack = () => {
 }
 
 .aliam-center {
+  z-index: 99;
   display: flex;
   align-items: center;
-  z-index: 99;
 }
 
 .strong {
@@ -683,21 +781,22 @@ const onBack = () => {
 }
 
 .background {
+  position: relative;
   width: 49.5%;
   background-color: white;
-  position: relative;
+
   .border_box {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
     width: 100%;
     height: 50px;
+    padding: 10px;
     background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    border: 4px solid #ffffff;
     border-radius: 8px 8px 0px 0px;
     opacity: 1;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 1;
-    border: 4px solid #ffffff;
-    padding: 10px;
   }
 }
 </style>

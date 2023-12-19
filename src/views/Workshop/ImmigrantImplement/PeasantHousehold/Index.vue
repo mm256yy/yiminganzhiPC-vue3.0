@@ -77,8 +77,8 @@
         <template #reportDate="{ row }">
           <div>{{ formatDate(row.reportDate) }}</div>
         </template> -->
-        <template #currentStage>
-          <div>资格认定</div>
+        <template #currentProgress="{ row }">
+          <div>{{ row.currentProgress }}</div>
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
@@ -349,7 +349,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'currentStage',
+    field: 'currentProgress',
     label: '当前阶段',
     search: {
       show: false

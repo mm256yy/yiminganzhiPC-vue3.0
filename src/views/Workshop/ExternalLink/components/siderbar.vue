@@ -23,7 +23,9 @@
     </div>
     <div class="right_icon"></div>
     <div v-if="index == 0" class="container">
-      <div class="con_tilte"> 土地权属 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        土地权属<span>{{ detail.gytd + detail.jttd }}</span>
+      </div>
       <div class="con_list">
         <div class="li">
           <div class="li_name">国有土地</div>
@@ -34,7 +36,11 @@
           <div class="li_value">{{ detail.jttd }}</div>
         </div>
       </div>
-      <div class="con_tilte"> 工程建设区和水库淹没区 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        工程建设区和水库淹没区<span>{{
+          detail.c_xcx + detail.c_xcx + detail.c_kqq + detail.c_pax
+        }}</span>
+      </div>
 
       <div class="con_list">
         <div class="li">
@@ -54,7 +60,9 @@
           <div class="li_value">{{ detail.c_pax }}</div>
         </div>
       </div>
-      <div class="con_tilte"> 工程建设区和水库淹没区 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        工程建设区和水库淹没区<span>{{ detail.m_xcx + detail.m_szs + detail.m_kqq }}</span>
+      </div>
       <div class="con_list">
         <div class="li">
           <div class="li_name">新昌县</div>
@@ -76,6 +84,7 @@
       </div>
       <div class="question-list">
         <div class="item" v-for="item in questionList" :key="item">
+          <div class="name">{{ item[keyJosn[index].keys] }}</div>
           <div class="name">{{ item[keyJosn[index].key] }}</div>
           <div class="names">{{ item[keyJosn[index].key_a] }}</div>
           <div class="names">{{ item[keyJosn[index].key_b] }} </div>
@@ -130,7 +139,7 @@ const tableJosn = ref({
   0: ['行政村', '户数', '户数', '户数', '户数'],
   1: ['行政村', '户数', '人口合计', '农业人口', '非农人口'],
   2: ['行政村', '住宅房屋', '村集体房屋', '合计'],
-  3: ['企业', '水电站', '个体工商户', '探矿权']
+  3: ['行政村', '企业', '水电站', '个体工商户', '探矿权']
 })
 
 const keyJosn = ref({
@@ -158,6 +167,7 @@ const keyJosn = ref({
   },
   //企（事）业单位
   3: {
+    keys: 'villageName',
     key: 'qyNum',
     key_a: 'sdzNum',
     key_b: 'gtNum',

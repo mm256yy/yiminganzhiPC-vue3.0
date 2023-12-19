@@ -4,7 +4,7 @@
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_notice.png" class="icon" />
         <div>消息通知</div>
-        <div class="more-box">更多</div>
+        <!-- <div class="more-box">更多</div> -->
       </div>
       <!--消息通知-->
       <div>
@@ -122,11 +122,12 @@ onMounted(() => {
 <style lang="less" scoped>
 .more-box {
   margin-left: 251px;
-  cursor: pointer;
-  color: #171718;
-  font-weight: 400;
   font-size: 17px;
+  font-weight: 400;
+  color: #171718;
+  cursor: pointer;
 }
+
 .statistic {
   width: 456px;
 
@@ -150,6 +151,7 @@ onMounted(() => {
   background: #ffffff;
   align-items: center;
   border-radius: 8px;
+
   &.active {
     color: #ffffff;
     background: linear-gradient(135deg, #1a63ff 0%, rgba(255, 255, 255, 0) 100%);

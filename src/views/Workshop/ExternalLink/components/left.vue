@@ -341,8 +341,15 @@ const handleChange = () => {
 }
 
 const onChange = (e: any) => {
-  isClose.value = true
-  isType.value = e
+  console.log(e, isClose.value)
+
+  if (isClose.value) {
+    isClose.value = false
+  }
+  setTimeout(() => {
+    isClose.value = true
+    isType.value = e
+  }, 500)
 }
 const villageList = async () => {
   villageLists.value = await getVillageList({})
