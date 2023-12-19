@@ -280,12 +280,15 @@ const typeNumber = ref<number>(1)
 let numberMan: any = ref()
 let numberWoman: any = ref()
 const tag = ref<boolean>(true)
+const perPersonMapTotal = ref<string>()
+const perHouseholdTotal = ref<string>()
 const dataAll = ref()
 const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
   console.log(zhiji)
-
+  perPersonMapTotal.value = list.perPersonMapTotal[0].areaTotal
+  perHouseholdTotal.value = list.perHouseholdTotal[0].areaTotal
   aalls.value = zhiji.avgMoney
   fundOption.value.series[0].data = zhiji.data.reduce((pre, item) => {
     pre.push({ value: item.totalPrice, name: item.name })
@@ -418,6 +421,7 @@ const getVillageAnalysisLists = async () => {
           name: '草地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -428,6 +432,7 @@ const getVillageAnalysisLists = async () => {
           name: '耕地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -438,6 +443,7 @@ const getVillageAnalysisLists = async () => {
           name: '工矿仓储用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -448,6 +454,7 @@ const getVillageAnalysisLists = async () => {
           name: '公共管理与公共服务用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -458,6 +465,7 @@ const getVillageAnalysisLists = async () => {
           name: '交通用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -468,6 +476,7 @@ const getVillageAnalysisLists = async () => {
           name: '林地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -478,6 +487,7 @@ const getVillageAnalysisLists = async () => {
           name: '商服用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -488,6 +498,7 @@ const getVillageAnalysisLists = async () => {
           name: '水域及水利设施用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -498,6 +509,7 @@ const getVillageAnalysisLists = async () => {
           name: '特殊用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -508,6 +520,7 @@ const getVillageAnalysisLists = async () => {
           name: '园地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -518,6 +531,7 @@ const getVillageAnalysisLists = async () => {
           name: '住宅用地',
           type: 'bar',
           stack: 'Ad',
+          barWidth: 57,
           emphasis: {
             focus: 'series'
           },
@@ -547,7 +561,13 @@ const tabVillage = async () => {
   getVillageAnalysisLists()
   getChartScreenLists()
 }
+const tabPersonName = ref<string>('')
+if (tabPersonName.value) {
+} else {
+  tabPersonName.value = '户均'
+}
 const tabPerson = (index) => {
+  tabPersonName.value = tabListHouse[index].title
   if (index == 0) {
     tag.value = true
     getChartScreenLists()
@@ -564,7 +584,7 @@ onMounted(() => {
 })
 const tabListCareer = [
   {
-    title: '学历分布'
+    title: '文化程度分布'
   },
   {
     title: '职业分布'
@@ -1335,72 +1355,7 @@ const tudiArr = ref({
       type: 'value'
     }
   ],
-  series: [
-    {
-      name: 'Email',
-      type: 'bar',
-      stack: 'Ad',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [120, 132, 101, 134, 90, 230, 210]
-    },
-    {
-      name: 'Union Ads',
-      type: 'bar',
-      stack: 'Ad',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [220, 182, 191, 234, 290, 330, 310]
-    },
-    {
-      name: 'Video Ads',
-      type: 'bar',
-      stack: 'Ad',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [150, 232, 201, 154, 190, 330, 410]
-    },
-    {
-      name: 'Baidu',
-      type: 'bar',
-      barWidth: 5,
-      stack: 'Search Engine',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [620, 732, 701, 734, 1090, 1130, 1120]
-    },
-    {
-      name: 'Google',
-      type: 'bar',
-      stack: 'Search Engine',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [120, 132, 101, 134, 290, 230, 220]
-    },
-    {
-      name: 'Bing',
-      type: 'bar',
-      stack: 'Search Engine',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [60, 72, 71, 74, 190, 130, 110]
-    },
-    {
-      name: 'Others',
-      type: 'bar',
-      stack: 'Search Engine',
-      emphasis: {
-        focus: 'series'
-      },
-      data: [62, 82, 91, 84, 109, 110, 120]
-    }
-  ]
+  series: []
 })
 const { back } = useRouter()
 const onBack = () => {

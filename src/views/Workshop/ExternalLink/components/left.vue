@@ -335,6 +335,11 @@ const projectArr = ref<any>([
   }
 ])
 
+//该方法未知 需确认排查 只为方便提交
+const handleChange = () => {
+  console.log(1)
+}
+
 const onChange = (e: any) => {
   isClose.value = true
   isType.value = e
@@ -343,9 +348,6 @@ const villageList = async () => {
   villageLists.value = await getVillageList({})
 }
 
-const handleChange = () => {
-  console.log(1)
-}
 const tabVillage = async () => {
   appStore.setVillageCoder(reason.value)
   getList()

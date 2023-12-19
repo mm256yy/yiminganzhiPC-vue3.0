@@ -75,7 +75,7 @@
         <div v-for="(item, indexs) in tableJosn[index]" class="th_h" :key="indexs">{{ item }}</div>
       </div>
       <div class="question-list">
-        <div class="item" v-for="item in questionList" :key="item.id">
+        <div class="item" v-for="item in questionList" :key="item">
           <div class="name">{{ item[keyJosn[index].key] }}</div>
           <div class="names">{{ item[keyJosn[index].key_a] }}</div>
           <div class="names">{{ item[keyJosn[index].key_b] }} </div>
