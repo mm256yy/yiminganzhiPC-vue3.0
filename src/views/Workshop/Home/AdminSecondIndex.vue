@@ -1,113 +1,185 @@
 <template>
-  <div class="data-fill">
-    <ElButton
-      @click="onBack"
-      :icon="BackIcon"
-      type="default"
-      class="px-9px py-0px !h-28px mr-8px !text-12px"
-    >
-      返回
-    </ElButton>
-    <!-- 上面区域 -->
-    <div class="common-color" style="background-color: white">
-      <div class="between">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">项目概览</div></div
-        >
-        <div>
-          <ElSelect clearable filterable v-model="reason" class="!w-full" @change="tabVillage">
-            <ElOption
-              v-for="item in villageLists"
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
-            />
-          </ElSelect>
-        </div>
-      </div>
-      <div class="between">
-        <div class="header-list">
-          <div class="strong aliam-center title-padding">
-            <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />职业分布</div
-          >
-          <tabButton @tab="tab" :tabList="tabListCareer" />
-          <Echart :options="careerOption" :height="340" />
-        </div>
-        <div class="header-list">
-          <div class="strong aliam-center title-padding">
-            <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />户籍规模</div
-          >
-          <!-- impProgressOption -->
-          <Echart :options="domicileOption" :height="340" />
-        </div>
-        <div class="header-list">
-          <div class="strong aliam-center title-padding">
-            <Icon icon="teenyicons:right-solid" style="color: #97b7ff" />年龄性别分析</div
-          >
-          <div class="between gender-list"
-            ><div>男性:{{ numberMan }}</div>
-            <div>女性:{{ numberWoman }}</div>
-            <!-- <div>男女比例:{{ (numberMan / numberWoman).toFixed(2) }}</div> -->
-          </div>
-          <Echart :options="genderOption" :height="300" />
-        </div>
+  <div class="data-fill" style="height: 100%">
+    <div style="display: flex; justify-content: space-between">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        type="default"
+        class="px-9px py-0px !h-28px mr-8px !text-12px"
+      >
+        返回
+      </ElButton>
+      <div style="width: 80px">
+        <ElSelect clearable filterable v-model="reason" class="!w-full" @change="tabVillage">
+          <ElOption
+            v-for="item in villageLists"
+            :key="item.code"
+            :label="item.name"
+            :value="item.code"
+          />
+        </ElSelect>
       </div>
     </div>
-    <!-- 中间区域 -->
-    <div class="between">
-      <div style="width: 30%; background-color: white" class="common-color">
+    <div
+      style="
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+      "
+    >
+      <!-- 上面区域 -->
+      <div class="common-color">
         <div class="between">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">参保覆盖率</div></div
-          >
-        </div>
-        <Echart :options="insuredOption" :height="410" />
-      </div>
-      <div style="width: 38%; margin-left: 0.5%; background-color: white" class="common-color">
-        <div class="between">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">房屋分析</div></div
-          >
-        </div>
-        <tabButton @tab-person="tabPerson" :tabList="tabListHouse" />
-        <div class="between gender-list">
-          <div>户均住房面积</div>
-          <div>2000,000m²</div>
-        </div>
-        <Echart :options="houseOption" :height="300" />
-      </div>
-      <div></div>
-      <div style="width: 30%; height: 454px; background-color: white" class="common-color">
-        <div class="between">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">土地分析</div></div
-          >
-        </div>
-        <div class="between gender-list">
-          <div>户均土地面积</div>
-          <div>2000,000人</div>
-        </div>
-        <div class="echart-wrap">
-          <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
-            <div class="echart-item-lt">
-              <span class="user-name">{{ item.name }}</span>
+          <div class="header-list">
+            <div
+              style="
+                display: flex;
+                padding: 0 10px;
+                background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div
+                class="strong aliam-center title-padding"
+                style="font-size: 20px; color: #3e73ec"
+              >
+                <div class="line"></div>职业分布
+              </div>
+              <tabButton @tab="tab" :tabList="tabListCareer" :link="true" />
             </div>
 
-            <div class="echart-item-ct">
-              <div class="progress" :style="{ width: `${item.progress}%` }"></div>
+            <Echart :options="careerOption" :height="340" />
+          </div>
+          <div class="header-list">
+            <div
+              style="
+                display: flex;
+                padding: 0 10px;
+                background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div
+                class="strong aliam-center title-padding"
+                style="font-size: 20px; color: #3e73ec"
+              >
+                <div class="line"></div>户籍规模
+              </div>
             </div>
-
-            <div class="echart-item-rt">
-              <text class="txt">{{ item.number }}户</text>
+            <Echart :options="domicileOption" :height="340" />
+          </div>
+          <div class="header-list">
+            <div
+              style="
+                display: flex;
+                padding: 0 10px;
+                background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div
+                class="strong aliam-center title-padding"
+                style="font-size: 20px; color: #3e73ec"
+              >
+                <div class="line"></div>年龄性别分析
+              </div>
+            </div>
+            <div class="between gender-list">
+              <div
+                >男性:{{ numberMan }} ({{
+                  ((numberMan / (numberMan + numberWoman)) * 100).toFixed(2)
+                }}%)</div
+              >
+              <div
+                >女性:{{ numberWoman }}({{
+                  ((numberWoman / (numberMan + numberWoman)) * 100).toFixed(2)
+                }}%)</div
+              >
+              <!-- <div>男女比例:{{ (numberMan / numberWoman).toFixed(2) }}</div> -->
+            </div>
+            <Echart :options="genderOption" :height="300" />
+          </div>
+        </div>
+      </div>
+      <!-- 中间区域 -->
+      <div class="between" style="width: 100%; height: 100%">
+        <div style="width: 33%; background-color: white" class="common-color">
+          <div
+            style="
+              display: flex;
+              padding: 0 10px;
+              background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
+              <div class="line"></div>参保覆盖率
             </div>
           </div>
-        </div></div
-      >
-      <!-- <div class="echart-wrap">
+          <Echart :options="insuredOption" :height="410" />
+        </div>
+        <div style="width: 33%; background-color: white" class="common-color">
+          <div
+            style="
+              display: flex;
+              padding: 0 10px;
+              background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
+              <div class="line"></div>房屋分析
+            </div>
+            <tabButton @tab="tabPerson" :tabList="tabListHouse" :link="true" />
+          </div>
+          <div class="between gender-list">
+            <div>户均住房面积</div>
+            <div>2000,000m²</div>
+          </div>
+          <Echart :options="houseOption" :height="300" :width="'100%'" />
+        </div>
+        <div style="width: 33%; background-color: white" class="common-color">
+          <div
+            style="
+              display: flex;
+              padding: 0 10px;
+              background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
+              <div class="line"></div>土地分析
+            </div>
+          </div>
+          <div class="between gender-list">
+            <div>户均土地面积</div>
+            <div>2000,000人</div>
+          </div>
+          <div class="echart-wrap" style="margin-top: 20px">
+            <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
+              <div class="echart-item-lt">
+                <span class="user-name">{{ item.name }}</span>
+              </div>
+
+              <div class="echart-item-ct">
+                <div class="progress" :style="{ width: `${item.progress}%` }"></div>
+              </div>
+
+              <div class="echart-item-rt">
+                <text class="txt">{{ item.number }}户</text>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="echart-wrap">
         <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
           <div class="echart-item-lt">
             <span class="user-name">{{ item.name }}</span>
@@ -122,37 +194,58 @@
           </div>
         </div>
       </div> -->
-    </div>
-    <!-- 下面区域 -->
-    <div class="between">
-      <div style="width: 30%; background-color: white" class="common-color">
-        <div class="between">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">资金分析</div></div
-          >
-        </div>
-        <div class="between gender-list">
-          <div>户均补偿补助金额</div>
-          <div>2000,000元</div>
-        </div>
-        <Echart :options="fundOption" :height="465" />
       </div>
-      <div style="width: 69%; background-color: white" class="common-color">
-        <div class="between">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">移民村分析</div></div
+      <!-- 下面区域 -->
+      <div class="between">
+        <div style="width: 33%; background-color: white" class="common-color">
+          <div
+            style="
+              display: flex;
+              padding: 0 10px;
+              background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+              justify-content: space-between;
+              align-items: center;
+            "
           >
+            <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
+              <div class="line"></div>资金分析
+            </div>
+          </div>
+          <div class="between gender-list">
+            <div>户均补偿补助金额</div>
+            <div>{{ aalls }}元</div>
+          </div>
+          <Echart :options="fundOption" :height="465" />
         </div>
-        <tabButton @tab-village-analysis="tabVillageAnalysis" :tabList="tabListImmigration" />
-        <div class="between gender-list">
-          <div>总人口</div>
-          <div>{{ villageAnalysisNumber }}人</div>
+        <div style="width: 66%; background-color: white" class="common-color">
+          <div
+            style="
+              display: flex;
+              padding: 0 10px;
+              background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
+              <div class="line"></div>移民村分析
+            </div>
+            <tabButton
+              @tab-village-analysis="tabVillageAnalysis"
+              :tabList="tabListImmigration"
+              :link="true"
+            />
+          </div>
+          <div class="between gender-list">
+            <div>总人口</div>
+            <div>{{ villageAnalysisNumber }}人</div>
+          </div>
+          <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />
+          <Echart v-else :options="tudiArr" :height="415" />
         </div>
-        <Echart :options="immigrationOption" :height="415" />
       </div>
     </div>
+
     <bottomTarg />
   </div>
 </template>
@@ -165,7 +258,8 @@ import bottomTarg from '../Home/components/bottomTarg.vue'
 import {
   getChartScreenList,
   getVillageAnalysisList,
-  getVillageList
+  getVillageList,
+  getFundAnalysis
 } from '@/api/AssetEvaluation/leader-side'
 import { useAppStore } from '@/store/modules/app'
 import { ElSelect, ElOption, ElButton } from 'element-plus'
@@ -178,16 +272,57 @@ const tabVillageAnalysis = (index) => {
   typeNumber.value = index + 1
   getVillageAnalysisLists()
 }
+let aalls: any = ref()
 const reason = ref()
 const appStore = useAppStore()
 const villageAnalysisNumber = ref<number>()
 const typeNumber = ref<number>(1)
-const numberMan = ref<number>()
-const numberWoman = ref<number>()
+let numberMan: any = ref()
+let numberWoman: any = ref()
 const tag = ref<boolean>(true)
+const dataAll = ref()
 const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
+  let zhiji = await getFundAnalysis()
+  console.log(zhiji)
+
+  aalls.value = zhiji.avgMoney
+  fundOption.value.series[0].data = zhiji.data.reduce((pre, item) => {
+    pre.push({ value: item.totalPrice, name: item.name })
+    return pre
+  }, [])
+  dataAll.value = list
   console.log(list, '1111')
+  careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
+    pre.push(item.label)
+    return pre
+  }, [])
+  careerOption.value.series.forEach((item) => {
+    item.data = dataAll.value.career.reduce((pre, item) => {
+      pre.push({ value: item.number, name: item.label })
+      return pre
+    }, [])
+  })
+  let all = 0
+  for (var index in list.insuranceNumber[0]) {
+    all += list.insuranceNumber[0][index]
+  }
+  insuredOption.value.series[0].data[1] = (
+    (dataAll.value.insuranceNumber[0].commerceNumber / all) *
+    100
+  ).toFixed(2)
+  insuredOption.value.series[1].data[1] = (
+    (dataAll.value.insuranceNumber[0].medicalNumber / all) *
+    100
+  ).toFixed(2)
+  insuredOption.value.series[2].data[1] = (
+    (dataAll.value.insuranceNumber[0].retirementNumber / all) *
+    100
+  ).toFixed(2)
+  insuredOption.value.series[3].data[1] = (
+    (dataAll.value.insuranceNumber[0].otherNumber / all) *
+    100
+  ).toFixed(2)
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
   genderOption.value.series[0].data = [
@@ -206,9 +341,37 @@ const getChartScreenLists = async () => {
   ]
   const householdNumberList = ref<any>([])
   for (var index in list.householdNumber[0]) {
-    householdNumberList.value.push(list.householdNumber[0][index])
+    let m = ''
+    if (index == 'nineNumber') {
+      m = '九人户'
+    } else if (index == 'eightNumber') {
+      m = '八人户'
+    } else if (index == 'sevenNumber') {
+      m = '七人户'
+    } else if (index == 'sixNumber') {
+      m = '六人户'
+    } else if (index == 'fiveNumber') {
+      m = '五人户'
+    } else if (index == 'fourNumber') {
+      m = '四人户'
+    } else if (index == 'threeNumber') {
+      m = '三人户'
+    } else if (index == 'towNumber') {
+      m = '二人户'
+    } else if (index == 'oneNumber') {
+      m = '一人户'
+    }
+    if (m) {
+      householdNumberList.value.push({ value: list.householdNumber[0][index], name: m })
+    }
   }
+  console.log(householdNumberList.value, 'bbq')
+
   domicileOption.value.series[0].data = householdNumberList.value
+  domicileOption.value.yAxis.data = householdNumberList.value.reduce((pre, item) => {
+    pre.push(item.name)
+    return pre
+  }, [])
   if (tag.value) {
     const perHouseholdList = ref<any>([])
     list.perHousehold.forEach((item) => {
@@ -234,18 +397,150 @@ const getVillageAnalysisLists = async () => {
     type: typeNumber.value
   })
   console.log(list, '2222')
-  const dataList = ref<any>([])
-  const numberList = ref<any>([])
-  list.forEach((item) => {
-    dataList.value.push(item.name)
-    numberList.value.push(item.number)
-  })
-  immigrationOption.value.xAxis.data = dataList.value
-  immigrationOption.value.series[0].data = numberList.value
-  villageAnalysisNumber.value = numberList.value.reduce((old, now) => {
-    return old + now
-  }, 0)
-  console.log(numberList.value, '1111111111')
+  if (typeNumber.value == 4) {
+    tudiArr.value.xAxis[0].data = list.reduce((pre, item) => {
+      pre.push(item.qsdw)
+      return pre
+    }, [])
+    let arr = {}
+    list.forEach((item) => {
+      for (let i in item) {
+        if (i != 'qsdw') {
+          if (!arr[i]) arr[i] = []
+          arr[i].push(item[i])
+        }
+      }
+    })
+    let sseries: any = []
+    for (let m in arr) {
+      if (m == 'caodi') {
+        sseries.push({
+          name: '草地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'gengdi') {
+        sseries.push({
+          name: '耕地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'gkccyd') {
+        sseries.push({
+          name: '工矿仓储用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'ggfwyd') {
+        sseries.push({
+          name: '公共管理与公共服务用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'jtyd') {
+        sseries.push({
+          name: '交通用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'lindi') {
+        sseries.push({
+          name: '林地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'sfyd') {
+        sseries.push({
+          name: '商服用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'syyd') {
+        sseries.push({
+          name: '水域及水利设施用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'tsyd') {
+        sseries.push({
+          name: '特殊用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'yuandi') {
+        sseries.push({
+          name: '园地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      } else if (m == 'zzyd') {
+        sseries.push({
+          name: '住宅用地',
+          type: 'bar',
+          stack: 'Ad',
+          emphasis: {
+            focus: 'series'
+          },
+          data: arr[m]
+        })
+      }
+    }
+    tudiArr.value.series = sseries
+    console.log(sseries, tudiArr.value.xAxis)
+  } else {
+    const dataList = ref<any>([])
+    const numberList = ref<any>([])
+    list.forEach((item) => {
+      dataList.value.push(item.name)
+      numberList.value.push(item.number)
+    })
+    immigrationOption.value.xAxis.data = dataList.value
+    immigrationOption.value.series[0].data = numberList.value
+    villageAnalysisNumber.value = numberList.value.reduce((old, now) => {
+      return old + now
+    }, 0)
+    console.log(numberList.value, '1111111111')
+  }
 }
 const tabVillage = async () => {
   console.log(reason.value, '选中的code')
@@ -301,21 +596,21 @@ const tabListImmigration = [
   }
 ]
 const workGroupOptions = [
-  { index: 1, name: '耕地', progress: 100, number: 125 },
+  { index: 1, name: '耕地', progress: 100, number: 125, show: true },
   { index: 2, name: '水田', progress: 90, number: 115 },
   { index: 3, name: '水浇地', progress: 80, number: 105 },
   { index: 4, name: '旱地', progress: 70, number: 98 },
-  { index: 5, name: '园地', progress: 65, number: 85 },
-  { index: 6, name: '耕地', progress: 100, number: 125 },
-  { index: 7, name: '水田', progress: 90, number: 115 },
-  { index: 8, name: '水浇地', progress: 80, number: 105 },
-  { index: 9, name: '旱地', progress: 70, number: 98 },
-  { index: 10, name: '园地', progress: 65, number: 85 },
-  { index: 11, name: '耕地', progress: 100, number: 125 },
-  { index: 12, name: '水田', progress: 90, number: 115 },
-  { index: 13, name: '水浇地', progress: 80, number: 105 },
-  { index: 14, name: '旱地', progress: 70, number: 98 },
-  { index: 15, name: '园地', progress: 65, number: 85 }
+  { index: 5, name: '园地', progress: 65, number: 85, show: true },
+  { index: 6, name: '果园', progress: 100, number: 125 },
+  { index: 7, name: '水园', progress: 90, number: 115 },
+  { index: 8, name: '苹果园', progress: 80, number: 105 },
+  { index: 9, name: '香蕉园', progress: 70, number: 98 },
+  { index: 10, name: '草莓园', progress: 65, number: 85 },
+  { index: 11, name: '林地', progress: 100, number: 125, show: true },
+  { index: 12, name: '山林', progress: 90, number: 115 },
+  { index: 13, name: '土林', progress: 80, number: 105 },
+  { index: 14, name: '水林', progress: 70, number: 98 },
+  { index: 15, name: '枫林', progress: 65, number: 85 }
 ]
 // const genderList = [
 //   { title: '男性', num: '6145' },
@@ -323,13 +618,13 @@ const workGroupOptions = [
 //   { title: '男女比例', num: '6145' }
 // ]
 //参保覆盖率
-const insuredOption = ref({
+const insuredOption: any = ref({
   // title: [
   //   {
   //     text: 'Tangential Polar Bar Label Position (middle)'
   //   }
   // ],
-  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
+  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
     data: ['商业保险', '医疗保险', '养老保险', '其他'],
@@ -365,86 +660,83 @@ const insuredOption = ref({
       show: false // 显示坐标刻度
     }
   },
-  tooltip: {},
+  tooltip: {
+    trigger: 'axis',
+    formatter: '{a} : {c}%}'
+  },
+
   series: [
     {
       name: '商业保险',
       type: 'bar',
-      data: [20, 40, 60, 80],
+      data: [0, 80],
       coordinateSystem: 'polar',
-      barWidth: 20,
+      showBackground: true,
+      barWidth: 10,
       colorBy: 'data'
     },
     {
       name: '医疗保险',
       type: 'bar',
-      data: [20, 40, 60, 80],
+      data: [0, 80],
       coordinateSystem: 'polar',
-      barWidth: 20,
+      showBackground: true,
+      barWidth: 10,
       colorBy: 'data'
     },
     {
       name: '养老保险',
       type: 'bar',
-      data: [20, 40, 60, 80],
+      data: [0, 80],
       coordinateSystem: 'polar',
-      barWidth: 20,
+      showBackground: true,
+      barWidth: 10,
       colorBy: 'data'
     },
     {
       name: '其他',
       type: 'bar',
-      data: [20, 40, 60, 80],
+      data: [0, 80],
       coordinateSystem: 'polar',
-      barWidth: 20,
+      showBackground: true,
+      barWidth: 10,
       colorBy: 'data'
     }
   ]
 })
 const tab = (index) => {
   if (index == 0) {
-    careerOption.value.legend.data = [
-      '研究生',
-      '大学生',
-      '专科生',
-      '技效生',
-      '高中生',
-      '初中生',
-      '小学生',
-      '未上学'
-    ]
+    careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
+      pre.push(item.label)
+      return pre
+    }, [])
     careerOption.value.series.forEach((item) => {
-      item.data = [
-        { value: 600, name: '研究生' },
-        { value: 600, name: '大学生' },
-        { value: 600, name: '专科生' },
-        { value: 600, name: '技校生' },
-        { value: 600, name: '高中生' },
-        { value: 600, name: '初中生' },
-        { value: 600, name: '小学生' },
-        { value: 600, name: '未上学' }
-      ]
+      item.data = dataAll.value.career.reduce((pre, item) => {
+        pre.push({ value: item.number, name: item.label })
+        return pre
+      }, [])
     })
   } else if (index == 1) {
-    careerOption.value.legend.data = [
-      '专业技术人员',
-      '办事人员和有关人员',
-      '商业、服务业人员',
-      '农、林、牧、渔、水利业生产人员',
-      '生产、运输设备操作人员及有关人员',
-      '不便分类的其他从业人员'
-    ]
+    console.log(dataAll.value)
+
+    careerOption.value.legend.data = dataAll.value.education.reduce((pre, item) => {
+      pre.push(item.label)
+      return pre
+    }, [])
     careerOption.value.series.forEach((item) => {
-      item.data = [
-        { value: 600, name: '专业技术人员' },
-        { value: 100, name: '办事人员和有关人员' },
-        { value: 200, name: '商业、服务业人员' },
-        { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        { value: 500, name: '不便分类的其他从业人员' }
-      ]
+      item.data = dataAll.value.education.reduce((pre, item) => {
+        pre.push({ value: item.number, name: item.label })
+        return pre
+      }, [])
     })
   }
+}
+function arrCount(arr) {
+  let count = 0
+  arr.forEach((item) => {
+    count = count + item.value
+  })
+  return count
 }
 //职业分布
 const careerOption = ref({
@@ -468,15 +760,29 @@ const careerOption = ref({
     // right: 'center',
     // bottom: '2%',
     top: 'center',
-    left: '62%',
+    right: '10%',
+    left: '50%',
     textStyle: {
-      color: '#666666' //字体颜色
-      // borderRadius: '50%'
+      color: '#666666', //字体颜色
+      fontSize: '10'
     },
-    icon: 'circle'
+    icon: 'circle',
+    formatter: function (name) {
+      let singleData = careerOption.value.series[0].data.filter(function (item) {
+        return item.name == name
+      })
+      let m = careerOption.value.series[0].data.reduce((pre, item) => {
+        pre += item.value
+        return pre
+      }, 0)
+      console.log(m, singleData)
+
+      return name + ' | ' + ((singleData[0].value / m) * 100).toFixed(2) + '%'
+    }
   },
   tooltip: {
-    trigger: 'item'
+    trigger: 'item',
+    formatter: '{b}: {c} ({d}%)' // 鼠标悬浮在各分区时的提示内容
   },
   // legend: {
   //   orient: 'vertical',
@@ -580,100 +886,34 @@ const fundOption = ref({
   //   left: 'center'
   // },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
-  legend: {
-    // 指示框名字  注意！要和下方series中的name一起改
-    data: ['奖励费', '补偿费', '补助费'],
-    // 指示框位置  距离上下左右多少
-    right: 'center',
-    bottom: '2%',
-    textStyle: {
-      color: '#666666' //字体颜色
-      // borderRadius: '50%'
-    },
-    icon: 'circle'
-  },
   tooltip: {
-    trigger: 'item'
+    trigger: 'item',
+    formatter: '{b}: {c} ({d}%)' // 鼠标悬浮在各分区时的提示内容
   },
-  // legend: {
-  //   orient: 'vertical',
-  //   left: 'left'
-  // },
+  legend: {
+    bottom: '5%',
+    left: 'center'
+  },
   series: [
     {
-      name: '奖励费',
       type: 'pie',
-      radius: ['40%', '80%'],
-      data: [
-        { value: 735, name: '淹没区' },
-        { value: 580, name: '建设区' },
-        { value: 484, name: '影响区' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'red'
-        }
-      },
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
       label: {
         show: false,
         position: 'center'
-      }
-    },
-    {
-      name: '补偿费',
-      type: 'pie',
-      radius: ['40%', '80%'],
-      data: [
-        { value: 735, name: '淹没区' },
-        { value: 580, name: '建设区' },
-        { value: 484, name: '影响区' }
-      ],
+      },
       emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
         }
       },
-      // label: {
-      //   normal: {
-      //     show: true,
-      //     formatter: '{b}\n{d}%'
-      //   }
-      // }
-      label: {
-        show: false,
-        position: 'center'
-      }
-    },
-    {
-      name: '补助费',
-      type: 'pie',
-      radius: ['40%', '80%'],
-      data: [
-        { value: 735, name: '淹没区' },
-        { value: 580, name: '建设区' },
-        { value: 484, name: '影响区' }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)'
-        }
+      labelLine: {
+        show: false
       },
-      // label: {
-      //   normal: {
-      //     show: true,
-      //     formatter: '{b}\n{d}%'
-      //   }
-      // }
-      label: {
-        show: false,
-        position: 'center'
-      }
+      data: []
     }
   ]
 })
@@ -700,6 +940,18 @@ const domicileOption = ref({
     // }
   },
   legend: {
+    // 指示框名字  注意！要和下方series中的name一起改
+    // 指示框位置  距离上下左右多少
+    // right: 'center',
+    // bottom: '2%',
+    show: true,
+    top: 'center',
+    right: '10%',
+    left: '50%',
+    textStyle: {
+      color: '#666666', //字体颜色
+      fontSize: '10'
+    },
     icon: 'circle'
   },
   grid: {
@@ -710,8 +962,7 @@ const domicileOption = ref({
     containLabel: true
   },
   xAxis: {
-    show: true
-    // type: 'value'
+    show: false
   },
   yAxis: {
     type: 'category',
@@ -729,9 +980,9 @@ const domicileOption = ref({
       type: 'bar',
       barWidth: 15,
       stack: 'total',
-      label: {
-        show: true
-      },
+      // label: {
+      //   show: true
+      // },
       emphasis: {
         focus: 'series'
       },
@@ -739,7 +990,20 @@ const domicileOption = ref({
         // color: 'linear-gradient(100deg, #95C9FF 0%, #4892FB 100%)'
         color: 'linear-gradient(294deg, #4FC9FA 0%, #45DBE5 100%)'
       },
-      data: [50, 50, 30, 60, 70, 20, 40, 50, 10]
+      data: [50, 50, 30, 60, 70, 20, 40, 50, 10],
+      itemStyle: {
+        normal: {
+          label: {
+            show: true, //开启显示
+            position: 'right', //在上方显示
+            textStyle: {
+              //数值样式
+              color: 'black',
+              fontSize: 8
+            }
+          }
+        }
+      }
     }
     // {
     //   name: '计划进度',
@@ -839,7 +1103,8 @@ const houseOption = ref({
 // 移民村分析数据
 const immigrationOption = ref({
   tooltip: {
-    trigger: 'item'
+    trigger: 'item',
+    formatter: '{b}: {c}' // 鼠标悬浮在各分区时的提示内容
   },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   // legend: {
@@ -923,30 +1188,12 @@ const immigrationOption = ref({
     // }
   ]
 })
-//年龄性别分析数据图
-// option = {
-//   legend: {},
-//   tooltip: {},
-//   dataset: {
-//     source: [
-//       ['product', '2015', '2016', '2017'],
-//       ['Matcha Latte', 43.3, 85.8, 93.7],
-//       ['Milk Tea', 83.1, 73.4, 55.1],
-//       ['Cheese Cocoa', 86.4, 65.2, 82.5],
-//       ['Walnut Brownie', 72.4, 53.9, 39.1]
-//     ]
-//   },
-//   xAxis: { type: 'category' },
-//   yAxis: {},
-//   // Declare several bar series, each will be mapped
-//   // to a column of dataset.source by default.
-//   series: [{ type: 'bar' }, { type: 'bar' }, { type: 'bar' }]
-// };
 
 const genderOption = ref({
   tooltip: {
     trigger: 'item'
   },
+  color: ['#5E8AEF', '#D2DFFF'],
   legend: {
     //   指示框名字  注意！要和下方series中的name一起改
     data: ['男', '女'],
@@ -961,7 +1208,11 @@ const genderOption = ref({
     left: '3%',
     right: '4%',
     bottom: '3%',
-    containLabel: true
+    containLabel: true,
+    tooltip: {
+      trigger: 'item',
+      formatter: '{b}: {c}'
+    }
   },
   xAxis: {
     type: 'category',
@@ -987,13 +1238,25 @@ const genderOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#3E73EC' // 0% 处的颜色
+            color: '#5E8AEF' // 0% 处的颜色
           }
           // {
           //   offset: 1,
           //   color: '#8EBBFF' // 100% 处的颜色
           // }
         ]
+      },
+      label: {
+        show: true, //开启显示
+        position: 'top', //在上方显示
+        formatter: function (params) {
+          return ((params.data / numberMan.value) * 100).toFixed(2) + '%'
+        },
+        textStyle: {
+          //数值样式
+          color: 'black', //字体颜色
+          fontSize: 10 //字体大小
+        }
       }
     },
     {
@@ -1011,14 +1274,131 @@ const genderOption = ref({
         colorStops: [
           {
             offset: 0,
-            color: '#0041D7 ' // 0% 处的颜色
+            color: '#D2DFFF ' // 0% 处的颜色
           }
           // {
           //   offset: 1,
           //   color: '#FF8E8E ' // 100% 处的颜色
           // }
         ]
+      },
+      label: {
+        show: true, //开启显示
+        position: 'top', //在上方显示
+        formatter: function (params) {
+          return ((params.data / numberWoman.value) * 100).toFixed(2) + '%'
+        }, //显示百分号
+        textStyle: {
+          //数值样式
+          color: 'black', //字体颜色
+          fontSize: 10 //字体大小
+        }
       }
+    }
+  ]
+})
+const tudiArr = ref({
+  color: [
+    '#4682B4',
+    '#6495ED',
+    '#1E90FF',
+    '#B0C4DE',
+    '#00BFFF',
+    '#87CEEB',
+    '#87CEFA',
+    '#ADD8E6',
+    '#B0E0E6',
+    '#E6E6FA',
+    '#F0F8FF'
+  ],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  legend: {},
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Email',
+      type: 'bar',
+      stack: 'Ad',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [120, 132, 101, 134, 90, 230, 210]
+    },
+    {
+      name: 'Union Ads',
+      type: 'bar',
+      stack: 'Ad',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [220, 182, 191, 234, 290, 330, 310]
+    },
+    {
+      name: 'Video Ads',
+      type: 'bar',
+      stack: 'Ad',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [150, 232, 201, 154, 190, 330, 410]
+    },
+    {
+      name: 'Baidu',
+      type: 'bar',
+      barWidth: 5,
+      stack: 'Search Engine',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [620, 732, 701, 734, 1090, 1130, 1120]
+    },
+    {
+      name: 'Google',
+      type: 'bar',
+      stack: 'Search Engine',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [120, 132, 101, 134, 290, 230, 220]
+    },
+    {
+      name: 'Bing',
+      type: 'bar',
+      stack: 'Search Engine',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [60, 72, 71, 74, 190, 130, 110]
+    },
+    {
+      name: 'Others',
+      type: 'bar',
+      stack: 'Search Engine',
+      emphasis: {
+        focus: 'series'
+      },
+      data: [62, 82, 91, 84, 109, 110, 120]
     }
   ]
 })
@@ -1039,9 +1419,7 @@ const onBack = () => {
 .common-color {
   width: 100%;
   /* background-color: white; */
-  padding: 10px;
-  margin: 10px 0px auto;
-  border-radius: 5px;
+  margin: 10px 0px;
 }
 
 .between {
@@ -1081,7 +1459,8 @@ const onBack = () => {
 }
 
 .header-list {
-  width: calc((100%) / 3);
+  width: 33%;
+  background-color: white;
   /* flex: 1; */
 }
 
@@ -1135,6 +1514,7 @@ const onBack = () => {
         transform-origin: 0% 0%;
       }
     }
+
     .echart-item-rt {
       display: flex;
       align-items: center;
@@ -1150,7 +1530,10 @@ const onBack = () => {
 
 .gender-list {
   padding: 12px;
-  margin-top: 10px;
+  margin: 0 12px 0 12px;
+  background: #f2f6ff;
   background-color: #f2f6ff;
+  border-radius: 8px 8px 8px 8px;
+  box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
 }
 </style>
