@@ -82,7 +82,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.landArea" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.landArea"
+              @change="getModelValue(scope.row)"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -163,7 +168,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationPrice" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              v-model="scope.row.valuationPrice"
+              @change="getModelValue(scope.row)"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -174,7 +184,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -346,7 +356,8 @@ const getLandTypeOptions = () => {
 // 自动计算评估金额
 const getModelValue = (row: any) => {
   const totalPrice = Number(row.valuationPrice) * Number(row.landArea)
-  return totalPrice
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
 // 房屋主体评估合计
 const total = () => {
@@ -414,7 +425,6 @@ const onSave = () => {
     emit('updateData')
   })
 }
-
 onMounted(() => {
   getList()
   getLandTypeOptions()

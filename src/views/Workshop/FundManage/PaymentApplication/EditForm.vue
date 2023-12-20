@@ -98,7 +98,7 @@
           </div>
         </div>
       </div> -->
-      <ElFormItem label="收款方:" v-if="form.payType == 2" prop="payee">
+      <ElFormItem label="收款方:" v-if="form.payType == 2 && form.paymentType != 1" prop="payee">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[396]"
@@ -417,7 +417,7 @@ watch(
       // 处理行政区划
       form.value = { ...(val as {}) }
       console.log(form.value, 'bbq')
-      relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
+      relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : []
       fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
         if (item.name != '概算外费用') {
           pre.push(item)
@@ -452,6 +452,8 @@ watch(
 
 //刷新清空
 const refresh = () => {
+  console.log(1)
+
   amoutPrice.value = 0
   num.value = 0
   otherData.value = []
@@ -482,7 +484,7 @@ const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
-  formRef.value?.resetFields()
+  // formRef.value?.resetFields()
   tableData.value = []
   num.value = 0
   amoutPrice.value = 0

@@ -53,7 +53,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.number"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -64,12 +69,22 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.price"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="费率" :width="180" prop="rate" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.rate" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.rate"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -80,7 +95,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -290,9 +305,9 @@ const onSave = () => {
 const getModelValue = (row: any) => {
   const totalPrice =
     Number(row.number) * Number(row.price) * (Number(row.rate) == 0 ? 1 : Number(row.rate))
-  return totalPrice
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
-
 onMounted(() => {
   getList()
 })
