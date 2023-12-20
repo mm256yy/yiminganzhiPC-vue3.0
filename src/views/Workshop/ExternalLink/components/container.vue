@@ -32,7 +32,14 @@
       </Label>
       <div class="news_box">
         <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
-          <ElTabPane name="水库要闻" label="水库要闻">
+          <ElTabPane
+            v-for="(item, index) in newsTypes"
+            :label="item.label"
+            :key="index"
+            :name="item.value"
+          />
+
+          <!-- <ElTabPane name="水库要闻" label="水库要闻232">
             <div></div>
           </ElTabPane>
           <ElTabPane label="政策法规" name="政策法规">
@@ -41,9 +48,9 @@
           <ElTabPane label="水库概况" name="水库概况"><div></div></ElTabPane>
           <ElTabPane label="建设历程" name="建设历程"><div></div></ElTabPane>
           <ElTabPane label="安置概况" name="安置概况"><div></div></ElTabPane>
-          <ElTabPane label="水库风采" name="水库风采"><div></div></ElTabPane>
+          <ElTabPane label="水库风采" name="水库风采"><div></div></ElTabPane> -->
         </ElTabs>
-        <div class="news_info">
+        <div class="news_info" v-loading="panelLoading">
           <div v-for="item in newsList" :key="item.id" class="news_li">
             <div class="news_li_l">
               <div class="li_l_top">{{ item.title }}</div>
@@ -102,11 +109,12 @@ import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput } from 'element-plus'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import { feedbackList } from '@/api/AssetEvaluation/leader-side'
-import { getNewsList, getPolicyListApi } from '@/api/home'
+import { getNewsList } from '@/api/home'
+import { listDictDetailApi } from '@/api/sys/index'
 import { getTokenApi } from '@/api/common/index'
+import { useAppStore } from '@/store/modules/app'
 
 const { push } = useRouter()
-
 const questionList = ref<any>([])
 const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
@@ -115,11 +123,21 @@ const option = ref<any>([])
 const input = ref('')
 const reason = ref('移民户')
 const tokenStr = ref<string>('')
+const appStore = useAppStore()
+const newsTypes = ref<any[]>([])
+const dictName = 'news' // 字典名称
+const panelLoading = ref<boolean>(false)
 
-onMounted(() => {
-  initNewsData()
-  feedback()
-})
+const getNewsDict = async () => {
+  const res = await listDictDetailApi({
+    name: dictName,
+    projectId: appStore.getCurrentProjectId
+  })
+  if (res && res.dictValList) {
+    newsTypes.value = res.dictValList
+    console.log('resTTP', newsTypes.value)
+  }
+}
 
 const feedback = async () => {
   const list = await feedbackList({})
@@ -129,20 +147,31 @@ const feedback = async () => {
   questionList.value = list.content
 }
 // 点击新闻跳转
-const newsHandleClick = () => {}
+const newsHandleClick = (pane: any, ev: Event) => {
+  console.log('ev', ev)
+  requestNewsData(pane.props.name)
+}
 
-// 初始化获取新闻通知 -- 水库要闻列表数据
-const initNewsData = () => {
-  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' }).then((res: any) => {
-    newsList.value = res.content.map((item: any) => {
-      if (item.coverPic) {
-        item.url = JSON.parse(item.coverPic)[0].url
-      } else {
-        item.url = ''
-      }
-      return item
-    })
-  })
+// 水库要闻
+const requestNewsData = (type = '1') => {
+  panelLoading.value = true
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type }).then(
+    (res: any) => {
+      newsList.value = res.content.map((item: any) => {
+        if (item.coverPic) {
+          item.url = JSON.parse(item.coverPic)[0].url
+        } else {
+          item.url = ''
+        }
+        return item
+      })
+      panelLoading.value = false
+    },
+    (err) => {
+      console.log('err', err)
+      panelLoading.value = false
+    }
+  )
 }
 
 const onViewFeedBack = (item: any) => {
@@ -173,6 +202,12 @@ const handleClickItem = (type: number) => {
   }
   push({ name: pathMap[type] })
 }
+
+onMounted(() => {
+  requestNewsData()
+  feedback()
+  getNewsDict()
+})
 </script>
 
 <style lang="less" scoped>
@@ -230,7 +265,7 @@ const handleClickItem = (type: number) => {
       background-size: cover;
       background-position: center center;
       .s_full {
-        /deep/ .el-input__wrapper {
+        :deep(.el-input__wrapper) {
           background: #3578f2 !important;
           padding: 4px 11px !important;
           font-weight: 500;
@@ -238,12 +273,12 @@ const handleClickItem = (type: number) => {
           outline: none;
           box-shadow: none;
         }
-        /deep/ .el-input__inner {
+        :deep(.el-input__inner) {
           color: #ffffff !important;
           outline: none;
           box-shadow: none;
         }
-        /deep/ .el-icon svg {
+        :deep(.el-icon) svg {
           color: #ffffff;
           font-weight: bold;
         }

@@ -85,3 +85,9 @@ export const getFundAnalysis = (): Promise<any> => {
     url: `/leadershipScreen/getFundAnalysis`
   })
 }
+// /api/leadershipScreen/getLanAnalysisReport
+export const getLanAnalysisReport = (): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/getLanAnalysisReport`
+  })
+}

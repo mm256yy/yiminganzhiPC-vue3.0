@@ -140,8 +140,8 @@
             <tabButton @tab="tabPerson" :tabList="tabListHouse" :link="true" />
           </div>
           <div class="between gender-list">
-            <div>户均住房面积</div>
-            <div>2000,000m²</div>
+            <div>{{ tabPersonName }}住房面积</div>
+            <div>{{ tabPersonName == '人均' ? perPersonMapTotal : perHouseholdTotal }}m²</div>
           </div>
           <Echart :options="houseOption" :height="300" :width="'100%'" />
         </div>
@@ -161,20 +161,30 @@
           </div>
           <div class="between gender-list">
             <div>户均土地面积</div>
-            <div>2000,000人</div>
+            <div>{{ renjuntd.avgVal }}㎡</div>
           </div>
           <div class="echart-wrap" style="margin-top: 20px">
-            <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
-              <div class="echart-item-lt">
-                <span class="user-name">{{ item.name }}</span>
+            <div class="echart-item" v-for="item in renjuntd.data" :key="item.name">
+              <div class="echart-item-lt" :class="{ 'left-tit': item.isParent == '1' }">
+                <div
+                  style="
+                    width: 40px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    word-break: break-all;
+                    white-space: nowrap;
+                  "
+                >
+                  {{ item.name }}</div
+                >
               </div>
 
               <div class="echart-item-ct">
-                <div class="progress" :style="{ width: `${item.progress}%` }"></div>
+                <div class="progress" :style="{ width: `${(item.val / dataSum) * 100}%` }"></div>
               </div>
 
               <div class="echart-item-rt">
-                <text class="txt">{{ item.number }}户</text>
+                <text class="txt">{{ item.householdNum }}户</text>
               </div>
             </div>
           </div>
@@ -259,7 +269,8 @@ import {
   getChartScreenList,
   getVillageAnalysisList,
   getVillageList,
-  getFundAnalysis
+  getFundAnalysis,
+  getLanAnalysisReport
 } from '@/api/AssetEvaluation/leader-side'
 import { useAppStore } from '@/store/modules/app'
 import { ElSelect, ElOption, ElButton } from 'element-plus'
@@ -273,6 +284,8 @@ const tabVillageAnalysis = (index) => {
   getVillageAnalysisLists()
 }
 let aalls: any = ref()
+let renjuntd: any = ref({})
+let dataSum = 0
 const reason = ref()
 const appStore = useAppStore()
 const villageAnalysisNumber = ref<number>()
@@ -286,7 +299,15 @@ const dataAll = ref()
 const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
-  console.log(zhiji)
+  let gengdi = await getLanAnalysisReport()
+  dataSum = gengdi.data.reduce((pre, item) => {
+    if (item.val > pre) {
+      pre = item.val
+    }
+    return pre
+  }, 0)
+  renjuntd.value = gengdi
+  console.log(gengdi)
   perPersonMapTotal.value = list.perPersonMapTotal[0].areaTotal
   perHouseholdTotal.value = list.perHouseholdTotal[0].areaTotal
   aalls.value = zhiji.avgMoney
@@ -310,22 +331,24 @@ const getChartScreenLists = async () => {
   for (var index in list.insuranceNumber[0]) {
     all += list.insuranceNumber[0][index]
   }
-  insuredOption.value.series[0].data[1] = (
+  insuredOption.value.series[0].data[0] = (
     (dataAll.value.insuranceNumber[0].commerceNumber / all) *
     100
   ).toFixed(2)
-  insuredOption.value.series[1].data[1] = (
+  insuredOption.value.series[0].data[1] = (
     (dataAll.value.insuranceNumber[0].medicalNumber / all) *
     100
   ).toFixed(2)
-  insuredOption.value.series[2].data[1] = (
+  insuredOption.value.series[0].data[2] = (
     (dataAll.value.insuranceNumber[0].retirementNumber / all) *
     100
   ).toFixed(2)
-  insuredOption.value.series[3].data[1] = (
+  insuredOption.value.series[0].data[3] = (
     (dataAll.value.insuranceNumber[0].otherNumber / all) *
     100
   ).toFixed(2)
+  console.log(insuredOption.value.series, 'bbq')
+
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
   genderOption.value.series[0].data = [
@@ -644,11 +667,7 @@ const insuredOption: any = ref({
   //     text: 'Tangential Polar Bar Label Position (middle)'
   //   }
   // ],
-<<<<<<< HEAD
-  color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
-=======
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF'],
->>>>>>> master
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
     data: ['商业保险', '医疗保险', '养老保险', '其他'],
@@ -667,65 +686,61 @@ const insuredOption: any = ref({
   angleAxis: {
     max: 100,
     startAngle: 100,
+
     axisLine: {
-      show: false // 显示坐标轴轴线
+      show: true // 显示坐标轴轴线
     },
     axisTick: {
-      show: false // 显示坐标刻度
+      show: true // 显示坐标刻度
     }
   },
   radiusAxis: {
     type: 'category',
-    // data: ['商业保险', '医疗保险', '养老保险', '其他'],
-    axisLine: {
-      show: false // 显示坐标轴轴线
-    },
-    axisTick: {
-      show: false // 显示坐标刻度
+    data: ['商业保险', '医疗保险', '养老保险', '其他'],
+    axisLabel: {
+      interval: 0, //代表显示所有x轴标签显示
+      show: true
     }
   },
   tooltip: {
     trigger: 'axis',
-    formatter: '{a} : {c}%}'
+    formatter: '{b} : {c}%'
   },
 
   series: [
     {
-      name: '商业保险',
       type: 'bar',
-      data: [0, 80],
+      data: [2, 1.2, 2.4, 3.6],
       coordinateSystem: 'polar',
-      showBackground: true,
-      barWidth: 10,
-      colorBy: 'data'
-    },
-    {
-      name: '医疗保险',
-      type: 'bar',
-      data: [0, 80],
-      coordinateSystem: 'polar',
-      showBackground: true,
-      barWidth: 10,
-      colorBy: 'data'
-    },
-    {
-      name: '养老保险',
-      type: 'bar',
-      data: [0, 80],
-      coordinateSystem: 'polar',
-      showBackground: true,
-      barWidth: 10,
-      colorBy: 'data'
-    },
-    {
-      name: '其他',
-      type: 'bar',
-      data: [0, 80],
-      coordinateSystem: 'polar',
-      showBackground: true,
-      barWidth: 10,
-      colorBy: 'data'
+      barWidth: 10
     }
+    // {
+    //   name: '医疗保险',
+    //   type: 'bar',
+    //   data: [0, 80],
+    //   coordinateSystem: 'polar',
+    //   showBackground: true,
+    //   barWidth: 10,
+    //   colorBy: 'data'
+    // },
+    // {
+    //   name: '养老保险',
+    //   type: 'bar',
+    //   data: [0, 80],
+    //   coordinateSystem: 'polar',
+    //   showBackground: true,
+    //   barWidth: 10,
+    //   colorBy: 'data'
+    // },
+    // {
+    //   name: '其他',
+    //   type: 'bar',
+    //   data: [0, 80],
+    //   coordinateSystem: 'polar',
+    //   showBackground: true,
+    //   barWidth: 10,
+    //   colorBy: 'data'
+    // }
   ]
 })
 const tab = (index) => {
@@ -910,21 +925,6 @@ const fundOption = ref({
   //   left: 'center'
   // },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
-<<<<<<< HEAD
-  legend: {
-    // 指示框名字  注意！要和下方series中的name一起改
-    data: ['奖励费', '补偿费', '补助费'],
-    // 指示框位置  距离上下左右多少
-    right: 'center',
-    bottom: '2%',
-    textStyle: {
-      color: '#666666' //字体颜色
-      // borderRadius: '50%'
-    },
-    icon: 'circle'
-  },
-=======
->>>>>>> master
   tooltip: {
     trigger: 'item',
     formatter: '{b}: {c} ({d}%)' // 鼠标悬浮在各分区时的提示内容
@@ -1456,8 +1456,13 @@ const onBack = () => {
 
     .echart-item-lt {
       display: flex;
+      /* flex-direction: row; */
+      width: 60px;
+      font-size: 14px;
+      text-overflow: ellipsis;
+      word-break: keep-all;
       align-items: center;
-      flex-direction: row;
+      justify-content: center;
 
       .top-img {
         width: 26px;
@@ -1486,7 +1491,8 @@ const onBack = () => {
         background: linear-gradient(90deg, #0041d7 0%, #d4e1ff 100%);
         transform: skewX(-30deg);
         transform-origin: 0% 0%;
-      }    }
+      }
+    }
     .echart-item-rt {
       display: flex;
       align-items: center;
@@ -1507,5 +1513,12 @@ const onBack = () => {
   background-color: #f2f6ff;
   border-radius: 8px 8px 8px 8px;
   box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
+}
+
+.left-tit {
+  margin-left: -10px;
+  font-size: 18px;
+  font-weight: bolder;
+  text-align: left;
 }
 </style>

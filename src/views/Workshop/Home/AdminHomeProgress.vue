@@ -13,7 +13,7 @@
         <div class="header-list">
           <!-- <img :src="water_first" />
           资格认定 -->
-          <LiquidBall title="资格认定" :values="actualList[0]" /> </div
+          <LiquidBall title="资格认定" :values="'0.1'" /> </div
       ></div>
       <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
         <div class="arrow"><img :src="arrow" /></div>
@@ -141,7 +141,7 @@ import { ElTabs, ElTabPane, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { currentRoute } = useRouter()
-const { actualList } = currentRoute.value.query as any
+let actualList = [0, 1, 2, 3, 4, 5, 6]
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
@@ -175,7 +175,6 @@ const getScheduleRankList = async () => {
 }
 const newarr = ref<any>([])
 onMounted(() => {
-  actualList.shift()
   newarr.value = actualList.map((v, index) => {
     return { name: headList.value[index].name, values: v }
   })
@@ -472,10 +471,9 @@ const onBack = () => {
 </script>
 
 <style lang="less" scoped>
-/deep/ .el-tabs__nav .el-tabs__item {
+:deep(.el-tabs__nav .el-tabs__item) {
   width: 80%;
   height: 22px;
-  font-family: PingFang SC-Bold, PingFang SC;
   font-size: 16px;
   font-weight: bold;
   // color: #3e73ec;
