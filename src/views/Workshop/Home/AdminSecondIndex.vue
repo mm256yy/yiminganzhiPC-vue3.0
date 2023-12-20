@@ -184,7 +184,7 @@
               </div>
 
               <div class="echart-item-rt">
-                <text class="txt">{{ item.householdNum }}户</text>
+                <text class="txt">{{ item.val }}户</text>
               </div>
             </div>
           </div>
@@ -1441,7 +1441,7 @@ const onBack = () => {
 .echart-wrap {
   display: flex;
   flex-direction: column;
-  width: 436px;
+  width: 100%;
   /* height: 185px; */
   padding: 0 10px;
   box-sizing: border-box;
