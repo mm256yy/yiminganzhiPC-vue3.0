@@ -54,7 +54,7 @@
         {{ form.pendingAmount }}&nbsp;元
       </ElFormItem>
       <ElFormItem label="发放金额" required>
-        <ElInputNumber v-model="allamount" placeholder="请输入" />
+        <ElInputNumber v-model="allamount" :min="0" placeholder="请输入" />
         <span>&nbsp;&nbsp;元</span>
       </ElFormItem>
       <ElFormItem label="发放日期" prop="paymentTime" required>
