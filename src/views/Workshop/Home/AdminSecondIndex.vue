@@ -9,7 +9,7 @@
       >
         返回
       </ElButton>
-      <div style="width: 80px">
+      <div style="width: 120px">
         <ElSelect clearable filterable v-model="reason" class="!w-full" @change="tabVillage">
           <ElOption
             v-for="item in villageLists"
@@ -46,7 +46,7 @@
                 class="strong aliam-center title-padding"
                 style="font-size: 20px; color: #3e73ec"
               >
-                <div class="line"></div>职业分布
+                <div class="line"></div>学历职业分析
               </div>
               <tabButton @tab="tab" :tabList="tabListCareer" :link="true" />
             </div>
@@ -89,18 +89,23 @@
                 <div class="line"></div>年龄性别分析
               </div>
             </div>
-            <div class="between gender-list">
+            <div class="around gender-list">
               <div
-                >男性:{{ numberMan }} ({{
-                  ((numberMan / (numberMan + numberWoman)) * 100).toFixed(2)
-                }}%)</div
-              >
+                >男性:
+                <span class="gender-txt">
+                  {{ numberMan }} ({{
+                    ((numberMan / (numberMan + numberWoman)) * 100).toFixed(2)
+                  }}%)
+                </span>
+              </div>
               <div
-                >女性:{{ numberWoman }}({{
-                  ((numberWoman / (numberMan + numberWoman)) * 100).toFixed(2)
-                }}%)</div
-              >
-              <!-- <div>男女比例:{{ (numberMan / numberWoman).toFixed(2) }}</div> -->
+                >女性:
+                <span class="gender-txt">
+                  {{ numberWoman }}({{
+                    ((numberWoman / (numberMan + numberWoman)) * 100).toFixed(2)
+                  }}%)
+                </span>
+              </div>
             </div>
             <Echart :options="genderOption" :height="300" />
           </div>
@@ -139,9 +144,11 @@
             </div>
             <tabButton @tab="tabPerson" :tabList="tabListHouse" :link="true" />
           </div>
-          <div class="between gender-list">
+          <div class="display-flex gender-list">
             <div>{{ tabPersonName }}住房面积</div>
-            <div>{{ tabPersonName == '人均' ? perPersonMapTotal : perHouseholdTotal }}m²</div>
+            <div class="gender-txt"
+              >{{ tabPersonName == '人均' ? perPersonMapTotal : perHouseholdTotal }}m²</div
+            >
           </div>
           <Echart :options="houseOption" :height="300" :width="'100%'" />
         </div>
@@ -159,9 +166,9 @@
               <div class="line"></div>土地分析
             </div>
           </div>
-          <div class="between gender-list">
+          <div class="display-flex gender-list">
             <div>户均土地面积</div>
-            <div>{{ renjuntd.avgVal }}㎡</div>
+            <div class="gender-txt">{{ renjuntd.avgVal }}㎡</div>
           </div>
           <div class="echart-wrap" style="margin-top: 20px">
             <div class="echart-item" v-for="item in renjuntd.data" :key="item.name">
@@ -221,9 +228,9 @@
               <div class="line"></div>资金分析
             </div>
           </div>
-          <div class="between gender-list">
+          <div class="display-flex gender-list">
             <div>户均补偿补助金额</div>
-            <div>{{ aalls }}元</div>
+            <div class="gender-txt">{{ aalls }}元</div>
           </div>
           <Echart :options="fundOption" :height="465" />
         </div>
@@ -246,12 +253,18 @@
               :link="true"
             />
           </div>
-          <div class="between gender-list">
+          <div v-if="typeNumber != 4" class="display-flex gender-list">
             <div>总人口</div>
-            <div>{{ villageAnalysisNumber }}人</div>
+            <div class="gender-txt">{{ villageAnalysisNumber }}人</div>
           </div>
-          <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />
-          <Echart v-else :options="tudiArr" :height="415" />
+          <div v-else class="center gender-list">
+            <div>总土地</div>
+            <div class="ground-txt">{{ villageAnalysisNumber }}亩</div>
+          </div>
+          <div v-loading="analysisLoading">
+            <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />
+            <Echart v-else :options="tudiArr" :height="415" />
+          </div>
         </div>
       </div>
     </div>
@@ -259,7 +272,6 @@
     <bottomTarg />
   </div>
 </template>
-
 <script setup lang="ts">
 import Echart from '@/components/Echart/src/Echart.vue'
 import { ref, onMounted } from 'vue'
@@ -276,13 +288,16 @@ import { useAppStore } from '@/store/modules/app'
 import { ElSelect, ElOption, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+import iconEduSrc from '@/assets/imgs/homes/icon_edu.png'
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const analysisLoading = ref<boolean>(false)
 
 const tabVillageAnalysis = (index) => {
   typeNumber.value = index + 1
   getVillageAnalysisLists()
 }
+
 let aalls: any = ref()
 let renjuntd: any = ref({})
 let dataSum = 0
@@ -316,7 +331,6 @@ const getChartScreenLists = async () => {
     return pre
   }, [])
   dataAll.value = list
-  console.log(list, '1111')
   careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
     pre.push(item.label)
     return pre
@@ -391,7 +405,6 @@ const getChartScreenLists = async () => {
       householdNumberList.value.push({ value: list.householdNumber[0][index], name: m })
     }
   }
-  console.log(householdNumberList.value, 'bbq')
 
   domicileOption.value.series[0].data = householdNumberList.value
   domicileOption.value.yAxis.data = householdNumberList.value.reduce((pre, item) => {
@@ -416,13 +429,14 @@ const villageLists = ref<any>([])
 const villageList = async () => {
   villageLists.value = await getVillageList({})
 }
+
 const getVillageAnalysisLists = async () => {
+  analysisLoading.value = true
   const list = await getVillageAnalysisList({
     // code: appStore.getVillageCoder,
     code: reason.value,
     type: typeNumber.value
   })
-  console.log(list, '2222')
   if (typeNumber.value == 4) {
     tudiArr.value.xAxis[0].data = list.reduce((pre, item) => {
       pre.push(item.qsdw)
@@ -576,11 +590,10 @@ const getVillageAnalysisLists = async () => {
     villageAnalysisNumber.value = numberList.value.reduce((old, now) => {
       return old + now
     }, 0)
-    console.log(numberList.value, '1111111111')
   }
+  analysisLoading.value = false
 }
 const tabVillage = async () => {
-  console.log(reason.value, '选中的code')
   getVillageAnalysisLists()
   getChartScreenLists()
 }
@@ -777,13 +790,12 @@ function arrCount(arr) {
   })
   return count
 }
+
+const getImageSrc = async () => {
+  return await import('@/assets/imgs/homes/icon_edu.png')
+}
 //职业分布
 const careerOption = ref({
-  // title: {
-  //   text: 'Referer of a Website',
-  //   subtext: 'Fake Data',
-  //   left: 'center'
-  // },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
@@ -819,14 +831,26 @@ const careerOption = ref({
       return name + ' | ' + ((singleData[0].value / m) * 100).toFixed(2) + '%'
     }
   },
+  graphic: {
+    //图形中间图片
+    elements: [
+      {
+        type: 'image',
+        style: {
+          image: getImageSrc(), //你的图片地址
+          width: 70,
+          height: 70
+        },
+        left: 'center',
+        top: 'center',
+        level: '999'
+      }
+    ]
+  },
   tooltip: {
     trigger: 'item',
     formatter: '{b}: {c} ({d}%)' // 鼠标悬浮在各分区时的提示内容
   },
-  // legend: {
-  //   orient: 'vertical',
-  //   left: 'left'
-  // },
   series: [
     {
       // name: '奖励费',
@@ -872,12 +896,6 @@ const careerOption = ref({
           shadowColor: 'rgba(0, 0, 0, 0.5)'
         }
       },
-      // label: {
-      //   normal: {
-      //     show: true,
-      //     formatter: '{b}\n{d}%'
-      //   }
-      // }
       label: {
         show: false,
         position: 'center'
@@ -1065,14 +1083,7 @@ const houseOption = ref({
     trigger: 'item'
   },
   legend: {
-    // 指示框名字  注意！要和下方series中的name一起改
-    // data: ['男', '女'],
-    // 指示框位置  距离上下左右多少
-    // right: '10%',
-    // top: '5%',
-    // textStyle: {
-    //   color: '#666666 ' //字体颜色
-    // }
+    show: false
   },
   grid: {
     left: '3%',
@@ -1086,7 +1097,6 @@ const houseOption = ref({
   },
   yAxis: {
     type: 'value'
-    // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
   series: [
     {
@@ -1146,16 +1156,9 @@ const immigrationOption = ref({
     formatter: '{b}: {c}' // 鼠标悬浮在各分区时的提示内容
   },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
-  // legend: {
-  //   //   指示框名字  注意！要和下方series中的name一起改
-  //   data: ['未采集', '已采集'],
-  //   // 指示框位置  距离上下左右多少
-  //   right: '10%',
-  //   top: '5%',
-  //   textStyle: {
-  //     color: '#4F4F4F' //字体颜色
-  //   }
-  // },
+  legend: {
+    show: false
+  },
   grid: {
     left: '3%',
     right: '4%',
@@ -1356,7 +1359,9 @@ const tudiArr = ref({
       type: 'shadow'
     }
   },
-  legend: {},
+  legend: {
+    show: false
+  },
   grid: {
     left: '3%',
     right: '4%',
@@ -1401,7 +1406,12 @@ const onBack = () => {
   justify-content: space-between;
 }
 
-.arround {
+.display-flex {
+  display: flex;
+  align-items: center;
+}
+
+.around {
   display: flex;
   justify-content: space-around;
 }
@@ -1513,6 +1523,22 @@ const onBack = () => {
   background-color: #f2f6ff;
   border-radius: 8px 8px 8px 8px;
   box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
+}
+
+.gender-txt {
+  font-size: 14px;
+  font-weight: 500;
+  color: #171718;
+  margin-left: 8px;
+  padding-top: 4px;
+  font-weight: bold;
+}
+
+.ground-txt {
+  font-size: 18px;
+  font-weight: bold;
+  color: #171718;
+  margin-left: 8px;
 }
 
 .left-tit {

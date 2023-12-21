@@ -11,7 +11,7 @@
         </ElSelect>
       </div>
       <div class="search">
-        <ElInput v-model="input" class="ipt" />
+        <ElInput v-model="input" class="ipt" placeholder="请输入搜索内容" />
         <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
