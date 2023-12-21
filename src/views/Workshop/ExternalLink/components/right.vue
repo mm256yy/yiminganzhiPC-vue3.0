@@ -338,6 +338,7 @@ const handleClickItem = (type: number) => {
         font-weight: 400;
         line-height: 23px;
         color: #333333;
+        padding-left: 8px;
       }
 
       .text_b {

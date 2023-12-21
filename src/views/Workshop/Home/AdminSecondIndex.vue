@@ -72,7 +72,7 @@
             </div>
             <Echart :options="domicileOption" :height="340" />
           </div>
-          <div class="header-list">
+          <div v-loading="genderLoading" class="header-list">
             <div
               style="
                 display: flex;
@@ -152,7 +152,11 @@
           </div>
           <Echart :options="houseOption" :height="300" :width="'100%'" />
         </div>
-        <div style="width: 33%; background-color: white" class="common-color">
+        <div
+          v-loading="groundLoading"
+          style="width: 33%; background-color: white"
+          class="common-color"
+        >
           <div
             style="
               display: flex;
@@ -163,7 +167,7 @@
             "
           >
             <div class="strong aliam-center title-padding" style="font-size: 20px; color: #3e73ec">
-              <div class="line"></div>土地分析
+              <div class="line"></div>土地分析（搬迁村）
             </div>
           </div>
           <div class="display-flex gender-list">
@@ -172,45 +176,40 @@
           </div>
           <div class="echart-wrap" style="margin-top: 20px">
             <div class="echart-item" v-for="item in renjuntd.data" :key="item.name">
-              <div class="echart-item-lt" :class="{ 'left-tit': item.isParent == '1' }">
+              <div class="echart-item-lt" :class="{ 'left-tit': item.isParent === '1' }">
+                <div v-if="item.isParent === '1'" class="arrow-to-right"></div>
+                <div v-else class="left-dot"></div>
                 <div
                   style="
-                    width: 40px;
+                    width: 80px;
                     overflow: hidden;
                     text-overflow: ellipsis;
                     word-break: break-all;
                     white-space: nowrap;
+                    cursor: pointer;
                   "
+                  :title="item.name"
                 >
                   {{ item.name }}</div
                 >
               </div>
 
               <div class="echart-item-ct">
-                <div class="progress" :style="{ width: `${(item.val / dataSum) * 100}%` }"></div>
+                <div
+                  class="progress"
+                  :style="{
+                    width: `${(item.val / dataSum) * 100}%`,
+                    marginLeft: item.isParent !== '1' ? '-8px' : ''
+                  }"
+                ></div>
               </div>
 
               <div class="echart-item-rt">
-                <text class="txt">{{ item.val }}户</text>
+                <text class="txt">{{ item.val }}&nbsp;户</text>
               </div>
             </div>
           </div>
         </div>
-        <!-- <div class="echart-wrap">
-        <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
-          <div class="echart-item-lt">
-            <span class="user-name">{{ item.name }}</span>
-          </div>
-
-          <div class="echart-item-ct">
-            <div class="progress" :style="{ width: `${item.progress}%` }"></div>
-          </div>
-
-          <div class="echart-item-rt">
-            <text class="txt">{{ item.number }}户</text>
-          </div>
-        </div>
-      </div> -->
       </div>
       <!-- 下面区域 -->
       <div class="between">
@@ -234,7 +233,7 @@
           </div>
           <Echart :options="fundOption" :height="465" />
         </div>
-        <div style="width: 66%; background-color: white" class="common-color">
+        <div style="width: 66.4%; background-color: white" class="common-color">
           <div
             style="
               display: flex;
@@ -288,10 +287,12 @@ import { useAppStore } from '@/store/modules/app'
 import { ElSelect, ElOption, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import iconEduSrc from '@/assets/imgs/homes/icon_edu.png'
+// import iconEduSrc from '@/assets/imgs/homes/icon_edu.png'
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const analysisLoading = ref<boolean>(false)
+const groundLoading = ref<boolean>(false)
+const genderLoading = ref<boolean>(false)
 
 const tabVillageAnalysis = (index) => {
   typeNumber.value = index + 1
@@ -312,17 +313,23 @@ const perPersonMapTotal = ref<string>()
 const perHouseholdTotal = ref<string>()
 const dataAll = ref()
 const getChartScreenLists = async () => {
+  groundLoading.value = true
+  genderLoading.value = true
   const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
-  let gengdi = await getLanAnalysisReport()
-  dataSum = gengdi.data.reduce((pre, item) => {
-    if (item.val > pre) {
-      pre = item.val
-    }
-    return pre
-  }, 0)
-  renjuntd.value = gengdi
-  console.log(gengdi)
+  try {
+    let gengdi = await getLanAnalysisReport()
+    dataSum = gengdi.data.reduce((pre, item) => {
+      if (item.val > pre) {
+        pre = item.val
+      }
+      return pre
+    }, 0)
+    renjuntd.value = gengdi
+    groundLoading.value = false
+  } catch {
+    groundLoading.value = false
+  }
   perPersonMapTotal.value = list.perPersonMapTotal[0].areaTotal
   perHouseholdTotal.value = list.perHouseholdTotal[0].areaTotal
   aalls.value = zhiji.avgMoney
@@ -361,7 +368,6 @@ const getChartScreenLists = async () => {
     (dataAll.value.insuranceNumber[0].otherNumber / all) *
     100
   ).toFixed(2)
-  console.log(insuredOption.value.series, 'bbq')
 
   numberMan.value = list.ageNumber[0].numberMan
   numberWoman.value = list.ageNumber[0].numberWoman
@@ -379,6 +385,7 @@ const getChartScreenLists = async () => {
     list.ageNumber[0].numberWoman50,
     list.ageNumber[0].numberWoman66
   ]
+  genderLoading.value = false
   const householdNumberList = ref<any>([])
   for (var index in list.householdNumber[0]) {
     let m = ''
@@ -616,7 +623,6 @@ onMounted(() => {
   getChartScreenLists()
   getVillageAnalysisLists()
   villageList()
-  console.log(appStore.getVillageCoder, '测试数据的传入')
 })
 const tabListCareer = [
   {
@@ -651,41 +657,15 @@ const tabListImmigration = [
     title: '村集体资产补偿费'
   }
 ]
-const workGroupOptions = [
-  { index: 1, name: '耕地', progress: 100, number: 125, show: true },
-  { index: 2, name: '水田', progress: 90, number: 115 },
-  { index: 3, name: '水浇地', progress: 80, number: 105 },
-  { index: 4, name: '旱地', progress: 70, number: 98 },
-  { index: 5, name: '园地', progress: 65, number: 85, show: true },
-  { index: 6, name: '果园', progress: 100, number: 125 },
-  { index: 7, name: '水园', progress: 90, number: 115 },
-  { index: 8, name: '苹果园', progress: 80, number: 105 },
-  { index: 9, name: '香蕉园', progress: 70, number: 98 },
-  { index: 10, name: '草莓园', progress: 65, number: 85 },
-  { index: 11, name: '林地', progress: 100, number: 125, show: true },
-  { index: 12, name: '山林', progress: 90, number: 115 },
-  { index: 13, name: '土林', progress: 80, number: 105 },
-  { index: 14, name: '水林', progress: 70, number: 98 },
-  { index: 15, name: '枫林', progress: 65, number: 85 }
-]
-// const genderList = [
-//   { title: '男性', num: '6145' },
-//   { title: '女性', num: '6145' },
-//   { title: '男女比例', num: '6145' }
-// ]
+
 //参保覆盖率
 const insuredOption: any = ref({
-  // title: [
-  //   {
-  //     text: 'Tangential Polar Bar Label Position (middle)'
-  //   }
-  // ],
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
-    data: ['商业保险', '医疗保险', '养老保险', '其他'],
+    // data: ['商业保险', '医疗保险', '养老保险', '其他'],
     // 指示框位置  距离上下左右多少
-    // right: 'center',
+    right: 'center',
     bottom: '2%',
     textStyle: {
       color: '#666666' //字体颜色
@@ -694,12 +674,11 @@ const insuredOption: any = ref({
     icon: 'circle'
   },
   polar: {
-    radius: [30, '80%']
+    radius: [30, '60%']
   },
   angleAxis: {
     max: 100,
-    startAngle: 100,
-
+    startAngle: 90,
     axisLine: {
       show: true // 显示坐标轴轴线
     },
@@ -937,11 +916,6 @@ const careerOption = ref({
 })
 //资金分析
 const fundOption = ref({
-  // title: {
-  //   text: 'Referer of a Website',
-  //   subtext: 'Fake Data',
-  //   left: 'center'
-  // },
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   tooltip: {
     trigger: 'item',
@@ -1053,28 +1027,12 @@ const domicileOption = ref({
           label: {
             show: true, //开启显示
             position: 'right', //在上方显示
-            textStyle: {
-              //数值样式
-              color: 'black',
-              fontSize: 8
-            }
+            color: '#000',
+            fontWeight: 'bold'
           }
         }
       }
     }
-    // {
-    //   name: '计划进度',
-    //   type: 'bar',
-    //   barWidth: 15,
-    //   stack: 'total',
-    //   label: {
-    //     show: false
-    //   },
-    //   emphasis: {
-    //     focus: 'series'
-    //   },
-    //   data: [80, 70, 50, 70, 90, 60, 70, 80]
-    // }
   ]
 })
 // 房屋分析数据
@@ -1088,7 +1046,7 @@ const houseOption = ref({
   grid: {
     left: '3%',
     right: '4%',
-    bottom: '3%',
+    bottom: '0',
     containLabel: true
   },
   xAxis: {
@@ -1121,32 +1079,14 @@ const houseOption = ref({
           //   color: '#8EBBFF' // 100% 处的颜色
           // }
         ]
+      },
+      label: {
+        show: true,
+        position: 'top',
+        color: '#000',
+        fontWeight: 'bold'
       }
     }
-    // {
-    //   name: '女',
-    //   data: [1200, 1300, 2500, 2100, 1800],
-    //   type: 'bar',
-    //   barWidth: 30,
-    //   // stack: 'all',
-    //   color: {
-    //     type: 'linear',
-    //     x: 0, // 右
-    //     y: 0, // 下
-    //     x2: 0, // 左
-    //     y2: 1, // 上
-    //     colorStops: [
-    //       {
-    //         offset: 0,
-    //         color: '#FF8E8E ' // 0% 处的颜色
-    //       }
-    //       // {
-    //       //   offset: 1,
-    //       //   color: '#FF8E8E ' // 100% 处的颜色
-    //       // }
-    //     ]
-    //   }
-    // }
   ]
 })
 // 移民村分析数据
@@ -1178,56 +1118,14 @@ const immigrationOption = ref({
       type: 'bar',
       data: [],
       barWidth: 57,
-      colorBy: 'data'
+      colorBy: 'data',
+      label: {
+        show: true,
+        position: 'top',
+        color: '#000',
+        fontWeight: 'bold'
+      }
     }
-    // {
-    //   name: '已采集',
-    //   data: [100, 120, 300, 200, 150, 210, 230, 250],
-    //   type: 'bar',
-    //   barWidth: 57,
-    //   stack: 'all',
-    //   color: {
-    //     type: 'linear',
-    //     x: 0, // 右
-    //     y: 0, // 下
-    //     x2: 0, // 左
-    //     y2: 1, // 上
-    //     colorStops: [
-    //       {
-    //         offset: 0,
-    //         color: 'rgba(113, 182, 185, 1)' // 0% 处的颜色
-    //       },
-    //       {
-    //         offset: 1,
-    //         color: 'rgba(37, 197, 102, 1)' // 100% 处的颜色
-    //       }
-    //     ]
-    //   }
-    // },
-    // {
-    //   name: '未采集',
-    //   data: [120, 130, 250, 210, 180, 110, 290, 250],
-    //   type: 'bar',
-    //   barWidth: 45,
-    //   stack: 'all',
-    //   color: {
-    //     type: 'linear',
-    //     x: 0, // 右
-    //     y: 0, // 下
-    //     x2: 0, // 左
-    //     y2: 1, // 上
-    //     colorStops: [
-    //       {
-    //         offset: 0,
-    //         color: 'rgba(22, 208, 255, 1)' // 0% 处的颜色
-    //       },
-    //       {
-    //         offset: 1,
-    //         color: 'rgba(0, 102, 255, 1)' // 100% 处的颜色
-    //       }
-    //     ]
-    //   }
-    // }
   ]
 })
 
@@ -1262,12 +1160,11 @@ const genderOption = ref({
   },
   yAxis: {
     type: 'value'
-    // data: ['0-17岁', '18-35岁', '36-49岁', '50-65岁', '65岁以上岁', '村6', '村7', '村8']
   },
   series: [
     {
       name: '男',
-      data: [1400, 1800, 3000, 2000, 1500],
+      data: [],
       type: 'bar',
       barWidth: 30,
       // stack: 'all',
@@ -1282,28 +1179,26 @@ const genderOption = ref({
             offset: 0,
             color: '#5E8AEF' // 0% 处的颜色
           }
-          // {
-          //   offset: 1,
-          //   color: '#8EBBFF' // 100% 处的颜色
-          // }
         ]
       },
       label: {
         show: true, //开启显示
         position: 'top', //在上方显示
         formatter: function (params) {
-          return ((params.data / numberMan.value) * 100).toFixed(2) + '%'
+          const result: number = (params.data / numberMan.value) * 100
+          if (isNaN(result)) {
+            return '' // 如果数值为 NaN，则返回空字符串
+          } else {
+            return result.toFixed(2) + '%'
+          }
         },
-        textStyle: {
-          //数值样式
-          color: 'black', //字体颜色
-          fontSize: 10 //字体大小
-        }
+        color: '#000',
+        fontWeight: 'bold'
       }
     },
     {
       name: '女',
-      data: [1200, 1300, 2500, 2100, 1800],
+      data: [],
       type: 'bar',
       barWidth: 30,
       // stack: 'all',
@@ -1399,6 +1294,8 @@ const onBack = () => {
   width: 100%;
   /* background-color: white; */
   margin: 10px 0px;
+  border: 2px solid #8faef4;
+  box-shadow: 0px 2px 6px #b6caf8;
 }
 
 .between {
@@ -1445,7 +1342,8 @@ const onBack = () => {
 .header-list {
   width: 33%;
   background-color: white;
-  /* flex: 1; */
+  border: 2px solid #8faef4;
+  box-shadow: 0px 2px 6px #b6caf8;
 }
 
 .echart-wrap {
@@ -1462,16 +1360,15 @@ const onBack = () => {
     justify-content: space-between;
     flex-direction: row;
     width: 100%;
-    /* height: 37px; */
 
     .echart-item-lt {
       display: flex;
-      /* flex-direction: row; */
-      width: 60px;
+      width: 80px;
       font-size: 14px;
       text-overflow: ellipsis;
       word-break: keep-all;
       align-items: center;
+      padding-left: 20px;
       justify-content: center;
 
       .top-img {
@@ -1492,21 +1389,22 @@ const onBack = () => {
 
     .echart-item-ct {
       display: flex;
-      align-items: center;
-      width: 278px;
-      margin-left: 16px;
+      width: 300px;
+      justify-content: flex-start;
+      /* margin-left: 16px; */
 
       .progress {
-        height: 9px;
+        height: 10px;
         background: linear-gradient(90deg, #0041d7 0%, #d4e1ff 100%);
-        transform: skewX(-30deg);
-        transform-origin: 0% 0%;
+        /* transform: skewX(-30deg); */
+        /* transform-origin: 0% 0%; */
       }
     }
     .echart-item-rt {
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      padding-right: 10px;
 
       .txt {
         font-size: 14px;
@@ -1546,5 +1444,24 @@ const onBack = () => {
   font-size: 18px;
   font-weight: bolder;
   text-align: left;
+}
+
+.arrow-to-right {
+  width: 0;
+  height: 0;
+  border-top: 8px solid transparent;
+  border-left: 8px solid #97b7ff;
+  border-bottom: 6px solid transparent;
+  font-size: 0px;
+  line-height: 20px;
+  margin: 10px;
+}
+
+.left-dot {
+  width: 6px;
+  height: 6px;
+  background: #9fbcff;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 </style>
