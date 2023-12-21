@@ -198,7 +198,7 @@
             header-align="center"
           /> -->
           <ElTableColumn
-            label="合同金额(万元)"
+            label="合同金额(元)"
             prop="contractAmount"
             align="center"
             header-align="center"
@@ -296,7 +296,7 @@
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time" v-if="item.status">
-                    审核时间：{{
+                    提交时间：{{
                       item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
                     }}
                   </div>
@@ -484,7 +484,7 @@ const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
-  // formRef.value?.resetFields()
+  formRef.value?.resetFields()
   tableData.value = []
   num.value = 0
   amoutPrice.value = 0

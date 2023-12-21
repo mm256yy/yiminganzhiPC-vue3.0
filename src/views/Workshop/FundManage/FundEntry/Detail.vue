@@ -11,8 +11,10 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金预拨</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">预拨详情</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">{{
+          type == 1 ? '资金预拨' : '资金池'
+        }}</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">详情</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
 
@@ -111,6 +113,7 @@ const { back, currentRoute } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { query } = unref(currentRoute)
 const id: number = query.id ? +query.id : 0
+const type: number = query.type ? +query.type : 0
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 

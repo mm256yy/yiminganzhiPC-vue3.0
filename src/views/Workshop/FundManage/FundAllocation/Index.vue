@@ -169,7 +169,7 @@ const onEditRow = (row: any) => {
 }
 
 const onViewRow = (row) => {
-  push(`/FundManage/FundEntry/Detail?id=${row.id}`)
+  push(`/FundManage/FundEntry/Detail?id=${row.id}&type=1`)
 }
 
 // const onExport = () => {

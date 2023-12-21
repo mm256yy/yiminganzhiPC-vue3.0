@@ -85,8 +85,8 @@
         </template>
       </Table>
     </div>
-
-    <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" />
+    <EditForm :show="dialog" :id="doorNo" @close="onFormPupClose" />
+    <!-- <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" /> -->
   </WorkContentWrap>
 </template>
 
@@ -102,9 +102,10 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
 import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
-import EditForm from './EditForm.vue'
+// import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 import dayjs from 'dayjs'
+import EditForm from '@/views/Workshop/FundManage/FundDistribution/EditForm.vue'
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
@@ -342,11 +343,16 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
+let doorNo = ref()
 const onViewRow = (row) => {
-  const { id } = row
-  // 点击查看进入入账详情页面
-  toLink('FundEntryDetail', id)
+  if (row.type === '1') {
+    const { id } = row
+    // 点击查看进入入账详情页面
+    toLink('FundEntryDetail', id)
+  } else {
+    doorNo.value = row.doorNo
+    dialog.value = true
+  }
 }
 
 const onFormPupClose = () => {
