@@ -155,7 +155,7 @@ onMounted(() => {
 }
 
 .reached_the_limit {
-  /deep/ .el-upload {
+  :deep(.el-upload) {
     display: none;
   }
 }

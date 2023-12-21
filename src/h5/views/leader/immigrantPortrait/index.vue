@@ -376,8 +376,8 @@ let getChartScreens = async () => {
       }
     },
     legend: {
-      y: 'top',
-      x: 'right',
+      top: 'top',
+      left: 'center',
       data: ['男性', '女性']
     },
     grid: {

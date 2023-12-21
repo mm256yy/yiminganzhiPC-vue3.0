@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 0 })">
+          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 0 })">
             <div class="line-1">{{ statisticsObj?.peasantLagCount }}</div>
             <div class="flex">
               <div
@@ -42,7 +42,7 @@
               <div class="line-2">滞后</div>
             </div>
           </div>
-          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 1 })">
+          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 1 })">
             <div class="line-1">{{ statisticsObj?.peasantWarnCount }}</div>
             <div class="flex">
               <div
@@ -58,7 +58,7 @@
               <div class="line-2">预警</div>
             </div>
           </div>
-          <div class="field-box" @click.prevent.stop="toLinkParams('homeHoldList', { type: 2 })">
+          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 2 })">
             <div class="line-1">{{ statisticsObj?.peasantNormalCount }}</div>
             <div class="flex">
               <div

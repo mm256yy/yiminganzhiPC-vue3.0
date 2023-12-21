@@ -1,12 +1,23 @@
 <template>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
+    <!-- <MigrateCrumb :titles="titles" /> -->
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">{{ getTitle }}</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">基本情况</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 企业基本信息表 </div>
+        <div class="table-left-title">{{ getTitle }} 基本情况表 </div>
       </div>
       <ElTable :data="tableData1.tableList" style="width: 100%" :span-method="objectSpanMethod1">
-        <ElTableColumn type="index" label="序号" />
+        <ElTableColumn type="index" width="100" label="序号" />
         <ElTableColumn prop="townCodeText" label="行政村" />
         <ElTableColumn prop="name" label="名称" />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
@@ -33,8 +44,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 // import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -46,7 +58,10 @@ import {
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+const { back } = useRouter()
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const appStore = useAppStore()
 // const dictStore = useDictStoreWithOut()
@@ -54,7 +69,12 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
-const titles = ['智能报表', '实物成果', '企业', '基本情况']
+const { currentRoute } = useRouter()
+const { id } = currentRoute.value.query as any
+
+const getTitle = computed(() => {
+  return id === '1' ? '企业' : '个体户'
+})
 
 let tableData1 = reactive<any>({
   tableList: [],
@@ -92,70 +112,7 @@ const getEnterpriseAsync = async (e: any) => {
   return list
 }
 
-// const schema = reactive<CrudSchema[]>([
-//   {
-//     field: 'code',
-//     label: '所属区域',
-//     search: {
-//       show: true,
-//       component: 'TreeSelect',
-//       componentProps: {
-//         data: districtTree,
-//         nodeKey: 'code',
-//         props: {
-//           value: 'code',
-//           label: 'name'
-//         },
-//         showCheckbox: true,
-//         checkStrictly: true,
-//         checkOnClickNode: true
-//       }
-//     },
-//     table: {
-//       show: false
-//     }
-//   }
-
-//   // table
-// ])
-
-// let { allSchemas } = useCrudSchemas(schema)
-
-// const onSearch = (data) => {
-//   //解决是否户主relation入参变化
-//   let searchData = JSON.parse(JSON.stringify(data))
-//   console.log(searchData)
-
-//   if (searchData.relation == '1') {
-//     searchData.relation = ['is', 1]
-//   } else if (searchData.relation == '0') {
-//     searchData.relation = ['not', 1]
-//   } else {
-//     delete searchData.relation
-//   }
-
-//   // 处理参数
-//   let params = {
-//     ...searchData
-//   }
-//   tableObject.params = {
-//     projectId
-//   }
-//   if (params.code) {
-//     delete params.code
-//     setSearchParams({ ...params })
-//   } else {
-//     delete params.code
-//     setSearchParams({ ...params })
-//   }
-// }
-
-const objectSpanMethod1 = ({
-  // row,
-  // column,
-  rowIndex,
-  columnIndex
-}) => {
+const objectSpanMethod1 = ({ rowIndex, columnIndex }) => {
   if (columnIndex === 1) {
     if (rowIndex === 0) {
       return {
@@ -178,6 +135,11 @@ const handleCurrentChange = (val: number) => {
   tableData1.currentPageRef = val - 1
   getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
+
+const onBack = () => {
+  back()
+}
+
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()

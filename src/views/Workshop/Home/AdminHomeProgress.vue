@@ -471,10 +471,9 @@ const onBack = () => {
 </script>
 
 <style lang="less" scoped>
-/deep/ .el-tabs__nav .el-tabs__item {
+:deep(.el-tabs__nav .el-tabs__item) {
   width: 80%;
   height: 22px;
-  font-family: PingFang SC-Bold, PingFang SC;
   font-size: 16px;
   font-weight: bold;
   // color: #3e73ec;
