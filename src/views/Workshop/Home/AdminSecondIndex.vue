@@ -315,7 +315,7 @@ const dataAll = ref()
 const getChartScreenLists = async () => {
   groundLoading.value = true
   genderLoading.value = true
-  let list: any = await getChartScreenList({ code: reason.value })
+  const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
   try {
     let gengdi = await getLanAnalysisReport()

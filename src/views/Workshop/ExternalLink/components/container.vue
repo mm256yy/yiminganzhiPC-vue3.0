@@ -1,6 +1,6 @@
 <!--
  * @Author: baike
- * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div class="container_box">
@@ -25,8 +25,8 @@
           <view @click="handleClickItem(4)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
-              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
-            /></view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
+            </view>
           </view>
         </template>
       </Label>
@@ -72,8 +72,8 @@
           <view @click="handleClickItem(5)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
-              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
-            /></view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
+            </view>
           </view>
         </template>
       </Label>
