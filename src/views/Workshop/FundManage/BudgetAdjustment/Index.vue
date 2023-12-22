@@ -545,14 +545,14 @@ const onAdjust = async (e) => {
       adjustDialog.value = true
       landlordIds.value = res.map((item) => item.id)
       statusType.value = res.map((item) => item.gsStatus)
-      console.log('landlordIds', toRaw(landlordIds.value))
+      console.log('landlordIds', toRaw(statusType.value), toRaw(landlordIds.value))
     } else {
       ElMessage.info('请先勾选列表数据')
     }
   } else {
     adjustDialog.value = true
-    landlordIds.value = e.id
-    statusType.value = e.gsStatus
+    landlordIds.value = [e.id]
+    statusType.value = [e.gsStatus]
   }
 }
 // 关闭查看弹窗

@@ -186,7 +186,7 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
     window.location.href = url
   } catch {}
 }
