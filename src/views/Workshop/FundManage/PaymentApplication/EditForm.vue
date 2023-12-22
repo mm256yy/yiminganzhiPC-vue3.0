@@ -247,7 +247,7 @@
             :on-preview="imgPreview"
             :disabled="actionType !== 'add'"
           >
-            <template #trigger>
+            <template #trigger v-if="actionType != 'view'">
               <div class="card-img-box">
                 <img class="card-img" src="@/assets/imgs/house.png" alt="" />
                 <div class="card-txt">点击上传</div>
@@ -362,6 +362,7 @@ import { useAppStore } from '@/store/modules/app'
 import { addPaymentApplicationList } from '@/api/fundManage/paymentApplication-service'
 import { updatePaymentApplicationList } from '@/api/fundManage/paymentApplication-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useValidator } from '@/hooks/web/useValidator'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
 import { formatDate, fmtDict } from '@/utils'
@@ -378,6 +379,7 @@ interface FileItemType {
   name: string
   url: string
 }
+const { required } = useValidator()
 const girdDialog = ref(false)
 const type = ref(false)
 let selence = ref([])
@@ -449,7 +451,6 @@ watch(
   },
   { deep: true }
 )
-
 //刷新清空
 const refresh = () => {
   amoutPrice.value = 0
@@ -476,8 +477,17 @@ const delRow = () => {
   targe.value = false
 }
 // 规则校验
-const rules = reactive<FormRules>({})
-
+// const rules = reactive<FormRules>({})
+// 规则校验
+const rules = reactive<FormRules>({
+  applyType: [required('申请类型不能为空')],
+  name: [required('申请名称不能为空')],
+  type: [required('概算科目不能为空')],
+  funSubjectId: [required('资金科目不能为空')],
+  remark: [required('付款说明不能为空')],
+  paymentType: [required('付款对象类型不能为空')],
+  payType: [required('付款类型不能为空')]
+})
 const initData = () => {}
 
 // 关闭弹窗

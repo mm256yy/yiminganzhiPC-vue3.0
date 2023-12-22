@@ -183,7 +183,7 @@ const onSave = (data: any, isVerify: string) => {
       .then((res: any) => {
         if (res) {
           ElMessage.success('操作成功')
-          //initData()
+          initData()
           loading.value = false
         }
       })

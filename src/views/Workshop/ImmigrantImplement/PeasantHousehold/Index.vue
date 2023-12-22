@@ -124,7 +124,6 @@ const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 const { currentRoute } = useRouter()
 const { search } = currentRoute.value.query as any // 从搜索入口取值
-
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -143,7 +142,11 @@ tableObject.params = {
   blurry: search
 }
 
-setSearchParams({ type: 'PeasantHousehold', status: 'implementation' })
+setSearchParams({
+  type: 'PeasantHousehold',
+  status: 'implementation',
+  warnStatus: currentRoute.value.query['warnStatus']
+})
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
@@ -165,7 +168,8 @@ const onUpdateDistrict = () => {
 const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({
     type: 'PeasantHousehold',
-    status: 'implementation'
+    status: 'implementation',
+    warnStatus: currentRoute.value.query['warnStatus']
   })
   headInfo.value = info
 }

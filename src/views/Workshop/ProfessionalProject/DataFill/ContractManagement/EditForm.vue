@@ -78,7 +78,7 @@
           >
         </div>
       </ElFormItem>
-      <ElFormItem label="支付时间" prop="paymentNodeList">
+      <!--<ElFormItem label="支付时间" prop="paymentNodeList">
         <div class="node-list">
           <div class="node-item" v-for="(item, index) in paymentTimeList" :key="index">
             <div class="label"> {{ item.createdDate }}</div>
@@ -96,7 +96,7 @@
             </div>
           </div>
         </div>
-      </ElFormItem>
+      </ElFormItem>-->
     </ElForm>
     <template v-if="actionType !== 'view'" #footer>
       <ElButton @click="onClose">取消</ElButton>
