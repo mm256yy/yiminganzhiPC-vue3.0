@@ -8,97 +8,91 @@
     >
       返回
     </ElButton>
-    <div class="between">
-      <div class="between" @click="checktab(-1)">
-        <div class="header-list">
-          <!-- <img :src="water_first" />
+    <div>
+      <div class="between">
+        <div class="between" @click="checktab(-1)">
+          <div class="header-list">
+            <!-- <img :src="water_first" />
           资格认定 -->
-          <LiquidBall title="资格认定" :values="'0.1'" /> </div
-      ></div>
-      <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
-        <div class="arrow"><img :src="arrow" /></div>
-        <div class="header-list">
-          <!-- <img :src="item.url" /> -->
-          <!-- {{ item.name }} -->
-          <LiquidBall :title="item.name" :values="item.values" /> </div
-      ></div>
-    </div>
-    <div class="between">
-      <div class="common-color background-l">
-        <div class="aliam-center">
-          <div class="line"></div>
-          <div class="strong">工作组进度</div></div
-        >
-        <ElTabs class="demo-tabs news" v-if="flag" @tab-click="handleClick">
-          <ElTabPane label="房产" name="房产" />
-          <ElTabPane label="土地" name="土地" />
-        </ElTabs>
-        <tabButton @tab="tab" :tabList="tabList" />
-        <div class="echart-wrap">
-          <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
-            <div class="echart-item-lt">
-              <!-- <img class="top-img" :src="item.url" /> -->
-              <span class="user-name">{{ item.name }}</span>
-            </div>
-
-            <div class="echart-item-ct">
-              <div class="progress" :style="{ width: `${item.number}%` }"></div>
-            </div>
-
-            <div class="echart-item-rt">
-              <text class="txt">{{ item.number }}户</text>
-            </div>
+            <LiquidBall title="资格认定" :values="'0.1'" /> </div
+        ></div>
+        <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
+          <div class="arrow"><img :src="arrow" /></div>
+          <div class="header-list"> <LiquidBall :title="item.name" :values="item.values" /> </div
+        ></div>
+      </div>
+      <div class="between" style="background: #fff; margin-top: 20px">
+        <div class="common-color background-l">
+          <!--完成情况-->
+          <div v-loading="completeLoading" class="white common-border">
+            <div class="aliam-center">
+              <div class="line"></div>
+              <div class="strong">完成情况</div></div
+            >
+            <Echart :options="householdOption" :height="300" />
+          </div>
+          <!--进度预警-->
+          <div class="white common-border">
+            <div class="aliam-center" style="padding-bottom: 10px">
+              <div class="line"></div>
+              <div class="strong">进度预警</div></div
+            >
+            <Table
+              :data="tableObject"
+              :columns="allSchemas.tableColumns"
+              :header-cell-style="{ background: '#F2F6ff' }"
+              row-key="id"
+              headerAlign="center"
+              align="center"
+              highlightCurrentRow
+            >
+              <template #radiu>
+                <div class="center"><div class="radiuBox"></div></div>
+              </template>
+              <template #filling="{ row }">
+                <div class="filling-btn" @click="viewProfile(row)">查看档案</div>
+              </template>
+            </Table>
           </div>
         </div>
-      </div>
-      <div class="background-r">
-        <div class="white">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">完成情况</div></div
-          >
-          <Echart :options="householdOption" :height="300" />
-        </div>
-        <div class="white">
-          <div class="aliam-center">
-            <div class="line"></div>
-            <div class="strong">进度预警</div></div
-          >
-          <Table
-            :data="tableObject"
-            :columns="allSchemas.tableColumns"
-            :header-cell-style="{ background: '#F2F6ff' }"
-            row-key="id"
-            headerAlign="center"
-            align="center"
-            highlightCurrentRow
-          >
-            <!-- <template #doorNo="{ row }">
-                  {{ filterViewDoorNo(row) }}
-                </template>
-                <template #regionText="{ row }">
-                  <div>
-                    {{
-                      `
-                  ${row.cityCodeText ? row.cityCodeText + '/' : ''}
-                  ${row.areaCodeText ? row.areaCodeText : ''}
-                  ${row.townCodeText ? '/' + row.townCodeText : ''}
-                  ${row.villageText ? '/' + row.villageText : ''}
-                  ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
-                  `
-                    }}
+        <div class="background-r">
+          <div class="common-border">
+            <!--工作组进度-->
+            <div class="aliam-center" style="margin: 10px">
+              <div class="line"></div>
+              <div class="strong">工作组进度</div></div
+            >
+            <div class="data-fill-head">
+              <div class="head-top">
+                <div class="tabs">
+                  <div
+                    :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+                    v-for="item in tabsList"
+                    :key="item.id"
+                    @click="onTabClick(item)"
+                  >
+                    {{ item.name }}
                   </div>
-                </template>
-                <template #reportDate="{ row }">
-                  <div>{{ formatDate(row.reportDate) }}</div>
-                </template> -->
-            <template #radiu>
-              <div class="center"><div class="radiuBox"></div></div>
-            </template>
-            <template #filling="{ row }">
-              <div class="filling-btn" @click="viewProfile(row)">查看档案</div>
-            </template>
-          </Table>
+                </div>
+              </div>
+            </div>
+            <!-- <tabButton @tab="tab" :tabList="tabList" /> -->
+            <div v-loading="workLoading" class="echart-wrap">
+              <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
+                <div class="echart-item-lt">
+                  <span class="user-name">{{ item.name }}</span>
+                </div>
+
+                <div class="echart-item-ct">
+                  <div class="progress" :style="{ width: `${item.number}%` }"></div>
+                </div>
+
+                <div class="echart-item-rt">
+                  <text class="txt">{{ item.number }}户</text>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -108,27 +102,11 @@
 
 <script lang="ts" setup>
 import Echart from '@/components/Echart/src/Echart.vue'
-// import water_first from '@/assets/imgs/water_first.png'
-// import water_two from '@/assets/imgs/water_two.png'
-// import water_three from '@/assets/imgs/water_three.png'
-// import water_four from '@/assets/imgs/water_four.png'
-// import water_five from '@/assets/imgs/water_five.png'
-// import water_six from '@/assets/imgs/water_six.png'
-// import water_seven from '@/assets/imgs/water_seven.png'
-// import water_eight from '@/assets/imgs/water_eight.png'
 import arrow from '@/assets/imgs/arrow.png'
 import LiquidBall from './LiquidBall.vue'
-// import icon_first from '@/assets/imgs/home/icon_first.png' // 引入工作粗比拼晾晒 No.1 icon
-// import icon_second from '@/assets/imgs/home/icon_second.png' // 引入工作粗比拼晾晒 No.2 icon
-// import icon_third from '@/assets/imgs/home/icon_third.png' // 引入工作粗比拼晾晒 No.3 icon
-// import icon_four from '@/assets/imgs/home/icon_four.png' // 引入工作粗比拼晾晒 No.4 icon
-// import icon_five from '@/assets/imgs/home/icon_five.png' // 引入工作粗比拼晾晒 No.5 icon
-import tabButton from '../Home/components/tabButton.vue'
+// import tabButton from '../Home/components/tabButton.vue'
 import { ref, reactive, onMounted } from 'vue'
-// import { useTable } from '@/hooks/web/useTable'
 import { Table } from '@/components/Table'
-// import { getLandlordListApi } from '@/api/AssetEvaluation/service'
-// import { useAppStore } from '@/store/modules/app'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import bottomTarg from '../Home/components/bottomTarg.vue'
 
@@ -137,22 +115,41 @@ import {
   villageScheduleList,
   scheduleRankList
 } from '@/api/AssetEvaluation/leader-side'
-import { ElTabs, ElTabPane, ElButton } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-const { currentRoute } = useRouter()
+
+const tabCurrentId = ref<number>(1)
 let actualList = [0, 1, 2, 3, 4, 5, 6]
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
 const type = ref<number>(1)
 const flag = ref<boolean>(false)
+const workLoading = ref<boolean>(false)
+const completeLoading = ref<boolean>(false)
+
+const tabsList = [
+  {
+    id: 1,
+    name: '累计'
+  },
+  {
+    id: 2,
+    name: '今日'
+  },
+  {
+    id: 3,
+    name: '滞后'
+  }
+]
+
 const getWarningList = async () => {
   tableObject.value = await warningList({})
 }
 const getVillageScheduleList = async () => {
+  completeLoading.value = true
   const list = await villageScheduleList({ type: type.value })
-  console.log(list, '1222')
   const dataList = ref<any>([])
   const incompleteNumberList = ref<any>([])
   const completeNumberList = ref<any>([])
@@ -162,18 +159,32 @@ const getVillageScheduleList = async () => {
     completeNumberList.value.push(item.completeNumber)
   })
   householdOption.value.xAxis.data = dataList.value
-  console.log(householdOption.value.xAxis.data, '11111')
   householdOption.value.series[0].data = completeNumberList.value
   householdOption.value.series[1].data = incompleteNumberList.value
+  completeLoading.value = false
 }
 const getScheduleRankList = async () => {
-  const list = await scheduleRankList(parmas.value)
-  //false 累计 true 今日
-  workGroupOptions.value = list.map((item) => {
-    return Object.assign({}, { name: item.name, number: item.completeNumber })
-  })
+  workLoading.value = true
+  try {
+    const list = await scheduleRankList(parmas.value)
+    workLoading.value = false
+    //false 累计 true 今日
+    workGroupOptions.value = list.map((item) => {
+      return Object.assign({}, { name: item.name, number: item.completeNumber })
+    })
+  } catch {
+    workLoading.value = false
+  }
 }
 const newarr = ref<any>([])
+
+const onTabClick = (tabItem) => {
+  if (tabCurrentId.value === tabItem.id) {
+    return
+  }
+  tabCurrentId.value = tabItem.id
+}
+
 onMounted(() => {
   newarr.value = actualList.map((v, index) => {
     return { name: headList.value[index].name, values: v }
@@ -182,27 +193,7 @@ onMounted(() => {
   getVillageScheduleList()
   getScheduleRankList()
 })
-// const { register, tableObject, methods } = useTable({
-//   getListApi: getLandlordListApi
-// })
-// const appStore = useAppStore()
-// const projectId = appStore.currentProjectId
-// const { setSearchParams } = methods
-
-// tableObject.params = {
-//   projectId,
-//   status: 'implementation'
-// }
 const schema = reactive<CrudSchema[]>([
-  // table字段 分割
-  // {
-  //   field: 'index',
-  //   type: 'index',
-  //   label: '进度预警',
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'radiu',
     label: '进度预警',
@@ -234,21 +225,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'regionText',
-  //   label: '所属区域',
-  //   width: 190,
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'regionText',
-  //   label: '所在位置',
-  //   search: {
-  //     show: false
-  //   }
-  // },
   {
     field: 'gridmanName',
     label: '工作组',
@@ -283,8 +259,6 @@ const viewProfile = (row) => {
   console.log(row)
 }
 const { allSchemas } = useCrudSchemas(schema)
-// setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
-// setSearchParams({ type: 'IndividualHousehold', status: 'implementation' })
 const tabList = [
   {
     title: '累计'
@@ -312,7 +286,6 @@ const checktab = (index) => {
     flag.value = false
   } else {
     type.value = index + 2
-    console.log(type.value)
     getVillageScheduleList()
     parmas.value = { type: type.value }
     getScheduleRankList()
@@ -326,15 +299,9 @@ const checktab = (index) => {
 
 const handleClick = (tab) => {
   if (tab.props.name == '房产') {
-    // console.log(tab.props.name, '11111111111111')
-    // type.value = 10
-    // parmas.value = { type: type.value, isToday: false }
     parmas.value.type = 10
     getScheduleRankList()
   } else if (tab.props.name == '土地') {
-    // console.log(tab.props.name, '222222222222')
-    // type.value = 11
-    // parmas.value = { type: type.value, isToday: false }
     parmas.value.type = 11
     getScheduleRankList()
   }
@@ -430,10 +397,6 @@ const householdOption = ref({
             offset: 0,
             color: '#51CE94' // 0% 处的颜色
           }
-          // {
-          //   offset: 1,
-          //   color: '#8EBBFF' // 100% 处的颜色
-          // }
         ]
       }
     },
@@ -455,10 +418,6 @@ const householdOption = ref({
             offset: 0,
             color: '#65A4FE' // 0% 处的颜色
           }
-          // {
-          //   offset: 1,
-          //   color: '#FF8E8E ' // 100% 处的颜色
-          // }
         ]
       }
     }
@@ -471,25 +430,58 @@ const onBack = () => {
 </script>
 
 <style lang="less" scoped>
+.data-fill-head {
+  position: relative;
+  padding: 14px 16px;
+  margin-top: 6px;
+  background: #ffffff;
+  border-radius: 4px;
+  // box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
+
+  .head-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tabs {
+    display: flex;
+    align-items: center;
+
+    .tab-item {
+      display: flex;
+      height: 32px;
+      padding: 0 20px;
+      margin-right: 4px;
+      font-size: 14px;
+      color: #000;
+      cursor: pointer;
+      background: #f0f2f7;
+      border-radius: 10px 10px 0px 0px;
+      align-items: center;
+
+      &.active {
+        color: #fff;
+        background-color: var(--el-color-primary);
+      }
+    }
+  }
+}
+
 :deep(.el-tabs__nav .el-tabs__item) {
   width: 80%;
   height: 22px;
   font-size: 16px;
   font-weight: bold;
-  // color: #3e73ec;
   line-height: 19px;
   text-align: center;
-  // -webkit-background-clip: text;
-  // -webkit-text-fill-color: transparent;
 }
 
 .data-fill {
   width: 100%;
 }
-
 .common-color {
   width: 100%;
-  /* background-color: white; */
   padding: 10px;
   margin: 10px 0px auto;
   border-radius: 5px;
@@ -537,21 +529,23 @@ const onBack = () => {
 }
 
 .background-l {
-  width: 39.5%;
-  background-color: white;
+  width: 75%;
+  background: #fff;
+  border-radius: 8px;
 }
 
 .background-r {
-  width: 59.5%;
+  width: 25%;
+  // background: #fff;
+  // padding-top: 30px;
+  margin-top: 30px;
 }
 
 .white {
   padding: 10px;
   margin: 10px 0px auto;
-  background-color: white;
   border-radius: 5px;
 }
-
 .margin {
   margin-top: 10px;
 }
@@ -663,5 +657,13 @@ const onBack = () => {
   background-color: #ff5722;
   border-radius: 50%;
   box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
+}
+
+.common-border {
+  border: 2px solid rgba(62, 115, 236, 0.7);
+  border-radius: 8px;
+  opacity: 1;
+  box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+  box-sizing: border-box;
 }
 </style>
