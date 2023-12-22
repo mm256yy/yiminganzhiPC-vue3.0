@@ -18,7 +18,7 @@
       align="center"
       highlightCurrentRow
       @register="register"
-      height="250"
+      height="500"
     >
       <template #grantTime="{ row }">
         <div>{{ row.grantTime ? dayjs(row.grantTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</div>

@@ -427,6 +427,7 @@ const getList = async () => {
     width: 74px;
     height: 15px;
   }
+
   .contain {
     width: 620px;
     height: 755px;

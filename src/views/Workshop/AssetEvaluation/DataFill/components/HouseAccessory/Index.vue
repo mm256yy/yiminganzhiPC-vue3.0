@@ -56,12 +56,22 @@
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.number"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.price"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -72,7 +82,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.discountRate" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.discountRate"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -83,7 +98,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -300,9 +315,9 @@ const getModelValue = (row: any) => {
     Number(row.number) *
     Number(row.price) *
     (Number(row.discountRate) == 0 ? 1 : Number(row.discountRate))
-  return totalPrice
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
-
 onMounted(() => {
   getList()
 })

@@ -39,6 +39,10 @@
         <div class="tit">监理单位：</div>
         <div class="txt">{{ props.baseInfo.supervisionCompany || '-' }}</div>
       </div>
+      <div class="info-item">
+        <div class="tit">项目进度:</div>
+        <div class="txt">{{ props.baseInfo.projectSchedule || '-' }}</div>
+      </div>
     </div>
   </div>
 </template>

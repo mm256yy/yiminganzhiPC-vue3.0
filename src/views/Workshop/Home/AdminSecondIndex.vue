@@ -1129,7 +1129,7 @@ const immigrationOption = ref({
   ]
 })
 
-const genderOption = ref({
+const genderOption: any = ref({
   tooltip: {
     trigger: 'item'
   },
@@ -1364,11 +1364,11 @@ const onBack = () => {
     .echart-item-lt {
       display: flex;
       width: 80px;
+      padding-left: 20px;
       font-size: 14px;
       text-overflow: ellipsis;
       word-break: keep-all;
       align-items: center;
-      padding-left: 20px;
       justify-content: center;
 
       .top-img {
@@ -1400,6 +1400,7 @@ const onBack = () => {
         /* transform-origin: 0% 0%; */
       }
     }
+
     .echart-item-rt {
       display: flex;
       align-items: center;
@@ -1424,19 +1425,19 @@ const onBack = () => {
 }
 
 .gender-txt {
+  padding-top: 4px;
+  margin-left: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #171718;
-  margin-left: 8px;
-  padding-top: 4px;
   font-weight: bold;
+  color: #171718;
 }
 
 .ground-txt {
+  margin-left: 8px;
   font-size: 18px;
   font-weight: bold;
   color: #171718;
-  margin-left: 8px;
 }
 
 .left-tit {
@@ -1449,19 +1450,19 @@ const onBack = () => {
 .arrow-to-right {
   width: 0;
   height: 0;
-  border-top: 8px solid transparent;
-  border-left: 8px solid #97b7ff;
-  border-bottom: 6px solid transparent;
+  margin: 10px;
   font-size: 0px;
   line-height: 20px;
-  margin: 10px;
+  border-top: 8px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid #97b7ff;
 }
 
 .left-dot {
   width: 6px;
   height: 6px;
+  margin-right: 8px;
   background: #9fbcff;
   border-radius: 50%;
-  margin-right: 8px;
 }
 </style>

@@ -35,8 +35,10 @@
           <div>{{ formatDateTime(row.createdDate) }}</div>
         </template>
         <template #action="{ row }">
-          <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
-          <ElButton type="primary" @click="onReviewRow(row)"> 审核 </ElButton>
+          <ElButton type="primary" link @click="onViewRow(row)">查看</ElButton>
+          <ElButton type="primary" link @click="onReviewRow(row)" v-show="tabVal == '1'">
+            审核
+          </ElButton>
         </template>
       </Table>
     </div>
@@ -418,6 +420,12 @@ onMounted(() => {
         }
       }
     }
+  }
+}
+
+:deep(.cell) {
+  .el-button + .el-button {
+    margin: auto;
   }
 }
 </style>

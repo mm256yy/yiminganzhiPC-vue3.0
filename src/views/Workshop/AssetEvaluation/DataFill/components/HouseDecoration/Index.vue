@@ -116,6 +116,7 @@
           <template #default="scope">
             <ElInputNumber
               :min="0"
+              @change="getModelValue(scope.row)"
               v-model="scope.row.number"
               :precision="2"
               v-if="scope.row.isBuyItNow == '0'"
@@ -127,6 +128,7 @@
           <template #default="scope">
             <ElInputNumber
               :min="0"
+              @change="getModelValue(scope.row)"
               v-model="scope.row.price"
               :precision="2"
               v-if="scope.row.isBuyItNow == '0'"
@@ -144,6 +146,7 @@
           <template #default="scope">
             <ElInputNumber
               :min="0"
+              @change="getModelValue(scope.row)"
               v-model="scope.row.discountRate"
               :precision="2"
               v-if="scope.row.isBuyItNow == '0'"
@@ -161,7 +164,7 @@
           <template #default="scope">
             <ElInputNumber
               :min="0"
-              :model-value="getModelValue(scope.row)"
+              v-model="scope.row.valuationAmount"
               :precision="2"
               v-if="scope.row.isBuyItNow == '0'"
             />
@@ -390,9 +393,9 @@ const onSave = () => {
 // 自动计算评估金额
 const getModelValue = (row: any) => {
   const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
-  return totalPrice
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
-
 onMounted(() => {
   getList()
 })

@@ -64,12 +64,22 @@
         </ElTableColumn>
         <ElTableColumn label="数量" :width="150" prop="number" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getValuationAmount(scope.row)"
+              v-model="scope.row.number"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn label="单价" :width="150" prop="price" align="center" header-align="center">
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.price" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getValuationAmount(scope.row)"
+              v-model="scope.row.price"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -80,7 +90,11 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.newnessRate" />
+            <ElInput
+              placeholder="请输入"
+              @change="getValuationAmount(scope.row)"
+              v-model="scope.row.newnessRate"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -91,7 +105,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getValuationAmount(scope.row)" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -316,7 +330,12 @@ const handleClose = () => {
 }
 //自动计算评估金额
 const getValuationAmount = (row: any) => {
-  return Number(row.number) * Number(row.price) * Number(row.newnessRate)
+  let totalPrice = Number(row.number) * Number(row.price) * Number(row.newnessRate)
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
+}
+let handelchange = (e: any, row) => {
+  row.compensationAmount = e
 }
 onMounted(() => {
   getList()

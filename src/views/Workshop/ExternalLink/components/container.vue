@@ -1,6 +1,6 @@
 <!--
  * @Author: baike
- * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div class="container_box">
@@ -25,8 +25,8 @@
           <view @click="handleClickItem(4)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
-              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
-            /></view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
+            </view>
           </view>
         </template>
       </Label>
@@ -61,8 +61,8 @@
           <view @click="handleClickItem(5)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
-              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
-            /></view>
+              <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
+            </view>
           </view>
         </template>
       </Label>
@@ -192,8 +192,7 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    console.log('ZPP', result.token)
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
     window.location.href = url
     console.log('QPP', url)
   } catch {}
@@ -225,117 +224,131 @@ onMounted(() => {
     height: 15px;
     // margin-top: 2px;
   }
+
   .right_text {
     font-size: 14px;
-    font-family: PingFang SC, PingFang SC;
+
     font-weight: 400;
-    color: #666666;
     line-height: 20px;
+    color: #666666;
   }
+
   .right_slot {
     display: flex;
     cursor: pointer;
+
     .look_icon {
       width: 16px;
       height: 16px;
       margin-top: 2px;
     }
   }
+
   .cin_top {
+    position: relative;
+    display: flex;
     width: 620px;
     height: 360px;
+    padding: 16px 24px;
+    margin-bottom: 12px;
     background: url('../../../../assets/imgs/homes/ym_bg.png');
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
     border-radius: 8px 8px 8px 8px;
-    margin-bottom: 12px;
-    display: flex;
-    padding: 16px 24px;
-    cursor: pointer;
-    position: relative;
 
     .screen {
-      width: 31px;
-      height: 30px;
-      background: url('../../../../assets/imgs/homes/qb.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center center;
       position: absolute;
       right: 9px;
       bottom: 9px;
+      width: 31px;
+      height: 30px;
       cursor: pointer;
+      background: url('../../../../assets/imgs/homes/qb.png');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
     }
+
     .seach_select {
       width: 96px;
       height: 40px;
       background: url('../../../../assets/imgs/homes/seach_select.png');
+      background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
-      background-position: center center;
+
       .s_full {
         :deep(.el-input__wrapper) {
-          background: #3578f2 !important;
           padding: 4px 11px !important;
           font-weight: 500;
+          background: #3578f2 !important;
           border-color: #3578f2;
           outline: none;
           box-shadow: none;
         }
+
         :deep(.el-input__inner) {
           color: #ffffff !important;
           outline: none;
           box-shadow: none;
         }
+
         :deep(.el-icon) svg {
-          color: #ffffff;
           font-weight: bold;
+          color: #ffffff;
         }
       }
     }
+
     .search {
+      position: relative;
       width: 476px;
       height: 40px;
+      margin-left: -2px;
       background: url('../../../../assets/imgs/homes/seach.png');
+      background-position: center center;
       background-repeat: no-repeat;
       background-size: cover;
-      background-position: center center;
-      margin-left: -2px;
-      position: relative;
+
       .ipt {
         width: 476px;
         height: 40px;
       }
+
       .seach_icon {
+        position: absolute;
+        top: 10px;
+        right: 16px;
         width: 21px;
         height: 20px;
+        cursor: pointer;
         background: url('../../../../assets/imgs/homes/search_icon.png');
+        background-position: center center;
         background-repeat: no-repeat;
         background-size: cover;
-        background-position: center center;
-        position: absolute;
-        right: 16px;
-        top: 10px;
-        cursor: pointer;
       }
     }
   }
+
   .con_box {
     width: 620px;
     height: 298px;
-    background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     margin-bottom: 12px;
-    box-sizing: border-box;
+    background: #ffffff;
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
-    border: 2px solid rgba(62, 115, 236, 0.7);
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    box-sizing: border-box;
+
     .news_box {
       padding: 0 26px;
+
       .news_info {
         display: flex;
         flex-wrap: wrap;
+
         .news_li:nth-of-type(1) {
           margin-top: 16px;
           margin-bottom: 28px;
@@ -349,66 +362,71 @@ onMounted(() => {
         .news_li {
           display: flex;
           flex: 1;
-          cursor: pointer;
+
           .li_l_top {
-            margin-bottom: 5px;
             width: 158px;
             height: 40px;
+            margin-bottom: 5px;
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
+
             font-weight: 500;
             color: #333333;
           }
+
           .li_l_bom {
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
+
             font-weight: 400;
-            color: #999999;
             line-height: 20px;
+            color: #999999;
           }
 
           .news_li_logo {
             width: 99px;
             height: 65px;
+            // background: red;
+            margin-left: 10px;
+
             .cover-pic {
               width: 99px;
               height: 65px;
             }
-            // background: red;
-            margin-left: 10px;
           }
         }
       }
     }
   }
+
   .con_bom {
     width: 620px;
     height: 268px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
-    box-sizing: border-box;
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
-    border: 2px solid rgba(62, 115, 236, 0.7);
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    box-sizing: border-box;
 
     .table_box {
       padding: 8px 16px;
+
       .th-title {
         display: flex;
         height: 36px;
         padding: 0 10px;
+
+        font-size: 14px;
+
+        font-weight: 500;
+        line-height: 36px;
+        color: #171718;
         // font-weight: bold;
         background: #f2f6ff;
         box-sizing: border-box;
         align-items: center;
         justify-content: space-between;
-
-        font-size: 14px;
-        font-family: PingFang SC, PingFang SC;
-        font-weight: 500;
-        color: #171718;
-        line-height: 36px;
       }
+
       .question-list {
         .item {
           display: flex;
@@ -423,8 +441,7 @@ onMounted(() => {
             width: 70px;
             overflow: hidden;
             font-size: 14px;
-            font-weight: 500;
-            font-family: PingFang SC, PingFang SC;
+
             font-weight: 500;
             color: #333333;
             text-overflow: ellipsis; //溢出用省略号显示
@@ -435,14 +452,14 @@ onMounted(() => {
             margin-left: 70px;
             overflow: hidden;
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
+
             font-weight: 500;
             color: #666666;
           }
 
           .time {
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
+
             font-weight: 500;
             color: rgba(19, 19, 19, 0.4);
           }

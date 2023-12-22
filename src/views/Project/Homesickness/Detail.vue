@@ -153,8 +153,8 @@ onMounted(() => {
   }
   getNewsByIdApi(id).then((res) => {
     if (res) {
-      coverPic.value = JSON.parse(res.coverPic)
-      enclosure.value = JSON.parse(res.otherPic)
+      coverPic.value = res.coverPic ? JSON.parse(res.coverPic) : []
+      enclosure.value = res.otherPic ? JSON.parse(res.otherPic) : []
       res.showable = res.showable == '1' ? true : false
       res.top = res.top == '1' ? true : false
       methods.setValues({

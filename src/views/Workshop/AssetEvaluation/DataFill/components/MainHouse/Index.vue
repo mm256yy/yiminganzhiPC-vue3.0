@@ -119,7 +119,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.landArea" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.landArea"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -219,7 +224,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.newnessRate" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.newnessRate"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -230,7 +240,12 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationPrice" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.valuationPrice"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -241,7 +256,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" :model-value="getModelValue(scope.row)" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -396,9 +411,12 @@ const getModelValue = (row: any) => {
     Number(row.landArea) *
     Number(row.valuationPrice) *
     (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate))
-  return totalPrice
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
-
+let handelchange = (e: any, row) => {
+  row.compensationAmount = e
+}
 onMounted(() => {
   getList()
 })

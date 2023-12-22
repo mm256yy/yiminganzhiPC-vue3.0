@@ -394,18 +394,21 @@ const close = () => {
   right: -410px;
   z-index: 999;
 }
+
 #top_b {
   position: absolute;
   top: 155px;
   right: -410px;
   z-index: 999;
 }
+
 #top_c {
   position: absolute;
   top: 305px;
   right: -410px;
   z-index: 999;
 }
+
 #top_d {
   position: absolute;
   top: 405px;

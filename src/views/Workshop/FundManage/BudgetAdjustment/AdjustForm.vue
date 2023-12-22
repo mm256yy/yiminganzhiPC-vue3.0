@@ -87,7 +87,8 @@ const form = ref<Omit<AdjustmentType, 'id'>>(defaultValue)
 const rules = reactive<FormRules>({
   name: [required()],
   doorNo: [required()],
-  parentCode: [required()]
+  parentCode: [required()],
+  type: [required()]
 })
 
 // 关闭弹窗
@@ -124,6 +125,7 @@ const submit = async (data: AdjustmentType) => {
     btnLoading.value = false
     ElMessage.success('操作成功！')
   } else {
+    btnLoading.value = false
     ElMessage.error('待审核状态不能调整概算')
   }
   onClose(true)

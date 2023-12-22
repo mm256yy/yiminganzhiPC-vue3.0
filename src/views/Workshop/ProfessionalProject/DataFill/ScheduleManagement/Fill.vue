@@ -266,9 +266,7 @@ const onError = () => {
   }
 }
 
-.upload {
-  .el-upload--picture-card {
-    display: none;
-  }
+:deep(.el-upload--picture-card) {
+  display: none;
 }
 </style>

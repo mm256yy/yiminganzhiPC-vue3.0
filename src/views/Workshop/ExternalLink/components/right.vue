@@ -340,12 +340,12 @@ const handleProcessClick = (item: any) => {
     }
 
     .management_foot {
+      display: flex;
       margin-top: 25px;
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
       color: #666666;
-      display: flex;
       align-items: center;
 
       .text_a {
@@ -353,11 +353,11 @@ const handleProcessClick = (item: any) => {
       }
 
       .text_num {
+        padding-left: 8px;
         font-size: 20px;
         font-weight: 400;
         line-height: 23px;
         color: #333333;
-        padding-left: 8px;
       }
 
       .text_b {
