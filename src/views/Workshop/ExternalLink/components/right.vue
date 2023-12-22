@@ -54,11 +54,13 @@
       <div class="management_foot">
         <span class="text_a">本年计划资金(万元)</span>
         <span class="text_num">{{ fundScreenDto.bnjhzj }}</span>
-        <span class="text_b">本年使用资金(万元)</span>
-        <span class="text_num">{{ fundScreenDto.bnsyzj }}</span>
+        <div class="center-txt">
+          <span>本年使用资金(万元)</span>
+          <span class="text_num">{{ fundScreenDto.bnsyzj }}</span>
+        </div>
       </div>
     </div>
-    <div class="right_info_con">
+    <div class="right_info_con" style="display: flex; flex-direction: column">
       <Label>
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/jd.png" alt="" />
@@ -73,14 +75,12 @@
         </template>
       </Label>
 
-      <div class="progress">
+      <div class="progress" style="flex: 1; display: flex; flex-direction: column">
         <div class="progoress_ridio">
           <div class="cur_b"></div>
           <div class="ridio_text">实际进度</div>
-          <div class="cur_jd"></div>
-          <div>实际进度</div>
         </div>
-        <div class="progress_list">
+        <div class="progress_list" style="flex: 1">
           <div v-for="item in progressList" :key="item.img" class="progress_li">
             <div class="li_img">
               <img class="logo_li" :src="item.img" alt="" />
@@ -88,7 +88,7 @@
             <div class="li_right">
               <div class="li_title">{{ item.name }}</div>
               <ElProgress :color="customColor_a" class="progress_top" :percentage="item.actual" />
-              <ElProgress :color="customColor" class="progress_top" :percentage="item.plan" />
+              <!-- <ElProgress :color="customColor" class="progress_top" :percentage="item.plan" /> -->
             </div>
           </div>
         </div>
@@ -107,13 +107,14 @@
 <script lang="ts" setup>
 import Label from './label.vue'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import { ElProgress } from 'element-plus'
 const { emitter } = useEmitt()
 
 const { push } = useRouter()
+let route = useRoute()
 const fundScreenDto = ref<any>({})
 
 const customColor = ref('#CADAFF')
@@ -144,6 +145,8 @@ const getInfo = (e: any) => {
   })
 }
 const handleClickItem = (type: number) => {
+  console.log(route)
+
   const pathMap = {
     1: 'adminSecondHome', // 大数据分析
     2: 'adminhomefund', //资金管理
@@ -318,19 +321,20 @@ const handleClickItem = (type: number) => {
     }
 
     .management_foot {
+      display: flex;
       margin-top: 25px;
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
       color: #666666;
+      align-items: center;
 
       .text_a {
-        margin-right: 8px;
-        margin-left: 39px;
+        margin-left: 60px;
       }
 
       .text_num {
-        font-family: DIN Medium, DIN Medium;
+        padding-left: 8px;
         font-size: 20px;
         font-weight: 400;
         line-height: 23px;
@@ -338,8 +342,14 @@ const handleClickItem = (type: number) => {
       }
 
       .text_b {
-        margin-right: 8px;
         margin-left: 98px;
+      }
+
+      .center-txt {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 190px;
       }
     }
   }
@@ -416,7 +426,7 @@ const handleClickItem = (type: number) => {
             margin-bottom: 6px;
           }
 
-          /deep/ .el-progress-bar__outer {
+          :deep(.el-progress-bar__outer) {
             height: 10px !important;
           }
         }

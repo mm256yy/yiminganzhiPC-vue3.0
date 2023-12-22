@@ -22,6 +22,9 @@
         :columns="schemas.columns"
         :showOverflowTooltip="true"
         tableLayout="auto"
+        height="460"
+        :max-height="460"
+        style="width: 100%"
         row-key="id"
         show-summary
         headerAlign="center"

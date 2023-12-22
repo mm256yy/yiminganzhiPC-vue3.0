@@ -729,7 +729,7 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .upload {
-  /deep/ .el-upload {
+  :deep(.el-upload) {
     display: none;
   }
 }

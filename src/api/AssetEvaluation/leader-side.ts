@@ -79,3 +79,15 @@ export const getLeadershipScreenDetail = (query: any): Promise<any> => {
   })
 }
 // api/
+//getFundAnalysis
+export const getFundAnalysis = (): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/getFundAnalysis`
+  })
+}
+// /api/leadershipScreen/getLanAnalysisReport
+export const getLanAnalysisReport = (): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/getLanAnalysisReport`
+  })
+}

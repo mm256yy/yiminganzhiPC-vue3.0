@@ -1,11 +1,7 @@
 <template>
   <ContentWrap title="菜单管理">
     <div class="flex justify-between">
-      <Search
-        :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
-      />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
       <ElButton :icon="addIcon" type="primary" @click="onAddMenu">新增</ElButton>
     </div>
 
@@ -99,6 +95,28 @@ const loadProject = () => {
   })
 }
 
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    size: 100
+  }
+  setSearchParams({})
+}
+
 onMounted(() => {
   // 权限限制
   if (!appStore.getIsSysAdmin) {
@@ -151,7 +169,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'showName',
     label: '类目名称',
     search: {
       show: false
@@ -165,7 +183,7 @@ const schema = reactive<CrudSchema[]>([
     align: 'left'
   },
   {
-    field: 'showName',
+    field: 'name',
     label: '显示名称'
   },
   {
@@ -346,6 +364,7 @@ const onEditMenu = (row: MenuDtoType) => {
 
 const onFormPupClose = () => {
   menuPup.value = false
+  tableObject.currentRow = null
 }
 
 const onSubmit = async (data: MenuDtoType) => {

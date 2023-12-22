@@ -271,13 +271,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -356,7 +357,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: true,
@@ -461,7 +462,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: false

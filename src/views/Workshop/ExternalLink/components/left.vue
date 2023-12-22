@@ -1,6 +1,7 @@
 <!--
  * @Author: baike
  * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div class="letf_info">
@@ -341,8 +342,15 @@ const handleChange = () => {
 }
 
 const onChange = (e: any) => {
-  isClose.value = true
-  isType.value = e
+  console.log(e, isClose.value)
+
+  if (isClose.value) {
+    isClose.value = false
+  }
+  setTimeout(() => {
+    isClose.value = true
+    isType.value = e
+  }, 500)
 }
 const villageList = async () => {
   villageLists.value = await getVillageList({})
@@ -392,103 +400,110 @@ const getList = async () => {
   .header {
     width: 620px;
     height: 182px;
+    margin-bottom: 13px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
-    border: 2px solid rgba(62, 115, 236, 0.7);
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
-    margin-bottom: 13px;
 
     .w-full {
       width: 80px;
       height: 24px;
       margin-top: -6px;
     }
+
     .con_box {
       padding: 16px;
       font-size: 14px;
-      font-family: PingFang SC, PingFang SC;
       font-weight: 400;
-      color: #171718;
       line-height: 20px;
+      color: #171718;
     }
   }
+
   .xm_img {
     width: 74px;
     height: 15px;
   }
+
   .contain {
     width: 620px;
     height: 755px;
     background: #ffffff;
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+    border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
-    border: 2px solid rgba(62, 115, 236, 0.7);
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+
     .contain_ym_box {
-      padding: 16px;
       position: relative;
-      .siderbar_box_house {
-      }
+      padding: 16px;
+
       .tip_box {
         display: flex;
 
         .icon {
           width: 7px;
           height: 9px;
-          margin-right: 8px;
           margin-top: 2px;
-        }
-        .left_text {
-          font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
-          font-weight: 500;
-          color: #131313;
-          line-height: 16px;
           margin-right: 8px;
         }
+
+        .left_text {
+          margin-right: 8px;
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 16px;
+          color: #131313;
+        }
+
         .right_tip_box {
+          position: relative;
           padding: 2px 10px;
+          margin-top: -2px;
+          margin-left: 6px;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 16px;
+          color: #333333;
           background: #f3f7ff;
           border-radius: 4px 4px 4px 4px;
-          font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
-          font-weight: 400;
-          color: #333333;
-          line-height: 16px;
-          margin-top: -2px;
-          position: relative;
-          margin-left: 6px;
+
           .icons {
+            position: absolute;
+            top: 5px;
+            left: -7px;
             width: 7px;
             height: 9px;
-            position: absolute;
-            left: -7px;
-            top: 5px;
           }
+
           span {
+            margin-right: 5px;
             font-weight: 600;
             color: #3e73ec;
-            margin-right: 5px;
           }
         }
       }
+
       .people_tip {
         margin-bottom: 10px;
       }
+
       .permanent {
+        position: relative;
+        display: flex;
         width: 100%;
-        cursor: pointer;
         height: 72px;
+        margin-top: 10px;
+        margin-bottom: 18px;
+        cursor: pointer;
+        border: 1px solid rgba(62, 115, 236, 0.2);
         border-radius: 4px 4px 4px 4px;
         opacity: 1;
-        border: 1px solid rgba(62, 115, 236, 0.2);
-        margin-top: 10px;
-        display: flex;
         justify-content: space-between;
-        margin-bottom: 18px;
-        position: relative;
+
         .siderbar_box {
           position: absolute;
           top: 15px;
@@ -498,32 +513,36 @@ const getList = async () => {
 
         .permanent_box {
           font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
           font-weight: 500;
-          color: #666666;
           line-height: 20px;
+          color: #666666;
           text-align: center;
           flex: 1;
         }
+
         .permanent_box_top {
           margin-top: 10px;
           margin-bottom: 8px;
         }
+
         .permanent_box_bom {
-          font-size: 20px;
           font-family: DIN Medium, DIN Medium;
+          font-size: 20px;
           font-weight: 400;
-          color: #171718;
           line-height: 23px;
+          color: #171718;
+
           span {
             font-size: 14px;
             font-weight: none;
           }
         }
       }
+
       .peoole_list {
         position: relative;
         cursor: pointer;
+
         .siderbar_people {
           position: absolute;
           top: 15px;
@@ -531,167 +550,182 @@ const getList = async () => {
           z-index: 999;
         }
       }
+
       .people_info {
         padding-left: 7px;
+
         .people_box {
           display: flex;
+
           .prople_img {
             width: 56px;
             height: 56px;
           }
+
           .people_con {
             width: 178px;
             height: 44px;
-            border-radius: 4px 4px 4px 4px;
-            opacity: 1;
-            border: 1px solid rgba(62, 115, 236, 0.2);
             margin-left: 8px;
+            font-size: 14px;
             line-height: 40px;
             text-align: center;
-            font-size: 14px;
+            border: 1px solid rgba(62, 115, 236, 0.2);
+            border-radius: 4px 4px 4px 4px;
+            opacity: 1;
+
             .num {
-              font-size: 20px;
               font-family: DIN Medium, DIN Medium;
+              font-size: 20px;
               font-weight: 400;
               color: #171718;
             }
+
             .people_text {
               margin-right: 8px;
               font-size: 14px;
-              font-family: PingFang SC, PingFang SC;
               font-weight: 500;
               color: #666666;
             }
           }
+
           .people_right {
+            position: relative;
             width: 324px;
             height: 44px;
+            margin-left: 16px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 44px;
+            color: #000000;
+            text-align: center;
             background: #f3f7ff;
             border-radius: 4px 4px 4px 4px;
             opacity: 1;
-            margin-left: 16px;
-            position: relative;
-            text-align: center;
-            line-height: 44px;
-            font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
-            font-weight: 400;
-            color: #000000;
 
             .people_border {
+              display: inline-block;
               width: 0px;
               height: 14px;
-              opacity: 1;
-              border: 1px solid #dddddd;
-              display: inline-block;
               margin: 0 16px;
+              border: 1px solid #dddddd;
+              opacity: 1;
             }
+
             span {
+              margin-right: 8px;
               font-size: 14px;
-              font-family: PingFang SC, PingFang SC;
               font-weight: 500;
               color: #666666;
-              margin-right: 8px;
             }
+
             .right_icon {
               position: absolute;
-              left: -9px;
               top: 16px;
+              left: -9px;
               width: 9px;
               height: 12px;
             }
           }
         }
       }
+
       .business {
         display: flex;
-        margin-top: 11px;
         padding-left: 13px;
+        margin-top: 11px;
         margin-bottom: 18px;
         cursor: pointer;
+
         .business_li {
           display: flex;
           flex: 1;
+
           .ico_a {
             width: 40px;
             height: 40px;
             margin-right: 8px;
           }
         }
+
         .business_li_r {
           font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
           font-weight: 500;
-          color: #666666;
           line-height: 16px;
+          color: #666666;
+
           .bom_text {
-            font-size: 20px;
-            font-family: DIN Medium, DIN Medium;
-            font-weight: 400;
-            color: #171718;
-            line-height: 23px;
             margin-top: 8px;
+            font-family: DIN Medium, DIN Medium;
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 23px;
+            color: #171718;
+
             span {
-              line-height: 16px;
               font-size: 14px;
+              line-height: 16px;
             }
           }
         }
       }
+
       .project {
-        margin-top: 12px;
         display: flex;
+        margin-top: 12px;
+
         .project_table {
-          flex: 1;
-          margin-right: 8px;
           height: 172px;
+          padding: 16px;
+          margin-right: 8px;
           background: #f2f6ff;
-          box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
           border-radius: 4px 4px 4px 4px;
           opacity: 1;
-          padding: 16px;
+          box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
+          flex: 1;
         }
 
         .table_li {
           display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
           width: 100%;
+          margin-bottom: 10px;
+          justify-content: space-between;
+
           .table_name {
             position: relative;
+            padding-left: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 20px;
+            color: #666666;
+
             .table_cur {
+              position: absolute;
+              top: 8px;
+              left: 0;
+              display: inline-block;
               width: 4px;
               height: 4px;
               background: #9fbcff;
               border-radius: 0px 0px 0px 0px;
-              display: inline-block;
-              position: absolute;
-              left: 0;
-              top: 8px;
             }
-            font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
-            font-weight: 500;
-            color: #666666;
-            line-height: 20px;
-            padding-left: 12px;
           }
+
           .tabel_value {
             font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
             font-weight: 400;
-            color: #171718;
             line-height: 16px;
+            color: #171718;
           }
         }
+
         .project_table_r {
-          flex: 1;
           height: 172px;
+          padding: 16px;
           background: #f2f6ff;
-          box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
           border-radius: 4px 4px 4px 4px;
           opacity: 1;
-          padding: 16px;
+          box-shadow: 0px 2px 0px 0px rgba(62, 115, 236, 0.2);
+          flex: 1;
         }
       }
     }

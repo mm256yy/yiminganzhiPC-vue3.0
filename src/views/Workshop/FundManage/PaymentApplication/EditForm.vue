@@ -98,7 +98,7 @@
           </div>
         </div>
       </div> -->
-      <ElFormItem label="收款方:" v-if="form.payType == 2" prop="payee">
+      <ElFormItem label="收款方:" v-if="form.payType == 2 && form.paymentType != 1" prop="payee">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[396]"
@@ -198,7 +198,7 @@
             header-align="center"
           /> -->
           <ElTableColumn
-            label="合同金额(万元)"
+            label="合同金额(元)"
             prop="contractAmount"
             align="center"
             header-align="center"
@@ -296,7 +296,7 @@
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time" v-if="item.status">
-                    审核时间：{{
+                    提交时间：{{
                       item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
                     }}
                   </div>
@@ -419,7 +419,7 @@ watch(
       // 处理行政区划
       form.value = { ...(val as {}) }
       console.log(form.value, 'bbq')
-      relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : ''
+      relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : []
       fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
         if (item.name != '概算外费用') {
           pre.push(item)
@@ -453,6 +453,8 @@ watch(
 )
 //刷新清空
 const refresh = () => {
+  console.log(1)
+
   amoutPrice.value = 0
   num.value = 0
   otherData.value = []

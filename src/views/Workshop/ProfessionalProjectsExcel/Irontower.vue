@@ -26,6 +26,9 @@
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="tableObject.loading">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title"> 铁塔工程统计表 </div>
+      </div>
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"

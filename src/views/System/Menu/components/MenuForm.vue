@@ -29,15 +29,15 @@
         <ElCol :span="12">
           <ElFormItem
             :label="form.type === MenuTypes.button ? '按钮名称' : '菜单标题'"
-            prop="name"
+            prop="showName"
             required
           >
-            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.name" />
+            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.showName" />
           </ElFormItem>
         </ElCol>
         <ElCol :span="12" v-if="form.type !== MenuTypes.button">
-          <ElFormItem label="展示标题" prop="showName" required>
-            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.showName" />
+          <ElFormItem label="展示标题" prop="name" required>
+            <ElInput :minlength="2" :maxlength="20" v-model.trim="form.name" />
           </ElFormItem>
         </ElCol>
       </ElRow>

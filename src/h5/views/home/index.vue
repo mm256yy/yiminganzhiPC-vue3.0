@@ -230,7 +230,6 @@ onMounted(() => {
 }
 
 .label-txt {
-  font-family: PingFang SC;
   font-size: 34px;
   font-weight: 700;
   line-height: 32px;

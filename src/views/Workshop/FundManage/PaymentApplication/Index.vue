@@ -76,7 +76,6 @@
     </div>
 
     <EditForm
-      v-if="dialog"
       :show="dialog"
       @close="onEditFormClose"
       :actionType="actionType"
@@ -199,8 +198,9 @@ const onDelRow = async (row: any, multiple: boolean) => {
 const onAddRow = () => {
   actionType.value = 'add'
   tableObject.currentRow = {}
-  dialog.value = true
+
   vill.value.refresh()
+  dialog.value = true
 }
 
 const onEditRow = (row: any) => {

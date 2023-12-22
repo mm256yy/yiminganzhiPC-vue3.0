@@ -1,6 +1,7 @@
 <!--
  * @Author: baike
  * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div v-loading="loading" class="sider_info" :id="idName">
@@ -23,7 +24,9 @@
     </div>
     <div class="right_icon"></div>
     <div v-if="index == 0" class="container">
-      <div class="con_tilte"> 土地权属 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        土地权属<span>{{ detail.gytd + detail.jttd }}</span>
+      </div>
       <div class="con_list">
         <div class="li">
           <div class="li_name">国有土地</div>
@@ -34,7 +37,11 @@
           <div class="li_value">{{ detail.jttd }}</div>
         </div>
       </div>
-      <div class="con_tilte"> 工程建设区和水库淹没区 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        工程建设区和水库淹没区<span>{{
+          detail.c_xcx + detail.c_xcx + detail.c_kqq + detail.c_pax
+        }}</span>
+      </div>
 
       <div class="con_list">
         <div class="li">
@@ -54,7 +61,9 @@
           <div class="li_value">{{ detail.c_pax }}</div>
         </div>
       </div>
-      <div class="con_tilte"> 工程建设区和水库淹没区 </div>
+      <div class="con_tilte" style="display: flex; justify-content: space-between">
+        工程建设区和水库淹没区<span>{{ detail.m_xcx + detail.m_szs + detail.m_kqq }}</span>
+      </div>
       <div class="con_list">
         <div class="li">
           <div class="li_name">新昌县</div>
@@ -76,6 +85,7 @@
       </div>
       <div class="question-list">
         <div class="item" v-for="item in questionList" :key="item">
+          <div class="name">{{ item[keyJosn[index].keys] }}</div>
           <div class="name">{{ item[keyJosn[index].key] }}</div>
           <div class="names">{{ item[keyJosn[index].key_a] }}</div>
           <div class="names">{{ item[keyJosn[index].key_b] }} </div>
@@ -130,7 +140,7 @@ const tableJosn = ref({
   0: ['行政村', '户数', '户数', '户数', '户数'],
   1: ['行政村', '户数', '人口合计', '农业人口', '非农人口'],
   2: ['行政村', '住宅房屋', '村集体房屋', '合计'],
-  3: ['企业', '水电站', '个体工商户', '探矿权']
+  3: ['行政村', '企业', '水电站', '个体工商户', '探矿权']
 })
 
 const keyJosn = ref({
@@ -158,6 +168,7 @@ const keyJosn = ref({
   },
   //企（事）业单位
   3: {
+    keys: 'villageName',
     key: 'qyNum',
     key_a: 'sdzNum',
     key_b: 'gtNum',
@@ -172,7 +183,7 @@ const idJson = ref({
   '3': 'top_d'
 })
 
-const questionList = ref([])
+const questionList: any = ref([])
 
 const index = ref(props.isType)
 
@@ -223,19 +234,26 @@ const close = () => {
 
 <style lang="less" scoped>
 .sider_info {
+  position: relative;
   width: 400px;
   height: 294px;
   background: #ffffff;
-  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
+  border: 2px solid #3e73ec;
   border-radius: 9px 9px 9px 9px;
   opacity: 1;
-  position: relative;
-  border: 2px solid #3e73ec;
+  box-shadow: 0px 10px 10px 0px rgba(0, 0, 0, 0.2);
+
   .container {
     padding: 16px 16px;
+
     .th-title {
       display: flex;
       height: 36px;
+
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 36px;
+      color: #171718;
       // padding: 0 10px;
       // font-weight: bold;
       background: #f2f6ff;
@@ -243,20 +261,16 @@ const close = () => {
       align-items: center;
       justify-content: space-between;
 
-      font-size: 14px;
-      font-family: PingFang SC, PingFang SC;
-      font-weight: 500;
-      color: #171718;
-      line-height: 36px;
-
       .th_h {
         text-align: center;
         flex: 1;
       }
     }
+
     .question-list {
       height: 180px;
       overflow-y: scroll;
+
       .item {
         display: flex;
         height: 44px;
@@ -272,8 +286,6 @@ const close = () => {
           overflow: hidden;
           font-size: 14px;
           font-weight: 500;
-          font-family: PingFang SC, PingFang SC;
-          font-weight: 500;
           color: #333333;
           text-overflow: ellipsis; //溢出用省略号显示
           white-space: nowrap;
@@ -284,7 +296,6 @@ const close = () => {
           // margin-left: 70px;
           overflow: hidden;
           font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
           font-weight: 500;
           color: #666666;
           text-align: center;
@@ -292,103 +303,112 @@ const close = () => {
 
         .time {
           font-size: 14px;
-          font-family: PingFang SC, PingFang SC;
           font-weight: 500;
           color: rgba(19, 19, 19, 0.4);
         }
       }
     }
+
     .con_tilte {
+      margin: 5px 0;
       font-size: 16px;
-      font-family: PingFang SC, PingFang SC;
       font-weight: 500;
       color: #131313;
-      margin: 5px 0;
     }
+
     .con_list {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
+
       .li {
         display: flex;
         font-family: DIN Medium, DIN Medium;
+        font-size: 14px;
         font-weight: 400;
         color: #171718;
-        font-size: 14px;
+
         .li_name {
           margin-right: 20px;
         }
       }
     }
   }
+
   .right_icon {
+    position: absolute;
+    top: 10px;
+    left: -11px;
     width: 16px;
     height: 24px;
     background: url('../../../../assets/imgs/homes/right_icon.png');
+    background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center;
-    position: absolute;
-    left: -11px;
-    top: 10px;
   }
+
   .seder_head {
+    position: relative;
     width: 100%;
     height: 50px;
-    border-top-left-radius: 8px; /* 左上角边框弧形 */
-    border-top-right-radius: 8px;
-    background: #3e73ec;
-    position: relative;
     padding: 10px 0 0 10px;
+    background: #3e73ec;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px; /* 左上角边框弧形 */
     .tab_list {
       display: flex;
+
       .list_li {
         padding: 10px 10px 10px 10px;
-        cursor: pointer;
-        border-radius: 4px 4px 0px 0px;
         font-size: 16px;
-        font-family: PingFang SC, PingFang SC;
         font-weight: 400;
         color: #ffffff;
+        cursor: pointer;
+        border-radius: 4px 4px 0px 0px;
         // line-height: 19px;
       }
+
       #list_li {
-        background: #ffffff;
-        font-family: PingFang SC, PingFang SC;
-        font-weight: 500;
-        color: #3e73ec;
         font-size: 16px;
+        font-weight: 500;
         line-height: 19px;
+        color: #3e73ec;
+        background: #ffffff;
       }
     }
+
     .close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
       font-size: 16px;
       color: white;
       cursor: pointer;
-      position: absolute;
-      right: 10px;
-      top: 10px;
     }
   }
 }
+
 #top_a {
   position: absolute;
   top: 55px;
   right: -410px;
   z-index: 999;
 }
+
 #top_b {
   position: absolute;
   top: 155px;
   right: -410px;
   z-index: 999;
 }
+
 #top_c {
   position: absolute;
   top: 305px;
   right: -410px;
   z-index: 999;
 }
+
 #top_d {
   position: absolute;
   top: 405px;

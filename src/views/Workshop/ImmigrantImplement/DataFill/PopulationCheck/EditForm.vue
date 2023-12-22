@@ -606,7 +606,7 @@ onMounted(() => {
 }
 
 .upload {
-  /deep/ .el-upload {
+  :deep(.el-upload) {
     display: none;
   }
 }

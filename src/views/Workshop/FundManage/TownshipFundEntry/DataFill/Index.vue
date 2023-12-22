@@ -10,7 +10,9 @@
     </ElButton>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px"> 资金管理 </ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px"> {{ getTypeTitle(type) }}</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">
+        {{ type ? getTypeTitle(type) : '乡镇资金发放' }}</ElBreadcrumbItem
+      >
     </ElBreadcrumb>
   </div>
 
