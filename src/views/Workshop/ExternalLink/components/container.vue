@@ -6,13 +6,18 @@
   <div class="container_box">
     <div class="cin_top" @click="goLink">
       <div class="seach_select">
-        <ElSelect placeholder=" " clearable filterable v-model="reason" class="s_full">
+        <ElSelect placeholder="请选择" clearable filterable v-model="reason" class="s_full">
           <ElOption v-for="item in option" :key="item.code" :label="item.name" :value="item.code" />
         </ElSelect>
       </div>
       <div class="search">
-        <ElInput v-model="input" class="ipt" placeholder="请输入搜索内容" />
-        <div class="seach_icon"></div>
+        <ElInput
+          v-model="searchContent"
+          class="ipt"
+          placeholder="请输入搜索内容"
+          @click.stop="() => {}"
+        />
+        <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
     </div>
@@ -119,7 +124,7 @@ const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
 const option = ref<any>([])
 
-const input = ref('')
+const searchContent = ref('')
 const reason = ref('移民户')
 const tokenStr = ref<string>('')
 const appStore = useAppStore()
@@ -204,6 +209,7 @@ const requestNewsData = (type = '1') => {
 const onViewFeedBack = (item: any) => {
   push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
+
 // 路由跳转
 const routerJump = (path: string) => {
   push(path)
@@ -213,9 +219,8 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
     window.location.href = url
-    console.log('QPP', url)
   } catch {}
 }
 

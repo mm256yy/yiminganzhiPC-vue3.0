@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div class="title"> 居民户账户信息 </div>
+        <div class="title">居民户账户信息</div>
       </div>
       <ElForm
         class="form"
@@ -37,7 +37,7 @@
       </ElForm>
 
       <div class="flex items-center justify-between pb-12px">
-        <div class="title"> 家庭基本情况列表</div>
+        <div class="title">家庭基本情况列表</div>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -62,7 +62,7 @@
       </Table>
 
       <div class="flex items-center justify-between pb-12px mt-20px">
-        <div class="title"> 费用补偿情况列表</div>
+        <div class="title">费用补偿情况列表</div>
         <ElSpace>
           <ElButton type="primary" @click="confirmReward">奖励费确认</ElButton>
         </ElSpace>
@@ -89,14 +89,18 @@
           </ElTableColumn>
           <ElTableColumn label="数量" prop="number" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
-              <div v-if="row.isUpdate !== '1'"> —— </div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.number }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
-              <div v-if="row.isUpdate !== '1'"> —— </div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.price }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
             </template>
           </ElTableColumn>
           <ElTableColumn
@@ -108,9 +112,9 @@
           >
             <template #default="{ row }">
               <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
-              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">{{
-                computedTotalPrice(row)
-              }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">
+                {{ computedTotalPrice(row) }}
+              </div>
               <div v-else-if="row.isUpdate === '1' && row.name === '奖励费小计'">
                 {{ getSummaries(row) }}
               </div>
@@ -118,13 +122,15 @@
           </ElTableColumn>
           <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.remark }}
+              </div>
             </template>
           </ElTableColumn>
         </ElTable>
       </div>
       <div class="pb-12px mt-20px">
-        <div class="title"> 备注</div>
+        <div class="title">备注</div>
         <div class="text">1. 补偿费、异地搬迁补助费、奖励费等拨付至甲方指定银行</div>
         <div class="text mt-20px">
           2. 搬迁补助费、过渡资金补助费、其他补助费、临时安置补助费拨付至乙方指定银行。
@@ -239,8 +245,8 @@
           "
         >
           <div style="padding-left: 20px">制发单位（盖章）：</div>
-        </div></div
-      >
+        </div>
+      </div>
       <div style="width: 50%">
         <ElTable
           :data="feeTableData"
@@ -265,22 +271,26 @@
           </ElTableColumn>
           <ElTableColumn label="数量" prop="number" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
-              <div v-if="row.isUpdate !== '1'"> —— </div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.number }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
-              <div v-if="row.isUpdate !== '1'"> —— </div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.price }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="补偿金额" prop="totalPrice" align="center" header-align="center">
             <template #default="{ row }">
               <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
-              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">{{
-                computedTotalPrice(row)
-              }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">
+                {{ computedTotalPrice(row) }}
+              </div>
               <div v-else-if="row.isUpdate === '1' && row.name === '奖励费小计'">
                 {{ getSummaries(row) }}
               </div>
@@ -288,7 +298,9 @@
           </ElTableColumn>
           <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.remark }}</div>
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.remark }}
+              </div>
             </template>
           </ElTableColumn>
         </ElTable>
@@ -771,10 +783,9 @@ const getSummariese = (param) => {
     --el-table-border: 1px solid black;
   }
 
-  :deep(
-      .el-table__footer-wrapper tbody td.el-table__cell,
-      .el-table__header-wrapper tbody td.el-table__cell
-    ) {
+  :deep(.el-table__footer-wrapper tbody td.el-table__cell, .el-table__header-wrapper
+      tbody
+      td.el-table__cell) {
     font-size: 7px;
     font-weight: bold;
     background: none;

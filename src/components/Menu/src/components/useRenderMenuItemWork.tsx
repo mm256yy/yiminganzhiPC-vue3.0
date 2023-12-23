@@ -9,6 +9,7 @@ import { pathResolve } from '@/utils/routerHelper'
 
 export const useRenderMenuItem = () => {
   const renderMenuItem = (routers: AppRouteRecordRaw[], parentPath = '/', sub?: boolean) => {
+    console.log('V-Map', routers)
     return routers.map((v) => {
       const meta = (v.meta ?? {}) as RouteMeta
       if (!meta.hidden) {
