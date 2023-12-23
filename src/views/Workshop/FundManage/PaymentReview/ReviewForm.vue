@@ -257,7 +257,12 @@
             <div class="label"> </div>
             <div class="content">
               <ElButton type="primary" @click="onSubmit('1')" :loading="btnLoading">通过</ElButton>
-              <!-- <ElButton @click="onSubmit('0')" :loading="btnLoading" >驳回</ElButton> -->
+              <ElButton
+                @click="onSubmit('0')"
+                v-show="userInfo != 'financevoucher'"
+                :loading="btnLoading"
+                >驳回</ElButton
+              >
             </div>
           </div>
         </ElCol>
@@ -376,12 +381,27 @@ const form = ref<any>({})
 const formAudit = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-const appStore = useAppStore()
+const appStore: any = useAppStore()
+const currentProjectId = appStore.currentProjectId
+const userInfo: any = computed(() => {
+  if (appStore.getUserInfo.value) {
+    const project = appStore.getUserInfo.value.projectUsers.find(
+      (x: any) => x.projectId === currentProjectId
+    )
+    const role = project.roles[0].code
+
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return ''
+})
 watch(
   () => props.row,
   (val) => {
     if (val) {
       // 处理行政区划
+      // console.log(userInfo.value.systemRole == 'NORMAL_USER', 'bbq')
+
       form.value = { ...(val as {}) }
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
@@ -465,6 +485,14 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 
 const onSubmit = async (status: string) => {
+  if (userInfo.value == 'financevoucher' && !formAudit.value.paymentTime) {
+    ElMessage.error('请选择付款时间')
+    return
+  }
+  if (userInfo.value == 'financevoucher' && !relocateVerifyPic.value) {
+    ElMessage.error('请选择财务凭证')
+    return
+  }
   console.log(status)
   btnLoading.value = true
   let params: any = {
@@ -485,6 +513,11 @@ const onSubmit = async (status: string) => {
 
 // 关闭弹窗
 const onClose = () => {
+  // for (let i in formAudit.value) {
+
+  // }
+  formAudit.value = {}
+  relocateVerifyPic.value = []
   emit('close')
   // nextTick(() => {
   //   formRef.value?.resetFields()

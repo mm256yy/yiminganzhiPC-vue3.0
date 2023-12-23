@@ -69,7 +69,7 @@
       <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
       <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
       <ElTableColumn
-        label="合同金额(万元)"
+        label="合同金额(元)"
         prop="contractAmount"
         align="center"
         header-align="center"

@@ -16,7 +16,7 @@
           <!-- <div class="data-box"> 合计金额： <span class="green">10,000</span> 元 </div> -->
         </div>
         <div class="col right">
-          <ElButton type="primary" @click="onAdjust"> 调整概算 </ElButton>
+          <ElButton type="primary" @click="onAdjust('1')"> 调整概算 </ElButton>
         </div>
       </div>
 
@@ -46,7 +46,10 @@
           <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
         </template>
         <template #action="{ row }">
-          <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
+          <ElButton type="primary" @click="onViewRow(row)" v-if="row.gsStatus == '2'">
+            查看
+          </ElButton>
+          <ElButton type="primary" @click="onAdjust(row)" v-else> 调整 </ElButton>
         </template>
       </Table>
     </div>
@@ -179,7 +182,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -504,15 +508,21 @@ const onViewRow = async (row: any) => {
 }
 
 // 调整概算
-const onAdjust = async () => {
-  const res = await getSelections()
-  if (res && res.length) {
-    adjustDialog.value = true
-    landlordIds.value = res.map((item) => item.id)
-    statusType.value = res.map((item) => item.gsStatus)
-    console.log('landlordIds', toRaw(landlordIds.value))
+const onAdjust = async (e) => {
+  if (e == '1') {
+    const res = await getSelections()
+    if (res && res.length) {
+      adjustDialog.value = true
+      landlordIds.value = res.map((item) => item.id)
+      statusType.value = res.map((item) => item.gsStatus)
+      console.log('landlordIds', toRaw(statusType.value), toRaw(landlordIds.value))
+    } else {
+      ElMessage.info('请先勾选列表数据')
+    }
   } else {
-    ElMessage.info('请先勾选列表数据')
+    adjustDialog.value = true
+    landlordIds.value = [e.id]
+    statusType.value = [e.gsStatus]
   }
 }
 // 关闭查看弹窗

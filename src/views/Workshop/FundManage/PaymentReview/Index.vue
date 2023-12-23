@@ -5,7 +5,7 @@
       <ElBreadcrumbItem class="text-size-12px">资金审核</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
@@ -76,7 +76,14 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElRadioGroup, ElRadioButton } from 'element-plus'
+import {
+  ElButton,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElRadioGroup,
+  ElRadioButton,
+  ElMessage
+} from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -123,7 +130,14 @@ tableObject.params = {
   businessId: 1,
   auditType: tabVal.value
 }
-
+let setSearchParamss = () => {
+  tableObject.params = {
+    projectId,
+    businessId: 1,
+    auditType: tabVal.value
+  }
+  getList()
+}
 getList()
 const tabChange = (data: string) => {
   tabVal.value = data
@@ -271,13 +285,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyDate',
+    field: 'createdDate',
     label: '申请时间',
     search: {
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -356,7 +371,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: true,
@@ -461,7 +476,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'applyUserName',
+    field: 'createdBy',
     label: '申请人',
     search: {
       show: false
@@ -522,14 +537,6 @@ const onSearch = (data) => {
   let searchData = JSON.parse(JSON.stringify(data))
   console.log(searchData)
 
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
-
   // 处理参数
   let params = {
     ...searchData
@@ -539,19 +546,20 @@ const onSearch = (data) => {
     auditType: 1,
     businessId: 1
   }
-  if (params.code) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.code
-      }
-      delete params.code
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.code
-    setSearchParams({ ...params })
+  for (let i in params) {
+    if (!params[i]) {
+      delete params[i]
+    }
   }
+  console.log(params.amount)
+
+  if (params.amount) {
+    if (!params.amount.every((item) => item)) {
+      ElMessage.info('请输入申请金额范围')
+      return
+    }
+  }
+  setSearchParams({ ...params })
 }
 </script>
 
