@@ -219,7 +219,9 @@
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time">
-                  审核时间：{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}
+                  审核时间：{{
+                    item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD') : '-'
+                  }}
                 </div>
                 <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
                 <div class="remark"> 审核意见: {{ item.remark }} </div>

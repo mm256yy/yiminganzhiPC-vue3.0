@@ -485,6 +485,14 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 
 const onSubmit = async (status: string) => {
+  if (userInfo.value == 'financevoucher' && !formAudit.value.paymentTime) {
+    ElMessage.error('请选择付款时间')
+    return
+  }
+  if (userInfo.value == 'financevoucher' && !relocateVerifyPic.value) {
+    ElMessage.error('请选择财务凭证')
+    return
+  }
   console.log(status)
   btnLoading.value = true
   let params: any = {
@@ -505,6 +513,11 @@ const onSubmit = async (status: string) => {
 
 // 关闭弹窗
 const onClose = () => {
+  // for (let i in formAudit.value) {
+
+  // }
+  formAudit.value = {}
+  relocateVerifyPic.value = []
   emit('close')
   // nextTick(() => {
   //   formRef.value?.resetFields()

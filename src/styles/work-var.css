@@ -7,6 +7,7 @@
   --text-color-1: #131313;
   /* 固定间距 */
   --distance-base: 16px;
+  --distance-gap:6px;
   /* 边框色 */
   --border-color: #e1e4ea;
   /* warning */

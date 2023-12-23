@@ -87,7 +87,8 @@ const form = ref<Omit<AdjustmentType, 'id'>>(defaultValue)
 const rules = reactive<FormRules>({
   name: [required()],
   doorNo: [required()],
-  parentCode: [required()]
+  parentCode: [required()],
+  type: [required()]
 })
 
 // 关闭弹窗

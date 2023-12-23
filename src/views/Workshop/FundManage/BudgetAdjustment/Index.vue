@@ -7,16 +7,16 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
       <div class="row">
         <div class="col left">
-          <div class="data-box"> 合计金额： <span class="green">10,000</span> 元 </div>
+          <!-- <div class="data-box"> 合计金额： <span class="green">10,000</span> 元 </div> -->
         </div>
         <div class="col right">
-          <ElButton type="primary" @click="onAdjust"> 调整概算 </ElButton>
+          <ElButton type="primary" @click="onAdjust('1')"> 调整概算 </ElButton>
         </div>
       </div>
 
@@ -46,7 +46,10 @@
           <div>{{ getTreeName(fundAccountList, row.funSubjectId) }}</div>
         </template>
         <template #action="{ row }">
-          <ElButton type="primary" @click="onViewRow(row)"> 查看 </ElButton>
+          <ElButton type="primary" @click="onViewRow(row)" v-if="row.gsStatus == '2'">
+            查看
+          </ElButton>
+          <ElButton type="primary" @click="onAdjust(row)" v-else> 调整 </ElButton>
         </template>
       </Table>
     </div>
@@ -110,8 +113,6 @@ tableObject.params = {
   status: 4
 }
 setSearchParams({})
-
-// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -181,7 +182,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {
@@ -451,50 +453,21 @@ tableObject.params = {
 
 const onSearch = (data) => {
   // 处理参数
-  let params = { ...data }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
+  let params = {
+    ...data
   }
 
-  if (!params.name) {
-    delete params.name
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
   }
-
-  if (!params.applyType) {
-    delete params.applyType
-  }
-
-  if (!params.dataState) {
-    delete params.dataState
-  }
-
-  if (!params.createdDate) {
-    delete params.createdDate
-  }
-
-  if (!params.amount && !params.amount.length) {
-    delete params.amount
-  }
-
-  if (!params.type) {
-    delete params.type
-  }
-
-  if (!params.funSubjectId) {
-    delete params.funSubjectId
-  }
-
-  if (!params.applyUserName) {
-    delete params.applyUserName
-  }
-
-  if (!params.paymentType) {
-    delete params.paymentType
-  }
-
   setSearchParams({ ...params, status: '4' })
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 
 // 获取资金科目选项列表
@@ -536,15 +509,21 @@ const onViewRow = async (row: any) => {
 }
 
 // 调整概算
-const onAdjust = async () => {
-  const res = await getSelections()
-  if (res && res.length) {
-    adjustDialog.value = true
-    landlordIds.value = res.map((item) => item.id)
-    statusType.value = res.map((item) => item.gsStatus)
-    console.log('landlordIds', toRaw(landlordIds.value))
+const onAdjust = async (e) => {
+  if (e == '1') {
+    const res = await getSelections()
+    if (res && res.length) {
+      adjustDialog.value = true
+      landlordIds.value = res.map((item) => item.id)
+      statusType.value = res.map((item) => item.gsStatus)
+      console.log('landlordIds', toRaw(statusType.value), toRaw(landlordIds.value))
+    } else {
+      ElMessage.info('请先勾选列表数据')
+    }
   } else {
-    ElMessage.info('请先勾选列表数据')
+    adjustDialog.value = true
+    landlordIds.value = [e.id]
+    statusType.value = [e.gsStatus]
   }
 }
 // 关闭查看弹窗

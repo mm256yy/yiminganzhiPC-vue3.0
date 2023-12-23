@@ -65,7 +65,6 @@ const onTabClick = (tabItem) => {
     return
   }
   tabCurrentId.value = tabItem.id
-  console.log('KP', tabCurrentId.value)
 }
 
 const onBack = () => {
