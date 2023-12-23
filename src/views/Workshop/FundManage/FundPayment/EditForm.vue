@@ -236,24 +236,34 @@ const onSubmit = debounce((formEl, status: number) => {
   // }
 
   if (!formEl) return
-  formEl.validate((valid, fields) => {
-    if (valid) {
-      if (!receipt.value.length) {
-        ElMessage.error('请上传凭证')
-        return
-      } else {
-        let params: any = {
-          ...form.value,
-          receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
-        }
-        params.paymentTime = dayjs(params.paymentTime)
-        params.status = status
-        submit(params)
-      }
-    } else {
-      console.log('error submit!', fields)
+  if (status == 0) {
+    let params: any = {
+      ...form.value,
+      receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
     }
-  })
+    params.paymentTime = dayjs(params.paymentTime)
+    params.status = status
+    submit(params)
+  } else {
+    formEl.validate((valid, fields) => {
+      if (valid) {
+        if (!receipt.value.length) {
+          ElMessage.error('请上传凭证')
+          return
+        } else {
+          let params: any = {
+            ...form.value,
+            receipt: JSON.stringify(receipt.value || []) // 搬迁安置确认单
+          }
+          params.paymentTime = dayjs(params.paymentTime)
+          params.status = status
+          submit(params)
+        }
+      } else {
+        console.log('error submit!', fields)
+      }
+    })
+  }
 
   // formEl?.validate((valid: any) => {
   //   if (valid) {

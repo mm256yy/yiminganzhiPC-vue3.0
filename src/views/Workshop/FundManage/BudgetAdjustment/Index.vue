@@ -498,6 +498,7 @@ const getTreeName = (list: any, code: any) => {
   }
 }
 const onViewRow = async (row: any) => {
+  console.log('===============row=========', row)
   PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {
     parmasList.value = res
     console.log(res, '测试')

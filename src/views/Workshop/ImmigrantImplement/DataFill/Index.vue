@@ -331,8 +331,11 @@
       </template>
 
       <!-- 动迁协议 -->
-      <ent-relocation-agreement v-if="tabCurrentId === 3" />
-
+      <ent-relocation-agreement
+        :doorNo="doorNo"
+        v-if="tabCurrentId === 3"
+        @update-data="getLandlordInfo"
+      />
       <!-- 相关手续 -->
       <ent-procedures :doorNo="doorNo" v-if="tabCurrentId === 4" />
     </div>
@@ -377,7 +380,11 @@
       </template>
 
       <!-- 动迁协议 -->
-      <individual-relocation-agreement v-if="tabCurrentId === 3" />
+      <individual-relocation-agreement
+        :doorNo="doorNo"
+        v-if="tabCurrentId === 3"
+        @update-data="getLandlordInfo"
+      />
 
       <!-- 相关手续 -->
       <individual-procedures :doorNo="doorNo" v-if="tabCurrentId === 4" />
@@ -409,8 +416,11 @@
       <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
 
       <!-- 动迁协议 -->
-      <village-relocation-agreement v-if="tabCurrentId === 2" />
-
+      <village-relocation-agreement
+        :doorNo="doorNo"
+        v-if="tabCurrentId === 2"
+        @update-data="getLandlordInfo"
+      />
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>

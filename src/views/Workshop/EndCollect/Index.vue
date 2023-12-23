@@ -50,7 +50,7 @@
         <div class="content">
           <div class="text1">
             <div>涉及总人口</div>
-            <div class="numberBox">{{ statisticalInfo.demographicCount }} <span>户</span> </div>
+            <div class="numberBox">{{ statisticalInfo.demographicCount }}<span>户</span> </div>
           </div>
           <div class="shu"> </div>
           <div class="text2">
@@ -375,7 +375,7 @@ onMounted(() => {
 
         .text1 {
           height: 68px;
-          margin: 22px 0px 22px 20px;
+          margin: 22px 0px 22px 5px;
           border-radius: 0px 0px 0px 0px;
           opacity: 1;
 

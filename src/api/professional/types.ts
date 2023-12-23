@@ -17,6 +17,7 @@ export interface ProfessionalProjectDtoType {
   projectId: number
   projectSchedule: string
   [key: string]: any
+  parentCode?: string
 }
 
 // 专业项目进度类型
