@@ -13,7 +13,9 @@
     <div class="table-wrap">
       <div class="row">
         <div class="col left">
-          <div class="data-box"> 合计金额： <span class="green">10,000</span> 元 </div>
+          <div class="data-box">
+            合计金额： <span class="green">{{ sum.other?.finishAmount }}</span> 元
+          </div>
         </div>
         <div class="col right">
           <ElButton type="primary" @click="onAdjust('1')"> 调整概算 </ElButton>
@@ -568,9 +570,10 @@ const onCloseAdjust = (flag: boolean) => {
     setSearchParams({ status: '4' })
   }
 }
-
-onMounted(() => {
+let sum: any = ref(0)
+onMounted(async () => {
   getFundSubjectList()
+  sum.value = await getBudgetAdjustmentListApi(tableObject.params)
 })
 </script>
 

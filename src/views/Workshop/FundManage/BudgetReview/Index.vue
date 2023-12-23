@@ -7,7 +7,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
     </div>
 
     <div class="table-wrap">
@@ -84,7 +84,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getBudgetReviewListApi
 })
 
-const { setSearchParams } = methods
+const { setSearchParams, getList } = methods
 
 setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 
@@ -352,7 +352,15 @@ const tabChange = (data: string) => {
   tabVal.value = data
   setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 }
-
+let setSearchParamss = () => {
+  tableObject.params = {
+    auditType: tabVal.value,
+    businessId: '2',
+    status: '4',
+    projectId
+  }
+  getList()
+}
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
