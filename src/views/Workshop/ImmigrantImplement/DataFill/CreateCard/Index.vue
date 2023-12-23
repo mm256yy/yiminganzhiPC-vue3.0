@@ -1,5 +1,5 @@
 <template>
-  <WorkContentWrap>
+  <WorkContentWrap v-loading="loading">
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div class="title"> 居民户账户信息 </div>
@@ -340,7 +340,7 @@ const props = defineProps<PropsType>()
 const dialog = ref<boolean>(false)
 const rewardConfirmDialog = ref<boolean>(false)
 const emit = defineEmits(['updateData'])
-
+let loading = ref(true)
 const { register, tableObject, methods } = useTable({
   getListApi: getDemographicListApi,
   delListApi: delDemographicByIdApi
@@ -509,6 +509,7 @@ const rules = reactive<FormRules>({
 const getRewardFeeList = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
     feeTableData.value = res
+    loading.value = false
   })
 }
 
