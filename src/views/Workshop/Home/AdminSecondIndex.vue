@@ -284,7 +284,7 @@ import {
   getLanAnalysisReport
 } from '@/api/AssetEvaluation/leader-side'
 import { useAppStore } from '@/store/modules/app'
-import { ElSelect, ElOption, ElButton } from 'element-plus'
+import { ElSelect, ElOption, ElButton, ElDialog } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 // import iconEduSrc from '@/assets/imgs/homes/icon_edu.png'
@@ -303,7 +303,6 @@ let aalls: any = ref()
 let renjuntd: any = ref({})
 let dataSum = 0
 const reason = ref()
-const appStore = useAppStore()
 const villageAnalysisNumber = ref<number>()
 const typeNumber = ref<number>(1)
 let numberMan: any = ref()
@@ -312,6 +311,7 @@ const tag = ref<boolean>(true)
 const perPersonMapTotal = ref<string>()
 const perHouseholdTotal = ref<string>()
 const dataAll = ref()
+
 const getChartScreenLists = async () => {
   groundLoading.value = true
   genderLoading.value = true

@@ -191,7 +191,17 @@
           </ElFormItem>
         </ElCol>
 
-        <ElCol :span="7" />
+        <ElCol :span="7">
+          <ElFormItem label="企业类别" prop="industryType">
+            <ElSelect clearable filterable v-model="form.type" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[379]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect> </ElFormItem
+        ></ElCol>
       </ElRow>
 
       <ElRow justify="center">

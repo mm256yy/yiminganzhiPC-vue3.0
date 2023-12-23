@@ -426,4 +426,10 @@ onMounted(() => {
     }
   }
 }
+
+:deep(.cell) {
+  .el-button + .el-button {
+    margin: auto;
+  }
+}
 </style>

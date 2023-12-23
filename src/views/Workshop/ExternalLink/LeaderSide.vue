@@ -22,8 +22,6 @@ import ContainerInfo from './components/container.vue'
 import RightInfo from './components/right.vue'
 import Footer from './components/footer.vue'
 
-import { ElTabs, ElTabPane, ElSelect, ElOption } from 'element-plus'
-
 onMounted(() => {
   changeScale()
   window.addEventListener('resize', changeScale)
