@@ -126,7 +126,7 @@ const initData = () => {
  */
 const computedTotalPrice = (row: any) => {
   if (row.totalPrice) {
-    return Number(row.totalPrice)
+    return Number(row.number) * Number(row.price)
   } else {
     if (row.number && row.price) {
       return Number(row.number) * Number(row.price)
