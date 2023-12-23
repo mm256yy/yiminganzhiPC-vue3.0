@@ -36,7 +36,7 @@
         </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
-          <ElButton type="primary" @click="onReviewRow(row)"> 审核 </ElButton>
+          <ElButton type="primary" v-if="showButton" @click="onReviewRow(row)"> 审核 </ElButton>
         </template>
       </Table>
     </div>
@@ -77,7 +77,7 @@ const tabVal = ref<string>('1')
 const fundAccountList = ref<any[]>([]) // 资金科目
 const parmasList = ref<any[]>([])
 const actionType = ref<'view' | 'add' | 'edit'>('view')
-
+const showButton = ref(true)
 const { register, tableObject, methods } = useTable({
   getListApi: getBudgetReviewListApi
 })
@@ -348,6 +348,11 @@ const onSearch = (data) => {
  */
 const tabChange = (data: string) => {
   tabVal.value = data
+  if (tabVal.value === '1') {
+    showButton.value = true
+  } else {
+    showButton.value = false
+  }
   setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 }
 
@@ -382,6 +387,7 @@ const onViewRow = async (row: any) => {
 // 关闭审核弹窗
 const onCloseReview = () => {
   dialog.value = false
+  setSearchParams({ businessId: '2', status: '4' })
 }
 
 onMounted(() => {

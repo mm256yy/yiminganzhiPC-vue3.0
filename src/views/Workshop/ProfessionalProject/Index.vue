@@ -58,12 +58,13 @@
       :actionType="actionType"
       :row="tableObject.currentRow"
       @close="onFormPupClose"
+      :districtTree="districtTree"
     />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -76,10 +77,10 @@ import { getProfessionalProjectListApi } from '@/api/professional/service'
 import { useRouter } from 'vue-router'
 import type { ProfessionalProjectDtoType } from '@/api/professional/types'
 import { useIcon } from '@/hooks/web/useIcon'
-
+import { getVillageTreeApi } from '@/api/workshop/village/service'
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const actionType = ref<'add' | 'edit' | 'view'>('add')
-
+const districtTree = ref()
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -249,11 +250,17 @@ const onFormPupClose = (flag: boolean) => {
     setSearchParams({ name: '', code: '' })
   }
 }
-
+const getDistrictTree = async () => {
+  const list = await getVillageTreeApi(projectId)
+  districtTree.value = list || []
+  return list || []
+}
 const onSearch = (data) => {
   setSearchParams({ ...data })
 }
-
+onMounted(() => {
+  getDistrictTree()
+})
 // 数据填报
 const fillData = (row: any) => {
   push({
