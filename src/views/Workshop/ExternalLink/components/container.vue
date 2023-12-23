@@ -126,7 +126,6 @@ const appStore = useAppStore()
 const newsTypes = ref<any[]>([])
 const dictName = 'news' // 字典名称
 const panelLoading = ref<boolean>(false)
-<<<<<<< HEAD
 option.value = [
   {
     code: '1',
@@ -145,11 +144,8 @@ option.value = [
     name: '分户土地'
   }
 ]
-=======
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
-
->>>>>>> 52a55eb16e8dac78bf15c8a501e66c39fba5be95
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
     name: dictName,
