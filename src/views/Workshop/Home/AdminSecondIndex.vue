@@ -760,10 +760,10 @@ const careerOption = ref({
     },
     icon: 'circle',
     formatter: function (name) {
-      let singleData = careerOption.value.series[0].data.filter(function (item) {
+      let singleData: any = careerOption.value.series[0].data.filter(function (item: any) {
         return item.name == name
       })
-      let m = careerOption.value.series[0].data.reduce((pre, item) => {
+      let m = careerOption.value.series[0].data.reduce((pre, item: any) => {
         pre += item.value
         return pre
       }, 0)
@@ -1326,13 +1326,13 @@ const onBack = () => {
     .echart-item-lt {
       display: flex;
       width: 80px;
+      height: 35px;
       padding-left: 20px;
       font-size: 14px;
       text-overflow: ellipsis;
       word-break: keep-all;
       align-items: center;
       justify-content: center;
-      height: 35px;
 
       .top-img {
         width: 26px;
