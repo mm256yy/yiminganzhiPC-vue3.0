@@ -91,3 +91,18 @@ export const getLanAnalysisReport = (): Promise<any> => {
     url: `/leadershipScreen/getLanAnalysisReport`
   })
 }
+
+// 获取预警列表
+export const getWarningTypeList = (type: any): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/new/warning/${type}`
+  })
+}
+
+// 获取预警详情
+export const getWarningDetail = (params: any): Promise<any> => {
+  return request.get({
+    url: `leadershipScreen/new/warning/details`,
+    params
+  })
+}

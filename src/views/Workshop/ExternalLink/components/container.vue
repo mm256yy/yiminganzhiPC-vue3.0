@@ -6,7 +6,7 @@
   <div class="container_box">
     <div class="cin_top" @click="goLink">
       <div class="seach_select">
-        <ElSelect placeholder=" " clearable filterable v-model="reason" class="s_full">
+        <ElSelect placeholder="请选择" clearable filterable v-model="reason" class="s_full">
           <ElOption v-for="item in option" :key="item.code" :label="item.name" :value="item.code" />
         </ElSelect>
       </div>
@@ -198,9 +198,8 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
     window.location.href = url
-    console.log('QPP', url)
   } catch {}
 }
 

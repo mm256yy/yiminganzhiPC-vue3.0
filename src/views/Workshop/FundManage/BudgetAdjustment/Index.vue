@@ -466,7 +466,10 @@ const onSearch = (data) => {
 }
 
 const onReset = () => {
-  tableObject.params = {}
+  tableObject.params = {
+    projectId,
+    status: '4'
+  }
   setSearchParams({})
 }
 

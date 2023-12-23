@@ -783,10 +783,9 @@ const getSummariese = (param) => {
     --el-table-border: 1px solid black;
   }
 
-  :deep(
-      .el-table__footer-wrapper tbody td.el-table__cell,
-      .el-table__header-wrapper tbody td.el-table__cell
-    ) {
+  :deep(.el-table__footer-wrapper tbody td.el-table__cell, .el-table__header-wrapper
+      tbody
+      td.el-table__cell) {
     font-size: 7px;
     font-weight: bold;
     background: none;

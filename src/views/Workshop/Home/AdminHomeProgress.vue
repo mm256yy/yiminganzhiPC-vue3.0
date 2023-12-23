@@ -37,31 +37,31 @@
               <div class="line"></div>
               <div class="strong">预警情况</div></div
             >
-            <div class="warnStatus">
-              <ElTable :data="tableData" class="warn-table">
-                <ElTableColumn type="index" label="序号" width="80" align="center" />
-                <ElTableColumn prop="village" label="行政村" align="center" />
-                <ElTableColumn prop="total" label="总户数" align="center" />
-                <ElTableColumn prop="delay" label="滞后户数" align="center" />
-                <ElTableColumn prop="finish" label="完成户数" align="center" />
+            <div class="warnStatus" v-loading="warnListLoading">
+              <ElTable :data="tableData1" class="warn-table">
+                <ElTableColumn prop="seq" label="序号" width="80" align="center" />
+                <ElTableColumn prop="villageName" label="行政村" align="center" />
+                <ElTableColumn prop="householdQuantity" label="总户数" align="center" />
+                <ElTableColumn prop="lagHouseholdQuantity" label="滞后户数" align="center" />
+                <ElTableColumn prop="completedQuantity" label="完成户数" align="center" />
                 <ElTableColumn fixed="right" prop="operation" label="操作" align="center">
-                  <template #default>
-                    <el-button link type="primary" size="small" @click="handleDetailClick"
+                  <template #default="{ row }">
+                    <el-button link type="primary" size="small" @click="handleDetailClick(row)"
                       >查看详情</el-button
                     >
                   </template>
                 </ElTableColumn>
               </ElTable>
               <div class="span-area"></div>
-              <ElTable :data="tableData" class="warn-table">
-                <ElTableColumn type="index" label="序号" width="80" align="center" />
-                <ElTableColumn prop="village" label="行政村" align="center" />
-                <ElTableColumn prop="total" label="总户数" align="center" />
-                <ElTableColumn prop="delay" label="滞后户数" align="center" />
-                <ElTableColumn prop="finish" label="完成户数" align="center" />
+              <ElTable :data="tableData2" class="warn-table">
+                <ElTableColumn prop="seq" label="序号" width="80" align="center" />
+                <ElTableColumn prop="villageName" label="行政村" align="center" />
+                <ElTableColumn prop="householdQuantity" label="总户数" align="center" />
+                <ElTableColumn prop="lagHouseholdQuantity" label="滞后户数" align="center" />
+                <ElTableColumn prop="completedQuantity" label="完成户数" align="center" />
                 <ElTableColumn fixed="right" prop="operation" label="操作" align="center">
-                  <template #default>
-                    <el-button link type="primary" size="small" @click="handleDetailClick"
+                  <template #default="{ row }">
+                    <el-button link type="primary" size="small" @click="handleDetailClick(row)"
                       >查看详情</el-button
                     >
                   </template>
@@ -119,16 +119,16 @@
       alignCenter
       appendToBody
     >
-      <ElTable :data="warnTableData">
+      <ElTable v-loading="contentLoading" :data="warnTableData" maxHeight="400">
         <ElTableColumn prop="warn" label="进度预警" align="center">
           <template #default>
             <div class="red-dot"></div>
           </template>
         </ElTableColumn>
-        <ElTableColumn prop="name" label="户主姓名" align="center" />
-        <ElTableColumn prop="number" label="户号" align="center" />
-        <ElTableColumn prop="village" label="所属行政村" align="center" />
-        <ElTableColumn prop="group" label="工作组" align="center" />
+        <ElTableColumn prop="householdName" label="户主姓名" align="center" />
+        <ElTableColumn prop="householdNo" label="户号" align="center" />
+        <ElTableColumn prop="villageNames" label="所属行政村" align="center" />
+        <ElTableColumn prop="gridmanName" label="工作组" align="center" />
       </ElTable>
     </ElDialog>
   </div>
@@ -145,11 +145,14 @@ import bottomTarg from '../Home/components/bottomTarg.vue'
 import {
   warningList,
   villageScheduleList,
-  scheduleRankList
+  scheduleRankList,
+  getWarningTypeList,
+  getWarningDetail
 } from '@/api/AssetEvaluation/leader-side'
 import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+import { imgHeight } from '../../../print/config'
 
 const tabCurrentId = ref<number>(1)
 let actualList = [0, 1, 2, 3, 4, 5, 6]
@@ -161,25 +164,13 @@ const flag = ref<boolean>(false)
 const workLoading = ref<boolean>(false)
 const completeLoading = ref<boolean>(false)
 const contentDialog = ref<boolean>(false)
+const contentLoading = ref<boolean>(false)
+const warnListLoading = ref<boolean>(false)
 
-const tableData = ref<any[]>([
-  {
-    village: '鞍山村',
-    total: '314',
-    delay: '214',
-    finish: '100'
-  }
-])
+const tableData1 = ref<any[]>([])
+const tableData2 = ref<any[]>([])
 
-const warnTableData = ref<any[]>([
-  {
-    warn: '鞍山村',
-    name: '关展博',
-    number: '214',
-    village: '鞍山村',
-    group: '工作甲组'
-  }
-])
+const warnTableData = ref<any[]>([])
 
 const tabsList = [
   {
@@ -236,6 +227,18 @@ const onTabClick = (tabItem) => {
   tabCurrentId.value = tabItem.id
 }
 
+const requestWarningTypeList = async () => {
+  warnListLoading.value = true
+  try {
+    const result = await getWarningTypeList(type.value)
+    warnListLoading.value = false
+    tableData1.value = result.slice(0, 5)
+    tableData2.value = result.slice(5)
+  } catch {
+    warnListLoading.value = false
+  }
+}
+
 onMounted(() => {
   newarr.value = actualList.map((v, index) => {
     return { name: headList.value[index].name, values: v }
@@ -243,6 +246,7 @@ onMounted(() => {
   getWarningList()
   getVillageScheduleList()
   getScheduleRankList()
+  requestWarningTypeList()
 })
 
 const tab = (index) => {
@@ -261,12 +265,14 @@ const checktab = (index) => {
     getVillageScheduleList()
     parmas.value = { type: type.value }
     getScheduleRankList()
+    requestWarningTypeList()
     flag.value = false
   } else {
     type.value = index + 2
     getVillageScheduleList()
     parmas.value = { type: type.value }
     getScheduleRankList()
+    requestWarningTypeList()
     if (index == 0) {
       flag.value = true
     } else {
@@ -285,9 +291,20 @@ const handleClick = (tab) => {
   }
 }
 
-const handleDetailClick = (item: any) => {
-  console.log(item)
-  contentDialog.value = true
+const handleDetailClick = async (item: any) => {
+  const params = {
+    type: type.value,
+    villageCode: item.villageCode
+  }
+  contentLoading.value = true
+  try {
+    const result = await getWarningDetail(params)
+    warnTableData.value = result
+    contentLoading.value = false
+    contentDialog.value = true
+  } catch {
+    contentLoading.value = false
+  }
 }
 const workGroupOptions = ref<any>([])
 const headList = ref([
