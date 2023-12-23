@@ -131,6 +131,24 @@ const appStore = useAppStore()
 const newsTypes = ref<any[]>([])
 const dictName = 'news' // 字典名称
 const panelLoading = ref<boolean>(false)
+option.value = [
+  {
+    code: '1',
+    name: '移民户'
+  },
+  {
+    code: '2',
+    name: '企事业单位'
+  },
+  {
+    code: '3',
+    name: '专业项目'
+  },
+  {
+    code: '4',
+    name: '分户土地'
+  }
+]
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
 
