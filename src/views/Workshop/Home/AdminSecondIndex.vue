@@ -193,7 +193,6 @@
                   {{ item.name }}</div
                 >
               </div>
-
               <div class="echart-item-ct">
                 <div
                   class="progress"
@@ -203,9 +202,8 @@
                   }"
                 ></div>
               </div>
-
               <div class="echart-item-rt">
-                <text class="txt">{{ item.val }}&nbsp;户</text>
+                <text class="txt">{{ item.val }}&nbsp;㎡/户</text>
               </div>
             </div>
           </div>

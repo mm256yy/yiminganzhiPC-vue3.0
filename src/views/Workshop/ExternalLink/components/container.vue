@@ -11,8 +11,13 @@
         </ElSelect>
       </div>
       <div class="search">
-        <ElInput v-model="input" class="ipt" placeholder="请输入搜索内容" />
-        <div class="seach_icon"></div>
+        <ElInput
+          v-model="searchContent"
+          class="ipt"
+          placeholder="请输入搜索内容"
+          @click.stop="() => {}"
+        />
+        <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
     </div>
@@ -119,7 +124,7 @@ const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
 const option = ref<any>([])
 
-const input = ref('')
+const searchContent = ref('')
 const reason = ref('移民户')
 const tokenStr = ref<string>('')
 const appStore = useAppStore()
@@ -183,6 +188,7 @@ const requestNewsData = (type = '1') => {
 const onViewFeedBack = (item: any) => {
   push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
+
 // 路由跳转
 const routerJump = (path: string) => {
   push(path)
