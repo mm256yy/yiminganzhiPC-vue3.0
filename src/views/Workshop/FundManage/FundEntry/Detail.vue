@@ -48,7 +48,10 @@
             detail.recordTime ? dayjs(detail.recordTime).format('YYYY-MM-DD') : '-'
           }}</div>
         </div>
-
+        <div class="row">
+          <div class="label">收款方：</div>
+          <div class="value">{{ detail.payee ? fmtDict(dictObj[395], detail.payee) : '-' }}</div>
+        </div>
         <div class="row">
           <div class="label">说明：</div>
           <div class="value">{{ detail.remark }}</div>

@@ -124,6 +124,7 @@ const submit = async (data: AdjustmentType) => {
     btnLoading.value = false
     ElMessage.success('操作成功！')
   } else {
+    btnLoading.value = false
     ElMessage.error('待审核状态不能调整概算')
   }
   onClose(true)

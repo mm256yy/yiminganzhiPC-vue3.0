@@ -457,7 +457,7 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}`
+    let url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}`
     console.log('openUrl', url)
     // window.open(url)
     window.location.href = url

@@ -16,7 +16,7 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="资金名称1:" prop="name" required>
+      <ElFormItem label="资金名称:" prop="name" required>
         <ElInput type="text" v-model="form.name" />
       </ElFormItem>
       <ElFormItem label="资金来源:" prop="source" required>
