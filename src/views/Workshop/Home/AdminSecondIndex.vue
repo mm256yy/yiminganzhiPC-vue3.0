@@ -720,12 +720,12 @@ const tab = (index) => {
     })
   } else if (index == 1) {
     careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
-      pre.push(item.label)
+      pre.push(item.name)
       return pre
     }, [])
     careerOption.value.series.forEach((item) => {
       item.data = dataAll.value.career.reduce((pre, item) => {
-        pre.push({ value: item.number, name: item.label })
+        pre.push({ value: item.number, name: item.name })
         return pre
       }, [])
     })
