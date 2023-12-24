@@ -297,7 +297,7 @@ onMounted(() => {
 
 .time-txt {
   margin-top: 10px;
-  font-size: 30px;                                                                                                                                                                                                                                                                            `111111`
+  font-size: 30px;
   line-height: 20px;
   color: #13131366;
 }
