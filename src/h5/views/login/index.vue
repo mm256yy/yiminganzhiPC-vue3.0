@@ -9,7 +9,7 @@
         <div class="field">
           <div class="label">用户号</div>
           <div class="input">
-            <input v-model="userName" placeholder="请输入用户名" type="tel" maxlength="11" />
+            <input v-model="userName" placeholder="请输入用户名" type="text" maxlength="11" />
           </div>
         </div>
         <div class="field">

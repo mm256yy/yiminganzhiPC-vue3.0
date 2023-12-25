@@ -75,12 +75,15 @@ export default defineComponent({
 
     if (projects.value && projects.value.length > 1) {
       return () => (
-        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
+        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%]']}>
           {/* 顶部背景 */}
 
           <img class="bg" src={bgImg} />
 
-          <div class="flex items-center justify-between px-16px h-64px relative z-1">
+          <div
+            class="flex items-center justify-between h-64px z-1 mr-20px"
+            style="padding-right:35px !important"
+          >
             <WorkLogo></WorkLogo>
             <WorkMenu class="flex-1 pl-24px"></WorkMenu>
             <div class="div">
@@ -114,12 +117,15 @@ export default defineComponent({
       )
     } else {
       return () => (
-        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%] relative']}>
+        <section class={[prefixCls, `${prefixCls}__top`, 'h-[100%]']}>
           {/* 顶部背景 */}
 
           <img class="bg" src={bgImg} />
 
-          <div class="flex items-center justify-between px-16px h-64px relative z-1">
+          <div
+            class="flex items-center justify-between px-16px h-64px  z-1"
+            style="padding-right:35px !important"
+          >
             <WorkLogo></WorkLogo>
             <WorkMenu class="flex-1 pl-24px"></WorkMenu>
             <div class="div"></div>

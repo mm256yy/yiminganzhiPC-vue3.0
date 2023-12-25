@@ -9,17 +9,31 @@
       返回
     </ElButton>
     <div>
-      <div class="between">
-        <div class="between" @click="checktab(-1)">
-          <div class="header-list">
-            <!-- <img :src="water_first" />
-          资格认定 -->
-            <LiquidBall title="资格认定" :values="'0.1'" /> </div
-        ></div>
+      <div class="between" v-loading="processLoading">
         <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
-          <div class="arrow"><img :src="arrow" /></div>
-          <div class="header-list"> <LiquidBall :title="item.name" :values="item.values" /> </div
-        ></div>
+          <div class="arrow" v-if="index > 0"><img :src="arrow" /></div>
+          <ElPopover :width="200" placement="right">
+            <template #reference>
+              <div class="header-list" :class="[currentCheckTabIndex === index ? 'active' : '']">
+                <LiquidBall :title="item.name" :values="item.actual" />
+              </div>
+            </template>
+            <template #default>
+              <div
+                >当前阶段：&nbsp;<span class="stage-txt">{{ item.name }}</span></div
+              >
+              <div
+                >当前进度：&nbsp;<span>{{ (item.actual * 100).toFixed(2) }}%</span></div
+              >
+              <div
+                >开始时间：&nbsp;<span>{{ item.startTime }}</span></div
+              >
+              <div
+                >结束时间：&nbsp;<span>{{ item.endTime }}</span></div
+              >
+            </template>
+          </ElPopover>
+        </div>
       </div>
       <div class="between" style="background: #fff; margin-top: 20px">
         <div class="common-color background-l">
@@ -135,8 +149,9 @@
 </template>
 
 <script lang="ts" setup>
+//el-popover
 import Echart from '@/components/Echart/src/Echart.vue'
-import { ElDialog, ElTable, ElTableColumn } from 'element-plus'
+import { ElDialog, ElTable, ElTableColumn, ElPopover } from 'element-plus'
 import arrow from '@/assets/imgs/arrow.png'
 import LiquidBall from './LiquidBall.vue'
 import { ref, onMounted } from 'vue'
@@ -152,25 +167,26 @@ import {
 import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import { imgHeight } from '../../../print/config'
+import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 
 const tabCurrentId = ref<number>(1)
-let actualList = [0, 1, 2, 3, 4, 5, 6]
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
 const parmas = ref<any>({ type: 1, isToday: false })
 const type = ref<number>(1)
-const flag = ref<boolean>(false)
 const workLoading = ref<boolean>(false)
 const completeLoading = ref<boolean>(false)
 const contentDialog = ref<boolean>(false)
 const contentLoading = ref<boolean>(false)
 const warnListLoading = ref<boolean>(false)
+const newarr = ref<any>([])
+const currentCheckTabIndex = ref<number>(0)
 
 const tableData1 = ref<any[]>([])
 const tableData2 = ref<any[]>([])
 
 const warnTableData = ref<any[]>([])
+const processLoading = ref<boolean>(false)
 
 const tabsList = [
   {
@@ -206,6 +222,8 @@ const getVillageScheduleList = async () => {
   householdOption.value.series[1].data = incompleteNumberList.value
   completeLoading.value = false
 }
+
+// 获取工作组进度
 const getScheduleRankList = async () => {
   workLoading.value = true
   try {
@@ -218,7 +236,6 @@ const getScheduleRankList = async () => {
     workLoading.value = false
   }
 }
-const newarr = ref<any>([])
 
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
@@ -239,56 +256,33 @@ const requestWarningTypeList = async () => {
   }
 }
 
+// 获取进度
+const requestProcess = async () => {
+  processLoading.value = true
+  try {
+    const result = await getLeadershipScreen({})
+    newarr.value = result.progressManagementDto
+    processLoading.value = false
+  } catch {
+    processLoading.value = false
+  }
+}
+
 onMounted(() => {
-  newarr.value = actualList.map((v, index) => {
-    return { name: headList.value[index].name, values: v }
-  })
+  requestProcess()
   getWarningList()
   getVillageScheduleList()
   getScheduleRankList()
   requestWarningTypeList()
 })
 
-const tab = (index) => {
-  if (index == 0) {
-    parmas.value = { type: type.value, isToday: false }
-    getScheduleRankList()
-  } else {
-    parmas.value = { type: type.value, isToday: true }
-    getScheduleRankList()
-  }
-}
-
 const checktab = (index) => {
-  if (index == -1) {
-    type.value = 1
-    getVillageScheduleList()
-    parmas.value = { type: type.value }
-    getScheduleRankList()
-    requestWarningTypeList()
-    flag.value = false
-  } else {
-    type.value = index + 2
-    getVillageScheduleList()
-    parmas.value = { type: type.value }
-    getScheduleRankList()
-    requestWarningTypeList()
-    if (index == 0) {
-      flag.value = true
-    } else {
-      flag.value = false
-    }
-  }
-}
-
-const handleClick = (tab) => {
-  if (tab.props.name == '房产') {
-    parmas.value.type = 10
-    getScheduleRankList()
-  } else if (tab.props.name == '土地') {
-    parmas.value.type = 11
-    getScheduleRankList()
-  }
+  currentCheckTabIndex.value = index
+  type.value = index + 1
+  getVillageScheduleList()
+  parmas.value = { type: type.value }
+  getScheduleRankList()
+  requestWarningTypeList()
 }
 
 const handleDetailClick = async (item: any) => {
@@ -307,15 +301,6 @@ const handleDetailClick = async (item: any) => {
   }
 }
 const workGroupOptions = ref<any>([])
-const headList = ref([
-  { name: '资产评估' },
-  { name: '安置确认' },
-  { name: '择址确认' },
-  { name: '腾空过渡' },
-  { name: '动迁协议' },
-  { name: '搬迁安置' },
-  { name: '生产安置' }
-])
 const householdOption = ref({
   tooltip: {
     trigger: 'item'
@@ -386,6 +371,7 @@ const householdOption = ref({
     }
   ]
 })
+
 const { back } = useRouter()
 const onBack = () => {
   back()
@@ -522,12 +508,21 @@ const onBack = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+
+  &.active {
+    border: 2px solid rgba(62, 115, 236, 0.7);
+  }
+}
+
+.stage-txt {
+  color: #000;
+  font-weight: bold;
 }
 
 .echart-wrap {
   display: flex;
   flex-direction: column;
-  // width: 436px;
   height: 570px;
   padding: 0 10px;
   box-sizing: border-box;
@@ -553,7 +548,6 @@ const onBack = () => {
 
       .user-name {
         width: 42px;
-        // overflow: hidden;
         font-size: 14px;
         color: #333;
         text-overflow: ellipsis;

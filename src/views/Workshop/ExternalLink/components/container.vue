@@ -451,6 +451,8 @@ onMounted(() => {
       }
 
       .question-list {
+        max-height: 176px;
+        overflow: hidden;
         .item {
           display: flex;
           height: 44px;
