@@ -24,11 +24,11 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
+            共 <span class="num">{{ headerInfo?.qyNum }}</span> 家企业
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家水电站
+            <span class="num">{{ headerInfo?.sdzNum }}</span> 家水电站
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家矿业权
+            <span class="num">{{ headerInfo?.tkqNum }}</span> 家矿业权
           </div>
         </div>
       </div>
@@ -52,12 +52,12 @@
           <div>
             {{
               `
-              ${row.cityCodeText ? row.cityCodeText + '/' : ''}
-              ${row.areaCodeText ? row.areaCodeText : ''}
-              ${row.townCodeText ? '/' + row.townCodeText : ''}
-              ${row.villageText ? '/' + row.villageText : ''}
-              ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
-              `
+            ${row.cityCodeText ? row.cityCodeText + '/' : ''}
+                        ${row.areaCodeText ? row.areaCodeText : ''}
+                        ${row.townCodeText ? '/' + row.townCodeText : ''}
+                        ${row.villageText ? '/' + row.villageText : ''}
+                        ${row.virutalVillageText ? '/' + row.virutalVillageText : ''}
+            `
             }}
           </div>
         </template>
@@ -100,19 +100,14 @@ import { getLandlordListApi, getLandlordHeadApi } from '@/api/immigrantImplement
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
+import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
+const headerInfo = ref<any>()
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
@@ -134,8 +129,8 @@ const getDistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
-  headInfo.value = info
+  const info = await getLandlordHeadApi({ status: 'implementation', type: 'Company' })
+  headerInfo.value = info
 }
 
 onMounted(() => {

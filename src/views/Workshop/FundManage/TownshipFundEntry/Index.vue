@@ -11,7 +11,7 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
-            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
           </div>
           <div class="content">
             <div class="sub-title">余额</div>
@@ -24,7 +24,7 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">发放金额</div>
-            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            总共 <span class="num">{{ tableObject.tableList.length }}</span> 个
+            总共 <span class="num">{{ tableObject.total }}</span> 个
           </div>
         </div>
         <div class="table-header-right">

@@ -4,7 +4,7 @@
 -->
 <template>
   <div class="right_info">
-    <div class="right_info_top">
+    <div class="right_info_top" @click="handleClickFundManage">
       <Label>
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" />
@@ -81,14 +81,18 @@
           <div class="ridio_text">实际进度</div>
         </div>
         <div class="progress_list" style="flex: 1">
-          <div v-for="item in progressList" :key="item.img" class="progress_li">
+          <div
+            v-for="item in progressList"
+            :key="item.img"
+            class="progress_li"
+            @click="handleProcessClick(item)"
+          >
             <div class="li_img">
               <img class="logo_li" :src="item.img" alt="" />
             </div>
             <div class="li_right">
               <div class="li_title">{{ item.name }}</div>
               <ElProgress :color="customColor_a" class="progress_top" :percentage="item.actual" />
-              <!-- <ElProgress :color="customColor" class="progress_top" :percentage="item.plan" /> -->
             </div>
           </div>
         </div>
@@ -106,7 +110,6 @@
 </template>
 <script lang="ts" setup>
 import Label from './label.vue'
-import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
 import { useRouter, useRoute } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
@@ -145,7 +148,7 @@ const getInfo = (e: any) => {
   })
 }
 const handleClickItem = (type: number) => {
-  console.log(route)
+  // console.log(route)
 
   const pathMap = {
     1: 'adminSecondHome', // 大数据分析
@@ -156,6 +159,21 @@ const handleClickItem = (type: number) => {
     6: 'SmartReport' // 智慧报表
   }
   push({ name: pathMap[type] })
+}
+
+const handleClickFundManage = () => {
+  const pdfUlr = 'https://oss.zdwp.tech/migrate/files/概算资金.pdf'
+  window.open(pdfUlr, '_blank')
+}
+
+const handleProcessClick = (item: any) => {
+  // console.log('T-G', item)
+  push({
+    name: 'adminhomeprogress',
+    query: {
+      ...item
+    }
+  })
 }
 </script>
 
@@ -181,6 +199,7 @@ const handleClickItem = (type: number) => {
     width: 620px;
     height: 312px;
     margin-bottom: 12px;
+    cursor: pointer;
     background: #ffffff;
     border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
@@ -402,6 +421,7 @@ const handleClickItem = (type: number) => {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        cursor: pointer;
 
         .progress_li {
           display: flex;

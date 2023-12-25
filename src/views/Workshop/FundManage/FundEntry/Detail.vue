@@ -11,10 +11,8 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">{{
-          type == 1 ? '资金预拨' : '资金池'
-        }}</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">详情</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金入账详情</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
 
@@ -47,10 +45,13 @@
         <div class="row">
           <div class="label">入账时间：</div>
           <div class="value">{{
-            detail.createdDate ? dayjs(detail.createdDate).format('YYYY-MM-DD') : '-'
+            detail.recordTime ? dayjs(detail.recordTime).format('YYYY-MM-DD') : '-'
           }}</div>
         </div>
-
+        <div class="row">
+          <div class="label">收款方：</div>
+          <div class="value">{{ detail.payee ? fmtDict(dictObj[395], detail.payee) : '-' }}</div>
+        </div>
         <div class="row">
           <div class="label">说明：</div>
           <div class="value">{{ detail.remark }}</div>
@@ -113,7 +114,6 @@ const { back, currentRoute } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { query } = unref(currentRoute)
 const id: number = query.id ? +query.id : 0
-const type: number = query.type ? +query.type : 0
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 

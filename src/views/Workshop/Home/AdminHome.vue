@@ -12,8 +12,8 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div class="enter-item" @click="toTarget('PeasantHouseholdImp')">
-        <div class="title-field" @click="toLink('householdList')">
+      <div class="enter-item">
+        <div class="title-field" @click="toTarget('PeasantHouseholdImp')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
           </div>
@@ -26,7 +26,10 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 0 })">
+          <div
+            class="field-box"
+            @click.prevent.stop="toLinkParams('PeasantHouseholdImp', { warnStatus: 2 })"
+          >
             <div class="line-1">{{ statisticsObj?.peasantLagCount }}</div>
             <div class="flex">
               <div
@@ -42,7 +45,7 @@
               <div class="line-2">滞后</div>
             </div>
           </div>
-          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 1 })">
+          <div class="field-box" @click="toLinkParams('PeasantHouseholdImp', { warnStatus: 1 })">
             <div class="line-1">{{ statisticsObj?.peasantWarnCount }}</div>
             <div class="flex">
               <div
@@ -58,7 +61,7 @@
               <div class="line-2">预警</div>
             </div>
           </div>
-          <div class="field-box" @click="toLinkParams('homeHoldList', { type: 2 })">
+          <div class="field-box" @click="toLinkParams('PeasantHouseholdImp', { warnStatus: 0 })">
             <div class="line-1">{{ statisticsObj?.peasantNormalCount }}</div>
             <div class="flex">
               <div
@@ -308,10 +311,14 @@ const toLink = (name: string) => {
   emit('toLink', name)
 }
 
-const toLinkParams = (name: string, params: any) => {
-  emit('toParamsLink', {
-    name,
-    ...params
+const toLinkParams = (routeName: string, query = {}) => {
+  // emit('toParamsLink', {
+  //   name,
+  //   ...params
+  // })
+  push({
+    name: routeName,
+    query
   })
 }
 

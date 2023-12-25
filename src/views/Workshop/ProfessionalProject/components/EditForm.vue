@@ -39,6 +39,16 @@
           placeholder="请输入权属单位名称"
         />
       </ElFormItem>
+      <ElFormItem label="所属区域" prop="parentCode">
+        <ElTreeSelect
+          class="!w-350px"
+          v-model="form.parentCode"
+          :data="props.districtTree"
+          node-key="code"
+          :props="treeSelectDefaultProps"
+          :default-expanded-keys="[form.parentCode]"
+        />
+      </ElFormItem>
       <ElFormItem label="地址" prop="address">
         <ElInput v-model="form.address" class="!w-350px" placeholder="请输入地址" />
       </ElFormItem>
@@ -107,7 +117,8 @@ import {
   FormRules,
   ElOption,
   ElSelect,
-  ElMessage
+  ElMessage,
+  ElTreeSelect
 } from 'element-plus'
 import { ref, reactive, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
@@ -116,6 +127,7 @@ import { editProfessionalProjectApi } from '@/api/professional/service'
 import type { ProfessionalProjectDtoType } from '@/api/professional/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useAppStore } from '@/store/modules/app'
+import type { DistrictNodeType } from '@/api/district/types'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
@@ -123,8 +135,12 @@ interface PropsType {
   show: boolean
   actionType: string
   row?: ProfessionalProjectDtoType | null | undefined
+  districtTree: DistrictNodeType[]
 }
-
+const treeSelectDefaultProps = {
+  value: 'code',
+  label: 'name'
+}
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
@@ -147,7 +163,8 @@ const defaultValue = {
   responsibilityCompany: '',
   designCompany: '',
   supervisionCompany: '',
-  projectSchedule: ''
+  projectSchedule: '',
+  parentCode: ''
 }
 const form = ref<Omit<ProfessionalProjectDtoType, 'id'>>(defaultValue)
 
@@ -170,7 +187,8 @@ const rules = reactive<FormRules>({
   name: [required()],
   code: [required()],
   type: [required()],
-  address: [required()]
+  address: [required()],
+  parentCode: [required()]
 })
 
 // 关闭弹窗

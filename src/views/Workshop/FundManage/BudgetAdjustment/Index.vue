@@ -7,7 +7,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -115,8 +115,6 @@ tableObject.params = {
   status: 4
 }
 setSearchParams({})
-
-// getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -457,50 +455,24 @@ tableObject.params = {
 
 const onSearch = (data) => {
   // 处理参数
-  let params = { ...data }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
+  let params = {
+    ...data
   }
 
-  if (!params.name) {
-    delete params.name
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
   }
-
-  if (!params.applyType) {
-    delete params.applyType
-  }
-
-  if (!params.dataState) {
-    delete params.dataState
-  }
-
-  if (!params.createdDate) {
-    delete params.createdDate
-  }
-
-  if (!params.amount && !params.amount.length) {
-    delete params.amount
-  }
-
-  if (!params.type) {
-    delete params.type
-  }
-
-  if (!params.funSubjectId) {
-    delete params.funSubjectId
-  }
-
-  if (!params.applyUserName) {
-    delete params.applyUserName
-  }
-
-  if (!params.paymentType) {
-    delete params.paymentType
-  }
-
   setSearchParams({ ...params, status: '4' })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId,
+    status: '4'
+  }
+  setSearchParams({})
 }
 
 // 获取资金科目选项列表
@@ -528,6 +500,7 @@ const getTreeName = (list: any, code: any) => {
   }
 }
 const onViewRow = async (row: any) => {
+  console.log('===============row=========', row)
   PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {
     parmasList.value = res
     console.log(res, '测试')

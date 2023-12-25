@@ -22,7 +22,7 @@
             :min="0"
             v-model="row.number"
           />
-          <div v-if="row.isUpdate === '1'">{{ row.number }}</div>
+          <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
           <div v-if="!showInput(row.name)"> —— </div>
         </template>
       </ElTableColumn>
@@ -183,7 +183,7 @@ const onSave = (data: any, isVerify: string) => {
       .then((res: any) => {
         if (res) {
           ElMessage.success('操作成功')
-          //initData()
+          initData()
           loading.value = false
         }
       })

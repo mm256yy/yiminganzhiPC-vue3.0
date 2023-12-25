@@ -4,14 +4,19 @@
 -->
 <template>
   <div class="container_box">
-    <div class="cin_top">
+    <div class="cin_top" @click="goLink">
       <div class="seach_select">
-        <ElSelect placeholder=" " clearable filterable v-model="reason" class="s_full">
+        <ElSelect placeholder="请选择" clearable filterable v-model="reason" class="s_full">
           <ElOption v-for="item in option" :key="item.code" :label="item.name" :value="item.code" />
         </ElSelect>
       </div>
       <div class="search">
-        <ElInput v-model="input" class="ipt" placeholder="请输入搜索内容" />
+        <ElInput
+          v-model="searchContent"
+          class="ipt"
+          placeholder="请输入搜索内容"
+          @click.stop="() => {}"
+        />
         <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
@@ -38,20 +43,9 @@
             :key="index"
             :name="item.value"
           />
-
-          <!-- <ElTabPane name="水库要闻" label="水库要闻232">
-            <div></div>
-          </ElTabPane>
-          <ElTabPane label="政策法规" name="政策法规">
-            <div></div>
-          </ElTabPane>
-          <ElTabPane label="水库概况" name="水库概况"><div></div></ElTabPane>
-          <ElTabPane label="建设历程" name="建设历程"><div></div></ElTabPane>
-          <ElTabPane label="安置概况" name="安置概况"><div></div></ElTabPane>
-          <ElTabPane label="水库风采" name="水库风采"><div></div></ElTabPane> -->
         </ElTabs>
         <div class="news_info" v-loading="panelLoading">
-          <div v-for="item in newsList" :key="item.id" class="news_li">
+          <div v-for="item in newsList" :key="item.id" class="news_li" @click="checkNews(item)">
             <div class="news_li_l">
               <div class="li_l_top">{{ item.title }}</div>
               <div class="li_l_bom">{{ item.releaseTime.replace(/-/g, '/') }}</div>
@@ -99,12 +93,22 @@
         </div>
       </div>
     </div>
+    <ElDialog
+      title="文章内容查看"
+      v-model="contentDialog"
+      :width="800"
+      @close="contentDialog = false"
+      alignCenter
+      appendToBody
+    >
+      <div v-html="content"></div>
+    </ElDialog>
   </div>
 </template>
 <script lang="ts" setup>
 import Label from './label.vue'
 import { ref, onMounted } from 'vue'
-import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput } from 'element-plus'
+import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput, ElDialog } from 'element-plus'
 
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -120,13 +124,33 @@ const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
 const option = ref<any>([])
 
-const input = ref('')
+const searchContent = ref('')
 const reason = ref('移民户')
 const tokenStr = ref<string>('')
 const appStore = useAppStore()
 const newsTypes = ref<any[]>([])
 const dictName = 'news' // 字典名称
 const panelLoading = ref<boolean>(false)
+option.value = [
+  {
+    code: '1',
+    name: '移民户'
+  },
+  {
+    code: '2',
+    name: '企事业单位'
+  },
+  {
+    code: '3',
+    name: '专业项目'
+  },
+  {
+    code: '4',
+    name: '分户土地'
+  }
+]
+const content = ref<string>() // 文章内容
+const contentDialog = ref<boolean>(false)
 
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
@@ -135,7 +159,6 @@ const getNewsDict = async () => {
   })
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
-    console.log('resTTP', newsTypes.value)
   }
 }
 
@@ -146,6 +169,12 @@ const feedback = async () => {
   })
   questionList.value = list.content
 }
+
+const checkNews = (item: any) => {
+  content.value = item.content
+  contentDialog.value = true
+}
+
 // 点击新闻跳转
 const newsHandleClick = (pane: any, ev: Event) => {
   console.log('ev', ev)
@@ -177,6 +206,7 @@ const requestNewsData = (type = '1') => {
 const onViewFeedBack = (item: any) => {
   push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
+
 // 路由跳转
 const routerJump = (path: string) => {
   push(path)
@@ -186,7 +216,7 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
+    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
     window.location.href = url
   } catch {}
 }

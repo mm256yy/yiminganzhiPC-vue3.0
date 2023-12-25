@@ -22,8 +22,6 @@
         :columns="schemas.columns"
         :showOverflowTooltip="true"
         tableLayout="auto"
-        height="460"
-        :max-height="460"
         style="width: 100%"
         row-key="id"
         show-summary
@@ -272,5 +270,9 @@ onMounted(() => {
 .title-hint {
   padding: 15px 0 0 15px;
   color: 14px;
+}
+
+:deep(.el-table .el-table__cell) {
+  padding: 5px 0;
 }
 </style>

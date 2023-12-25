@@ -2,7 +2,6 @@ import request from '@/config/axios'
 import { LandlordDtoType, TemplateParamsType, SurveyInfoType } from './types'
 import { GraveType, LandlordType } from '@/types/print'
 import { globalData } from '@/config/fill'
-import { isWindow } from '../../../utils/is'
 
 /**
  * 查询居民户信息列表

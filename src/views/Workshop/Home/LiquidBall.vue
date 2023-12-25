@@ -18,7 +18,7 @@ const liquidOption = ref({
   title: [
     {
       text: props.title,
-      x: '20%',
+      x: '26%',
       y: '75%',
       textStyle: {
         fontSize: 12,

@@ -83,11 +83,15 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const map = ref<any>(null)
 const AMap = ref<any>(null)
-const longitude = 120.148775
-const latitude = 30.245799
+let longitude = ''
+let latitude = ''
 const pointInfo = ref<any>({})
 
 const init = async () => {
+  // marker
+  pointInfo.value = { ...props.placementPointInfo }
+  longitude = pointInfo.value.longitude
+  latitude = pointInfo.value.latitude
   AMap.value = await AMapLoader.load({
     key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
@@ -113,10 +117,11 @@ const init = async () => {
     map: map.value
   })
   map.value.setDefaultCursor('pointer')
-  // marker
-  pointInfo.value = { ...props.placementPointInfo }
 }
-
+// 第二部：暴露方法
+defineExpose({
+  init
+})
 onMounted(() => {
   //   console.log('执行几次')
   init()

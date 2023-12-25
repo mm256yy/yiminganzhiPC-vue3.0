@@ -25,10 +25,9 @@
         :columns="allSchemas.tableColumns"
         :span-method="objectSpanMethod"
         row-key="id"
-        height="460"
-        :max-height="460"
         style="width: 100%"
         headerAlign="center"
+        show-overflow-tooltip
         align="center"
         @register="register"
       />
@@ -351,6 +350,11 @@ onMounted(() => {
 
 .title-hint {
   padding: 15px 0 0 15px;
+  font-size: 14px;
   color: 14px;
+}
+
+:deep(.el-table .el-table__cell) {
+  padding: 5px 0;
 }
 </style>

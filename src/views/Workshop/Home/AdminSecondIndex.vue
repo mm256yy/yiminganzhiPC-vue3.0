@@ -193,7 +193,6 @@
                   {{ item.name }}</div
                 >
               </div>
-
               <div class="echart-item-ct">
                 <div
                   class="progress"
@@ -203,9 +202,8 @@
                   }"
                 ></div>
               </div>
-
               <div class="echart-item-rt">
-                <text class="txt">{{ item.val }}&nbsp;户</text>
+                <text class="txt">{{ item.val }}&nbsp;㎡/户</text>
               </div>
             </div>
           </div>
@@ -284,7 +282,7 @@ import {
   getLanAnalysisReport
 } from '@/api/AssetEvaluation/leader-side'
 import { useAppStore } from '@/store/modules/app'
-import { ElSelect, ElOption, ElButton } from 'element-plus'
+import { ElSelect, ElOption, ElButton, ElDialog } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 // import iconEduSrc from '@/assets/imgs/homes/icon_edu.png'
@@ -303,7 +301,6 @@ let aalls: any = ref()
 let renjuntd: any = ref({})
 let dataSum = 0
 const reason = ref()
-const appStore = useAppStore()
 const villageAnalysisNumber = ref<number>()
 const typeNumber = ref<number>(1)
 let numberMan: any = ref()
@@ -312,6 +309,7 @@ const tag = ref<boolean>(true)
 const perPersonMapTotal = ref<string>()
 const perHouseholdTotal = ref<string>()
 const dataAll = ref()
+
 const getChartScreenLists = async () => {
   groundLoading.value = true
   genderLoading.value = true
@@ -338,12 +336,12 @@ const getChartScreenLists = async () => {
     return pre
   }, [])
   dataAll.value = list
-  careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
+  careerOption.value.legend.data = dataAll.value.education.reduce((pre, item) => {
     pre.push(item.label)
     return pre
   }, [])
   careerOption.value.series.forEach((item) => {
-    item.data = dataAll.value.career.reduce((pre, item) => {
+    item.data = dataAll.value.education.reduce((pre, item) => {
       pre.push({ value: item.number, name: item.label })
       return pre
     }, [])
@@ -626,7 +624,7 @@ onMounted(() => {
 })
 const tabListCareer = [
   {
-    title: '文化程度分布'
+    title: '学历分布'
   },
   {
     title: '职业分布'
@@ -706,50 +704,10 @@ const insuredOption: any = ref({
       coordinateSystem: 'polar',
       barWidth: 10
     }
-    // {
-    //   name: '医疗保险',
-    //   type: 'bar',
-    //   data: [0, 80],
-    //   coordinateSystem: 'polar',
-    //   showBackground: true,
-    //   barWidth: 10,
-    //   colorBy: 'data'
-    // },
-    // {
-    //   name: '养老保险',
-    //   type: 'bar',
-    //   data: [0, 80],
-    //   coordinateSystem: 'polar',
-    //   showBackground: true,
-    //   barWidth: 10,
-    //   colorBy: 'data'
-    // },
-    // {
-    //   name: '其他',
-    //   type: 'bar',
-    //   data: [0, 80],
-    //   coordinateSystem: 'polar',
-    //   showBackground: true,
-    //   barWidth: 10,
-    //   colorBy: 'data'
-    // }
   ]
 })
 const tab = (index) => {
   if (index == 0) {
-    careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
-      pre.push(item.label)
-      return pre
-    }, [])
-    careerOption.value.series.forEach((item) => {
-      item.data = dataAll.value.career.reduce((pre, item) => {
-        pre.push({ value: item.number, name: item.label })
-        return pre
-      }, [])
-    })
-  } else if (index == 1) {
-    console.log(dataAll.value)
-
     careerOption.value.legend.data = dataAll.value.education.reduce((pre, item) => {
       pre.push(item.label)
       return pre
@@ -757,6 +715,17 @@ const tab = (index) => {
     careerOption.value.series.forEach((item) => {
       item.data = dataAll.value.education.reduce((pre, item) => {
         pre.push({ value: item.number, name: item.label })
+        return pre
+      }, [])
+    })
+  } else if (index == 1) {
+    careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
+      pre.push(item.name)
+      return pre
+    }, [])
+    careerOption.value.series.forEach((item) => {
+      item.data = dataAll.value.career.reduce((pre, item) => {
+        pre.push({ value: item.number, name: item.name })
         return pre
       }, [])
     })
@@ -778,14 +747,7 @@ const careerOption = ref({
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
   legend: {
     // 指示框名字  注意！要和下方series中的name一起改
-    data: [
-      '专业技术人员',
-      '办事人员和有关人员',
-      '商业、服务业人员',
-      '农、林、牧、渔、水利业生产人员',
-      '生产、运输设备操作人员及有关人员',
-      '不便分类的其他从业人员'
-    ],
+    data: [],
     // 指示框位置  距离上下左右多少
     // right: 'center',
     // bottom: '2%',
@@ -798,10 +760,10 @@ const careerOption = ref({
     },
     icon: 'circle',
     formatter: function (name) {
-      let singleData = careerOption.value.series[0].data.filter(function (item) {
+      let singleData: any = careerOption.value.series[0].data.filter(function (item: any) {
         return item.name == name
       })
-      let m = careerOption.value.series[0].data.reduce((pre, item) => {
+      let m = careerOption.value.series[0].data.reduce((pre, item: any) => {
         pre += item.value
         return pre
       }, 0)
@@ -836,12 +798,12 @@ const careerOption = ref({
       type: 'pie',
       radius: ['40%', '80%'],
       data: [
-        { value: 600, name: '专业技术人员' },
-        { value: 100, name: '办事人员和有关人员' },
-        { value: 200, name: '商业、服务业人员' },
-        { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        { value: 500, name: '不便分类的其他从业人员' }
+        // { value: 600, name: '专业技术人员' },
+        // { value: 100, name: '办事人员和有关人员' },
+        // { value: 200, name: '商业、服务业人员' },
+        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
+        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
+        // { value: 500, name: '不便分类的其他从业人员' }
       ],
       emphasis: {
         itemStyle: {
@@ -861,12 +823,12 @@ const careerOption = ref({
       type: 'pie',
       radius: ['40%', '80%'],
       data: [
-        { value: 600, name: '专业技术人员' },
-        { value: 100, name: '办事人员和有关人员' },
-        { value: 200, name: '商业、服务业人员' },
-        { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        { value: 500, name: '不便分类的其他从业人员' }
+        // { value: 600, name: '专业技术人员' },
+        // { value: 100, name: '办事人员和有关人员' },
+        // { value: 200, name: '商业、服务业人员' },
+        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
+        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
+        // { value: 500, name: '不便分类的其他从业人员' }
       ],
       emphasis: {
         itemStyle: {
@@ -886,12 +848,12 @@ const careerOption = ref({
       type: 'pie',
       radius: ['40%', '80%'],
       data: [
-        { value: 600, name: '专业技术人员' },
-        { value: 100, name: '办事人员和有关人员' },
-        { value: 200, name: '商业、服务业人员' },
-        { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        { value: 500, name: '不便分类的其他从业人员' }
+        // { value: 600, name: '专业技术人员' },
+        // { value: 100, name: '办事人员和有关人员' },
+        // { value: 200, name: '商业、服务业人员' },
+        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
+        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
+        // { value: 500, name: '不便分类的其他从业人员' }
       ],
       emphasis: {
         itemStyle: {
@@ -1364,6 +1326,7 @@ const onBack = () => {
     .echart-item-lt {
       display: flex;
       width: 80px;
+      height: 35px;
       padding-left: 20px;
       font-size: 14px;
       text-overflow: ellipsis;
@@ -1459,8 +1422,8 @@ const onBack = () => {
 }
 
 .left-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   margin-right: 8px;
   background: #9fbcff;
   border-radius: 50%;

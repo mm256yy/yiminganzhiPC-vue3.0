@@ -24,6 +24,7 @@ export interface LandlordDtoType {
   allocationStatus?: string
   householdNumber?: string // 户籍册编号
   status?: string // 移民阶段，如数据采集 survey，实物复核 implementation
+  warnStatus?: string
   type?: string
   [key: string]: any
 }
