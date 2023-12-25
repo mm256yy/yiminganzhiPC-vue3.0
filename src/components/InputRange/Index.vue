@@ -13,7 +13,7 @@ import { useConfigGlobal } from '@/hooks/web/useConfigGlobal'
 import { useDesign } from '@/hooks/web/useDesign'
 
 interface PropsType {
-  modelValue: Array<number | undefined>
+  modelValue: Array<number | null>
 }
 
 const { getPrefixCls } = useDesign()
@@ -23,16 +23,16 @@ const prefixCls = getPrefixCls('input-range')
 const props = defineProps<PropsType>()
 
 // 输入框的值
-const val1 = ref<number | undefined>()
-const val2 = ref<number | undefined>()
+const val1 = ref<any>()
+const val2 = ref<any>()
 
 const { configGlobal } = useConfigGlobal()
 
 const emit = defineEmits(['update:modelValue'])
 
-// const val1Change = (val: number | undefined) => {
+// const val1Change = (val: number | null) => {
 //   console.log(val, 'val')
-//   if (val2.value !== undefined && val !== undefined) {
+//   if (val2.value !== null && val !== null) {
 //     if (val >= val2.value) {
 //       val1.value = 0
 //       return
@@ -41,8 +41,8 @@ const emit = defineEmits(['update:modelValue'])
 //   val1.value = val
 // }
 
-// const val2Change = (val: number | undefined) => {
-//   if (val1.value !== undefined && val !== undefined) {
+// const val2Change = (val: number | null) => {
+//   if (val1.value !== null && val !== null) {
 //     if (val <= val1.value) {
 //       val2.value = 0
 //       return
@@ -53,18 +53,22 @@ const emit = defineEmits(['update:modelValue'])
 
 watch(
   () => props.modelValue,
-  (val: Array<number | undefined>) => {
-    val1.value = val[0] || undefined
-    val2.value = val[1] || undefined
+  (val: Array<number | null>) => {
+    console.log(val, 'bbq')
+
+    val1.value = val[0]
+    val2.value = val[1]
   }
 )
 
 // 监听
 watch([val1, val2], ([value1, value2]) => {
-  if (value1 !== undefined && value2 !== undefined) {
+  console.log(value1, value2, 'bbq')
+
+  if (value1 && value2) {
     if (value1 >= value2) {
       ElMessage.info('第一个值不得大于第二个值')
-      emit('update:modelValue', [undefined, undefined])
+      emit('update:modelValue', [null, null])
       return
     } else {
       emit('update:modelValue', [value1, value2])

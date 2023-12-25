@@ -2,7 +2,9 @@
   <!-- 实物调查首页 -->
   <InvestigationHome v-if="role === RoleCodeType.investigator || role === RoleCodeType.reviewer" />
   <!-- 领导首页 -->
-  <LeaderHome v-else-if="role === RoleCodeType.leaderworkbenches" />
+  <LeaderHome
+    v-else-if="role === RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision"
+  />
   <!--评估人员首页-->
   <EvaluationHome v-else-if="isEvaluation" />
   <!-- 实施人员首页 -->
@@ -21,14 +23,17 @@
  * 只放页面组件
  */
 
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref, onMounted } from 'vue'
 import UserHome from './AdminHome.vue'
 import LeaderHome from '../ExternalLink/LeaderSide.vue'
 import EvaluationHome from './EvaluationHome.vue'
 import InvestigationHome from './Index.vue'
 import OtherHome from './Other.vue'
+import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
+import { usePermissionStore } from '@/store/modules/permission'
 
+const permissionStore = usePermissionStore()
 // 角色代码
 enum RoleCodeType {
   investigator = 'investigator', // 实物调查
@@ -38,7 +43,16 @@ enum RoleCodeType {
   assessor = 'assessor', // 房屋评估
   assessorland = 'assessorland', // 土地评估
   other = 'other', // 其他 注意不是字典 用作区别 领导角色的,
-  implementleader = 'implementleader' //实施组长
+  implementleader = 'implementleader', //实施组长
+  legalentity = 'legalentity',
+  relocationagent = 'relocationagent',
+  relocationchief = 'relocationchief',
+  supervision = 'supervision',
+  responsibilities = 'responsibilities',
+  finance = 'finance',
+  executive = 'executive',
+  financevoucher = 'financevoucher',
+  township = 'township'
 }
 
 const appStore = useAppStore()
@@ -66,9 +80,42 @@ const getRole = () => {
   }
   return RoleCodeType.other
 }
-
+let rolerToRouter = ref([
+  { name: 'legalentity', path: 'FundAllocation' },
+  { name: 'relocationagent', path: 'PaymentApplication' },
+  { name: 'relocationchief', path: 'PaymentReview' },
+  { name: 'responsibilities', path: 'PaymentReview' },
+  { name: 'finance', path: 'PaymentReview' },
+  { name: 'executive', path: 'PaymentReview' },
+  { name: 'financevoucher', path: 'PaymentReview' },
+  { name: 'township', path: 'TownshipFundEntry' }
+])
+const Router = useRouter()
 onBeforeMount(() => {
   role.value = getRole()
-  console.log(role.value, 'bbq')
+  console.log(Router)
+
+  // if (
+  //   permissionStore.getIsAddRouters &&
+  //   role.value == 'legalentity' &&
+  //   Router.options.history.state.back == '/login'
+  // ) {
+  //   Router.push({ name: 'FundAllocation' })
+  // }
+  rolerToRouter.value.forEach((item) => {
+    if (
+      permissionStore.getIsAddRouters &&
+      role.value == item.name &&
+      Router.options.history.state.back == '/login'
+    ) {
+      Router.push({ name: item.path })
+    }
+  })
 })
+// onMounted(() => {
+//   console.log(role.value, permissionStore.getIsAddRouters, 'bbq')
+//   if (permissionStore.getIsAddRouters && role.value == 'legalentity') {
+//     push('FundAllocation')
+//   }
+// })
 </script>

@@ -78,6 +78,9 @@
       <ElFormItem label="高程" prop="altitude">
         <ElInput v-model="form.altitude" class="!w-350px" placeholder="请输入高程" />
       </ElFormItem>
+      <ElFormItem label="长度（KM）" prop="size">
+        <ElInput v-model="form.size" class="!w-350px" placeholder="请输入高程" />
+      </ElFormItem>
       <ElFormItem label="施工单位" prop="constructionCompany">
         <ElInput v-model="form.constructionCompany" class="!w-350px" placeholder="请输入施工单位" />
       </ElFormItem>
@@ -164,7 +167,8 @@ const defaultValue = {
   designCompany: '',
   supervisionCompany: '',
   projectSchedule: '',
-  parentCode: ''
+  parentCode: '',
+  size: ''
 }
 const form = ref<Omit<ProfessionalProjectDtoType, 'id'>>(defaultValue)
 

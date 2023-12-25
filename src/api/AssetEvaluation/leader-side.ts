@@ -86,9 +86,10 @@ export const getFundAnalysis = (): Promise<any> => {
   })
 }
 // /api/leadershipScreen/getLanAnalysisReport
-export const getLanAnalysisReport = (): Promise<any> => {
+export const getLanAnalysisReport = (params: any): Promise<any> => {
   return request.get({
-    url: `/leadershipScreen/getLanAnalysisReport`
+    url: `/leadershipScreen/getLanAnalysisReport`,
+    params
   })
 }
 

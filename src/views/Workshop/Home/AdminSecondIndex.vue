@@ -316,7 +316,7 @@ const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
   try {
-    let gengdi = await getLanAnalysisReport()
+    let gengdi = await getLanAnalysisReport({ code: reason.value })
     dataSum = gengdi.data.reduce((pre, item) => {
       if (item.val > pre) {
         pre = item.val
@@ -430,9 +430,55 @@ const getChartScreenLists = async () => {
     houseOption.value.series[0].data = perHouseholdList.value
   }
 }
+const villageListss = ref<any>([
+  {
+    code: null,
+    name: '全域'
+  },
+  {
+    code: 330624109213,
+    name: '竹潭村'
+  },
+  {
+    code: 330624109212,
+    name: '小泉溪村'
+  },
+  {
+    code: 330624109214,
+    name: '殿前村'
+  },
+  {
+    code: 330624109215,
+    name: '下潘村'
+  },
+  {
+    code: 330624109217,
+    name: '大畈村'
+  },
+  {
+    code: 330624109221,
+    name: '潭角村'
+  },
+  {
+    code: 330624109216,
+    name: '后染村'
+  },
+  {
+    code: 330624109222,
+    name: '里镜屏村'
+  },
+  {
+    code: 330624109202,
+    name: '溪西村'
+  },
+  {
+    code: 330624109218,
+    name: '安山村'
+  }
+])
 const villageLists = ref<any>([])
 const villageList = async () => {
-  villageLists.value = await getVillageList({})
+  villageLists.value = villageListss.value
 }
 
 const getVillageAnalysisLists = async () => {

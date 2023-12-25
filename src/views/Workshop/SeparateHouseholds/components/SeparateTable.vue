@@ -46,13 +46,24 @@
         </template>
         <template #doorNo="{ row }">
           <el-input
+            v-if="row.pid"
             v-model="row.doorNo"
             maxlength="4"
             placeholder="填入户号"
             type="textnumber"
             :disabled="!row.pid"
           >
-            <template #prepend v-if="row.pid">{{ row.noDoor }}</template>
+            <!-- <template #prepend v-if="row.pid">{{ row.noDoor }}</template> -->
+          </el-input>
+          <el-input
+            v-else
+            v-model="row.showDoorNo"
+            maxlength="4"
+            placeholder="填入户号"
+            type="textnumber"
+            :disabled="!row.pid"
+          >
+            <!-- <template #prepend v-if="row.pid">{{ row.noDoor }}</template> -->
           </el-input>
         </template>
         <template #totalPrice="{ row }">
@@ -111,15 +122,7 @@ const getdistrictTree = async () => {
 }
 onMounted(() => {
   getdistrictTree()
-
-  getList().then(() => {
-    tableObject.tableList.forEach((item: any) => {
-      item.listBoy = []
-      item.familyMembers.forEach((i: any) => {
-        item.listBoy.push(i.name)
-      })
-    })
-  })
+  tableObject.loading = false
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -272,7 +275,7 @@ const onSearch = (data) => {
     })
     delete params.code
   }
-  tableObject.params = { ...params, type: 'PeasantHousehold' }
+  tableObject.params = { ...params, type: 'PeasantHousehold', projectId }
   getList().then(() => {
     tableObject.tableList.forEach((item: any) => {
       item.listBoy = []
@@ -309,7 +312,7 @@ let handleEdit = (row) => {
             pid: row.showDoorNo,
             familyMembers: row.familyMembers,
             listBoy: [],
-            noDoor: row.doorNo.slice(0, 5)
+            noDoor: row.doorNo.slice(0, 2)
           })
         : (item.children = [
             {
@@ -323,7 +326,7 @@ let handleEdit = (row) => {
               pid: row.showDoorNo,
               familyMembers: row.familyMembers,
               listBoy: [],
-              noDoor: row.doorNo.slice(0, 5)
+              noDoor: row.doorNo.slice(0, 2)
             }
           ])
     }
