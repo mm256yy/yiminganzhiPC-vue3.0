@@ -17,6 +17,6 @@ export interface LandlordDtoType {
   areaCode: string
   hasPropertyAccount: boolean
   householdNumber: string // 户籍册编号
-  warnStatus: string
+  warnStatus?: string
   [key: string]: any
 }

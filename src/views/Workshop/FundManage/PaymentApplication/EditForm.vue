@@ -686,6 +686,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+/deep/ .el-upload--picture-card {
+  display: none;
+}
+
 .col-wrapper {
   display: flex;
   align-items: center;

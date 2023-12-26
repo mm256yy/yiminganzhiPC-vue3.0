@@ -21,7 +21,7 @@
           <div class="header-list"> <LiquidBall :title="item.name" :values="item.values" /> </div
         ></div>
       </div>
-      <div class="between" style="background: #fff; margin-top: 20px">
+      <div class="between" style=" margin-top: 20px;background: #fff">
         <div class="common-color background-l">
           <!--完成情况-->
           <div v-loading="completeLoading" class="white common-border">
@@ -35,24 +35,39 @@
           <div class="white common-border">
             <div class="aliam-center" style="padding-bottom: 10px">
               <div class="line"></div>
-              <div class="strong">进度预警</div></div
+              <div class="strong">预警情况</div></div
             >
-            <Table
-              :data="tableObject"
-              :columns="allSchemas.tableColumns"
-              :header-cell-style="{ background: '#F2F6ff' }"
-              row-key="id"
-              headerAlign="center"
-              align="center"
-              highlightCurrentRow
-            >
-              <template #radiu>
-                <div class="center"><div class="radiuBox"></div></div>
-              </template>
-              <template #filling="{ row }">
-                <div class="filling-btn" @click="viewProfile(row)">查看档案</div>
-              </template>
-            </Table>
+            <div class="warnStatus" v-loading="warnListLoading">
+              <ElTable :data="tableData1" class="warn-table">
+                <ElTableColumn prop="seq" label="序号" width="80" align="center" />
+                <ElTableColumn prop="villageName" label="行政村" align="center" />
+                <ElTableColumn prop="householdQuantity" label="总户数" align="center" />
+                <ElTableColumn prop="lagHouseholdQuantity" label="滞后户数" align="center" />
+                <ElTableColumn prop="completedQuantity" label="完成户数" align="center" />
+                <ElTableColumn fixed="right" prop="operation" label="操作" align="center">
+                  <template #default="{ row }">
+                    <el-button link type="primary" size="small" @click="handleDetailClick(row)"
+                      >查看详情</el-button
+                    >
+                  </template>
+                </ElTableColumn>
+              </ElTable>
+              <div class="span-area"></div>
+              <ElTable :data="tableData2" class="warn-table">
+                <ElTableColumn prop="seq" label="序号" width="80" align="center" />
+                <ElTableColumn prop="villageName" label="行政村" align="center" />
+                <ElTableColumn prop="householdQuantity" label="总户数" align="center" />
+                <ElTableColumn prop="lagHouseholdQuantity" label="滞后户数" align="center" />
+                <ElTableColumn prop="completedQuantity" label="完成户数" align="center" />
+                <ElTableColumn fixed="right" prop="operation" label="操作" align="center">
+                  <template #default="{ row }">
+                    <el-button link type="primary" size="small" @click="handleDetailClick(row)"
+                      >查看详情</el-button
+                    >
+                  </template>
+                </ElTableColumn>
+              </ElTable>
+            </div>
           </div>
         </div>
         <div class="background-r">
@@ -76,7 +91,6 @@
                 </div>
               </div>
             </div>
-            <!-- <tabButton @tab="tab" :tabList="tabList" /> -->
             <div v-loading="workLoading" class="echart-wrap">
               <div class="echart-item" v-for="item in workGroupOptions" :key="item.index">
                 <div class="echart-item-lt">
@@ -97,27 +111,48 @@
       </div>
     </div>
     <bottomTarg />
+    <ElDialog
+      title="预警详情"
+      v-model="contentDialog"
+      :width="800"
+      @close="contentDialog = false"
+      alignCenter
+      appendToBody
+    >
+      <ElTable v-loading="contentLoading" :data="warnTableData" maxHeight="400">
+        <ElTableColumn prop="warn" label="进度预警" align="center">
+          <template #default>
+            <div class="red-dot"></div>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn prop="householdName" label="户主姓名" align="center" />
+        <ElTableColumn prop="householdNo" label="户号" align="center" />
+        <ElTableColumn prop="villageNames" label="所属行政村" align="center" />
+        <ElTableColumn prop="gridmanName" label="工作组" align="center" />
+      </ElTable>
+    </ElDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import Echart from '@/components/Echart/src/Echart.vue'
+import { ElDialog, ElTable, ElTableColumn } from 'element-plus'
 import arrow from '@/assets/imgs/arrow.png'
 import LiquidBall from './LiquidBall.vue'
-// import tabButton from '../Home/components/tabButton.vue'
-import { ref, reactive, onMounted } from 'vue'
-import { Table } from '@/components/Table'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { ref, onMounted } from 'vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
 
 import {
   warningList,
   villageScheduleList,
-  scheduleRankList
+  scheduleRankList,
+  getWarningTypeList,
+  getWarningDetail
 } from '@/api/AssetEvaluation/leader-side'
 import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+import { imgHeight } from '../../../print/config'
 
 const tabCurrentId = ref<number>(1)
 let actualList = [0, 1, 2, 3, 4, 5, 6]
@@ -128,6 +163,14 @@ const type = ref<number>(1)
 const flag = ref<boolean>(false)
 const workLoading = ref<boolean>(false)
 const completeLoading = ref<boolean>(false)
+const contentDialog = ref<boolean>(false)
+const contentLoading = ref<boolean>(false)
+const warnListLoading = ref<boolean>(false)
+
+const tableData1 = ref<any[]>([])
+const tableData2 = ref<any[]>([])
+
+const warnTableData = ref<any[]>([])
 
 const tabsList = [
   {
@@ -168,7 +211,6 @@ const getScheduleRankList = async () => {
   try {
     const list = await scheduleRankList(parmas.value)
     workLoading.value = false
-    //false 累计 true 今日
     workGroupOptions.value = list.map((item) => {
       return Object.assign({}, { name: item.name, number: item.completeNumber })
     })
@@ -185,6 +227,18 @@ const onTabClick = (tabItem) => {
   tabCurrentId.value = tabItem.id
 }
 
+const requestWarningTypeList = async () => {
+  warnListLoading.value = true
+  try {
+    const result = await getWarningTypeList(type.value)
+    warnListLoading.value = false
+    tableData1.value = result.slice(0, 5)
+    tableData2.value = result.slice(5)
+  } catch {
+    warnListLoading.value = false
+  }
+}
+
 onMounted(() => {
   newarr.value = actualList.map((v, index) => {
     return { name: headList.value[index].name, values: v }
@@ -192,81 +246,9 @@ onMounted(() => {
   getWarningList()
   getVillageScheduleList()
   getScheduleRankList()
+  requestWarningTypeList()
 })
-const schema = reactive<CrudSchema[]>([
-  {
-    field: 'radiu',
-    label: '进度预警',
-    fixed: 'left',
-    width: 115,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '户主姓名',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    width: 180,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'legalPersonName',
-    label: '所属行政村',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'gridmanName',
-    label: '工作组',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'gridmanPhone',
-    label: '当前进度',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'filling',
-    label: '操作',
-    fixed: 'right',
-    width: 115,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  }
-])
-const viewProfile = (row) => {
-  console.log(row)
-}
-const { allSchemas } = useCrudSchemas(schema)
-const tabList = [
-  {
-    title: '累计'
-  },
-  {
-    title: '今日'
-  }
-]
+
 const tab = (index) => {
   if (index == 0) {
     parmas.value = { type: type.value, isToday: false }
@@ -283,12 +265,14 @@ const checktab = (index) => {
     getVillageScheduleList()
     parmas.value = { type: type.value }
     getScheduleRankList()
+    requestWarningTypeList()
     flag.value = false
   } else {
     type.value = index + 2
     getVillageScheduleList()
     parmas.value = { type: type.value }
     getScheduleRankList()
+    requestWarningTypeList()
     if (index == 0) {
       flag.value = true
     } else {
@@ -306,25 +290,24 @@ const handleClick = (tab) => {
     getScheduleRankList()
   }
 }
-const workGroupOptions = ref<any>([
-  // { index: 1, name: '陈汉林', progress: 100, number: 125, url: icon_first },
-  // { index: 2, name: '梁柏林', progress: 90, number: 115, url: icon_second },
-  // { index: 3, name: '董化杰', progress: 80, number: 105, url: icon_third },
-  // { index: 4, name: '潘永浩', progress: 70, number: 98, url: icon_four },
-  // { index: 5, name: '董羽坤', progress: 65, number: 85, url: icon_five },
-  // { index: 1, name: '陈汉林', progress: 100, number: 125, url: icon_first },
-  // { index: 2, name: '梁柏林', progress: 90, number: 115, url: icon_second },
-  // { index: 3, name: '董化杰', progress: 80, number: 105, url: icon_third },
-  // { index: 4, name: '潘永浩', progress: 70, number: 98, url: icon_four },
-  // { index: 5, name: '董羽坤', progress: 65, number: 85, url: icon_five },
-  // { index: 1, name: '陈汉林', progress: 100, number: 125, url: icon_first },
-  // { index: 2, name: '梁柏林', progress: 90, number: 115, url: icon_second },
-  // { index: 3, name: '董化杰', progress: 80, number: 105, url: icon_third },
-  // { index: 4, name: '潘永浩', progress: 70, number: 98, url: icon_four },
-  // { index: 5, name: '董羽坤', progress: 65, number: 85, url: icon_five }
-])
+
+const handleDetailClick = async (item: any) => {
+  const params = {
+    type: type.value,
+    villageCode: item.villageCode
+  }
+  contentLoading.value = true
+  try {
+    const result = await getWarningDetail(params)
+    warnTableData.value = result
+    contentLoading.value = false
+    contentDialog.value = true
+  } catch {
+    contentLoading.value = false
+  }
+}
+const workGroupOptions = ref<any>([])
 const headList = ref([
-  // { url: water_first, name: '资格认定' },
   { name: '资产评估' },
   { name: '安置确认' },
   { name: '择址确认' },
@@ -355,29 +338,10 @@ const householdOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: [
-      // '殿前村',
-      // '大畈村',
-      // '后染村',
-      // '里镜村',
-      // '潭角村',
-      // '下潘村',
-      // '小泉村',
-      // '竹潭村',
-      // '安山村',
-      // '荷塘村',
-      // '市中社',
-      // '钟楼社',
-      // '桐中井',
-      // '里东村',
-      // '姚宫村',
-      // '琅珂村',
-      // '大塘坑'
-    ]
+    data: []
   },
   yAxis: {
     type: 'value'
-    // data: ['村6', '村7', '村8', '村6', '村7', '村8', '村6', '村7', '村8', '村6']
   },
   series: [
     {
@@ -406,7 +370,6 @@ const householdOption = ref({
 
       type: 'bar',
       barWidth: 18,
-      // stack: 'all',
       color: {
         type: 'linear',
         x: 0, // 右
@@ -436,7 +399,6 @@ const onBack = () => {
   margin-top: 6px;
   background: #ffffff;
   border-radius: 4px;
-  // box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
 
   .head-top {
     display: flex;
@@ -480,6 +442,7 @@ const onBack = () => {
 .data-fill {
   width: 100%;
 }
+
 .common-color {
   width: 100%;
   padding: 10px;
@@ -536,8 +499,6 @@ const onBack = () => {
 
 .background-r {
   width: 25%;
-  // background: #fff;
-  // padding-top: 30px;
   margin-top: 30px;
 }
 
@@ -546,6 +507,7 @@ const onBack = () => {
   margin: 10px 0px auto;
   border-radius: 5px;
 }
+
 .margin {
   margin-top: 10px;
 }
@@ -665,5 +627,28 @@ const onBack = () => {
   opacity: 1;
   box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
   box-sizing: border-box;
+}
+
+.warnStatus {
+  display: flex;
+  align-items: center;
+
+  .warn-table {
+    flex: 1;
+    height: 262px;
+  }
+
+  .span-area {
+    width: 16px;
+  }
+}
+
+.red-dot {
+  width: 10px;
+  height: 10px;
+  margin-left: 60px;
+  background: #ff5722;
+  border-radius: 50%;
+  box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
 }
 </style>
