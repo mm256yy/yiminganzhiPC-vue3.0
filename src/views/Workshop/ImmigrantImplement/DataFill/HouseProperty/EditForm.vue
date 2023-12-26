@@ -70,8 +70,16 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="房屋性质" prop="houseNature">
-            <ElInput v-model="form.houseNature" class="!w-full" placeholder="请输入" />
+          <ElFormItem label="房屋来源" prop="houseNature">
+            <!-- <ElInput v-model="form.houseNature" class="!w-full" placeholder="请输入" /> -->
+            <ElSelect clearable filterable v-model="form.houseNature" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[304]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
       </ElRow>

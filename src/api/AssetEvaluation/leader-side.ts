@@ -86,8 +86,24 @@ export const getFundAnalysis = (): Promise<any> => {
   })
 }
 // /api/leadershipScreen/getLanAnalysisReport
-export const getLanAnalysisReport = (): Promise<any> => {
+export const getLanAnalysisReport = (params: any): Promise<any> => {
   return request.get({
-    url: `/leadershipScreen/getLanAnalysisReport`
+    url: `/leadershipScreen/getLanAnalysisReport`,
+    params
+  })
+}
+
+// 获取预警列表
+export const getWarningTypeList = (type: any): Promise<any> => {
+  return request.get({
+    url: `/leadershipScreen/new/warning/${type}`
+  })
+}
+
+// 获取预警详情
+export const getWarningDetail = (params: any): Promise<any> => {
+  return request.get({
+    url: `leadershipScreen/new/warning/details`,
+    params
   })
 }

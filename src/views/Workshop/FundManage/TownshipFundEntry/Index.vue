@@ -43,7 +43,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            总共 <span class="num">{{ tableObject.tableList.length }}</span> 个
+            总共 <span class="num">{{ tableObject.total }}</span> 个
           </div>
         </div>
         <div class="table-header-right">

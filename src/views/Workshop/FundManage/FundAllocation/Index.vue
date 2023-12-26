@@ -99,7 +99,7 @@ import {
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
 
-const { push } = useRouter()
+const { push, options } = useRouter()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
@@ -190,6 +190,7 @@ const sumAmountApi = async () => {
 
 onMounted(() => {
   sumAmountApi()
+  console.log(options, 'bbq')
 })
 
 const schema = reactive<CrudSchema[]>([

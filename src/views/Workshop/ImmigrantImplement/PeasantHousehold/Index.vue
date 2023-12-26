@@ -178,6 +178,7 @@ onMounted(() => {
   getVillageTree()
   getdistrictTree()
   getLandlordHeadInfo()
+  console.log(allSchemas.searchSchema)
 })
 const toTarget = (routeName: string, query = {}) => {
   push({

@@ -4,13 +4,13 @@
 -->
 <template>
   <div class="right_info">
-    <div class="right_info_top" @click="handleClickFundManage">
+    <div class="right_info_top">
       <Label>
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/zj.png" alt="" />
         </template>
         <template #info>
-          <view @click="handleClickItem(2)" class="right_slot">
+          <view @click.prevent.stop="handleClickItem(2)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt=""
@@ -18,7 +18,7 @@
           </view>
         </template>
       </Label>
-      <div class="management">
+      <div class="management" @click="toFundDetail">
         <div class="management_left">
           <div>
             <img class="left_logo" src="../../../../assets/imgs/homes/zj_icon.png" alt="" />
@@ -52,9 +52,11 @@
         </div>
       </div>
       <div class="management_foot">
-        <span class="text_a">本年计划资金(万元)</span>
-        <span class="text_num">{{ fundScreenDto.bnjhzj }}</span>
-        <div class="center-txt">
+        <div @click="handleClickFundManage">
+          <span class="text_a">本年计划资金(万元)</span>
+          <span class="text_num">{{ fundScreenDto.bnjhzj }}</span>
+        </div>
+        <div class="center-txt" @click="toCapitalPool">
           <span>本年使用资金(万元)</span>
           <span class="text_num">{{ fundScreenDto.bnsyzj }}</span>
         </div>
@@ -110,19 +112,15 @@
 </template>
 <script lang="ts" setup>
 import Label from './label.vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ref, onMounted, computed } from 'vue'
 import { useEmitt } from '@/hooks/web/useEmitt'
 import { ElProgress } from 'element-plus'
 const { emitter } = useEmitt()
 
 const { push } = useRouter()
-let route = useRoute()
 const fundScreenDto = ref<any>({})
-
-const customColor = ref('#CADAFF')
 const customColor_a = ref('#3E73EC')
-
 const progressList: any = ref([])
 
 const computedProperty = computed(() => {
@@ -148,8 +146,6 @@ const getInfo = (e: any) => {
   })
 }
 const handleClickItem = (type: number) => {
-  // console.log(route)
-
   const pathMap = {
     1: 'adminSecondHome', // 大数据分析
     2: 'adminhomefund', //资金管理
@@ -162,17 +158,31 @@ const handleClickItem = (type: number) => {
 }
 
 const handleClickFundManage = () => {
-  const pdfUlr = 'https://oss.zdwp.tech/migrate/files/概算资金.pdf'
+  const pdfUlr =
+    'https://oss.zdwp.tech/migrate/files/172关于印发《浙江长龙山抽水蓄能电站2017年度移民安置工作任务及资金计划》的通知.pdf'
   window.open(pdfUlr, '_blank')
 }
 
 const handleProcessClick = (item: any) => {
-  // console.log('T-G', item)
   push({
     name: 'adminhomeprogress',
     query: {
       ...item
     }
+  })
+}
+
+// 跳转资金使用情况
+const toFundDetail = () => {
+  push({
+    name: 'FundUseDetail'
+  })
+}
+
+// 跳转资金池
+const toCapitalPool = () => {
+  push({
+    name: 'CapitalPoolCheck'
   })
 }
 </script>
@@ -199,13 +209,13 @@ const handleProcessClick = (item: any) => {
     width: 620px;
     height: 312px;
     margin-bottom: 12px;
+    cursor: pointer;
     background: #ffffff;
     border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
     box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
-    cursor: pointer;
 
     .management {
       display: flex;
