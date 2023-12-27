@@ -72,25 +72,41 @@
         </template>
       </Label>
       <div class="table_box">
-        <div class="th-title">
-          <div>问题内容</div>
-          <div>提交人</div>
-          <div>提交时间</div>
-        </div>
-        <div class="question-list">
-          <div
-            class="item"
-            v-for="item in questionList"
-            :key="item.id"
-            @click="onViewFeedBack(item)"
+        <ElTable :data="questionList" style="width: 100%; max-height: 200px" :border="true">
+          <ElTableColumn
+            label="序号"
+            type="index"
+            align="center"
+            width="60"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="问题内容"
+            prop="remark"
+            align="center"
+            width="250"
+            show-overflow-tooltip
+            header-align="center"
+          />
+          <ElTableColumn
+            label="提交人"
+            prop="creater"
+            align="center"
+            show-overflow-tooltip
+            header-align="center"
+          />
+          <ElTableColumn
+            label="提交时间"
+            prop="unit"
+            align="center"
+            show-overflow-tooltip
+            header-align="center"
           >
-            <div class="name">{{ item.remark }}</div>
-            <div class="names">{{ item.creater }}</div>
-            <div class="time">
-              {{ dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
-            </div>
-          </div>
-        </div>
+            <template #default="{ row }">
+              {{ dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
+            </template>
+          </ElTableColumn>
+        </ElTable>
       </div>
     </div>
     <ElDialog
@@ -108,7 +124,16 @@
 <script lang="ts" setup>
 import Label from './label.vue'
 import { ref, onMounted } from 'vue'
-import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput, ElDialog } from 'element-plus'
+import {
+  ElTabs,
+  ElSelect,
+  ElOption,
+  ElTabPane,
+  ElInput,
+  ElDialog,
+  ElTable,
+  ElTableColumn
+} from 'element-plus'
 
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -203,20 +228,11 @@ const requestNewsData = (type = '1') => {
   )
 }
 
-const onViewFeedBack = (item: any) => {
-  push(`/Feedback/FeedbackDetail?id=${item.id}`)
-}
-
-// 路由跳转
-const routerJump = (path: string) => {
-  push(path)
-}
-
 const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
+    let url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
     window.location.href = url
   } catch {}
 }
@@ -431,7 +447,7 @@ onMounted(() => {
     box-sizing: border-box;
 
     .table_box {
-      padding: 8px 16px;
+      padding: 0 16px;
 
       .th-title {
         display: flex;
@@ -448,6 +464,26 @@ onMounted(() => {
         box-sizing: border-box;
         align-items: center;
         justify-content: space-between;
+
+        .head-index {
+          width: 45px;
+          text-align: center;
+        }
+
+        .head-content {
+          flex: 1;
+          text-align: center;
+        }
+
+        .commit {
+          width: 180px;
+          text-align: center;
+        }
+
+        .commit-time {
+          width: 140px;
+          text-align: center;
+        }
       }
 
       .question-list {
@@ -461,6 +497,11 @@ onMounted(() => {
           box-sizing: border-box;
           align-items: center;
           justify-content: space-between;
+
+          .table-index {
+            width: 45px;
+            text-align: center;
+          }
 
           .name {
             width: 70px;
