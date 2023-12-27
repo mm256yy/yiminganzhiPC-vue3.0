@@ -209,13 +209,13 @@ const toCapitalPool = () => {
     width: 620px;
     height: 312px;
     margin-bottom: 12px;
+    cursor: pointer;
     background: #ffffff;
     border: 2px solid rgba(62, 115, 236, 0.7);
     border-radius: 8px 8px 8px 8px;
     opacity: 1;
     box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
     box-sizing: border-box;
-    cursor: pointer;
 
     .management {
       display: flex;

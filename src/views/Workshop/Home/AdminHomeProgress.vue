@@ -35,7 +35,7 @@
           </ElPopover>
         </div>
       </div>
-      <div class="between" style="background: #fff; margin-top: 20px">
+      <div class="between" style="margin-top: 20px; background: #fff">
         <div class="common-color background-l">
           <!--完成情况-->
           <div v-loading="completeLoading" class="white common-border">
@@ -428,6 +428,7 @@ const onBack = () => {
 .data-fill {
   width: 100%;
 }
+
 .common-color {
   width: 100%;
   padding: 10px;
@@ -492,6 +493,7 @@ const onBack = () => {
   margin: 10px 0px auto;
   border-radius: 5px;
 }
+
 .margin {
   margin-top: 10px;
 }
@@ -501,6 +503,7 @@ const onBack = () => {
   width: 112px;
   height: 130px;
   margin-top: 8px;
+  cursor: pointer;
   background: linear-gradient(180deg, #f1f9ff 0%, #ffffff 100%);
   border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) 2 2;
   border-radius: 10px 10px 10px 10px;
@@ -508,7 +511,6 @@ const onBack = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 
   &.active {
     border: 2px solid rgba(62, 115, 236, 0.7);
@@ -516,8 +518,8 @@ const onBack = () => {
 }
 
 .stage-txt {
-  color: #000;
   font-weight: bold;
+  color: #000;
 }
 
 .echart-wrap {
@@ -638,10 +640,10 @@ const onBack = () => {
 .red-dot {
   width: 10px;
   height: 10px;
-  background: #ff5722;
-  box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
-  border-radius: 50%;
   margin-left: 60px;
+  background: #ff5722;
+  border-radius: 50%;
+  box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
 }
 
 .process-segment {

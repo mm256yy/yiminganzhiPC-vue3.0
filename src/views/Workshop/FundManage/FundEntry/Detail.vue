@@ -11,8 +11,12 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金入账</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金入账详情</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">{{
+          type == 1 ? '资金预拨' : '资金入账'
+        }}</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">{{
+          type == 1 ? '资金预拨详情' : '资金入账详情'
+        }}</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
 
@@ -116,11 +120,10 @@ const { query } = unref(currentRoute)
 const id: number = query.id ? +query.id : 0
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
-
+const type: any = query.type
 const detail = ref<any>({})
 const dialogVisible = ref<boolean>(false)
 const imgUrl = ref<string>('')
-
 onMounted(() => {
   if (!id) {
     return

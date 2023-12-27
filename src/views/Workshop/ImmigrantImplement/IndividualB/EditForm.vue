@@ -228,7 +228,7 @@ const submit = async (data: LandlordDtoType) => {
   await updateLandlordApi({
     ...data,
     projectId
-  })
+  } as any)
   btnLoading.value = false
   ElMessage.success('操作成功！')
   onClose(true)

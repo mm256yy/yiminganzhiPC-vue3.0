@@ -332,7 +332,7 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 const onEditRow = (row: LandlordDtoType) => {
-  tableObject.currentRow = row
+  tableObject.currentRow = row as any
   dialog.value = true
 }
 
