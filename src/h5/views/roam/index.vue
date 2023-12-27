@@ -24,12 +24,12 @@ onMounted(() => {
   if (route.meta.type === 'leader') {
     // 领导端
     // 动态获取
-    requestToken()
+    const h5Token = sessionStorage.getItem('h5token')
+    let targetUrl = `${url}token=${h5Token}`
+    window.open(targetUrl)
   } else {
     // 移民端
-    const h5Token = sessionStorage.getItem('h5token')
-    let targetUrl = `${url}h5token=${h5Token}`
-    window.open(targetUrl)
+    requestToken()
   }
 })
 </script>

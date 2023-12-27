@@ -74,13 +74,8 @@
         </template>
         <template #fillStatus="{ row }">
           <div class="flex items-center justify-center">
-            <span
-              :class="[
-                'status',
-                row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
-              ]"
-            ></span>
-            {{ row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
+            <span :class="['status', showFillColor(row)]"></span>
+            {{ showFillStatus(row) }}</div
           >
         </template>
         <template #reportDate="{ row }">
@@ -603,6 +598,26 @@ const fillData = (row) => {
       type: 'IndividualB'
     }
   })
+}
+
+const showFillStatus = (row: any) => {
+  // 采集
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Survey) {
+    return row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报'
+  } else {
+    // 复核
+    return row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报'
+  }
+}
+
+const showFillColor = (row: any) => {
+  // 采集
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Survey) {
+    return row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+  } else {
+    // 复核
+    return row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+  }
 }
 
 const onSurveyDialogClose = () => {

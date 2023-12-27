@@ -258,12 +258,6 @@ const toLink = (routeName: string, query = {}) => {
   })
 }
 
-// 第三方跳转
-const toThirdParty = () => {
-  const url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}`
-  window.location.href = url
-}
-
 let cityList: any = reactive({
   data: [],
   value: '',
