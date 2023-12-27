@@ -25,7 +25,7 @@ onMounted(() => {
     // 领导端
     // 动态获取
     const h5Token = sessionStorage.getItem('h5token')
-    let targetUrl = `${url}h5token=${h5Token}`
+    let targetUrl = `${url}token=${h5Token}`
     window.open(targetUrl)
   } else {
     // 移民端
