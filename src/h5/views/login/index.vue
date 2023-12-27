@@ -70,12 +70,13 @@ const onConfirm = () => {
     (res) => {
       btnLoading.value = false
       if (res) {
-        const user = res.user
         sessionStorage.setItem('token', res.token)
         sessionStorage.setItem('user', res.user)
         currentUserApi().then((res) => {
           sessionStorage.setItem('projectId', res.projectUsers[0].projectId)
         })
+        // 默认跳转home页
+        window.localStorage.setItem('selectTabUrl', '/home')
         toLink('home')
       }
     },

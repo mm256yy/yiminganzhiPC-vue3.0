@@ -11,7 +11,7 @@
       <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="line"></div>
-    <div class="title-hint">附属物统计表（区域报表）</div>
+    <div class="title-hint">零星林(果)木统计表（区域报表）</div>
     <div class="table-wrap" v-loading="tableObject.loading">
       <Table
         v-model:pageSize="tableObject.size"
@@ -86,30 +86,31 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
-    label: '户号',
-    width: 180,
+    field: 'index',
+    type: 'index',
+    label: '序号',
+    width: 80,
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
-    label: '户主姓名',
+    field: 'regionName',
+    label: '区域名',
     search: {
       show: false
     }
   },
   {
-    field: 'name',
-    label: '类型',
+    field: 'code',
+    label: '区域编码',
     search: {
       show: false
     }
   },
   {
-    field: 'unitText',
-    label: '单位',
+    field: 'cateGory',
+    label: '品种',
     search: {
       show: false
     }
@@ -123,15 +124,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'number',
-    label: '数量',
+    field: 'unit',
+    label: '单位',
     search: {
       show: false
     }
   },
   {
-    field: 'remark',
-    label: '备注',
+    field: 'number',
+    label: '数量',
     search: {
       show: false
     }

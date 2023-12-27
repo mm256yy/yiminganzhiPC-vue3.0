@@ -35,7 +35,7 @@ import { changeScale, init } from '../ExternalLink/rem'
 import Label from '../ExternalLink/components/label.vue'
 import Footer from '../ExternalLink/components/footer.vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 
 const router = useRouter()
@@ -176,7 +176,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/b.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(5).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -190,7 +190,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(6).png', import.meta.url).href,
         name: '村集体',
         list: [
           {
@@ -200,7 +200,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -218,7 +218,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(8).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
@@ -258,7 +258,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/c.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(9).png', import.meta.url).href,
         name: '安置意愿',
         list: [
           {
@@ -278,7 +278,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/d.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(10).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -293,7 +293,7 @@ const listArray = ref([
       },
 
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(11).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -311,10 +311,11 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(12).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
+            value: 'comprehensivereport',
             text: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站'
           }
         ]
@@ -391,9 +392,7 @@ onBeforeUnmount(() => {
       border: 2px solid rgba(62, 115, 236, 0.7);
       margin-top: 16px;
       .xm_img {
-        width: 74px;
-        height: 15px;
-        margin-top: 1px;
+        height: 16px;
       }
       .con_list {
         padding: 0px 28px;

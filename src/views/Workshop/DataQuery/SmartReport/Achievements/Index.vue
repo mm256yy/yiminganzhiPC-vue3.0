@@ -12,12 +12,9 @@
           class="mb-20"
           :row-class-name="tableRowClassName"
           :border="true"
+          height="650"
         >
-          <ElTableColumn label="序号" align="center" prop="serNo" header-align="center">
-            <!-- <template #default="{ row }">
-              <b>{{ getTypeStr(row.type) }}</b>
-            </template> -->
-          </ElTableColumn>
+          <ElTableColumn label="序号" align="center" prop="serNo" header-align="center" />
           <ElTableColumn label="项目" prop="proName" align="center" header-align="center" />
           <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
             <template #default="{ row }">

@@ -24,7 +24,7 @@ const router = createRouter({
           component: () => import('../views/roam/index.vue'),
           meta: {
             name: '库区漫游',
-            type: 'leader'
+            type: 'user'
           }
         },
         {
@@ -235,6 +235,5 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next({ path: '/login' })
   }
-  console.log(from)
 })
 export default router

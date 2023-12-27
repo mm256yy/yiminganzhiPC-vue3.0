@@ -102,6 +102,8 @@ const onConfirm = () => {
       btnLoading.value = false
       if (res) {
         sessionStorage.setItem('h5token', res.token)
+        // 默认跳转home页
+        window.localStorage.setItem('selectTabUrl', '/home')
         toLink('home')
       }
     },

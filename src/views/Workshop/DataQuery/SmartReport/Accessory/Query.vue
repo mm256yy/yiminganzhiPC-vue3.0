@@ -13,11 +13,7 @@
 
     <div class="line"></div>
     <div class="title-hint">附属物统计表（按户查询）</div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
-      <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 附属物统计表 </div>
-      </div>
       <Table
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
@@ -243,5 +239,11 @@ onMounted(() => {
   width: 100%;
   height: 10px;
   background-color: #e7edfd;
+}
+
+.title-hint {
+  padding: 15px 0 0 15px;
+  color: 14px;
+  font-size: 14px;
 }
 </style>
