@@ -158,7 +158,6 @@ import {
   saveSimulateImmigrantSettleApi
 } from '@/api/workshop/datafill/mockResettle-service'
 
-import { DemographicDtoType } from '@/api/workshop/population/types'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { resettleHouseType, HouseType, apartmentArea } from '../config'
