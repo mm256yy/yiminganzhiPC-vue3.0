@@ -35,7 +35,7 @@
           </ElPopover>
         </div>
       </div>
-      <div class="between" style="margin-top: 20px; background: #fff">
+      <div class="between" style=" margin-top: 20px;background: #fff">
         <div class="common-color background-l">
           <!--完成情况-->
           <div v-loading="completeLoading" class="white common-border">

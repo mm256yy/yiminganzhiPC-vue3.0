@@ -11,11 +11,11 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
-            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
           </div>
           <div class="content">
             <div class="sub-title">余额</div>
-            <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>

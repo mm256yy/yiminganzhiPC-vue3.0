@@ -177,7 +177,6 @@ option.value = [
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
 
-
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
     name: dictName,
@@ -202,8 +201,7 @@ const checkNews = (item: any) => {
 }
 
 // 点击新闻跳转
-const newsHandleClick = (pane: any, ev: Event) => {
-  console.log('ev', ev)
+const newsHandleClick = (pane: any, _ev?: Event) => {
   requestNewsData(pane.props.name)
 }
 

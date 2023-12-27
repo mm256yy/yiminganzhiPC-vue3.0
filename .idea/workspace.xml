@@ -1,8 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8f529d98-08cd-47a2-8436-64830c113864" name="Default Changelist" comment="">
+    <list default="true" id="8f529d98-08cd-47a2-8436-64830c113864" name="Default Changelist" comment="feat: bug修复">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/AssetEvaluation/leader-side.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/AssetEvaluation/leader-side.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/InputRange/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InputRange/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/UserInfo/src/WorkUserInfo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UserInfo/src/WorkUserInfo.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/h5/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/h5/views/login/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/h5/views/roam/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/h5/views/roam/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/UserLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/UserLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/work-var.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/work-var.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/System/Menu/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/System/Menu/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/DataFill/components/UserInfo/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/DataFill/components/UserInfo/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/Landlord/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/Landlord/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/DataQuery/SmartReport/PopulationHousing/QueryHousehold.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/DataQuery/SmartReport/PopulationHousing/QueryHousehold.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/left.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/left.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/right.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/right.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/rem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/rem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/ReviewForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/ReviewForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/PeasantHousehold/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/PeasantHousehold/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/SeparateHouseholds/components/SeparateTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/SeparateHouseholds/components/SeparateTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,39 +46,78 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/EditForm.vue">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+            <state relative-caret-position="9499">
+              <caret line="413" column="18" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/Home.vue">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="25" column="17" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="17" />
+            <state relative-caret-position="5704">
+              <caret line="284" column="1" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
+              <folding>
+                <element signature="n#style#0;n#el-table#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="20" column="20" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="20" />
+            <state relative-caret-position="3335">
+              <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="294" column="35" lean-forward="true" selection-start-line="294" selection-start-column="35" selection-end-line="294" selection-end-column="35" />
+            <state relative-caret-position="420">
+              <caret line="306" column="10" selection-start-line="306" selection-start-column="6" selection-end-line="306" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="296">
+              <caret line="1400" column="5" lean-forward="true" selection-start-line="1400" selection-start-column="5" selection-end-line="1400" selection-end-column="5" />
               <folding>
-                <element signature="e#3358#3389#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#7211#7217#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#9499#9554#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,36 +127,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>PropsType</find>
-      <find>DistrictNodeType</find>
-      <find>districtTree</find>
-      <find>code</find>
-      <find>treeSelectDefaultProps</find>
-      <find>parentCode</find>
-      <find>ElTreeSelect</find>
-      <find>概算科目:</find>
-      <find>审批流程</find>
-      <find>概算调整</find>
-      <find>tableObject</find>
-      <find>row</find>
-      <find>onViewRow</find>
-      <find>form</find>
-      <find>parmasList</find>
-      <find>AdjustForm</find>
-      <find>资金入账详情</find>
+      <find>EditForm</find>
+      <find>资金发放</find>
+      <find>required</find>
       <find>onSubmit</find>
-      <find>fmtDict</find>
-      <find>乡镇资金入账</find>
-      <find>收款方</find>
-      <find>资金名称1</find>
-      <find>test-jingling.jldt.top</find>
+      <find>allamount</find>
+      <find>刷新清空</find>
+      <find>refresh</find>
+      <find>https</find>
+      <find>resettleArea</find>
+      <find>https://jingling-reservoir-demo.jldt.top</find>
       <find>http://test-jingling.jldt.top</find>
-      <find>v-show=&quot;tabVal == '1'</find>
-      <find>onReviewRow(row)</find>
-      <find>LeaderHome</find>
-      <find>ContainerInfo</find>
-      <find>option</find>
-      <find>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</find>
+      <find>已发放金额</find>
+      <find>tableObject</find>
+      <find>tableColumns</find>
+      <find>allSchemas</find>
+      <find>schema</find>
+      <find>receipt</find>
+      <find>onShowImage</find>
+      <find>dialogVisible</find>
+      <find>filterWay</find>
+      <find>安置点详情</find>
+      <find>周边配套</find>
+      <find>common-head</find>
+      <find>.map-cont</find>
+      <find>搬迁安置</find>
+      <find>房屋补偿补助款</find>
+      <find>selfResettleData</find>
+      <find>户型类型</find>
+      <find>flag</find>
+      <find>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -110,20 +179,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/views/jingling/SimulatedPlacement.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/siderbar.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/left.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/DataFill/Resettlement/Index.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/Index.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/Apartment.vue" />
-        <option value="$PROJECT_DIR$/vite.config.ts" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/Homestead.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/AreaDetail.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/EditForm.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/EndCollect/Index.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/HouseholdAgreementSign.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/Landlord/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/IndividualB/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/EntRelocationAgreement.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/IndividualRelocationAgreement.vue" />
@@ -131,12 +186,9 @@
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/VillageRelocationAgreement.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/Home/Home.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/Home/components/WorkGroupChart.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/DataFill/ContractManagement/EditForm.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue" />
-        <option value="$PROJECT_DIR$/src/api/immigrantImplement/common-types.ts" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/PeasantHousehold/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/Home/AdminHome.vue" />
-        <option value="$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/types.ts" />
         <option value="$PROJECT_DIR$/src/api/workshop/export/types.ts" />
         <option value="$PROJECT_DIR$/src/api/AssetEvaluation/types.ts" />
         <option value="$PROJECT_DIR$/src/api/immigrantImplement/landlordCheck/landlordCheck-types.ts" />
@@ -150,17 +202,34 @@
         <option value="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundPayment/EditForm.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/ReviewForm.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/ViewForm.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/AdjustForm.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Detail.vue" />
-        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/EditForm.vue" />
         <option value="$PROJECT_DIR$/src/h5/views/login/phoneLogin.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ExternalLink/copy.vue" />
         <option value="$PROJECT_DIR$/src/h5/views/home/leader.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/DataFill/ContractManagement/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/DataFill/ContractManagement/EditForm.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Detail.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/SystemConfig/PlacementPoint/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/components/EditForm.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/components/CheckForm.vue" />
+        <option value="$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/types.ts" />
+        <option value="$PROJECT_DIR$/src/api/AssetEvaluation/gird-type.ts" />
+        <option value="$PROJECT_DIR$/src/api/immigrantImplement/common-types.ts" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/SystemConfig/PlacementPoint/EditForm.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/AreaDetail.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/Index.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" />
       </list>
     </option>
   </component>
@@ -172,7 +241,7 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1251" />
-    <option name="y" value="184" />
+    <option name="y" value="183" />
     <option name="width" value="1101" />
     <option name="height" value="1050" />
   </component>
@@ -181,6 +250,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -204,31 +274,7 @@
               <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Dashboard" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ExternalLink" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ExternalLink" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
@@ -243,7 +289,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -332,7 +377,13 @@
       <workItem from="1703121059707" duration="17637000" />
       <workItem from="1703206729235" duration="3663000" />
       <workItem from="1703293205066" duration="3135000" />
-      <workItem from="1703296739550" duration="15689000" />
+      <workItem from="1703296739550" duration="21482000" />
+      <workItem from="1703466864198" duration="19903000" />
+      <workItem from="1703552195074" duration="15226000" />
+      <workItem from="1703578254408" duration="2623000" />
+      <workItem from="1703638780796" duration="6656000" />
+      <workItem from="1703647066868" duration="245000" />
+      <workItem from="1703655576169" duration="419000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 首次提交">
       <created>1702535912503</created>
@@ -436,7 +487,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="248545000" />
+    <option name="totallyTimeSpent" value="299410000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -449,8 +500,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1721" height="1033" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2679976" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21657592" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -469,8 +521,8 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.6860254" side_tool="true" weight="0.26818183" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.40895343" weight="0.40681818" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.4059286" weight="0.34318182" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="13" sideWeight="0.3139746" visible="true" weight="0.26818183" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.4059286" weight="0.7090909" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="13" sideWeight="0.3139746" visible="true" weight="0.39545456" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -481,6 +533,38 @@
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27646703" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Image Layers" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="UI Designer" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4996975" weight="0.3556818" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4996975" weight="0.32954547" />
+      <window_info anchor="bottom" id="TypeScript" order="7" weight="0.32954547" />
+      <window_info anchor="bottom" id="Docker" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.6860254" side_tool="true" weight="0.26818183" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.40895343" weight="0.40681818" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.4059286" weight="0.5181818" />
+      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.3139746" visible="true" weight="0.39545456" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Maven" order="3" />
+      <window_info anchor="right" id="Palette" order="4" />
+      <window_info anchor="right" id="Capture Analysis" order="5" />
+      <window_info anchor="right" id="Database" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Theme Preview" order="8" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -530,274 +614,11 @@
     <option name="LAST_COMMIT_MESSAGE" value="feat: bug修复" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="654" height="738" key="Git.Branch.Popup" />
-    <state width="654" height="738" key="Git.Branch.Popup/2561.1601" />
-    <state width="654" height="738" key="Git.Branch.Popup@2561.1601@180dpi" />
+    <state width="660" height="744" key="Git.Branch.Popup" />
+    <state width="660" height="744" key="Git.Branch.Popup/2561.1601" />
+    <state width="660" height="744" key="Git.Branch.Popup@2561.1601@180dpi" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminHome.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="338" column="3" selection-start-line="338" selection-start-column="3" selection-end-line="338" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/Enterprise/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="370">
-          <caret line="70" column="53" selection-start-line="70" selection-start-column="53" selection-end-line="70" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="32" selection-start-column="17" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/AssetEvaluation/gird-type.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="7" column="23" lean-forward="true" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/immigrantImplement/common-types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="16" column="18" lean-forward="true" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/workshop/export/service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Gird/GirdData/Enterprise.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="436" column="26" selection-start-line="436" selection-start-column="26" selection-end-line="436" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/workshop/landlord/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/landlordCheck/landlordCheck-types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/immigrantImplement/landlordCheck/landlordCheck-types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/AssetEvaluation/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/workshop/export/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="16" column="20" selection-start-line="16" selection-start-column="20" selection-end-line="16" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Gird/GirdData/Individuality.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-230">
-          <caret line="148" selection-start-line="148" selection-end-line="148" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vite.config.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="193" column="17" lean-forward="true" selection-start-line="193" selection-start-column="17" selection-end-line="193" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundReport/Enterprise.vue">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Search/index.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="11" lean-forward="true" selection-start-column="11" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Search/src/Search.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="46" column="52" lean-forward="true" selection-start-line="46" selection-start-column="52" selection-end-line="46" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Table/src/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-23">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="163" lean-forward="true" selection-start-line="163" selection-end-line="163" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/@vue/reactivity/dist/reactivity.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="451" column="4" selection-start-line="451" selection-start-column="4" selection-end-line="451" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/hooks/web/useTable.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-357">
-          <caret line="115" column="19" lean-forward="true" selection-start-line="115" selection-start-column="19" selection-end-line="115" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/fundManage/budgetReview-service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="8" column="35" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="89" column="3" lean-forward="true" selection-start-line="89" selection-start-column="3" selection-end-line="89" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/workshop/village/service.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="53" column="15" lean-forward="true" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/typescript/lib/lib.es5.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="1593" column="5" selection-start-line="1593" selection-start-column="5" selection-end-line="1593" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/element-plus/es/tokens/form.d.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/district/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/api/professional/types.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Grid/Maintenance/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="13" column="44" selection-start-line="13" selection-start-column="44" selection-end-line="13" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Grid/Maintenance/components/EditForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="23" column="56" lean-forward="true" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
-          <folding>
-            <element signature="e#3064#3250#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="44" column="34" selection-start-line="44" selection-start-column="24" selection-end-line="44" selection-end-column="34" />
-          <folding>
-            <element signature="e#3670#3840#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundPayment/EditForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="27" column="19" lean-forward="true" selection-start-line="27" selection-start-column="19" selection-end-line="27" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="259" column="33" selection-start-line="259" selection-start-column="33" selection-end-line="259" selection-end-column="33" />
-          <folding>
-            <element signature="e#11783#12060#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/ReviewForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" column="24" lean-forward="true" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="84" column="28" lean-forward="true" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="e#2043#2089#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/api/fundManage/budgetAdjustment-service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -833,20 +654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Detail.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="37" column="18" lean-forward="true" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="19" column="14" lean-forward="true" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Dashboard/Home.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="287">
@@ -861,13 +668,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/copy.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="12" column="38" lean-forward="true" selection-start-line="12" selection-start-column="38" selection-end-line="12" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/h5/views/login/phoneLogin.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3197">
@@ -875,41 +675,364 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/h5/views/home/leader.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="15" column="59" lean-forward="true" selection-start-line="15" selection-start-column="59" selection-end-line="15" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/EditForm.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
+        <state relative-caret-position="345">
           <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/Home.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
+        <state relative-caret-position="575">
           <caret line="25" column="17" selection-start-line="25" selection-start-column="7" selection-end-line="25" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
+        <state relative-caret-position="460">
           <caret line="20" column="20" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="642" column="42" selection-start-line="642" selection-start-column="42" selection-end-line="642" selection-end-column="42" />
+          <folding>
+            <element signature="e#11783#12060#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/DataFill/ContractManagement/EditForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="84" column="54" lean-forward="true" selection-start-line="84" selection-start-column="54" selection-end-line="84" selection-end-column="54" />
+          <folding>
+            <element signature="e#3545#3719#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/DataFill/ContractManagement/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="76" column="21" lean-forward="true" selection-start-line="76" selection-start-column="21" selection-end-line="76" selection-end-column="21" />
+          <folding>
+            <element signature="e#1681#1716#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/DataFill/components/UserInfo.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="106" column="16" lean-forward="true" selection-start-line="106" selection-start-column="16" selection-end-line="106" selection-end-column="16" />
+          <folding>
+            <element signature="e#3553#3593#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Detail.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="127" column="12" lean-forward="true" selection-start-line="127" selection-start-column="12" selection-end-line="127" selection-end-column="12" />
+          <folding>
+            <element signature="e#3114#3167#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="171" column="39" selection-start-line="171" selection-start-column="37" selection-end-line="171" selection-end-column="39" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="16" column="43" lean-forward="true" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5980">
+          <caret line="277" column="24" selection-start-line="277" selection-start-column="24" selection-end-line="277" selection-end-column="24" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Search/index.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="28" selection-start-column="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/Search/src/Search.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="851">
+          <caret line="45" column="15" selection-start-line="45" selection-start-column="6" selection-end-line="45" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hooks/web/useForm.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="623" column="24" selection-start-line="623" selection-start-column="24" selection-end-line="623" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Produce/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="258" column="5" lean-forward="true" selection-start-line="258" selection-start-column="5" selection-end-line="258" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/systemConfig/placementPoint-types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="17" column="8" lean-forward="true" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/element-plus/es/components/form/src/form.vue.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="86" column="4" selection-start-line="86" selection-start-column="4" selection-end-line="86" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/SystemConfig/PlacementPoint/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="56" column="10" selection-start-line="56" selection-start-column="7" selection-end-line="56" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/Homestead.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="70" column="22" lean-forward="true" selection-start-line="70" selection-start-column="22" selection-end-line="70" selection-end-column="22" />
+          <folding>
+            <element signature="e#1768#1820#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/copy.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="465" column="7" lean-forward="true" selection-start-line="465" selection-start-column="7" selection-end-line="465" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/components/EditForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="215" column="22" selection-start-line="215" selection-start-column="22" selection-end-line="215" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2852">
+          <caret line="148" column="4" selection-start-line="148" selection-start-column="4" selection-end-line="148" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/types/table.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hooks/web/useCrudSchemas.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="52" column="22" lean-forward="true" selection-start-line="52" selection-start-column="22" selection-end-line="52" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/TownshipFundEntry/components/CheckForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="79" column="46" lean-forward="true" selection-start-line="79" selection-start-column="46" selection-end-line="79" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/workshop/landlord/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="21" column="2" selection-start-line="21" selection-start-column="2" selection-end-line="21" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/landlordCheck/landlordCheck-types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/AssetEvaluation/gird-type.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/immigrantImplement/landlordCheck/landlordCheck-types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/workshop/export/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="15" column="20" selection-start-line="15" selection-start-column="20" selection-end-line="15" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/immigrantImplement/common-types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="19" column="38" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/putIntoEffect/putIntoEffectDataFill/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/api/AssetEvaluation/types.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="12" column="18" lean-forward="true" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/AreaDetail.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="217" column="32" lean-forward="true" selection-start-line="217" selection-start-column="32" selection-end-line="217" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/SystemConfig/PlacementPoint/EditForm.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="111" column="27" lean-forward="true" selection-start-line="111" selection-start-column="27" selection-end-line="111" selection-end-column="27" />
+          <folding>
+            <element signature="n#style#0;n#div#2;n#ElForm#0;n#ElDialog#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/h5/views/home/leader.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="246" column="38" lean-forward="true" selection-start-line="246" selection-start-column="38" selection-end-line="246" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="166">
+          <caret line="80" column="44" lean-forward="true" selection-start-line="80" selection-start-column="44" selection-end-line="80" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9499">
+          <caret line="413" column="18" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5704">
+          <caret line="284" column="1" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
+          <folding>
+            <element signature="n#style#0;n#el-table#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="294" column="35" lean-forward="true" selection-start-line="294" selection-start-column="35" selection-end-line="294" selection-end-column="35" />
+        <state relative-caret-position="3335">
+          <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="1400" column="5" lean-forward="true" selection-start-line="1400" selection-start-column="5" selection-end-line="1400" selection-end-column="5" />
           <folding>
-            <element signature="e#3358#3389#0" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#7211#7217#0" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#9499#9554#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="306" column="10" selection-start-line="306" selection-start-column="6" selection-end-line="306" selection-end-column="10" />
         </state>
       </provider>
     </entry>

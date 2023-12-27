@@ -6,5 +6,6 @@ export interface LandlordDtoType {
   companyNumber: number
   individualHouseholdNumber: number
   villageNumber: number
+  warnStatus?: string
   [key: string]: any
 }
