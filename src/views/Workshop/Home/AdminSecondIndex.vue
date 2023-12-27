@@ -1274,7 +1274,7 @@ const onBack = () => {
   /* display: flex; */
   width: 100%;
   /* margin: 0 auto;
-    justify-content: space-between; */
+  justify-content: space-between; */
 }
 
 .common-color {
