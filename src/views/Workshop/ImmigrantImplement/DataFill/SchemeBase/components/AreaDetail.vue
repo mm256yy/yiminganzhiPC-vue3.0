@@ -213,7 +213,7 @@ onMounted(() => {
 
   .map-cont {
     position: relative;
-    width: 840px;
+    width: 100%;
     height: 190px;
     margin: 0 auto;
     overflow: hidden;

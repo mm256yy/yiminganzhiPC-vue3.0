@@ -175,8 +175,7 @@ const checkNews = (item: any) => {
 }
 
 // 点击新闻跳转
-const newsHandleClick = (pane: any, ev: Event) => {
-  console.log('ev', ev)
+const newsHandleClick = (pane: any, _ev?: Event) => {
   requestNewsData(pane.props.name)
 }
 
