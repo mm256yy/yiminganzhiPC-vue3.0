@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8f529d98-08cd-47a2-8436-64830c113864" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,7 +19,7 @@
         <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/EditForm.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
-              <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+              <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -46,8 +45,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="132" column="14" selection-start-line="132" selection-start-column="14" selection-end-line="132" selection-end-column="14" />
+            <state relative-caret-position="345">
+              <caret line="294" column="35" lean-forward="true" selection-start-line="294" selection-start-column="35" selection-end-line="294" selection-end-column="35" />
+              <folding>
+                <element signature="e#3358#3389#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,7 +58,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>defineProps</find>
       <find>PropsType</find>
       <find>DistrictNodeType</find>
       <find>districtTree</find>
@@ -86,6 +87,7 @@
       <find>LeaderHome</find>
       <find>ContainerInfo</find>
       <find>option</find>
+      <find>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -330,7 +332,7 @@
       <workItem from="1703121059707" duration="17637000" />
       <workItem from="1703206729235" duration="3663000" />
       <workItem from="1703293205066" duration="3135000" />
-      <workItem from="1703296739550" duration="14962000" />
+      <workItem from="1703296739550" duration="15689000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 首次提交">
       <created>1702535912503</created>
@@ -434,7 +436,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="247818000" />
+    <option name="totallyTimeSpent" value="248545000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -447,9 +449,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1721" height="1033" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2679976" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2679976" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -469,7 +470,7 @@
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.40895343" weight="0.40681818" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
       <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.4059286" weight="0.34318182" />
-      <window_info anchor="bottom" id="Terminal" order="13" sideWeight="0.3139746" visible="true" weight="0.26818183" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="13" sideWeight="0.3139746" visible="true" weight="0.26818183" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -884,7 +885,7 @@
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/FundEntry/EditForm.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
-          <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -904,8 +905,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="132" column="14" selection-start-line="132" selection-start-column="14" selection-end-line="132" selection-end-column="14" />
+        <state relative-caret-position="345">
+          <caret line="294" column="35" lean-forward="true" selection-start-line="294" selection-start-column="35" selection-end-line="294" selection-end-column="35" />
+          <folding>
+            <element signature="e#3358#3389#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
