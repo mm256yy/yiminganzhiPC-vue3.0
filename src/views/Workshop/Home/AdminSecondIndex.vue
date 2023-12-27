@@ -316,7 +316,7 @@ const getChartScreenLists = async () => {
   const list = await getChartScreenList({ code: reason.value })
   let zhiji = await getFundAnalysis()
   try {
-    let gengdi = await getLanAnalysisReport()
+    let gengdi = await getLanAnalysisReport({ code: reason.value })
     dataSum = gengdi.data.reduce((pre, item) => {
       if (item.val > pre) {
         pre = item.val
@@ -430,9 +430,55 @@ const getChartScreenLists = async () => {
     houseOption.value.series[0].data = perHouseholdList.value
   }
 }
+const villageListss = ref<any>([
+  {
+    code: null,
+    name: '全域'
+  },
+  {
+    code: 330624109213,
+    name: '竹潭村'
+  },
+  {
+    code: 330624109212,
+    name: '小泉溪村'
+  },
+  {
+    code: 330624109214,
+    name: '殿前村'
+  },
+  {
+    code: 330624109215,
+    name: '下潘村'
+  },
+  {
+    code: 330624109217,
+    name: '大畈村'
+  },
+  {
+    code: 330624109221,
+    name: '潭角村'
+  },
+  {
+    code: 330624109216,
+    name: '后染村'
+  },
+  {
+    code: 330624109222,
+    name: '里镜屏村'
+  },
+  {
+    code: 330624109202,
+    name: '溪西村'
+  },
+  {
+    code: 330624109218,
+    name: '安山村'
+  }
+])
 const villageLists = ref<any>([])
 const villageList = async () => {
-  villageLists.value = await getVillageList({})
+  villageLists.value = villageListss.value
 }
 
 const getVillageAnalysisLists = async () => {
@@ -720,12 +766,12 @@ const tab = (index) => {
     })
   } else if (index == 1) {
     careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
-      pre.push(item.label)
+      pre.push(item.name)
       return pre
     }, [])
     careerOption.value.series.forEach((item) => {
       item.data = dataAll.value.career.reduce((pre, item) => {
-        pre.push({ value: item.number, name: item.label })
+        pre.push({ value: item.number, name: item.name })
         return pre
       }, [])
     })
@@ -760,10 +806,10 @@ const careerOption = ref({
     },
     icon: 'circle',
     formatter: function (name) {
-      let singleData = careerOption.value.series[0].data.filter(function (item) {
+      let singleData: any = careerOption.value.series[0].data.filter(function (item: any) {
         return item.name == name
       })
-      let m = careerOption.value.series[0].data.reduce((pre, item) => {
+      let m = careerOption.value.series[0].data.reduce((pre, item: any) => {
         pre += item.value
         return pre
       }, 0)
@@ -1228,7 +1274,7 @@ const onBack = () => {
   /* display: flex; */
   width: 100%;
   /* margin: 0 auto;
-  justify-content: space-between; */
+    justify-content: space-between; */
 }
 
 .common-color {

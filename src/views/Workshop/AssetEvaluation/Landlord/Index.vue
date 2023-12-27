@@ -25,9 +25,9 @@
             <span class="distance"></span>
             <span class="num">{{ headInfo.demographicNum }}</span> 人
             <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 户
-            <span class="distance"></span>未填报
-            <span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 户 ）
+            已评估<span class="num !text-[#30A952]">{{ headInfo.assessNumber }}</span> 户
+            <span class="distance"></span>未评估
+            <span class="num !text-[#FF3030]">{{ headInfo.notAssessNumber }}</span> 户 ）
           </div>
         </div>
         <div> </div>
@@ -126,11 +126,13 @@ const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 
-const headInfo = ref<LandlordHeadInfoType>({
+const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
-  unReportNum: 0
+  unReportNum: 0,
+  assessNumber: 0,
+  notAssessNumber: 0
 })
 
 const { register, tableObject, methods } = useTable({

@@ -3,8 +3,36 @@
   <component name="ChangeListManager">
     <list default="true" id="8f529d98-08cd-47a2-8436-64830c113864" name="Default Changelist" comment="feat: bug修复">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/api/AssetEvaluation/leader-side.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/AssetEvaluation/leader-side.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/InputRange/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InputRange/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/UserInfo/src/WorkUserInfo.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UserInfo/src/WorkUserInfo.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/h5/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/h5/views/login/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/h5/views/roam/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/h5/views/roam/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/UserLayout.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/UserLayout.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles/work-var.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles/work-var.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/System/Menu/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/System/Menu/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/DataFill/components/UserInfo/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/DataFill/components/UserInfo/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/Landlord/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/AssetEvaluation/Landlord/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/DataQuery/SmartReport/PopulationHousing/QueryHousehold.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/DataQuery/SmartReport/PopulationHousing/QueryHousehold.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/LeaderSide.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/AreaDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/components/AreaDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/left.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/left.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/right.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/right.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/rem.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ExternalLink/rem.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetAdjustment/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/FundAllocation/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentApplication/EditForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/ReviewForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/FundManage/PaymentReview/ReviewForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/Home/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/Home/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/CreateCard/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/PeasantHousehold/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/PeasantHousehold/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/components/EditForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/Workshop/SeparateHouseholds/components/SeparateTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Workshop/SeparateHouseholds/components/SeparateTable.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="413" column="18" lean-forward="true" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
+            <state relative-caret-position="9499">
+              <caret line="413" column="18" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -29,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="350">
-              <caret line="284" column="1" lean-forward="true" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
+            <state relative-caret-position="5704">
+              <caret line="284" column="1" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
               <folding>
                 <element signature="n#style#0;n#el-table#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
               </folding>
@@ -38,11 +66,59 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="74">
-              <caret line="154" column="25" selection-start-line="154" selection-start-column="20" selection-end-line="154" selection-end-column="25" />
+            <state relative-caret-position="3335">
+              <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="306" column="10" selection-start-line="306" selection-start-column="6" selection-end-line="306" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="296">
+              <caret line="1400" column="5" lean-forward="true" selection-start-line="1400" selection-start-column="5" selection-end-line="1400" selection-end-column="5" />
+              <folding>
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#7211#7217#0" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <element signature="e#9499#9554#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,8 +127,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>formRef</find>
-      <find>resetFields</find>
       <find>EditForm</find>
       <find>资金发放</find>
       <find>required</find>
@@ -81,6 +155,8 @@
       <find>房屋补偿补助款</find>
       <find>selfResettleData</find>
       <find>户型类型</find>
+      <find>flag</find>
+      <find>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -103,7 +179,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/views/Workshop/Landlord/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/IndividualB/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/EntRelocationAgreement.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/Agreement/IndividualRelocationAgreement.vue" />
@@ -154,6 +229,7 @@
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue" />
         <option value="$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue" />
+        <option value="$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue" />
       </list>
     </option>
   </component>
@@ -175,7 +251,6 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -207,82 +282,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ExternalLink" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ExternalLink" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ImmigrantImplement" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ImmigrantImplement" type="462c0819:PsiDirectoryNode" />
-              <item name="DataFill" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ProfessionalProject" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ProfessionalProject" type="462c0819:PsiDirectoryNode" />
-              <item name="DataFill" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="ProfessionalProject" type="462c0819:PsiDirectoryNode" />
-              <item name="DataFill" type="462c0819:PsiDirectoryNode" />
-              <item name="ContractManagement" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="SystemConfig" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="migrate-web" type="b2602c69:ProjectViewProjectNode" />
-              <item name="migrate-web" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="Workshop" type="462c0819:PsiDirectoryNode" />
-              <item name="SystemConfig" type="462c0819:PsiDirectoryNode" />
-              <item name="PlacementPoint" type="462c0819:PsiDirectoryNode" />
+              <item name="Home" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -375,7 +381,9 @@
       <workItem from="1703466864198" duration="19903000" />
       <workItem from="1703552195074" duration="15226000" />
       <workItem from="1703578254408" duration="2623000" />
-      <workItem from="1703638780796" duration="5370000" />
+      <workItem from="1703638780796" duration="6656000" />
+      <workItem from="1703647066868" duration="245000" />
+      <workItem from="1703655576169" duration="419000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 首次提交">
       <created>1702535912503</created>
@@ -479,7 +487,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="297460000" />
+    <option name="totallyTimeSpent" value="299410000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -492,8 +500,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1721" height="1033" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21052632" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21657592" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -610,24 +619,6 @@
     <state width="660" height="744" key="Git.Branch.Popup@2561.1601@180dpi" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/FundManage/BudgetReview/ReviewForm.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" column="24" lean-forward="true" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ProfessionalProject/Index.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="84" column="28" lean-forward="true" selection-start-line="84" selection-start-column="28" selection-end-line="84" selection-end-column="28" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="e#2043#2089#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/api/fundManage/budgetAdjustment-service.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -970,13 +961,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="413" column="18" lean-forward="true" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/SchemeBase/Index.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
@@ -984,10 +968,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/config.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9499">
+          <caret line="413" column="18" selection-start-line="413" selection-start-column="18" selection-end-line="413" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Relocation/Index.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="350">
-          <caret line="284" column="1" lean-forward="true" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
+        <state relative-caret-position="5704">
+          <caret line="284" column="1" selection-start-line="284" selection-start-column="1" selection-end-line="284" selection-end-column="1" />
           <folding>
             <element signature="n#style#0;n#el-table#0;n#div#1;n#WorkContentWrap#0;n#template#0;n#!!top" expanded="true" />
           </folding>
@@ -996,8 +987,52 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/Workshop/ExternalLink/components/container.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="154" column="25" selection-start-line="154" selection-start-column="20" selection-end-line="154" selection-end-column="25" />
+        <state relative-caret-position="3335">
+          <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminSecondIndex.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="296">
+          <caret line="1400" column="5" lean-forward="true" selection-start-line="1400" selection-start-column="5" selection-end-line="1400" selection-end-column="5" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#0;n#div#0;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#2;n#div#2;n#div#1;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#7211#7217#0" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#1;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#9499#9554#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/Workshop/Home/AdminHomeProgress.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="306" column="10" selection-start-line="306" selection-start-column="6" selection-end-line="306" selection-end-column="10" />
         </state>
       </provider>
     </entry>

@@ -6,7 +6,6 @@ export function changeScale() {
   document.body.style.width = '1920px'
   document.body.style.height = '1080px'
   document.body.style.overflow = 'hidden'
-  // document.body.style.background = "#070818";
   normalBox.style.width = '1920px'
   normalBox.style.height = '1080px'
   normalBox.style.transformOrigin = 'left top'

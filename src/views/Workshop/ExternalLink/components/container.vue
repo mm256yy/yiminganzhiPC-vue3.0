@@ -151,6 +151,7 @@ option.value = [
 ]
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
+
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
     name: dictName,
@@ -449,6 +450,9 @@ onMounted(() => {
       }
 
       .question-list {
+        max-height: 176px;
+        overflow: hidden;
+
         .item {
           display: flex;
           height: 44px;

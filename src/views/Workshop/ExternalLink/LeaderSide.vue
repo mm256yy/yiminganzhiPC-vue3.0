@@ -38,8 +38,9 @@ onBeforeUnmount(() => {
   width: 100%;
 
   height: 1016px;
-  border-radius: 8px 8px 8px 8px;
   background: #e7edfd;
+  border-radius: 8px 8px 8px 8px;
+
   .container {
     display: flex;
     padding-top: 10px;
@@ -48,8 +49,6 @@ onBeforeUnmount(() => {
     .containerInfo {
       margin-right: 14px;
     }
-  }
-  .footer {
   }
 }
 </style>
