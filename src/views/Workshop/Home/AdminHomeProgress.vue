@@ -9,8 +9,8 @@
       返回
     </ElButton>
     <div>
-      <div class="between" v-loading="processLoading">
-        <div class="between" @click="checktab(index)" v-for="(item, index) in newarr" :key="index">
+      <div class="between process-segment" v-loading="processLoading">
+        <div class="between" v-for="(item, index) in newarr" :key="index" @click="checktab(index)">
           <div class="arrow" v-if="index > 0"><img :src="arrow" /></div>
           <ElPopover :width="200" placement="right">
             <template #reference>
@@ -309,8 +309,8 @@ const householdOption = ref({
     //   指示框名字  注意！要和下方series中的name一起改
     data: ['已完成', '未完成'],
     // 指示框位置  距离上下左右多少
-    right: '10%',
-    top: '5%',
+    right: '45%',
+    top: '2%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -644,5 +644,9 @@ const onBack = () => {
   background: #ff5722;
   border-radius: 50%;
   box-shadow: 0px 4px 6px 0px rgba(255, 87, 34, 0.4);
+}
+
+.process-segment {
+  height: 150px;
 }
 </style>

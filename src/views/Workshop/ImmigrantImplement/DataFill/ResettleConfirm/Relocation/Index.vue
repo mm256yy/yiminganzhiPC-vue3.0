@@ -69,7 +69,7 @@
         </ElSpace>
       </div>
 
-      <el-table v-if="showTable" :data="tableData" style="width: 100%">
+      <el-table v-if="true" :data="tableData" style="width: 100%">
         <el-table-column type="index" label="序号" width="100" align="center" />
         <el-table-column prop="settleAddressText" label="安置区" align="center" />
         <el-table-column prop="area" label="户型/套型" align="center" />

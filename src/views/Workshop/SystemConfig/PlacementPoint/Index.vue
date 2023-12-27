@@ -211,6 +211,7 @@ const onAddRow = () => {
 
 const onEditRow = async (row) => {
   actionType.value = 'edit'
+  console.log('===========row===============', row)
   // tableObject.currentRow = { ...row }
   tableObject.currentRow = row
   dialog.value = true

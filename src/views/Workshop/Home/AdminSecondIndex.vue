@@ -843,14 +843,7 @@ const careerOption = ref({
       // name: '奖励费',
       type: 'pie',
       radius: ['40%', '80%'],
-      data: [
-        // { value: 600, name: '专业技术人员' },
-        // { value: 100, name: '办事人员和有关人员' },
-        // { value: 200, name: '商业、服务业人员' },
-        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        // { value: 500, name: '不便分类的其他从业人员' }
-      ],
+      data: [{ value: 0, name: '' }],
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -868,14 +861,7 @@ const careerOption = ref({
       // name: '补偿费',
       type: 'pie',
       radius: ['40%', '80%'],
-      data: [
-        // { value: 600, name: '专业技术人员' },
-        // { value: 100, name: '办事人员和有关人员' },
-        // { value: 200, name: '商业、服务业人员' },
-        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        // { value: 500, name: '不便分类的其他从业人员' }
-      ],
+      data: [{ value: 0, name: '' }],
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -893,14 +879,7 @@ const careerOption = ref({
       // name: '补助费',
       type: 'pie',
       radius: ['40%', '80%'],
-      data: [
-        // { value: 600, name: '专业技术人员' },
-        // { value: 100, name: '办事人员和有关人员' },
-        // { value: 200, name: '商业、服务业人员' },
-        // { value: 300, name: '农、林、牧、渔、水利业生产人员' },
-        // { value: 400, name: '生产、运输设备操作人员及有关人员' },
-        // { value: 500, name: '不便分类的其他从业人员' }
-      ],
+      data: [{ value: 0, name: '' }],
       emphasis: {
         itemStyle: {
           shadowBlur: 10,

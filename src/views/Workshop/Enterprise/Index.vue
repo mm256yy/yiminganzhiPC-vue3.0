@@ -23,11 +23,11 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
-            <span class="distance"></span>
+            共 <span class="num">{{ headerInfo.qyNum }}</span> 家企业
+            <!-- <span class="distance"></span>
             已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
             <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
+            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家 -->
           </div>
         </div>
         <ElSpace>
@@ -204,12 +204,13 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const landlordIds = ref<number[]>([])
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
+// const headInfo = ref<LandlordHeadInfoType>({
+//   demographicNum: 0,
+//   peasantHouseholdNum: 0,
+//   reportSucceedNum: 0,
+//   unReportNum: 0
+// })
+const headerInfo = ref<any>({})
 const outsideData = ref<any>([])
 const printDialog = ref(false)
 const exportDialog = ref(false)
@@ -272,8 +273,9 @@ const getDistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
-  headInfo.value = info
+  const info = await getLandlordHeadApi({ type: 'Company', status: SurveyStatusEnum.Review })
+  headerInfo.value = info
+  console.log('ULPP', headerInfo.value)
 }
 
 onMounted(() => {

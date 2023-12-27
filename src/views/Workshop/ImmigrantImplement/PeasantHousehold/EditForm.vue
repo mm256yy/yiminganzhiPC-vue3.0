@@ -269,7 +269,7 @@ const submit = async (data: LandlordDtoType) => {
     ...data,
     type: 'PeasantHousehold',
     projectId
-  }).catch(() => {
+  } as any).catch(() => {
     btnLoading.value = false
   })
   btnLoading.value = false
