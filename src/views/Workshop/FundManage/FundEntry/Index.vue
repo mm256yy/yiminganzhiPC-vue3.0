@@ -156,17 +156,13 @@ const onViewRow = (row) => {
 // }
 
 const onSearch = (data) => {
+  let searchData = JSON.parse(JSON.stringify(data))
   // 处理参数
   let params = {
-    ...data
+    ...searchData
   }
 
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
+  console.log(params, 'bbq')
   setSearchParams({ ...params })
 }
 
@@ -200,12 +196,6 @@ const schema = reactive<CrudSchema[]>([
     },
     table: {
       show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
     }
   },
   {
@@ -220,12 +210,6 @@ const schema = reactive<CrudSchema[]>([
     },
     table: {
       show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
     }
   },
   {
@@ -236,12 +220,6 @@ const schema = reactive<CrudSchema[]>([
       component: 'InputRange'
     },
     table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
       show: false
     }
   },
@@ -257,12 +235,6 @@ const schema = reactive<CrudSchema[]>([
       }
     },
     table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
       show: false
     }
   },
@@ -286,12 +258,6 @@ const schema = reactive<CrudSchema[]>([
       }
     },
     table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
       show: false
     }
   },

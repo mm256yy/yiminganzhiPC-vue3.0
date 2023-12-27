@@ -26,9 +26,9 @@
           <div class="text">
             共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家个体工商
             <span class="distance"></span>
-            已填报 <span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
-            <span class="distance"></span> 未填报
-            <span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
+            已评估 <span class="num !text-[#30A952]">{{ headInfo.assessNumber }}</span> 家
+            <span class="distance"></span> 未评估
+            <span class="num !text-[#FF3030]">{{ headInfo.notAssessNumber }}</span> 家
           </div>
         </div>
         <div> </div>
@@ -105,7 +105,6 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 
 import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
-import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { formatTime } from '@/utils/index'
@@ -117,7 +116,7 @@ const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
-const headInfo = ref<LandlordHeadInfoType>({
+const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
