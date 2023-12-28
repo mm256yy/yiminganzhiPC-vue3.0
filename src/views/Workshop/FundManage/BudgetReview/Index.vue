@@ -7,7 +7,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -68,8 +68,6 @@ import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplica
 import ReviewForm from './ReviewForm.vue'
 import { formatDateTime } from '@/utils/index'
 
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 审核弹窗标识
@@ -342,6 +340,13 @@ const onSearch = (data) => {
   setSearchParams({ ...params, auditType: tabVal.value, businessId: '2', status: '4' })
 }
 
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
+}
+
 /**
  * tab 切换
  * @param data tab 值
@@ -386,7 +391,6 @@ const onViewRow = async (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
-    // parmasList: parmasList.value
   }
   tableObject.currentRow = row
   dialog.value = true

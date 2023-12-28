@@ -91,76 +91,9 @@ const onTabClick = (tabItem) => {
   }
 }
 
-.report-tabs {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  .report-tab-item {
-    display: flex;
-    height: 32px;
-    padding: 0 16px;
-    margin: 14px 8px 0 0;
-    font-size: 14px;
-    cursor: pointer;
-    background: #ffffff;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    align-items: center;
-
-    .tit {
-      margin-left: 6px;
-      // user-select: none;
-    }
-
-    &.active {
-      color: var(--el-color-primary);
-      background: #e9f0ff;
-      border: 1px solid var(--el-color-primary);
-    }
-  }
-}
-
 .data-fill-body {
   padding-top: 10px;
   margin-top: -10px;
   background-color: #fff;
-}
-
-.report-dialog {
-  .report-cont {
-    padding: 22px 55px;
-    margin: 0 auto;
-    background: #f5f7fa;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-
-    .report-item {
-      display: flex;
-      height: 32px;
-      font-size: 14px;
-      line-height: 32px;
-      align-items: center;
-
-      .report-tit {
-        margin-right: 16px;
-        color: rgba(19, 19, 19, 0.6);
-        text-align: right;
-      }
-
-      .report-txt {
-        font-weight: 500;
-        color: var(--text-color-1);
-      }
-    }
-  }
-
-  .tips {
-    display: flex;
-    align-items: center;
-    margin-top: 16px;
-    font-size: 14px;
-    color: var(--text-color-1);
-  }
 }
 </style>

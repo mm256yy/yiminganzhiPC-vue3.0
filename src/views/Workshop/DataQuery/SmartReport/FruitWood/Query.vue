@@ -12,7 +12,7 @@
     </div>
 
     <div class="line"></div>
-    <div class="title-hint">附属物统计表（按户查询）</div>
+    <div class="title-hint">零星林(果)木统计表（按户查询）</div>
     <div class="table-wrap" v-loading="tableObject.loading">
       <Table
         v-model:pageSize="tableObject.size"
@@ -117,7 +117,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '户号',
-    width: 180,
     search: {
       show: false
     }
@@ -131,22 +130,21 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '类型',
+    label: '品种',
     search: {
       show: false
     }
   },
   {
-    field: 'unitText',
-    label: '单位',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'sizeText',
+    field: 'size',
     label: '规格',
-    width: 100,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'unit',
+    label: '单位',
     search: {
       show: false
     }

@@ -24,7 +24,7 @@ const router = createRouter({
           component: () => import('../views/roam/index.vue'),
           meta: {
             name: '库区漫游',
-            type: 'leader'
+            type: 'user'
           }
         },
         {

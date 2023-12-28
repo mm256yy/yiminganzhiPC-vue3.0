@@ -1,6 +1,6 @@
 <!--
  * @Author: baike
- * @LastEditors: baike
+ * @LastEditors: 1019314017@qq.com 1019314017@qq.com
 -->
 <template>
   <div id="LeaderSide_work_home_rem" class="smart_report">
@@ -35,7 +35,7 @@ import { changeScale, init } from '../ExternalLink/rem'
 import Label from '../ExternalLink/components/label.vue'
 import Footer from '../ExternalLink/components/footer.vue'
 import { useRouter } from 'vue-router'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 
 const router = useRouter()
@@ -176,7 +176,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/b.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(5).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -190,7 +190,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(6).png', import.meta.url).href,
         name: '村集体',
         list: [
           {
@@ -200,7 +200,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(3).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -218,7 +218,7 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(4).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(8).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
@@ -258,7 +258,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/c.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(9).png', import.meta.url).href,
         name: '安置意愿',
         list: [
           {
@@ -278,7 +278,7 @@ const listArray = ref([
     icon: new URL('../../../assets/imgs/smarts/d.png', import.meta.url).href,
     conArray: [
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(10).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -293,7 +293,7 @@ const listArray = ref([
       },
 
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(11).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
@@ -311,10 +311,11 @@ const listArray = ref([
         ]
       },
       {
-        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(2).png', import.meta.url).href,
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(12).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {
+            value: 'comprehensivereport',
             text: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站'
           }
         ]
@@ -365,81 +366,91 @@ onBeforeUnmount(() => {
   .goBack {
     width: 72px;
     height: 32px;
-    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
-    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
-    border-radius: 4px 4px 4px 4px;
-    opacity: 1;
-    border: 1px solid #3e73ec;
     font-size: 14px;
-    font-family: PingFang SC, PingFang SC;
+
     font-weight: 500;
+    line-height: 32px;
     color: #3e73ec;
     text-align: center;
     cursor: pointer;
-    line-height: 32px;
+    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    border: 1px solid #3e73ec;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
   }
+
   .conatiner {
     display: flex;
     flex-wrap: wrap;
+
     .smart_border {
       width: 936px;
       height: 443px;
+      margin-top: 16px;
       background: #ffffff;
-      box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+      border: 2px solid rgba(62, 115, 236, 0.7);
       border-radius: 8px 8px 8px 8px;
       opacity: 1;
-      border: 2px solid rgba(62, 115, 236, 0.7);
-      margin-top: 16px;
+      box-shadow: 0px 3px 3px 0px rgba(62, 115, 236, 0.3);
+
       .xm_img {
-        width: 74px;
-        height: 15px;
-        margin-top: 1px;
+        height: 16px;
       }
+
       .con_list {
         padding: 0px 28px;
+
         .list_li {
           display: flex;
           width: 100%;
-          border-bottom: 1px solid #ebebeb;
           padding: 18px 0 12px 0;
+          border-bottom: 1px solid #ebebeb;
+
           .img_icon {
             width: 24px;
             height: 24px;
             margin-right: 10px;
           }
+
           .list_name {
-            font-size: 14px;
-            font-family: PingFang SC, PingFang SC;
-            font-weight: 400;
-            color: #131313;
             width: 118px;
-            cursor: pointer;
+            font-size: 14px;
+
+            font-weight: 400;
             line-height: 24px;
+            color: #131313;
+            cursor: pointer;
           }
+
           .list_value {
             display: flex;
             flex-wrap: wrap;
             width: 744px;
+
             .value {
-              font-size: 14px;
-              font-family: PingFang SC, PingFang SC;
-              cursor: pointer;
-              font-weight: 500;
-              color: #131313;
-              line-height: 24px;
               margin-right: 48px;
               margin-bottom: 6px;
+              font-size: 14px;
+              font-weight: 500;
+              line-height: 24px;
+              color: #131313;
+
+              cursor: pointer;
             }
           }
         }
+
         .list_li:last-child {
           border: none !important;
         }
       }
     }
+
     .smart_border:nth-child(1) {
       margin-right: 16px;
     }
+
     .smart_border:nth-child(3) {
       margin-right: 16px;
     }

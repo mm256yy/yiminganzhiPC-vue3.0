@@ -117,7 +117,6 @@ const getNewsDict = async () => {
   })
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
-    console.log(res, 'res')
   }
 }
 
