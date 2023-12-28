@@ -197,6 +197,7 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
+
       form.value = { ...val }
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
@@ -216,9 +217,9 @@ const initData = () => {}
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
+  /*nextTick(() => {
     formRef.value?.resetFields()
-  })
+  })*/
 }
 
 const submit = (data: any) => {

@@ -31,13 +31,24 @@
           {{ props.datarole?.landAllStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <div
+          v-if="props.role === 'assessor'"
           :class="{
             status: true,
-            success: props.baseInfo.implementEscalationStatus === '1'
+            success: props.baseInfo.houseImplementEscalationStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.baseInfo.implementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+          {{ props.baseInfo.houseImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+        </div>
+        <div
+          v-else
+          :class="{
+            status: true,
+            success: props.baseInfo.landImplementEscalationStatus === '1'
+          }"
+        >
+          <span class="point"></span>
+          {{ props.baseInfo.landImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
         </div>
       </ElSpace>
     </div>

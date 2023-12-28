@@ -80,7 +80,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getBudgetReviewListApi
 })
 
-const { setSearchParams } = methods
+const { setSearchParams, getList } = methods
 
 setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 
@@ -360,7 +360,15 @@ const tabChange = (data: string) => {
   }
   setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 }
-
+let setSearchParamss = () => {
+  tableObject.params = {
+    auditType: tabVal.value,
+    businessId: '2',
+    status: '4',
+    projectId
+  }
+  getList()
+}
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
