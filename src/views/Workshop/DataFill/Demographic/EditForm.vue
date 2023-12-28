@@ -85,7 +85,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="民族11" prop="nation">
+          <ElFormItem label="民族" prop="nation">
             <ElSelect
               clearable
               filterable
@@ -107,7 +107,7 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="联系方式" prop="phone">
-            <ElInput placeholder="请输入联系方式" />
+            <ElInput v-model="form.phone" class="!w-full" placeholder="请输入联系方式" />
           </ElFormItem>
         </ElCol>
       </ElRow>
