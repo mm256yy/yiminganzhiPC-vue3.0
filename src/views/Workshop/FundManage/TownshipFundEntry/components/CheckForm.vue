@@ -18,8 +18,8 @@
       label-suffix=":"
     >
       <ElFormItem v-if="isHouseHold" label="户主" prop="household"> {{ form.name }} </ElFormItem>
-      <ElFormItem v-if="isHouseHold" label="户号" prop="accountNumber">
-        {{ form.doorNo }}
+      <ElFormItem v-if="isHouseHold" label="户号" prop="showDoorNo">
+        {{ form.showDoorNo }}
       </ElFormItem>
 
       <ElFormItem v-if="isVillage" label="村集体" prop="household">
@@ -70,15 +70,15 @@
           </template>
           <template #receipt="{ row }">
             <div class="proof-container">
-              <ElImage :src="row.receipt" @click="onShowImage" alt="相关凭证"
+              <ElImage :src="row.receipt" @click="onShowImage(row.receipt)" alt="相关凭证"
             /></div>
           </template>
         </Table>
       </div>
     </ElForm>
-    <!-- <el-dialog title="查看图片" :width="600" v-model="dialogVisible">
+    <el-dialog title="查看图片" :width="600" v-model="dialogVisible">
       <img class="block w-full" :src="avatarSrc" alt="Preview Image" />
-    </el-dialog> -->
+    </el-dialog>
   </ElDialog>
 </template>
 
@@ -109,7 +109,7 @@ const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
 
 const form = ref<any>({})
 const dialogVisible = ref<boolean>(false)
-
+let avatarSrc = ref()
 const isHouseHold = computed(() => {
   return props.type === 1
 })
@@ -122,7 +122,8 @@ const isOther = computed(() => {
   return props.type === 3
 })
 
-const onShowImage = () => {
+const onShowImage = (e) => {
+  avatarSrc.value = e
   dialogVisible.value = true
 }
 
