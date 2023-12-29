@@ -1,13 +1,13 @@
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
-    <div class="search-form-wrap">
+    <!-- <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         @search="setSearchParams"
         @reset="setSearchParams"
       />
-    </div>
+    </div> -->
 
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">

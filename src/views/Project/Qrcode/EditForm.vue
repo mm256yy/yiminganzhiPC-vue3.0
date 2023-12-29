@@ -17,7 +17,15 @@
       :rules="rules"
     >
       <ElFormItem label="水库项目:" prop="projectName">
-        <ElInput type="text" v-model="form.projectName" placeholder="请输入水库项目" />
+        <el-select v-model="form.projectName" placeholder="请输入水库项目">
+          <el-option
+            v-for="item in projectData"
+            :key="item.label"
+            :label="item.label"
+            :value="item.label"
+          />
+        </el-select>
+        <!-- <ElInput type="text" v-model="form.projectName" placeholder="请输入水库项目" /> -->
       </ElFormItem>
       <ElFormItem label="所属行政区域:" prop="landSpace">
         <ElTreeSelect
@@ -119,6 +127,7 @@ interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: PlacementPointDtoType | null | undefined
+  projectData?: any
 }
 
 interface FileItemType {

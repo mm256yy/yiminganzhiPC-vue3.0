@@ -26,10 +26,14 @@
                 >当前进度：&nbsp;<span>{{ (item.actual * 100).toFixed(2) }}%</span></div
               >
               <div
-                >开始时间：&nbsp;<span>{{ item.startTime }}</span></div
+                >开始时间：&nbsp;<span>{{
+                  item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '-'
+                }}</span></div
               >
               <div
-                >结束时间：&nbsp;<span>{{ item.endTime }}</span></div
+                >结束时间：&nbsp;<span>{{
+                  item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '-'
+                }}</span></div
               >
             </template>
           </ElPopover>
@@ -168,7 +172,7 @@ import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
-
+import dayjs from 'dayjs'
 const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
