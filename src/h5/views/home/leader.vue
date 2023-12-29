@@ -181,7 +181,7 @@
           <div class="flex-row items-center">
             <div class="group-house">
               <span class="emphasize">{{
-                formatData((cityList.listArray.houseScreenDto.totalArea / 10000).toFixed(2))
+                (cityList.listArray.houseScreenDto.totalArea / 10000).toFixed(2)
               }}</span>
               <span class="house-title">万㎡</span>
             </div>
@@ -195,7 +195,7 @@
           <div class="flex-row items-center">
             <div class="group-house">
               <span class="emphasize">{{
-                formatData((cityList.listArray.houseScreenDto.zzArea / 10000).toFixed(2))
+                (cityList.listArray.houseScreenDto.zzArea / 10000).toFixed(2)
               }}</span>
               <span class="house-title">万㎡</span>
             </div>
@@ -209,7 +209,7 @@
           <div class="flex-row items-center">
             <div class="group-house">
               <span class="emphasize">{{
-                formatData(cityList.listArray.houseScreenDto.cjtArea / 10000).toFixed(2)
+                (cityList.listArray.houseScreenDto.cjtArea / 10000).toFixed(2)
               }}</span>
               <span class="house-title">万㎡</span>
             </div>
@@ -278,10 +278,6 @@ let cityList: any = reactive({
 let handelchange = (e) => {
   console.log(e)
   getLeadershipScreens()
-}
-
-const formatData = (data: any) => {
-  return isNaN(data) ? '' : data
 }
 
 // 实施进度图表配置项
