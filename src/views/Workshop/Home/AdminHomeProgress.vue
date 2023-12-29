@@ -176,7 +176,6 @@ import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
-import dayjs from 'dayjs'
 const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
