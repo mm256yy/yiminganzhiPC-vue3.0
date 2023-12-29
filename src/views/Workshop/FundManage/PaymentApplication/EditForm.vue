@@ -231,6 +231,7 @@
         <div class="col-label-required"> 申请凭证： </div>
         <div class="card-img-list">
           <ElUpload
+            :class="{ 'upload-disabled': actionType !== 'add' }"
             :list-type="'picture-card'"
             action="/api/file/type"
             :data="{
@@ -689,8 +690,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-/deep/ .el-upload--picture-card {
-  display: none;
+.upload-disabled {
+  :deep(.el-upload--picture-card) {
+    display: none;
+  }
 }
 
 .col-wrapper {
