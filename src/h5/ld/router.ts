@@ -235,5 +235,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next({ path: '/login' })
   }
+  console.log(from)
 })
 export default router

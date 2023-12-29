@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Form } from '@/components/Form'
-import { PropType, computed, unref, ref } from 'vue'
+import { PropType, computed, unref, ref, watch } from 'vue'
 import { propTypes } from '@/utils/propTypes'
 import { ElButton } from 'element-plus'
 import { useI18n } from '@/hooks/web/useI18n'
@@ -36,7 +36,8 @@ const props = defineProps({
   expandField: propTypes.string.def(''),
   // 默认展开伸缩
   defaultExpand: propTypes.bool.def(true),
-  inline: propTypes.bool.def(true)
+  inline: propTypes.bool.def(true),
+  valueForme: propTypes.object.def({})
 })
 
 const emit = defineEmits(['search', 'reset', 'fhhh'])
@@ -66,7 +67,7 @@ const newSchema = computed(() => {
 })
 
 const { register, elFormRef, methods } = useForm()
-
+const { setValues } = methods
 const search = async () => {
   await unref(elFormRef)?.validate(async (isValid) => {
     if (isValid) {
@@ -97,6 +98,13 @@ const setVisible = () => {
   unref(elFormRef)?.resetFields()
   visible.value = !unref(visible)
 }
+watch(
+  () => props.valueForme,
+  (v) => {
+    setValues(v)
+  },
+  { immediate: true }
+)
 </script>
 
 <template>

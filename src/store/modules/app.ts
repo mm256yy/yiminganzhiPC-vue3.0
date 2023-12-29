@@ -9,6 +9,7 @@ import { ThemeTypes } from '@/types/theme'
 import { JwtUserType } from '@/api/login/types'
 import { ProjectUserType, SystemRoleEnum, UserInfoType } from '@/api/sys/types'
 import { PlatformType } from '@/types/platform'
+import { object } from 'vue-types'
 
 const { wsCache } = useCache()
 const TOKEN_NAME = 'YM-TOKEN'
@@ -54,6 +55,7 @@ interface AppState {
   fixedMenu: boolean
   ProjectStatus: string
   villageCoder: string
+  serchValue: object
 }
 
 export const useAppStore = defineStore('app', {
@@ -122,7 +124,8 @@ export const useAppStore = defineStore('app', {
         topHeaderHoverColor: '#f6f6f6',
         // 头部边框颜色
         topToolBorderColor: '#eee'
-      }
+      },
+      serchValue: {}
     }
   },
   getters: {
@@ -253,6 +256,9 @@ export const useAppStore = defineStore('app', {
     },
     getFooter(): boolean {
       return this.footer
+    },
+    getsercher(): object {
+      return this.serchValue
     }
   },
   actions: {
@@ -391,6 +397,9 @@ export const useAppStore = defineStore('app', {
     },
     setFooter(footer: boolean) {
       this.footer = footer
+    },
+    setsercher(footer: any) {
+      this.serchValue[footer.name] = footer.value
     }
   }
 })

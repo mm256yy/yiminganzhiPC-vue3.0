@@ -54,7 +54,7 @@
       </div>
     </div>
     <!--问题列表-->
-    <div class="statistic-item">
+    <div class="statistic-item" v-if="false">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_feed.png" class="icon" />
         <div>问题列表</div>
@@ -116,7 +116,7 @@ onMounted(() => {
   width: 700px;
 
   .statistic-item {
-    height: 295px;
+    height: 610px;
     padding: 10px;
     margin-top: 20px;
     background-color: #ffffff;
