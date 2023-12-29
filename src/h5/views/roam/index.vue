@@ -5,18 +5,28 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getTokenApi } from './service'
+import { isIOS } from '@/h5/utils'
 
 // 测试跳转链接
 const url = 'https://jingling-h5-test.jldt.top/token?'
 const route = useRoute()
 const tokenStr = ref<string>()
 
+// 统一跳转
+const uniformJump = (targetUrl: string) => {
+  if (isIOS()) {
+    window.location.href = targetUrl
+  } else {
+    window.open(targetUrl)
+  }
+}
+
 const requestToken = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
     let targetUrl = `${url}token=${tokenStr.value}`
-    window.open(targetUrl)
+    uniformJump(targetUrl)
   } catch {}
 }
 
@@ -29,7 +39,7 @@ onMounted(() => {
     // 移民端
     const h5Token = sessionStorage.getItem('h5token')
     let targetUrl = `${url}token=${h5Token}`
-    window.open(targetUrl)
+    uniformJump(targetUrl)
   }
 })
 </script>

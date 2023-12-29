@@ -26,10 +26,14 @@
                 >当前进度：&nbsp;<span>{{ (item.actual * 100).toFixed(2) }}%</span></div
               >
               <div
-                >开始时间：&nbsp;<span>{{ item.startTime }}</span></div
+                >开始时间：&nbsp;<span>{{
+                  item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '--'
+                }}</span></div
               >
               <div
-                >结束时间：&nbsp;<span>{{ item.endTime }}</span></div
+                >结束时间：&nbsp;<span>{{
+                  item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '--'
+                }}</span></div
               >
             </template>
           </ElPopover>
@@ -156,6 +160,7 @@ import arrow from '@/assets/imgs/arrow.png'
 import LiquidBall from './LiquidBall.vue'
 import { ref, onMounted } from 'vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
+import dayjs from 'dayjs'
 
 import {
   warningList,
@@ -514,6 +519,8 @@ const onBack = () => {
 
   &.active {
     border: 2px solid rgba(62, 115, 236, 0.7);
+    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    box-shadow: 0px 5px 5px 0px rgba(62, 115, 236, 0.4);
   }
 }
 
