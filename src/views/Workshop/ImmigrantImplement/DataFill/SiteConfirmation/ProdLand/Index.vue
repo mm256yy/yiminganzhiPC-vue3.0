@@ -150,7 +150,8 @@ import {
   saveImmigrantLandApi
 } from '@/api/immigrantImplement/siteConfirmation/prodLand-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
-import { resettleArea, apartmentArea } from '../../config'
+import { resettleArea } from '../../config'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 interface PropsType {
   doorNo: string
@@ -199,13 +200,27 @@ const initData = () => {
  * 获取安置区块
  * @param data
  */
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
+}
 const getSettleAddress = (data: string) => {
   if (data) {
     // 选择了公寓房的安置方式
     if (props.baseInfo.houseAreaType === 'flat') {
       let str = ''
       apartmentArea.map((item: any) => {
-        if (item.id === data) {
+        if (item.id == data) {
           str = item.name
         }
       })
@@ -295,7 +310,8 @@ const onSave = () => {
   })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  getSettleAddressList()
   initData()
   getChooseConfig()
 })

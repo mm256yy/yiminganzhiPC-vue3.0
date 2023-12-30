@@ -233,9 +233,11 @@ import {
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
-import { resettleArea, apartmentArea } from '../../config'
+import { resettleArea } from '../../config'
 // import { deepClone } from '@/utils'
 import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { useAppStore } from '@/store/modules/app'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 interface PropsType {
   doorNo: string
@@ -292,12 +294,27 @@ const getList = () => {
  * 获取当前行安置区
  * @param data 当前行信息
  */
+const appStore = useAppStore()
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
+}
 const getSettleAddress = (data: any) => {
   // 选择了公寓房的安置方式
   if (data.houseAreaType === 'flat') {
     let str = ''
     apartmentArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
+      if (item.id == data.settleAddress) {
         str = item.name
       }
     })
@@ -420,7 +437,8 @@ const close = (params: any[], type: string) => {
 let comdbe = () => {
   ElMessage.error('待业主提供模板')
 }
-onMounted(() => {
+onMounted(async () => {
+  await getSettleAddressList()
   getList()
 })
 </script>

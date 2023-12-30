@@ -128,7 +128,8 @@ const emit = defineEmits(['export'])
 const titles = ['智能报表', '实物成果', '土地信息']
 
 const getLocationText = (key: string) => {
-  return locationTypes.find((item) => item.value === key)?.label
+  // return locationTypes.find((item) => item.value === key)?.label
+  return key
 }
 const { tableObject } = useTable({
   getListApi: getLandInfoApi

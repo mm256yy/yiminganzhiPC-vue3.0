@@ -105,7 +105,7 @@ import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capit
 // import EditForm from './EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 import dayjs from 'dayjs'
-import EditForm from '@/views/Workshop/FundManage/FundDistribution/EditForm.vue'
+import EditForm from './addForm.vue'
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
@@ -350,7 +350,7 @@ const onViewRow = (row) => {
     // 点击查看进入入账详情页面
     toLink('FundEntryDetail', id)
   } else {
-    doorNo.value = row.doorNo
+    doorNo.value = { doorNo: 'jl1030472 ', type: '3' }
     dialog.value = true
   }
 }

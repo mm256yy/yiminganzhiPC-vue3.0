@@ -334,7 +334,7 @@ const onSearch = (data) => {
     })
     delete params.code
   }
-  setSearchParams({ ...params })
+  setSearchParams({ ...params, type: 'PeasantHousehold' })
 }
 </script>
 <style lang="less">
