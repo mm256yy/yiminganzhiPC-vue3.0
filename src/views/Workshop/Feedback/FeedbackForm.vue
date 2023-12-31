@@ -64,7 +64,7 @@ import {
   ElMessageBox,
   ElUpload
 } from 'element-plus'
-import { ref, reactive, nextTick } from 'vue'
+import { ref, reactive, nextTick, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -184,6 +184,16 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => false
   )
 }
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      form.value = defaultValue
+      feedbackPic.value = []
+      form.value.type = props.type
+    }
+  }
+)
 </script>
 
 <style lang="less">

@@ -1,6 +1,6 @@
 <template>
   <ElDialog
-    title="资金入账"
+    title="资金预拨"
     :model-value="props.show"
     :width="800"
     @close="onClose"
@@ -40,7 +40,7 @@
         </ElSelect>
       </ElFormItem>
       <ElFormItem label="金额(元):" required prop="amount">
-        <ElInput type="text" v-model="form.amount" onchange="value=value.replace(/[^0-9.]/g,'')" />
+        <ElInput type="number" v-model="form.amount" />
       </ElFormItem>
       <ElFormItem label="付款日期:" required prop="recordTime">
         <ElDatePicker type="date" v-model="form.recordTime" />

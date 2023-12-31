@@ -14,6 +14,7 @@
         @search="onSearch"
         @fhhh="toTargetNew"
         @reset="setSearchParams"
+        :valueForme="valueForme['居民户信息']"
       />
     </div>
 
@@ -117,8 +118,9 @@ import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landl
 import { filterViewDoorNo } from '@/utils/index'
 
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, options } = useRouter()
 const projectId = appStore.currentProjectId
+let valueForme = appStore.getsercher
 const dialog = ref(false) // 弹窗标识
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -139,7 +141,8 @@ const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId,
-  blurry: search
+  blurry: search,
+  ...valueForme['居民户信息']
 }
 
 setSearchParams({
@@ -178,7 +181,7 @@ onMounted(() => {
   getVillageTree()
   getdistrictTree()
   getLandlordHeadInfo()
-  console.log(allSchemas.searchSchema)
+  console.log(options.history.state.forward, 'bbq')
 })
 const toTarget = (routeName: string, query = {}) => {
   push({
@@ -470,6 +473,7 @@ const onSearch = (data) => {
 
 // 数据填报
 const fillData = (row) => {
+  appStore.setsercher({ value: tableObject.params, name: '居民户信息' })
   push({
     name: 'ImmigrantImpDataFill',
     query: {

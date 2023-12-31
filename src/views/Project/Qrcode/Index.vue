@@ -65,6 +65,7 @@
       :show="showEdit"
       @close="onCloseEdit"
       :actionType="actionType"
+      :projectData="projectData"
     />
   </ContentWrap>
 </template>
@@ -79,6 +80,8 @@ import { ContentWrap } from '@/components/ContentWrap'
 import { TableColumn } from '@/types/table'
 import { PolicyDtoType } from '@/api/project/qrCode/types'
 import { getQrcodeApi, delQrcodeByIdApi } from '@/api/project/qrCode/service'
+import { listProjectApi } from '@/api/project'
+import { TreeNodeType } from '@/api/common'
 // import { DistrictNodeType } from '@/api/district/types'
 // import { TreeNodeType } from '@/api/common'
 import { getDistrictChildrenApi } from '@/api/district'
@@ -101,7 +104,7 @@ const defaultProps = {
     return node.level === 3
   }
 }
-
+const rootNodeId = -1
 const columns = reactive<TableColumn[]>([
   { field: 'index', label: '序号', type: 'index', width: '60px' },
   { field: 'projectName', label: '水库项目' },
@@ -225,4 +228,21 @@ const onCloseConfig = () => {
   showConfig.value = false
   getList()
 }
+let projectData = ref()
+const loadProject = async () => {
+  const root: any = []
+  const projects = await listProjectApi({ page: 0, size: 100 })
+  projects.content.forEach((p) => {
+    root.push({
+      id: p.id.toString(),
+      label: p.name,
+      children: []
+    })
+  })
+  projectData.value = root
+  console.log(projectData.value)
+}
+onMounted(() => {
+  loadProject()
+})
 </script>

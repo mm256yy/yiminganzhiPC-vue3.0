@@ -214,7 +214,7 @@ onMounted(() => {
 
 .title-hint {
   padding: 15px 0 0 15px;
-  color: 14px;
   font-size: 14px;
+  color: 14px;
 }
 </style>

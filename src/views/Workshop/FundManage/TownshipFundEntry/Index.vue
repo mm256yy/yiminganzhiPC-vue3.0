@@ -123,12 +123,6 @@ const onSearch = (data) => {
     ...data
   }
 
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
   setSearchParams({ ...params })
 }
 

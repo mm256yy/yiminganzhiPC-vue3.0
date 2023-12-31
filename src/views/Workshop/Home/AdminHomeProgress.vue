@@ -26,10 +26,14 @@
                 >当前进度：&nbsp;<span>{{ (item.actual * 100).toFixed(2) }}%</span></div
               >
               <div
-                >开始时间：&nbsp;<span>{{ item.startTime }}</span></div
+                >开始时间：&nbsp;<span>{{
+                  item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '-'
+                }}</span></div
               >
               <div
-                >结束时间：&nbsp;<span>{{ item.endTime }}</span></div
+                >结束时间：&nbsp;<span>{{
+                  item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '-'
+                }}</span></div
               >
             </template>
           </ElPopover>
@@ -112,11 +116,14 @@
                 </div>
 
                 <div class="echart-item-ct">
-                  <div class="progress" :style="{ width: `${item.number}%` }"></div>
+                  <div
+                    class="progress"
+                    :style="{ width: `${tabCurrentId != 3 ? item.number : item.isnumber}%` }"
+                  ></div>
                 </div>
 
                 <div class="echart-item-rt">
-                  <text class="txt">{{ item.number }}户</text>
+                  <text class="txt">{{ tabCurrentId != 3 ? item.number : item.isnumber }}户</text>
                 </div>
               </div>
             </div>
@@ -168,7 +175,7 @@ import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
-
+import dayjs from 'dayjs'
 const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
@@ -224,13 +231,16 @@ const getVillageScheduleList = async () => {
 }
 
 // 获取工作组进度
-const getScheduleRankList = async () => {
+const getScheduleRankList = async (e) => {
   workLoading.value = true
   try {
-    const list = await scheduleRankList(parmas.value)
+    const list = await scheduleRankList(e)
     workLoading.value = false
     workGroupOptions.value = list.map((item) => {
-      return Object.assign({}, { name: item.name, number: item.completeNumber })
+      return Object.assign(
+        {},
+        { name: item.name, number: item.completeNumber, isnumber: item.incompleteNumber }
+      )
     })
   } catch {
     workLoading.value = false
@@ -242,6 +252,19 @@ const onTabClick = (tabItem) => {
     return
   }
   tabCurrentId.value = tabItem.id
+
+  switch (tabCurrentId.value) {
+    case 1:
+      parmas.value = { type: type.value }
+      break
+    case 2:
+      parmas.value = { type: type.value, isToday: true }
+      break
+    case 3:
+      parmas.value = { type: type.value }
+      break
+  }
+  getScheduleRankList(parmas.value)
 }
 
 const requestWarningTypeList = async () => {
@@ -272,7 +295,7 @@ onMounted(() => {
   requestProcess()
   getWarningList()
   getVillageScheduleList()
-  getScheduleRankList()
+  getScheduleRankList(parmas.value)
   requestWarningTypeList()
 })
 
@@ -280,8 +303,8 @@ const checktab = (index) => {
   currentCheckTabIndex.value = index
   type.value = index + 1
   getVillageScheduleList()
-  parmas.value = { type: type.value }
-  getScheduleRankList()
+  parmas.value.type = type.value
+  getScheduleRankList(parmas.value)
   requestWarningTypeList()
 }
 

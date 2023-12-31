@@ -125,7 +125,7 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {
