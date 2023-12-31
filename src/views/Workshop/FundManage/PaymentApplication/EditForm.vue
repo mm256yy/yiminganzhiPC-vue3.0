@@ -296,12 +296,15 @@
                   </div>
                   <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                   <div class="time" v-if="item.status">
-                    提交时间：{{
+                    {{ index == 0 ? '提交时间：' : '审核时间:' }}
+                    {{
                       item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
                     }}
                   </div>
                   <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
-                  <div class="remark" v-if="item.status"> 审核意见: {{ item.remark }} </div>
+                  <div class="remark" v-if="item.status && index != 0">
+                    审核意见: {{ item.remark }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -686,6 +689,10 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+/deep/ .el-upload--picture-card {
+  display: none;
+}
+
 .col-wrapper {
   display: flex;
   align-items: center;

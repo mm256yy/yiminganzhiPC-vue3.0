@@ -12,7 +12,7 @@
         <ElBreadcrumbItem class="text-size-12px">电信工程</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
