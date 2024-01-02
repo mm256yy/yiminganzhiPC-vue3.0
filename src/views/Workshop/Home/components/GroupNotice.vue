@@ -119,6 +119,7 @@ onMounted(() => {
     height: 610px;
     padding: 10px;
     margin-top: 20px;
+    overflow: auto;
     background-color: #ffffff;
     border-radius: 8px;
   }

@@ -313,6 +313,7 @@ import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 import type { EvaluatorStatisticsDtoType } from '@/api/home-types'
 import { getEvaluatorStatistics } from '@/api/home-service'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 interface PropsType {
   role?: string
 }
@@ -332,10 +333,14 @@ const getStatistics = async () => {
 }
 
 const toTarget = (routeName: string, query = {}) => {
-  push({
-    name: routeName,
-    query
-  })
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
 }
 
 onMounted(() => {

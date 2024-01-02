@@ -95,7 +95,7 @@
         <!-- <span class="main-title">专业项目合同清单</span> -->
         申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请户数：<span
           class="num"
-          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
+          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList?.length : 0 }}</span
         >
         户
       </div>
@@ -159,7 +159,6 @@
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
           <template #default="{ $index }">
-            <!-- <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div> -->
             <div> {{ parmasList.paymentObjectList[$index]?.amount }} </div>
           </template>
         </ElTableColumn>
@@ -198,7 +197,6 @@
           <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">
               <div class="label">付款日期</div>
-              <!-- <div class="content">境岭镇</div> -->
               <ElDatePicker
                 v-model="formAudit.paymentTime"
                 type="date"
@@ -296,7 +294,7 @@
               </div>
               <div
                 class="line"
-                v-if="index == parmasList.funPaymentRequestFlowNodeList.length - 1"
+                v-if="index == parmasList.funPaymentRequestFlowNodeList?.length - 1"
                 style="background: white"
               ></div>
               <div class="line" v-else></div>
@@ -319,9 +317,12 @@
                 <div class="remark" v-if="item.status">
                   审核意见: {{ index == 0 ? '发起申请' : item.remark }}
                 </div>
-                <div style="display: flex" v-if="index == 6 && item.receipt != '[]'">
+                <div
+                  style="display: flex"
+                  v-if="index == 6 && item.receipt && item.receipt != '[]'"
+                >
                   财务凭证:
-                  <img :src="JSON.parse(item.receipt)[0].url" style="height: 200px" alt="" />
+                  <img :src="JSON.parse(item.receipt)[0]?.url" style="height: 200px" alt="" />
                 </div>
               </div>
             </div>
@@ -427,6 +428,10 @@ const getFundSubjectList = () => {
   })
 }
 const getTreeName = (list: any, code: any) => {
+  if (!list) {
+    return ''
+  }
+
   for (let i = 0; i < list.length; i++) {
     let a = list[i]
     if (a.code == code) {

@@ -73,7 +73,7 @@
           <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
         </template>
         <template #filling="{ row }">
-          <div class="filling-btn" @click="adjust(row)">调整网络</div>
+          <div class="filling-btn" @click="adjust(row)">调整网格</div>
         </template>
       </Table>
     </div>
