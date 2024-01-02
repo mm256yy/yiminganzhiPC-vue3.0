@@ -26,14 +26,14 @@
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/news.png" alt="" />
         </template>
-        <template #info>
+        <!-- <template #info>
           <view @click="handleClickItem(4)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
             </view>
           </view>
-        </template>
+        </template> -->
       </Label>
       <div class="news_box">
         <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
@@ -84,7 +84,7 @@
             label="问题内容"
             prop="remark"
             align="center"
-            width="250"
+            width="260"
             show-overflow-tooltip
             header-align="center"
           />
@@ -103,14 +103,14 @@
             header-align="center"
           >
             <template #default="{ row }">
-              {{ dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
+              {{ dayjs(row.createdDate).format('YYYY-MM-DD') }}
             </template>
           </ElTableColumn>
         </ElTable>
       </div>
     </div>
     <ElDialog
-      title="文章内容查看"
+      :title="dialogTitle"
       v-model="contentDialog"
       :width="800"
       @close="contentDialog = false"
@@ -176,6 +176,7 @@ option.value = [
 ]
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
+const dialogTitle = ref<string>('')
 
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
@@ -184,6 +185,7 @@ const getNewsDict = async () => {
   })
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
+    activeName2.value = newsTypes.value[0]?.value // 默认选中
   }
 }
 
@@ -197,6 +199,7 @@ const feedback = async () => {
 
 const checkNews = (item: any) => {
   content.value = item.content
+  dialogTitle.value = item.title
   contentDialog.value = true
 }
 
@@ -218,6 +221,7 @@ const requestNewsData = (type = '1') => {
         }
         return item
       })
+
       panelLoading.value = false
     },
     (err) => {
@@ -400,6 +404,7 @@ onMounted(() => {
         .news_li {
           display: flex;
           flex: 1;
+          cursor: pointer;
 
           .li_l_top {
             width: 158px;
@@ -458,7 +463,6 @@ onMounted(() => {
         font-weight: 500;
         line-height: 36px;
         color: #171718;
-        // font-weight: bold;
         background: #f2f6ff;
         box-sizing: border-box;
         align-items: center;
@@ -496,7 +500,6 @@ onMounted(() => {
           border-bottom: 1px solid #ebebeb;
           box-sizing: border-box;
           align-items: center;
-          justify-content: space-between;
 
           .table-index {
             width: 45px;
@@ -507,7 +510,6 @@ onMounted(() => {
             width: 70px;
             overflow: hidden;
             font-size: 14px;
-
             font-weight: 500;
             color: #333333;
             text-overflow: ellipsis; //溢出用省略号显示
@@ -515,17 +517,15 @@ onMounted(() => {
           }
 
           .names {
-            margin-left: 70px;
+            width: 70px;
             overflow: hidden;
             font-size: 14px;
-
             font-weight: 500;
             color: #666666;
           }
 
           .time {
             font-size: 14px;
-
             font-weight: 500;
             color: rgba(19, 19, 19, 0.4);
           }

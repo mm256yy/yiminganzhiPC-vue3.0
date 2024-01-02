@@ -217,7 +217,6 @@ onBeforeUnmount(() => {
 const onReviewRow = async (row) => {
   let res: any = await PaymentApplicationByIdDetailApi(row.id, 1)
   parmasList.value = res
-  console.log(res, '测试')
 
   actionType.value = 'edit'
   tableObject.currentRow = {
@@ -237,7 +236,9 @@ const onViewRow = async (row: any) => {
     ...row
     // parmasList: parmasList.value
   }
+
   tableObject.currentRow = row
+  console.log('OLP', tableObject.currentRow)
   dialog.value = true
 }
 

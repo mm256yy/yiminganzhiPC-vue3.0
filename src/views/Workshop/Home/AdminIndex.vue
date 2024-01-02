@@ -330,7 +330,7 @@ const impProgressOption = ref({
 
 // 新闻&法规 tab切换数据列表
 const newsTabList = [
-  { title: '水库要闻', value: 1 },
+  { title: '', value: 1 },
   { title: '水库概况', value: 2 },
   { title: '政策法规', value: 3 },
   { title: '建设历程', value: 4 },
