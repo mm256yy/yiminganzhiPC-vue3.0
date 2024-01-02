@@ -478,6 +478,14 @@ export const apartmentArea = [
     name: '曙光安置区'
   },
   {
+    id: '2',
+    name: '曙光安置区'
+  },
+  {
+    id: '26',
+    name: '镜岭集镇安置区'
+  },
+  {
     id: '7',
     name: '镜岭集镇安置区'
   }
