@@ -1060,7 +1060,6 @@ const onAll = async () => {
 .mright {
   margin-right: -4px;
 }
-
 .news_info {
   display: flex;
   flex-wrap: wrap;

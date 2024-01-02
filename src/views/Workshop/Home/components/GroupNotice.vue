@@ -122,6 +122,7 @@ onMounted(() => {
     overflow: auto;
     background-color: #ffffff;
     border-radius: 8px;
+    overflow: auto;
   }
 }
 
