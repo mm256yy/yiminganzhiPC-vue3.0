@@ -121,6 +121,7 @@ onMounted(() => {
     margin-top: 20px;
     background-color: #ffffff;
     border-radius: 8px;
+    overflow: auto;
   }
 }
 
