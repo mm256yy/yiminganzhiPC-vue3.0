@@ -85,7 +85,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="民族11" prop="nation">
+          <ElFormItem label="民族" prop="nation">
             <ElSelect
               clearable
               filterable

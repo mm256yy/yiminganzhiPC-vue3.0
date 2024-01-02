@@ -162,6 +162,7 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+    <!-- 打印模板 -->
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
       <div
@@ -196,9 +197,11 @@
         </el-table-column>
       </el-table>
       <div style="display: flex; justify-content: space-between; height: 50px">
-        <div style="flex: 1; border: 1px solid black; border-top: 0px"
+        <div style=" line-height: 50px; border: 1px solid black; border-top: 0px;flex: 1"
           >户主代表或收委托人(签名)：</div
-        ><div style="flex: 1; border: 1px solid black; border-top: 0px"> 联系移民干部(签名)：</div>
+        ><div style=" line-height: 50px; border: 1px solid black; border-top: 0px;flex: 1">
+          联系移民干部(签名)：</div
+        >
       </div>
     </div>
   </WorkContentWrap>
@@ -236,9 +239,12 @@ import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { htmlToPdf } from '@/utils/ptf'
+import { debounce } from '@/utils/index'
+
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
 import { useAppStore } from '@/store/modules/app'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -477,10 +483,11 @@ const onEditSubmit = async (params: any) => {
 }
 let data = ref()
 let comdbe = () => {
-  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
-  setTimeout(() => {
+  debounce(() => {
+    data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+
     htmlToPdf('#anztable')
-  }, 3000)
+  })
 }
 </script>
 
