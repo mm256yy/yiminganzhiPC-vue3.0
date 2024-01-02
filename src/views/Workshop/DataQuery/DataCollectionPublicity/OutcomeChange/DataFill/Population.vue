@@ -47,10 +47,10 @@
         <el-table-column prop="operation" label="操作" width="250" align="center">
           <template #default="scope">
             <el-button size="small" type="primary" text @click="handleCollection(scope.row)"
-              >查看采集人员</el-button
+              >查看采集成果</el-button
             >
             <el-button size="small" type="primary" text @click="handleReviewers(scope.row)"
-              >查看复核人员</el-button
+              >查看复核成果</el-button
             >
           </template>
         </el-table-column>

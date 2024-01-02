@@ -25,21 +25,21 @@
     <div class="right_icon"></div>
     <div v-if="index == 0" class="container">
       <div class="con_tilte" style="display: flex; justify-content: space-between">
-        土地权属<span>{{ detail.gytd + detail.jttd }}</span>
+        土地权属<span>{{ (detail.gytd + detail.jttd).toFixed(2) }}</span>
       </div>
       <div class="con_list">
         <div class="li">
           <div class="li_name">国有土地</div>
-          <div class="li_value">{{ detail.gytd }}</div>
+          <div class="li_value">{{ detail?.gytd.toFixed(2) }}</div>
         </div>
         <div class="li">
           <div class="li_name">集体土地</div>
-          <div class="li_value">{{ detail.jttd }}</div>
+          <div class="li_value">{{ detail?.jttd.toFixed(2) }}</div>
         </div>
       </div>
       <div class="con_tilte" style="display: flex; justify-content: space-between">
         工程建设区和水库淹没区<span>{{
-          detail.c_xcx + detail.c_xcx + detail.c_kqq + detail.c_pax
+          (detail.c_xcx + detail.c_xcx + detail.c_kqq + detail.c_pax).toFixed(2)
         }}</span>
       </div>
 
@@ -62,7 +62,9 @@
         </div>
       </div>
       <div class="con_tilte" style="display: flex; justify-content: space-between">
-        工程建设区和水库淹没区<span>{{ detail.m_xcx + detail.m_szs + detail.m_kqq }}</span>
+        工程建设区和水库淹没区<span>{{
+          (detail.m_xcx + detail.m_szs + detail.m_kqq).toFixed(2)
+        }}</span>
       </div>
       <div class="con_list">
         <div class="li">
@@ -85,8 +87,8 @@
       </div>
       <div class="question-list">
         <div class="item" v-for="item in questionList" :key="item">
-          <div class="name">{{ item[keyJosn[index].keys] }}</div>
-          <div class="name">{{ item[keyJosn[index].key] }}</div>
+          <!-- <div class="names">{{ item[keyJosn[index].keys] }}</div> -->
+          <div class="names">{{ item[keyJosn[index].key] }}</div>
           <div class="names">{{ item[keyJosn[index].key_a] }}</div>
           <div class="names">{{ item[keyJosn[index].key_b] }} </div>
           <div v-if="keyJosn[index].key_c" class="names">{{ item[keyJosn[index].key_c] }} </div>
@@ -206,25 +208,23 @@ const init = async () => {
   //永久用地
   if (index.value == 0) {
     detail.value = res.landScreenDto.detail
-
-    console.log(detail.value, '[[]]', res.landScreenDto.detail)
   }
-  // 入口
+  // 人口
   if (index.value == 1) {
+    questionList.value = []
     questionList.value = res.populationScreenDto.detail
   }
   // 房屋
   if (index.value == 2) {
+    questionList.value = []
     questionList.value = res.houseScreenDto.detail
   }
 
-  //
   if (index.value == 3) {
+    questionList.value = []
     questionList.value = res.companyDto.detail
   }
   loading.value = false
-
-  // console.log('-0000', res)
 }
 
 const close = () => {

@@ -496,53 +496,45 @@
           <span class="text">新闻通知</span>
         </div>
         <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
-          <ElTabPane name="水库要闻" label="水库要闻">
-            <div class="element news">
-              <div class="list-box-left" v-if="newsList && newsList.length > 0">
-                <img class="cover-pic" :src="newsList[0].coverPic" />
-              </div>
-              <div class="list-box-right">
-                <div
-                  class="text"
-                  v-for="item in newsList"
-                  :key="item.id"
-                  @click="routerJump(`newDetail?id=${item.id}`)"
-                >
-                  <div class="title">{{ item.title }}</div>
-                  <div class="time">{{ item.releaseTime }}</div>
-                </div>
-              </div>
-            </div>
-          </ElTabPane>
-          <ElTabPane label="政策法规" name="政策法规">
-            <div class="element">
-              <div class="policy-list" v-for="item in policyList" :key="item.id">
-                <div class="title">
-                  {{ item.title }}
-                </div>
-                <div class="time">
-                  <span> {{ item.publicityTime }}</span>
-                  <span>更多</span>
-                </div>
-              </div>
-            </div>
-          </ElTabPane>
-          <ElTabPane label="水库概况" name="水库概况">水库概况</ElTabPane>
-          <ElTabPane label="建设历程" name="建设历程">建设历程</ElTabPane>
-          <ElTabPane label="安置概况" name="安置概况">安置概况</ElTabPane>
-          <ElTabPane label="水库风采" name="水库风采">水库风采</ElTabPane>
+          <ElTabPane
+            v-for="(item, index) in newsTypes"
+            :label="item.label"
+            :key="index"
+            :name="item.value"
+          />
         </ElTabs>
+        <div class="news_info" v-loading="panelLoading">
+          <div v-for="item in newsList" :key="item.id" class="news_li" @click="checkNews(item)">
+            <div class="news_li_l">
+              <div class="li_l_top">{{ item.title }}</div>
+              <div class="li_l_bom">{{ item.releaseTime.replace(/-/g, '/') }}</div>
+            </div>
+            <div class="news_li_logo">
+              <img v-if="item.url" class="cover-pic" :src="item.url" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <!-- </ScaleBox> -->
+    <ElDialog
+      :title="dialogTitle"
+      v-model="contentDialog"
+      :width="800"
+      @close="contentDialog = false"
+      alignCenter
+      appendToBody
+    >
+      <div v-html="content"></div>
+    </ElDialog>
   </div>
 </template>
 <script lang="ts" setup>
 // import ScaleBox from './ScaleBox.vue'
-import { ElTabs, ElTabPane, ElButton } from 'element-plus'
+import { ElTabs, ElTabPane, ElButton, ElDialog } from 'element-plus'
 import Echart from '@/components/Echart/src/Echart.vue'
 import { useRouter } from 'vue-router'
 import { usePermissionStore } from '@/store/modules/permission'
+import { listDictDetailApi } from '@/api/sys/index'
 
 // computed
 import { ref, onMounted } from 'vue'
@@ -561,17 +553,23 @@ import Rank_2 from '@/assets/imgs/Rank_2.png'
 import Rank_3 from '@/assets/imgs/Rank_3.png'
 import Rank_4 from '@/assets/imgs/Rank_4.png'
 import Rank_5 from '@/assets/imgs/Rank_5.png'
+import { useAppStore } from '@/store/modules/app'
 
-// import { useDictStoreWithOut } from '@/store/modules/dict'
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
 const { push } = useRouter()
+const dictName = 'news' // 字典名称
+const appStore = useAppStore()
 const newsList = ref<any>([])
 const policyList = ref<any>([])
 const activeName = ref('报告归集')
 const activeName2 = ref('水库要闻')
 const activeName3 = ref('累计')
 const reportData = ref<any>([]) // 报告列表
+const newsTypes = ref<any[]>([])
+const panelLoading = ref<boolean>(false)
+const contentDialog = ref<boolean>(false)
+const content = ref<string>() // 文章内容
+const dialogTitle = ref<string>('')
+
 const reportResult = ref<any>({
   Outline: false,
   Report: false,
@@ -595,14 +593,38 @@ const reportResult = ref<any>({
 })
 
 // 初始化获取新闻通知 -- 水库要闻列表数据
-const initNewsData = () => {
-  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' }).then((res: any) => {
-    newsList.value = res.content
-    newsList.value.forEach((item: any) => {
-      item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-    })
-    // console.log('newsList：', newsList.value)
+const initNewsData = (type = '1') => {
+  panelLoading.value = true
+  getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type }).then(
+    (res: any) => {
+      newsList.value = res.content
+      newsList.value.forEach((item: any) => {
+        item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
+      })
+      panelLoading.value = false
+    },
+    (err) => {
+      console.log('err', err)
+      panelLoading.value = false
+    }
+  )
+}
+
+const checkNews = (item: any) => {
+  content.value = item.content
+  dialogTitle.value = item.title
+  contentDialog.value = true
+}
+
+const getNewsDict = async () => {
+  const res = await listDictDetailApi({
+    name: dictName,
+    projectId: appStore.getCurrentProjectId
   })
+  if (res && res.dictValList) {
+    newsTypes.value = res.dictValList
+    activeName2.value = newsTypes.value[0]?.value // 默认选中
+  }
 }
 
 // 初始化获取新闻通知 -- 政策法规列表数据
@@ -663,11 +685,11 @@ const residentOption = ref({
   ]
 })
 // 点击新闻跳转
-const newsHandleClick = () => {}
+const newsHandleClick = (pane: any, _ev?: Event) => {
+  initNewsData(pane.props.name)
+}
 
 const statisticsData = ref<any>([])
-// const topTenList = ref<any>([])
-
 // 获取前十的数据
 const seriesdata = ref<any>([])
 const seriesdata2 = ref<any>([])
@@ -979,6 +1001,7 @@ const toLink = (type: string) => {
 
 onMounted(async () => {
   onAll()
+  getNewsDict()
   initHomeStatisticsData()
   initTopTenData()
   initGatherProgressData()
@@ -1036,5 +1059,54 @@ const onAll = async () => {
 
 .mright {
   margin-right: -4px;
+}
+.news_info {
+  display: flex;
+  flex-wrap: wrap;
+
+  .news_li:nth-of-type(1) {
+    margin-top: 16px;
+    margin-bottom: 28px;
+  }
+
+  .news_li:nth-of-type(2) {
+    margin-top: 16px;
+    margin-bottom: 28px;
+  }
+
+  .news_li {
+    display: flex;
+    flex: 1;
+
+    .li_l_top {
+      width: 158px;
+      height: 40px;
+      margin-bottom: 5px;
+      font-size: 14px;
+
+      font-weight: 500;
+      color: #333333;
+    }
+
+    .li_l_bom {
+      font-size: 14px;
+
+      font-weight: 400;
+      line-height: 20px;
+      color: #999999;
+    }
+
+    .news_li_logo {
+      width: 99px;
+      height: 65px;
+      // background: red;
+      margin-left: 10px;
+
+      .cover-pic {
+        width: 99px;
+        height: 65px;
+      }
+    }
+  }
 }
 </style>
