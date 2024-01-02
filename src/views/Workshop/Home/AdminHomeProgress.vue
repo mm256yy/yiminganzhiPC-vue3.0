@@ -27,12 +27,12 @@
               >
               <div
                 >开始时间：&nbsp;<span>{{
-                  item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '-'
+                  item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '--'
                 }}</span></div
               >
               <div
                 >结束时间：&nbsp;<span>{{
-                  item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '-'
+                  item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '--'
                 }}</span></div
               >
             </template>
@@ -163,6 +163,7 @@ import arrow from '@/assets/imgs/arrow.png'
 import LiquidBall from './LiquidBall.vue'
 import { ref, onMounted } from 'vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
+import dayjs from 'dayjs'
 
 import {
   warningList,
@@ -175,7 +176,6 @@ import { ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
-import dayjs from 'dayjs'
 const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tableObject = ref<any>([])
@@ -536,7 +536,9 @@ const onBack = () => {
   align-items: center;
 
   &.active {
+    background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
     border: 2px solid rgba(62, 115, 236, 0.7);
+    box-shadow: 0px 5px 5px 0px rgba(62, 115, 236, 0.4);
   }
 }
 

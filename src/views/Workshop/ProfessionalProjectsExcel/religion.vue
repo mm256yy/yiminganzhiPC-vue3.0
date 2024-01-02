@@ -12,7 +12,7 @@
         <ElBreadcrumbItem class="text-size-12px">宗教</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -288,7 +288,8 @@ const onSearch = (data) => {
 
   // 需要重置一次params
   tableObject.params = {
-    projectId
+    projectId,
+    type: 27
   }
   if (!params.householdName) {
     delete params.householdName

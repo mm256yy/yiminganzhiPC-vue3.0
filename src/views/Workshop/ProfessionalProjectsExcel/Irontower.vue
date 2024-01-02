@@ -12,7 +12,7 @@
         <ElBreadcrumbItem class="text-size-12px">铁塔工程</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -289,7 +289,8 @@ const onSearch = (data) => {
 
   // 需要重置一次params
   tableObject.params = {
-    projectId
+    projectId,
+    type: 25
   }
   if (!params.householdName) {
     delete params.householdName
