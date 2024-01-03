@@ -350,7 +350,7 @@ const onViewRow = (row) => {
     // 点击查看进入入账详情页面
     toLink('FundEntryDetail', id)
   } else {
-    doorNo.value = { doorNo: 'jl1030472 ', type: '3' }
+    doorNo.value = { doorNo: row.doorNo, type: row.cardType }
     dialog.value = true
   }
 }

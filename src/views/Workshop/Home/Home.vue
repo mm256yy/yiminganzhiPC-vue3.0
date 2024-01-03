@@ -93,7 +93,7 @@ let rolerToRouter = ref([
 const Router = useRouter()
 onBeforeMount(() => {
   role.value = getRole()
-  console.log(Router)
+  console.log(Router.options.history.state.back, role.value, permissionStore.getIsAddRouters, 'bbq')
 
   // if (
   //   permissionStore.getIsAddRouters &&
