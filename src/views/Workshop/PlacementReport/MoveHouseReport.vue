@@ -6,18 +6,26 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap" style="display: none">
-      <Search :schema="allSchemas.searchSchema" @search="handleSearch" @reset="setSearchParams" />
+    <div class="search-wrap">
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
+      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
       </div>
-      <el-table :span-method="objectSpanMethod" :data="tableData" border style="width: 100%">
+      <el-table
+        :span-method="objectSpanMethod"
+        :data="tableData"
+        border
+        style="width: 100%; max-height: 580px"
+        height="580"
+      >
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
         <el-table-column label="公寓房(套)" align="center">
@@ -102,32 +110,42 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { reactive, ref, onMounted } from 'vue'
-import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getMoveHouseReportListApi } from '@/api/workshop/placementReport/service'
+import { screeningTree } from '@/api/workshop/village/service'
+import { useAppStore } from '@/store/modules/app'
+
 const { back } = useRouter()
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
 const totalNum = ref(0)
+const villageTree = ref<any[]>([])
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'qy',
-    label: '区域',
+    field: 'villageCode',
+    label: '所属区域',
     search: {
       show: true,
-      component: 'Select'
+      component: 'TreeSelect',
+      componentProps: {
+        data: villageTree,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
+      }
     },
     table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
       show: false
     }
   },
@@ -168,14 +186,31 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 const { allSchemas } = useCrudSchemas(schema)
-const { methods } = useTable()
-const { setSearchParams } = methods
 
 const tableData = ref<any>([])
 const percent = ref() //已选占比
 
-const handleSearch = () => {
-  getMoveHouseReportList('0', '10')
+// 数据导出
+const onExport = () => {
+  // const params = {
+  //   exportType: '1',
+  //   ...tableObject.params
+  // }
+  // const res = await exportReportApi(params)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
 }
 const getMoveHouseReportList = (page, size) => {
   const params = {
@@ -229,7 +264,15 @@ const getMoveHouseReportList = (page, size) => {
 }
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 
+// 获取所属区域数据(行政村列表)
+const getVillageTree = async () => {
+  const list = await screeningTree(projectId, 'adminVillage')
+  villageTree.value = list || []
+  return list || []
+}
+
 onMounted(() => {
+  getVillageTree()
   getMoveHouseReportList('0', '10')
 })
 
@@ -336,6 +379,21 @@ const totalHomestead = (arr) => {
   })
   return s
 }
+
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+}
+
+const onReset = () => {}
 </script>
 
 <style scoped></style>

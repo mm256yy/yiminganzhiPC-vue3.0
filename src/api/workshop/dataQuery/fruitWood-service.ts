@@ -18,3 +18,22 @@ export const getsummaryApi = (params: Partial<summary>): Promise<TableResponse<s
     params
   })
 }
+
+// 查询零星(林)果木列表(区域)
+export const getFruitWoodRegionListApi = (
+  params: Partial<FruitWoodDtoType>
+): Promise<TableResponse<FruitWoodDtoType>> => {
+  return request.get({
+    url: '/resultForms/queryDistrictTree',
+    params
+  })
+}
+
+// 导出报表(区域)
+export const exportRegionReportApi = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/queryDistrictTree`,
+    params,
+    responseType: 'blob'
+  })
+}

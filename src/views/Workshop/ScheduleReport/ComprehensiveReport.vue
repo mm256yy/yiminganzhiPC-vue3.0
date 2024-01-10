@@ -256,12 +256,7 @@ const getParamsKey = (key: string) => {
 //     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
 //   ).length
 //   const index = tableObject.tableList.findIndex(
-//     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-//   )
-//   if (column && columnIndex < 1) {
-//     if (index === rowIndex) {
-//       return {
-//         rowspan: num,
+//     (item: any) => item
 //         colspan: 1
 //       }
 //     } else {

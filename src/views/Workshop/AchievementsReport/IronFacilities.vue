@@ -7,7 +7,7 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">铁塔工程设施汇总表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">铁塔工程</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
     <div v-if="false" class="search-form-wrap">
@@ -16,8 +16,14 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 铁塔工程设施汇总表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
-      <ElTable v-loading="tableLoading" :data="tableData" style="width: 100%">
+      <ElTable
+        v-loading="tableLoading"
+        :data="tableData"
+        style="width: 100%; max-height: 600px"
+        height="600"
+      >
         <ElTableColumn type="index" label="序号" width="100" align="center" />
         <ElTableColumn
           prop="baseStationName"
@@ -63,7 +69,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
+import { getCommonReportApi, exportPhysicalApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
@@ -143,6 +149,25 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 const onBack = () => {
   back()
+}
+
+// 数据导出
+const onExport = async () => {
+  const res = await exportPhysicalApi(14)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 </script>
 

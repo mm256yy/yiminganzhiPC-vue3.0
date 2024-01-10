@@ -80,7 +80,7 @@ export const getFindByDoorNo = (params?: any): Promise<TableResponse<FunPayType>
     params
   })
 }
-//企业房屋 /api/
+//企业房屋
 export const getEnterpriseAppendant = (params?: any): Promise<TableResponse<FunPayType>> => {
   return request.get({
     url: '/resultForms/enterpriseAppendant',

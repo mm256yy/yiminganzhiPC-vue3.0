@@ -1,7 +1,4 @@
-<!--
- * @Author: baike
- * @LastEditors: 1019314017@qq.com 1019314017@qq.com
--->
+<!--智慧报表-->
 <template>
   <div id="LeaderSide_work_home_rem" class="smart_report">
     <ElButton @click="onBack" :icon="BackIcon" class="goBack"> 返回 </ElButton>
@@ -50,6 +47,20 @@ const listArray = ref([
     conArray: [
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
+        name: '实物成果',
+        list: [
+          {
+            value: 'Achievements',
+            text: '实物成果汇总'
+          },
+          {
+            value: 'OutcomeChange',
+            text: '实物成果变更'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports.png', import.meta.url).href,
         name: '居民户',
         list: [
           {
@@ -63,14 +74,6 @@ const listArray = ref([
           {
             value: 'FruitWood',
             text: '零星林(果)木'
-          },
-          {
-            value: 'Achievements',
-            text: '实物成果汇总'
-          },
-          {
-            value: 'OutcomeChange',
-            text: '实物成果变更'
           }
         ]
       },
@@ -79,19 +82,47 @@ const listArray = ref([
         name: '村集体',
         list: [
           {
-            text: '房屋'
+            text: '房屋',
+            value: 'VillageCollective',
+            params: {
+              pageType: '1'
+            }
           },
           {
-            text: '附属物'
+            text: '附属物',
+            value: 'VillageCollective',
+            params: {
+              pageType: '2'
+            }
           },
           {
-            text: '零星林(果)木'
+            text: '零星林(果)木',
+            value: 'VillageCollective',
+            params: {
+              pageType: '3'
+            }
           },
           {
-            text: '坟墓'
+            text: '坟墓',
+            value: 'Grave'
           },
           {
-            text: '小型专项及农副业设施'
+            text: '小型专项及农副业设施',
+            value: 'SmallSpecial'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(1).png', import.meta.url).href,
+        name: '个体户',
+        list: [
+          {
+            text: '基本信息',
+            value: 'physicalResults'
+          },
+          {
+            text: '房屋及附属物',
+            value: 'IndividualHouseAccessory'
           }
         ]
       },
@@ -100,16 +131,16 @@ const listArray = ref([
         name: '企(事)业单位',
         list: [
           {
-            text: '企业'
+            text: '企业',
+            value: 'physicalResults'
           },
           {
-            text: '个体户'
+            text: '水电站',
+            value: 'waterbasicreport'
           },
           {
-            text: '水电站'
-          },
-          {
-            text: '探矿权'
+            text: '探矿权',
+            value: 'explorationRight'
           }
         ]
       },
@@ -130,31 +161,31 @@ const listArray = ref([
             text: '文物古迹'
           },
           {
-            value: 'telecommunication',
+            value: 'telecomProject',
             text: '电信工程'
           },
           {
-            value: 'moveExcel',
+            value: 'MobileProject',
             text: '移动工程'
           },
           {
-            value: 'unicom',
+            value: 'UnicomProject',
             text: '联通工程'
           },
           {
-            value: 'Irontower',
+            value: 'ironFacilities',
             text: '铁塔工程'
           },
           {
-            value: 'radioExcel',
+            value: 'RadioTelevisionProject',
             text: '广播电视工程'
           },
           {
-            value: 'hydrology',
+            value: 'hydrographicStation',
             text: '水文站'
           },
           {
-            value: 'religion',
+            value: 'ReligiousProject',
             text: '宗教'
           }
         ]
@@ -177,15 +208,21 @@ const listArray = ref([
     conArray: [
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(5).png', import.meta.url).href,
+        name: '概算资金',
+        list: [
+          {
+            value: 'FundUseDetail',
+            text: '资金使用报表'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(5).png', import.meta.url).href,
         name: '居民户',
         list: [
           {
-            value: 'FundPeople',
-            text: '居民户'
-          },
-          {
-            value: 'FundUseDetail',
-            text: '资金使用详细'
+            value: 'HouseholdFundDetail',
+            text: '资金发放明细'
           }
         ]
       },
@@ -194,8 +231,18 @@ const listArray = ref([
         name: '村集体',
         list: [
           {
-            value: 'FundVillage',
-            text: '村集体'
+            value: 'VillageHouseholdFundDetail',
+            text: '资金发放明细'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(6).png', import.meta.url).href,
+        name: '个体户',
+        list: [
+          {
+            value: 'IndividualFundDetail',
+            text: '资金发放明细'
           }
         ]
       },
@@ -204,16 +251,12 @@ const listArray = ref([
         name: '企(事)业单位',
         list: [
           {
-            value: 'FundEnterprise',
-            text: '企业'
+            value: 'EnterpriseFundDetail',
+            text: '企业资金发放明细'
           },
           {
-            value: 'FundIndividualB',
-            text: '个体户'
-          },
-          {
-            value: 'FundHydropower',
-            text: '水电站'
+            value: 'HydropowerFundDetail',
+            text: '水电站资金发放明细'
           }
         ]
       },
@@ -222,32 +265,8 @@ const listArray = ref([
         name: '专业项目',
         list: [
           {
-            value: 'telecommunication',
-            text: '电信工程'
-          },
-          {
-            value: 'moveExcel',
-            text: '移动工程'
-          },
-          {
-            value: 'unicom',
-            text: '联通工程'
-          },
-          {
-            value: 'Irontower',
-            text: '铁塔工程'
-          },
-          {
-            value: 'radioExcel',
-            text: '广播电视工程'
-          },
-          {
-            value: 'hydrology',
-            text: '水文站'
-          },
-          {
-            value: 'religion',
-            text: '宗教'
+            value: 'ProfessionFundDetail',
+            text: '资金发放明细'
           }
         ]
       }
@@ -282,31 +301,52 @@ const listArray = ref([
         name: '居民户',
         list: [
           {
+            value: 'residentProgressDetails',
+            text: '进度明细'
+          },
+          {
             value: 'residentRegion',
-            text: '居民户按区域组'
+            text: '区域统计'
           },
           {
             value: 'residentWork',
-            text: '居民户按工作组'
+            text: '工作组统计'
           }
         ]
       },
-
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(10).png', import.meta.url).href,
+        name: '个体户',
+        list: [
+          {
+            value: 'individualProgressDetails',
+            text: '进度明细'
+          },
+          {
+            value: 'individualRegionalStatistics',
+            text: '区域统计'
+          },
+          {
+            value: 'individualWorkgroupStatistics',
+            text: '工作组统计'
+          }
+        ]
+      },
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(11).png', import.meta.url).href,
         name: '企(事)业单位',
         list: [
           {
-            value: 'enterprisereport',
-            text: '企业'
+            value: 'enterpriseProgressDetails',
+            text: '进度明细'
           },
           {
-            value: 'individualregionreport',
-            text: '个体户按区域'
+            value: 'enterpriseRegionalStatistics',
+            text: '区域统计'
           },
           {
-            value: 'individualworkreport',
-            text: '个体户按工作区'
+            value: 'enterpriseWorkgroupStatistics',
+            text: '工作组统计'
           }
         ]
       },
@@ -315,8 +355,8 @@ const listArray = ref([
         name: '专业项目',
         list: [
           {
-            value: 'comprehensivereport',
-            text: '交通/电力/移动联通铁塔电信/文物/寺庙/水文站'
+            value: 'professionProgressDetails',
+            text: '进度明细'
           }
         ]
       }
@@ -325,7 +365,7 @@ const listArray = ref([
 ])
 
 const handleClick = (item: any) => {
-  goLink(item.value, {})
+  goLink(item.value, item.params)
 }
 
 const onBack = () => {
@@ -335,10 +375,6 @@ const onBack = () => {
 const goLink = (routerName: string, query: any) => {
   if (!routerName) return
 
-  // const linkObj = router.resolve({
-  //   name: routerName,
-  //   query: query
-  // })
   // 修改跳转方式为本页跳转
   router.push({
     name: routerName,
@@ -367,7 +403,6 @@ onBeforeUnmount(() => {
     width: 72px;
     height: 32px;
     font-size: 14px;
-
     font-weight: 500;
     line-height: 32px;
     color: #3e73ec;
@@ -386,7 +421,7 @@ onBeforeUnmount(() => {
 
     .smart_border {
       width: 936px;
-      height: 443px;
+      height: 480px;
       margin-top: 16px;
       background: #ffffff;
       border: 2px solid rgba(62, 115, 236, 0.7);
@@ -404,7 +439,7 @@ onBeforeUnmount(() => {
         .list_li {
           display: flex;
           width: 100%;
-          padding: 18px 0 12px 0;
+          padding: 10px 0 12px 0;
           border-bottom: 1px solid #ebebeb;
 
           .img_icon {
@@ -433,9 +468,8 @@ onBeforeUnmount(() => {
               margin-bottom: 6px;
               font-size: 14px;
               font-weight: 500;
-              line-height: 24px;
+              line-height: 26px;
               color: #131313;
-
               cursor: pointer;
             }
           }
@@ -453,6 +487,10 @@ onBeforeUnmount(() => {
 
     .smart_border:nth-child(3) {
       margin-right: 16px;
+      height: 380px;
+    }
+    .smart_border:nth-child(4) {
+      height: 380px;
     }
   }
 }
