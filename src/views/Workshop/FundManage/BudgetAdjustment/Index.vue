@@ -504,13 +504,9 @@ const onViewRow = async (row: any) => {
   PaymentApplicationByIdDetailApi(row.id, 2).then((res: any) => {
     parmasList.value = res
     console.log(res, '测试')
+    tableObject.currentRow = row
+    dialog.value = true
   })
-  tableObject.currentRow = {
-    ...row
-    // parmasList: parmasList.value
-  }
-  tableObject.currentRow = row
-  dialog.value = true
 }
 
 // 调整概算

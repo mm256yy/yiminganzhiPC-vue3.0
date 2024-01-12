@@ -176,3 +176,10 @@ export const exportIndividualHouseholdTree = (params: any) => {
     responseType: 'blob'
   })
 }
+
+export const getfindByDoorNoAndType = (data: any): Promise<any> => {
+  return request.get({
+    url: '/funAmountGrant/findByDoorNoAndType',
+    data
+  })
+}

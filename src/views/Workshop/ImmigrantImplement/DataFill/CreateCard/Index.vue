@@ -177,7 +177,7 @@
           </div>
           <div style="width: 30%">
             <span style="font-weight: bold">户号:</span>
-            <span style="margin-left: 5px">{{ doorNo }}</span>
+            <span style="margin-left: 5px">{{ baseInfo.showDoorNo }}</span>
           </div>
           <div style="width: 30%">
             <span style="font-weight: bold">联系方式:</span>

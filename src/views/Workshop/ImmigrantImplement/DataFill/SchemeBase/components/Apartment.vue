@@ -22,7 +22,12 @@
       <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
-          <el-radio :label="item.id" size="large" v-for="item in settleAddressList" :key="item.id">
+          <el-radio
+            :label="item.id"
+            size="large"
+            v-for="item in settleAddressList"
+            :key="item.id * 1"
+          >
             {{ item.name }}
           </el-radio>
         </el-radio-group>
@@ -257,7 +262,7 @@ interface PropsType {
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
-const settleAddress = ref('1')
+const settleAddress = ref(1)
 const areaSize = ref(apartmentAreaSize)
 const AreaDetailRef: any = ref(null)
 const areaDetailPup = ref(false)
@@ -309,7 +314,7 @@ watch(
       console.log(val, 'val')
       const { settleAddress: settleArea, typeOneNum, typeTwoNum, typeThreeNum, typeFourNum } = val
 
-      settleAddress.value = settleArea
+      settleAddress.value = parseInt(settleArea)
       areaSize.value = areaSize.value.map((item, index) => {
         if (index === 0) {
           item.num = typeOneNum

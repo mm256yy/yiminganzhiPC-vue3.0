@@ -69,13 +69,58 @@
       @close="onFormPupClose"
       :baseInfo="props.baseInfo"
     />
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="font-size: 24px; font-weight: bold; text-align: center">坟墓确认单</h1>
+      <div
+        style="
+          display: flex;
+          margin: 20px 0 20px 0;
+          font-size: 18px;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          {{
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+          }}</div
+        >
+
+        <div>{{ data }}</div>
+      </div>
+      <el-table
+        :data="tableObject.tableList"
+        style="width: 100%"
+        border
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+      >
+        <el-table-column prop="relation" label="坟墓与登记人关系" align="center">
+          <template #default="{ row }">
+            {{ dictFmt(row.relation, 307) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="number" label="数量" align="center" />
+        <el-table-column prop="handleWayText" label="户型/处理方式" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column label="备注" align="center">
+          <template #default></template>
+        </el-table-column>
+      </el-table>
+      <div style="display: flex; justify-content: space-between; height: 50px">
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
+          >户主代表或收委托人(签名)：</div
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { reactive, ref, computed } from 'vue'
-import { ElButton, ElSpace, ElMessage } from 'element-plus'
+import { ElButton, ElSpace, ElMessage, ElTable, ElTableColumn } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
@@ -86,9 +131,11 @@ import {
   getGraveArrageListApi,
   delGraveArrageApi
 } from '@/api/immigrantImplement/resettleConfirm/grave-service'
-import { standardFormatDate } from '@/utils/index'
+import { standardFormatDate, debounce } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
+import dayjs from 'dayjs'
+import { htmlToPdf } from '@/utils/ptf'
 
 interface PropsType {
   doorNo: string
@@ -245,8 +292,14 @@ const onFilling = () => {
     }
   })
 }
+let data = ref()
 let comdbe = () => {
-  ElMessage.error('待业主提供模板')
+  debounce(() => {
+    data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+    // ElMessage.error('待业主提供模板')
+
+    htmlToPdf('#anztable')
+  })
 }
 </script>
 <style lang="less" scoped>
@@ -257,5 +310,25 @@ let comdbe = () => {
 
 :deep(.el-form-item) {
   padding: 0 10px;
+}
+
+#anztable {
+  :deep(.table-headers) {
+    font-size: 12px;
+    font-weight: bold;
+    background: none;
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 10px;
+      background: none;
+    }
+  }
 }
 </style>
