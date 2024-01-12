@@ -63,8 +63,8 @@
 
     <OnDocumentation :door-no="doorNo" :show="houseArchivesPup" @close="onDocumentationClose" />
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
-      <h1 style=" margin-bottom: 20px;font-size: 24px; font-weight: bold; text-align: center"
-        >房屋腾让确认单</h1
+      <h1 style="margin-bottom: 20px; font-size: 24px; font-weight: bold; text-align: center"
+        >房屋腾空确认单</h1
       >
       <el-descriptions class="margin-top" :column="2" border>
         <el-descriptions-item align="center" label="户主姓名" label-class-name="bbqs">

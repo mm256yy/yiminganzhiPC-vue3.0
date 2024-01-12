@@ -65,7 +65,7 @@
 
     <OnDocumentation :door-no="doorNo" :show="houseArchivesPup" @close="onDocumentationClose" />
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
-      <h1 style=" margin-bottom: 20px;font-size: 24px; font-weight: bold; text-align: center"
+      <h1 style="margin-bottom: 20px; font-size: 24px; font-weight: bold; text-align: center"
         >土地腾让确认单</h1
       >
       <el-descriptions class="margin-top" :column="2" border>

@@ -80,7 +80,7 @@
     />
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">{{
-        baseInfo.houseAreaType === 'homestead' ? '选址确认单' : '选房确认单'
+        baseInfo.houseAreaType === 'homestead' ? '建房告知单' : '选房确认单'
       }}</h1>
       <div
         style="
