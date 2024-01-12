@@ -19,14 +19,13 @@
         @search="onSearch"
         @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
-
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 专业项目进度明细报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -44,19 +43,25 @@
         @register="register"
       >
         <template #agreementStatus="{ row }">
-          <div v-if="row.agreementStatus == '1'">
+          <div v-if="row?.agreementStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
           <div v-if="row.agreementStatus == '0'"></div>
         </template>
         <template #startStatus="{ row }">
-          <div v-if="row.startStatus == '1'">
+          <div v-if="row?.startStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
           <div v-if="row.startStatus == '0'"></div>
         </template>
+        <template #completeStatus="{ row }">
+          <div v-if="row?.completeStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div v-if="row.completeStatus == '0'"></div>
+        </template>
         <template #checkStatus="{ row }">
-          <div v-if="row.checkStatus == '1'">
+          <div v-if="row?.checkStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
           <div v-if="row.checkStatus == '0'"></div>
@@ -162,7 +167,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'village',
+    field: 'villageCodeText',
     label: '所属区域',
     search: {
       show: false
@@ -241,7 +246,7 @@ const schema = reactive<CrudSchema[]>([
         }
       },
       {
-        field: 'finishStatus',
+        field: 'completeStatus',
         label: '完工',
         search: {
           show: false

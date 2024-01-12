@@ -17,9 +17,8 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
 
     <div class="line"></div>
@@ -27,6 +26,7 @@
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 企业进度明细统计表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -143,9 +143,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -154,7 +154,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'doorNo',
-    label: '户号',
+    label: '企业编号',
     search: {
       show: true,
       component: 'Input',
@@ -168,12 +168,12 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'householdName',
-    label: '户主姓名',
+    label: '企业名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户主姓名'
+        placeholder: '请输入企业名称'
       }
     },
     table: {
@@ -191,7 +191,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'village',
+    field: 'villageCodeText',
     label: '行政村',
     search: {
       show: false
@@ -351,35 +351,16 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
+  setSearchParams({ ...params })
+}
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.doorNo) {
-    delete params.doorNo
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+const onReset = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
-}
+const onExport = () => {}
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
@@ -388,18 +369,6 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
 const onBack = () => {
   back()
 }

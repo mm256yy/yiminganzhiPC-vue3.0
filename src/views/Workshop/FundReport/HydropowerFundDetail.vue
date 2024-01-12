@@ -10,13 +10,12 @@
         @search="onSearch"
         @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="line"></div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 资金使用报表 </div>
-        <div></div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         :loading="tableObject.loading"
@@ -55,7 +54,7 @@ import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/Migrate
 import HouseholdEdit from './components/HouseholdEdit.vue'
 import { screeningTree } from '@/api/workshop/village/service'
 
-const titles = ['智能报表', '资金管理', '资金使用情况']
+const titles = ['智能报表', '进度统计表', '企(事)业单位', '水电站资金发放明细']
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识

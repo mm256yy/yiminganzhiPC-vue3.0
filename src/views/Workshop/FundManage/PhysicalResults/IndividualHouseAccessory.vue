@@ -1,4 +1,4 @@
-<!--坟墓统计表-->
+<!--房屋及附属物统计表-->
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
@@ -27,6 +27,8 @@
         align="center"
         highlightCurrentRow
         height="600"
+        :summary-method="getSummaries"
+        show-summary
       />
     </div>
   </WorkContentWrap>
@@ -38,7 +40,10 @@ import { ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { useAppStore } from '@/store/modules/app'
-import { getIndividualHouseholdTree } from '@/api/fundManage/fundPayment-service'
+import {
+  requestIndividualHouseholdTree,
+  exportIndividualHouseholdTree
+} from '@/api/fundManage/fundPayment-service'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
@@ -50,11 +55,11 @@ const titles = ['智能报表', '实物成果', '个体户', '房屋及附属物
 let tableRef = ref()
 const tableLoading = ref<boolean>(false)
 const projectId = appStore.currentProjectId
+let searchParams = reactive({})
 
 let schemas = reactive<any>({
   columns: []
 })
-
 const getDistrictTree = async () => {
   const list = await screeningTree(projectId, 'IndividualHousehold')
   districtTree.value = list || []
@@ -63,7 +68,7 @@ const getDistrictTree = async () => {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'code',
+    field: 'villageCodeVal',
     label: '所属区域',
     search: {
       show: true,
@@ -79,6 +84,28 @@ const schema = reactive<CrudSchema[]>([
         checkStrictly: true,
         checkOnClickNode: true
       }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'showDoorNo',
+    label: '个体工商户编号',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'name',
+    label: '个体工商户名称',
+    search: {
+      show: true,
+      component: 'Input'
     },
     table: {
       show: false
@@ -104,50 +131,91 @@ const commonTableItemSchema = {
   }
 }
 
+// 合计
+const getSummaries = (params: any) => {
+  const { columns, data } = params
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = '合计'
+      return
+    }
+    if (index < 3) {
+      sums[index] = ''
+      return
+    }
+    const values = data.map((item) => Number(item[column.property]))
+    if (!values.every((value) => Number.isNaN(value))) {
+      sums[index] = `${values.reduce((prev, curr) => {
+        const value = Number(curr)
+        if (!Number.isNaN(value)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)}`
+    }
+  })
+
+  return sums
+}
+
 // 获取附属物数据
 const requestIndividualHouseAccessory = async () => {
   let column: any = [
     {
       width: 80,
-      field: 'index',
-      type: 'index',
+      field: '0',
       label: '序号'
     },
     {
-      field: '0',
-      label: '行政村',
-      ...commonTableItemSchema
-    },
-    {
       field: '1',
-      label: '名称',
+      label: '行政村'
+    },
+    {
+      field: '2',
+      label: '个体户编号'
+    },
+    {
+      field: '3',
+      label: '个体工商户名称'
+    },
+    {
+      label: '房屋面积（㎡）',
+      children: [],
       ...commonTableItemSchema
     },
     {
-      label: '零星果木',
+      label: '附属物',
       children: [],
       ...commonTableItemSchema
     }
   ]
 
   tableLoading.value = true
+
+  const params = {
+    ...searchParams
+  }
   try {
-    const result: any = await getIndividualHouseholdTree()
-    result.titles.forEach((item: any, index: any) => {
-      if (result.usageTitles.includes(item)) {
-        column[3].children.push({
-          label: item,
-          field: `${index}`,
-          ...commonTableItemSchema
-        })
-      }
+    const result: any = await requestIndividualHouseholdTree(params)
+    result.houseTitleArr.forEach((item: any, index: any) => {
+      column[4].children.push({
+        label: item,
+        field: `${index + 4}`,
+        ...commonTableItemSchema
+      })
+    })
+    result.appendageTitleArr.forEach((item: any, index: any) => {
+      column[5].children.push({
+        label: item,
+        field: `${index + 4 + result.houseTitleArr.length}`,
+        ...commonTableItemSchema
+      })
     })
     let allData = useCrudSchemas(column)
     schemas.columns = allData.allSchemas.tableColumns
-    tableObject.tableList = result.list.reduce((pre, iem) => {
-      pre.push({ ...iem })
-      return pre
-    }, [])
+    tableObject.tableList = result.data
     tableLoading.value = false
   } catch {
     tableLoading.value = false
@@ -156,7 +224,7 @@ const requestIndividualHouseAccessory = async () => {
 
 const onSearch = (data) => {
   // 处理参数
-  let params = {
+  searchParams = {
     ...data
   }
 
@@ -164,33 +232,27 @@ const onSearch = (data) => {
 }
 
 const onReset = () => {
-  //   tableObject.params = {
-  //     projectId
-  //   }
+  searchParams = {}
   requestIndividualHouseAccessory()
 }
 
 const onExport = async () => {
-  //     const params = {
-  //     exportType: '2',
-  //     projectId,
-  //     villageCode: code.value
-  //   }
-  //   const res = await exportReportApi(params)
-  //   let filename = res.headers
-  //   filename = filename['content-disposition']
-  //   filename = filename.split(';')[1].split('filename=')[1]
-  //   filename = decodeURIComponent(filename)
-  //   let elink = document.createElement('a')
-  //   document.body.appendChild(elink)
-  //   elink.style.display = 'none'
-  //   elink.download = filename
-  //   let blob = new Blob([res.data])
-  //   const URL = window.URL || window.webkitURL
-  //   elink.href = URL.createObjectURL(blob)
-  //   elink.click()
-  //   document.body.removeChild(elink)
-  //   URL.revokeObjectURL(elink.href)
+  const params = {}
+  const res = await exportIndividualHouseholdTree(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

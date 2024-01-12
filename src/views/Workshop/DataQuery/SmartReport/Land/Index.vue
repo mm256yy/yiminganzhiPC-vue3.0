@@ -111,9 +111,8 @@ import { ElTable, ElTableColumn, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useTable } from '@/hooks/web/useTable'
 import { screeningTree } from '@/api/workshop/village/service'
-import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
+import { getLandInfoApi, exportReportApi } from '@/api/workshop/dataQuery/landInfo-service'
 import { ParamsType } from '@/api/workshop/dataQuery/landInfo-types'
-import { locationTypes } from '@/views/Workshop/components/config'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const appStore = useAppStore()
@@ -122,11 +121,8 @@ const tableDataList = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
 const emit = defineEmits(['export'])
-const titles = ['智能报表', '实物成果', '土地信息']
+const titles = ['智能报表', '实物成果', '土地', '土地信息']
 
-const getLocationText = (key: string) => {
-  return locationTypes.find((item) => item.value === key)?.label
-}
 const { tableObject } = useTable({
   getListApi: getLandInfoApi
 })
@@ -532,22 +528,22 @@ const getVillageTree = async () => {
   return list || []
 }
 
-const onExport = () => {
-  // const res = await exportPhysicalApi(16)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const res = await exportReportApi({})
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

@@ -232,7 +232,7 @@ const getTableList = (params: ParamsType) => {
 // 数据导出
 const onExport = async () => {
   const params = {
-    ...tableObject.params
+    exportType: pageType
   }
   const res = await exportReportApi(params)
   let filename = res.headers

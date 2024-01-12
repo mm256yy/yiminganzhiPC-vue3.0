@@ -17,16 +17,15 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
 
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 个体户按区域统计表 </div>
+        <div class="table-left-title"> 个体户进度明细表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -91,7 +90,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { IndividualRegionApi } from '@/api/workshop/individualRegion/service'
+import { individualProgressRegionApi } from '@/api/workshop/individualRegion/service'
 import { IndividualRegionType } from '@/api/workshop/individualRegion/type'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
@@ -112,7 +111,7 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: IndividualRegionApi
+  getListApi: individualProgressRegionApi
 })
 
 const { setSearchParams } = methods
@@ -137,9 +136,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -147,8 +146,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'id',
-    label: '户号',
+    field: 'no',
+    label: '个体户编号',
     search: {
       show: true,
       component: 'Input',
@@ -162,7 +161,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'householdName',
-    label: '户主姓名',
+    label: '个体户名称',
     search: {
       show: true,
       component: 'Input',
@@ -174,11 +173,18 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   // table字段 分割
   {
-    field: 'id',
+    field: 'index',
+    type: 'index',
     label: '序号',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'villageCodeText',
+    label: '行政村',
     search: {
       show: false
     }
@@ -311,12 +317,11 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
   setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  setSearchParams({})
 }
 
 // 数据导出

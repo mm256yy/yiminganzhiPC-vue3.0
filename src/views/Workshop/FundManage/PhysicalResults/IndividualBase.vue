@@ -53,7 +53,8 @@ import { ElTable, ElTableColumn, ElPagination } from 'element-plus'
 import {
   getEnterprise,
   deleteFunPayApi,
-  getFunPaySumAmountApi
+  getFunPaySumAmountApi,
+  exportReportApi
 } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -137,22 +138,22 @@ const onBack = () => {
   back()
 }
 
-const onExport = () => {
-  // const res = await exportPhysicalApi(16)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const res = await exportReportApi({})
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

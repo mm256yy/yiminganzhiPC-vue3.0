@@ -20,14 +20,13 @@
         @search="onSearch"
         @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
     </div>
 
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 资金发放明细统计表</div>
+        <ElButton type="primary" @click="onExport">数据导出</ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"

@@ -1,16 +1,16 @@
 <template>
+  <div class="flex items-center">
+    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">生产安置意愿</ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
   <WorkContentWrap>
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">生产安置意愿</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
     <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -26,6 +26,7 @@
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <el-table
+        v-loading="tableLoading"
         class="flex-col flex-1"
         :data="tableData"
         border
@@ -68,7 +69,7 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, toRefs } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getProHouseReportListApi } from '@/api/workshop/placementReport/service'
@@ -83,6 +84,12 @@ const totalNum = ref(0)
 const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const tableLoading = ref<boolean>()
+let extraParams = reactive({
+  villageCode: undefined,
+  doorNo: undefined,
+  name: undefined
+})
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
@@ -144,10 +151,6 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 const { allSchemas } = useCrudSchemas(schema)
-// const { tableObject, methods } = useTable({
-//   getListApi: getProHouseReportListApi
-// })
-// const { getList, setSearchParams } = methods
 const tableData = ref([])
 //百分比
 const percent = ref()
@@ -157,14 +160,23 @@ const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 //获取列表数据
 const getProHouseReportList = (page, size) => {
   const params = {
+    ...extraParams,
     page: page,
     size: size
   }
-  getProHouseReportListApi(params).then((res) => {
-    tableData.value = res.reports.content
-    totalNum.value = res.reports.total
-    percent.value = toPercent(res.percent)
-  })
+  tableLoading.value = true
+  getProHouseReportListApi(params).then(
+    (res) => {
+      tableData.value = res.reports.content
+      totalNum.value = res.reports.total
+      percent.value = toPercent(res.percent)
+      tableLoading.value = false
+    },
+    (err) => {
+      console.log(err)
+      tableLoading.value = false
+    }
+  )
 }
 const handleSizeChange = (val: number) => {
   pageSize.value = val
@@ -202,10 +214,19 @@ const onSearch = (data) => {
     }
   }
 
+  extraParams = {
+    ...params
+  }
+
   getProHouseReportList('0', pageSize.value)
 }
 
 const onReset = () => {
+  extraParams = {
+    villageCode: undefined,
+    doorNo: undefined,
+    name: undefined
+  }
   getProHouseReportList('0', pageSize.value)
 }
 

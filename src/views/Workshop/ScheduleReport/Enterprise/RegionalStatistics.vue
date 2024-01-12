@@ -11,22 +11,11 @@
     </ElBreadcrumb>
   </div>
   <WorkContentWrap>
-    <div class="search-wrap">
-      <Search
-        :schema="allSchemas.searchSchema"
-        :defaultExpand="false"
-        :expand-field="'card'"
-        @search="onSearch"
-        @reset="setSearchParams"
-      />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
-    </div>
-
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 企业区域统计报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -41,48 +30,7 @@
         headerAlign="center"
         align="center"
         @register="register"
-      >
-        <template #appendageStatus="{ row }">
-          <div v-if="row.appendageStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #graveStatus="{ row }">
-          <div v-if="row.graveStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #deviceStatus="{ row }">
-          <div v-if="row.deviceStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #cardStatus="{ row }">
-          <div v-if="row.cardStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #houseSoarStatus="{ row }">
-          <div v-if="row.houseSoarStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #landSoarStatus="{ row }">
-          <div v-if="row.landSoarStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #agreementStatus="{ row }">
-          <div v-if="row.agreementStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-        <template #proceduresStatus="{ row }">
-          <div v-if="row.proceduresStatus == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-        </template>
-      </Table>
+      />
     </div>
   </WorkContentWrap>
 </template>
@@ -90,15 +38,13 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-
 import { EnterpriseReportType } from '@/api/workshop/enterpriseReport/type'
-import { getEnterpriseReportApi } from '@/api/workshop/enterpriseReport/service'
+import { enterpriseRegionalStatisticsApi } from '@/api/workshop/enterpriseReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -118,69 +64,14 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getEnterpriseReportApi
+  getListApi: enterpriseRegionalStatisticsApi
 })
 
 const { setSearchParams } = methods
 
 const villageTree = ref<any[]>([])
 
-tableObject.params = {
-  projectId
-}
-
 const schema = reactive<CrudSchema[]>([
-  {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'householdName',
-    label: '户主姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户主姓名'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-
   // table字段 分割
   {
     field: 'index',
@@ -191,22 +82,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'village',
+    field: 'villageCodeText',
     label: '行政村',
     search: {
       show: false
     }
   },
   {
-    field: 'doorNo',
-    label: '企业编号',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '企业',
+    field: 'totalHouse',
+    label: '总个数（家）',
     search: {
       show: false
     }
@@ -219,28 +103,28 @@ const schema = reactive<CrudSchema[]>([
     },
     children: [
       {
-        field: 'estimate',
+        field: 'assess',
         label: '资产评估',
         search: {
           show: false
         },
         children: [
           {
-            field: 'appendageStatus',
+            field: 'appendageStatusCount',
             label: '房屋/附属物',
             search: {
               show: false
             }
           },
           {
-            field: 'graveStatus',
+            field: 'landStatusCount',
             label: '土地/附着物',
             search: {
               show: false
             }
           },
           {
-            field: 'deviceStatus',
+            field: 'deviceStatusCount',
             label: '设施设备',
             search: {
               show: false
@@ -249,8 +133,8 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'cardStatus',
-        label: '企业建卡',
+        field: 'cardStatusCount',
+        label: '个体户建卡',
         search: {
           show: false
         }
@@ -263,14 +147,14 @@ const schema = reactive<CrudSchema[]>([
         },
         children: [
           {
-            field: 'houseSoarStatus',
+            field: 'houseSoarStatusCount',
             label: '房屋腾空',
             search: {
               show: false
             }
           },
           {
-            field: 'landSoarStatus',
+            field: 'landSoarStatusCount',
             label: '土地腾空',
             search: {
               show: false
@@ -279,7 +163,7 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'agreementStatus',
+        field: 'agreementStatusCount',
         label: '动迁协议',
         search: {
           show: false
@@ -288,14 +172,14 @@ const schema = reactive<CrudSchema[]>([
     ]
   },
   {
-    field: 'inCount',
+    field: 'placement',
     label: '安置阶段',
     search: {
       show: false
     },
     children: [
       {
-        field: 'proceduresStatus',
+        field: 'proceduresStatusCount',
         label: '相关手续',
         search: {
           show: false

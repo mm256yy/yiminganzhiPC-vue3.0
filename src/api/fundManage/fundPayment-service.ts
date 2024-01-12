@@ -145,3 +145,34 @@ export const postMerge = (data: any): Promise<any> => {
     data
   })
 }
+
+// 导出报表
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/enterprise`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+/**
+ * 个体户房屋及附属物
+ */
+export const requestIndividualHouseholdTree = (params: any) => {
+  return request.get({
+    url: `/resultForms/new/individualHouseholdTree`,
+    params
+  })
+}
+
+/**
+ * 个体户房屋及附属物（导出）
+ * @returns
+ */
+export const exportIndividualHouseholdTree = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/new/individualHouseholdTree`,
+    params,
+    responseType: 'blob'
+  })
+}

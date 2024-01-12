@@ -636,15 +636,6 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
               title: '个体户房屋附属物',
               hidden: false
             }
-          },
-          {
-            path: 'PhysicaFrom',
-            name: 'PhysicaFrom',
-            component: () => import('@/views/Workshop/FundManage/PhysicalResults/PhysicaFrom.vue'),
-            meta: {
-              title: '个体报表',
-              hidden: false
-            }
           }
         ]
       },

@@ -17,22 +17,24 @@
         @search="setSearchParams"
         @reset="setSearchParams"
       />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户进度明细报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
+      <!--show-summary-->
       <el-table
+        v-loading="tableLoading"
         :data="tableData"
         border
         :span-method="objectSpanMethod"
         style="width: 100%; max-height: 600px"
         height="600"
       >
-        <el-table-column prop="number" label="序号" align="center" />
-        <el-table-column prop="villageName" label="行政村" align="center" />
-        <el-table-column prop="doorNo" label="户号" align="center" />
+        <el-table-column type="index" label="序号" align="center" width="60" />
+        <el-table-column prop="villageCodeText" label="行政村" align="center" />
+        <el-table-column prop="showDoorNo" label="户号" align="center" />
         <el-table-column prop="name" label="户主" align="center" />
         <!-- 公寓房 -->
         <el-table-column label="动迁阶段(户)" align="center">
@@ -341,7 +343,7 @@ import { reactive, ref, onMounted } from 'vue'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import { getResidentRegionListApi } from '@/api/workshop/scheduleReport/service'
+import { getResidentProgressListApi } from '@/api/workshop/scheduleReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
 
@@ -354,6 +356,7 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
 const totalNum = ref(0)
+const tableLoading = ref<boolean>(false)
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
@@ -369,9 +372,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -379,7 +382,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -430,44 +433,50 @@ const handleCurrentChange = (val: number) => {
 //查询报表数据
 const getResidentRegionList = (page, size) => {
   const params = { page, size }
-  getResidentRegionListApi(params).then((res) => {
-    tableData.value = res.content
-    tableData.value.forEach((item, index) => {
-      item.number = index + 1
-    })
-    //添加合计行
-
-    if (tableData.value.length >= 1) {
-      tableData.value.push({
-        number: '合计',
-        populationStatus: totalColumn(tableData.value, 'populationStatus'),
-        propertyStatus: totalColumn(tableData.value, 'propertyStatus'),
-        appendageStatus: totalColumn(tableData.value, 'appendageStatus'),
-        landStatus: totalColumn(tableData.value, 'landStatus'),
-        productionArrangementStatus: totalColumn(tableData.value, 'productionArrangementStatus'),
-        relocateArrangementStatus: totalColumn(tableData.value, 'relocateArrangementStatus'),
-        graveArrangementStatus: totalColumn(tableData.value, 'graveArrangementStatus'),
-        landUseStatus: totalColumn(tableData.value, 'landUseStatus'),
-        chooseHouseStatus: totalColumn(tableData.value, 'chooseHouseStatus'),
-        chooseGraveStatus: totalColumn(tableData.value, 'chooseGraveStatus'),
-        cardStatus: totalColumn(tableData.value, 'cardStatus'),
-        houseSoarStatus: totalColumn(tableData.value, 'houseSoarStatus'),
-        landSoarStatus: totalColumn(tableData.value, 'landSoarStatus'),
-        excessStatus: totalColumn(tableData.value, 'excessStatus'),
-        agreementStatus: totalColumn(tableData.value, 'agreementStatus'),
-        buildOneselfStatus: totalColumn(tableData.value, 'buildOneselfStatus'),
-        flatsStatus: totalColumn(tableData.value, 'flatsStatus'),
-        centralizedSupportStatus: totalColumn(tableData.value, 'centralizedSupportStatus'),
-        selfSeekingStatus: totalColumn(tableData.value, 'selfSeekingStatus'),
-        aricutureArrangementStatus: totalColumn(tableData.value, 'aricutureArrangementStatus'),
-        retirementStatus: totalColumn(tableData.value, 'retirementStatus'),
-        selfEmploymentStatus: totalColumn(tableData.value, 'selfEmploymentStatus'),
-        proceduresStatus: totalColumn(tableData.value, 'proceduresStatus')
+  tableLoading.value = true
+  getResidentProgressListApi(params).then(
+    (res) => {
+      tableData.value = res.content
+      tableData.value.forEach((item, index) => {
+        item.number = index + 1
       })
-    }
+      //添加合计行
+      if (tableData.value.length >= 1) {
+        tableData.value.push({
+          populationStatus: totalColumn(tableData.value, 'populationStatus'),
+          propertyStatus: totalColumn(tableData.value, 'propertyStatus'),
+          appendageStatus: totalColumn(tableData.value, 'appendageStatus'),
+          landStatus: totalColumn(tableData.value, 'landStatus'),
+          productionArrangementStatus: totalColumn(tableData.value, 'productionArrangementStatus'),
+          relocateArrangementStatus: totalColumn(tableData.value, 'relocateArrangementStatus'),
+          graveArrangementStatus: totalColumn(tableData.value, 'graveArrangementStatus'),
+          landUseStatus: totalColumn(tableData.value, 'landUseStatus'),
+          chooseHouseStatus: totalColumn(tableData.value, 'chooseHouseStatus'),
+          chooseGraveStatus: totalColumn(tableData.value, 'chooseGraveStatus'),
+          cardStatus: totalColumn(tableData.value, 'cardStatus'),
+          houseSoarStatus: totalColumn(tableData.value, 'houseSoarStatus'),
+          landSoarStatus: totalColumn(tableData.value, 'landSoarStatus'),
+          excessStatus: totalColumn(tableData.value, 'excessStatus'),
+          agreementStatus: totalColumn(tableData.value, 'agreementStatus'),
+          buildOneselfStatus: totalColumn(tableData.value, 'buildOneselfStatus'),
+          flatsStatus: totalColumn(tableData.value, 'flatsStatus'),
+          centralizedSupportStatus: totalColumn(tableData.value, 'centralizedSupportStatus'),
+          selfSeekingStatus: totalColumn(tableData.value, 'selfSeekingStatus'),
+          aricutureArrangementStatus: totalColumn(tableData.value, 'aricutureArrangementStatus'),
+          retirementStatus: totalColumn(tableData.value, 'retirementStatus'),
+          selfEmploymentStatus: totalColumn(tableData.value, 'selfEmploymentStatus'),
+          proceduresStatus: totalColumn(tableData.value, 'proceduresStatus')
+        })
+      }
 
-    totalNum.value = res.total
-  })
+      totalNum.value = res.total
+      tableLoading.value = false
+    },
+    (err) => {
+      console.log(err)
+      tableLoading.value = false
+    }
+  )
 }
 
 //完成状态合计
@@ -498,19 +507,6 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
     }
   }
 }
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-// const getHeight = (arr: any) => {
-//   if (arr.length === 0) {
-//     return 150
-//   } else if (arr.length > 9) {
-//     return 500
-//   } else {
-//     return 'auto'
-//   }
-// }
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {

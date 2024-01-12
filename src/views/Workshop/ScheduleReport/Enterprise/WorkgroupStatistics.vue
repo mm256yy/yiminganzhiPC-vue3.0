@@ -7,7 +7,7 @@
       <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">个体户按工作区</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">工作组统计</ElBreadcrumbItem>
     </ElBreadcrumb>
   </div>
   <WorkContentWrap>
@@ -18,14 +18,14 @@
         :expand-field="'card'"
         @reset="setSearchParams"
       />
-      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 个体户按工作区统计表 </div>
+        <div class="table-left-title"> 企业工作组统计表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -40,71 +40,24 @@
         headerAlign="center"
         align="center"
         @register="register"
-      >
-        <template #populationStatusCount="{ row }">
-          <div v-if="Number(row.populationStatusCount) === Number(1)">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.populationStatusCount == '0'"></div>
-        </template>
-        <template #landStatusCount="{ row }">
-          <div v-if="Number(row.landStatusCount) === 1">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.landStatusCount == '0'"></div>
-        </template>
-        <template #deviceStatusCount="{ row }">
-          <div v-if="Number(row.deviceStatusCount) === 1">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.deviceStatusCount == '0'"></div>
-        </template>
-        <template #cardStatusCount="{ row }">
-          <div v-if="row.cardStatusCount == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.cardStatusCount == '0'"></div>
-        </template>
-        <template #houseSoarStatusCount="{ row }">
-          <div v-if="row.houseSoarStatusCount == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.houseSoarStatusCount == '0'"></div>
-        </template>
-        <template #landSoarStatusCount="{ row }">
-          <div v-if="row.landSoarStatusCount == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.landSoarStatusCount == '0'"></div>
-        </template>
-        <template #agreementStatusCount="{ row }">
-          <div v-if="row.agreementStatusCount == '1'">
-            <Icon icon="ep:check" color="#000000" />
-          </div>
-          <div v-if="row.agreementStatusCount == '0'"></div>
-        </template>
-      </Table>
+      />
     </div>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
-import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
-
-import { getIndividualWorkListApi } from '@/api/workshop/individualWork/service'
+import { enterpriseWorkGroupApi } from '@/api/workshop/enterpriseReport/service'
 import { IndividualWorkType } from '@/api/workshop/individualWork/types'
 
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
@@ -122,7 +75,7 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getIndividualWorkListApi
+  getListApi: enterpriseWorkGroupApi
 })
 const { setSearchParams } = methods
 
@@ -134,59 +87,23 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'householdName',
-    label: '户号',
+    field: 'gridmanName',
+    label: '工作组',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户号'
+        placeholder: '请输入工作组名称'
       }
     },
     table: {
       show: false
     }
   },
-  {
-    field: 'householdName',
-    label: '户主姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户主姓名'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-
   // table字段 分割
   {
-    field: 'id',
+    field: 'index',
+    type: 'index',
     label: '序号',
     search: {
       show: false
@@ -281,6 +198,22 @@ const schema = reactive<CrudSchema[]>([
         }
       }
     ]
+  },
+  {
+    field: 'placement',
+    label: '安置阶段',
+    search: {
+      show: false
+    },
+    children: [
+      {
+        field: 'proceduresStatusCount',
+        label: '相关手续',
+        search: {
+          show: false
+        }
+      }
+    ]
   }
 ])
 
@@ -357,7 +290,27 @@ const onSearch = (data) => {
 
 // 数据导出
 const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
+  // emit('export', villageTree.value, exportTypes.house)
+  // const params = {
+  //   exportType: '2',
+  //   projectId,
+  //   villageCode: code.value
+  // }
+  // const res = await exportReportApi(params)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)

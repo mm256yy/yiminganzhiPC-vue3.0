@@ -1,31 +1,39 @@
 <template>
+  <div class="flex items-center">
+    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
   <WorkContentWrap>
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
     <div class="search-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <el-table
+        v-loading="tableLoading"
         :span-method="objectSpanMethod"
         :data="tableData"
         border
         style="width: 100%; max-height: 580px"
         height="580"
       >
+        <el-table-column type="index" label="序号" align="center" width="80" />
+        <el-table-column
+          prop="villageCodeText"
+          label="行政村"
+          align="center"
+          show-overflow-tooltip
+        />
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
         <el-table-column label="公寓房(套)" align="center">
@@ -124,6 +132,12 @@ const pageNum = ref(1)
 const totalNum = ref(0)
 const villageTree = ref<any[]>([])
 const appStore = useAppStore()
+const tableLoading = ref<boolean>()
+let extraParams = reactive({
+  villageCode: undefined,
+  doorNo: undefined,
+  name: undefined
+})
 const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
@@ -214,9 +228,11 @@ const onExport = () => {
 }
 const getMoveHouseReportList = (page, size) => {
   const params = {
+    ...extraParams,
     page: page,
     size: size
   }
+  tableLoading.value = true
   getMoveHouseReportListApi(params).then((res) => {
     tableData.value = res.reports.content
     percent.value = toPercent(res.percent)
@@ -260,6 +276,7 @@ const getMoveHouseReportList = (page, size) => {
         concentrateCount: totalColumn(tableArr, 'concentrateCount')
       }
     )
+    tableLoading.value = false
   })
 }
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
@@ -391,9 +408,22 @@ const onSearch = (data) => {
       delete params[key]
     }
   }
+
+  extraParams = {
+    ...params
+  }
+
+  getMoveHouseReportList('0', pageSize.value)
 }
 
-const onReset = () => {}
+const onReset = () => {
+  extraParams = {
+    villageCode: undefined,
+    doorNo: undefined,
+    name: undefined
+  }
+  getMoveHouseReportList('0', '10')
+}
 </script>
 
 <style scoped></style>

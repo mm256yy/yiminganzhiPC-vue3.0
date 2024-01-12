@@ -17,12 +17,11 @@
         @search="setSearchParams"
         @reset="setSearchParams"
       />
-
-      <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 居民户工作组统计报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <el-table :data="tableData" border style="width: 100%; max-height: 600px" height="600">
         <el-table-column label="序号" type="index" align="center" width="80" />
@@ -171,54 +170,13 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
 const totalNum = ref(0)
-const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-
-  {
     field: 'name',
-    label: '姓名',
+    label: '工作组',
     search: {
       show: true,
       component: 'Input'
