@@ -86,6 +86,15 @@
       </Table>
     </div>
     <EditForm :show="dialog" :id="doorNo" @close="onFormPupClose" />
+    <TypeFour
+      :show="dialogs"
+      @close="onEditFormClose"
+      :actionType="'view'"
+      :row="parmasList"
+      :parmasList="parmasList"
+      :fundAccountList="fundAccountList"
+      ref="vill"
+    />
     <!-- <EditForm :show="dialog" :row="tableObject.currentRow" @close="onFormPupClose" /> -->
   </WorkContentWrap>
 </template>
@@ -103,9 +112,12 @@ import { useTable } from '@/hooks/web/useTable'
 import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
 import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
 // import EditForm from './EditForm.vue'
+import TypeFour from '@/views/Workshop/FundManage/PaymentApplication/EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
 import dayjs from 'dayjs'
 import EditForm from './addForm.vue'
+import { getFundSubjectListApi } from '@/api/fundManage/common-service'
+import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
@@ -344,21 +356,36 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 let doorNo = ref()
+let parmasList = ref()
 const onViewRow = (row) => {
-  if (row.type === '1') {
+  if (row.entryType === '1' || row.entryType === '2') {
     const { id } = row
     // 点击查看进入入账详情页面
     toLink('FundEntryDetail', id)
-  } else {
-    doorNo.value = { doorNo: 'jl1030472 ', type: '3' }
+  } else if (row.entryType === '3') {
+    //资金发放
+    doorNo.value = { doorNo: row.doorNo, type: row.cardType }
     dialog.value = true
+  } else if (row.entryType === '4') {
+    //财务发放
+    PaymentApplicationByIdDetailApi(row.doorNo, 1).then((res: any) => {
+      parmasList.value = res
+      console.log(res.funPaymentRequestFlowNodeList, '测试')
+      dialogs.value = true
+    })
   }
 }
 
 const onFormPupClose = () => {
   dialog.value = false
 }
-
+let dialogs = ref(false)
+const onEditFormClose = (flag: boolean) => {
+  if (flag) {
+    getList()
+  }
+  dialogs.value = false
+}
 // 导出
 // const onExport = () => {}
 
@@ -367,6 +394,7 @@ onMounted(() => {
   getCapitalPoolApi(params).then((res) => {
     accountData.value = res
   })
+  getFundSubjectList()
 })
 
 /**
@@ -375,6 +403,16 @@ onMounted(() => {
  */
 const toLink = (name: string, id?: string | number) => {
   push({ name: name, query: { id } })
+}
+// 获取资金科目选项列表
+let fundAccountList = ref()
+const getFundSubjectList = () => {
+  getFundSubjectListApi().then((res: any) => {
+    if (res) {
+      fundAccountList.value = res.content
+      console.log(fundAccountList.value, '资金列表数据')
+    }
+  })
 }
 </script>
 

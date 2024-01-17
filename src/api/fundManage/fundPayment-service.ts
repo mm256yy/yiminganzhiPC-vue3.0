@@ -180,6 +180,6 @@ export const exportIndividualHouseholdTree = (params: any) => {
 export const getfindByDoorNoAndType = (data: any): Promise<any> => {
   return request.get({
     url: '/funAmountGrant/findByDoorNoAndType',
-    data
+    params
   })
 }

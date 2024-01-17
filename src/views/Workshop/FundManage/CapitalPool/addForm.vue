@@ -10,8 +10,7 @@
   >
     <Table
       ref="tabalRef"
-      :loading="tableObject.loading"
-      :data="tableObject.tableList"
+      :data="dataForm"
       :columns="allSchemas.tableColumns"
       row-key="id"
       headerAlign="center"
@@ -109,11 +108,18 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 let { allSchemas } = useCrudSchemas(schema)
+let dataForm = ref()
+let getFindByDoorNoAsync = async (e) => {
+  const data: any = await getfindByDoorNoAndType(e)
+  console.log(data, 'bbq')
+  dataForm.value = data
+}
 watch(
   () => props.show,
   (val) => {
     if (val) {
-      setSearchParams({ ...props.id })
+      console.log(props.id)
+      getFindByDoorNoAsync(props.id)
     }
   }
 )

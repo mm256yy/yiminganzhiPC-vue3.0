@@ -111,6 +111,52 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="font-size: 24px; font-weight: bold; text-align: center">生产安置</h1>
+      <div
+        style="
+          display: flex;
+          margin: 20px 0 20px 0;
+          font-size: 18px;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          {{
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+          }}</div
+        >
+
+        <div>{{ data }}</div>
+      </div>
+      <el-table
+        :data="tableObject.tableList"
+        style="width: 100%"
+        border
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+      >
+        <el-table-column prop="name" label="姓名" align="center" />
+        <el-table-column prop="relationText" label="与户主关系" align="center" />
+        <el-table-column prop="card" label="身份证号" align="center" />
+        <el-table-column prop="populationNatureText" label="人口性质" align="center" />
+        <el-table-column prop="settingWay" label="安置类型" align="center">
+          <template #default="{ row }">
+            {{ filterWay(row).filter((item) => item.value === row.settingWay)[0].label }}
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" align="center" prop="settingRemark">
+          <template #default></template>
+        </el-table-column>
+      </el-table>
+      <div style="display: flex; justify-content: space-between; height: 50px">
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
+          >户主代表或收委托人(签名)：</div
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 
@@ -126,7 +172,9 @@ import {
   ElSelect,
   ElOption,
   ElForm,
-  ElMessage
+  ElMessage,
+  ElTable,
+  ElTableColumn
 } from 'element-plus'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
@@ -142,7 +190,8 @@ import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { cloneDeep } from 'lodash-es'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-
+import { debounce } from '@/utils/index'
+import { htmlToPdf } from '@/utils/ptf'
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
@@ -246,7 +295,12 @@ const dialogVisible = ref(false)
 onMounted(() => {
   getMockList()
 })
-
+const dictFmt = (value, index) => {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
+    const item = dictObj.value[index].find((item: any) => item?.value === value)
+    return item ? item.label : value
+  }
+}
 /**
  * 安置方式过滤
  */
@@ -341,8 +395,14 @@ const onSave = async () => {
     ElMessage.success('保存成功！')
   }
 }
+let data = ref()
 let comdbe = () => {
-  ElMessage.error('待业主提供模板')
+  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+  debounce(() => {
+    // ElMessage.error('待业主提供模板')
+
+    htmlToPdf('#anztable')
+  })
 }
 </script>
 <style lang="less" scoped>
@@ -376,6 +436,26 @@ let comdbe = () => {
       color: #171718;
 
       border-left: 4px solid rgba(62, 115, 236, 1) !important;
+    }
+  }
+}
+
+#anztable {
+  :deep(.table-headers) {
+    font-size: 12px;
+    font-weight: bold;
+    background: none;
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 10px;
+      background: none;
     }
   }
 }

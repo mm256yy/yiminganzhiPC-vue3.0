@@ -294,8 +294,8 @@ const onFilling = () => {
 }
 let data = ref()
 let comdbe = () => {
+  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
   debounce(() => {
-    data.value = dayjs(new Date()).format('YYYY年MM月DD日')
     // ElMessage.error('待业主提供模板')
 
     htmlToPdf('#anztable')
