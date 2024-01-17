@@ -13,7 +13,7 @@
         <div class="segment-label">补偿费</div>
         <div>
           <ElTable :data="tableData1" style="width: 100%">
-            <ElTableColumn type="index" label="序号" align="center" />
+            <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
             <ElTableColumn prop="name" label="应发" />
             <ElTableColumn prop="name" label="已发" />
@@ -26,7 +26,7 @@
         <div class="segment-label">补助费</div>
         <div>
           <ElTable :data="tableData2" style="width: 100%">
-            <ElTableColumn type="index" label="序号" />
+            <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
             <ElTableColumn prop="name" label="应发" />
             <ElTableColumn prop="name" label="已发" />
@@ -37,7 +37,7 @@
         <div class="segment-label">奖励费</div>
         <div>
           <ElTable :data="tableData3" style="width: 100%">
-            <ElTableColumn type="index" label="序号" />
+            <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
             <ElTableColumn prop="name" label="应发" />
             <ElTableColumn prop="name" label="已发" />

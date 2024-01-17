@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<!--居民户资金发放明细-->
-=======
 <!--企事业单位资金发放明细-->
->>>>>>> 317e54c368fedb4dbfac89e86d71dceb8f6c918b
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />

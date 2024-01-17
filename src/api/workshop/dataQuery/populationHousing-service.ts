@@ -33,3 +33,12 @@ export const getAreaHouseReportApi = (params: any): Promise<void> => {
 export const exportReportApi = (params: any) => {
   return request.get({ url: `/resultForms/export/queryAreaHouse`, params, responseType: 'blob' })
 }
+
+// 导出资金专业项目
+export const exportFundProfessionProjectApi = (params: any) => {
+  return request.get({
+    url: '/immigrantCompensationCardReport/feeStatisticsDownload',
+    params,
+    responseType: 'blob'
+  })
+}

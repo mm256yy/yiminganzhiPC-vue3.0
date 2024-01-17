@@ -55,7 +55,10 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getProfessionalProjectsPageApi } from '@/api/workshop/dataQuery/populationHousing-service'
+import {
+  getProfessionalProjectsPageApi,
+  exportFundProfessionProjectApi
+} from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
@@ -106,9 +109,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -319,26 +322,25 @@ const onSearch = (data) => {
 }
 
 // 数据导出
-const onExport = () => {
-  // const params = {
-  //   exportType: '1',
-  //   ...tableObject.params
-  // }
-  // const res = await exportReportApi(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    ...tableObject.params
+  }
+  const res = await exportFundProfessionProjectApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 const onReset = () => {
@@ -349,29 +351,11 @@ const onReset = () => {
   setSearchParams({})
 }
 
-// 数据导出
-// const onExport = () => {
-//   emit('export', villageTree.value, exportTypes.house)
-// }
-
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'adminVillage')
   villageTree.value = list || []
   return list || []
-}
-
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
 }
 
 onMounted(() => {
