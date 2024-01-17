@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <!--居民户资金发放明细-->
+=======
+<!--企事业单位资金发放明细-->
+>>>>>>> 317e54c368fedb4dbfac89e86d71dceb8f6c918b
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
@@ -94,7 +98,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户号'
+        placeholder: '请输入企业编号'
       }
     },
     table: {
@@ -102,13 +106,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'householdName',
     label: '企业名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户主姓名'
+        placeholder: '请输入企业名称'
       }
     },
     table: {

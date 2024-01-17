@@ -231,7 +231,7 @@ const listArray = ref([
         name: '村集体',
         list: [
           {
-            // value: 'VillageHouseholdFundDetail',
+            value: 'VillageHouseholdFundDetail',
             text: '资金发放明细'
           }
         ]
