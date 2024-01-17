@@ -10,6 +10,7 @@
           style="width: 100%"
           class="mb-20"
           :row-class-name="tableRowClassName"
+          height="650"
           :border="true"
         >
           <ElTableColumn label="序号" align="center" prop="serNo" header-align="center" />

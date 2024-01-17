@@ -77,7 +77,8 @@ import { getProfessionalProjectListApi } from '@/api/professional/service'
 import { useRouter } from 'vue-router'
 import type { ProfessionalProjectDtoType } from '@/api/professional/types'
 import { useIcon } from '@/hooks/web/useIcon'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { getDistrictTreeApi } from '@/api/district'
+
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const actionType = ref<'add' | 'edit' | 'view'>('add')
 const districtTree = ref()
@@ -251,10 +252,11 @@ const onFormPupClose = (flag: boolean) => {
   }
 }
 const getDistrictTree = async () => {
-  const list = await getVillageTreeApi(projectId)
+  const list = await getDistrictTreeApi(projectId)
   districtTree.value = list || []
   return list || []
 }
+
 const onSearch = (data) => {
   setSearchParams({ ...data })
 }

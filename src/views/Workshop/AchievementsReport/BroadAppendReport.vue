@@ -1,25 +1,20 @@
 <template>
   <WorkContentWrap>
-    <!-- 广播电视工程房屋及其附属物设备汇总表 -->
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">广播电视工程</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
     <div v-if="false" class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" />
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 广播电视工程房屋及其附属物设备汇总表 </div>
+        <div class="table-left-title">房屋及其附属物设备汇总表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <div>
-        <ElTable :data="tableData" style="width: 100%">
+        <ElTable
+          v-loading="tableLoading"
+          :data="tableData"
+          style="width: 100%; max-height: 600px"
+          height="600"
+        >
           <ElTableColumn type="index" label="序号" width="100" align="center" />
           <ElTableColumn prop="projectName" label="项目名称" show-overflow-tooltip align="center" />
           <ElTableColumn prop="unit" label="单位" show-overflow-tooltip align="center" />
@@ -31,19 +26,15 @@
 </template>
 
 <script setup lang="ts">
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
-import { useIcon } from '@/hooks/web/useIcon'
-import { useRouter } from 'vue-router'
-const { back } = useRouter()
+import { getCommonReportApi, exportPhysicalApi } from '@/api/workshop/achievementsReport/service'
+
 const tableData = ref<any>([])
 const tableLoading = ref<boolean>(false)
-
-const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const getList = async () => {
   tableLoading.value = true
@@ -113,8 +104,23 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 const { allSchemas } = useCrudSchemas(schema)
-const onBack = () => {
-  back()
+
+const onExport = async () => {
+  const res = await exportPhysicalApi(16)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 </script>
 

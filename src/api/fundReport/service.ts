@@ -17,15 +17,42 @@ export const getFundDetailReportListApi = (
 }
 
 /**
+ * 导出资金详情
+ * @param params
+ * @returns
+ */
+export const exportFundDetailApi = (params: any) => {
+  return request.get({ url: '/fundsForms/fundDetailDownload', params, responseType: 'blob' })
+}
+
+/**
  * 查询居民户资金报表
  */
 
-// fundsForms/peasantHouseholdCard
-
-export const getHouseholdReportListApi = (
-  query: Partial<HouseholdReportType>
-): Promise<TableResponse<HouseholdReportType>> => {
+export const getHouseholdReportListApi = (query: any) => {
   return request.get({ url: '/fundsForms/peasantHouseholdCard', params: query })
+}
+
+/**
+ * 查询居名户资金使用详情
+ * @param query
+ * @returns
+ */
+export const getHouseholdDetail = (query: any) => {
+  return request.get({ url: '/fundsForms/peasantHouseholdCardDetail', params: query })
+}
+
+/**
+ * 导出居民户资金使用情况
+ * @param params
+ * @returns
+ */
+export const exportFundHouseholdApi = (params: any) => {
+  return request.get({
+    url: '/fundsForms/peasantHouseholdCardDownload',
+    params,
+    responseType: 'blob'
+  })
 }
 
 /**
@@ -59,6 +86,29 @@ export const getVillageReportListApi = (
 }
 
 // 资金管理报告
-export const getCardReportApi = (type: string): Promise<void> => {
-  return request.get({ url: `/immigrantCompensationCardReport/feeStatistics?type=${type}` })
+export const getCardReportApi = (params: any) => {
+  return request.get({ url: `/immigrantCompensationCardReport/feeStatistics`, params })
+}
+
+/**
+ * 导出个体户资金使用情况
+ * @param params
+ * @returns
+ */
+export const exportFundIndividualApi = (params: any) => {
+  return request.get({
+    url: '/immigrantCompensationCardReport/feeStatisticsDownload',
+    params,
+    responseType: 'blob'
+  })
+}
+
+/**
+ * 获取个体户资金详情
+ */
+export const getFundIndividualDetailApi = (params: any) => {
+  return request.get({
+    url: '/immigrantCompensationCardReport/feeStatisticDetail',
+    params
+  })
 }

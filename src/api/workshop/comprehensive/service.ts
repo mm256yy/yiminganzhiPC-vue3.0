@@ -9,6 +9,3 @@ export const getComprehensiveReportApi = (
 ): Promise<TableResponse<ComprehensiveReportType>> => {
   return request.get({ url: '/progressReport/professionalProjectsStatistics', params: data })
 }
-// export const getComprehensiveReportApi = (params: ComprehensiveReportType) => {
-//   return request.get({ url: `/progressReport/professionalProjectsStatistics`, params })
-// }

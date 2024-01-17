@@ -147,7 +147,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn prop="householdName" label="户主姓名" align="center" />
-        <ElTableColumn prop="householdNo" label="户号" align="center" />
+        <ElTableColumn prop="showDoorNo" label="户号" align="center" />
         <ElTableColumn prop="villageNames" label="所属行政村" align="center" />
         <ElTableColumn prop="gridmanName" label="工作组" align="center" />
       </ElTable>
@@ -536,8 +536,8 @@ const onBack = () => {
   align-items: center;
 
   &.active {
-    border: 2px solid rgba(62, 115, 236, 0.7);
     background: linear-gradient(180deg, #d5e1ff 0%, #ffffff 100%);
+    border: 2px solid rgba(62, 115, 236, 0.7);
     box-shadow: 0px 5px 5px 0px rgba(62, 115, 236, 0.4);
   }
 }

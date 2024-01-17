@@ -1,65 +1,84 @@
 <template>
+  <div class="flex items-center">
+    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">村集体</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">{{ getTitles(pageType) }}</ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="resetSearch"
+        @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
     </div>
 
     <div class="line"></div>
     <div class="table-wrap" v-loading="loading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 房屋/附属物/零星林(果)木 </div>
+        <div class="table-left-title"> {{ getTitles(pageType) }} </div>
+        <ElButton type="primary" @click="onExport">数据导出</ElButton>
       </div>
-      <el-table :data="houseList" :height="getHeight(houseList)" style="width: 100%">
-        <el-table-column label="房屋" header-align="center">
-          <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
-          <el-table-column
-            prop="storeyNumber"
-            label="房屋层数"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column
-            prop="constructionTypeText"
-            label="结构"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column
-            prop="landArea"
-            label="房屋建筑面积（m²）"
-            align="center"
-            header-align="center"
-          />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
-        </el-table-column>
+      <el-table
+        v-if="pageType === '1'"
+        :data="houseList"
+        :height="getHeight(houseList)"
+        style="width: 100%"
+      >
+        <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
+        <el-table-column
+          prop="storeyNumber"
+          label="房屋层数"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="constructionTypeText"
+          label="结构"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="landArea"
+          label="房屋建筑面积（m²）"
+          align="center"
+          header-align="center"
+        />
+        <el-table-column prop="remark" label="备注" align="center" header-align="center" />
       </el-table>
-      <el-table :data="appendantList" :height="getHeight(appendantList)" style="width: 100%">
-        <el-table-column label="附属物" header-align="center">
-          <el-table-column prop="index" label="序号" align="center" header-align="center" />
-          <el-table-column prop="name" label="类型" align="center" header-align="center" />
-          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
-          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
-          <el-table-column prop="number" label="数量" align="center" header-align="center" />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
-        </el-table-column>
+      <el-table
+        v-if="pageType === '2'"
+        :data="appendantList"
+        :height="getHeight(appendantList)"
+        style="width: 100%"
+      >
+        <el-table-column prop="index" label="序号" align="center" header-align="center" />
+        <el-table-column prop="name" label="类型" align="center" header-align="center" />
+        <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
+        <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
+        <el-table-column prop="number" label="数量" align="center" header-align="center" />
+        <el-table-column prop="remark" label="备注" align="center" header-align="center" />
       </el-table>
-      <el-table :data="treeList" :height="getHeight(treeList)" style="width: 100%">
-        <el-table-column label="零星林果木" header-align="center">
-          <el-table-column prop="index" label="序号" align="center" header-align="center" />
-          <el-table-column prop="name" label="品种" align="center" header-align="center" />
-          <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
-          <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
-          <el-table-column prop="number" label="数量" align="center" header-align="center" />
-          <el-table-column prop="remark" label="备注" align="center" header-align="center" />
-        </el-table-column>
+      <el-table
+        v-if="pageType === '3'"
+        :data="treeList"
+        :height="getHeight(treeList)"
+        style="width: 100%"
+      >
+        <el-table-column prop="index" label="序号" align="center" header-align="center" />
+        <el-table-column prop="name" label="品种" align="center" header-align="center" />
+        <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
+        <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
+        <el-table-column prop="number" label="数量" align="center" header-align="center" />
+        <el-table-column prop="remark" label="备注" align="center" header-align="center" />
       </el-table>
     </div>
   </WorkContentWrap>
@@ -73,17 +92,22 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getVillageCollectiveListApi } from '@/api/workshop/dataQuery/villageCollective-service'
+import {
+  getVillageCollectiveListApi,
+  exportReportApi
+} from '@/api/workshop/dataQuery/villageCollective-service'
 import { ParamsType } from '@/api/workshop/dataQuery/villageCollective-types'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../config'
-import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
+const { currentRoute } = useRouter()
+const { pageType } = currentRoute.value.query as any
 
-const titles = ['智能报表', '实物成果', '村集体', '房屋/附属物/零星林(果)木']
-
+const { back } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const houseList = ref<any[]>([])
 const appendantList = ref<any[]>([])
@@ -113,9 +137,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -139,15 +163,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
 
 /**
  * 计算 table 的高度
@@ -161,6 +176,36 @@ const getHeight = (arr: any) => {
   } else {
     return 'auto'
   }
+}
+
+// 获取表格标题
+const getTitles = (type: string) => {
+  const map = {
+    '1': '房屋统计表',
+    '2': '附属物统计表',
+    '3': '零星林(果)木统计表'
+  }
+  return map[type]
+}
+
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  getTableList({})
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  getTableList({})
 }
 
 /**
@@ -184,41 +229,26 @@ const getTableList = (params: ParamsType) => {
     })
 }
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = {
-    ...data
-  }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      getTableList({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    getTableList({ ...params })
-  }
-}
-
-// 重置
-const resetSearch = () => {
-  getTableList({})
-}
-
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.village)
+const onExport = async () => {
+  const params = {
+    exportType: pageType
+  }
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)
@@ -228,17 +258,8 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
+const onBack = () => {
+  back()
 }
 
 onMounted(() => {

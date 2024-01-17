@@ -1,30 +1,32 @@
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
-    <!-- <div class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
-        @search="setSearchParams"
-        @reset="setSearchParams"
+        :defaultExpand="false"
+        :expand-field="'card'"
+        @search="onSearch"
+        @reset="onReset"
       />
-    </div> -->
-
+    </div>
+    <div class="line"></div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 移民资金使用情况报表 </div>
-        <div></div>
+        <div class="table-left-title"> 资金使用报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         :loading="tableObject.loading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         :showOverflowTooltip="true"
-        tableLayout="auto"
         row-key="id"
         headerAlign="center"
         align="center"
         highlightCurrentRow
         @register="register"
+        height="600"
       />
     </div>
   </WorkContentWrap>
@@ -34,17 +36,17 @@
 import { reactive } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import { ElButton } from 'element-plus'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
-import { getFundDetailReportListApi } from '@/api/fundReport/service'
+import { getFundDetailReportListApi, exportFundDetailApi } from '@/api/fundReport/service'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
-const titles = ['智能报表', '资金管理', '资金使用情况']
+const titles = ['智能报表', '资金管理', '概算资金', '资金使用情况']
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
 const { register, tableObject } = useTable()
 
 tableObject.params = {
@@ -65,8 +67,8 @@ const commonTableItemSchema = {
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'doorNo',
-    label: '户号',
+    field: 'code',
+    label: '代码',
     search: {
       show: true,
       component: 'Input'
@@ -103,6 +105,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'serNoStr',
     label: '序号',
+    width: 100,
     ...commonTableItemSchema
   },
   {
@@ -150,6 +153,50 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({})
+}
+
+// 数据导出
+const onExport = async () => {
+  const params = {
+    ...tableObject.params
+  }
+  const res = await exportFundDetailApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
+}
+
 const getTableList = async (params?: any) => {
   tableObject.loading = true
   const res = await getFundDetailReportListApi({
@@ -171,3 +218,30 @@ const setSearchParams = (data: any) => {
 
 getTableList()
 </script>
+
+<style lang="less" scoped>
+.search-form-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-wrap {
+  margin-top: 0;
+}
+
+.line {
+  width: 100%;
+  height: 10px;
+  background-color: #e7edfd;
+}
+
+.title-hint {
+  padding: 15px 0 0 15px;
+  font-size: 14px;
+  color: 14px;
+}
+
+:deep(.el-table .el-table__cell) {
+  padding: 5px 0;
+}
+</style>

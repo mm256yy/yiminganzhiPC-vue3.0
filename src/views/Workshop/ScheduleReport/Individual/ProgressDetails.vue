@@ -5,27 +5,27 @@
     </ElButton>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">个体户按工作区</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">进度统计表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">个体户</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">进度明细</ElBreadcrumbItem>
     </ElBreadcrumb>
   </div>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
-        @reset="setSearchParams"
+        @search="onSearch"
+        @reset="onReset"
       />
-      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 个体户按工作区统计表 </div>
+        <div class="table-left-title"> 个体户进度明细表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -41,47 +41,40 @@
         align="center"
         @register="register"
       >
-        <template #populationStatusCount="{ row }">
-          <div v-if="Number(row.populationStatusCount) === Number(1)">
+        <template #appendageStatus="{ row }">
+          <div v-if="row.appendageStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.populationStatusCount == '0'"></div>
         </template>
-        <template #landStatusCount="{ row }">
-          <div v-if="Number(row.landStatusCount) === 1">
+        <template #landStatus="{ row }">
+          <div v-if="row.landStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.landStatusCount == '0'"></div>
         </template>
-        <template #deviceStatusCount="{ row }">
-          <div v-if="Number(row.deviceStatusCount) === 1">
+        <template #deviceStatus="{ row }">
+          <div v-if="row.deviceStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.deviceStatusCount == '0'"></div>
         </template>
-        <template #cardStatusCount="{ row }">
-          <div v-if="row.cardStatusCount == '1'">
+        <template #cardStatus="{ row }">
+          <div v-if="row.cardStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.cardStatusCount == '0'"></div>
         </template>
-        <template #houseSoarStatusCount="{ row }">
-          <div v-if="row.houseSoarStatusCount == '1'">
+        <template #houseSoarStatus="{ row }">
+          <div v-if="row.houseSoarStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.houseSoarStatusCount == '0'"></div>
         </template>
-        <template #landSoarStatusCount="{ row }">
-          <div v-if="row.landSoarStatusCount == '1'">
+        <template #landSoarStatus="{ row }">
+          <div v-if="row.landSoarStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.landSoarStatusCount == '0'"></div>
         </template>
-        <template #agreementStatusCount="{ row }">
-          <div v-if="row.agreementStatusCount == '1'">
+        <template #agreementStatus="{ row }">
+          <div v-if="row.agreementStatus == '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
-          <div v-if="row.agreementStatusCount == '0'"></div>
         </template>
       </Table>
     </div>
@@ -89,29 +82,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getPopulationHousingListApi } from '@/api/workshop/dataQuery/populationHousing-service'
-import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
-
-import { getIndividualWorkListApi } from '@/api/workshop/individualWork/service'
-import { IndividualWorkType } from '@/api/workshop/individualWork/types'
-
+import { individualProgressRegionApi } from '@/api/workshop/individualRegion/service'
+import { IndividualRegionType } from '@/api/workshop/individualRegion/type'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
+import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 
 interface SpanMethodProps {
-  row: IndividualWorkType
-  column: IndividualWorkType
+  row: IndividualRegionType
+  column: IndividualRegionType
   rowIndex: number
   columnIndex: number
 }
@@ -122,8 +111,9 @@ const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getIndividualWorkListApi
+  getListApi: individualProgressRegionApi
 })
+
 const { setSearchParams } = methods
 
 const villageTree = ref<any[]>([])
@@ -146,9 +136,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -156,8 +146,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householdName',
-    label: '户号',
+    field: 'no',
+    label: '个体户编号',
     search: {
       show: true,
       component: 'Input',
@@ -171,7 +161,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'householdName',
-    label: '户主姓名',
+    label: '个体户名称',
     search: {
       show: true,
       component: 'Input',
@@ -183,25 +173,32 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   // table字段 分割
   {
-    field: 'id',
+    field: 'index',
+    type: 'index',
     label: '序号',
     search: {
       show: false
     }
   },
   {
-    field: 'gridmanName',
-    label: '工作组',
+    field: 'villageCodeText',
+    label: '行政村',
     search: {
       show: false
     }
   },
   {
-    field: 'totalHouse',
-    label: '总任务数（户）',
+    field: 'doorNo',
+    label: '个体户编号',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'name',
+    label: '个体户名称',
     search: {
       show: false
     }
@@ -221,21 +218,21 @@ const schema = reactive<CrudSchema[]>([
         },
         children: [
           {
-            field: 'populationStatusCount',
+            field: 'appendageStatus',
             label: '房屋/附属物',
             search: {
               show: false
             }
           },
           {
-            field: 'landStatusCount',
+            field: 'landStatus',
             label: '土地/附着物',
             search: {
               show: false
             }
           },
           {
-            field: 'deviceStatusCount',
+            field: 'deviceStatus',
             label: '设施设备',
             search: {
               show: false
@@ -244,28 +241,28 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'cardStatusCount',
+        field: 'cardStatus',
         label: '个体户建卡',
         search: {
           show: false
         }
       },
       {
-        field: 'soar',
+        field: 'vacate',
         label: '腾空',
         search: {
           show: false
         },
         children: [
           {
-            field: 'houseSoarStatusCount',
+            field: 'inCohouseSoarStatusunt',
             label: '房屋腾空',
             search: {
               show: false
             }
           },
           {
-            field: 'landSoarStatusCount',
+            field: 'landSoarStatus',
             label: '土地腾空',
             search: {
               show: false
@@ -274,7 +271,7 @@ const schema = reactive<CrudSchema[]>([
         ]
       },
       {
-        field: 'agreementStatusCount',
+        field: 'agreementStatus',
         label: '动迁协议',
         search: {
           show: false
@@ -286,16 +283,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 /**
  * 合并单元行
  * @param{Object} row 当前行
@@ -305,10 +292,10 @@ const getParamsKey = (key: string) => {
  */
 const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
   const num = tableObject.tableList.filter(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   ).length
   const index = tableObject.tableList.findIndex(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
+    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   )
   if (column && columnIndex < 5) {
     if (index === rowIndex) {
@@ -330,29 +317,11 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
+  setSearchParams({ ...params })
+}
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.doorNo) {
-    delete params.doorNo
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+const onReset = () => {
+  setSearchParams({})
 }
 
 // 数据导出
@@ -367,33 +336,13 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
 const onBack = () => {
   back()
 }
-
 onMounted(() => {
-  // getVillageTree()
+  getVillageTree()
   setSearchParams({})
 })
-// computed: {
-//   tableListWithIndex() {
-//     return this.tableObject.tableList.map((item, index) => {
-//       return { ...item, index: index + 1 }
-//     })
-//   }
-// }
 </script>
 <style lang="less" scoped>
 .search-form-wrap {

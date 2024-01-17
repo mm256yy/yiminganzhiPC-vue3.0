@@ -30,6 +30,6 @@ export const getAreaHouseReportApi = (params: any): Promise<void> => {
 }
 
 // 导出报表
-export const exportReportApi = (data: any) => {
-  return request.get({ url: `/resultForms/export/queryAreaHouse`, data, responseType: 'blob' })
+export const exportReportApi = (params: any) => {
+  return request.get({ url: `/resultForms/export/queryAreaHouse`, params, responseType: 'blob' })
 }

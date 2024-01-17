@@ -33,7 +33,15 @@
             {{ splitStr(row.ownersSituationName) }}
           </div>
         </template>
-
+        <template #houseNature="{ row }">
+          <div>
+            {{
+              row.houseNature
+                ? dictObj[304].find((item: any) => item.value === row.houseNature).label
+                : '-'
+            }}
+          </div>
+        </template>
         <template #action="{ row }">
           <el-button type="primary" link @click="onViewRow(row)">详情</el-button>
           <el-button type="primary" link @click="onEditRow(row)">核定</el-button>
@@ -53,7 +61,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { ElButton, ElSpace, ElMessage } from 'element-plus'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
@@ -62,12 +70,14 @@ import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getHouseListApi } from '@/api/workshop/datafill/house-service'
 import { standardFormatDate } from '@/utils/index'
 import EditForm from './EditForm.vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
-
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const props = defineProps<PropsType>()
 const dialog = ref(false) // 弹窗标识
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
@@ -139,7 +149,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'houseNature',
-    label: '房屋性质',
+    label: '房屋来源',
     search: {
       show: false
     }

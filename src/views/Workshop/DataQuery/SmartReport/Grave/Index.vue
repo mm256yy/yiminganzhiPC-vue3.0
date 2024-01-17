@@ -1,22 +1,22 @@
+<!--坟墓统计表-->
 <template>
+  <MigrateCrumb :titles="titles" />
   <WorkContentWrap>
-    <MigrateCrumb :titles="titles" />
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton>
     </div>
 
     <div class="line"></div>
-
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 坟墓统计表 </div>
+        <ElButton type="primary" @click="onExport">数据导出</ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -33,6 +33,8 @@
         border
         @register="register"
         :span-method="arraySpanMethod"
+        height="450"
+        style="width: 100%; max-height: 550px"
       />
     </div>
   </WorkContentWrap>
@@ -47,14 +49,12 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { exportTypes } from '../config'
-import { getGraveListApi } from '@/api/workshop/dataQuery/grave-service'
+import { getGraveListApi, exportReportApi } from '@/api/workshop/dataQuery/grave-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
 const titles = ['智能报表', '实物成果', '村集体', '坟墓']
 
 const { register, tableObject, methods } = useTable({
@@ -83,9 +83,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -109,7 +109,7 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: false
@@ -147,16 +147,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 /**
  * 合并单元行
  * @param{Object} row 当前行
@@ -188,31 +178,40 @@ const onSearch = (data) => {
     ...data
   }
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
   }
 
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+  setSearchParams({ ...params })
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  setSearchParams({})
 }
 
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.grave)
+const onExport = async () => {
+  const params = {
+    ...tableObject.params
+  }
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)

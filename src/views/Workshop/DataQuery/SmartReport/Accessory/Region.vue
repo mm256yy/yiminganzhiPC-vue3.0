@@ -12,20 +12,17 @@
     </div>
     <div class="line"></div>
     <div class="title-hint">附属物统计表（区域报表）</div>
-    <div class="table-wrap" v-loading="tableObject.loading">
+    <div class="table-wrap">
       <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
+        ref="tableRef"
+        v-loading="tableLoading"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
         align="center"
+        height="600"
         border
-        @register="register"
       />
     </div>
   </WorkContentWrap>
@@ -38,27 +35,21 @@ import { ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
-import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getAccessoryListApi } from '@/api/workshop/dataQuery/accessory-service'
+import {
+  getAccessoryRegionListApi,
+  exportReportApi
+} from '@/api/workshop/dataQuery/accessory-service'
 import { screeningTree } from '@/api/workshop/village/service'
-import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
-const { register, tableObject, methods } = useTable({
-  getListApi: getAccessoryListApi
-})
-
-const { setSearchParams } = methods
-
+const tableLoading = ref<boolean>()
+const code = ref<any>(null)
 const villageTree = ref<any[]>([])
-
-tableObject.params = {
-  projectId,
-  status: SurveyStatusEnum.Implementation
-}
+let tableObject = reactive({
+  tableList: []
+})
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -74,9 +65,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -86,16 +77,24 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'doorNo',
-    label: '户号',
-    width: 180,
+    field: 'index',
+    type: 'index',
+    label: '序号',
+    width: 100,
     search: {
       show: false
     }
   },
   {
-    field: 'householdName',
-    label: '户主姓名',
+    field: 'villageName',
+    label: '区域名',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'villageCode',
+    label: '区域编码',
     search: {
       show: false
     }
@@ -108,30 +107,22 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'unitText',
+    field: 'unit',
     label: '单位',
     search: {
       show: false
     }
   },
   {
-    field: 'sizeText',
+    field: 'size',
     label: '规格',
-    width: 100,
     search: {
       show: false
     }
   },
   {
-    field: 'number',
+    field: 'quantity',
     label: '数量',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'remark',
-    label: '备注',
     search: {
       show: false
     }
@@ -140,48 +131,58 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
+const requestListApi = async () => {
+  const params = {
+    projectId,
+    villageCode: code.value
+  }
+  tableLoading.value = true
+  try {
+    let result: any = await getAccessoryRegionListApi(params)
+    console.log('KKP', result)
+    tableObject.tableList = result
+    tableLoading.value = false
+  } catch (error) {
+    tableLoading.value = false
+  }
+}
+
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
 
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
-  setSearchParams({ ...params })
+  code.value = params.villageCode
+  requestListApi()
 }
 
 const onReset = () => {
-  tableObject.params = {
-    projectId
-  }
-  setSearchParams({})
+  code.value = null
+  requestListApi()
 }
+
 // 数据导出
-const onExport = () => {
-  //     const params = {
-  //     exportType: '1',
-  //     ...tableObject.params
-  //   }
-  //   const res = await exportReportApi(params)
-  //   let filename = res.headers
-  //   filename = filename['content-disposition']
-  //   filename = filename.split(';')[1].split('filename=')[1]
-  //   filename = decodeURIComponent(filename)
-  //   let elink = document.createElement('a')
-  //   document.body.appendChild(elink)
-  //   elink.style.display = 'none'
-  //   elink.download = filename
-  //   let blob = new Blob([res.data])
-  //   const URL = window.URL || window.webkitURL
-  //   elink.href = URL.createObjectURL(blob)
-  //   elink.click()
-  //   document.body.removeChild(elink)
-  //   URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    exportType: '2',
+    villageCode: code.value
+  }
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)
@@ -193,7 +194,7 @@ const getVillageTree = async () => {
 
 onMounted(() => {
   getVillageTree()
-  setSearchParams({})
+  requestListApi()
 })
 </script>
 <style lang="less" scoped>

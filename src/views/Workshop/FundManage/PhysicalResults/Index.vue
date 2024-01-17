@@ -1,211 +1,212 @@
 <template>
-  <WorkContentWrap>
-    <!-- <MigrateCrumb :titles="titles" /> -->
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">{{ getTitle }}</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">基本情况</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
-    <div class="table-wrap">
-      <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title">{{ getTitle }} 基本情况表 </div>
+  <div class="flex items-center">
+    <ElButton
+      @click="onBack"
+      :icon="BackIcon"
+      type="default"
+      class="px-9px py-0px !h-28px mr-8px !text-12px"
+    >
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px"> 智慧报表 </ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px"> 实物成果 </ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px"> 企(事)业单位 </ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
+
+  <div class="data-fill-head">
+    <div class="head-top">
+      <div class="tabs">
+        <div
+          :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+          v-for="item in tabsList"
+          :key="item.id"
+          @click="onTabClick(item)"
+        >
+          {{ item.name }}
+        </div>
       </div>
-      <ElTable :data="tableData1.tableList" style="width: 100%" :span-method="objectSpanMethod1">
-        <ElTableColumn type="index" width="100" label="序号" />
-        <ElTableColumn prop="townCodeText" label="行政村" />
-        <ElTableColumn prop="name" label="名称" />
-        <ElTableColumn prop="legalPersonName" label="法人代表" />
-        <ElTableColumn prop="landUseNature" label="用地性质" />
-        <ElTableColumn prop="industryType" label="所属行业" />
-        <ElTableColumn prop="licenceNo" label="工商证" />
-        <ElTableColumn prop="productCategory" label="主要产品" />
-        <ElTableColumn prop="averageAnnualOutputValue" label="年产值（万元）" />
-        <ElTableColumn prop="averageAnnualProfit" label="年利润（万元）" />
-        <ElTableColumn prop="workNum" label="从业人员（人）" />
-      </ElTable>
-      <ElPagination
-        v-model:pageSize="tableData1.pageSizeRef"
-        v-model:currentPage="tableData1.currentPageRef"
-        class="mt-10px"
-        :page-sizes="[10, 20, 30, 40, 50, 100]"
-        layout="sizes, prev, pager, next, jumper, ->, total"
-        :total="tableData1.totol"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-      />
     </div>
-  </WorkContentWrap>
+  </div>
+
+  <div class="data-fill-body">
+    <!-- 基本情况 -->
+    <BasicInformation v-if="tabCurrentId === 1" />
+
+    <!-- 房屋及其附属物 -->
+    <HouseAccessory v-if="tabCurrentId === 2" />
+
+    <!-- 零星林（果）木 -->
+    <FruitWood v-if="tabCurrentId === 3" />
+  </div>
 </template>
-
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue'
-import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
-import { WorkContentWrap } from '@/components/ContentWrap'
-// import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { useTable } from '@/hooks/web/useTable'
-import { ElTable, ElTableColumn, ElPagination } from 'element-plus'
-import {
-  getEnterprise,
-  deleteFunPayApi,
-  getFunPaySumAmountApi
-} from '@/api/fundManage/fundPayment-service'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { ref } from 'vue'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
+import BasicInformation from './BasicInformation.vue' // 基本情况
+import HouseAccessory from './HouseAccessory.vue' // 房屋及其附属物
+import FruitWood from './FruitWood.vue' // 零星林（果）木
 import { useRouter } from 'vue-router'
+
 const { back } = useRouter()
+const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
-
-const appStore = useAppStore()
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
-const projectId = appStore.currentProjectId
-const headInfo = ref<any>()
-const districtTree = ref<any[]>([])
-const { currentRoute } = useRouter()
-const { id } = currentRoute.value.query as any
-
-const getTitle = computed(() => {
-  return id === '1' ? '企业' : '个体户'
-})
-
-let tableData1 = reactive<any>({
-  tableList: [],
-  pageSizeRef: 10,
-  currentPageRef: 1,
-  totol: 0
-})
-const { tableObject, methods } = useTable({
-  getListApi: getEnterprise,
-  delListApi: deleteFunPayApi
-})
-const { getList } = methods
-
-tableObject.params = {
-  projectId
-}
-
-getList()
-
-const getHeadInfo = async () => {
-  const info = await getFunPaySumAmountApi()
-  headInfo.value = info
-}
-
-const getdistrictTree = async () => {
-  const list = await getVillageTreeApi(projectId)
-  districtTree.value = list || []
-  return list || []
-}
-const getEnterpriseAsync = async (e: any) => {
-  let list = await getEnterprise(e)
-  console.log(list)
-  tableData1.tableList = list.content
-  tableData1.totol = list.total
-  return list
-}
-
-const objectSpanMethod1 = ({ rowIndex, columnIndex }) => {
-  if (columnIndex === 1) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 20,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
+const tabsList = [
+  {
+    id: 1,
+    name: '基本情况'
+  },
+  {
+    id: 2,
+    name: '房屋及其附属物'
+  },
+  {
+    id: 3,
+    name: '零星林（果）木'
   }
-}
-const handleSizeChange = (val: number) => {
-  tableData1.pageSizeRef = val
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
-}
-const handleCurrentChange = (val: number) => {
-  tableData1.currentPageRef = val - 1
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
+]
+
+const onTabClick = (tabItem) => {
+  if (tabCurrentId.value === tabItem.id) {
+    return
+  }
+  tabCurrentId.value = tabItem.id
 }
 
 const onBack = () => {
   back()
 }
-
-onMounted(() => {
-  getHeadInfo()
-  getdistrictTree()
-  getEnterpriseAsync({ projectId, size: 10, page: 0 })
-})
 </script>
 
 <style lang="less" scoped>
-.view-upload {
-  display: flex;
-  height: 32px;
-  padding: 0 10px;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-color-1);
-  white-space: nowrap;
-  cursor: default;
+.data-fill-head {
+  position: relative;
+  padding: 14px 16px;
+  margin-top: 6px;
   background: #ffffff;
-  border: 1px solid #ebebeb;
   border-radius: 4px;
-  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
-  align-items: center;
-}
+  box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
 
-.file-list {
-  height: 210px;
-  overflow-y: scroll;
-
-  .file-item {
+  .head-top {
     display: flex;
-    padding: 5px 16px;
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: var(--text-color-1);
-    border-bottom: 1px solid #ebebeb;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tabs {
+    display: flex;
     align-items: center;
 
-    .m-lr-20px {
-      margin: 0 20px;
-    }
+    .tab-item {
+      display: flex;
+      height: 32px;
+      padding: 0 20px;
+      margin-right: 4px;
+      font-size: 14px;
+      color: #000;
+      cursor: pointer;
+      background: #f0f2f7;
+      border-radius: 10px 10px 0px 0px;
+      align-items: center;
 
-    .file-name {
-      text-align: justify;
-      word-break: break-all;
-    }
-
-    .number {
-      font-weight: 500;
-      color: var(--el-color-primary);
-    }
-
-    .flex-none {
-      flex: none;
+      &.active {
+        color: #fff;
+        background-color: var(--el-color-primary);
+      }
     }
   }
 }
 
-.ElButton-form-wrap {
-  display: block;
-  padding: var(--distance-base);
-  margin-top: 10px;
-  background-color: #fff;
-  border-radius: 4px;
+.report-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .report-tab-item {
+    display: flex;
+    height: 32px;
+    padding: 0 16px;
+    margin: 14px 8px 0 0;
+    font-size: 14px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    align-items: center;
+
+    .tit {
+      margin-left: 6px;
+      // user-select: none;
+    }
+
+    &.active {
+      color: var(--el-color-primary);
+      background: #e9f0ff;
+      border: 1px solid var(--el-color-primary);
+    }
+  }
 }
 
-.numFont {
-  font-size: 14px;
+.data-fill-body {
+  padding-top: 10px;
+  margin-top: -10px;
+  background-color: #fff;
+}
+
+.report-dialog {
+  .report-cont {
+    padding: 22px 55px;
+    margin: 0 auto;
+    background: #f5f7fa;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+
+    .report-item {
+      display: flex;
+      height: 32px;
+      font-size: 14px;
+      line-height: 32px;
+      align-items: center;
+
+      .report-tit {
+        margin-right: 16px;
+        color: rgba(19, 19, 19, 0.6);
+        text-align: right;
+      }
+
+      .report-txt {
+        font-weight: 500;
+        color: var(--text-color-1);
+      }
+    }
+  }
+
+  .tips {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-color-1);
+  }
+}
+</style>
+
+<style lang="less">
+.el-divider--horizontal {
+  margin: 8px 0 24px;
+}
+
+.report-dialog {
+  .el-dialog__body {
+    padding: 16px 40px !important;
+  }
+}
+
+.datafill-content {
+  padding: 12px 16px 16px;
+  background: #ffffff;
+  border-radius: 4px;
 }
 </style>

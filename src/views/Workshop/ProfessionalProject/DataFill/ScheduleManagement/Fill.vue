@@ -42,6 +42,7 @@
                 :data="{
                   type: 'archives'
                 }"
+                :class="{ archives: form.isComplete === '1' }"
                 :on-error="onError"
                 :list-type="'picture-card'"
                 accept=".jpg,.png,jpeg,.pdf"
@@ -266,7 +267,9 @@ const onError = () => {
   }
 }
 
-:deep(.el-upload--picture-card) {
-  display: none;
+.archives {
+  :deep(.el-upload--picture-card) {
+    display: none;
+  }
 }
 </style>

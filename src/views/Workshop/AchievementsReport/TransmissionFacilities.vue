@@ -7,7 +7,8 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">专业项目(输变电工程设施) 公示表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">专业项目</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">输变电工程设施</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
     <div v-if="false" class="search-form-wrap">
@@ -15,9 +16,11 @@
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 专业项目(输变电工程设施) 公示表 </div>
+        <div class="table-left-title"> 输变电工程设施公示表 </div>
+        <ElButton type="primary" style="margin-bottom: 10px" @click="onExport"> 数据导出 </ElButton>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
+      <ElTable :data="tableData" v-loading="tableLoading" style="width: 100%" height="600">
+        <ElTableColumn type="index" width="80" label="序号" align="center" />
         <ElTableColumn prop="lineName" label="线路名称" show-overflow-tooltip align="center" />
         <ElTableColumn prop="ownershipCompany" label="权属" show-overflow-tooltip align="center" />
         <ElTableColumn
@@ -75,16 +78,23 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ref, reactive } from 'vue'
-import { getCommonReportApi } from '@/api/workshop/achievementsReport/service'
+import { getCommonReportApi, exportPhysicalApi } from '@/api/workshop/achievementsReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
 const tableData = ref<any>([])
+const tableLoading = ref<boolean>(false)
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const getList = async () => {
-  const result = await getCommonReportApi(6)
-  tableData.value = result
+  tableLoading.value = true
+  try {
+    const result = await getCommonReportApi(6)
+    tableData.value = result
+    tableLoading.value = false
+  } catch {
+    tableLoading.value = false
+  }
 }
 
 getList()
@@ -147,6 +157,24 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 const onBack = () => {
   back()
+}
+
+const onExport = async () => {
+  const res = await exportPhysicalApi(6)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 </script>
 

@@ -41,7 +41,10 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getAccessoryListApi } from '@/api/workshop/dataQuery/accessory-service'
+import {
+  getAccessoryListApi,
+  exportAccessoryReportApi
+} from '@/api/workshop/dataQuery/accessory-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
@@ -75,9 +78,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -112,8 +115,22 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   // table字段 分割
+  {
+    field: 'index',
+    type: 'index',
+    label: '序号',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'villageName',
+    label: '行政村',
+    search: {
+      show: false
+    }
+  },
   {
     field: 'doorNo',
     label: '户号',
@@ -189,26 +206,26 @@ const onReset = () => {
   setSearchParams({})
 }
 // 数据导出
-const onExport = () => {
-  //     const params = {
-  //     exportType: '1',
-  //     ...tableObject.params
-  //   }
-  //   const res = await exportReportApi(params)
-  //   let filename = res.headers
-  //   filename = filename['content-disposition']
-  //   filename = filename.split(';')[1].split('filename=')[1]
-  //   filename = decodeURIComponent(filename)
-  //   let elink = document.createElement('a')
-  //   document.body.appendChild(elink)
-  //   elink.style.display = 'none'
-  //   elink.download = filename
-  //   let blob = new Blob([res.data])
-  //   const URL = window.URL || window.webkitURL
-  //   elink.href = URL.createObjectURL(blob)
-  //   elink.click()
-  //   document.body.removeChild(elink)
-  //   URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    exportType: '1',
+    ...tableObject.params
+  }
+  const res = await exportAccessoryReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)

@@ -162,6 +162,7 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+    <!-- 打印模板 -->
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
       <div
@@ -196,9 +197,11 @@
         </el-table-column>
       </el-table>
       <div style="display: flex; justify-content: space-between; height: 50px">
-        <div style="flex: 1; border: 1px solid black; border-top: 0px"
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
           >户主代表或收委托人(签名)：</div
-        ><div style="flex: 1; border: 1px solid black; border-top: 0px"> 联系移民干部(签名)：</div>
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
       </div>
     </div>
   </WorkContentWrap>
@@ -227,8 +230,7 @@ import {
   resettleHouseType,
   homesteadAreaSize,
   apartmentAreaSize,
-  resettleArea,
-  apartmentArea
+  resettleArea
 } from '../../config'
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 import Homestead from '../../SchemeBase/components/Homestead.vue'
@@ -237,7 +239,12 @@ import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { htmlToPdf } from '@/utils/ptf'
+import { debounce } from '@/utils/index'
+
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
+import { useAppStore } from '@/store/modules/app'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -259,7 +266,6 @@ const form = ref<any>({})
 
 onMounted(async () => {
   form.value = props.baseInfo
-
   await getMockData()
   await getRelocationInfo()
   await getPeopleList()
@@ -307,14 +313,31 @@ const getRelocationInfo = async () => {
   const res = await getRelocationInfoApi(props.doorNo)
   if (res) {
     houseType.value = res.houseAreaType
+    await getSettleAddressList()
     immigrantSettle.value = res
+    console.log(res, 'bbq')
   }
 }
-
+const appStore = useAppStore()
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
+}
 watch(
   () => immigrantSettle.value,
   (res) => {
     // 整成数组
+    console.log(apartmentArea, 'bbq')
     if (!res) return
     if (res.houseAreaType === HouseType.homestead || res.houseAreaType === HouseType.flat) {
       const houseAreaTypeText = resettleHouseType.find(
@@ -334,7 +357,7 @@ watch(
         if (res.typeOneNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
             area: apartmentAreaSize[0].name,
             num: res.typeOneNum
           })
@@ -342,7 +365,7 @@ watch(
         if (res.typeTwoNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
             area: apartmentAreaSize[1].name,
             num: res.typeTwoNum
           })
@@ -350,7 +373,7 @@ watch(
         if (res.typeThreeNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
             area: apartmentAreaSize[2].name,
             num: res.typeThreeNum
           })
@@ -358,7 +381,7 @@ watch(
         if (res.typeFourNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
             area: apartmentAreaSize[3].name,
             num: res.typeFourNum
           })
@@ -460,10 +483,11 @@ const onEditSubmit = async (params: any) => {
 }
 let data = ref()
 let comdbe = () => {
-  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
-  setTimeout(() => {
+  debounce(() => {
+    data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+
     htmlToPdf('#anztable')
-  }, 3000)
+  })
 }
 </script>
 

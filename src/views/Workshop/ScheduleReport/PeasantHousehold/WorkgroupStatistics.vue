@@ -6,11 +6,12 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">居民户按工作分组</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">进度统计表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">居民户</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">工作组统计</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div class="search-form-wrap" style="display: none">
+    <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         @search="setSearchParams"
@@ -19,14 +20,11 @@
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 居民户按工作分组报表 </div>
+        <div class="table-left-title"> 居民户工作组统计报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
-      <el-table :data="tableData" border style="width: 100%">
-        <el-table-column label="序号" align="center" width="60">
-          <template #default="scope">
-            <span> {{ scope.$index + 1 }}</span>
-          </template>
-        </el-table-column>
+      <el-table :data="tableData" border style="width: 100%; max-height: 600px" height="600">
+        <el-table-column label="序号" type="index" align="center" width="80" />
         <el-table-column prop="gridmanName" label="工作组" align="center" />
         <el-table-column prop="totalHouse" label="总任务数（户）" align="center" />
         <!-- 公寓房 -->
@@ -126,7 +124,7 @@
           <el-table-column
             prop="proceduresStatusCount"
             label="相关手续
-"
+  "
             align="center"
             width="120"
           />
@@ -165,52 +163,20 @@ import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { getResidentWorkListApi } from '@/api/workshop/scheduleReport/service'
-const { back } = useRouter()
+import { useAppStore } from '@/store/modules/app'
 
+const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
 const totalNum = ref(0)
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'qy',
-    label: '区域',
-    search: {
-      show: true,
-      component: 'Select'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-
-  {
     field: 'name',
-    label: '姓名',
+    label: '工作组',
     search: {
       show: true,
       component: 'Input'
@@ -247,6 +213,29 @@ const getResidentWorkList = (page, size) => {
     tableData.value = res.content
     totalNum.value = res.total
   })
+}
+
+// 数据导出
+const onExport = () => {
+  // const params = {
+  //   exportType: '1',
+  //   ...tableObject.params
+  // }
+  // const res = await exportReportApi(params)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

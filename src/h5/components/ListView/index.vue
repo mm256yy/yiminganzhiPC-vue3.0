@@ -94,7 +94,7 @@ const FnEnd = function (ev: TouchEvent) {
 //防抖函数,默认100ms
 const debounce = (() => {
   let timer
-  return (callback: any, ms: any = 100) => {
+  return (callback: any, ms: any = 1000) => {
     clearTimeout(timer)
     timer = setTimeout(callback, ms)
   }

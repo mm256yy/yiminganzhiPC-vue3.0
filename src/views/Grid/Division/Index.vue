@@ -179,7 +179,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   {
     field: 'code',
     label: '所属区域',

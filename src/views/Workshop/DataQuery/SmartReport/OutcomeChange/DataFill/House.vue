@@ -13,9 +13,9 @@
     </div>
 
     <div class="line"></div>
-    <div class="table-wrap" v-loading="loading">
+    <div class="table-wrap" v-loading="loading" height="650">
       <el-table :data="houseList" style="width: 100%">
-        <el-table-column type="index" width="50" />
+        <el-table-column label="序号" type="index" width="60" align="center" />
         <el-table-column prop="showDoorNo" label="户号" show-overflow-tooltip />
         <el-table-column prop="householder" label="户主" show-overflow-tooltip />
         <el-table-column prop="area" label="所属区域" show-overflow-tooltip />
@@ -95,9 +95,7 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        flat: true
       }
     },
     table: {

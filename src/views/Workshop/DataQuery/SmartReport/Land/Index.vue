@@ -1,31 +1,32 @@
 <template>
   <WorkContentWrap>
     <MigrateCrumb :titles="titles" />
-    <div v-if="false" class="search-form-wrap">
-      <!-- <Search
-        :schema="allSchemas.searchSchema"
-        :defaultExpand="false"
-        :expand-field="'card'"
-        @search="onSearch"
-        @reset="resetSearch"
-      />
-      <ElButton type="primary" @click="onExport">数据导出</ElButton> -->
-    </div>
     <div class="table-wrap" v-loading="loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title">土地信息统计表</div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <el-table
         :data="tableDataList"
         border
         :height="getHeight(tableDataList)"
-        style="width: 100%"
+        style="width: 100%; max-height: 600px"
         :span-method="objectSpanMethod"
       >
-        <el-table-column prop="locationType" label="功能区" align="center" header-align="center">
-          <template #default="{ row }"> {{ getLocationText(row.locationType) }}</template>
-        </el-table-column>
-        <el-table-column prop="plotNo" label="地块号" align="center" header-align="center" />
+        <el-table-column
+          prop="locationType"
+          label="功能区"
+          show-overflow-tooltip
+          align="center"
+          header-align="center"
+        />
+        <el-table-column
+          prop="plotNo"
+          label="地块号"
+          show-overflow-tooltip
+          align="center"
+          header-align="center"
+        />
         <el-table-column prop="plowland" label="权属单位" align="center" header-align="center">
           <el-table-column prop="town" label="乡(镇、街道)" align="center" header-align="center" />
           <el-table-column
@@ -49,7 +50,6 @@
             :prop="item1.prop"
             :label="item1.label"
           >
-            <!-- <el-table-column prop="livePerson" label="合计" align="center" header-align="center" /> -->
             <template v-if="item1.children">
               <el-table-column
                 v-for="(item2, index2) in item1.children"
@@ -105,18 +105,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElTable, ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn, ElButton } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
-// import { Search } from '@/components/Search'
 import { useTable } from '@/hooks/web/useTable'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
-import { getLandInfoApi } from '@/api/workshop/dataQuery/landInfo-service'
+import { getLandInfoApi, exportReportApi } from '@/api/workshop/dataQuery/landInfo-service'
 import { ParamsType } from '@/api/workshop/dataQuery/landInfo-types'
-import { exportTypes } from '../config'
-import { locationTypes } from '@/views/Workshop/components/config'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const appStore = useAppStore()
@@ -125,11 +121,7 @@ const tableDataList = ref<any[]>([])
 const villageTree = ref<any[]>([])
 const loading = ref<boolean>(false)
 const emit = defineEmits(['export'])
-const titles = ['智能报表', '实物成果', '土地信息']
-
-const getLocationText = (key: string) => {
-  return locationTypes.find((item) => item.value === key)?.label
-}
+const titles = ['智能报表', '实物成果', '土地', '土地信息']
 const { tableObject } = useTable({
   getListApi: getLandInfoApi
 })
@@ -278,30 +270,6 @@ const tableColBuildData = ref<any>([
         prop: 'subtotalCommercial',
         label: '小计'
       },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '零售商业用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '批发市场用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '餐饮用地'
-      // },
-      // {
-      //   prop: 'livePerson0',
-      //   label: '旅馆用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '商务金融用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '娱乐用地'
-      // },
       {
         prop: 'otherCommercialLand',
         label: '其他商服用地'
@@ -315,14 +283,6 @@ const tableColBuildData = ref<any>([
         prop: 'subtotalStorage',
         label: '小计'
       },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '采矿用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '盐田'
-      // },
       {
         prop: 'storageLand',
         label: '仓储用地'
@@ -340,10 +300,6 @@ const tableColBuildData = ref<any>([
         prop: 'subtotalDwelling',
         label: '小计'
       },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '城镇住宅用地'
-      // },
       {
         prop: 'homestead',
         label: '农村宅基地'
@@ -361,38 +317,6 @@ const tableColBuildData = ref<any>([
         prop: 'governmentPublicationLand',
         label: '机关团体新闻出版用地'
       },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '新闻出版用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '教育用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '科研用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '医疗卫生用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '社会福利用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '文化设施用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '体育用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '公园与绿地'
-      // },
       {
         prop: 'publicFacilitiesLand',
         label: '公用设施用地'
@@ -406,34 +330,10 @@ const tableColBuildData = ref<any>([
         prop: 'subtotalSpecial',
         label: '小计'
       },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '军事设施工地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '领事馆用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '监教场所用地'
-      // },
       {
         prop: 'specialLand',
         label: '特殊用地'
       }
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '宗教用地'
-      // },
-      // {
-      //   prop: 'liveDays0',
-      //   label: '殡葬用地'
-      // },
-      // {
-      //   prop: 'roomNumber0',
-      //   label: '风景名胜设施用地'
-      // }
     ]
   },
   {
@@ -498,70 +398,7 @@ const tableColNoneData = ref<any>([
     ]
   }
 ])
-const schema = reactive<CrudSchema[]>([
-  {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'householdName',
-    label: '村集体名称',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入村集体名称'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'type',
-    label: '类型',
-    search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        placeholder: '请选择类型',
-        options: [
-          {
-            label: '集体土地',
-            value: 'collectiveness'
-          },
-          {
-            label: '国有土地',
-            value: 'stateOwned'
-          }
-        ]
-      }
-    },
-    table: {
-      show: false
-    }
-  }
-])
 
-const { allSchemas } = useCrudSchemas(schema)
 const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
   if (columnIndex === 1) {
     if (rowIndex == 29 || rowIndex == 30 || rowIndex == 31) {
@@ -619,16 +456,6 @@ const getHeight = (arr: any) => {
   }
 }
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 /**
  * 获取表格数据
  * @param params 查询参数
@@ -641,57 +468,6 @@ const getTableList = (params: ParamsType) => {
     .then((res: any) => {
       if (res) {
         tableDataList.value = res
-        console.log(tableDataList.value, '111111111111111')
-        // tableDataList.value = [
-        //   {
-        //     gardenPlot: '集体',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   },
-        //   {
-        //     gardenPlot: '集体',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   },
-        //   {
-        //     gardenPlot: '集体',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   },
-        //   {
-        //     gardenPlot: '集体',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   },
-        //   {
-        //     gardenPlot: '国有',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   },
-        //   {
-        //     gardenPlot: '集体',
-        //     forestLand: 10,
-        //     livePerson: 5,
-        //     livePerson0: 1,
-        //     roomNumber0: 2,
-        //     liveDays0: 3
-        //   }
-        // ]
         let result = tableDataList.value.reduce((total, value, index, arr) => {
           if (arr[index].landType == '5') {
             for (let i in tableDataList.value[0]) {
@@ -717,11 +493,6 @@ const getTableList = (params: ParamsType) => {
 
         tableDataList.value.push(result, result1, result2)
         tableDataList.value.forEach((item, index) => {
-          // for (const key in item) {
-          //   if (typeof item[key] === 'number') {
-          //     console.log(item[key].toFixed(2), '测试')
-          //   }
-          // }
           if (index == tableDataList.value.length - 3) {
             item.plotNo = '集体总计'
             item.companyName = ''
@@ -741,54 +512,12 @@ const getTableList = (params: ParamsType) => {
             item.plowland = ''
             item.landType = ''
           }
-          console.log(tableDataList.value, '数据')
         })
-        console.log(result, result1, result2, '11111111111111111')
       }
     })
     .finally(() => {
       loading.value = false
     })
-}
-
-// const onSearch = (data) => {
-//   // 处理参数
-//   let params = {
-//     ...data
-//   }
-
-//   // 需要重置一次params
-//   tableObject.params = {
-//     projectId
-//   }
-//   if (!params.householdName) {
-//     delete params.householdName
-//   }
-//   if (!params.type) {
-//     delete params.type
-//   }
-//   if (params.villageCode) {
-//     // 拿到对应的参数key
-//     findRecursion(villageTree.value, params.villageCode, (item) => {
-//       if (item) {
-//         params[getParamsKey(item.districtType)] = params.villageCode
-//       }
-//       getTableList({ ...params })
-//     })
-//   } else {
-//     delete params.villageCode
-//     getTableList({ ...params })
-//   }
-// }
-
-// 重置
-// const resetSearch = () => {
-//   getTableList({})
-// }
-
-// 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.ground)
 }
 
 // 获取所属区域数据(行政村列表)
@@ -798,17 +527,22 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
+const onExport = async () => {
+  const res = await exportReportApi({})
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {
