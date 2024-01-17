@@ -42,7 +42,20 @@
         align="center"
         height="600"
         @register="register"
-      />
+      >
+        <template #regionText="{ row }">
+          <div>
+            {{
+              `
+              ${row.cityCodeText ? row.cityCodeText + '/' : ''}
+              ${row.areaCodeText ? row.areaCodeText : ''}
+              ${row.townCodeText ? '/' + row.townCodeText : ''}
+              ${row.villageText ? '/' + row.villageText : ''}
+              `
+            }}
+          </div>
+        </template>
+      </Table>
     </div>
   </WorkContentWrap>
 </template>
@@ -91,8 +104,7 @@ const { setSearchParams } = methods
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
-  projectId,
-  type: 23
+  projectId
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -172,7 +184,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'area',
+    field: 'regionText',
     label: '所属区域',
     search: {
       show: false
@@ -345,8 +357,7 @@ const onExport = async () => {
 
 const onReset = () => {
   tableObject.params = {
-    projectId,
-    type: 23
+    projectId
   }
   setSearchParams({})
 }

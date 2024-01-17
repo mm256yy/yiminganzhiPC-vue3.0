@@ -144,7 +144,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: .value[386]
+        options: dictObj.value[386]
       }
     },
     table: {

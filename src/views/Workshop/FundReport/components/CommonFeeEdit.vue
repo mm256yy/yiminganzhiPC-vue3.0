@@ -12,11 +12,11 @@
       <ElCol :span="24">
         <div class="segment-label">补偿费</div>
         <div>
-          <ElTable :data="tableData1" style="width: 100%">
+          <ElTable :data="tableData1" style="width: 100%; max-height: 300px" height="300">
             <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
-            <ElTableColumn prop="name" label="应发" />
-            <ElTableColumn prop="name" label="已发" />
+            <ElTableColumn prop="payableAmount" label="应发" />
+            <ElTableColumn prop="factAmount" label="已发" />
           </ElTable>
         </div>
       </ElCol>
@@ -25,22 +25,22 @@
       <ElCol :span="12">
         <div class="segment-label">补助费</div>
         <div>
-          <ElTable :data="tableData2" style="width: 100%">
+          <ElTable :data="tableData2" style="width: 100%; max-height: 300px" height="300">
             <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
-            <ElTableColumn prop="name" label="应发" />
-            <ElTableColumn prop="name" label="已发" />
+            <ElTableColumn prop="payableAmount" label="应发" />
+            <ElTableColumn prop="factAmount" label="已发" />
           </ElTable>
         </div>
       </ElCol>
       <ElCol :span="12">
         <div class="segment-label">奖励费</div>
         <div>
-          <ElTable :data="tableData3" style="width: 100%">
+          <ElTable :data="tableData3" style="width: 100%; max-height: 300px" height="300">
             <ElTableColumn type="index" label="序号" align="center" width="100" />
             <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
-            <ElTableColumn prop="name" label="应发" />
-            <ElTableColumn prop="name" label="已发" />
+            <ElTableColumn prop="payableAmount" label="应发" />
+            <ElTableColumn prop="factAmount" label="已发" />
           </ElTable>
         </div>
       </ElCol>
@@ -85,8 +85,8 @@ const requestDetailApi = async () => {
     const result = await getFundIndividualDetailApi(params)
     console.log('PKLL', result)
     tableData1.value = result.bcFeeList
-    tableData2.value = result.jlFeeList
-    tableData3.value = result.bzFeeList
+    tableData2.value = result.bzFeeList
+    tableData3.value = result.jlFeeList
     dialogLoading.value = false
   } catch {
     dialogLoading.value = false

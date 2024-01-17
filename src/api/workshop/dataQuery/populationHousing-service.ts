@@ -37,7 +37,7 @@ export const exportReportApi = (params: any) => {
 // 导出资金专业项目
 export const exportFundProfessionProjectApi = (params: any) => {
   return request.get({
-    url: '/immigrantCompensationCardReport/feeStatisticsDownload',
+    url: '/fundsForms/getProfessionalProjectsPageDownload',
     params,
     responseType: 'blob'
   })

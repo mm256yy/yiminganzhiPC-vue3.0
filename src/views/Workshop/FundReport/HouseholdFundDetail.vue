@@ -18,6 +18,11 @@
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
+        v-model:pageSize="tableObject.size"
+        v-model:currentPage="tableObject.currentPage"
+        :pagination="{
+          total: tableObject.total
+        }"
         :loading="tableLoading"
         :data="tableObject.tableList"
         :columns="schemas.columns"
@@ -45,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ElButton } from 'element-plus'
@@ -56,6 +61,7 @@ import { getHouseholdReportListApi, exportFundHouseholdApi } from '@/api/fundRep
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 import HouseholdEdit from './components/HouseholdEdit.vue'
 import { screeningTree } from '@/api/workshop/village/service'
+import { useTable } from '@/hooks/web/useTable'
 
 const titles = ['智能报表', '资金管理', '居民户', '资金使用情况']
 const appStore = useAppStore()
@@ -63,7 +69,6 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const villageTree = ref<any[]>([])
 const currentDoorNo = ref<string>('') // 当前户号
-let searchParams = reactive({})
 
 const commonTableItemSchema = {
   search: {
@@ -77,14 +82,24 @@ const commonTableItemSchema = {
   }
 }
 
+const { tableObject } = useTable()
+
+// const paramsObj = computed(() => {
+//   return {
+//     ...tableObject.params,
+//     size: tableObject.size,
+//     page: tableObject.currentPage
+//   }
+// })
+
 const tableLoading = ref<boolean>()
 let schemas = reactive<any>({
   columns: []
 })
 
-let tableObject = reactive({
-  tableList: []
-})
+// let tableObject = reactive({
+//   tableList: []
+// })
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
@@ -147,12 +162,12 @@ const onSearch = (data) => {
   let params = {
     ...data
   }
-  searchParams = params
+  tableObject.params = params
   getTableList()
 }
 
 const onReset = () => {
-  searchParams = {}
+  tableObject.params = {}
   getTableList()
 }
 
@@ -260,15 +275,6 @@ const getTableDepends = (list: any) => {
       }
     }
   ]
-
-  // list.forEach((item: any, index: any) => {
-  //   columns[index].push({
-  //     label: item,
-  //     field: `${index + 1}`,
-  //     ...commonTableItemSchema
-  //   })
-  // })
-
   let allData = useCrudSchemas(columns)
   schemas.columns = allData.allSchemas.tableColumns
   tableObject.tableList = list
@@ -276,9 +282,7 @@ const getTableDepends = (list: any) => {
 
 // 数据导出
 const onExport = async () => {
-  const params = {
-    ...searchParams
-  }
+  const params = getSearchParams()
   const res = await exportFundHouseholdApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
@@ -307,11 +311,18 @@ const handleClickItem = (row: any) => {
   dialog.value = true
 }
 
+const getSearchParams = () => {
+  return {
+    ...tableObject.params,
+    size: tableObject.size,
+    page: tableObject.currentPage
+  }
+}
+
 const getTableList = async () => {
   tableLoading.value = true
-  const res = await getHouseholdReportListApi({
-    ...searchParams
-  }).finally(() => {
+  const params = getSearchParams()
+  const res = await getHouseholdReportListApi(params).finally(() => {
     tableLoading.value = false
   })
   if (res) {
@@ -319,7 +330,7 @@ const getTableList = async () => {
     res.list.content.forEach((item) => {
       return item.shift()
     })
-    console.log('tableListXL', res.list.content)
+    tableObject.total = res.list.total
     getTableDepends(res.list.content)
   }
 }
@@ -333,7 +344,25 @@ const getVillageTree = async () => {
   return list || []
 }
 
-const requestListApi = async () => {}
+watch(
+  () => tableObject.currentPage,
+  () => {
+    getTableList()
+  }
+)
+
+watch(
+  () => tableObject.size,
+  () => {
+    // 当前页不为1时，修改页数后会导致多次调用getList方法
+    if (tableObject.currentPage === 1) {
+      getTableList()
+    } else {
+      tableObject.currentPage = 1
+      getTableList()
+    }
+  }
+)
 
 onMounted(() => {
   getVillageTree()
