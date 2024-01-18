@@ -99,7 +99,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
               <ElOption
-                v-for="item in row.roomNoOptions"
+                v-for="item in row.roomNoOptions.content"
                 :key="item.id"
                 :label="item.showName"
                 :value="item.code"
