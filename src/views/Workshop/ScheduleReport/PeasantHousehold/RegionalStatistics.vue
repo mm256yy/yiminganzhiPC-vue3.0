@@ -166,7 +166,10 @@ import { reactive, ref, onMounted } from 'vue'
 import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import { getResidentRegionListApi } from '@/api/workshop/scheduleReport/service'
+import {
+  getResidentRegionListApi,
+  exportRegionalStatisticsApi
+} from '@/api/workshop/scheduleReport/service'
 const { back } = useRouter()
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
@@ -269,26 +272,25 @@ const objectSpanMethod = ({ row, columnIndex }: any) => {
 }
 
 // 数据导出
-const onExport = () => {
-  // const params = {
-  //   exportType: '1',
-  //   ...tableObject.params
-  // }
-  // const res = await exportReportApi(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    type: 'PeasantHousehold'
+  }
+  const res = await exportRegionalStatisticsApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

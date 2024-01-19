@@ -333,21 +333,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'reportUserName',
-  //   label: '填报人员',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'reportDate',
-  //   label: '填报时间',
-  //   search: {
-  //     show: false
-  //   },
-  //   showOverflowTooltip: false
-  // },
   {
     field: 'gridmanName',
     label: '所属网格',

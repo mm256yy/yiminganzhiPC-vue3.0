@@ -45,8 +45,8 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { individualRegionApi } from '@/api/workshop/individualRegion/service'
 import { IndividualRegionType } from '@/api/workshop/individualRegion/type'
+import { exportRegionalStatisticsApi } from '@/api/workshop/scheduleReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
@@ -220,16 +220,26 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   }
 }
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = {
-    ...data
-  }
-}
-
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
+const onExport = async () => {
+  const params = {
+    type: 'IndividualHousehold'
+  }
+  const res = await exportRegionalStatisticsApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)
