@@ -9,3 +9,12 @@ export const getComprehensiveReportApi = (
 ): Promise<TableResponse<ComprehensiveReportType>> => {
   return request.get({ url: '/progressReport/professionalProjectsStatistics', params: data })
 }
+
+// 导出报表
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/progressReport/professionalProjectsExport`,
+    params,
+    responseType: 'blob'
+  })
+}

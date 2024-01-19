@@ -36,7 +36,7 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
+        show-overflow-tooltip
         row-key="id"
         headerAlign="center"
         align="center"
@@ -84,14 +84,6 @@ const dictObj = computed(() => dictStore.getDictObj)
 
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { back } = useRouter()
-
-interface SpanMethodProps {
-  row: PopulationHousingDtoType
-  column: PopulationHousingDtoType
-  rowIndex: number
-  columnIndex: number
-}
-
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
@@ -186,6 +178,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'regionText',
     label: '所属区域',
+    width: 200,
     search: {
       show: false
     }
@@ -281,35 +274,6 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const onBack = () => {
   back()
-}
-
-/**
- * 合并单元行
- * @param{Object} row 当前行
- * @param{Object} column 当前列
- * @param{Object} rowIndex 当前行下标
- * @param{Object} columnInex 当前列下标
- */
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  ).length
-  const index = tableObject.tableList.findIndex(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  )
-  if (column && columnIndex < 5) {
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
 }
 
 const onSearch = (data) => {

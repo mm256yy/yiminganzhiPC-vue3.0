@@ -16,7 +16,8 @@
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
-        @reset="setSearchParams"
+        @search="onSearch"
+        @reset="onReset"
       />
     </div>
 
@@ -35,7 +36,6 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -55,19 +55,10 @@ import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { enterpriseWorkGroupApi } from '@/api/workshop/enterpriseReport/service'
-import { IndividualWorkType } from '@/api/workshop/individualWork/types'
-
-import { screeningTree } from '@/api/workshop/village/service'
+import { exportWorkGroupApi } from '@/api/workshop/scheduleReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
-
-interface SpanMethodProps {
-  row: IndividualWorkType
-  column: IndividualWorkType
-  rowIndex: number
-  columnIndex: number
-}
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -77,14 +68,8 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { register, tableObject, methods } = useTable({
   getListApi: enterpriseWorkGroupApi
 })
-const { setSearchParams } = methods
-
-const villageTree = ref<any[]>([])
-
-tableObject.params = {
-  projectId
-}
-
+const { getList } = methods
+getList()
 const schema = reactive<CrudSchema[]>([
   {
     field: 'gridmanName',
@@ -219,126 +204,47 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
-/**
- * 合并单元行
- * @param{Object} row 当前行
- * @param{Object} column 当前列
- * @param{Object} rowIndex 当前行下标
- * @param{Object} columnInex 当前列下标
- */
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
-  ).length
-  const index = tableObject.tableList.findIndex(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
-  )
-  if (column && columnIndex < 5) {
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.doorNo) {
-    delete params.doorNo
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+  tableObject.params = params
+  getList()
+}
+
+const onReset = () => {
+  tableObject.params = {}
+  getList()
 }
 
 // 数据导出
-const onExport = () => {
-  // emit('export', villageTree.value, exportTypes.house)
-  // const params = {
-  //   exportType: '2',
-  //   projectId,
-  //   villageCode: code.value
-  // }
-  // const res = await exportReportApi(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    ...tableObject.params,
+    type: 'Company'
+  }
+  const res = await exportWorkGroupApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
-// 获取所属区域数据(行政村列表)
-const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'adminVillage')
-  villageTree.value = list || []
-  return list || []
-}
-
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
 const onBack = () => {
   back()
 }
-
-onMounted(() => {
-  setSearchParams({})
-})
 </script>
 <style lang="less" scoped>
 .search-form-wrap {
