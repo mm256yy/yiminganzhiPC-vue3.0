@@ -79,6 +79,80 @@
     </el-dialog>
 
     <OnDocumentation :door-no="doorNo" :show="trsArchivesPup" @close="onDocumentationClose" />
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="margin-bottom: 20px; font-size: 24px; font-weight: bold; text-align: center"
+        >过渡安置确认单
+      </h1>
+      <el-descriptions class="margin-top" :column="2" border>
+        <el-descriptions-item align="center" label="户主姓名" label-class-name="bbqs">
+          {{ baseInfo.name }}
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" align="center" label="户号">
+          {{ baseInfo.showDoorNo }}
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" align="center" label="户内人口">
+          {{ baseInfo.familyNum }}
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" align="center" label="联系方式">
+          {{ baseInfo.phone }}
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
+          {{ baseInfo.locationTypeText }}
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
+          过渡去向情况
+        </el-descriptions-item>
+        <el-descriptions-item
+          label-class-name="bbqs"
+          :span="2"
+          label="过渡安置地详址"
+          align="center"
+        >
+          <template #default>
+            <div style="display: flex; flex-direction: column">
+              <div style="flex: 1; text-align: left">{{ form.excessAddress }} </div></div
+            >
+          </template>
+        </el-descriptions-item>
+        <el-descriptions-item label-class-name="bbqs" :span="2" label="移民户主" align="center">
+          <template #default>
+            <div style="display: flex; flex-direction: column">
+              <div style="flex: 1; text-align: left"> </div
+            ></div>
+          </template>
+        </el-descriptions-item>
+        <el-descriptions-item
+          label-class-name="bbqs"
+          :span="2"
+          label="移民工作组验收意见"
+          align="center"
+        >
+          <template #default>
+            <div style="display: flex; flex-direction: column">
+              <div style="flex: 1">&nbsp;</div>
+              <div style="flex: 1; display: flex; justify-content: space-around">
+                <div>验收人：</div><div>验收时间：</div></div
+              >
+            </div>
+          </template>
+        </el-descriptions-item>
+        <el-descriptions-item
+          label-class-name="bbqs"
+          :span="2"
+          label="乡镇街道审核意见"
+          align="center"
+        >
+          <template #default>
+            <div style="display: flex; flex-direction: column">
+              <div style="flex: 1">&nbsp;</div>
+              <div style="flex: 1; display: flex; justify-content: space-around">
+                <div>审核人：</div><div>审核时间：</div></div
+              >
+            </div>
+          </template>
+        </el-descriptions-item>
+      </el-descriptions>
+    </div>
   </div>
 </template>
 
@@ -93,7 +167,9 @@ import {
   ElInput,
   ElDatePicker,
   ElMessage,
-  FormRules
+  FormRules,
+  ElDescriptions,
+  ElDescriptionsItem
 } from 'element-plus'
 import dayjs from 'dayjs'
 import { useValidator } from '@/hooks/web/useValidator'
@@ -103,7 +179,8 @@ import {
   getTransitionInfoApi,
   saveTransitionInfoApi
 } from '@/api/immigrantImplement/vacate/transition-service'
-
+import { debounce } from '@/utils/index'
+import { htmlToPdf } from '@/utils/ptf'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -175,6 +252,11 @@ const onDocumentationClose = () => {
 
 const onPrintTable = () => {
   console.log('打印')
+  debounce(() => {
+    // ElMessage.error('待业主提供模板')
+
+    htmlToPdf('#anztable', '无', false)
+  })
 }
 
 const onDialogClose = () => {
@@ -260,5 +342,9 @@ const onSubmit = (formEl: any) => {
     font-size: 14px;
     color: #171717;
   }
+}
+
+:deep(.bbqs) {
+  background: #ffffff !important;
 }
 </style>

@@ -106,6 +106,7 @@
             <div v-else-if="row.handleWay == 2">{{ row.settingGraveText }}</div>
           </template>
         </el-table-column>
+        <el-table-column prop="graveNo" label="编号" align="center" />
         <el-table-column label="备注" align="center">
           <template #default></template>
         </el-table-column>
