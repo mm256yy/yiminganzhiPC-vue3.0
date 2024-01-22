@@ -52,7 +52,8 @@ enum RoleCodeType {
   finance = 'finance',
   executive = 'executive',
   financevoucher = 'financevoucher',
-  township = 'township'
+  township = 'township',
+  fileadmin = 'fileadmin' // 档案管理员
 }
 
 const appStore = useAppStore()

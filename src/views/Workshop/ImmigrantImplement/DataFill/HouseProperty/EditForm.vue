@@ -323,7 +323,14 @@
         </ElCol>
         <ElCol :span="12" />
       </ElRow>
-
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="宅基地面积" prop="homesteadArea">
+            <ElInput v-model="form.homesteadArea" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
       <ElRow>
         <ElCol :span="24">
           <ElFormItem label="其他佐证材料">
