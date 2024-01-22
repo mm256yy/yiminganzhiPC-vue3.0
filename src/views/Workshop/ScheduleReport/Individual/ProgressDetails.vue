@@ -39,6 +39,7 @@
         headerAlign="center"
         align="center"
         border
+        show-overflow-tooltip
         :summary-method="getSummaries"
         show-summary
         style="min-height: 600px"
