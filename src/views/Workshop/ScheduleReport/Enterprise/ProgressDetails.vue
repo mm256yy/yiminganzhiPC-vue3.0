@@ -5,28 +5,28 @@
     </ElButton>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">进度管理</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">进度统计表</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">企业</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">进度明细</ElBreadcrumbItem>
     </ElBreadcrumb>
   </div>
   <WorkContentWrap>
-    <div class="search-form-wrap">
+    <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
-      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
 
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 企业 </div>
+        <div class="table-left-title"> 企业进度明细统计表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -36,51 +36,60 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
+        :summary-method="getSummaries"
+        show-summary
+        show-overflow-tooltip
         align="center"
-        @register="register"
       >
         <template #appendageStatus="{ row }">
-          <div v-if="row.appendageStatus == '1'">
+          <div v-if="row.appendageStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #graveStatus="{ row }">
-          <div v-if="row.graveStatus == '1'">
+          <div v-if="row.graveStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #deviceStatus="{ row }">
-          <div v-if="row.deviceStatus == '1'">
+          <div v-if="row.deviceStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #cardStatus="{ row }">
-          <div v-if="row.cardStatus == '1'">
+          <div v-if="row.cardStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #houseSoarStatus="{ row }">
-          <div v-if="row.houseSoarStatus == '1'">
+          <div v-if="row.houseSoarStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #landSoarStatus="{ row }">
-          <div v-if="row.landSoarStatus == '1'">
+          <div v-if="row.landSoarStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #agreementStatus="{ row }">
-          <div v-if="row.agreementStatus == '1'">
+          <div v-if="row.agreementStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
         <template #proceduresStatus="{ row }">
-          <div v-if="row.proceduresStatus == '1'">
+          <div v-if="row.proceduresStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
+          <div e-else></div>
         </template>
       </Table>
     </div>
@@ -90,39 +99,25 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-
-import { EnterpriseReportType } from '@/api/workshop/enterpriseReport/type'
 import { getEnterpriseReportApi } from '@/api/workshop/enterpriseReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../DataQuery/DataCollectionPublicity/config'
+import { exportProgressDetailApi } from '@/api/workshop/scheduleReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+
 const { back } = useRouter()
-
-interface SpanMethodProps {
-  row: EnterpriseReportType
-  column: EnterpriseReportType
-  rowIndex: number
-  columnIndex: number
-}
-
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
-
-const { register, tableObject, methods } = useTable({
-  getListApi: getEnterpriseReportApi
-})
-
-const { setSearchParams } = methods
-
+const totalCountObj = ref<any>() // 总计对象
+const { tableObject } = useTable()
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
@@ -143,9 +138,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -154,7 +149,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'doorNo',
-    label: '户号',
+    label: '企业编号',
     search: {
       show: true,
       component: 'Input',
@@ -167,13 +162,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householdName',
-    label: '户主姓名',
+    field: 'name',
+    label: '企业名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户主姓名'
+        placeholder: '请输入企业名称'
       }
     },
     table: {
@@ -183,8 +178,16 @@ const schema = reactive<CrudSchema[]>([
 
   // table字段 分割
   {
-    field: 'id',
+    field: 'index',
+    type: 'index',
     label: '序号',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'villageCodeText',
+    label: '行政村',
     search: {
       show: false
     }
@@ -280,7 +283,7 @@ const schema = reactive<CrudSchema[]>([
     ]
   },
   {
-    field: 'inCount',
+    field: 'placement',
     label: '安置阶段',
     search: {
       show: false
@@ -299,78 +302,83 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
-/**
- * 合并单元行
- * @param{Object} row 当前行
- * @param{Object} column 当前列
- * @param{Object} rowIndex 当前行下标
- * @param{Object} columnInex 当前列下标
- */
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  ).length
-  const index = tableObject.tableList.findIndex(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  )
-  if (column && columnIndex < 5) {
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
+  tableObject.params = params
+  requestListApi()
+}
 
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.doorNo) {
-    delete params.doorNo
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
+const onReset = () => {
+  tableObject.params = {}
+  requestListApi()
+}
+
+const getSummaries = (params: any) => {
+  const { columns } = params
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = '合计'
+      return
+    }
+    if (index < 4) {
+      sums[index] = ''
+      return
+    }
+    console.log(column)
+    if (!totalCountObj.value) {
+      return
+    }
+    const totalMap = {
+      4: totalCountObj.value.appendageStatusTotal, // 房屋、附属物
+      5: totalCountObj.value.landSeedlingStatusTotal, // 土地附属物
+      6: totalCountObj.value.deviceStatusTotal, // 设施设备
+      7: totalCountObj.value.cardStatusTotal, // 企业建卡
+      8: totalCountObj.value.houseSoarStatusTotal, // 房屋腾空
+      9: totalCountObj.value.landSoarStatusTotal, // 土地腾空
+      10: totalCountObj.value.agreementStatusTotal, // 动迁协议
+      11: totalCountObj.value.proceduresStatusTotal // 相关手续
+      // 12: totalCountObj.value.chooseHouseStatusTotal,
+      // 13: totalCountObj.value.chooseGraveStatusTotal,
+      // 14: totalCountObj.value.cardStatusTotal,
+      // 15: totalCountObj.value.houseSoarStatusTotal,
+      // 16: totalCountObj.value.landSoarStatusTotal,
+      // 17: totalCountObj.value.excessStatusTotal,
+      // 18: totalCountObj.value.agreementStatusTotal,
+      // 19: totalCountObj.value.buildOneselfStatusTotal,
+      // 20: totalCountObj.value.flatsStatusTotal,
+      // 21: totalCountObj.value.centralizedSupportStatusTotal
+    }
+    sums[index] = totalMap[index]
+    return
+  })
+  return sums
 }
 
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
+const onExport = async () => {
+  const params = {
+    ...tableObject.params,
+    type: 'Company'
+  }
+  const res = await exportProgressDetailApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)
@@ -380,24 +388,23 @@ const getVillageTree = async () => {
   return list || []
 }
 
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
 const onBack = () => {
   back()
 }
+
+const requestListApi = () => {
+  tableObject.loading = true
+  getEnterpriseReportApi(tableObject.params).then((res) => {
+    tableObject.tableList = res.content
+    totalCountObj.value = res.other
+    tableObject.loading = false
+  })
+}
+
+requestListApi()
+
 onMounted(() => {
   getVillageTree()
-  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>
@@ -415,4 +422,17 @@ onMounted(() => {
   height: 10px;
   background-color: #e7edfd;
 }
+
+.fill-field {
+  width: calc(100% + 20px);
+  height: 100%;
+  padding: 12px 0;
+  margin: 0 -20px;
+  background-color: #67c23a;
+  box-sizing: border-box;
+}
+
+// ::v-deep(.el-table .cell) {
+//   margin: -8px 0;
+// }
 </style>

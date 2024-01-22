@@ -4,6 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 实物成果汇总表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <div class="fylist">
         <ElTable
@@ -82,125 +83,13 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
-// import { Table } from '@/components/Table'
-// import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-// import { useTable } from '@/hooks/web/useTable'
-// import { getCompensationCardList } from '@/api/immigrantImplement/createCard/service'
+import { ElTable, ElTableColumn, ElButton } from 'element-plus'
 import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const titles = ['智能报表', '实物成果', '居民户', '实物成果汇总']
-const feeTableData = ref<any[]>([
-  // {
-  //   doorNo: null,
-  //   id: null,
-  //   isUpdate: '0',
-  //   isVerify: null,
-  //   name: '房屋主体补偿费',
-  //   number: null,
-  //   price: 1000,
-  //   projectId: 53,
-  //   remark: null,
-  //   status: null,
-  //   totalPrice: 8,
-  //   type: '1',
-  //   uid: null,
-  //   unit: null
-  // },
-  // {
-  //   doorNo: null,
-  //   id: null,
-  //   isUpdate: '0',
-  //   isVerify: null,
-  //   name: '房屋主体补偿费',
-  //   number: null,
-  //   price: 1000,
-  //   projectId: 53,
-  //   remark: null,
-  //   status: null,
-  //   totalPrice: 8,
-  //   type: '1',
-  //   uid: null,
-  //   unit: null
-  // }
-]) // 费用补偿情况列表
-
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-//   console.log(row, column)
-//   if (columnIndex === 0) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 10,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 10) {
-//       return {
-//         rowspan: 17,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 27) {
-//       return {
-//         rowspan: 7,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 1) {
-//     if (rowIndex === 17) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 18) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 19) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 20) {
-//       return {
-//         rowspan: 2,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 21) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 22) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 23) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 24) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     }
-//   }
-// }
-
-// // 根据户号来做筛选
-// tableObject.params = {
-//   doorNo: jl1080433,
-// //   status: props.baseInfo.status
-// }
+const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const tableRowClassName = ({ row }: any) => {
   if (
@@ -213,16 +102,35 @@ const tableRowClassName = ({ row }: any) => {
     return ''
   }
 }
-// const { allSchemas } = useCrudSchemas(schema)
-
-// const formRef = ref<FormInstance>()
-// const form = ref<any>({ ...props.baseInfo })
 
 // 获取费用补偿情况列表
 const getRewardFeeList = () => {
   getsummaryApi({}).then((res: any) => {
     feeTableData.value = res
   })
+}
+
+// 数据导出
+const onExport = () => {
+  // const params = {
+  //   exportType: '1',
+  //   ...tableObject.params
+  // }
+  // const res = await exportReportApi(params)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
 }
 
 /**

@@ -21,12 +21,11 @@
         :data="tableObject.tableList"
         :columns="schemas.columns"
         :showOverflowTooltip="true"
-        tableLayout="auto"
-        style="width: 100%"
         row-key="id"
         show-summary
         headerAlign="center"
         align="center"
+        height="450"
       />
     </div>
   </WorkContentWrap>
@@ -167,39 +166,13 @@ const getTableDepends = (titles: any[], list: any[]) => {
   }, [])
 }
 
-const getSummaries = (param: any) => {
-  const { columns, data } = param
-  const sums: string[] = []
-  columns.forEach((column, index) => {
-    if (index === 1) {
-      sums[index] = '合计'
-      return
-    }
-    const values = data.map((item) => Number(item[column.property]))
-    if (!values.every((value) => Number.isNaN(value))) {
-      sums[index] = `${values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return (prev + curr).toFixed(2)
-        } else {
-          return prev
-        }
-      }, 0)}`
-    } else {
-      sums[index] = ''
-    }
-  })
-
-  return sums
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
 
-  code.value = params.code
+  code.value = params.villageCode
   requestListApi()
 }
 
@@ -269,6 +242,7 @@ onMounted(() => {
 
 .title-hint {
   padding: 15px 0 0 15px;
+  font-size: 14px;
   color: 14px;
 }
 

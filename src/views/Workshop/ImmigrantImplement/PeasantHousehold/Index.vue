@@ -118,7 +118,7 @@ import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landl
 import { filterViewDoorNo } from '@/utils/index'
 
 const appStore = useAppStore()
-const { push, options } = useRouter()
+const { push } = useRouter()
 const projectId = appStore.currentProjectId
 let valueForme = appStore.getsercher
 const dialog = ref(false) // 弹窗标识
@@ -181,7 +181,6 @@ onMounted(() => {
   getVillageTree()
   getdistrictTree()
   getLandlordHeadInfo()
-  console.log(options.history.state.forward, 'bbq')
 })
 const toTarget = (routeName: string, query = {}) => {
   push({
@@ -334,21 +333,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'reportUserName',
-  //   label: '填报人员',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'reportDate',
-  //   label: '填报时间',
-  //   search: {
-  //     show: false
-  //   },
-  //   showOverflowTooltip: false
-  // },
   {
     field: 'gridmanName',
     label: '所属网格',

@@ -8,3 +8,12 @@ export const getLandInfoApi = (params: Partial<any>): Promise<TableResponse<any>
     params
   })
 }
+
+// 导出报表(区域)
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/landSurvey/export`,
+    params,
+    responseType: 'blob'
+  })
+}

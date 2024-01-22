@@ -9,7 +9,7 @@ export const getResidentRegionListApi = (params: {
   sort?: string[]
 }) => {
   return request.get({
-    url: '/progressReport/peasantFillingStatistics',
+    url: '/progressReport/peasantAreaStatistics',
     params
   })
 }
@@ -20,5 +20,48 @@ export const getResidentWorkListApi = (params: { page: string; size: string; sor
   return request.get({
     url: '/progressReport/peasantGridStatistics',
     params
+  })
+}
+
+/**
+ * 查询居民户进度报表
+ * @param params
+ * @returns
+ */
+export const getResidentProgressListApi = (params: {
+  page: string
+  size: string
+  sort?: string[]
+}) => {
+  return request.get({
+    url: '/progressReport/peasantFillingStatistics',
+    params
+  })
+}
+
+// 进度明细（导出）
+export const exportProgressDetailApi = (params: any) => {
+  return request.get({
+    url: `/progressReport/exportFilling`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+// 区域统计（导出）
+export const exportRegionalStatisticsApi = (params: any) => {
+  return request.get({
+    url: `/progressReport/exportFillingByArea`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+// 工作组统计（导出）
+export const exportWorkGroupApi = (params: any) => {
+  return request.get({
+    url: `/progressReport/exportFillingByGrid`,
+    params,
+    responseType: 'blob'
   })
 }
