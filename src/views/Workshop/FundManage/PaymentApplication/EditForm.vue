@@ -98,7 +98,7 @@
           </div>
         </div>
       </div> -->
-      <ElFormItem label="收款方:" v-if="form.payType == 2 && form.paymentType != 1" prop="payee">
+      <!-- <ElFormItem label="收款方:" v-if="form.payType == 2 && form.paymentType != 1" prop="payee">
         <ElSelect class="w-350px" v-model="form.payee">
           <ElOption
             v-for="item in dictObj[396]"
@@ -107,7 +107,7 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
+      </ElFormItem> -->
       <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
