@@ -175,7 +175,8 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号
+${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -335,9 +336,11 @@ const getSettleAddressList = async () => {
 }
 watch(
   () => immigrantSettle.value,
-  (res) => {
+  async (res) => {
     // 整成数组
-    console.log(apartmentArea, 'bbq')
+    let m = await resettleArea()
+    console.log(m, res, 'bbqs')
+
     if (!res) return
     if (res.houseAreaType === HouseType.homestead || res.houseAreaType === HouseType.flat) {
       const houseAreaTypeText = resettleHouseType.find(
@@ -347,7 +350,7 @@ watch(
         tableData.value = [
           {
             houseAreaTypeText,
-            settleAddressText: resettleArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: m.find((item) => item.code === res.settleAddress)?.name,
             area: homesteadAreaSize.find((item) => item.id === res.areaType)?.name,
             num: 1
           }
