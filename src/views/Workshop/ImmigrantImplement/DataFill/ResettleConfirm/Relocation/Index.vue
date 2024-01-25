@@ -69,7 +69,11 @@
         </ElSpace>
       </div>
 
-      <el-table v-if="true" :data="tableData" style="width: 100%">
+      <el-table
+        v-if="houseType === HouseType.homestead || houseType === HouseType.flat"
+        :data="tableData"
+        style="width: 100%"
+      >
         <el-table-column type="index" label="序号" width="100" align="center" />
         <el-table-column prop="settleAddressText" label="安置区" align="center" />
         <el-table-column prop="area" label="户型/套型" align="center" />
@@ -360,7 +364,7 @@ watch(
         if (res.typeOneNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
             area: apartmentAreaSize[0].name,
             num: res.typeOneNum
           })
@@ -368,7 +372,7 @@ watch(
         if (res.typeTwoNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
             area: apartmentAreaSize[1].name,
             num: res.typeTwoNum
           })
@@ -376,7 +380,7 @@ watch(
         if (res.typeThreeNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
             area: apartmentAreaSize[2].name,
             num: res.typeThreeNum
           })
@@ -384,7 +388,7 @@ watch(
         if (res.typeFourNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
             area: apartmentAreaSize[3].name,
             num: res.typeFourNum
           })

@@ -365,6 +365,14 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="备注" prop="remark">
+            <ElInput v-model="form.remark" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
     </ElForm>
 
     <template #footer v-if="actionType !== 'view'">

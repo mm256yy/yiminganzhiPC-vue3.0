@@ -21,7 +21,7 @@
           <div class="base-item">
             <div class="label">区块：</div>
             <div class="value">
-              {{ productionLandInfo ? getSettleAddress(productionLandInfo.settleAddress) : '' }}
+              {{ productionLandInfo ? productionLandInfo.settleAddressText : '' }}
             </div>
           </div>
           <div class="base-item">
