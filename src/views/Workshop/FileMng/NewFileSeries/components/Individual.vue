@@ -12,9 +12,11 @@
     </div>
     <div class="line"></div>
     <div class="title-hint"
-      ><span class="title-label">个体户档案列表</span> &nbsp;&nbsp;共<span class="title-number">
-        1000 </span
-      >份</div
+      ><span class="title-label">个体户档案列表</span> &nbsp;&nbsp;共&nbsp;<span
+        class="title-number"
+      >
+        {{ tableObject.total }} </span
+      >&nbsp;份</div
     >
     <div class="table-wrap" v-loading="tableObject.loading">
       <Table
@@ -38,8 +40,10 @@
             >平台采集</ElButton
           >
         </template>
-        <template #archiving>
-          <ElButton size="small" type="primary" text>电子档案</ElButton>
+        <template #archiving="{ row }">
+          <ElButton size="small" type="primary" text @click="handleArchiving(row)"
+            >电子档案（已上传{{ row?.docNum }}份）</ElButton
+          >
         </template>
       </Table>
     </div>
@@ -48,7 +52,6 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onMounted } from 'vue'
-
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -57,18 +60,23 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
 import { ElButton } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { getFileList } from '@/api/fileMng/service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
-
-const { register, tableObject, methods } = useTable({})
+const { push } = useRouter()
+const { register, tableObject, methods } = useTable({
+  getListApi: getFileList
+})
 const { setSearchParams } = methods
 
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
-  projectId
+  projectId,
+  type: 'IndividualHousehold'
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -85,9 +93,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        showCheckbox: false,
+        checkStrictly: false,
+        checkOnClickNode: false
       }
     },
     table: {
@@ -123,7 +131,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fileNumber',
+    field: 'archiveNo',
     label: '文件档号',
     search: {
       show: true,
@@ -144,9 +152,8 @@ const schema = reactive<CrudSchema[]>([
     width: 80
   },
   {
-    field: 'villageCodeText',
+    field: 'villageText',
     label: '行政村',
-    width: 180,
     search: {
       show: false
     }
@@ -154,7 +161,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'doorNo',
     label: '个体户编号',
-    width: 180,
     search: {
       show: false
     }
@@ -201,12 +207,45 @@ const onSearch = (data) => {
 
 const onReset = () => {
   tableObject.params = {
-    projectId
+    projectId,
+    type: 'IndividualHousehold'
   }
   setSearchParams({})
 }
 
-const handleCollection = (row: any) => {}
+// 平台采集查看
+const handleCollection = (row: any) => {
+  console.log('row', row)
+  const type = 'Individual'
+  const routeName = 'Individual' // 个体户
+  const query = { type }
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
+}
+
+// 查看电子档案
+const handleArchiving = (row: any) => {
+  const routeName = 'FileMngDetail'
+  const type = 'IndividualHousehold'
+  const query = {
+    type,
+    pId: row.id
+  }
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
+}
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
@@ -215,23 +254,9 @@ const getVillageTree = async () => {
   return list || []
 }
 
-const requestList = () => {
-  try {
-    tableObject.tableList = [
-      {
-        villageCodeText: '西山村',
-        showDoorNo: '10010',
-        householdName: '张三'
-      }
-    ]
-    tableObject.loading = false
-  } catch {}
-}
-
-requestList()
-
 onMounted(() => {
   getVillageTree()
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

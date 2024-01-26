@@ -1,7 +1,7 @@
 <!--专业项目-->
 <template>
   <WorkContentWrap>
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -34,8 +34,10 @@
             >平台采集</ElButton
           >
         </template>
-        <template #archiving>
-          <ElButton size="small" type="primary" text>电子档案</ElButton>
+        <template #archiving="{ row }">
+          <ElButton size="small" type="primary" text @click="handleArchiving(row)"
+            >电子档案（已上传{{ row?.docNum }}份）</ElButton
+          >
         </template>
       </Table>
     </div>
@@ -43,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -53,15 +55,21 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { screeningTree } from '@/api/workshop/village/service'
 import { ElButton } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useDictStoreWithOut } from '@/store/modules/dict'
+import { getProfessionalProjectFileList } from '@/api/fileMng/service'
 
 const appStore = useAppStore()
+const dictStore = useDictStoreWithOut()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
-
-const { register, tableObject, methods } = useTable({})
+const dictObj = computed(() => dictStore.getDictObj)
+const { push } = useRouter()
+const { register, tableObject, methods } = useTable({
+  getListApi: getProfessionalProjectFileList
+})
 
 const { setSearchParams } = methods
-
 const villageTree = ref<any[]>([])
 
 tableObject.params = {
@@ -70,49 +78,13 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: villageTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '个体户编号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入个体户编号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
     field: 'name',
-    label: '个体户名称',
+    label: '专项名称',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入个体户名称'
+        placeholder: '请输入专项名称'
       }
     },
     table: {
@@ -120,7 +92,36 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fileNumber',
+    field: 'code',
+    label: '专项编码',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '请输入专项编码'
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'type',
+    label: '专项类别',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        placeholder: '请选择',
+        options: dictObj.value[342]
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'archiveNo',
     label: '文件档号',
     search: {
       show: true,
@@ -155,7 +156,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'category',
+    field: 'typeText',
     label: '专项类别',
     search: {
       show: false
@@ -201,8 +202,6 @@ const onReset = () => {
   setSearchParams({})
 }
 
-const handleCollection = (row: any) => {}
-
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'adminVillage')
@@ -210,23 +209,45 @@ const getVillageTree = async () => {
   return list || []
 }
 
-const requestList = () => {
+// 平台采集查看
+const handleCollection = (row: any) => {
+  console.log('row', row)
+  const type = 'FileProfessionalProject'
+  const routeName = 'FileProfessionalProject' // 专业项目
+  const query = { type }
   try {
-    tableObject.tableList = [
-      {
-        villageCodeText: '西山村',
-        showDoorNo: '10010',
-        householdName: '张三'
-      }
-    ]
-    tableObject.loading = false
-  } catch {}
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
 }
 
-requestList()
+// 查看电子档案
+const handleArchiving = (row: any) => {
+  const routeName = 'FileMngDetail'
+  const type = 'ProfessionalProject'
+  const query = {
+    type,
+    pId: row.id,
+    showDoorNo: row.code,
+    name: row.name
+  }
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
+}
 
 onMounted(() => {
   getVillageTree()
+  setSearchParams({})
 })
 </script>
 <style lang="less" scoped>

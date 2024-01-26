@@ -5,28 +5,24 @@
     <div class="title-hint"><span class="title-label">报告及批文列表</span></div>
     <div class="table-wrap" v-loading="tableObject.loading">
       <Table
-        v-model:pageSize="tableObject.size"
-        v-model:currentPage="tableObject.currentPage"
-        :pagination="{
-          total: tableObject.total
-        }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         row-key="id"
-        style="width: 100%"
         headerAlign="center"
         show-overflow-tooltip
         align="center"
-        height="560"
-        @register="register"
+        height="600"
+        style="max-height: 600px"
       >
         <template #collection="{ row }">
           <ElButton size="small" type="primary" text @click="handleCollection(row)"
             >平台采集</ElButton
           >
         </template>
-        <template #archiving>
-          <ElButton size="small" type="primary" text>电子档案</ElButton>
+        <template #archiving="{ row }">
+          <ElButton size="small" type="primary" text @click="handleArchiving(row)"
+            >电子档案（已上传{{ row?.docNum }}份）</ElButton
+          >
         </template>
       </Table>
     </div>
@@ -34,23 +30,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { screeningTree } from '@/api/workshop/village/service'
-import { ElButton } from 'element-plus'
+import { ElButton, ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { getApprovalList } from '@/api/fileMng/service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
-
-const { register, tableObject, methods } = useTable({})
-
-const villageTree = ref<any[]>([])
-
+const { push } = useRouter()
+const { tableObject } = useTable()
 tableObject.params = {
   projectId
 }
@@ -64,7 +57,7 @@ const schema = reactive<CrudSchema[]>([
     width: 100
   },
   {
-    field: 'villageCodeText',
+    field: 'name',
     label: '报告类别',
     search: {
       show: false
@@ -88,32 +81,57 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const handleCollection = (row: any) => {}
-
-// 获取所属区域数据(行政村列表)
-const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'adminVillage')
-  villageTree.value = list || []
-  return list || []
-}
-
-const requestList = () => {
+const handleCollection = (row: any) => {
+  console.log('row', row)
+  const type = 'ReportApproval'
+  const routeName = 'ReportApproval' // 报告及批文
+  const query = { type }
   try {
-    tableObject.tableList = [
-      {
-        villageCodeText: '西山村',
-        showDoorNo: '10010',
-        householdName: '张三'
-      }
-    ]
-    tableObject.loading = false
-  } catch {}
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
 }
 
-requestList()
+// 查看电子档案
+const handleArchiving = (row: any) => {
+  const routeName = 'FileMngDetail'
+  const type = row.type
+  const showDoorNo = row.showDoorNo
+  const name = row.name
+  const query = {
+    type,
+    pId: row.id,
+    showDoorNo,
+    name
+  }
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
+}
+
+const requestListApi = async () => {
+  tableObject.loading = true
+  try {
+    const res = await getApprovalList(tableObject.params)
+    tableObject.tableList = res || []
+    tableObject.loading = false
+  } catch {
+    tableObject.loading = false
+    tableObject.tableList = []
+  }
+}
 
 onMounted(() => {
-  getVillageTree()
+  requestListApi()
 })
 </script>
 <style lang="less" scoped>

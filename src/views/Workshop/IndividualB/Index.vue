@@ -208,6 +208,8 @@ const headInfo = ref<LandlordHeadInfoType>({
 })
 const printDialog = ref(false)
 const exportDialog = ref(false)
+const { currentRoute } = useRouter()
+const { type } = currentRoute.value.query as any
 interface exportListType {
   name: string
   value: string | number
@@ -269,6 +271,16 @@ const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({ type: 'IndividualHousehold' })
   headInfo.value = info
 }
+
+const checkIsOpenDialog = () => {
+  if (type === 'individualCheck') {
+    actionType.value = 'add'
+    tableObject.currentRow = null
+    dialog.value = true
+  }
+}
+
+checkIsOpenDialog()
 
 onMounted(() => {
   getVillageTree()

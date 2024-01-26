@@ -42,7 +42,6 @@ import LandAcquisition from './components/LandAcquisition.vue'
 import ReportsApprovals from './components/ReportsApprovals.vue'
 
 const tabCurrentId = ref<number>(0)
-
 const tabsList = [
   {
     id: 0,
@@ -79,10 +78,14 @@ const onTabClick = (tabItem) => {
     return
   }
   tabCurrentId.value = tabItem.id
+  sessionStorage.setItem('tabCurrentId', tabCurrentId.value.toString())
 }
 
 onMounted(() => {
-  //   getRewardFeeList()
+  const currentTab = sessionStorage.getItem('tabCurrentId')
+  if (currentTab) {
+    tabCurrentId.value = Number(currentTab)
+  }
 })
 </script>
 <style lang="less" scoped>

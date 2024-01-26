@@ -20,10 +20,8 @@
         height="560"
         @register="register"
       >
-        <template #collection="{ row }">
-          <ElButton size="small" type="primary" text @click="handleCollection(row)"
-            >平台采集</ElButton
-          >
+        <template #collection>
+          <ElButton size="small" type="primary" text @click="handleCollection">平台采集</ElButton>
         </template>
         <template #archiving>
           <ElButton size="small" type="primary" text>电子档案</ElButton>
@@ -46,7 +44,7 @@ import { ElButton } from 'element-plus'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const { register, tableObject, methods } = useTable({})
+const { register, tableObject, methods } = useTable()
 const { setSearchParams } = methods
 const villageTree = ref<any[]>([])
 
@@ -65,7 +63,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'villageCodeText',
     label: '权属单位',
-    width: 180,
     search: {
       show: false
     }
@@ -73,7 +70,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'showDoorNo',
     label: '户号',
-    width: 180,
     search: {
       show: false
     }
@@ -103,29 +99,7 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = {
-    ...data
-  }
-
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
-  setSearchParams({ ...params })
-}
-
-const onReset = () => {
-  tableObject.params = {
-    projectId
-  }
-  setSearchParams({})
-}
-
-const handleCollection = (row: any) => {}
+const handleCollection = () => {}
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
@@ -136,14 +110,9 @@ const getVillageTree = async () => {
 
 const requestList = () => {
   try {
-    tableObject.tableList = [
-      {
-        villageCodeText: '西山村',
-        showDoorNo: '10010',
-        householdName: '张三'
-      }
-    ]
+    tableObject.tableList = []
     tableObject.loading = false
+    console.log(1)
   } catch {}
 }
 

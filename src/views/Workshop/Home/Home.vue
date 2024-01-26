@@ -11,6 +11,8 @@
   <UserHome
     v-else-if="role === RoleCodeType.implementation || role === RoleCodeType.implementleader"
   />
+  <!--档案管理人员首页-->
+  <FileMngHome v-else-if="role === RoleCodeType.fileadmin" />
   <!-- 其他首页 -->
   <OtherHome v-else />
 </template>
@@ -23,11 +25,12 @@
  * 只放页面组件
  */
 
-import { computed, onBeforeMount, ref, onMounted } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import UserHome from './AdminHome.vue'
 import LeaderHome from '../ExternalLink/LeaderSide.vue'
 import EvaluationHome from './EvaluationHome.vue'
 import InvestigationHome from './Index.vue'
+import FileMngHome from '@/views/Workshop/FileMng/NewFileSeries/Index.vue'
 import OtherHome from './Other.vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'

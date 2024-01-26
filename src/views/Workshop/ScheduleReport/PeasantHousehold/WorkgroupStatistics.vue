@@ -197,15 +197,17 @@ const handleSizeChange = (val: number) => {
   pageSize.value = val
   getResidentWorkList()
 }
+
 const handleCurrentChange = (val: number) => {
   pageNum.value = val
   getResidentWorkList()
 }
+
 //查询报表数据
 const getResidentWorkList = () => {
   const params = {
     ...tableObject.params,
-    page: pageNum.value,
+    page: pageNum.value - 1,
     size: pageSize.value
   }
   getResidentWorkListApi(params).then((res) => {
