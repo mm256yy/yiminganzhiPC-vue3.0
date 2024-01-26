@@ -42,7 +42,7 @@
                       type: 'archives'
                     }"
                     :on-error="onError"
-                    :list-type="'picture-card'"
+                    :list-type="'picture'"
                     accept=".jpg,.jpeg,.png,.pdf"
                     :multiple="true"
                     :file-list="collectiveAssetsPic"
@@ -58,6 +58,35 @@
                           <Icon icon="ant-design:plus-outlined" :size="22" />
                         </div>
                         <div class="card-txt">点击上传</div>
+                      </div>
+                    </template>
+                    <template #file="{ file }">
+                      <div class="flex items-center w-full">
+                        <div class="img-box" @click="imgPreview(file)">
+                          <img :src="file.url" alt="" />
+                        </div>
+                        <div class="flex-1">
+                          <ElInput
+                            v-if="file.edit"
+                            v-model="file.name"
+                            clearable
+                            placeholder="修改附件名称"
+                            @blur="file.edit = false"
+                          />
+                          <div v-else class="flex items-center justify-between">
+                            <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
+                            <ElTooltip placement="top" content="修改附件名称">
+                              <Icon
+                                icon="uil:edit-alt"
+                                color="var(--el-color-primary)"
+                                @click="file.edit = true"
+                              />
+                            </ElTooltip>
+                          </div>
+                        </div>
+                        <div class="upload-delete" @click="removeFiles(file)">
+                          <Icon icon="ph:x" :size="14" />
+                        </div>
                       </div>
                     </template>
                   </ElUpload>
@@ -87,7 +116,9 @@ import {
   ElUpload,
   ElDialog,
   UploadFile,
-  UploadFiles
+  UploadFiles,
+  ElInput,
+  ElTooltip
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useAppStore } from '@/store/modules/app'
@@ -204,7 +235,12 @@ const onSave = () => {
     emit('updateData')
   })
 }
-
+let removeFiles = (data) => {
+  collectiveAssetsPic.value = collectiveAssetsPic.value.filter((item: any) => {
+    return item.uid != data.uid
+  })
+  console.log(data, collectiveAssetsPic)
+}
 onMounted(() => {
   initData()
 })
@@ -274,6 +310,38 @@ onMounted(() => {
 
   .unit {
     color: var(--el-color-primary);
+  }
+}
+
+.flex-1 {
+  cursor: pointer;
+}
+
+.upload-delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 22px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-box {
+  display: flex;
+  align-items: center;
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #ffffff;
+  border-radius: 4px;
+
+  img {
+    display: block;
+    width: 100%;
   }
 }
 </style>

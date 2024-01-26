@@ -278,7 +278,7 @@ const filterWay = (data) => {
     // }
     // return item
     item.disabled = false
-    if (isProductionLand.value != '1' && item.value == '1') {
+    if (data.isProductionLand != '1' && item.value == '1') {
       item.disabled = true
     }
     if (data.populationNature != '1' && item.value == '1') {
@@ -287,16 +287,16 @@ const filterWay = (data) => {
     if (data.age < 14 && item.value == '2') {
       item.disabled = true
     }
-    if (data.age < 14 && item.value != '3') {
-      item.disabled = true
-    }
+    // if (data.age < 14 && item.value != '3') {
+    //   item.disabled = true
+    // }
     return item
   })
   console.log(arr, data)
 
   return arr
 }
-
+4
 const stepClick = (id) => {
   stepIndex.value = id
 }
