@@ -167,7 +167,7 @@ const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 const getProHouseReportList = () => {
   const params = {
     ...extraParams,
-    page: pageNum.value,
+    page: pageNum.value - 1,
     size: pageSize.value,
     projectId
   }

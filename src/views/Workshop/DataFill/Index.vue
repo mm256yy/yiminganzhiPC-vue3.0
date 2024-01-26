@@ -22,6 +22,8 @@
       <div v-if="classifyType !== 'check'" class="head-top">
         <div class="tabs"> </div>
         <ElSpace>
+          <ElButton type="primary" @click="addEnterprise"> 添加企业 </ElButton>
+          <ElButton type="primary" @click="addIndividual"> 添加个体户 </ElButton>
           <ElButton
             :icon="printIcon"
             v-if="
@@ -42,7 +44,7 @@
             :icon="EscalationIcon"
             @click="onReportData"
           >
-            填报完成
+            填报完成2
           </ElButton>
 
           <ElButton
@@ -451,6 +453,7 @@ const EscalationIcon = useIcon({ icon: 'carbon:send-alt' })
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const SignIcon = useIcon({ icon: 'typcn:edit' })
+const { push } = useRouter()
 
 // 农户详情
 const getLandlordInfo = () => {
@@ -463,7 +466,6 @@ const getLandlordInfo = () => {
 }
 
 getLandlordInfo()
-// const { push } = useRouter()
 
 watch(
   () => globalData.currentSurveyStatus,
@@ -471,6 +473,33 @@ watch(
     surveyStatus.value = val
   }
 )
+
+// 新增企业
+const addEnterprise = () => {
+  const query = {
+    type: 'enterpriseCheck'
+  }
+
+  sessionStorage.setItem('isDefaultOpen', '1')
+  const routeName = 'EnterpriceCheck'
+  push({
+    name: routeName,
+    query
+  })
+}
+
+// 新增个体工商户
+const addIndividual = () => {
+  const query = {
+    type: 'individualCheck'
+  }
+  sessionStorage.setItem('isDefaultOpen', '1')
+  const routeName = 'IndividualBCheck'
+  push({
+    name: routeName,
+    query
+  })
+}
 
 const onReportTabClick = (tabItem) => {
   if (reportTabCurrentId.value === tabItem.id) {
@@ -538,7 +567,6 @@ const onConfirmReport = async () => {
 }
 
 const onBack = () => {
-  // push('/Workshop/Landlord')
   back()
 }
 

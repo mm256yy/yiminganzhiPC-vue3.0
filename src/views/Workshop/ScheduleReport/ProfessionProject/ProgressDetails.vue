@@ -21,7 +21,6 @@
       />
     </div>
     <div class="line"></div>
-
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 专业项目进度明细报表 </div>

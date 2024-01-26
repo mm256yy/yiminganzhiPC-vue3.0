@@ -184,11 +184,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
-import type {
-  LandlordDtoType,
-  LandlordHeadInfoType,
-  SurveyInfoType
-} from '@/api/workshop/landlord/types'
+import type { LandlordDtoType, SurveyInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
@@ -204,16 +200,14 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const landlordIds = ref<number[]>([])
-// const headInfo = ref<LandlordHeadInfoType>({
-//   demographicNum: 0,
-//   peasantHouseholdNum: 0,
-//   reportSucceedNum: 0,
-//   unReportNum: 0
-// })
 const headerInfo = ref<any>({})
 const outsideData = ref<any>([])
 const printDialog = ref(false)
 const exportDialog = ref(false)
+const { currentRoute } = useRouter()
+let { type } = currentRoute.value.query as any
+const currentType = ref<string>('')
+
 interface exportListType {
   name: string
   value: string | number
@@ -275,8 +269,19 @@ const getDistrictTree = async () => {
 const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({ type: 'Company', status: SurveyStatusEnum.Review })
   headerInfo.value = info
-  console.log('ULPP', headerInfo.value)
 }
+
+const checkIsOpenDialog = () => {
+  const result = sessionStorage.getItem('isDefaultOpen')
+  console.log('v-result', result)
+  if (result && result === '1') {
+    actionType.value = 'add'
+    tableObject.currentRow = null
+    dialog.value = true
+  }
+}
+
+checkIsOpenDialog()
 
 onMounted(() => {
   getDistrictTree()

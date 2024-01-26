@@ -309,7 +309,6 @@ const getStatistics = async () => {
 }
 
 const toTarget = (routeName: string, query = {}) => {
-  console.log('PMM', routeName)
   try {
     push({
       name: routeName,

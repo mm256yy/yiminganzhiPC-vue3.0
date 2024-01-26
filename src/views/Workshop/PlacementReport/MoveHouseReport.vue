@@ -232,7 +232,7 @@ const onExport = async () => {
 const getMoveHouseReportList = () => {
   const params = {
     ...extraParams,
-    page: pageNum.value,
+    page: pageNum.value - 1,
     size: pageSize.value,
     projectId
   }

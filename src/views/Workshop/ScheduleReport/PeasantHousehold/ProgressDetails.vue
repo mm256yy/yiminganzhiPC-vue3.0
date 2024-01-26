@@ -439,7 +439,7 @@ const handleCurrentChange = (val: number) => {
 const getResidentRegionList = () => {
   const params = {
     ...tableObject.params,
-    page: pageNum.value,
+    page: pageNum.value - 1,
     size: pageSize.value
   }
   tableLoading.value = true

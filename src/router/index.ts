@@ -692,9 +692,19 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
       {
         path: 'adminThirdHome',
         name: 'adminThirdHome',
-        component: () => import('@/views/Workshop/Home/AdminThirdIndex.vue'),
+        component: () => import('@/views/Workshop/FileMng/AdminThirdIndex.vue'),
         meta: {
           title: '工作台', // 领导端三级首页
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'fileManagerHome',
+        name: 'fileManagerHome',
+        component: () => import('@/views/Workshop/FileMng/NewFileSeries/Index.vue'),
+        meta: {
+          title: '档案管理员工作台', // 档案管理员工作台首页
           icon: 'ant-design:home-outlined',
           hidden: true
         }
