@@ -159,6 +159,7 @@
         :uid="uid"
         :baseInfo="baseInfo"
         @update-data="getLandlordInfo"
+        :id="tabCurrentId"
       />
     </div>
   </WorkContentWrap>

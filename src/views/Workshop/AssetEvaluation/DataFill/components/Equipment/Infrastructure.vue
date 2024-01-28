@@ -49,20 +49,10 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber
-              :min="0"
-              @change="getModelValue(scope.row)"
-              v-model="scope.row.price"
-              :precision="2"
-            />
-          </template>
-        </ElTableColumn>
         <ElTableColumn
-          label="折率"
+          label="单价"
           :width="180"
-          prop="discountRate"
+          prop="valuationPrice"
           align="center"
           header-align="center"
         >
@@ -70,7 +60,23 @@
             <ElInputNumber
               :min="0"
               @change="getModelValue(scope.row)"
-              v-model="scope.row.discountRate"
+              v-model="scope.row.valuationPrice"
+              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="折率"
+          :width="180"
+          prop="newnessRate"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.newnessRate"
               :precision="2"
             />
           </template>
@@ -133,7 +139,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watch } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -152,9 +158,12 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { onMounted } from 'vue'
 import {
-  getFruitTreeListApi,
-  saveFruitTreeApi,
-  deleteFruitTreeApi
+  getImmigrantInfrastructure,
+  saveImmigrantInfrastructure,
+  deleteImmigrantInfrastructure,
+  getImmigrantOther,
+  saveImmigrantOther,
+  deleteImmigrantOther
 } from '@/api/AssetEvaluation/fruitTree-service'
 import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
@@ -164,6 +173,7 @@ interface PropsType {
   projectId: number
   uid: string
   baseInfo: any
+  id: any
 }
 
 const props = defineProps<PropsType>()
@@ -203,10 +213,15 @@ const defaultRow = {
 
 // 填报完成
 const onReportData = async () => {
-  const result = await saveImmigrantFillingApi({
-    doorNo: props.doorNo,
-    treeStatus: '1'
-  })
+  let data: any = {
+    doorNo: props.doorNo
+  }
+  if (props.id == 9) {
+    data.infrastructureStatus = 1
+  } else {
+    data.otherStatus = 1
+  }
+  const result = await saveImmigrantFillingApi(data)
   if (result && Array.isArray(result)) {
     reportDialog.value = true
     reportResult.value = result
@@ -230,9 +245,15 @@ const getList = () => {
     status: 'implementation',
     size: 1000
   }
-  getFruitTreeListApi(params).then((res) => {
-    tableData.value = res.content
-  })
+  if (props.id == 9) {
+    getImmigrantInfrastructure(params).then((res) => {
+      tableData.value = res.content
+    })
+  } else {
+    getImmigrantOther(params).then((res) => {
+      tableData.value = res.content
+    })
+  }
 }
 
 // 房屋主体评估合计
@@ -261,12 +282,21 @@ const onDeleteSubmit = async () => {
 
   btnLoading.value = true
   try {
-    await deleteFruitTreeApi(params.id)
-    btnLoading.value = false
-    getList()
-    emit('updateData')
-    ElMessage.success('删除成功')
-    handleClose()
+    if (props.id == 9) {
+      await deleteImmigrantInfrastructure(params.id)
+      btnLoading.value = false
+      getList()
+      emit('updateData')
+      ElMessage.success('删除成功')
+      handleClose()
+    } else {
+      await deleteImmigrantOther(params.id)
+      btnLoading.value = false
+      getList()
+      emit('updateData')
+      ElMessage.success('删除成功')
+      handleClose()
+    }
   } catch (error) {
     btnLoading.value = false
   }
@@ -289,22 +319,38 @@ const handleClose = () => {
 
 // 保存
 const onSave = () => {
-  saveFruitTreeApi(tableData.value).then(() => {
-    ElMessage.success('操作成功！')
-    getList()
-    emit('updateData')
-  })
+  if (props.id == 9) {
+    saveImmigrantInfrastructure(tableData.value).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+      emit('updateData')
+    })
+  } else {
+    saveImmigrantOther(tableData.value).then(() => {
+      ElMessage.success('操作成功！')
+      getList()
+      emit('updateData')
+    })
+  }
 }
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
+  const totalPrice = Number(row.number) * Number(row.valuationPrice) * Number(row.newnessRate)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }
-onMounted(() => {
-  getList()
-})
+// onMounted(() => {
+//   getList()
+// })
+watch(
+  () => props.id,
+  () => {
+    getList()
+    console.log(props.id)
+  },
+  { deep: true }
+)
 </script>
 <style lang="less" scoped>
 .btn-txt {
