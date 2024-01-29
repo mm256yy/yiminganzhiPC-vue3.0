@@ -132,6 +132,7 @@ const getList = () => {
     settingWay: '1', // 农业 安置方式
     isDelete: '0'
   }).then((res) => {
+    console.log(res.content, '测试数据')
     hasFarmingResettle.value = res.content.length > 0
   })
 }

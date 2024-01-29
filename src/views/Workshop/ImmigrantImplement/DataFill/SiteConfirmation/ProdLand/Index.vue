@@ -2,7 +2,7 @@
   <WorkContentWrap>
     <!-- 择址确认 —— 生产用地 -->
     <!-- 安置方式 settingWay: 1 农业安置 -->
-    <div class="table-wrap !py-12px !mt-0px" v-if="baseInfo.settingWay === '1'">
+    <div class="table-wrap !py-12px !mt-0px" v-if="len > 0">
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
@@ -126,7 +126,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import {
   ElMessage,
   ElMessageBox,
@@ -152,7 +152,7 @@ import {
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea } from '../../config'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
-
+import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -177,7 +177,7 @@ const dialogVisible = ref(false)
 const emit = defineEmits(['updateData'])
 
 const options = ref<any[]>([])
-
+const len = ref<any>()
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
@@ -212,8 +212,27 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     apartmentArea = result.content
+    console.log(props.baseInfo, '测试数据')
   } catch {}
 }
+
+// 获取生产安置数据
+const getdemographicList = async () => {
+  const params = {
+    doorNo: props.baseInfo.doorNo,
+    projectId: props.baseInfo.projectId,
+    status: props.baseInfo.status,
+    populationNature: '5',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getProduceListApi(params)
+    len.value = result.content.filter((item: any) => item.settingWay === '1').length
+    console.log(len.value, '测试人物数据')
+  } catch {}
+}
+
 const getSettleAddress = (data: string) => {
   if (data) {
     // 选择了公寓房的安置方式
@@ -314,6 +333,7 @@ onMounted(async () => {
   getSettleAddressList()
   initData()
   getChooseConfig()
+  getdemographicList()
 })
 </script>
 <style lang="less" scoped>

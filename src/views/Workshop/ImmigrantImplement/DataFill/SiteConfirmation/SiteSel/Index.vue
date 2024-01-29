@@ -386,6 +386,13 @@ const getList = () => {
           3,
           item.settleAddress
         )
+        console.log(
+          item.landNoOptions,
+          item.storeroomNoOptions,
+          item.carNoOptions,
+          item.roomNoOptions,
+          '测试数据'
+        )
       })
       tableData.value = arr
       // setTimeout(() => {
