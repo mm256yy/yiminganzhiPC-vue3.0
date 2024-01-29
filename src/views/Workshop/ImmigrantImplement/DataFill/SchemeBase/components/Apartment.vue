@@ -23,7 +23,7 @@
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
           <el-radio
-            :label="item.id"
+            :label="item.code"
             size="large"
             v-for="item in settleAddressList"
             :key="item.id * 1"

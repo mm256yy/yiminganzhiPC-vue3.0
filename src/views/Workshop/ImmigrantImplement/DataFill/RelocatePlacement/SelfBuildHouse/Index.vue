@@ -92,7 +92,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -240,7 +240,7 @@ const getSettleAddressList = async () => {
     apartmentArea = result.content
   } catch {}
 }
-const getSettleAddress = (data: any) => {
+const getSettleAddress = async (data: any) => {
   // 选择了公寓房的安置方式
   if (data.houseAreaType === 'flat') {
     let str = ''
@@ -251,9 +251,10 @@ const getSettleAddress = (data: any) => {
     })
     return str
   } else {
+    let m = await resettleArea()
     let str = ''
-    resettleArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
+    m.map((item: any) => {
+      if (item.code === data.settleAddress) {
         str = item.name
       }
     })

@@ -26,7 +26,7 @@
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
         <ElTableColumn label="安置区" prop="settleAddress" align="center" header-align="center">
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
@@ -74,7 +74,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -221,7 +221,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -238,7 +238,7 @@
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
         <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
@@ -270,7 +270,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="房型" prop="houseAreaType" align="center" header-align="center">
@@ -415,26 +415,28 @@ const getSettleAddressList = async () => {
     apartmentArea = result.content
   } catch {}
 }
-const getSettleAddress = (data: any) => {
-  // 选择了公寓房的安置方式
-  if (data.houseAreaType === 'flat') {
-    let str = ''
-    apartmentArea.map((item: any) => {
-      if (item.id == data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
-  } else {
-    let str = ''
-    resettleArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
-  }
-}
+// const getSettleAddress = async (data: any) => {
+//   // 选择了公寓房的安置方式
+//   let m = await resettleArea()
+//   console.log(m, data, 'bbqss')
+
+//   let str = ''
+//   if (data.houseAreaType === 'flat') {
+//     m.map((item: any) => {
+//       if (item.code == data.settleAddress) {
+//         str = item.name
+//       }
+//     })
+//     return str
+//   } else {
+//     m.map((item: any) => {
+//       if (item.code == data.settleAddress) {
+//         str = item.name
+//       }
+//     })
+//     return str
+//   }
+// }
 
 // 获取宅基地地块编号选项列表, async 返回的是一个 promise
 const getlandNoList = async (settleAddress?: string) => {

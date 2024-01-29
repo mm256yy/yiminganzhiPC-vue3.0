@@ -187,6 +187,8 @@ watch(
 
     if (form.value.productionPic) {
       productionPic.value = JSON.parse(form.value.productionPic)
+    } else {
+      productionPic.value = []
     }
   },
   // 可选 immediate: true 马上执行

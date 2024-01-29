@@ -154,7 +154,7 @@
     <div
       style="
         position: fixed;
-        display: flex;
+        left: -1000px;
         width: 340mm;
         padding: 0 10px 0 10px;
         border: 1px solid black;
@@ -190,14 +190,14 @@
             label-class-name="my-label"
             class-name="my-content"
           >
-            kooriookami
+            {{ form.address || '--' }}
           </ElDescriptionsItem>
           <ElDescriptionsItem
-            label="迁后地址："
+            label="安置地址："
             label-class-name="my-label"
             class-name="my-content"
           >
-            18100000000
+            {{ AddressText || '--' }}
           </ElDescriptionsItem>
           <ElDescriptionsItem label="开户名：" label-class-name="my-label" class-name="my-content">
             {{ form.accountName }}
@@ -343,6 +343,8 @@ import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted } from 'vue'
 import { htmlToPdf } from '@/utils/ptf'
+import { getRelocationInfoApi } from '@/api/putIntoEffect/relocation'
+import { resettleArea } from '../config'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -653,6 +655,7 @@ const onSubmit = debounce((formEl) => {
 
 onMounted(() => {
   getRewardFeeList()
+  getRelocationInfo()
 })
 const getSummariese = (param) => {
   const { columns, data } = param
@@ -678,6 +681,15 @@ const getSummariese = (param) => {
   })
 
   return sums
+}
+let AddressText = ref()
+const getRelocationInfo = async () => {
+  const res = await getRelocationInfoApi(props.doorNo)
+  if (res) {
+    console.log(res, 'bbq')
+    let m = await resettleArea()
+    AddressText.value = m.find((item) => item.code === res.settleAddress)?.name
+  }
 }
 </script>
 <style lang="less" scoped>

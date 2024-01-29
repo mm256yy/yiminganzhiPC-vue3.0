@@ -1,3 +1,20 @@
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
+import { useAppStore } from '@/store/modules/app'
+const appStore = useAppStore()
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '1',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result: any = await getPlacementPointListApi(params)
+    console.log(result, 'bbqs')
+    return result.content
+  } catch {}
+}
 // tab 唯一标识
 export const TabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
@@ -456,20 +473,7 @@ export const ProductionPlaceWay = [
 ]
 
 // 宅基地安置区块
-export const resettleArea = [
-  {
-    id: '3',
-    name: '棠村安置区'
-  },
-  {
-    id: '4',
-    name: '麻家田安置区'
-  },
-  {
-    id: '5',
-    name: '东坪安置区'
-  }
-]
+export const resettleArea = getSettleAddressList
 
 // 公寓安置地块
 export const apartmentArea = [

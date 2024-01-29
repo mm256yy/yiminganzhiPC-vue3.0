@@ -307,6 +307,7 @@ const dictFmt = (value, index) => {
 const filterWay = (data) => {
   const arr = cloneDeep(dictObj.value[375]).map((item) => {
     // 农村移民的 其他性质
+    item.disabled = false
     const notFarmer = data.populationNature !== '1'
     if (notFarmer && item.value === '1') {
       item.disabled = true
@@ -315,7 +316,7 @@ const filterWay = (data) => {
       item.disabled = true
     }
     data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : 0
-    if (+data.age < 14 && item.value !== '3' && item.value != '1') {
+    if (data.age < 14 && item.value !== '3' && item.value != '1') {
       item.disabled = true
     }
     return item
