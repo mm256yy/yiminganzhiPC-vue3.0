@@ -81,7 +81,7 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { getNotifyApi, delNotifyByIdApi } from '@/api/project/Notify/service'
 import type { PolicyDtoType } from '@/api/project/Notify/types'
 import { useRouter } from 'vue-router'
-import { listDictDetailApi } from '@/api/sys/index'
+// import { listDictDetailApi } from '@/api/sys/index'
 import dayjs from 'dayjs'
 // import { useAppStoreWithOut } from '@/store/modules/app'
 
@@ -92,7 +92,16 @@ const { push } = useRouter()
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const content = ref('')
 const dialog = ref(false)
-const newsTypes = ref<any[]>([])
+const newsTypes = ref<any[]>([
+  {
+    value: 'assessor,assessorland',
+    label: '资产评估人员'
+  },
+  {
+    value: 'implementation',
+    label: '实施人员'
+  }
+])
 
 const dictName = 'news' // 字典名称
 
@@ -119,18 +128,18 @@ const changTableList = (list) => {
   })
 }
 
-const getNewsDict = async () => {
-  const res = await listDictDetailApi({
-    name: dictName,
-    projectId: appStore.getCurrentProjectId
-  })
-  if (res && res.dictValList) {
-    newsTypes.value = res.dictValList
-    console.log(newsTypes.value, '下拉数据')
-  }
-}
+// const getNewsDict = async () => {
+//   const res = await listDictDetailApi({
+//     name: dictName,
+//     projectId: appStore.getCurrentProjectId
+//   })
+//   if (res && res.dictValList) {
+//     newsTypes.value = res.dictValList
+//     console.log(newsTypes.value, '下拉数据')
+//   }
+// }
 
-getNewsDict()
+// getNewsDict()
 
 const schema = reactive<CrudSchema[]>([
   {

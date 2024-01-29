@@ -200,7 +200,7 @@ const defaultRow = {
   status: 'implementation',
   name: '',
   usageType: '',
-  size: '',
+  // size: '',
   unit: '',
   number: 0,
   price: 0,
@@ -242,16 +242,17 @@ const getList = () => {
     doorNo: props.doorNo,
     householdId: props.householdId,
     projectId: props.projectId,
-    status: 'implementation',
-    size: 1000
+    status: 'implementation'
+    //  size: 1000
   }
   if (props.id == 9) {
     getImmigrantInfrastructure(params).then((res) => {
-      tableData.value = res.content
+      tableData.value = res
+      console.log(tableData.value, res, 'tableData.value数据')
     })
   } else {
     getImmigrantOther(params).then((res) => {
-      tableData.value = res.content
+      tableData.value = res
     })
   }
 }
@@ -277,20 +278,20 @@ const onDeleteSubmit = async () => {
 
   const params = {
     ...rowItem,
-    deleteReason: deleteReason.value
+    reason: deleteReason.value
   }
 
   btnLoading.value = true
   try {
     if (props.id == 9) {
-      await deleteImmigrantInfrastructure(params.id)
+      await deleteImmigrantInfrastructure({ id: params.id, reason: deleteReason.value })
       btnLoading.value = false
       getList()
       emit('updateData')
       ElMessage.success('删除成功')
       handleClose()
     } else {
-      await deleteImmigrantOther(params.id)
+      await deleteImmigrantOther({ id: params.id, reason: deleteReason.value })
       btnLoading.value = false
       getList()
       emit('updateData')

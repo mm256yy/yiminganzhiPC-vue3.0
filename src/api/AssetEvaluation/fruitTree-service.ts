@@ -73,15 +73,15 @@ export const saveImmigrantOther = (data: any): Promise<TableResponse<FruitTreeDt
  * @returns
  */
 export const deleteImmigrantInfrastructure = (
-  id: any
+  data: any
 ): Promise<TableResponse<FruitTreeDtoType>> => {
-  return request.post({ url: `/immigrantInfrastructure/delete/${id}` })
+  return request.post({ url: '/immigrantInfrastructure/delete', data })
 }
 /**
  * 删除单条其他设备评估数据
  * @param id 当前被删除的数据 ID
  * @returns
  */
-export const deleteImmigrantOther = (id: any): Promise<TableResponse<FruitTreeDtoType>> => {
-  return request.post({ url: `/immigrantOther/delete/${id}` })
+export const deleteImmigrantOther = (data: any): Promise<TableResponse<FruitTreeDtoType>> => {
+  return request.post({ url: '/immigrantOther/delete', data })
 }
