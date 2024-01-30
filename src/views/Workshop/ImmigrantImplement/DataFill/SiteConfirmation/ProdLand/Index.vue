@@ -126,7 +126,7 @@
 
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
   ElMessage,
   ElMessageBox,
@@ -226,14 +226,14 @@ const getdemographicList = async () => {
     size: 9999,
     page: 0
   }
-  try {
-    const result = await getProduceListApi(params)
-    len.value = result.content.filter((item: any) => item.settingWay === '1').length
-    console.log(len.value, '测试人物数据')
-  } catch {}
+  // try {
+  const result = await getProduceListApi(params)
+  len.value = result.content.filter((item: any) => item.settingWay === '1').length
+  console.log(len.value, '测试人物数据')
+  // } catch {}
 }
 
-const getSettleAddress = (data: string) => {
+const getSettleAddress = async (data: string) => {
   if (data) {
     // 选择了公寓房的安置方式
     if (props.baseInfo.houseAreaType === 'flat') {
