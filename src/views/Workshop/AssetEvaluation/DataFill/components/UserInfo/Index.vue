@@ -9,6 +9,7 @@
         </div>
       </div>
       <ElSpace>
+        <ElButton type="primary" @click="printReport"> 打印报表 </ElButton>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
         <div
           v-if="props.role === 'assessor'"
@@ -211,6 +212,12 @@
 
   <!-- 档案上传 -->
   <OnDocumentation :show="showDialog" :door-no="props.doorNo" :type="type" @close="close" />
+  <PrintReport
+    :show="inExportDialog"
+    @close="inExportDialogClose"
+    :list="exportList"
+    :type="type"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -218,7 +225,7 @@ import { ref, onMounted, watch } from 'vue'
 import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
 import { fmtStr } from '@/utils/index'
 import OnDocumentation from '../OnDocumentation/Index.vue'
-
+import PrintReport from '@/views/Workshop/components/PrintReport.vue'
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -228,7 +235,44 @@ interface PropsType {
   role: string
   datarole: any
 }
-
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '房屋评估表',
+    value: 'assetEval_company_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_company_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'assetEval_company_appendage'
+  },
+  {
+    name: '基础设施评估表',
+    value: 'assetEval_company_infra'
+  },
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_company_tree'
+  },
+  {
+    name: '其他评估表',
+    value: 'assetEval_company_other'
+  },
+  {
+    name: '设施设备表',
+    value: 'assetEval_company_equipment'
+  }
+])
+const inExportDialog = ref(false)
+const inExportDialogClose = () => {
+  inExportDialog.value = false
+}
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const showDialog = ref(false)
@@ -239,6 +283,10 @@ const onDocumentation = () => {
   showDialog.value = true
 }
 
+// 打印报表
+const printReport = () => {
+  inExportDialog.value = true
+}
 // 关闭档案弹窗
 const close = (flag: boolean) => {
   showDialog.value = false
@@ -248,6 +296,7 @@ const close = (flag: boolean) => {
 }
 
 onMounted(() => {
+  console.log(props.type, 'type测试')
   if (props.type == 'Landlord') {
     infoData.value = { icon: 'mdi:user-circle' }
   } else if (props.type == 'Enterprise') {

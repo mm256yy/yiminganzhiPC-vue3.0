@@ -131,7 +131,13 @@
         </template>
       </Table>
     </div>
-    <Export :show="exportDialog" @close="onExportDialogClose" :list="exportList" />
+    <Export
+      :show="exportDialog"
+      @close="onExportDialogClose"
+      :list="exportList"
+      :type="'PeasantHousehold'"
+      :flag="1"
+    />
     <InExport :show="inExportDialog" @close="inExportDialogClose" :list="exportList" />
   </WorkContentWrap>
 </template>
@@ -183,27 +189,27 @@ interface exportListType {
 const exportList = ref<exportListType[]>([
   {
     name: '房屋评估表',
-    value: 'exportPeasantHousehold'
+    value: 'assetEval_household_house'
   },
   {
     name: '房屋装修表',
-    value: 'exportDemographic'
+    value: 'assetEval_household_fitup'
   },
   {
     name: '附属物调查表',
-    value: 'exportHouse'
+    value: 'assetEval_household_appendage'
   },
   {
     name: '零星林果木调查表',
-    value: 'exportAppendage'
+    value: 'assetEval_household_tree'
   },
   {
     name: '土地基本情况评估表',
-    value: 'exportTree'
+    value: ''
   },
   {
     name: '土地青苗及附着物评估表',
-    value: 'exportImmigrantIncome'
+    value: ''
   }
 ])
 const onExport = () => {

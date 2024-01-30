@@ -9,6 +9,15 @@ export const getExportApi = (params: ExportType): Promise<any> => {
   return request.get({ url: '/peasantHousehold/export', params, responseType: 'blob' })
 }
 
+//评估类的导出
+export const getPgExportApi = (params: ExportType): Promise<any> => {
+  return request.get({
+    url: '/peasantHousehold/assetEvaluation/export',
+    params,
+    responseType: 'blob'
+  })
+}
+
 export const getGridExportApi = (params: LandlordDtoType): Promise<any> => {
   return request.get({ url: '/grid/exportGrid', params, responseType: 'blob' })
 }
