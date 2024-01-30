@@ -9,7 +9,6 @@
   >
     <Form :schema="schema" @register="register" :rules="rules" :is-col="true">
       <template #mapPic>
-        <!-- <span class="tips-icon">*</span> -->
         <ElUpload
           class="w-full"
           drag

@@ -674,7 +674,6 @@ const onPrint = async () => {
   } else {
     ElMessage.warning('请选择需要打印的居民户')
   }
-  console.log(landlordIds.value, 'res')
 }
 
 const onPrintDialogClose = () => {

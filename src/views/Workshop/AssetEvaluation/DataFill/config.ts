@@ -1,5 +1,5 @@
 // tabs 唯一标识
-export const TabIds = [1, 2, 3, 4, 5, 6, 7, 8]
+export const TabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 export const LandlordLandTabs = [
   {
@@ -94,6 +94,21 @@ export const EnterpriseTabs = [
     icon: 'fluent-mdl2:product-variant',
     active: false,
     key: 'deviceStatus'
+  },
+  {
+    name: '基础设施评估',
+    id: TabIds[8],
+    icon: 'mdi:pine-tree',
+    active: false,
+    key: 'Infrastructure'
+  },
+
+  {
+    name: '其他评估',
+    id: TabIds[9],
+    icon: 'fluent-mdl2:product-variant',
+    active: false,
+    key: 'Other'
   }
 ]
 

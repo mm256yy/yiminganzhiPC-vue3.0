@@ -245,9 +245,10 @@ const getSettleAddress = (data: string) => {
       })
       return str
     } else {
+      let m = await resettleArea()
       let str = ''
-      resettleArea.map((item: any) => {
-        if (item.id === data) {
+      m.map((item: any) => {
+        if (item.code === data) {
           str = item.name
         }
       })

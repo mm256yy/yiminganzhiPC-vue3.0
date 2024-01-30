@@ -75,7 +75,7 @@ import { useRouter } from 'vue-router'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useForm } from '@/hooks/web/useForm'
-import { listDictDetailApi } from '@/api/sys/index'
+// import { listDictDetailApi } from '@/api/sys/index'
 import { NewsDtoType } from '@/api/project/news/types'
 
 type InsertFnType = (url: string, alt: string, href: string) => void
@@ -91,7 +91,16 @@ const { query } = unref(currentRoute)
 const appStore = useAppStore()
 const { required } = useValidator()
 const { register, elFormRef, methods } = useForm()
-const newsTypes = ref<any[]>([])
+const newsTypes = ref<any[]>([
+  {
+    value: 'assessor,assessorland',
+    label: '资产评估人员'
+  },
+  {
+    value: 'implementation',
+    label: '实施人员'
+  }
+])
 const id: number = query.id ? +query.id : 0
 
 const coverPic = ref<FileItemType[]>([])
@@ -144,17 +153,17 @@ const editorConfig: Partial<IEditorConfig> = {
   }
 }
 
-const getNewsDict = async () => {
-  const res = await listDictDetailApi({
-    name: dictName,
-    projectId: appStore.getCurrentProjectId
-  })
-  if (res && res.dictValList) {
-    newsTypes.value = res.dictValList
-  }
-}
+// const getNewsDict = async () => {
+//   const res = await listDictDetailApi({
+//     name: dictName,
+//     projectId: appStore.getCurrentProjectId
+//   })
+//   if (res && res.dictValList) {
+//     newsTypes.value = res.dictValList
+//   }
+// }
 
-getNewsDict()
+// getNewsDict()
 
 onMounted(() => {
   if (!id) {

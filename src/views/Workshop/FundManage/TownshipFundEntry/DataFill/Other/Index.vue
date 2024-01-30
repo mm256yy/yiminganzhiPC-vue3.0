@@ -32,6 +32,12 @@
       highlightCurrentRow
       @register="register"
     >
+      <template #amount="{ row }">
+        {{ row.applyType == 2 ? -row.amount : row.amount }}
+      </template>
+      <template #pendingAmount="{ row }">
+        {{ row.applyType == 2 ? -row.pendingAmount : row.pendingAmount }}
+      </template>
       <template #action="{ row }">
         <ElButton link type="primary" @click="onCheckRow(row)">查看</ElButton>
         <ElButton link type="primary" @click="onIssue(row)">发放</ElButton>

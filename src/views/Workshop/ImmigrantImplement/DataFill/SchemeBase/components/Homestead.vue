@@ -13,7 +13,12 @@
       <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
-          <el-radio :label="item.id" size="large" v-for="item in settleAddressList" :key="item.id">
+          <el-radio
+            :label="item.code"
+            size="large"
+            v-for="item in settleAddressList"
+            :key="item.id"
+          >
             {{ item.name }}
           </el-radio>
         </el-radio-group>
@@ -70,6 +75,7 @@ import {
 } from '@/api/systemConfig/placementPoint-service'
 
 import type { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
+import { toNumber } from 'lodash-es'
 
 interface PropsType {
   baseInfo: any
@@ -81,7 +87,7 @@ interface PropsType {
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
 const areaDetailPup = ref(false)
-const settleAddress = ref('1')
+const settleAddress = ref(1)
 const AreaDetailRef: any = ref(null)
 const areaType = ref('1')
 const appStore = useAppStore()
@@ -105,6 +111,8 @@ watch(
   () => props.immigrantSettle,
   (val) => {
     if (val) {
+      console.log(val, 'bbq')
+
       const { areaType: area, settleAddress: settleArea } = val
       areaType.value = area
       settleAddress.value = settleArea

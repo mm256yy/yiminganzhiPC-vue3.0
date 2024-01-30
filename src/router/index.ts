@@ -700,6 +700,16 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'fileManagerHome',
+        name: 'fileManagerHome',
+        component: () => import('@/views/Workshop/FileMng/NewFileSeries/Index.vue'),
+        meta: {
+          title: '档案管理员工作台', // 档案管理员工作台首页
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
         path: 'newDetail',
         name: 'newDetail',
         component: () => import('@/views/Workshop/Home/components/newDetail.vue'),

@@ -58,43 +58,33 @@
           v-model="form.phone"
         />
       </ElFormItem>
-
-      <!-- <ElDivider border-style="dashed" />
-
-      <ElFormItem label="财产户" prop="hasPropertyAccount">
-        <ElSelect class="!w-350px" clearable v-model="form.hasPropertyAccount">
-          <ElOption
-            v-for="item in yesAndNoEnums"
-            :key="item.label"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
+      <ElFormItem label="关联居民户" prop="registrantName" align="center" header-align="center">
+        <el-select
+          v-model="form.registrantName"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入居民户姓名"
+          :remote-method="remoteMethod"
+          :loading="loading"
+          @change="doorTypeChange"
+        >
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+        </el-select>
       </ElFormItem>
-
-      <ElFormItem label="户籍册编号" prop="householdNumber">
-        <ElInput class="!w-350px" v-model="form.householdNumber" placeholder="请输入户籍册编号" />
+      <ElFormItem label="关联户号" prop="householderDoorNo" align="center" header-align="center">
+        <ElInput type="text" v-model="form.householderDoorNo" disabled />
       </ElFormItem>
-
-      <ElFormItem label="户籍所在地" prop="address">
-        <ElInput class="!w-350px" v-model="form.address" placeholder="请输入户籍所在地" />
-      </ElFormItem>
-
-      <ElFormItem label="所在位置" prop="locationType">
-        <ElSelect class="w-350px" v-model="form.locationType">
-          <ElOption
-            v-for="item in locationTypes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
+      <!-- <ElFormI tem label="关联居民户" prop="householderDoorNo">
+        <ElInput
+          clearable
+          placeholder="请输入企业联系方式"
+          type="text"
+          class="!w-350px"
+          v-model="form.householderDoorNo"
+        />
       </ElFormItem> -->
-
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange">
-        <ElInput class="!w-350px" v-model="form.inundationRange" placeholder="请输入淹没范围" />
-      </ElFormItem> -->
-      <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
+      <!-- <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -103,21 +93,7 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem>
-      <!-- <ElFormItem label="高程" prop="altitude">
-        <ElInput
-          clearable
-          filterable
-          placeholder="请输入高程"
-          type="number"
-          class="!w-350px"
-          v-model="form.altitude"
-        />
       </ElFormItem> -->
-
-      <!-- <div class="w-466px">
-        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
-      </div> -->
     </ElForm>
 
     <VillageEditForm
@@ -152,15 +128,15 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
-// import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-// import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
+import { getLandlordListApi } from '@/api/workshop/landlord/service'
+
 interface PropsType {
   show: any
   actionType: 'add' | 'edit' | 'view'
@@ -173,6 +149,8 @@ const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const loading = ref(false)
+const options = ref<any[]>([])
 
 const dictObj = computed(() => dictStore.getDictObj)
 const treeSelectDefaultProps = {
@@ -186,7 +164,9 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   longitude: 0,
   name: '',
   parentCode: [],
-  locationType: 'SubmergedArea'
+  locationType: 'SubmergedArea',
+  registrantName: '',
+  householderDoorNo: ''
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -226,8 +206,6 @@ watch(
 const rules = reactive<FormRules>({
   name: [required()],
   doorNo: [required()],
-
-  // phone: [required()],
   parentCode: [required()]
 })
 
@@ -236,6 +214,7 @@ const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
+  sessionStorage.setItem('isDefaultOpen', '0')
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
@@ -249,14 +228,24 @@ const onClose = (flag = false) => {
 //   position.address = ps.address
 // }
 
+const doorTypeChange = (val) => {
+  options.value.forEach((item) => {
+    if (item.name == val) {
+      form.value.householderDoorNo = item.doorNo
+      // tableData.value.forEach((item2) => {
+      //   if (item2.registrantName == item.name) {
+      //     item2.registrantId = item.id
+      //     item2.registrantDoorNo = item.doorNo
+      //   }
+      // })
+    }
+  })
+}
+
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      // if (!position.latitude || !position.longitude) {
-      //   ElMessage.error('请选择位置')
-      //   return
-      // }
       btnLoading.value = true
       const data: any = {
         ...form.value,
@@ -297,9 +286,6 @@ const submit = async (data: LandlordDtoType) => {
   onClose(true)
 }
 
-// const onVillageDialogOpen = () => {
-//   villageDialog.value = true
-// }
 const districtTree = ref([])
 const villageDialog = ref(false)
 
@@ -313,6 +299,24 @@ const onVillageDialogClose = (flag?: boolean) => {
   villageDialog.value = false
   if (flag) {
     emit('updateDistrict')
+  }
+}
+
+const remoteMethod = (query: string) => {
+  if (query) {
+    loading.value = true
+    getLandlordListApi({ name: query, type: 'PeasantHousehold' }).then((res) => {
+      loading.value = false
+      options.value = res.content
+    })
+    // setTimeout(() => {
+    //   loading.value = false
+    //   options.value = list.value.filter((item: any) => {
+    //     return item.label.toLowerCase().includes(query.toLowerCase())
+    //   })
+    // }, 200)
+  } else {
+    options.value = []
   }
 }
 </script>

@@ -31,11 +31,13 @@
         :data="tableData"
         border
         show-summary
+        :summary-method="getSummaries"
         style="width: 100%; max-height: 480px"
         height="480"
       >
         <el-table-column label="序号" type="index" align="center" width="80" />
-        <el-table-column prop="name" label="区域/户主" align="center" />
+        <el-table-column prop="villageCodeText" label="行政村" align="center" />
+        <el-table-column prop="name" label="户主" align="center" />
         <el-table-column prop="familyNumber" label="总人数(人)" align="center" />
         <el-table-column prop="countAgriculture" label="农业安置(人)" align="center" />
         <el-table-column prop="countRetirement" label="养老保险(人)" align="center" />
@@ -69,10 +71,13 @@ import {
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive, ref, onMounted, toRefs } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import { getProHouseReportListApi } from '@/api/workshop/placementReport/service'
+import {
+  getProHouseReportListApi,
+  exportProHouseReportApi
+} from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
 
@@ -85,6 +90,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const tableLoading = ref<boolean>()
+const totalCountObj = ref<any>() // 总计对象
 let extraParams = reactive({
   villageCode: undefined,
   doorNo: undefined,
@@ -158,11 +164,12 @@ const percent = ref()
 //格式化百分比
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 //获取列表数据
-const getProHouseReportList = (page, size) => {
+const getProHouseReportList = () => {
   const params = {
     ...extraParams,
-    page: page,
-    size: size
+    page: pageNum.value - 1,
+    size: pageSize.value,
+    projectId
   }
   tableLoading.value = true
   getProHouseReportListApi(params).then(
@@ -170,6 +177,7 @@ const getProHouseReportList = (page, size) => {
       tableData.value = res.reports.content
       totalNum.value = res.reports.total
       percent.value = toPercent(res.percent)
+      totalCountObj.value = res.total
       tableLoading.value = false
     },
     (err) => {
@@ -180,11 +188,39 @@ const getProHouseReportList = (page, size) => {
 }
 const handleSizeChange = (val: number) => {
   pageSize.value = val
-  getProHouseReportList(pageNum.value - 1, pageSize.value)
+  getProHouseReportList()
 }
 const handleCurrentChange = (val: number) => {
   pageNum.value = val
-  getProHouseReportList(pageNum.value - 1, pageSize.value)
+  getProHouseReportList()
+}
+
+const getSummaries = (params: any) => {
+  const { columns } = params
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 1) {
+      sums[index] = '合计'
+      return
+    }
+    if (index < 3) {
+      sums[index] = ''
+      return
+    }
+    console.log(column)
+    if (!totalCountObj.value) {
+      return
+    }
+    const totalMap = {
+      3: totalCountObj.value.familyNumber, // 总人数
+      4: totalCountObj.value.countAgriculture, // 农业安置
+      5: totalCountObj.value.countRetirement, // 养老保险
+      6: totalCountObj.value.countSelfEmployee // 自谋职业
+    }
+    sums[index] = totalMap[index]
+    return
+  })
+  return sums
 }
 
 // 获取所属区域数据(行政村列表)
@@ -194,10 +230,8 @@ const getVillageTree = async () => {
   return list || []
 }
 
-onMounted(() => {
-  getVillageTree()
-  getProHouseReportList('0', pageSize.value)
-})
+getProHouseReportList()
+
 const onBack = () => {
   back()
 }
@@ -218,7 +252,7 @@ const onSearch = (data) => {
     ...params
   }
 
-  getProHouseReportList('0', pageSize.value)
+  getProHouseReportList()
 }
 
 const onReset = () => {
@@ -227,31 +261,35 @@ const onReset = () => {
     doorNo: undefined,
     name: undefined
   }
-  getProHouseReportList('0', pageSize.value)
+  getProHouseReportList()
 }
 
 // 数据导出
-const onExport = () => {
-  // const params = {
-  //   exportType: '1',
-  //   ...tableObject.params
-  // }
-  // const res = await exportReportApi(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    ...extraParams,
+    projectId
+  }
+  const res = await exportProHouseReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
+
+onMounted(() => {
+  getVillageTree()
+})
 </script>
 
 <style scoped></style>

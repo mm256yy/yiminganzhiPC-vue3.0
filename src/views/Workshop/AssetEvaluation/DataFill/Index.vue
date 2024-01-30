@@ -147,6 +147,20 @@
         :baseInfo="baseInfo"
         @update-data="getLandlordInfo"
       />
+      <!-- 基础设备评估 -->
+      <Infrastructure
+        v-show="
+          (type === 'Enterprise' || type === 'IndividualB') &&
+          (tabCurrentId === TabIds[8] || tabCurrentId === TabIds[9])
+        "
+        :doorNo="doorNo"
+        :householdId="Number(householdId)"
+        :projectId="Number(projectId)"
+        :uid="uid"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+        :id="tabCurrentId"
+      />
     </div>
   </WorkContentWrap>
 </template>
@@ -176,6 +190,7 @@ import LandBasicInfo from './components/LandBasicInfo/Index.vue' // 资产评估
 import LandGreenSeedlings from './components/LandGreenSeedlings/Index.vue' // 资产评估 -- 土地青苗及附着物评估
 // import Grave from './components/Grave/Index.vue' // 资产评估 -- 坟墓评估
 import Equipment from './components/Equipment/Index.vue' // 资产评估 -- (企业/个体工商户)设施设备评估
+import Infrastructure from './components/Equipment/Infrastructure.vue' // 资产评估 -- (企业/个体工商户)基础设备
 import SpecialEquipment from './components/SpecialEquipment/Index.vue' // 资产评估 -- (村集体)小型专项及农副业设施评估
 import { getFillingStatusApi } from '@/api/immigrantImplement/common-service'
 import { deepClone } from '@/utils'

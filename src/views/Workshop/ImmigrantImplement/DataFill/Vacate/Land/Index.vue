@@ -90,7 +90,7 @@
         <el-descriptions-item label-class-name="bbqs" :span="2" label="移民户主意见" align="center">
           <template #default>
             <div style="display: flex; flex-direction: column">
-              <div style="flex: 1">&nbsp;</div>
+              <div style="flex: 1">{{ form.landEmptyOpinion }}</div>
               <div style="flex: 1; text-align: left"> 移民户主:</div></div
             >
           </template>
@@ -125,8 +125,8 @@
             </div>
           </template>
         </el-descriptions-item>
-      </el-descriptions></div
-    >
+      </el-descriptions>
+    </div>
   </div>
 </template>
 

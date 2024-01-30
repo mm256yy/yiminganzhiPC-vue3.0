@@ -45,10 +45,11 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { EnterpriseReportType } from '@/api/workshop/enterpriseReport/type'
 import { enterpriseRegionalStatisticsApi } from '@/api/workshop/enterpriseReport/service'
+import { exportRegionalStatisticsApi } from '@/api/workshop/scheduleReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
-import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
+
 const { back } = useRouter()
 
 interface SpanMethodProps {
@@ -191,16 +192,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 /**
  * 合并单元行
  * @param{Object} row 当前行
@@ -230,39 +221,26 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   }
 }
 
-const onSearch = (data) => {
-  // 处理参数
-  let params = {
-    ...data
-  }
-
-  // 需要重置一次params
-  tableObject.params = {
-    projectId
-  }
-  if (!params.householdName) {
-    delete params.householdName
-  }
-  if (!params.doorNo) {
-    delete params.doorNo
-  }
-  if (params.villageCode) {
-    // 拿到对应的参数key
-    findRecursion(villageTree.value, params.villageCode, (item) => {
-      if (item) {
-        params[getParamsKey(item.districtType)] = params.villageCode
-      }
-      setSearchParams({ ...params })
-    })
-  } else {
-    delete params.villageCode
-    setSearchParams({ ...params })
-  }
-}
-
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
+const onExport = async () => {
+  const params = {
+    type: 'Company'
+  }
+  const res = await exportRegionalStatisticsApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 // 获取所属区域数据(行政村列表)

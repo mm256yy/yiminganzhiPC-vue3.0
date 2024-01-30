@@ -69,8 +69,8 @@ const dialogLoading = ref<boolean>()
 
 interface PropsType {
   show: any
-  doorNo: string
-  projectId: number
+  doorNo?: string
+  projectId?: number
 }
 
 const props = defineProps<PropsType>()
@@ -113,11 +113,11 @@ const onClose = (flag = false) => {
 
 <style lang="less">
 .segment-label {
+  margin-top: 10px;
+  margin-bottom: 10px;
   font-size: 14px;
   font-weight: 600;
-  color: #303133;
   line-height: 20px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  color: #303133;
 }
 </style>

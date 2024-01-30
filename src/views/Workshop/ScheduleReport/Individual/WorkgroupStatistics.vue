@@ -36,7 +36,6 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
@@ -47,7 +46,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { reactive } from 'vue'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -56,7 +55,7 @@ import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { individualWorkGroupApi } from '@/api/workshop/individualRegion/service'
 import { IndividualWorkType } from '@/api/workshop/individualWork/types'
-import { exportTypes } from '../../DataQuery/DataCollectionPublicity/config'
+import { exportWorkGroupApi } from '@/api/workshop/scheduleReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
@@ -74,9 +73,9 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { register, tableObject, methods } = useTable({
   getListApi: individualWorkGroupApi
 })
-const { setSearchParams } = methods
+const { getList } = methods
 
-const villageTree = ref<any[]>([])
+getList()
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -212,60 +211,47 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-/**
- * 合并单元行
- * @param{Object} row 当前行
- * @param{Object} column 当前列
- * @param{Object} rowIndex 当前行下标
- * @param{Object} columnInex 当前列下标
- */
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
-  ).length
-  const index = tableObject.tableList.findIndex(
-    (item: any) => item.gridmanName === row.gridmanName && item.totalHouse === row.totalHouse
-  )
-  if (column && columnIndex < 5) {
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
 
-  setSearchParams({ ...params })
+  tableObject.params = params
+  getList()
 }
 
 const onReset = () => {
-  setSearchParams({})
+  tableObject.params = {}
+  getList()
 }
 
 // 数据导出
-const onExport = () => {
-  emit('export', villageTree.value, exportTypes.house)
+const onExport = async () => {
+  const params = {
+    ...tableObject.params,
+    type: 'IndividualHousehold'
+  }
+  const res = await exportWorkGroupApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 const onBack = () => {
   back()
 }
-
-onMounted(() => {
-  setSearchParams({})
-})
 </script>
 <style lang="less" scoped>
 .search-form-wrap {

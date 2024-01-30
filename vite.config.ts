@@ -129,11 +129,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       VueMarcos(),
       createHtmlPlugin({
         pages: mode === 'dev' ?
-        [
-         ...pcHmtlEntrys,
-         ...h5HmtlEntrys
-        ] :
-        platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
+          [
+            ...pcHmtlEntrys,
+            ...h5HmtlEntrys
+          ] :
+          platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
       })
     ],
 
@@ -175,14 +175,14 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
       rollupOptions: {
         input:
-        platform === 'pc' ? {
-          main: resolve(__dirname, "index.html"),
-          admin: resolve(__dirname, "admin.html"),
-        } :
-          {
-            h5: resolve(__dirname, "h5.html"),
-            ld: resolve(__dirname, "ld.html")
-          },
+          platform === 'pc' ? {
+            main: resolve(__dirname, "index.html"),
+            admin: resolve(__dirname, "admin.html"),
+          } :
+            {
+              h5: resolve(__dirname, "h5.html"),
+              ld: resolve(__dirname, "ld.html")
+            },
         output: {
           assetFileNames: `${platform}[ext]/[name]-[hash].[ext]`,
           chunkFileNames: `${platform}js/[name]-[hash].js`,
