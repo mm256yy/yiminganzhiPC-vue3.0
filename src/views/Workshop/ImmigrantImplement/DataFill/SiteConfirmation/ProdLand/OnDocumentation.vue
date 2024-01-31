@@ -23,7 +23,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="摇号顺序号：" prop="houseNo">
+          <ElFormItem label="：" prop="houseNo">
             {{ form.area }}
           </ElFormItem>
         </ElCol>

@@ -382,8 +382,6 @@ const getTypeColumns = (type) => {
   return targetList
 }
 
-// const { allSchemas } = useCrudSchemas(schema)
-
 const onClose = () => {
   dialogShow.value = false
   tableObject.params = {

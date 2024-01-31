@@ -112,85 +112,10 @@ const getRewardFeeList = () => {
 
 // 数据导出
 const onExport = () => {
-  // const params = {
-  //   exportType: '1',
-  //   ...tableObject.params
-  // }
-  // const res = await exportReportApi(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+  const url =
+    'https://oss.zdwp.tech/migrate/files/archives/82bada98-d8b6-43d5-9d9d-699a3e1ce3f0.xlsx'
+  window.open(url)
 }
-
-/**
- * 获取金额类型
- * @param type 类型 1 补偿, 2 补助, 3 奖励, 4 其他
- */
-// const getTypeStr = (type: string) => {
-//   switch (type) {
-//     case '1':
-//       return '补偿费'
-//       break
-//     case '2':
-//       return '补助费'
-//       break
-//     case '3':
-//       return '奖励费'
-//       break
-//     case '4':
-//       return '其他费用'
-//       break
-//     default:
-//       return ''
-//   }
-// }
-
-/**
- * 计算补偿金额
- * 补偿金额 = 数量 * 单价
- * @param row 当前行数据
- */
-// const computedTotalPrice = (row: any) => {
-//   if (row.totalPrice) {
-//     return Number(row.totalPrice)
-//   } else {
-//     if (row.number && row.price) {
-//       return Number(row.number) * Number(row.price)
-//     } else {
-//       return 0
-//     }
-//   }
-// }
-
-/**
- * 获取奖励小计
- * @param row 当前行信息
- */
-// const getSummaries = (row: any) => {
-//   let sums = 0
-//   let sumIndex = 0
-//   feeTableData.value.forEach((column, index) => {
-//     if (column.name === row.name) {
-//       sumIndex = index
-//     }
-//   })
-//   const arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
-//   sums = arr.reduce((totalPrice, currentItem) => {
-//     return totalPrice + computedTotalPrice(currentItem)
-//   }, 0)
-//   return sums
-// }
 
 onMounted(() => {
   getRewardFeeList()

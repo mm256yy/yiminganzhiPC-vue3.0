@@ -61,3 +61,15 @@ export const saveImmigrantChooseHouseApi = (data: any): Promise<TableResponse<Si
     data
   })
 }
+
+/**
+ * 批量档案上传
+ * @param data
+ * @returns
+ */
+export const saveBatchDocumentationApi = (data: any): Promise<TableResponse<SiteType>> => {
+  return request.post({
+    url: '/immigrantDocumentation/save ',
+    data
+  })
+}

@@ -120,3 +120,8 @@ export const saveFillingCompleteApi = (data: any): Promise<FillingType> => {
 export const getFillingStatusApi = (doorNo: string) => {
   return request.get({ url: '/immigrantFilling/findByDoorNo', params: { doorNo } })
 }
+
+// 档案上传
+export const saveFileUploadApi = (data: any) => {
+  return request.post({ url: '/immigrantDocumentation/save', data })
+}

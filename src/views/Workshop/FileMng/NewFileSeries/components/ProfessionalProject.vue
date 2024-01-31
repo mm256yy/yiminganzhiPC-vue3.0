@@ -11,7 +11,11 @@
       />
     </div>
     <div class="line"></div>
-    <div class="title-hint"><span class="title-label">专业项目列表</span></div>
+    <div class="title-hint"
+      ><span class="title-label">专业项目列表</span> &nbsp;&nbsp;共&nbsp;<span class="title-number">
+        {{ tableObject.total }} </span
+      >&nbsp;份</div
+    >
     <div class="table-wrap" v-loading="tableObject.loading">
       <Table
         v-model:pageSize="tableObject.size"
@@ -211,9 +215,9 @@ const getVillageTree = async () => {
 
 // 平台采集查看
 const handleCollection = (row: any) => {
-  console.log('row', row)
   const type = 'FileProfessionalProject'
   const routeName = 'FileProfessionalProject' // 专业项目
+
   const query = { type }
   try {
     push({

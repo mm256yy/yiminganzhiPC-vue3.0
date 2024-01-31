@@ -29,3 +29,66 @@ export const saveLandBasicInfoApi = (data: any): Promise<TableResponse<LandBasic
 export const deleteLandBasicInfoApi = (id: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
   return request.post({ url: `/assetLand/delete/${id}` })
 }
+
+/**
+ * 获取公寓房选房列表数据
+ * @param params 传参
+ */
+export const getApartmentSelectionListApi = (params: any) => {
+  return request.get({ url: `/immigrantChooseHouse/findPeasantFlatList`, params })
+}
+
+/**
+ * 获取宅基地择址列表数据
+ * @param params
+ * @returns
+ */
+export const getHomesteadLandSiteListApi = (params: any) => {
+  return request.get({ url: `/immigrantChooseHouse/findPeasantHomesteadList`, params })
+}
+
+/**
+ * 获取生产用地择址列表数据
+ * @param params
+ * @returns
+ */
+export const getProductionLandSiteListApi = (params: any) => {
+  return request.get({ url: `/immigrantLand/findPeasantLandList`, params })
+}
+
+/**
+ * 获取坟墓择址列表数据
+ * @param params 传参
+ */
+export const getTombSiteListApi = (params: any) => {
+  return request.get({ url: `/immigrantGrave/findPeasantGraveList`, params })
+}
+
+/**
+ * 批量存储档案
+ * @param data
+ * @returns
+ */
+export const saveBatchFileApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
+  return request.post({ url: '/immigrantChooseHouse/saveAll', data })
+}
+
+/**
+ * 生产用地批量存储档案
+ * @param data
+ * @returns
+ */
+export const saveBatchProductionLandFileApi = (
+  data: any
+): Promise<TableResponse<LandBasicInfoDtoType>> => {
+  return request.post({ url: '/immigrantLand/saveAll', data })
+}
+
+/**
+ * 坟墓批量存储档案
+ * @param data
+ * @returns
+ */
+export const saveBatchTombFileApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
+  return request.post({ url: '/immigrantGrave/createAll', data })
+}

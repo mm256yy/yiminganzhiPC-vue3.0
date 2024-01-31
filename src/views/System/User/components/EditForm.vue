@@ -117,6 +117,9 @@
           </el-form-item>
         </el-col>
       </el-form-item>
+      <el-form-item v-if="isIncludeTownship" prop="townshipCode" label="乡镇编码">
+        <el-input class="!w-260px" v-model="projectUser.townshipCode" placeholder="输入乡镇编码" />
+      </el-form-item>
     </el-form>
     <ProjectUserForm
       v-if="showProjectUserForm"
@@ -210,7 +213,8 @@ const projectUser = ref<ProjectUser>(
     position: '',
     defaultProject: false,
     roles: [],
-    roleIds: []
+    roleIds: [],
+    townshipCode: ''
   }
 )
 const orgs = ref<TreeNodeType[]>([])
@@ -226,6 +230,11 @@ const rules = {
   sex: [required()]
   // enabled: [{ type: 'boolean', required: true }]
 }
+
+// 是否包含乡镇
+const isIncludeTownship = computed(() => {
+  return projectUser.value.roleIds?.includes(104)
+})
 
 const schema = reactive<FormSchema[]>([
   { field: 'userName', label: '用户名', component: 'Input' },
