@@ -81,7 +81,7 @@
           </ElTableColumn>
           <ElTableColumn prop="graveNo" label="坟墓编号" align="center">
             <template #default="{ row }">
-              <ElInput placeholder="请输入" v-model="row.placeOrder" />
+              <ElInput placeholder="请输入" v-model="row.graveNo" />
             </template>
           </ElTableColumn>
           <ElTableColumn prop="remark" label="备注" align="center">
@@ -198,22 +198,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householder',
+    field: 'name',
     label: '户主姓名',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入户主名称'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
-    field: 'placement',
-    label: '安置点',
     search: {
       show: true,
       component: 'Input',
