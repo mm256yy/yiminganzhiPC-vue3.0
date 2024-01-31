@@ -196,6 +196,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import { useTable } from '@/hooks/web/useTable'
 import FileUpload from '../components/FileUpload.vue'
 
@@ -211,6 +212,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>()
+const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
 
@@ -255,7 +257,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'householder',
+    field: 'name',
     label: '户主姓名',
     search: {
       show: true,
@@ -269,7 +271,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'placement',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
@@ -277,12 +279,30 @@ const schema = reactive<CrudSchema[]>([
       componentProps: {
         placeholder: '请输入户主名称'
       }
-    },
-    table: {
-      show: false
     }
   }
 ])
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        value: item.name,
+        label: item.name
+      }
+    })
+    placementPointList.value = list
+    // console.log('placementPointList', placementPointList.value)
+  } catch {}
+}
 
 const { allSchemas } = useCrudSchemas(schema)
 
@@ -296,6 +316,7 @@ const onRowUpload = (row: any) => {
   dialog.value = true
 }
 
+// 搜索
 const onSearch = (data) => {
   // 处理参数
   let params = {
@@ -381,7 +402,6 @@ const onSave = () => {
       saveBatchFileApi(tableList).then(() => {
         ElMessage.success('操作成功！')
         getList()
-        emit('updateData')
       })
     })
     .catch(() => {})
@@ -448,6 +468,7 @@ const getCarNoList = async (settleAddress?: string) => {
 onMounted(() => {
   getVillageTree()
   getList()
+  getPlacementPointList()
 })
 </script>
 <style lang="less" scoped>

@@ -70,7 +70,7 @@ export const getTombSiteListApi = (params: any) => {
  * @returns
  */
 export const saveBatchFileApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.post({ url: '/immigrantChooseHouse/saveAll', data })
+  return request.post({ url: '/immigrantChooseHouse/updateOrder', data })
 }
 
 /**
@@ -81,7 +81,7 @@ export const saveBatchFileApi = (data: any): Promise<TableResponse<LandBasicInfo
 export const saveBatchProductionLandFileApi = (
   data: any
 ): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.post({ url: '/immigrantLand/saveAll', data })
+  return request.post({ url: '/immigrantLand/updateAddress', data })
 }
 
 /**
@@ -90,5 +90,5 @@ export const saveBatchProductionLandFileApi = (
  * @returns
  */
 export const saveBatchTombFileApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.post({ url: '/immigrantGrave/createAll', data })
+  return request.post({ url: '/immigrantGrave/updateAddress', data })
 }
