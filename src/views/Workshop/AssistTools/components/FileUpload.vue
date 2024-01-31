@@ -9,6 +9,7 @@
     :closeOnClickModal="false"
   >
     <ElForm
+      v-loading="formLoading"
       class="form"
       ref="formRef"
       :model="form"
@@ -228,16 +229,13 @@ import { ref, reactive, watch, nextTick } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { saveDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
-import type { SiteType } from '@/api/immigrantImplement/siteConfirmation/siteSel-types'
-import { resettleArea } from '../../config'
+import { saveBatchDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 interface PropsType {
   show: boolean
   doorNo: string
   baseInfo: any
-  dataList?: Array<SiteType>
 }
 
 interface FileItemType {
@@ -249,6 +247,23 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const formLoading = ref<boolean>(false)
+
+// 宅基地安置区块
+const resettleArea = [
+  {
+    id: '3',
+    name: '棠村安置区'
+  },
+  {
+    id: '4',
+    name: '麻家田安置区'
+  },
+  {
+    id: '5',
+    name: '东坪安置区'
+  }
+]
 
 const form = ref<any[]>([])
 const imgUrl = ref<string>('')
@@ -271,7 +286,7 @@ const onClose = (flag = false) => {
 }
 
 const submit = (data: any) => {
-  saveDocumentationApi(data).then(() => {
+  saveBatchDocumentationApi(data).then(() => {
     ElMessage.success('操作成功！')
   })
   onClose(true)
@@ -298,16 +313,17 @@ const onSubmit = debounce((formEl) => {
         )
         return
       }
-      let params: any = []
-      form.value.map((item: any) => {
-        params.push({
+      let params: any = {}
+      form.value.forEach((item) => {
+        params = {
           ...item,
           lotteryOrderPic: JSON.stringify(item.lotteryOrderPic || []), // 摇号顺序凭证
           placeOrderPic: JSON.stringify(item.placeOrderPic || []), // 择房/择址顺序号凭证
           chooseHousePic: JSON.stringify(item.chooseHousePic || []), // 择房/择址确认单
           otherPic: JSON.stringify(item.otherPic || []) // 其他附件
-        })
+        }
       })
+
       submit(params)
     } else {
       return false
@@ -413,7 +429,7 @@ const getSettleAddressList = async () => {
     apartmentArea = result.content
   } catch {}
 }
-const getSettleAddress = async (data: any) => {
+const getSettleAddress = (data: any) => {
   // 选择了公寓房的安置方式
   if (data.houseAreaType === 'flat') {
     let str = ''
@@ -424,10 +440,9 @@ const getSettleAddress = async (data: any) => {
     })
     return str
   } else {
-    let m = await resettleArea()
     let str = ''
-    m.map((item: any) => {
-      if (item.code === data.settleAddress) {
+    resettleArea.map((item: any) => {
+      if (item.id === data.settleAddress) {
         str = item.name
       }
     })
@@ -439,22 +454,18 @@ watch(
   async () => {
     // 处理表单数据
     await getSettleAddressList()
-    let arr: any = []
-    if (props.dataList) {
-      props.dataList?.map((item: any) => {
-        arr.push({
-          ...item,
-          lotteryOrderPic: item.lotteryOrderPic ? JSON.parse(item.lotteryOrderPic) : [], // 摇号顺序凭证
-          placeOrderPic: item.placeOrderPic ? JSON.parse(item.placeOrderPic) : [], // 择房顺序号凭证
-          chooseHousePic: item.chooseHousePic ? JSON.parse(item.chooseHousePic) : [], // 择房确认单
-          otherPic: item.otherPic ? JSON.parse(item.otherPic) : [] // 其他附件
-        })
-      })
-      form.value = [...arr]
-    } else {
-      form.value = [props.baseInfo]
+    const params = {
+      ...props.baseInfo,
+      lotteryOrderPic: props.baseInfo?.lotteryOrderPic
+        ? JSON.parse(props.baseInfo?.lotteryOrderPic)
+        : [], // 摇号顺序凭证
+      placeOrderPic: props.baseInfo?.placeOrderPic ? JSON.parse(props.baseInfo.placeOrderPic) : [], // 择房顺序号凭证
+      chooseHousePic: props.baseInfo?.chooseHousePic
+        ? JSON.parse(props.baseInfo?.chooseHousePic)
+        : [], // 择房确认单
+      otherPic: props.baseInfo?.otherPic ? JSON.parse(props.baseInfo?.otherPic) : [] // 其他附件
     }
-    console.log('bbq-2', form.value)
+    form.value = [params]
   },
   {
     immediate: true,

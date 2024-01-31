@@ -375,7 +375,6 @@ const getList = () => {
           roomNoOptions: []
         })
       })
-      console.log(arr, 'bbq')
 
       arr.map(async (item: any) => {
         item.landNoOptions = await getlandNoList(item.settleAddress)

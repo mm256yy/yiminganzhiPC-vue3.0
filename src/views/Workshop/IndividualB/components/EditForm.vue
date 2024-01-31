@@ -112,9 +112,9 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="绑定居民户号" prop="registrantName" align="center" header-align="center">
+      <ElFormItem label="绑定居民户号" prop="householderName" align="center" header-align="center">
         <el-select
-          v-model="form.registrantName"
+          v-model="form.householderName"
           filterable
           remote
           reserve-keyword
@@ -171,7 +171,6 @@
 </template>
 
 <script setup lang="ts">
-// ElCascader,ElDivider
 import {
   ElDialog,
   ElForm,
@@ -187,10 +186,8 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
-// import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-// import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -221,13 +218,12 @@ const treeSelectDefaultProps = {
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  // householdNumber: '',
   latitude: 0,
   longitude: 0,
   name: '',
   parentCode: [],
   locationType: 'SubmergedArea',
-  registrantName: '',
+  householderName: '',
   householderDoorNo: '' // 绑定户号
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)

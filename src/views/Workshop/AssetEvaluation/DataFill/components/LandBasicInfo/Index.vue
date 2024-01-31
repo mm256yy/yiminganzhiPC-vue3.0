@@ -328,7 +328,6 @@ const onAddRow = () => {
   const params = {
     ...defaultRow
   }
-  console.log('UOP', params)
   tableData.value.push(params)
 }
 

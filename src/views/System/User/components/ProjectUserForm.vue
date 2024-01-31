@@ -33,6 +33,9 @@
       <el-form-item prop="dingId" label="钉钉号">
         <el-input v-model="row.dingId" placeholder="钉钉组织中的用户 ID" />
       </el-form-item>
+      <el-form-item v-if="isIncludeTownship" prop="townshipCode" label="乡镇编码">
+        <el-input v-model="row.townshipCode" placeholder="输入乡镇编码" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button type="primary" small @click="onSave">确认</el-button>
@@ -53,7 +56,7 @@ import {
   ElFormItem,
   ElTreeSelect
 } from 'element-plus'
-import { ref, onMounted, watch, unref } from 'vue'
+import { ref, onMounted, watch, unref, computed } from 'vue'
 import { listProjectApi } from '@/api/project'
 import { ProjectDtoType } from '@/api/project/types'
 import { ProjectRoleEnum } from '@/api/sys/types'
@@ -74,6 +77,11 @@ interface ProjectUser extends ProjectUserType {
 const props = defineProps<Props>()
 const emit = defineEmits(['close', 'save'])
 
+// 是否包含乡镇
+const isIncludeTownship = computed(() => {
+  return row.value?.roleIds?.includes(104)
+})
+
 const form = ref<ComponentRef<typeof ElForm>>()
 const { required } = useValidator()
 const rules = {
@@ -92,7 +100,8 @@ const row = ref<ProjectUser>(
     dingId: undefined,
     roleIds: [],
     mapJson: '',
-    mapPic: ''
+    mapPic: '',
+    townshipCode: undefined // 乡镇编码
   }
 )
 const defaultProps = {
@@ -118,6 +127,8 @@ onMounted(async () => {
     row.value.projectName = projects.value.find((x) => x.id === pId)?.name
     orgs.value = [await getOrgTreeApi(pId)]
     roles.value = await getAllRoleApi(pId)
+    console.log('L-roles', roles.value)
+
     if (props.title === '编辑用户') {
       const arr: any = row.value.roles
       row.value.roles = []

@@ -51,6 +51,7 @@ export type ProjectUserType = {
   roleIds?: number[]
   mapPic?: string
   mapJson?: string
+  townshipCode?: string
   [key: string]: any
 }
 

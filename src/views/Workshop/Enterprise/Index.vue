@@ -24,10 +24,6 @@
           </div>
           <div class="text">
             共 <span class="num">{{ headerInfo.qyNum }}</span> 家企业
-            <!-- <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
-            <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家 -->
           </div>
         </div>
         <ElSpace>
@@ -273,7 +269,6 @@ const getLandlordHeadInfo = async () => {
 
 const checkIsOpenDialog = () => {
   const result = sessionStorage.getItem('isDefaultOpen')
-  console.log('v-result', result)
   if (result && result === '1') {
     actionType.value = 'add'
     tableObject.currentRow = null

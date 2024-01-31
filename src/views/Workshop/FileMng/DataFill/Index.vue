@@ -117,7 +117,7 @@ const showEnclosure = computed(() => {
 })
 
 const showUploadField = computed(() => {
-  return type === '4' ? tabCurrentId.value > 2 : tabCurrentId.value === 4
+  return type === '4' ? tabCurrentId.value > 1 : tabCurrentId.value === 4
 })
 
 const onImageClick = (item: FileDtoType) => {

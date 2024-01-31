@@ -257,7 +257,6 @@ const onSubmit = debounce((formEl) => {
 // 表单提交
 const submit = async (data: any) => {
   const { actionType, pId, pType, showDoorNo, name } = props
-  console.log('BN', showDoorNo)
   const params = {
     ...data,
     pId,

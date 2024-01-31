@@ -58,9 +58,9 @@
           v-model="form.phone"
         />
       </ElFormItem>
-      <ElFormItem label="关联居民户" prop="registrantName" align="center" header-align="center">
+      <ElFormItem label="关联居民户" prop="householderName" align="center" header-align="center">
         <el-select
-          v-model="form.registrantName"
+          v-model="form.householderName"
           filterable
           remote
           reserve-keyword
@@ -165,7 +165,7 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   name: '',
   parentCode: [],
   locationType: 'SubmergedArea',
-  registrantName: '',
+  householderName: '',
   householderDoorNo: ''
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
