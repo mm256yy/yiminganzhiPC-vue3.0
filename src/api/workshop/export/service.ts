@@ -18,6 +18,11 @@ export const getPgExportApi = (params: ExportType): Promise<any> => {
   })
 }
 
+//打印报告下载
+export const getExportReportApi = (params: ExportType): Promise<any> => {
+  return request.get({ url: '/exportWord/exportReport', params, responseType: 'blob' })
+}
+
 export const getGridExportApi = (params: LandlordDtoType): Promise<any> => {
   return request.get({ url: '/grid/exportGrid', params, responseType: 'blob' })
 }

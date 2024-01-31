@@ -226,6 +226,8 @@ import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
 import { fmtStr } from '@/utils/index'
 import OnDocumentation from '../OnDocumentation/Index.vue'
 import PrintReport from '@/views/Workshop/components/PrintReport.vue'
+import { getExportReportApi } from '@/api/workshop/export/service'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -277,15 +279,59 @@ const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const showDialog = ref(false)
 const emit = defineEmits(['updateData'])
-
+const parmas = ref<any>({
+  type: null,
+  doorNo: null
+})
 // 档案上传
 const onDocumentation = () => {
   showDialog.value = true
 }
 
 // 打印报表
-const printReport = () => {
-  inExportDialog.value = true
+const printReport = async () => {
+  // inExportDialog.value = true
+  console.log('打印数据')
+  if (props.type == 'Landlord') {
+    parmas.value = {
+      type: 'exportHouseEvalHousehold',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'Enterprise') {
+    parmas.value = {
+      type: 'exportHouseEvalCompany',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'IndividualB') {
+    parmas.value = {
+      type: 'exportHouseEvalIndividual',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'VillageInfoC') {
+    parmas.value = {
+      type: 'exportHouseEvalVillage',
+      doorNo: props.doorNo
+    }
+  }
+  const res = await getExportReportApi(parmas.value)
+  getRes(res)
+}
+
+const getRes = (res: any) => {
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 // 关闭档案弹窗
 const close = (flag: boolean) => {
