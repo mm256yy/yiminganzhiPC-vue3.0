@@ -8,23 +8,24 @@
           filterViewDoorNo(props.baseInfo)
         }}</span>
       </div>
-      <div @click="handleHouseholdClick" v-if="props.type == 'Landlord'"
-        >关联个体户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
-          props.baseInfo.relateIndividualName || '-'
-        }}</span></div
+      <div v-if="props.type == 'Landlord'"
+        >关联个体户：<span
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          @click="handleHouseholdClick"
+          >{{ props.baseInfo.relateIndividualName || '-' }}</span
+        ></div
       >
-      <div @click="handleCompanyClick" v-if="props.type == 'Landlord'"
-        >关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+      <div v-if="props.type == 'Landlord'"
+        >关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]" @click="handleCompanyClick">{{
           props.baseInfo.relateCompanyName || '-'
         }}</span></div
       >
-      <div
-        @click="handleLandlordClick"
-        v-if="props.type == 'Enterprise' || props.type == 'IndividualB'"
-      >
-        关联居民户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
-          props.baseInfo.householderName || '-'
-        }}</span></div
+      <div v-if="props.type == 'Enterprise' || props.type == 'IndividualB'">
+        关联居民户：<span
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          @click="handleLandlordClick"
+          >{{ props.baseInfo.householderName || '-' }}</span
+        ></div
       >
       <div
         :class="{
@@ -165,6 +166,7 @@ onMounted(() => {
 })
 const handleHouseholdClick = () => {
   console.log('跳转居民户')
+  if (!props.baseInfo.relateIndividualName) return false
   let routerName = 'DataFill'
   if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
     routerName = 'DataFillCheck'
@@ -180,6 +182,7 @@ const handleHouseholdClick = () => {
 }
 const handleCompanyClick = () => {
   console.log('跳转企业')
+  if (!props.baseInfo.relateCompanyName) return false
   let routerName = 'DataFill'
   if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
     routerName = 'DataFillCheck'
@@ -195,6 +198,7 @@ const handleCompanyClick = () => {
 }
 const handleLandlordClick = () => {
   console.log('跳转居民户')
+  if (!props.baseInfo.householderName) return false
   let routerName = 'DataFill'
   if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
     routerName = 'DataFillCheck'

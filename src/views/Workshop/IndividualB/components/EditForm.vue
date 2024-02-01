@@ -298,7 +298,7 @@ const onClose = (flag = false) => {
 const doorTypeChange = (val) => {
   options.value.forEach((item) => {
     if (item.name == val) {
-      form.value.showHouseholderDoorNo = item.doorNo
+      form.value.showHouseholderDoorNo = item.doorNo.slice(2)
       form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {
@@ -343,6 +343,8 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
+      form.value.showHouseholderDoorNo = 'jl' + form.value.showHouseholderDoorNo
+
       btnLoading.value = true
       const data: any = {
         ...form.value,

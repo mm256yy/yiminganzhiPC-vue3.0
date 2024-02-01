@@ -237,7 +237,7 @@ const doorTypeChange = (val) => {
   console.log(options.value, val, '测试数据下拉')
   options.value.forEach((item) => {
     if (item.name == val) {
-      form.value.showHouseholderDoorNo = item.doorNo
+      form.value.showHouseholderDoorNo = item.doorNo.slice(2)
       form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {
@@ -254,6 +254,7 @@ const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
       btnLoading.value = true
+      form.value.showHouseholderDoorNo = 'jl' + form.value.showHouseholderDoorNo
       const data: any = {
         ...form.value,
         id: form.value.id,
