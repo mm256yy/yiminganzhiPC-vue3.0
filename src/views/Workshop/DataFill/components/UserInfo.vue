@@ -8,6 +8,24 @@
           filterViewDoorNo(props.baseInfo)
         }}</span>
       </div>
+      <div @click="handleHouseholdClick" v-if="props.type == 'Landlord'"
+        >关联个体户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.relateIndividualName || '-'
+        }}</span></div
+      >
+      <div @click="handleCompanyClick" v-if="props.type == 'Landlord'"
+        >关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.relateCompanyName || '-'
+        }}</span></div
+      >
+      <div
+        @click="handleLandlordClick"
+        v-if="props.type == 'Enterprise' || props.type == 'IndividualB'"
+      >
+        关联居民户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.householderName || '-'
+        }}</span></div
+      >
       <div
         :class="{
           status: true,
@@ -99,10 +117,32 @@
   </div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { globalData } from '@/config/fill'
+import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
+export default defineComponent({
+  beforeRouteEnter(to, _from, next) {
+    console.log(to, 'to')
+    if (to.path === '/Workshop/Enterprise') {
+      // 实物采集
+      globalData.currentSurveyStatus = SurveyStatusEnum.Survey
+    } else {
+      // 实物复核
+      globalData.currentSurveyStatus = SurveyStatusEnum.Review
+    }
+    next()
+  }
+})
+</script>
+
 <script lang="ts" setup>
 import { ReportStatus } from '../config'
 import { ref, onMounted } from 'vue'
 import { filterViewDoorNo } from '@/utils'
+import { useRouter } from 'vue-router'
+const { push } = useRouter()
 
 interface PropsType {
   baseInfo: any
@@ -121,7 +161,53 @@ onMounted(() => {
   } else if (props.type == 'villageInfoC') {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
+  console.log(props.baseInfo, 'baseInfo')
 })
+const handleHouseholdClick = () => {
+  console.log('跳转居民户')
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
+  push({
+    name: routerName,
+    query: {
+      householdId: props.baseInfo.relateIndividualId,
+      doorNo: props.baseInfo.relateIndividualDoorNo,
+      type: 'IndividualB'
+    }
+  })
+}
+const handleCompanyClick = () => {
+  console.log('跳转企业')
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
+  push({
+    name: routerName,
+    query: {
+      householdId: props.baseInfo.relateCompanyId,
+      doorNo: props.baseInfo.relateCompanyDoorNo,
+      type: 'Enterprise'
+    }
+  })
+}
+const handleLandlordClick = () => {
+  console.log('跳转居民户')
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
+  push({
+    name: routerName,
+    query: {
+      householdId: props.baseInfo.householderId,
+      doorNo: props.baseInfo.householderDoorNo,
+      type: 'Landlord'
+    }
+  })
+}
 </script>
 
 <style lang="less" scoped>
