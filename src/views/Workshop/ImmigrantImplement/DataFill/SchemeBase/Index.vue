@@ -98,6 +98,7 @@
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
                 :baseInfo="props.baseInfo"
+                :dataList="dataList"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -180,6 +181,7 @@ interface PropsType {
   baseInfo: any
 }
 
+const dataList = ref<any>()
 const props = defineProps<PropsType>()
 
 // 步骤条
@@ -299,6 +301,9 @@ const filterWay = (data) => {
 4
 const stepClick = (id) => {
   stepIndex.value = id
+  // if (stepIndex.value == 1) {
+  //   console.log(dataList.value, '点击成功')
+  // }
 }
 
 /**
@@ -341,6 +346,7 @@ const immigrantSettleSubmit = async (params: any) => {
   }
   const datas: any = await getPlacementPointByIdApi(params.settleAddress)
   isProductionLand.value = datas.isProductionLand
+  dataList.value = res
   console.log(datas.isProductionLand, 'bbq')
 }
 const isShow = (row) => {

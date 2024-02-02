@@ -82,6 +82,7 @@ interface PropsType {
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
+  dataList: any
 }
 
 const emit = defineEmits(['submit'])
@@ -112,10 +113,15 @@ watch(
   (val) => {
     if (val) {
       console.log(val, 'bbq')
-
-      const { areaType: area, settleAddress: settleArea } = val
-      areaType.value = area
-      settleAddress.value = settleArea
+      console.log(props.dataList, '测试数据')
+      if (props.dataList) {
+        areaType.value = props.dataList.areaType
+        settleAddress.value = props.dataList.settleAddress
+      } else {
+        const { areaType: area, settleAddress: settleArea } = val
+        areaType.value = area
+        settleAddress.value = settleArea
+      }
     }
   },
   {
