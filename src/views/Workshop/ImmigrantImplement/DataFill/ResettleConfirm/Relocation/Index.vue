@@ -354,7 +354,8 @@ watch(
         tableData.value = [
           {
             houseAreaTypeText,
-            settleAddressText: m.find((item) => item.code === res.settleAddress)?.name,
+            // settleAddressText: m.find((item) => item.code === res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: homesteadAreaSize.find((item) => item.id === res.areaType)?.name,
             num: 1
           }
@@ -484,6 +485,9 @@ const onEditSubmit = async (params: any) => {
   const res = await saveRelocationInfoApi(params)
   if (res) {
     editDialogVisible.value = false
+    let m = await resettleArea()
+    console.log(m, res, 'bbqsssssssssss')
+    res.settleAddress = m.find((item) => item.code === res.settleAddress)?.name
     immigrantSettle.value = res
     ElMessage.success('保存成功！')
   }
