@@ -138,7 +138,12 @@
       :type="'PeasantHousehold'"
       :flag="1"
     />
-    <InExport :show="inExportDialog" @close="inExportDialogClose" :list="exportList" />
+    <InExport
+      :show="inExportDialog"
+      @close="inExportDialogClose"
+      :list="importList"
+      :type="'PeasantHousehold'"
+    />
   </WorkContentWrap>
 </template>
 
@@ -210,6 +215,24 @@ const exportList = ref<exportListType[]>([
   {
     name: '土地青苗及附着物评估表',
     value: ''
+  }
+])
+const importList = ref<exportListType[]>([
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_household_tree'
+  },
+  {
+    name: '房屋评估表',
+    value: 'assetEval_household_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_household_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'assetEval_household_appendage'
   }
 ])
 const onExport = () => {

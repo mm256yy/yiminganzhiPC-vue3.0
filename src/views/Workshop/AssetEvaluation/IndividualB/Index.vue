@@ -136,7 +136,12 @@
       :type="'IndividualHousehold'"
       :flag="1"
     />
-    <InExport :show="inExportDialog" @close="inExportDialogClose" :list="exportList" />
+    <InExport
+      :show="inExportDialog"
+      @close="inExportDialogClose"
+      :list="importList"
+      :type="'IndividualHousehold'"
+    />
   </WorkContentWrap>
 </template>
 
@@ -204,6 +209,36 @@ const exportList = ref<exportListType[]>([
   {
     name: '设施设备表',
     value: 'assetEval_company_equipment'
+  }
+])
+const importList = ref<exportListType[]>([
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_company_tree'
+  },
+  {
+    name: '房屋评估表',
+    value: 'assetEval_company_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_company_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'aassetEval_company_appendage'
+  },
+  {
+    name: '基础设施表',
+    value: 'assetEval_company_infra'
+  },
+  {
+    name: '设施设备',
+    value: 'assetEval_company_equipment'
+  },
+  {
+    name: '其它评估',
+    value: 'assetEval_company_other'
   }
 ])
 const onExport = () => {

@@ -138,7 +138,12 @@
       :type="'Village'"
       :flag="1"
     />
-    <InExport :show="inExportDialog" @close="inExportDialogClose" :list="exportList" />
+    <InExport
+      :show="inExportDialog"
+      @close="inExportDialogClose"
+      :list="importList"
+      :type="'Village'"
+    />
   </WorkContentWrap>
 </template>
 
@@ -207,6 +212,28 @@ const exportList = ref<exportListType[]>([
   {
     name: '零星林果木调查表',
     value: 'assetEval_village_tree'
+  },
+  {
+    name: '小型专项及农副业设施表',
+    value: 'assetEval_village_facilities'
+  }
+])
+const importList = ref<exportListType[]>([
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_village_tree'
+  },
+  {
+    name: '房屋评估表',
+    value: 'assetEval_village_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_village_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'assetEval_village_appendage'
   },
   {
     name: '小型专项及农副业设施表',

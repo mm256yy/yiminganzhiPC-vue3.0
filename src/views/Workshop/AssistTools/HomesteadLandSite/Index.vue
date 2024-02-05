@@ -102,8 +102,8 @@
       </div>
       <div class="py-[10px] bg-[#fff]" style="padding-left: 10px">
         <ElPagination
-          v-model:current-page="tableObject.params.currentPage"
-          v-model:page-size="tableObject.params.size"
+          v-model:current-page="pageNum"
+          v-model:page-size="pageSize"
           :page-sizes="[10, 20, 30, 40]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableObject.params.total"
@@ -161,7 +161,8 @@ const projectId = appStore.currentProjectId
 const baseInfo = ref<any>()
 
 const { tableObject } = useTable()
-
+const pageSize = ref(10)
+const pageNum = ref(1)
 tableObject.params = {
   projectId,
   status: 'implementation'
@@ -239,7 +240,7 @@ const onRowUpload = (row: any) => {
   doorNo.value = row.doorNo
   baseInfo.value = {
     ...row,
-    houseAreaType: 'flat' // 宅基地
+    houseAreaType: 'homestead' // 宅基地
   }
 
   dialog.value = true
@@ -291,7 +292,12 @@ const handleCurrentChange = (val: number) => {
 const getList = async () => {
   tableLoading.value = true
   try {
-    const result = await getHomesteadLandSiteListApi(tableObject.params)
+    const params = {
+      ...tableObject.params,
+      page: pageNum.value - 1,
+      size: pageSize.value
+    }
+    const result = await getHomesteadLandSiteListApi(params)
     const arr: any = []
     result.content.map((item: any) => {
       arr.push({

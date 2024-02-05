@@ -15,6 +15,20 @@ const getSettleAddressList = async () => {
     return result.content
   } catch {}
 }
+const getSettleAddressListFlat = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result: any = await getPlacementPointListApi(params)
+    console.log(result, '测试数据')
+    return result.content
+  } catch {}
+}
 // tab 唯一标识
 export const TabIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 
@@ -474,6 +488,7 @@ export const ProductionPlaceWay = [
 
 // 宅基地安置区块
 export const resettleArea = getSettleAddressList
+export const resettleAreaFlat = getSettleAddressListFlat
 
 // 公寓安置地块
 export const apartmentArea = [

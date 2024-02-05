@@ -19,7 +19,7 @@
     </div>
 
     <div class="common-form-item">
-      <div class="common-label">可选安置点：</div>
+      <div class="common-label">可选安置点1：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
           <el-radio

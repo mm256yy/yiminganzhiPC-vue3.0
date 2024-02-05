@@ -235,7 +235,8 @@ import {
   resettleHouseType,
   homesteadAreaSize,
   apartmentAreaSize,
-  resettleArea
+  resettleArea,
+  resettleAreaFlat
 } from '../../config'
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 import Homestead from '../../SchemeBase/components/Homestead.vue'
@@ -336,6 +337,7 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     apartmentArea = result.content
+    console.log(apartmentArea, '测试数据')
   } catch {}
 }
 watch(
@@ -365,7 +367,8 @@ watch(
         if (res.typeOneNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            // apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[0].name,
             num: res.typeOneNum
           })
@@ -373,7 +376,7 @@ watch(
         if (res.typeTwoNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[1].name,
             num: res.typeTwoNum
           })
@@ -381,7 +384,7 @@ watch(
         if (res.typeThreeNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[2].name,
             num: res.typeThreeNum
           })
@@ -389,7 +392,7 @@ watch(
         if (res.typeFourNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[3].name,
             num: res.typeFourNum
           })
@@ -456,6 +459,7 @@ const onImportData = async () => {
   }
   houseType.value = houseAreaType
   onEditSubmit(immigrantSettle.value)
+  console.log(immigrantSettle.value, '测试测试')
 }
 
 const onClose = () => {
@@ -486,9 +490,16 @@ const onEditSubmit = async (params: any) => {
   if (res) {
     editDialogVisible.value = false
     let m = await resettleArea()
+    let f = await resettleAreaFlat()
     console.log(m, res, 'bbqsssssssssss')
-    res.settleAddress = m.find((item) => item.code === res.settleAddress)?.name
-    immigrantSettle.value = res
+    console.log(f, '数据')
+    if (res.houseAreaType == 'homestead') {
+      res.settleAddress = m.find((item) => item.code === res.settleAddress)?.name
+      immigrantSettle.value = res
+    } else if (res.houseAreaType == 'flat') {
+      res.settleAddress = f.find((item) => item.code === res.settleAddress)?.name
+      immigrantSettle.value = res
+    }
     ElMessage.success('保存成功！')
   }
 }

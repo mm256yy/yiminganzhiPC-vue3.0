@@ -74,12 +74,12 @@
           </ElTableColumn>
           <ElTableColumn
             label="土地面积（亩）"
-            prop="placeOrder"
+            prop="landArea"
             align="center"
             header-align="center"
           >
             <template #default="{ row }">
-              <ElInputNumber placeholder="请输入" :min="0" v-model="row.placeOrder" />
+              <ElInputNumber placeholder="请输入" :min="0" v-model="row.landArea" />
             </template>
           </ElTableColumn>
           <ElTableColumn
@@ -97,8 +97,8 @@
       </div>
       <div class="py-[10px] bg-[#fff]" style="padding-left: 10px">
         <ElPagination
-          v-model:current-page="tableObject.params.currentPage"
-          v-model:page-size="tableObject.params.size"
+          v-model:current-page="pageNum"
+          v-model:page-size="pageSize"
           :page-sizes="[10, 20, 30, 40]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableObject.params.total"
@@ -130,7 +130,7 @@ import {
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
-  getHomesteadLandSiteListApi,
+  getProductionLandSiteListApi,
   saveBatchProductionLandFileApi
 } from '@/api/AssetEvaluation/landBasicInfo-service'
 import { Search } from '@/components/Search'
@@ -154,7 +154,9 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const { tableObject } = useTable()
-
+const pageSize = ref(10)
+const pageNum = ref(1)
+// const totalNum = ref(0)
 tableObject.params = {
   projectId,
   status: 'implementation'
@@ -267,11 +269,12 @@ const onReset = () => {
 }
 
 const handleSizeChange = (val: number) => {
-  tableObject.params.size = val
+  pageSize.value = val
   getList()
 }
 const handleCurrentChange = (val: number) => {
-  tableObject.params.currentPage = val
+  console.log(val, '测试数据')
+  pageNum.value = val
   getList()
 }
 
@@ -279,7 +282,12 @@ const handleCurrentChange = (val: number) => {
 const getList = async () => {
   tableLoading.value = true
   try {
-    const result = await getHomesteadLandSiteListApi(tableObject.params)
+    const params = {
+      ...tableObject.params,
+      page: pageNum.value - 1,
+      size: pageSize.value
+    }
+    const result = await getProductionLandSiteListApi(params)
     const arr: any = []
     result.content.map((item: any) => {
       arr.push({
@@ -289,7 +297,8 @@ const getList = async () => {
     })
 
     arr.map(async (item: any) => {
-      item.landNoOptions = await getLandNoList(item.settleAddress)
+      // item.settleAddress
+      item.landNoOptions = await getLandNoList()
     })
 
     tableData.value = arr || []
@@ -325,19 +334,19 @@ const getVillageTree = async () => {
 }
 
 // 获取宅基地地块编号选项列表
-const getLandNoList = async (settleAddress?: string) => {
+const getLandNoList = async () => {
   let arr: any = []
-  if (settleAddress) {
-    let params = {
-      projectId,
-      type: 2,
-      settleAddress
-    }
-    const res = await getChooseConfigApi(params)
-    if (res && res?.content.length) {
-      arr = [...res.content]
-    }
+  // if (settleAddress) {
+  let params = {
+    projectId,
+    type: 1
+    // settleAddress
   }
+  const res = await getChooseConfigApi(params)
+  if (res && res?.content.length) {
+    arr = [...res.content]
+  }
+  // }
   return arr
 }
 

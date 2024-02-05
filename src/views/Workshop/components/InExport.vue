@@ -10,21 +10,21 @@
     destroy-on-close
   >
     <div>
-      <!-- <el-checkbox-group v-model="checkList"> -->
-      <div class="collopase-item" v-for="item in props.list" :key="item.value">
-        <div class="collopase-item-head">
-          <el-checkbox :label="item.value">{{ item.name }}</el-checkbox>
+      <el-checkbox-group v-model="checkList" @change="onCheckChange">
+        <div class="collopase-item" v-for="item in props.list" :key="item.value">
+          <div class="collopase-item-head">
+            <el-checkbox :label="item.value">{{ item.name }}</el-checkbox>
+          </div>
         </div>
-      </div>
-      <!-- </el-checkbox-group> -->
+      </el-checkbox-group>
     </div>
     <template #footer>
       <div style="display: flex; justify-content: right">
         <ElButton @click="onClose" style="margin-right: 20px">取消</ElButton>
         <ElUpload
-          action="/api/peasantHousehold/import"
+          action="/api/peasantHousehold/assetEvaluation/import"
           :headers="headers"
-          :data="{ projectId }"
+          :data="params"
           :show-file-list="false"
           accept=".xls,.xlsx"
           :before-upload="beforeUpload"
@@ -94,7 +94,16 @@ const onClose = () => {
   checkList.value = []
   emit('close')
 }
-
+const params = ref<any>({
+  projectId,
+  householdType: props.type,
+  templateKey: ''
+})
+const onCheckChange = (val) => {
+  console.log(val, props.type)
+  params.value.templateKey = val.join(',')
+  // params.value.householdType = props.type
+}
 const onDownLoad = async () => {
   const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
   let filename = res.headers

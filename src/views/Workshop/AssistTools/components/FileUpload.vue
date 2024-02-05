@@ -466,6 +466,7 @@ watch(
       otherPic: props.baseInfo?.otherPic ? JSON.parse(props.baseInfo?.otherPic) : [] // 其他附件
     }
     form.value = [params]
+    console.log(form.value, '测试数据')
   },
   {
     immediate: true,

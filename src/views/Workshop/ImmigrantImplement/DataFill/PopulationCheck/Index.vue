@@ -124,7 +124,8 @@ const { getList } = methods
 // 根据户号来做筛选
 tableObject.params = {
   doorNo: props.doorNo,
-  status: props.baseInfo.status
+  status: props.baseInfo.status,
+  isContainDelete: 1
 }
 
 getList()

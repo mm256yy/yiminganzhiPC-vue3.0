@@ -19,7 +19,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 自建房告知单： </div>
+            <div class="col-label">自建房告知单：</div>
             <div class="card-img-list">
               <ElUpload
                 :list-type="'picture-card'"
@@ -217,10 +217,11 @@ const submit = (data: any) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (!buildOneselfPic.value.length) {
-        ElMessage.error('请上传自建房告知单')
-        return
-      } else if (!buildOneselfCheckPic.value.length) {
+      //       if (!buildOneselfPic.value.length) {
+      //   ElMessage.error('请上传自建房告知单')
+      //   return
+      // } else
+      if (!buildOneselfCheckPic.value.length) {
         ElMessage.error('请上传自建房验收告知单')
         return
       } else {
@@ -335,6 +336,19 @@ onMounted(() => {
       color: #f56c6c;
       content: '*';
     }
+  }
+  .col-label {
+    display: inline-flex;
+    width: 150px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
   }
 }
 

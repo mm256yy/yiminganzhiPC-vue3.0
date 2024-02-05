@@ -219,7 +219,7 @@ const handleCollection = (row: any) => {
   console.log('row', row)
   const type = 'household'
   const routeName = 'Household' // 一户一档
-
+  // householdId=232699&doorNo=jl1089990&type=0
   const query = { type }
   try {
     push({
