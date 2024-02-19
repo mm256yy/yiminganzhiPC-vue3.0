@@ -72,6 +72,7 @@
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
         </el-select>
       </ElFormItem>
+<<<<<<< HEAD
       <ElFormItem
         label="关联户号"
         prop="showHouseholderDoorNo"
@@ -79,6 +80,10 @@
         header-align="center"
       >
         <ElInput type="text" v-model="form.showHouseholderDoorNo" disabled />
+=======
+      <ElFormItem label="关联户号" prop="householderDoorNo" align="center" header-align="center">
+        <ElInput type="text" v-model="form.householderDoorNo" disabled />
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
       </ElFormItem>
       <!-- <ElFormI tem label="关联居民户" prop="householderDoorNo">
         <ElInput
@@ -171,7 +176,11 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   parentCode: [],
   locationType: 'SubmergedArea',
   householderName: '',
+<<<<<<< HEAD
   showHouseholderDoorNo: ''
+=======
+  householderDoorNo: ''
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -234,10 +243,15 @@ const onClose = (flag = false) => {
 // }
 
 const doorTypeChange = (val) => {
+<<<<<<< HEAD
   console.log(options.value, val, '测试数据下拉')
   options.value.forEach((item) => {
     if (item.name == val) {
       form.value.showHouseholderDoorNo = item.doorNo.slice(2)
+=======
+  options.value.forEach((item) => {
+    if (item.name == val) {
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
       form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {

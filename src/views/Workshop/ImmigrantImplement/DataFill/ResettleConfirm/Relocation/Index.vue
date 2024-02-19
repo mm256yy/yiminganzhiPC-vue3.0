@@ -69,11 +69,15 @@
         </ElSpace>
       </div>
 
+<<<<<<< HEAD
       <el-table
         v-if="houseType === HouseType.homestead || houseType === HouseType.flat"
         :data="tableData"
         style="width: 100%"
       >
+=======
+      <el-table v-if="true" :data="tableData" style="width: 100%">
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         <el-table-column type="index" label="序号" width="100" align="center" />
         <el-table-column prop="settleAddressText" label="安置区" align="center" />
         <el-table-column prop="area" label="户型/套型" align="center" />
@@ -235,8 +239,12 @@ import {
   resettleHouseType,
   homesteadAreaSize,
   apartmentAreaSize,
+<<<<<<< HEAD
   resettleArea,
   resettleAreaFlat
+=======
+  resettleArea
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 } from '../../config'
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 import Homestead from '../../SchemeBase/components/Homestead.vue'
@@ -337,16 +345,23 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     apartmentArea = result.content
+<<<<<<< HEAD
     console.log(apartmentArea, '测试数据')
+=======
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
   } catch {}
 }
 watch(
   () => immigrantSettle.value,
   async (res) => {
     // 整成数组
+<<<<<<< HEAD
     let m = await resettleArea()
     console.log(m, res, 'bbqs')
 
+=======
+    console.log(apartmentArea, 'bbq')
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
     if (!res) return
     if (res.houseAreaType === HouseType.homestead || res.houseAreaType === HouseType.flat) {
       const houseAreaTypeText = resettleHouseType.find(
@@ -367,8 +382,12 @@ watch(
         if (res.typeOneNum) {
           array.push({
             houseAreaTypeText,
+<<<<<<< HEAD
             // apartmentArea.find((item) => item.code == res.settleAddress)?.name,
             settleAddressText: res.settleAddress,
+=======
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             area: apartmentAreaSize[0].name,
             num: res.typeOneNum
           })
@@ -376,7 +395,11 @@ watch(
         if (res.typeTwoNum) {
           array.push({
             houseAreaTypeText,
+<<<<<<< HEAD
             settleAddressText: res.settleAddress,
+=======
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             area: apartmentAreaSize[1].name,
             num: res.typeTwoNum
           })
@@ -384,7 +407,11 @@ watch(
         if (res.typeThreeNum) {
           array.push({
             houseAreaTypeText,
+<<<<<<< HEAD
             settleAddressText: res.settleAddress,
+=======
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             area: apartmentAreaSize[2].name,
             num: res.typeThreeNum
           })
@@ -392,7 +419,11 @@ watch(
         if (res.typeFourNum) {
           array.push({
             houseAreaTypeText,
+<<<<<<< HEAD
             settleAddressText: res.settleAddress,
+=======
+            settleAddressText: apartmentArea.find((item) => item.id == res.settleAddress)?.name,
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             area: apartmentAreaSize[3].name,
             num: res.typeFourNum
           })

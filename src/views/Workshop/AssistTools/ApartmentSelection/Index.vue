@@ -215,6 +215,10 @@ const baseInfo = ref<any>()
 const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 tableObject.params = {
   projectId,
   status: 'implementation'

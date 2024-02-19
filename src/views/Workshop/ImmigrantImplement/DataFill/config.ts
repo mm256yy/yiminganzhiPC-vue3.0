@@ -487,8 +487,25 @@ export const ProductionPlaceWay = [
 ]
 
 // 宅基地安置区块
+<<<<<<< HEAD
 export const resettleArea = getSettleAddressList
 export const resettleAreaFlat = getSettleAddressListFlat
+=======
+export const resettleArea = [
+  {
+    id: '3',
+    name: '棠村安置区'
+  },
+  {
+    id: '4',
+    name: '麻家田安置区'
+  },
+  {
+    id: '5',
+    name: '东坪安置区'
+  }
+]
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 
 // 公寓安置地块
 export const apartmentArea = [

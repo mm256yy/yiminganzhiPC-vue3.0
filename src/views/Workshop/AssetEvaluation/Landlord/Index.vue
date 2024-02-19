@@ -176,8 +176,12 @@ const { push } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
+<<<<<<< HEAD
 const exportDialog = ref(false)
 const inExportDialog = ref(false)
+=======
+
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,

@@ -622,6 +622,7 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             name: 'physicalResults',
             component: () =>
               import('@/views/Workshop/FundManage/PhysicalResults/IndividualBase.vue'),
+<<<<<<< HEAD
             meta: {
               title: '个体户基本信息',
               hidden: false
@@ -631,6 +632,8 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             path: 'enterprisePhysicalResults',
             name: 'enterprisePhysicalResults',
             component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+=======
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             meta: {
               title: '企业基本信息',
               hidden: false

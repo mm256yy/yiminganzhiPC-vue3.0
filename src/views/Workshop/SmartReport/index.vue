@@ -132,7 +132,11 @@ const listArray = ref([
         list: [
           {
             text: '企业',
+<<<<<<< HEAD
             value: 'enterprisePhysicalResults'
+=======
+            value: 'physicalResults'
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           },
           {
             text: '水电站',
@@ -488,6 +492,10 @@ onBeforeUnmount(() => {
     .smart_border:nth-child(3) {
       height: 380px;
       margin-right: 16px;
+      height: 380px;
+    }
+    .smart_border:nth-child(4) {
+      height: 380px;
     }
 
     .smart_border:nth-child(4) {

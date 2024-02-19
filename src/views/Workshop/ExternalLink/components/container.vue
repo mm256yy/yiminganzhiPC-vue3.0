@@ -235,8 +235,12 @@ const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
+<<<<<<< HEAD
     // let url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
     let url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}` // 12.1 宗浩要求修改
+=======
+    let url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
     window.location.href = url
   } catch {}
 }

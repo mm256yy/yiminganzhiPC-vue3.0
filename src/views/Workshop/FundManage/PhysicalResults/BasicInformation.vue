@@ -1,5 +1,6 @@
 <template>
   <WorkContentWrap>
+<<<<<<< HEAD
     <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -25,6 +26,19 @@
         <ElTableColumn type="index" width="100" label="序号" />
         <ElTableColumn prop="townCodeText" label="行政村" show-overflow-tooltip />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
+=======
+    <div class="table-wrap">
+      <ElTable
+        v-loading="tableLoading"
+        :data="tableData1.tableList"
+        style="width: 100%; max-height: 500px"
+        height="500"
+        :span-method="objectSpanMethod1"
+      >
+        <ElTableColumn type="index" width="100" label="序号" />
+        <ElTableColumn prop="townCodeText" label="行政村" />
+        <ElTableColumn prop="name" label="名称" />
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         <ElTableColumn prop="legalPersonName" label="法人代表" />
         <ElTableColumn prop="landUseNature" label="用地性质" />
         <ElTableColumn prop="industryType" label="所属行业" />
@@ -53,9 +67,13 @@ import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useTable } from '@/hooks/web/useTable'
+<<<<<<< HEAD
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ElTable, ElTableColumn, ElPagination, ElButton } from 'element-plus'
+=======
+import { ElTable, ElTableColumn, ElPagination } from 'element-plus'
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 import {
   getEnterprise,
   deleteFunPayApi,
@@ -136,6 +154,7 @@ const handleCurrentChange = (val: number) => {
   getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
 
+<<<<<<< HEAD
 const onExport = () => {
   // const params = {}
   // const res = await exportIndividualHouseholdTree(params)
@@ -239,6 +258,8 @@ const onReset = () => {
   // setSearchParams({})
 }
 
+=======
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
@@ -246,6 +267,7 @@ onMounted(() => {
 })
 </script>
 
+<<<<<<< HEAD
 <style lang="less" scoped>
 .line {
   width: 100%;
@@ -253,3 +275,6 @@ onMounted(() => {
   background-color: #e7edfd;
 }
 </style>
+=======
+<style lang="less" scoped></style>
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912

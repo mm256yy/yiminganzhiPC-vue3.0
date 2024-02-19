@@ -221,7 +221,11 @@
       >
         <div>
           {{
+<<<<<<< HEAD
             `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+=======
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           }}</div
         >
 
@@ -238,7 +242,11 @@
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
         <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
           <template #default="{ row }">
+<<<<<<< HEAD
             {{ row.settleAddressText }}
+=======
+            {{ getSettleAddress(row) }}
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           </template>
         </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
@@ -270,7 +278,11 @@
           header-align="center"
         >
           <template #default="{ row }">
+<<<<<<< HEAD
             {{ row.settleAddressText }}
+=======
+            {{ getSettleAddress(row) }}
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           </template>
         </ElTableColumn>
         <ElTableColumn label="房型" prop="houseAreaType" align="center" header-align="center">
@@ -385,6 +397,7 @@ const getList = () => {
           3,
           item.settleAddress
         )
+<<<<<<< HEAD
         console.log(
           item.landNoOptions,
           item.storeroomNoOptions,
@@ -392,6 +405,8 @@ const getList = () => {
           item.roomNoOptions,
           '测试数据'
         )
+=======
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
       })
       tableData.value = arr
       // setTimeout(() => {
@@ -415,6 +430,33 @@ const getSettleAddressList = async () => {
     type: '2',
     size: 9999,
     page: 0
+<<<<<<< HEAD
+=======
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
+}
+const getSettleAddress = (data: any) => {
+  // 选择了公寓房的安置方式
+  if (data.houseAreaType === 'flat') {
+    let str = ''
+    apartmentArea.map((item: any) => {
+      if (item.id == data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+  } else {
+    let str = ''
+    resettleArea.map((item: any) => {
+      if (item.id === data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
   }
   try {
     const result = await getPlacementPointListApi(params)

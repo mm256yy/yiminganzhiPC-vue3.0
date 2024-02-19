@@ -219,6 +219,10 @@ const handleCollection = (row: any) => {
   console.log('row', row)
   const type = 'household'
   const routeName = 'Household' // 一户一档
+<<<<<<< HEAD
+=======
+
+>>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
   const query = { type }
   try {
     push({
