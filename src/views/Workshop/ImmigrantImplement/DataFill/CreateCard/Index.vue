@@ -662,12 +662,16 @@ const getSummariese = (param) => {
       sums[index] = '合计'
       return
     }
-    const values = data.map((item) => Number(item[column.property]))
+    const values = data.map((item) => {
+      return { num: Number(item[column.property]), key: item.name }
+    })
     if (index == 5) {
+      console.log(param, values)
+
       sums[index] = values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return prev + curr
+        const value = Number(curr.num)
+        if (!Number.isNaN(value) && !curr.key.includes('小计')) {
+          return prev + curr.num
         } else {
           return prev
         }
