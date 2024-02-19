@@ -64,7 +64,7 @@ const onDownLoad = async () => {
     const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
     getRes(res)
   } else {
-    const res = await getPgExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+    const res = await getPgExportApi({ type: props.type, templateKey: checkList.value })
     getRes(res)
   }
 }

@@ -1,6 +1,7 @@
 export interface ExportType {
   peasantHouseholdType?: string
-  type: number[]
+  templateKey?: any
+  type?: any
 }
 
 export interface LandlordDtoType {
