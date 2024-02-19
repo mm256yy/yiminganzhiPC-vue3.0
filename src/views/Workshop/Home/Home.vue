@@ -97,6 +97,8 @@ let rolerToRouter = ref([
 const Router = useRouter()
 onBeforeMount(() => {
   role.value = getRole()
+  console.log(Router.currentRoute.value.query.row)
+
   console.log(Router.options.history.state.back, role.value, permissionStore.getIsAddRouters, 'bbq')
 
   // if (
@@ -110,7 +112,7 @@ onBeforeMount(() => {
     if (
       permissionStore.getIsAddRouters &&
       role.value == item.name &&
-      Router.options.history.state.back == '/login'
+      Router.currentRoute.value.query.row
     ) {
       Router.push({ name: item.path })
     }

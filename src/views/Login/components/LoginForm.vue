@@ -217,7 +217,7 @@ const signIn = async () => {
 }
 
 const doRoute = async () => {
-  let path = '/#/workshop/home'
+  let path = '/#/workshop/home?row=true'
   if (appStore.getIsSysAdmin || appStore.getIsProjectAdmin) {
     path = '/admin.html#/dashboard/home'
     if (appStore.getIsProjectAdmin) {

@@ -19,7 +19,7 @@
     >
       <ElFormItem v-if="isHouseHold" label="户主" prop="household"> {{ form.name }} </ElFormItem>
       <ElFormItem v-if="isHouseHold" label="户号" prop="doorNo">
-        {{ form.doorNo }}
+        {{ form.showDoorNo }}
       </ElFormItem>
 
       <ElFormItem v-if="isVillage" label="村集体" prop="villageText">

@@ -155,6 +155,7 @@
       style="
         position: fixed;
         left: -1000px;
+        display: flex;
         width: 340mm;
         padding: 0 10px 0 10px;
         border: 1px solid black;
@@ -498,11 +499,7 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const tableRowClassName = ({ row }: any) => {
-  if (
-    row.name &&
-    (row.name.includes('小计') || row.name.includes('合计')) &&
-    row.name !== '其他费用/专项费小计'
-  ) {
+  if (row.name && (row.name.includes('小计') || row.name.includes('合计'))) {
     return 'gray-row'
   } else {
     return ''
