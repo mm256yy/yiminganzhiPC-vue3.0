@@ -314,6 +314,7 @@ const getExcelUploadList = async () => {
   if (res && res.content) {
     excelList.value = res.content
   }
+  console.log('测试')
 }
 
 onBeforeUnmount(() => {

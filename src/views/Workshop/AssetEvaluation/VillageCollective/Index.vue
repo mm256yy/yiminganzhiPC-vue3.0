@@ -302,7 +302,7 @@ const getLandlordHeadInfo = async () => {
   headInfo.value = info
 }
 const getExcelUploadList = async () => {
-  const type = 'assetEval_company'
+  const type = 'assetEval_village'
   const res = await getPgExcelList(type)
   if (res && res.content) {
     excelList.value = res.content

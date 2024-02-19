@@ -164,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { ElBreadcrumb, ElBreadcrumbItem, ElSpace, ElButton, ElPopover } from 'element-plus'
@@ -185,9 +185,9 @@ import { filterViewDoorNo, formatTime } from '@/utils/index'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
-import { getExcelList } from '@/api/workshop/population/service'
+import { getPgExcelList } from '@/api/workshop/population/service'
 import dayjs from 'dayjs'
-
+let timer = 0
 enum FileReportStatus {
   success = 'Succeed',
   failure = 'Failure',
@@ -306,16 +306,24 @@ const getLandlordHeadInfo = async () => {
   headInfo.value = info
 }
 const getExcelUploadList = async () => {
-  const res = await getExcelList()
+  const type = 'assetEval_peasant'
+  const res = await getPgExcelList(type)
   if (res && res.content) {
     excelList.value = res.content
   }
 }
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  timer = 0
+})
 onMounted(() => {
   getVillageTree()
   getdistrictTree()
   getLandlordHeadInfo()
   getExcelUploadList()
+  timer = window.setInterval(() => {
+    getExcelUploadList()
+  }, 3000)
 })
 
 const schema = reactive<CrudSchema[]>([
