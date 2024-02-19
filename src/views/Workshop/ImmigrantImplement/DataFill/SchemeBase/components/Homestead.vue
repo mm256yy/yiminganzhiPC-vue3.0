@@ -13,16 +13,12 @@
       <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
-<<<<<<< HEAD
           <el-radio
             :label="item.code"
             size="large"
             v-for="item in settleAddressList"
             :key="item.id"
           >
-=======
-          <el-radio :label="item.id" size="large" v-for="item in settleAddressList" :key="item.id">
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
             {{ item.name }}
           </el-radio>
         </el-radio-group>
@@ -79,10 +75,7 @@ import {
 } from '@/api/systemConfig/placementPoint-service'
 
 import type { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
-<<<<<<< HEAD
 import { toNumber } from 'lodash-es'
-=======
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 
 interface PropsType {
   baseInfo: any

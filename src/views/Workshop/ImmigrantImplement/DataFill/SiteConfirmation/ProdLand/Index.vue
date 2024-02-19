@@ -152,11 +152,7 @@ import {
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { resettleArea } from '../../config'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
-<<<<<<< HEAD
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
-=======
-
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -216,7 +212,6 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     apartmentArea = result.content
-<<<<<<< HEAD
     console.log(props.baseInfo, '测试数据')
   } catch {}
 }
@@ -239,11 +234,6 @@ const getdemographicList = async () => {
 }
 
 const getSettleAddress = async (data: string) => {
-=======
-  } catch {}
-}
-const getSettleAddress = (data: string) => {
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
   if (data) {
     // 选择了公寓房的安置方式
     if (props.baseInfo.houseAreaType === 'flat') {

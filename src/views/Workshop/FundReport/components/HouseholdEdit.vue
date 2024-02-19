@@ -69,13 +69,8 @@ const dialogLoading = ref<boolean>()
 
 interface PropsType {
   show: any
-<<<<<<< HEAD
   doorNo?: string
   projectId?: number
-=======
-  doorNo: string
-  projectId: number
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 }
 
 const props = defineProps<PropsType>()
@@ -118,20 +113,11 @@ const onClose = (flag = false) => {
 
 <style lang="less">
 .segment-label {
-<<<<<<< HEAD
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;
   color: #303133;
-=======
-  font-size: 14px;
-  font-weight: 600;
-  color: #303133;
-  line-height: 20px;
-  margin-bottom: 10px;
-  margin-top: 10px;
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 }
 </style>

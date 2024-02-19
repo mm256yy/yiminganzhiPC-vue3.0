@@ -98,13 +98,8 @@
       </div>
       <div class="py-[10px] bg-[#fff]" style="padding-left: 10px">
         <ElPagination
-<<<<<<< HEAD
           v-model:current-page="pageNum"
           v-model:page-size="pageSize"
-=======
-          v-model:current-page="tableObject.params.currentPage"
-          v-model:page-size="tableObject.params.size"
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           :page-sizes="[10, 20, 30, 40]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableObject.params.total"
@@ -161,12 +156,8 @@ const projectId = appStore.currentProjectId
 const tableLoading = ref<boolean>(false)
 
 const { tableObject } = useTable()
-<<<<<<< HEAD
 const pageSize = ref(10)
 const pageNum = ref(1)
-=======
-
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 tableObject.params = {
   projectId,
   status: 'implementation'
@@ -271,16 +262,12 @@ const handleCurrentChange = (val: number) => {
 const getList = async () => {
   tableLoading.value = true
   try {
-<<<<<<< HEAD
     const params = {
       ...tableObject.params,
       page: pageNum.value - 1,
       size: pageSize.value
     }
     const result = await getTombSiteListApi(params)
-=======
-    const result = await getTombSiteListApi(tableObject.params)
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
     tableData.value = result.content
     tableObject.params.total = result.total
     tableLoading.value = false

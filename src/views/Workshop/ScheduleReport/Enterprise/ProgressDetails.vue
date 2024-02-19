@@ -424,21 +424,12 @@ onMounted(() => {
 }
 
 .fill-field {
-<<<<<<< HEAD:src/views/Workshop/ScheduleReport/Enterprise/ProgressDetails.vue
   width: calc(100% + 20px);
   height: 100%;
   padding: 12px 0;
   margin: 0 -20px;
   background-color: #67c23a;
   box-sizing: border-box;
-=======
-  background-color: #67c23a;
-  box-sizing: border-box;
-  width: calc(100%+20px);
-  height: 100%;
-  margin: 0 -20px;
-  padding: 12px 0;
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912:src/views/Workshop/ScheduleReport/EnterpriseReport.vue
 }
 
 // ::v-deep(.el-table .cell) {

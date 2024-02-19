@@ -155,11 +155,7 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import { screeningTree } from '@/api/workshop/village/service'
-<<<<<<< HEAD
 import { useIcon } from '@/hooks/web/useIcon'
-=======
-
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -174,12 +170,8 @@ const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
-<<<<<<< HEAD
 const exportDialog = ref(false)
 const inExportDialog = ref(false)
-=======
-
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,

@@ -33,7 +33,6 @@
         :height="getHeight(houseList)"
         style="width: 100%"
       >
-<<<<<<< HEAD
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
         <el-table-column
           prop="villageCode"
@@ -47,8 +46,6 @@
           align="center"
           header-align="center"
         />
-=======
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         <el-table-column prop="houseNo" label="幢号" align="center" header-align="center" />
         <el-table-column
           prop="storeyNumber"
@@ -77,7 +74,6 @@
         style="width: 100%"
       >
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
-<<<<<<< HEAD
         <el-table-column
           prop="villageCode"
           label="村集体编号"
@@ -90,8 +86,6 @@
           align="center"
           header-align="center"
         />
-=======
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         <el-table-column prop="name" label="类型" align="center" header-align="center" />
         <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
         <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />
@@ -105,7 +99,6 @@
         style="width: 100%"
       >
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
-<<<<<<< HEAD
         <el-table-column
           prop="villageCode"
           label="村集体编号"
@@ -118,8 +111,6 @@
           align="center"
           header-align="center"
         />
-=======
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         <el-table-column prop="name" label="品种" align="center" header-align="center" />
         <el-table-column prop="unitText" label="单位" align="center" header-align="center" />
         <el-table-column prop="sizeText" label="规格" align="center" header-align="center" />

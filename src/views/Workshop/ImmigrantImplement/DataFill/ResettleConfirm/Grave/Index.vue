@@ -81,11 +81,7 @@
       >
         <div>
           {{
-<<<<<<< HEAD
             `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
-=======
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           }}</div
         >
 
