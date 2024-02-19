@@ -31,12 +31,12 @@
           </ElCol>
           <ElCol :span="6">
             <ElFormItem label="开户名" prop="bankAccount">
-              <ElInput v-model="form.bankAccount" placeholder="请输入" />
+              <ElInput v-model="form.accountName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
             <ElFormItem label="开户行" prop="bankAccount">
-              <ElInput v-model="form.bankAccount" placeholder="请输入" />
+              <ElInput v-model="form.bankName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
