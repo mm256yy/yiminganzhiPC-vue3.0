@@ -132,11 +132,7 @@ const listArray = ref([
         list: [
           {
             text: '企业',
-<<<<<<< HEAD
             value: 'enterprisePhysicalResults'
-=======
-            value: 'physicalResults'
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           },
           {
             text: '水电站',
