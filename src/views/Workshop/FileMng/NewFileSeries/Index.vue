@@ -45,7 +45,7 @@ const tabCurrentId = ref<number>(0)
 const tabsList = [
   {
     id: 0,
-    name: '居名户'
+    name: '居民户'
   },
   {
     id: 1,

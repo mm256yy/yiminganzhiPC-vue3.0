@@ -58,11 +58,7 @@
             align="center"
             header-align="center"
           />
-          <<<<<<< HEAD
-          <!-- <ElTableColumn label="户型" prop="area" align="center" header-align="center" /> -->
-          =======
           <ElTableColumn label="户型" prop="area" align="center" header-align="center" />
-          >>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
             <template #default="{ row }">
               <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">

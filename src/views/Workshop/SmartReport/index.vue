@@ -492,9 +492,13 @@ onBeforeUnmount(() => {
     .smart_border:nth-child(3) {
       height: 380px;
       margin-right: 16px;
+    }
+
+    .smart_border:nth-child(4) {
       height: 380px;
     }
-    .smart_border:nth-child(4) {
+
+    .smart_border:nth-child(5) {
       height: 380px;
     }
 

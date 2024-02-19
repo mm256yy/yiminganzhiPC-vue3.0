@@ -153,8 +153,8 @@
       </div>
       <div class="py-[10px] bg-[#fff]" style="padding-left: 10px">
         <ElPagination
-          v-model:current-page="tableObject.params.currentPage"
-          v-model:page-size="tableObject.params.size"
+          v-model:current-page="pageNum"
+          v-model:page-size="pageSize"
           :page-sizes="[10, 20, 30, 40]"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableObject.params.total"
@@ -215,6 +215,8 @@ const baseInfo = ref<any>()
 const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
+
+
 tableObject.params = {
   projectId,
   status: 'implementation'
@@ -362,7 +364,12 @@ const handleCurrentChange = (val: number) => {
 const getList = async () => {
   tableLoading.value = true
   try {
-    const result = await getApartmentSelectionListApi(tableObject.params)
+    const params = {
+      ...tableObject.params,
+      page: pageNum.value - 1,
+      size: pageSize.value
+    }
+    const result = await getApartmentSelectionListApi(params)
     const arr: any = []
     result.content.map((item: any) => {
       arr.push({

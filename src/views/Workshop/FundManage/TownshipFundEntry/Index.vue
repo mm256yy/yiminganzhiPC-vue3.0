@@ -21,6 +21,10 @@
 >>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           </div>
           <div class="content">
+            <div class="sub-title">发放金额</div>
+            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
+          </div>
+          <div class="content">
             <div class="sub-title">余额</div>
             <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
           </div>
