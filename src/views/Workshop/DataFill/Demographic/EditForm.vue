@@ -104,6 +104,14 @@
         </ElCol>
       </ElRow>
 
+      <ElRow :gutter="30">
+        <ElCol :span="8">
+          <ElFormItem label="联系方式" prop="phone">
+            <ElInput v-model="form.phone" class="!w-full" placeholder="请输入联系方式" />
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+
       <ElDivider border-style="dashed" />
 
       <ElRow :gutter="30">

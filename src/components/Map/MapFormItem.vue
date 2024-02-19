@@ -1,5 +1,5 @@
 <template>
-  <el-form-item label="经纬度" :required="!!props.required">
+  <el-form-item label="地理位置:" :required="!!props.required">
     <el-popover
       placement="top"
       width="424"

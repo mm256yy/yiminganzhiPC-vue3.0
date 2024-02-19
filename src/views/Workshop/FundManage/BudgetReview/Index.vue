@@ -7,7 +7,7 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
@@ -61,15 +61,12 @@ import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getBudgetReviewListApi } from '@/api/fundManage/budgetReview-service'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
 import ReviewForm from './ReviewForm.vue'
 import { formatDateTime } from '@/utils/index'
 
-// const dictStore = useDictStoreWithOut()
-// const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 审核弹窗标识
@@ -82,7 +79,7 @@ const { register, tableObject, methods } = useTable({
   getListApi: getBudgetReviewListApi
 })
 
-const { setSearchParams } = methods
+const { setSearchParams, getList } = methods
 
 setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 
@@ -342,6 +339,13 @@ const onSearch = (data) => {
   setSearchParams({ ...params, auditType: tabVal.value, businessId: '2', status: '4' })
 }
 
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
+}
+
 /**
  * tab 切换
  * @param data tab 值
@@ -355,7 +359,15 @@ const tabChange = (data: string) => {
   }
   setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 }
-
+let setSearchParamss = () => {
+  tableObject.params = {
+    auditType: tabVal.value,
+    businessId: '2',
+    status: '4',
+    projectId
+  }
+  getList()
+}
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
@@ -378,7 +390,6 @@ const onViewRow = async (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
-    // parmasList: parmasList.value
   }
   tableObject.currentRow = row
   dialog.value = true

@@ -24,15 +24,52 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
-            <span class="distance"></span> 已填报
-            <span class="num !text-[#30A952]"> {{ headInfo.reportSucceedNum }} </span>家
-            <span class="distance"></span>未填报
-            <span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span>
+            共 <span class="num">{{ headInfo.qyNum }}</span> 家企业
+            <span class="distance"></span> 已评估
+            <span class="num !text-[#30A952]"> {{ headInfo.assessNumber }} </span>家
+            <span class="distance"></span>未评估
+            <span class="num !text-[#FF3030]">{{ headInfo.notAssessNumber }}</span>
             家
           </div>
         </div>
-        <div></div>
+        <ElSpace>
+          <ElPopover :width="1000" trigger="click">
+            <template #reference>
+              <div class="view-upload">
+                <span class="pr-10px">批量导入日志</span>
+                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
+              </div>
+            </template>
+
+            <div class="file-list">
+              <div class="file-item">
+                <div class="file-name flex items-center flex-none w-272px">
+                  <Icon icon="ant-design:file-sync-outlined" />
+                  <div class="w-250px ml-5px"> 1 </div>
+                </div>
+                <div class="flex-none w-150px">2</div>
+                <div class="flex-none w-398px m-lr-20px"> 3 </div>
+                <div class="status flex-shrink-0">
+                  <!-- <div class="flex items-center">
+                    <span class="pr-10px">
+                      ( 共导入 <span class="number">3</span> 人， <span class="number">5</span> 户 )
+                    </span>
+                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
+                  </div> -->
+
+                  <!-- <div class="flex items-center text-[#F93F3F]">
+                    <span class="pr-10px">上传失败</span>
+                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
+                  </div> -->
+
+                  <!-- <div>导入中</div> -->
+                </div>
+              </div>
+            </div>
+          </ElPopover>
+          <ElButton type="primary" @click="onExport" :icon="downloadIcon"> 批量导出 </ElButton>
+          <ElButton type="primary" @click="onImport" :icon="importIcon"> 导入模板 </ElButton>
+        </ElSpace>
       </div>
       <Table
         selection
@@ -93,37 +130,133 @@
         </template>
       </Table>
     </div>
+    <Export
+      :show="exportDialog"
+      @close="onExportDialogClose"
+      :list="exportList"
+      :type="'Company'"
+      :flag="1"
+    />
+    <InExport
+      :show="inExportDialog"
+      @close="inExportDialogClose"
+      :list="importList"
+      :type="'Company'"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
-import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElSpace, ElButton, ElPopover } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getLandlordListApi, getLandlordHeadApi } from '@/api/AssetEvaluation/service'
 import { screeningTree } from '@/api/workshop/village/service'
-import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
-
+import { useIcon } from '@/hooks/web/useIcon'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { locationTypes, SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { formatTime } from '@/utils/index'
-
+import Export from '@/views/Workshop/components/Export.vue'
+import InExport from '@/views/Workshop/components/InExport.vue'
+import { getPgExcelList } from '@/api/workshop/population/service'
+const excelList = ref<any[]>([])
+const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
+const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
-
-const headInfo = ref<LandlordHeadInfoType>({
+const exportDialog = ref(false)
+const inExportDialog = ref(false)
+const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
   unReportNum: 0
 })
-
+interface exportListType {
+  name: string
+  value: string | number
+}
+let timer = 0
+const exportList = ref<exportListType[]>([
+  {
+    name: '房屋评估表',
+    value: 'assetEval_company_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_company_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'assetEval_company_appendage'
+  },
+  {
+    name: '基础设施评估表',
+    value: 'assetEval_company_infra'
+  },
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_company_tree'
+  },
+  {
+    name: '其他评估表',
+    value: 'assetEval_company_other'
+  },
+  {
+    name: '设施设备表',
+    value: 'assetEval_company_equipment'
+  }
+])
+const importList = ref<exportListType[]>([
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_company_tree'
+  },
+  {
+    name: '房屋评估表',
+    value: 'assetEval_company_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_company_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'aassetEval_company_appendage'
+  },
+  {
+    name: '基础设施表',
+    value: 'assetEval_company_infra'
+  },
+  {
+    name: '设施设备',
+    value: 'assetEval_company_equipment'
+  },
+  {
+    name: '其它评估',
+    value: 'assetEval_company_other'
+  }
+])
+const onExport = () => {
+  exportDialog.value = true
+  console.log('1111111')
+}
+const onImport = () => {
+  inExportDialog.value = true
+  console.log('导入')
+}
+const onExportDialogClose = () => {
+  exportDialog.value = false
+}
+const inExportDialogClose = () => {
+  inExportDialog.value = false
+}
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })
@@ -152,9 +285,25 @@ const getLandlordHeadInfo = async () => {
   headInfo.value = info
 }
 
+const getExcelUploadList = async () => {
+  const type = 'assetEval_company'
+  const res = await getPgExcelList(type)
+  if (res && res.content) {
+    excelList.value = res.content
+  }
+}
+
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  timer = 0
+})
 onMounted(() => {
   getDistrictTree()
   getLandlordHeadInfo()
+  getExcelUploadList()
+  timer = window.setInterval(() => {
+    getExcelUploadList()
+  }, 3000)
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -290,6 +439,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'estimateStatus',
+    label: '报告上传状态',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'estimateTime',
     label: '评估时间',
     search: {
@@ -397,6 +553,21 @@ const fillData = (row) => {
 </script>
 
 <style lang="less" scoped>
+.view-upload {
+  display: flex;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color-1);
+  white-space: nowrap;
+  cursor: default;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
+  align-items: center;
+}
 .filling-btn {
   display: flex;
   width: 80px;
@@ -426,6 +597,38 @@ const fillData = (row) => {
 
   &.status-suc {
     background-color: #0cc029;
+  }
+}
+.file-list {
+  height: 210px;
+  overflow-y: scroll;
+
+  .file-item {
+    display: flex;
+    padding: 5px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color-1);
+    border-bottom: 1px solid #ebebeb;
+    align-items: center;
+
+    .m-lr-20px {
+      margin: 0 20px;
+    }
+
+    .file-name {
+      text-align: justify;
+      word-break: break-all;
+    }
+
+    .number {
+      font-weight: 500;
+      color: var(--el-color-primary);
+    }
+
+    .flex-none {
+      flex: none;
+    }
   }
 }
 </style>

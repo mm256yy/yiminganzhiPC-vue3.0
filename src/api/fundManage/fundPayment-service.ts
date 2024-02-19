@@ -80,7 +80,7 @@ export const getFindByDoorNo = (params?: any): Promise<TableResponse<FunPayType>
     params
   })
 }
-//企业房屋 /api/
+//企业房屋
 export const getEnterpriseAppendant = (params?: any): Promise<TableResponse<FunPayType>> => {
   return request.get({
     url: '/resultForms/enterpriseAppendant',
@@ -142,6 +142,44 @@ export const postSeparate = (data: Partial<FunPayType>): Promise<any> => {
 export const postMerge = (data: any): Promise<any> => {
   return request.post({
     url: '/peasantHousehold/merge',
+    data
+  })
+}
+
+// 导出报表
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/enterprise`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+/**
+ * 个体户房屋及附属物
+ */
+export const requestIndividualHouseholdTree = (params: any) => {
+  return request.get({
+    url: `/resultForms/new/individualHouseholdTree`,
+    params
+  })
+}
+
+/**
+ * 个体户房屋及附属物（导出）
+ * @returns
+ */
+export const exportIndividualHouseholdTree = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/new/individualHouseholdTree`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+export const getfindByDoorNoAndType = (data: any): Promise<any> => {
+  return request.get({
+    url: '/funAmountGrant/findByDoorNoAndType',
     data
   })
 }

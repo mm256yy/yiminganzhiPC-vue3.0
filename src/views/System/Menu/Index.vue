@@ -169,7 +169,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'showName',
+    field: 'name',
     label: '类目名称',
     search: {
       show: false
@@ -183,7 +183,7 @@ const schema = reactive<CrudSchema[]>([
     align: 'left'
   },
   {
-    field: 'name',
+    field: 'showName',
     label: '显示名称'
   },
   {

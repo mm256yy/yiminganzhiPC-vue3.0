@@ -35,7 +35,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="是否需要评估"
           :width="120"
           prop="hasEstimate"
@@ -52,7 +52,7 @@
               />
             </ElSelect>
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn
           label="房屋坐落"
           :width="120"
@@ -124,6 +124,7 @@
               @change="getModelValue(scope.row)"
               v-model="scope.row.landArea"
               :precision="2"
+              :disabled="true"
             />
           </template>
         </ElTableColumn>
@@ -273,6 +274,35 @@
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="宅基地面积"
+          :width="160"
+          prop="homesteadArea"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.homesteadArea" :disabled="true" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="是否合法"
+          :width="160"
+          prop="houseType"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.isCompliance" :disabled="true">
+              <ElOption
+                v-for="item in dictObj[371]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="操作" prop="action" fixed="right">

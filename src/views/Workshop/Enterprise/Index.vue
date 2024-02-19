@@ -23,11 +23,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
-            <span class="distance"></span>
-            已填报<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
-            <span class="distance"></span>
-            未填报<span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
+            共 <span class="num">{{ headerInfo.qyNum }}</span> 家企业
           </div>
         </div>
         <ElSpace>
@@ -184,11 +180,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '@/views/Workshop/components/config'
 import { ReportStatus } from '@/views/Workshop/DataFill/config'
 import { useRouter } from 'vue-router'
-import type {
-  LandlordDtoType,
-  LandlordHeadInfoType,
-  SurveyInfoType
-} from '@/api/workshop/landlord/types'
+import type { LandlordDtoType, SurveyInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 
@@ -204,15 +196,14 @@ const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const landlordIds = ref<number[]>([])
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
+const headerInfo = ref<any>({})
 const outsideData = ref<any>([])
 const printDialog = ref(false)
 const exportDialog = ref(false)
+const { currentRoute } = useRouter()
+let { type } = currentRoute.value.query as any
+const currentType = ref<string>('')
+
 interface exportListType {
   name: string
   value: string | number
@@ -272,9 +263,20 @@ const getDistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
-  headInfo.value = info
+  const info = await getLandlordHeadApi({ type: 'Company', status: SurveyStatusEnum.Review })
+  headerInfo.value = info
 }
+
+const checkIsOpenDialog = () => {
+  const result = sessionStorage.getItem('isDefaultOpen')
+  if (result && result === '1') {
+    actionType.value = 'add'
+    tableObject.currentRow = null
+    dialog.value = true
+  }
+}
+
+checkIsOpenDialog()
 
 onMounted(() => {
   getDistrictTree()

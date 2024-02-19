@@ -11,20 +11,24 @@
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
-            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
+          </div>
+          <div class="content">
+            <div class="sub-title">发放金额</div>
+            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
           </div>
           <div class="content">
             <div class="sub-title">余额</div>
-            <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
+            <div class="amount">{{ amountItem?.pendingAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>
       <div class="item">
-        <div class="title">发放款</div>
+        <div class="title">支付款</div>
         <div class="content-wrapper">
           <div class="content">
-            <div class="sub-title">发放金额</div>
-            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
+            <div class="sub-title">入账金额</div>
+            <div class="amount">{{ amountItem?.zfkAllAmount }}&nbsp;元</div>
           </div>
         </div>
       </div>
@@ -43,11 +47,11 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            总共 <span class="num">{{ tableObject.tableList.length }}</span> 个
+            总共 <span class="num">{{ tableObject.total }}</span> 个
           </div>
         </div>
         <div class="table-header-right">
-          <ElButton :icon="importIcon" type="primary" @click="onExport">导出</ElButton>
+          <!-- <ElButton :icon="importIcon" type="primary" @click="onExport">导出</ElButton> -->
         </div>
       </div>
       <Table
@@ -70,6 +74,9 @@
       >
         <template #paymentTime="{ row }">
           {{ formatTime(row.paymentTime, 'yyyy-MM-dd HH:mm:ss') }}
+        </template>
+        <template #amount="{ row }">
+          {{ row.applyType == 2 ? -row.amount : row.amount }}
         </template>
         <!-- <template #action="{ row }">
           <ElButton link type="primary" @click="onCheckRow(row)">查看</ElButton>
@@ -121,12 +128,6 @@ getList()
 const onSearch = (data) => {
   let params = {
     ...data
-  }
-
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
   }
 
   setSearchParams({ ...params })

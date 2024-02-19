@@ -30,4 +30,5 @@ export interface AmountDtoType {
   issuedAmount: number
   allAmount: number
   pendingAmount: number
+  zfkAllAmount: number
 }

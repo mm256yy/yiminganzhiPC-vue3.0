@@ -12,7 +12,7 @@
         <ElBreadcrumbItem class="text-size-12px">铁塔工程</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
-    <div v-if="false" class="search-form-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -20,7 +20,6 @@
         @search="onSearch"
         @reset="setSearchParams"
       />
-      <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
     </div>
 
     <div class="line"></div>
@@ -28,6 +27,7 @@
     <div class="table-wrap" v-loading="tableObject.loading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 铁塔工程统计表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         v-model:pageSize="tableObject.size"
@@ -76,7 +76,6 @@ interface SpanMethodProps {
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-// const emit = defineEmits(['export'])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getProfessionalProjectsPageApi
@@ -92,42 +91,6 @@ tableObject.params = {
 }
 
 const schema = reactive<CrudSchema[]>([
-  //   {
-  //     field: 'villageCode',
-  //     label: '所属区域',
-  //     search: {
-  //       show: true,
-  //       component: 'TreeSelect',
-  //       componentProps: {
-  //         data: villageTree,
-  //         nodeKey: 'code',
-  //         props: {
-  //           value: 'code',
-  //           label: 'name'
-  //         },
-  //         showCheckbox: false,
-  //         checkStrictly: false,
-  //         checkOnClickNode: false
-  //       }
-  //     },
-  //     table: {
-  //       show: false
-  //     }
-  //   },
-  //   {
-  //     field: 'doorNo',
-  //     label: '户号',
-  //     search: {
-  //       show: true,
-  //       component: 'Input',
-  //       componentProps: {
-  //         placeholder: '请输入户号'
-  //       }
-  //     },
-  //     table: {
-  //       show: false
-  //     }
-  //   },
   {
     field: 'name',
     label: '项目名称',
@@ -165,29 +128,6 @@ const schema = reactive<CrudSchema[]>([
     search: {
       show: false
     }
-    // children: [
-    //   {
-    //     field: 'inCount',
-    //     label: '册内人口',
-    //     search: {
-    //       show: false
-    //     }
-    //   },
-    //   {
-    //     field: 'outCount',
-    //     label: '册外人口',
-    //     search: {
-    //       show: false
-    //     }
-    //   },
-    //   {
-    //     field: 'sumCount',
-    //     label: '合计',
-    //     search: {
-    //       show: false
-    //     }
-    //   }
-    // ]
   },
   {
     field: 'designCompany',
@@ -289,7 +229,8 @@ const onSearch = (data) => {
 
   // 需要重置一次params
   tableObject.params = {
-    projectId
+    projectId,
+    type: 25
   }
   if (!params.householdName) {
     delete params.householdName
@@ -338,6 +279,24 @@ const findRecursion = (data, code, callback) => {
       return findRecursion(item.children, code, callback)
     }
   })
+}
+
+const onExport = () => {
+  // const res = await exportPhysicalApi(9)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
 }
 
 onMounted(() => {

@@ -26,7 +26,7 @@
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
         <ElTableColumn label="安置区" prop="settleAddress" align="center" header-align="center">
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
@@ -74,7 +74,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            {{ getSettleAddress(row) }}
+            {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -99,7 +99,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
               <ElOption
-                v-for="item in row.roomNoOptions"
+                v-for="item in row.roomNoOptions.content"
                 :key="item.id"
                 :label="item.showName"
                 :value="item.code"
@@ -207,6 +207,109 @@
       :baseInfo="baseInfo"
       @close="(...event) => close(event, 'roomNo')"
     />
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="font-size: 24px; font-weight: bold; text-align: center">{{
+        baseInfo.houseAreaType === 'homestead' ? '选址确认单' : '选房确认单'
+      }}</h1>
+      <div
+        style="
+          display: flex;
+          margin: 20px 0 20px 0;
+          font-size: 18px;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          {{
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+          }}</div
+        >
+
+        <div>{{ data }}</div>
+      </div>
+      <ElTable
+        v-if="baseInfo.houseAreaType === 'homestead'"
+        :data="tableData"
+        style="width: 100%"
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+        border
+      >
+        <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
+        <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.settleAddressText }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.landNo ? row.landNoOptions.filter((e) => row.landNo == e.name)[0].name : '-' }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="备注" align="center" />
+      </ElTable>
+      <ElTable
+        :data="tableData"
+        style="width: 100%"
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+        v-if="baseInfo.houseAreaType === 'flat'"
+        border
+      >
+        <ElTableColumn label="序号" type="index" align="center" header-align="center" />
+        <ElTableColumn
+          label="区块"
+          width="120"
+          prop="settleAddress"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            {{ row.settleAddressText }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="房型" prop="houseAreaType" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="幢号" prop="houseNo" align="center" header-align="center" />
+        <ElTableColumn label="室号" prop="roomNo" align="center" header-align="center" />
+        <ElTableColumn label="储藏室编号" prop="storeroomNo" align="center" header-align="center">
+          <template #default="{ row }">
+            {{
+              row.storeroomNo
+                ? row.storeroomNoOptions.filter((e) => row.storeroomNo == e.name)[0].name
+                : '-'
+            }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="车库编号" prop="carNo" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.carNo ? row.carNoOptions.filter((e) => row.carNo == e.name)[0].name : '-' }}
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="备注" align="center" />
+
+        <!-- <ElTableColumn label="操作" width="200" align="center" header-align="center" fixed="right">
+          <template #default="{ row }">
+            <ElButton type="primary" @click="enterRoomNo(row)">录入房号</ElButton>
+          </template>
+        </ElTableColumn> -->
+      </ElTable>
+      <div style="display: flex; justify-content: space-between; height: 50px">
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
+          >户主代表或收委托人(签名)：</div
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
@@ -233,9 +336,14 @@ import {
 } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { saveFillingCompleteApi } from '@/api/immigrantImplement/common-service'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
-import { resettleArea, apartmentArea } from '../../config'
+import { resettleArea } from '../../config'
 // import { deepClone } from '@/utils'
 import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { useAppStore } from '@/store/modules/app'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
+import dayjs from 'dayjs'
+import { htmlToPdf } from '@/utils/ptf'
+import { debounce } from '@/utils/index'
 
 interface PropsType {
   doorNo: string
@@ -267,23 +375,29 @@ const getList = () => {
           roomNoOptions: []
         })
       })
-      arr.map((item: any) => {
-        getlandNoList(item.settleAddress).then((res: any) => {
-          item.landNoOptions = [...res]
-        })
-        getStoreroomNoList(item.settleAddress).then((res: any) => {
-          item.storeroomNoOptions = [...res]
-        })
-        getcarNoList(item.settleAddress).then((res: any) => {
-          item.carNoOptions = [...res]
-        })
-        getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress).then((res: any) => {
-          item.roomNoOptions = [...res.content]
-        })
+
+      arr.map(async (item: any) => {
+        item.landNoOptions = await getlandNoList(item.settleAddress)
+        item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
+        item.carNoOptions = await getcarNoList(item.settleAddress)
+        item.roomNoOptions = await getHouseConfigApi(
+          props.baseInfo.projectId,
+          3,
+          item.settleAddress
+        )
+        console.log(
+          item.landNoOptions,
+          item.storeroomNoOptions,
+          item.carNoOptions,
+          item.roomNoOptions,
+          '测试数据'
+        )
       })
-      setTimeout(() => {
-        tableData.value = [...arr]
-      }, 2000)
+      tableData.value = arr
+      // setTimeout(() => {
+      //   tableData.value = [...arr]
+      //   console.log(tableData.value)
+      // }, 2000)
     }
   })
 }
@@ -292,26 +406,43 @@ const getList = () => {
  * 获取当前行安置区
  * @param data 当前行信息
  */
-const getSettleAddress = (data: any) => {
-  // 选择了公寓房的安置方式
-  if (data.houseAreaType === 'flat') {
-    let str = ''
-    apartmentArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
-  } else {
-    let str = ''
-    resettleArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
+const appStore = useAppStore()
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
   }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
 }
+// const getSettleAddress = async (data: any) => {
+//   // 选择了公寓房的安置方式
+//   let m = await resettleArea()
+//   console.log(m, data, 'bbqss')
+
+//   let str = ''
+//   if (data.houseAreaType === 'flat') {
+//     m.map((item: any) => {
+//       if (item.code == data.settleAddress) {
+//         str = item.name
+//       }
+//     })
+//     return str
+//   } else {
+//     m.map((item: any) => {
+//       if (item.code == data.settleAddress) {
+//         str = item.name
+//       }
+//     })
+//     return str
+//   }
+// }
 
 // 获取宅基地地块编号选项列表, async 返回的是一个 promise
 const getlandNoList = async (settleAddress?: string) => {
@@ -417,10 +548,18 @@ const close = (params: any[], type: string) => {
     getList()
   }
 }
+let data = ref()
 let comdbe = () => {
-  ElMessage.error('待业主提供模板')
+  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+  debounce(() => {
+    // ElMessage.error('待业主提供模板')
+
+    htmlToPdf('#anztable')
+  })
 }
-onMounted(() => {
+
+onMounted(async () => {
+  await getSettleAddressList()
   getList()
 })
 </script>
@@ -437,5 +576,25 @@ onMounted(() => {
 .btn-txt {
   color: red;
   cursor: pointer;
+}
+
+#anztable {
+  :deep(.table-headers) {
+    font-size: 12px;
+    font-weight: bold;
+    background: none;
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 10px;
+      background: none;
+    }
+  }
 }
 </style>

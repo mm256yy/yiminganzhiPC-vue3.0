@@ -19,7 +19,7 @@
       <div class="row-item" v-for="(item, index) in form" :key="index">
         <ElRow>
           <ElCol :span="24">
-            <ElFormItem label="区块："> {{ item.settleAddressText }} </ElFormItem>
+            <ElFormItem label="区块："> {{ getSettleAddress(item) }}</ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -51,7 +51,7 @@
             <ElFormItem label="摇号顺序号："> {{ item.lotteryOrder }} </ElFormItem>
           </ElCol>
           <ElCol :span="4">
-            <ElFormItem label="择房顺序号："> {{ item.placeOrder }} </ElFormItem>
+            <ElFormItem label="选房顺序号："> {{ item.placeOrder }} </ElFormItem>
           </ElCol>
           <ElCol :span="6">
             <ElFormItem label="套型："> {{ item.area }} </ElFormItem>
@@ -94,7 +94,7 @@
           <ElCol :span="12">
             <div class="col-wrapper">
               <div class="col-labels">
-                {{ item.houseAreaType === 'housestead' ? '择房顺序号凭证：' : '择址顺序号凭证：' }}
+                {{ item.houseAreaType === 'housestead' ? '择房顺序号凭证：' : '选房顺序号凭证：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload
@@ -131,7 +131,7 @@
           <ElCol :span="24">
             <div class="col-wrapper">
               <div class="col-label-required">
-                {{ item.houseAreaType === 'housestead' ? '择房确认单：' : '择址确认单：' }}
+                {{ item.houseAreaType === 'housestead' ? '择房确认单：' : '选房确认单：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload
@@ -230,12 +230,14 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import type { SiteType } from '@/api/immigrantImplement/siteConfirmation/siteSel-types'
+import { resettleArea } from '../../config'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 interface PropsType {
   show: boolean
   doorNo: string
   baseInfo: any
-  dataList: Array<SiteType>
+  dataList?: Array<SiteType>
 }
 
 interface FileItemType {
@@ -256,28 +258,6 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
-watch(
-  () => props.show,
-  () => {
-    // 处理表单数据
-    let arr: any = []
-    props.dataList.map((item: any) => {
-      arr.push({
-        ...item,
-        lotteryOrderPic: item.lotteryOrderPic ? JSON.parse(item.lotteryOrderPic) : [], // 摇号顺序凭证
-        placeOrderPic: item.placeOrderPic ? JSON.parse(item.placeOrderPic) : [], // 择房顺序号凭证
-        chooseHousePic: item.chooseHousePic ? JSON.parse(item.chooseHousePic) : [], // 择房确认单
-        otherPic: item.otherPic ? JSON.parse(item.otherPic) : [] // 其他附件
-      })
-    })
-    form.value = [...arr]
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
 
 // 规则校验
 const rules = reactive<FormRules>({})
@@ -415,6 +395,72 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+/**
+ * 获取当前行安置区
+ * @param data 当前行信息
+ */
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+  } catch {}
+}
+const getSettleAddress = async (data: any) => {
+  // 选择了公寓房的安置方式
+  if (data.houseAreaType === 'flat') {
+    let str = ''
+    apartmentArea.map((item: any) => {
+      if (item.id == data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+  } else {
+    let m = await resettleArea()
+    let str = ''
+    m.map((item: any) => {
+      if (item.code === data.settleAddress) {
+        str = item.name
+      }
+    })
+    return str
+  }
+}
+watch(
+  () => props.show,
+  async () => {
+    // 处理表单数据
+    await getSettleAddressList()
+    let arr: any = []
+    if (props.dataList) {
+      props.dataList?.map((item: any) => {
+        arr.push({
+          ...item,
+          lotteryOrderPic: item.lotteryOrderPic ? JSON.parse(item.lotteryOrderPic) : [], // 摇号顺序凭证
+          placeOrderPic: item.placeOrderPic ? JSON.parse(item.placeOrderPic) : [], // 择房顺序号凭证
+          chooseHousePic: item.chooseHousePic ? JSON.parse(item.chooseHousePic) : [], // 择房确认单
+          otherPic: item.otherPic ? JSON.parse(item.otherPic) : [] // 其他附件
+        })
+      })
+      form.value = [...arr]
+    } else {
+      form.value = [props.baseInfo]
+    }
+    console.log('bbq-2', form.value)
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 </script>
 
 <style lang="less" scoped>

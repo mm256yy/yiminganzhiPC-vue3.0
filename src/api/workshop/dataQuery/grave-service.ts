@@ -10,3 +10,12 @@ export const getGraveListApi = (
     params
   })
 }
+
+// 导出报表
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/query/export/queryGrave`,
+    params,
+    responseType: 'blob'
+  })
+}

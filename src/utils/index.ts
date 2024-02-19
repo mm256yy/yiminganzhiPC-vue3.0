@@ -312,17 +312,20 @@ export const filterViewDoorNoWithBefore = (doorNo: string) => {
 
 // 显示doorNo
 export const filterViewDoorNo = (data: any): string => {
-  const { doorNo, type } = data || {}
-  if (!doorNo) {
+  const { showDoorNo, type } = data || {}
+  if (!showDoorNo) {
     return ''
   }
   // 6、8、9、11、12、13、14、15、16
-  if (type && type === 'PeasantHousehold' && doorNo.length === 16) {
-    const before = filterViewDoorNoWithBefore(doorNo)
-    const lastSix = doorNo.slice(doorNo.length - 6 < 0 ? 0 : doorNo.length - 6, doorNo.length)
+  if (type && type === 'PeasantHousehold' && showDoorNo.length === 16) {
+    const before = filterViewDoorNoWithBefore(showDoorNo)
+    const lastSix = showDoorNo.slice(
+      showDoorNo.length - 6 < 0 ? 0 : showDoorNo.length - 6,
+      showDoorNo.length
+    )
     return `${before}${lastSix}`
   }
-  return doorNo
+  return showDoorNo
 }
 // 显示showdoorNo
 export const filterViewDoorNos = (data: any): string => {
@@ -385,3 +388,11 @@ export function deepClone(target: any, map?: any) {
 
   return cloneTarget
 }
+//防抖函数,默认100ms
+export const debounce = (() => {
+  let timer
+  return (callback: any, ms: any = 100) => {
+    clearTimeout(timer)
+    timer = setTimeout(callback, ms)
+  }
+})()

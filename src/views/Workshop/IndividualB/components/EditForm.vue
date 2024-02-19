@@ -111,6 +111,33 @@
           />
         </ElSelect>
       </ElFormItem>
+
+      <ElFormItem label="绑定居民户号" prop="householderName" align="center" header-align="center">
+        <el-select
+          v-model="form.householderName"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入居民户姓名"
+          :remote-method="remoteMethod"
+          :loading="loading"
+          @change="doorTypeChange"
+        >
+          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+        </el-select>
+      </ElFormItem>
+      <ElFormItem label="关联户号" prop="householderDoorNo" align="center" header-align="center">
+        <ElInput type="text" v-model="form.householderDoorNo" disabled />
+      </ElFormItem>
+      <!-- <ElFormItem label="绑定居民户号" prop="householderDoorNo">
+        <ElInput
+          clearable
+          placeholder="请输入居民户号"
+          type="text"
+          class="!w-350px"
+          v-model="form.householderDoorNo"
+        />
+      </ElFormItem> -->
       <!-- <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
@@ -144,7 +171,6 @@
 </template>
 
 <script setup lang="ts">
-// ElCascader,ElDivider
 import {
   ElDialog,
   ElForm,
@@ -160,15 +186,15 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed } from 'vue'
 import { debounce } from 'lodash-es'
-// import { MapFormItem } from '@/components/Map'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
-// import { locationTypes } from '@/views/Workshop/components/config'
 import { addLandlordApi, updateLandlordApi } from '@/api/workshop/landlord/service'
 import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
+import { getLandlordListApi } from '@/api/workshop/landlord/service'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -182,7 +208,8 @@ const { required } = useValidator()
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-
+const loading = ref(false)
+const options = ref<any[]>([])
 const dictObj = computed(() => dictStore.getDictObj)
 const treeSelectDefaultProps = {
   value: 'code',
@@ -191,12 +218,13 @@ const treeSelectDefaultProps = {
 
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
-  // householdNumber: '',
   latitude: 0,
   longitude: 0,
   name: '',
   parentCode: [],
-  locationType: 'SubmergedArea'
+  locationType: 'SubmergedArea',
+  householderName: '',
+  householderDoorNo: '' // 绑定户号
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -255,10 +283,43 @@ const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
+  sessionStorage.setItem('isDefaultOpen', '0')
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
   })
+}
+
+const doorTypeChange = (val) => {
+  options.value.forEach((item) => {
+    if (item.name == val) {
+      form.value.householderDoorNo = item.doorNo
+      // tableData.value.forEach((item2) => {
+      //   if (item2.registrantName == item.name) {
+      //     item2.registrantId = item.id
+      //     item2.registrantDoorNo = item.doorNo
+      //   }
+      // })
+    }
+  })
+}
+
+const remoteMethod = (query: string) => {
+  if (query) {
+    loading.value = true
+    getLandlordListApi({ name: query, type: 'PeasantHousehold' }).then((res) => {
+      loading.value = false
+      options.value = res.content
+    })
+    // setTimeout(() => {
+    //   loading.value = false
+    //   options.value = list.value.filter((item: any) => {
+    //     return item.label.toLowerCase().includes(query.toLowerCase())
+    //   })
+    // }, 200)
+  } else {
+    options.value = []
+  }
 }
 
 // 定位
@@ -276,6 +337,8 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
+      form.value.showHouseholderDoorNo = 'jl' + form.value.showHouseholderDoorNo
+
       btnLoading.value = true
       const data: any = {
         ...form.value,

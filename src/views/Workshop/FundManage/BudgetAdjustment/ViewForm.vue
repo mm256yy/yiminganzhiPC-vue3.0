@@ -247,7 +247,8 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
-      form.value = { ...(val as {}) }
+      form.value = { ...(props.parmasList as {}) }
+
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address

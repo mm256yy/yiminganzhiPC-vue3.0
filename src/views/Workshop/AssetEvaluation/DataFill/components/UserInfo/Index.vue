@@ -9,6 +9,7 @@
         </div>
       </div>
       <ElSpace>
+        <ElButton type="primary" @click="printReport"> 打印报表 </ElButton>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
         <div
           v-if="props.role === 'assessor'"
@@ -31,13 +32,24 @@
           {{ props.datarole?.landAllStatus === '1' ? '已填报' : '未填报' }}
         </div>
         <div
+          v-if="props.role === 'assessor'"
           :class="{
             status: true,
-            success: props.baseInfo.implementEscalationStatus === '1'
+            success: props.baseInfo.houseImplementEscalationStatus === '1'
           }"
         >
           <span class="point"></span>
-          {{ props.baseInfo.implementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+          {{ props.baseInfo.houseImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+        </div>
+        <div
+          v-else
+          :class="{
+            status: true,
+            success: props.baseInfo.landImplementEscalationStatus === '1'
+          }"
+        >
+          <span class="point"></span>
+          {{ props.baseInfo.landImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
         </div>
       </ElSpace>
     </div>
@@ -200,6 +212,12 @@
 
   <!-- 档案上传 -->
   <OnDocumentation :show="showDialog" :door-no="props.doorNo" :type="type" @close="close" />
+  <PrintReport
+    :show="inExportDialog"
+    @close="inExportDialogClose"
+    :list="exportList"
+    :type="type"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -207,6 +225,8 @@ import { ref, onMounted, watch } from 'vue'
 import { ElRow, ElCol, ElSpace, ElButton } from 'element-plus'
 import { fmtStr } from '@/utils/index'
 import OnDocumentation from '../OnDocumentation/Index.vue'
+import PrintReport from '@/views/Workshop/components/PrintReport.vue'
+import { getExportReportApi } from '@/api/workshop/export/service'
 
 interface PropsType {
   doorNo: string
@@ -217,17 +237,102 @@ interface PropsType {
   role: string
   datarole: any
 }
-
+interface exportListType {
+  name: string
+  value: string | number
+}
+const exportList = ref<exportListType[]>([
+  {
+    name: '房屋评估表',
+    value: 'assetEval_company_house'
+  },
+  {
+    name: '房屋装修表',
+    value: 'assetEval_company_fitup'
+  },
+  {
+    name: '附属物调查表',
+    value: 'assetEval_company_appendage'
+  },
+  {
+    name: '基础设施评估表',
+    value: 'assetEval_company_infra'
+  },
+  {
+    name: '零星林果木调查表',
+    value: 'assetEval_company_tree'
+  },
+  {
+    name: '其他评估表',
+    value: 'assetEval_company_other'
+  },
+  {
+    name: '设施设备表',
+    value: 'assetEval_company_equipment'
+  }
+])
+const inExportDialog = ref(false)
+const inExportDialogClose = () => {
+  inExportDialog.value = false
+}
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
 const showDialog = ref(false)
 const emit = defineEmits(['updateData'])
-
+const parmas = ref<any>({
+  type: null,
+  doorNo: null
+})
 // 档案上传
 const onDocumentation = () => {
   showDialog.value = true
 }
 
+// 打印报表
+const printReport = async () => {
+  // inExportDialog.value = true
+  console.log('打印数据')
+  if (props.type == 'Landlord') {
+    parmas.value = {
+      type: 'exportHouseEvalHousehold',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'Enterprise') {
+    parmas.value = {
+      type: 'exportHouseEvalCompany',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'IndividualB') {
+    parmas.value = {
+      type: 'exportHouseEvalIndividual',
+      doorNo: props.doorNo
+    }
+  } else if (props.type == 'VillageInfoC') {
+    parmas.value = {
+      type: 'exportHouseEvalVillage',
+      doorNo: props.doorNo
+    }
+  }
+  const res = await getExportReportApi(parmas.value)
+  getRes(res)
+}
+
+const getRes = (res: any) => {
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
+}
 // 关闭档案弹窗
 const close = (flag: boolean) => {
   showDialog.value = false
@@ -237,6 +342,7 @@ const close = (flag: boolean) => {
 }
 
 onMounted(() => {
+  console.log(props.type, 'type测试')
   if (props.type == 'Landlord') {
     infoData.value = { icon: 'mdi:user-circle' }
   } else if (props.type == 'Enterprise') {

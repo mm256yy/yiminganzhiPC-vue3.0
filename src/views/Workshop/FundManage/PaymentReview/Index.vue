@@ -217,7 +217,6 @@ onBeforeUnmount(() => {
 const onReviewRow = async (row) => {
   let res: any = await PaymentApplicationByIdDetailApi(row.id, 1)
   parmasList.value = res
-  console.log(res, '测试')
 
   actionType.value = 'edit'
   tableObject.currentRow = {
@@ -237,7 +236,9 @@ const onViewRow = async (row: any) => {
     ...row
     // parmasList: parmasList.value
   }
+
   tableObject.currentRow = row
+  console.log('OLP', tableObject.currentRow)
   dialog.value = true
 }
 
@@ -543,7 +544,7 @@ const onSearch = (data) => {
   }
   tableObject.params = {
     projectId,
-    auditType: 1,
+    auditType: tabVal.value,
     businessId: 1
   }
   for (let i in params) {
@@ -552,11 +553,20 @@ const onSearch = (data) => {
     }
   }
   console.log(params.amount)
-
+  let m = 0
   if (params.amount) {
-    if (!params.amount.every((item) => item)) {
+    console.log(params.amount, 'bbq')
+    params.amount.forEach((item) => {
+      if (item) {
+        m++
+      }
+    })
+
+    if (m < 2 && m > 0) {
       ElMessage.info('请输入申请金额范围')
       return
+    } else if (m === 0) {
+      delete params.amount
     }
   }
   setSearchParams({ ...params })

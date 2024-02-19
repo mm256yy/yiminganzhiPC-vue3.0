@@ -10,3 +10,12 @@ export const getVillageCollectiveListApi = (
     params
   })
 }
+
+// 导出报表
+export const exportReportApi = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/queryVillage`,
+    params,
+    responseType: 'blob'
+  })
+}

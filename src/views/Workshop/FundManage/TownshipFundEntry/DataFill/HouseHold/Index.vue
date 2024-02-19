@@ -2,7 +2,7 @@
 <template>
   <!-- 搜素 -->
   <div class="search-form-wrap">
-    <Search :schema="allSchemas.searchSchema" @search="setSearchParams" @reset="setSearchParams" />
+    <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
   </div>
 
   <div class="table-wrap">
@@ -204,7 +204,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {
@@ -280,6 +280,61 @@ const onEditFormClose = (flag) => {
 
 const onCheckFormClose = () => {
   checkDialog.value = false
+}
+const onSearch = (data) => {
+  //解决是否户主relation入参变化
+  let searchData = JSON.parse(JSON.stringify(data))
+  console.log(searchData)
+
+  if (searchData.relation == '1') {
+    searchData.relation = ['is', 1]
+  } else if (searchData.relation == '0') {
+    searchData.relation = ['not', 1]
+  } else {
+    delete searchData.relation
+  }
+  const findRecursion = (data, code, callback) => {
+    if (!data || !Array.isArray(data)) return null
+    data.forEach((item, index, arr) => {
+      if (item.code === code) {
+        return callback(item, index, arr)
+      }
+      if (item.children) {
+        return findRecursion(item.children, code, callback)
+      }
+    })
+  }
+
+  const getParamsKey = (key: string) => {
+    const map = {
+      Country: 'areaCode',
+      Township: 'townCode',
+      Village: 'villageCode', // 行政村 code
+      NaturalVillage: 'virutalVillageCode' // 自然村 code
+    }
+    return map[key]
+  }
+  // 处理参数
+  let params = {
+    ...searchData
+  }
+  tableObject.params = {
+    projectId
+  }
+  for (let i in params) {
+    if (!params[i]) {
+      delete params[i]
+    }
+  }
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
+  setSearchParams({ ...params, type: 'PeasantHousehold' })
 }
 </script>
 <style lang="less">

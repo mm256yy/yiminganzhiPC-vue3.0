@@ -13,16 +13,21 @@
       <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
-          <el-radio :label="item.id" size="large" v-for="item in resettleArea" :key="item.id">
+          <el-radio
+            :label="item.code"
+            size="large"
+            v-for="item in settleAddressList"
+            :key="item.id"
+          >
             {{ item.name }}
           </el-radio>
         </el-radio-group>
         <div class="blue-row">
           <div
             class="blue-view"
-            v-for="item in resettleArea"
+            v-for="item in settleAddressList"
             :key="item.id"
-            @click="viewAreaDetail(item.name)"
+            @click="viewAreaDetail(Number(item.id))"
           >
             地块详情
           </div>
@@ -59,39 +64,64 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, computed, watch, nextTick, onMounted } from 'vue'
 import { ElRadioGroup, ElRadio, ElDialog } from 'element-plus'
-import { resettleArea, homesteadAreaSize, HouseType } from '../../config'
+import { homesteadAreaSize, HouseType } from '../../config'
 import AreaDetail from './AreaDetail.vue'
-import { getPlacementPointByIdApi } from '@/api/systemConfig/placementPoint-service'
+import { useAppStore } from '@/store/modules/app'
+import {
+  getPlacementPointListApi,
+  getPlacementPointByIdApi
+} from '@/api/systemConfig/placementPoint-service'
+
+import type { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
+import { toNumber } from 'lodash-es'
 
 interface PropsType {
   baseInfo: any
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
+  dataList: any
 }
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
 const areaDetailPup = ref(false)
-const settleAddress = ref('1')
+const settleAddress = ref(1)
 const AreaDetailRef: any = ref(null)
 const areaType = ref('1')
-const placmentPointObj = ref({
-  镜岭集镇安置区: '2',
-  棠村安置区: '3',
-  麻家田安置区: '4',
-  东坪安置区: '5',
-  曙光安置点: '26'
-})
+const appStore = useAppStore()
+const settleAddressList = ref<PlacementPointDtoType[]>([])
+
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '1',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    settleAddressList.value = result.content
+  } catch {}
+}
+
 watch(
   () => props.immigrantSettle,
   (val) => {
     if (val) {
-      const { areaType: area, settleAddress: settleArea } = val
-      areaType.value = area
-      settleAddress.value = settleArea
+      console.log(val, 'bbq')
+      console.log(props.dataList, '测试数据')
+      if (props.dataList) {
+        areaType.value = props.dataList.areaType
+        settleAddress.value = props.dataList.settleAddress
+      } else {
+        const { areaType: area, settleAddress: settleArea } = val
+        areaType.value = area
+        settleAddress.value = settleArea
+      }
     }
   },
   {
@@ -114,13 +144,9 @@ const areaSizeArray = computed(() => {
   return sizeArray
 })
 const placementPointInfo = ref({})
-const viewAreaDetail = async (name: string) => {
-  const id = placmentPointObj.value[name]
-
+const viewAreaDetail = async (id: number) => {
   const res = await getPlacementPointByIdApi(id)
-
   placementPointInfo.value = res as any
-
   areaDetailPup.value = true
   nextTick(() => {
     AreaDetailRef.value.init()
@@ -139,6 +165,10 @@ const submitResettle = async () => {
   }
   emit('submit', params)
 }
+
+onMounted(() => {
+  getSettleAddressList()
+})
 </script>
 
 <style lang="less" scoped>

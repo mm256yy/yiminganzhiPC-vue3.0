@@ -54,7 +54,7 @@
         {{ form.pendingAmount }}&nbsp;元
       </ElFormItem>
       <ElFormItem label="发放金额" required>
-        <ElInputNumber v-model="allamount" :min="0" placeholder="请输入" />
+        <ElInputNumber v-model="allamount" placeholder="请输入" />
         <span>&nbsp;&nbsp;元</span>
       </ElFormItem>
       <ElFormItem label="发放日期" prop="paymentTime" required>
@@ -156,6 +156,7 @@ const headers = {
 // 规则校验
 const rules = reactive<FormRules>({
   amount: [{ required: true, message: '发放金额不能为空', trigger: 'blur' }],
+  allamount: [{ required: true, message: '发放金额不能为空', trigger: 'blur' }],
   paymentTime: [{ required: true, message: '发放日期不能为空', trigger: 'change' }],
   remark: [{ required: true, message: '发放说明不能为空', trigger: 'blur' }]
 })
@@ -212,7 +213,7 @@ const submit = (data: any) => {
 const refresh = () => {
   relocateOtherPic.value = []
   form.value = {}
-  allamount.value = null
+  allamount.value = ''
 }
 defineExpose({ refresh })
 

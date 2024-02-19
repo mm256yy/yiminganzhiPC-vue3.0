@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { getExportApi } from '@/api/workshop/export/service'
+import { getExportApi, getPgExportApi } from '@/api/workshop/export/service'
 import { ElDialog, ElButton, ElCheckbox, ElCheckboxGroup } from 'element-plus'
 
 interface ExportListType {
@@ -46,6 +46,7 @@ interface PropsType {
   show: boolean
   list: ExportListType[]
   type?: string
+  flag?: number
 }
 
 const props = defineProps<PropsType>()
@@ -59,7 +60,16 @@ const onClose = () => {
 }
 
 const onDownLoad = async () => {
-  const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+  if (props.flag != 1) {
+    const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+    getRes(res)
+  } else {
+    const res = await getPgExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+    getRes(res)
+  }
+}
+
+const getRes = (res: any) => {
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]

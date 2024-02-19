@@ -1,23 +1,40 @@
 <template>
+  <div class="flex items-center">
+    <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿报表</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">安置意愿</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
   <WorkContentWrap>
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">搬迁安置意愿</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
-    <div class="search-form-wrap" style="display: none">
-      <Search :schema="allSchemas.searchSchema" @search="handleSearch" @reset="setSearchParams" />
+    <div class="search-wrap">
+      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 搬迁安置意愿报表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
-      <el-table :span-method="objectSpanMethod" :data="tableData" border style="width: 100%">
+      <el-table
+        v-loading="tableLoading"
+        :data="tableData"
+        border
+        show-summary
+        :summary-method="getSummaries"
+        style="width: 100%; max-height: 580px"
+        height="580"
+      >
+        <el-table-column type="index" label="序号" align="center" width="80" />
+        <el-table-column
+          prop="villageCodeText"
+          label="行政村"
+          align="center"
+          show-overflow-tooltip
+        />
         <el-table-column prop="name" label="户主" align="center" width="180" />
         <!-- 公寓房 -->
         <el-table-column label="公寓房(套)" align="center">
@@ -73,7 +90,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <p class="w-[180px] text-center text-[14px] mt-[5px]">已选占比:{{ percent }}</p>
+      <p class="w-[120px] text-center text-[14px] mt-[10px]">已选占比:{{ percent }}</p>
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
           v-model:current-page="pageNum"
@@ -102,32 +119,51 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { reactive, ref, onMounted } from 'vue'
-import { useTable } from '@/hooks/web/useTable'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
-import { getMoveHouseReportListApi } from '@/api/workshop/placementReport/service'
-const { back } = useRouter()
+import {
+  getMoveHouseReportListApi,
+  exportMoveHouseReportApi
+} from '@/api/workshop/placementReport/service'
+import { screeningTree } from '@/api/workshop/village/service'
+import { useAppStore } from '@/store/modules/app'
 
+const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
 const pageNum = ref(1)
 const totalNum = ref(0)
+const villageTree = ref<any[]>([])
+const appStore = useAppStore()
+const tableLoading = ref<boolean>()
+const totalCountObj = ref<any>() // 总计对象
+let extraParams = reactive({
+  villageCode: undefined,
+  doorNo: undefined,
+  name: undefined
+})
+const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'qy',
-    label: '区域',
+    field: 'villageCode',
+    label: '所属区域',
     search: {
       show: true,
-      component: 'Select'
+      component: 'TreeSelect',
+      componentProps: {
+        data: villageTree,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
+      }
     },
     table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
       show: false
     }
   },
@@ -151,7 +187,7 @@ const schema = reactive<CrudSchema[]>([
 
   {
     field: 'name',
-    label: '姓名',
+    label: '户主姓名',
     search: {
       show: true,
       component: 'Input'
@@ -168,69 +204,114 @@ const schema = reactive<CrudSchema[]>([
   }
 ])
 const { allSchemas } = useCrudSchemas(schema)
-const { methods } = useTable()
-const { setSearchParams } = methods
-
 const tableData = ref<any>([])
 const percent = ref() //已选占比
 
-const handleSearch = () => {
-  getMoveHouseReportList('0', '10')
-}
-const getMoveHouseReportList = (page, size) => {
+// 数据导出
+const onExport = async () => {
   const params = {
-    page: page,
-    size: size
+    ...extraParams
   }
+  const res = await exportMoveHouseReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
+}
+
+const getMoveHouseReportList = () => {
+  const params = {
+    ...extraParams,
+    page: pageNum.value - 1,
+    size: pageSize.value,
+    projectId
+  }
+  tableLoading.value = true
   getMoveHouseReportListApi(params).then((res) => {
     tableData.value = res.reports.content
     percent.value = toPercent(res.percent)
     totalNum.value = res.reports.total
-    const tableArr = tableData.value
-    tableArr.push(
-      {
-        name: '合计（套/宗)',
-        flatSG7Count: totalColumn(tableArr, 'flatSG7Count'),
-        flatSG9Count: totalColumn(tableArr, 'flatSG9Count'),
-        flatSG11Count: totalColumn(tableArr, 'flatSG11Count'),
-        flatSG13Count: totalColumn(tableArr, 'flatSG13Count'),
-        flatJL7Count: totalColumn(tableArr, 'flatJL7Count'),
-        flatJL9Count: totalColumn(tableArr, 'flatJL9Count'),
-        flatJL11Count: totalColumn(tableArr, 'flatJL11Count'),
-        flatJL13Count: totalColumn(tableArr, 'flatJL13Count'),
-        homesteadTC1AreaCount: totalColumn(tableArr, 'homesteadTC1AreaCount'),
-        homesteadTC2AreaCount: totalColumn(tableArr, 'homesteadTC2AreaCount'),
-        homesteadTC3AreaCount: totalColumn(tableArr, 'homesteadTC3AreaCount'),
-        homesteadTC4AreaCount: totalColumn(tableArr, 'homesteadTC4AreaCount'),
-        homesteadTC5AreaCount: totalColumn(tableArr, 'homesteadTC5AreaCount'),
-        homesteadTC6AreaCount: totalColumn(tableArr, 'homesteadTC6AreaCount'),
-        homesteadMJT1AreaCount: totalColumn(tableArr, 'homesteadMJT1AreaCount'),
-        homesteadMJT2AreaCount: totalColumn(tableArr, 'homesteadMJT2AreaCount'),
-        homesteadMJT3AreaCount: totalColumn(tableArr, 'homesteadMJT3AreaCount'),
-        homesteadMJT4AreaCount: totalColumn(tableArr, 'homesteadMJT4AreaCount'),
-        homesteadMJT5AreaCount: totalColumn(tableArr, 'homesteadMJT5AreaCount'),
-        homesteadMJT6AreaCount: totalColumn(tableArr, 'homesteadMJT6AreaCount'),
-        homesteadDP1AreaCount: totalColumn(tableArr, 'homesteadDP1AreaCount'),
-        homesteadDP2AreaCount: totalColumn(tableArr, 'homesteadDP2AreaCount'),
-        homesteadDP3AreaCount: totalColumn(tableArr, 'homesteadDP3AreaCount'),
-        homesteadDP4AreaCount: totalColumn(tableArr, 'homesteadDP4AreaCount'),
-        homesteadDP5AreaCount: totalColumn(tableArr, 'homesteadDP5AreaCount'),
-        homesteadDP6AreaCount: totalColumn(tableArr, 'homesteadDP6AreaCount')
-      },
-      {
-        name: '合计(户)',
-        flatSG7Count: totalApparent(tableArr),
-        homesteadTC1AreaCount: totalHomestead(tableArr),
-        oneselfCount: totalColumn(tableArr, 'oneselfCount'),
-        concentrateCount: totalColumn(tableArr, 'concentrateCount')
-      }
-    )
+    totalCountObj.value = res.total
+    tableLoading.value = false
   })
 }
+
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 
+// 获取所属区域数据(行政村列表)
+const getVillageTree = async () => {
+  const list = await screeningTree(projectId, 'adminVillage')
+  villageTree.value = list || []
+  return list || []
+}
+
+const getSummaries = (params: any) => {
+  const { columns } = params
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 1) {
+      sums[index] = '合计'
+      return
+    }
+    if (index < 3) {
+      sums[index] = ''
+      return
+    }
+    console.log(column)
+    if (!totalCountObj.value) {
+      return
+    }
+    const totalMap = {
+      3: totalCountObj.value.flatSG7Count,
+      4: totalCountObj.value.flatSG9Count,
+      5: totalCountObj.value.flatSG11Count,
+      6: totalCountObj.value.flatSG13Count,
+      7: totalCountObj.value.flatJL7Count,
+      8: totalCountObj.value.flatJL9Count,
+      9: totalCountObj.value.flatJL11Count,
+      10: totalCountObj.value.flatJL13Count,
+      11: totalCountObj.value.homesteadTC1AreaCount,
+      12: totalCountObj.value.homesteadTC2AreaCount,
+      13: totalCountObj.value.homesteadTC3AreaCount,
+      14: totalCountObj.value.homesteadTC4AreaCount,
+      15: totalCountObj.value.homesteadTC5AreaCount,
+      16: totalCountObj.value.homesteadTC6AreaCount,
+      17: totalCountObj.value.homesteadMJT1AreaCount,
+      18: totalCountObj.value.homesteadMJT2AreaCount,
+      19: totalCountObj.value.homesteadMJT3AreaCount,
+      20: totalCountObj.value.homesteadMJT4AreaCount,
+      21: totalCountObj.value.homesteadMJT5AreaCount,
+      22: totalCountObj.value.homesteadMJT6AreaCount,
+      23: totalCountObj.value.homesteadDP1AreaCount,
+      24: totalCountObj.value.homesteadDP2AreaCount,
+      25: totalCountObj.value.homesteadDP3AreaCount,
+      26: totalCountObj.value.homesteadDP4AreaCount,
+      27: totalCountObj.value.homesteadDP4AreaCount,
+      28: totalCountObj.value.homesteadDP5AreaCount,
+      29: totalCountObj.value.homesteadDP6AreaCount,
+      30: totalCountObj.value.oneselfCount,
+      31: totalCountObj.value.concentrateCount
+    }
+    sums[index] = totalMap[index]
+    return
+  })
+  return sums
+}
+
+getMoveHouseReportList()
+
 onMounted(() => {
-  getMoveHouseReportList('0', '10')
+  getVillageTree()
 })
 
 const onBack = () => {
@@ -238,103 +319,39 @@ const onBack = () => {
 }
 const handleSizeChange = (val: number) => {
   pageSize.value = val
-  getMoveHouseReportList(pageNum.value - 1, pageSize.value)
+  getMoveHouseReportList()
 }
 const handleCurrentChange = (val: number) => {
   pageNum.value = val
-  getMoveHouseReportList(pageNum.value - 1, pageSize.value)
+  getMoveHouseReportList()
 }
-//合并合计户单元格
-const objectSpanMethod = ({ row, columnIndex }: any) => {
-  if (row.name === '合计(户)') {
-    if (columnIndex === 1) {
-      return {
-        rowspan: 1,
-        colspan: 8
-      }
-    }
-    //把被合并的单元格进行处理
-    if (columnIndex > 1 && columnIndex <= 8) {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-    if (columnIndex === 9) {
-      return {
-        rowspan: 1,
-        colspan: 18
-      }
-    }
-    //把被合并的单元格进行处理
-    if (columnIndex > 9 && columnIndex < 27) {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
+
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
     }
   }
+
+  extraParams = {
+    ...params
+  }
+
+  getMoveHouseReportList()
 }
-//合计表格列
-const totalColumn = (arr, key) => {
-  let s = 0
-  arr.forEach((item) => {
-    const num = Number(item[key])
-    if (!isNaN(num)) {
-      s += num
-    }
-  })
-  return s
-}
-//公寓房合计
-const totalApparent = (arr) => {
-  let s = 0
-  arr.forEach((item) => {
-    let total =
-      Number(item.flatSG7Count) +
-      Number(item.flatSG9Count) +
-      Number(item.flatSG11Count) +
-      Number(item.flatSG13Count) +
-      Number(item.flatJL7Count) +
-      Number(item.flatJL9Count) +
-      Number(item.flatJL11Count) +
-      Number(item.flatJL13Count)
-    if (total >= 1) {
-      total = 1
-      s++
-    }
-  })
-  return s
-}
-//宅基地合计
-const totalHomestead = (arr) => {
-  let s = 0
-  arr.forEach((item) => {
-    let total =
-      Number(item.homesteadTC1AreaCount) +
-      Number(item.homesteadTC2AreaCount) +
-      Number(item.homesteadTC3AreaCount) +
-      Number(item.homesteadTC4AreaCount) +
-      Number(item.homesteadTC5AreaCount) +
-      Number(item.homesteadTC6AreaCount) +
-      Number(item.homesteadMJT1AreaCount) +
-      Number(item.homesteadMJT2AreaCount) +
-      Number(item.homesteadMJT3AreaCount) +
-      Number(item.homesteadMJT4AreaCount) +
-      Number(item.homesteadMJT5AreaCount) +
-      Number(item.homesteadMJT6AreaCount) +
-      Number(item.homesteadDP1AreaCount) +
-      Number(item.homesteadDP2AreaCount) +
-      Number(item.homesteadDP3AreaCount) +
-      Number(item.homesteadDP4AreaCount) +
-      Number(item.homesteadDP5AreaCount) +
-      Number(item.homesteadDP6AreaCount)
-    if (total >= 1) {
-      total = 1
-      s++
-    }
-  })
-  return s
+
+const onReset = () => {
+  extraParams = {
+    villageCode: undefined,
+    doorNo: undefined,
+    name: undefined
+  }
+  getMoveHouseReportList()
 }
 </script>
 

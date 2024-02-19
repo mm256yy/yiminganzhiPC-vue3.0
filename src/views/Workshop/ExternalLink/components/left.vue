@@ -134,7 +134,7 @@
             </div>
             <div class="business_li_r">
               <div>水电站</div>
-              <div class="bom_text">{{ companyDto.gtNum }} <span>家</span></div>
+              <div class="bom_text">{{ companyDto.sdzNum }} <span>家</span></div>
             </div>
           </div>
           <div class="business_li">
@@ -143,7 +143,7 @@
             </div>
             <div class="business_li_r">
               <div>个体工商户</div>
-              <div class="bom_text">{{ companyDto.tkqNum }} <span>家</span></div>
+              <div class="bom_text">{{ companyDto.gtNum }} <span>家</span></div>
             </div>
           </div>
           <div class="business_li">
@@ -152,7 +152,7 @@
             </div>
             <div class="business_li_r">
               <div>探矿权</div>
-              <div class="bom_text">{{ companyDto.qyNum }} <span>家</span></div>
+              <div class="bom_text">{{ companyDto.tkqNum }} <span>家</span></div>
             </div>
           </div>
         </div>
@@ -210,23 +210,75 @@ const props = defineProps({
 const emit = defineEmits(['update:loading'])
 
 onMounted(() => {
-  villageList()
+  // villageList()
   getList()
   //getToken()
 })
 const appStore = useAppStore()
 const { emitter } = useEmitt()
 const reason = ref()
-const villageLists = ref<any>([])
+// 330624109213	竹潭村
+// 330624109212	小泉溪村
+// 330624109214	殿前村
+// 330624109215	下潘村
+// 330624109217	大畈村
+// 330624109221	潭角村
+// 330624109216	后染村
+// 330624109222	里镜屏村
+// 330624109202	溪西村
+// 330624109218	安山村
+const villageLists = ref<any>([
+  {
+    code: null,
+    name: '全域'
+  },
+  {
+    code: 330624109213,
+    name: '竹潭村'
+  },
+  {
+    code: 330624109212,
+    name: '小泉溪村'
+  },
+  {
+    code: 330624109214,
+    name: '殿前村'
+  },
+  {
+    code: 330624109215,
+    name: '下潘村'
+  },
+  {
+    code: 330624109217,
+    name: '大畈村'
+  },
+  {
+    code: 330624109221,
+    name: '潭角村'
+  },
+  {
+    code: 330624109216,
+    name: '后染村'
+  },
+  {
+    code: 330624109222,
+    name: '里镜屏村'
+  },
+  {
+    code: 330624109202,
+    name: '溪西村'
+  },
+  {
+    code: 330624109218,
+    name: '安山村'
+  }
+])
 const landScreenDtoListObj = ref<any>({})
 const paramsValue = ref<any>({})
-const leadershipScreenList = ref<any>({})
 const arr = ref<any>([])
-const tokenStr = ref<string>('')
 const populationScreenDtoList = ref<any>({})
 const houseScreenDto = ref<any>({})
 const companyDto = ref<any>({})
-const fundScreenDto = ref<any>({})
 
 const isType = ref('0')
 
@@ -247,7 +299,7 @@ const landList = ref<any>([
   },
   {
     id: 3,
-    name: '翰水工程建设区',
+    name: '输水工厂建设区',
     num: 'totalSsjsqArea'
   }
 ])
@@ -352,9 +404,9 @@ const onChange = (e: any) => {
     isType.value = e
   }, 500)
 }
-const villageList = async () => {
-  villageLists.value = await getVillageList({})
-}
+// const villageList = async () => {
+//   villageLists.value = await getVillageList({})
+// }
 
 const tabVillage = async () => {
   appStore.setVillageCoder(reason.value)
@@ -385,9 +437,6 @@ const getList = async () => {
 
     // 主要专业项目
     professionalProjectsDto.value = list.professionalProjectsDto
-
-    // fundScreenDto.value = list.fundScreenDto
-
     emitter.emit('getHomeInfo_list', list)
   } catch (error) {
     emit('update:loading', false)

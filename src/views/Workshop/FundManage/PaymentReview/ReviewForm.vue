@@ -95,7 +95,7 @@
         <!-- <span class="main-title">专业项目合同清单</span> -->
         申请总金额：{{ parmasList.amount }}<span class="num"></span> 元 申请户数：<span
           class="num"
-          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList.length : 0 }}</span
+          >{{ parmasList.paymentObjectList ? parmasList.paymentObjectList?.length : 0 }}</span
         >
         户
       </div>
@@ -159,7 +159,6 @@
         </ElTableColumn>
         <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
           <template #default="{ $index }">
-            <!-- <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div> -->
             <div> {{ parmasList.paymentObjectList[$index]?.amount }} </div>
           </template>
         </ElTableColumn>
@@ -193,12 +192,11 @@
           </ElUpload>
         </div>
       </div>
-      <div v-if="parmasList?.funPaymentRequestFlowNodeList[5].status && actionType == 'edit'">
+      <div v-if="userInfo == 'financevoucher'">
         <ElRow>
           <ElCol :span="24" style="margin-top: 20px">
             <div class="col-wrap">
               <div class="label">付款日期</div>
-              <!-- <div class="content">境岭镇</div> -->
               <ElDatePicker
                 v-model="formAudit.paymentTime"
                 type="date"
@@ -296,7 +294,7 @@
               </div>
               <div
                 class="line"
-                v-if="index == parmasList.funPaymentRequestFlowNodeList.length - 1"
+                v-if="index == parmasList.funPaymentRequestFlowNodeList?.length - 1"
                 style="background: white"
               ></div>
               <div class="line" v-else></div>
@@ -308,7 +306,8 @@
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
                 <div class="time" v-if="item.status">
-                  审核时间：{{
+                  {{ index == 0 ? '提交时间：' : '审核时间:'
+                  }}{{
                     index == 0
                       ? dayjs(parmasList.createdDate).format('YYYY-MM-DD HH:mm:ss')
                       : dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss')
@@ -317,6 +316,13 @@
                 <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
                 <div class="remark" v-if="item.status">
                   审核意见: {{ index == 0 ? '发起申请' : item.remark }}
+                </div>
+                <div
+                  style="display: flex"
+                  v-if="index == 6 && item.receipt && item.receipt != '[]'"
+                >
+                  财务凭证:
+                  <img :src="JSON.parse(item.receipt)[0]?.url" style="height: 200px" alt="" />
                 </div>
               </div>
             </div>
@@ -384,8 +390,8 @@ const dialogVisible = ref<boolean>(false)
 const appStore: any = useAppStore()
 const currentProjectId = appStore.currentProjectId
 const userInfo: any = computed(() => {
-  if (appStore.getUserInfo.value) {
-    const project = appStore.getUserInfo.value.projectUsers.find(
+  if (appStore.getUserInfo) {
+    const project = appStore.getUserInfo.projectUsers.find(
       (x: any) => x.projectId === currentProjectId
     )
     const role = project.roles[0].code
@@ -400,7 +406,7 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
-      // console.log(userInfo.value.systemRole == 'NORMAL_USER', 'bbq')
+      console.log(userInfo.value, 'bbq')
 
       form.value = { ...(val as {}) }
       // position.longitude = form.value.longitude
@@ -422,6 +428,10 @@ const getFundSubjectList = () => {
   })
 }
 const getTreeName = (list: any, code: any) => {
+  if (!list) {
+    return ''
+  }
+
   for (let i = 0; i < list.length; i++) {
     let a = list[i]
     if (a.code == code) {

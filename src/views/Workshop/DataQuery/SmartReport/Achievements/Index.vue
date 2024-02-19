@@ -4,6 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title"> 实物成果汇总表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <div class="fylist">
         <ElTable
@@ -12,12 +13,9 @@
           class="mb-20"
           :row-class-name="tableRowClassName"
           :border="true"
+          height="650"
         >
-          <ElTableColumn label="序号" align="center" prop="serNo" header-align="center">
-            <!-- <template #default="{ row }">
-              <b>{{ getTypeStr(row.type) }}</b>
-            </template> -->
-          </ElTableColumn>
+          <ElTableColumn label="序号" align="center" prop="serNo" header-align="center" />
           <ElTableColumn label="项目" prop="proName" align="center" header-align="center" />
           <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
             <template #default="{ row }">
@@ -85,125 +83,13 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
-// import { Table } from '@/components/Table'
-// import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-// import { useTable } from '@/hooks/web/useTable'
-// import { getCompensationCardList } from '@/api/immigrantImplement/createCard/service'
+import { ElTable, ElTableColumn, ElButton } from 'element-plus'
 import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
 const titles = ['智能报表', '实物成果', '居民户', '实物成果汇总']
-const feeTableData = ref<any[]>([
-  // {
-  //   doorNo: null,
-  //   id: null,
-  //   isUpdate: '0',
-  //   isVerify: null,
-  //   name: '房屋主体补偿费',
-  //   number: null,
-  //   price: 1000,
-  //   projectId: 53,
-  //   remark: null,
-  //   status: null,
-  //   totalPrice: 8,
-  //   type: '1',
-  //   uid: null,
-  //   unit: null
-  // },
-  // {
-  //   doorNo: null,
-  //   id: null,
-  //   isUpdate: '0',
-  //   isVerify: null,
-  //   name: '房屋主体补偿费',
-  //   number: null,
-  //   price: 1000,
-  //   projectId: 53,
-  //   remark: null,
-  //   status: null,
-  //   totalPrice: 8,
-  //   type: '1',
-  //   uid: null,
-  //   unit: null
-  // }
-]) // 费用补偿情况列表
-
-// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: any) => {
-//   console.log(row, column)
-//   if (columnIndex === 0) {
-//     if (rowIndex === 0) {
-//       return {
-//         rowspan: 10,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 10) {
-//       return {
-//         rowspan: 17,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 27) {
-//       return {
-//         rowspan: 7,
-//         colspan: 1
-//       }
-//     } else {
-//       return {
-//         rowspan: 0,
-//         colspan: 0
-//       }
-//     }
-//   } else if (columnIndex === 1) {
-//     if (rowIndex === 17) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 18) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 19) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 20) {
-//       return {
-//         rowspan: 2,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 21) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 22) {
-//       return {
-//         rowspan: 3,
-//         colspan: 1
-//       }
-//     } else if (rowIndex === 23) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     } else if (rowIndex === 24) {
-//       return {
-//         rowspan: 1,
-//         colspan: 0
-//       }
-//     }
-//   }
-// }
-
-// // 根据户号来做筛选
-// tableObject.params = {
-//   doorNo: jl1080433,
-// //   status: props.baseInfo.status
-// }
+const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const tableRowClassName = ({ row }: any) => {
   if (
@@ -216,10 +102,6 @@ const tableRowClassName = ({ row }: any) => {
     return ''
   }
 }
-// const { allSchemas } = useCrudSchemas(schema)
-
-// const formRef = ref<FormInstance>()
-// const form = ref<any>({ ...props.baseInfo })
 
 // 获取费用补偿情况列表
 const getRewardFeeList = () => {
@@ -228,64 +110,12 @@ const getRewardFeeList = () => {
   })
 }
 
-/**
- * 获取金额类型
- * @param type 类型 1 补偿, 2 补助, 3 奖励, 4 其他
- */
-// const getTypeStr = (type: string) => {
-//   switch (type) {
-//     case '1':
-//       return '补偿费'
-//       break
-//     case '2':
-//       return '补助费'
-//       break
-//     case '3':
-//       return '奖励费'
-//       break
-//     case '4':
-//       return '其他费用'
-//       break
-//     default:
-//       return ''
-//   }
-// }
-
-/**
- * 计算补偿金额
- * 补偿金额 = 数量 * 单价
- * @param row 当前行数据
- */
-// const computedTotalPrice = (row: any) => {
-//   if (row.totalPrice) {
-//     return Number(row.totalPrice)
-//   } else {
-//     if (row.number && row.price) {
-//       return Number(row.number) * Number(row.price)
-//     } else {
-//       return 0
-//     }
-//   }
-// }
-
-/**
- * 获取奖励小计
- * @param row 当前行信息
- */
-// const getSummaries = (row: any) => {
-//   let sums = 0
-//   let sumIndex = 0
-//   feeTableData.value.forEach((column, index) => {
-//     if (column.name === row.name) {
-//       sumIndex = index
-//     }
-//   })
-//   const arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
-//   sums = arr.reduce((totalPrice, currentItem) => {
-//     return totalPrice + computedTotalPrice(currentItem)
-//   }, 0)
-//   return sums
-// }
+// 数据导出
+const onExport = () => {
+  const url =
+    'https://oss.zdwp.tech/migrate/files/archives/82bada98-d8b6-43d5-9d9d-699a3e1ce3f0.xlsx'
+  window.open(url)
+}
 
 onMounted(() => {
   getRewardFeeList()

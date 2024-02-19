@@ -43,6 +43,7 @@
           ]"
           @edit="onEditRow(row)"
           @delete="onDelRow"
+          :delete="row.delFlag"
         />
       </template>
     </Table>

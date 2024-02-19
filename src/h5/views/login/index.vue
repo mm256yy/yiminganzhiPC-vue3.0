@@ -9,7 +9,7 @@
         <div class="field">
           <div class="label">用户号</div>
           <div class="input">
-            <input v-model="userName" placeholder="请输入用户名" type="tel" maxlength="11" />
+            <input v-model="userName" placeholder="请输入用户名" type="text" maxlength="11" />
           </div>
         </div>
         <div class="field">
@@ -70,12 +70,13 @@ const onConfirm = () => {
     (res) => {
       btnLoading.value = false
       if (res) {
-        const user = res.user
         sessionStorage.setItem('token', res.token)
         sessionStorage.setItem('user', res.user)
         currentUserApi().then((res) => {
           sessionStorage.setItem('projectId', res.projectUsers[0].projectId)
         })
+        // 默认跳转home页
+        window.localStorage.setItem('selectTabUrl', '/home')
         toLink('home')
       }
     },

@@ -12,6 +12,7 @@
         :expand-field="'doorNo'"
         @search="onSearch"
         @reset="setSearchParams"
+        :valueForme="valueForme['企业信息']"
       />
     </div>
 
@@ -106,6 +107,7 @@ import { formatDate } from '@/utils/index'
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
+let valueForme = appStore.serchValue
 const dialog = ref(false) // 弹窗标识
 const headerInfo = ref<any>()
 
@@ -116,7 +118,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  ...valueForme['企业信息']
 }
 
 setSearchParams({ type: 'Company', status: 'implementation' })
@@ -319,7 +322,7 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 const onEditRow = (row: LandlordDtoType) => {
-  tableObject.currentRow = row
+  tableObject.currentRow = row as any
   dialog.value = true
 }
 
@@ -397,6 +400,7 @@ const onSearch = (data) => {
 
 // 数据填报
 const fillData = (row) => {
+  appStore.setsercher({ value: tableObject.params, name: '企业信息' })
   push({
     name: 'ImmigrantImpDataFill',
     query: {

@@ -710,6 +710,7 @@ const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
     baseInfo.value = res
+    console.log(baseInfo.value, 'BBQ')
   })
   getFillingStatus()
 }

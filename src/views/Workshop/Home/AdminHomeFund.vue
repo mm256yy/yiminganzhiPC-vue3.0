@@ -40,9 +40,7 @@
             <div class="strong">企(事)业单位</div></div
           >
         </div>
-
-        <tabButton @tab="tab" :tabList="tabList" />
-        <Echart style="padding-top: 20px" :options="enterpriseOption" :height="300" />
+        <Echart style="padding-top: 20px" :options="enterpriseOption" :height="350" />
       </div>
       <div class="common-color background">
         <div class="border_box">
@@ -104,7 +102,6 @@ const tab = (index) => {
 const householdOption = ref({
   tooltip: {
     trigger: 'axis',
-
     formatter: function (params) {
       return (
         params[0].name +
@@ -126,7 +123,7 @@ const householdOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -234,7 +231,7 @@ const villageOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -341,7 +338,7 @@ const enterpriseOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -442,7 +439,7 @@ const specialityOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -549,7 +546,7 @@ const otherOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }
@@ -653,7 +650,7 @@ const taxationOption = ref({
     data: ['应付', '已付'],
     // 指示框位置  距离上下左右多少
     right: '10%',
-    top: '5%',
+    top: '10%',
     textStyle: {
       color: '#666666 ' //字体颜色
     }

@@ -129,11 +129,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       VueMarcos(),
       createHtmlPlugin({
         pages: mode === 'dev' ?
-        [
-         ...pcHmtlEntrys,
-         ...h5HmtlEntrys
-        ] :
-        platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
+          [
+            ...pcHmtlEntrys,
+            ...h5HmtlEntrys
+          ] :
+          platform === 'pc' ? pcHmtlEntrys : h5HmtlEntrys
       })
     ],
 
@@ -175,14 +175,14 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       },
       rollupOptions: {
         input:
-        platform === 'pc' ? {
-          main: resolve(__dirname, "index.html"),
-          admin: resolve(__dirname, "admin.html"),
-        } :
-          {
-            h5: resolve(__dirname, "h5.html"),
-            ld: resolve(__dirname, "ld.html")
-          },
+          platform === 'pc' ? {
+            main: resolve(__dirname, "index.html"),
+            admin: resolve(__dirname, "admin.html"),
+          } :
+            {
+              h5: resolve(__dirname, "h5.html"),
+              ld: resolve(__dirname, "ld.html")
+            },
         output: {
           assetFileNames: `${platform}[ext]/[name]-[hash].[ext]`,
           chunkFileNames: `${platform}js/[name]-[hash].js`,
@@ -197,7 +197,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
-          target: 'http://192.168.1.106:8880',
+          target: 'http://192.168.1.119:8880',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',

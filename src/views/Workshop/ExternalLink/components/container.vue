@@ -6,13 +6,18 @@
   <div class="container_box">
     <div class="cin_top" @click="goLink">
       <div class="seach_select">
-        <ElSelect placeholder=" " clearable filterable v-model="reason" class="s_full">
+        <ElSelect placeholder="请选择" clearable filterable v-model="reason" class="s_full">
           <ElOption v-for="item in option" :key="item.code" :label="item.name" :value="item.code" />
         </ElSelect>
       </div>
       <div class="search">
-        <ElInput v-model="input" class="ipt" placeholder="请输入搜索内容" />
-        <div class="seach_icon"></div>
+        <ElInput
+          v-model="searchContent"
+          class="ipt"
+          placeholder="请输入搜索内容"
+          @click.stop="() => {}"
+        />
+        <div class="seach_icon" @click="goLink"></div>
       </div>
       <div @click="goLink" class="screen"></div>
     </div>
@@ -21,14 +26,14 @@
         <template #title>
           <img class="xm_img" src="../../../../assets/imgs/homes/news.png" alt="" />
         </template>
-        <template #info>
+        <!-- <template #info>
           <view @click="handleClickItem(4)" class="right_slot">
             <view class="right_text">查看更多</view>
             <view>
               <img class="look_icon" src="../../../../assets/imgs/homes/icon.png" alt="" />
             </view>
           </view>
-        </template>
+        </template> -->
       </Label>
       <div class="news_box">
         <ElTabs v-model="activeName2" class="demo-tabs news" @tab-click="newsHandleClick">
@@ -67,29 +72,45 @@
         </template>
       </Label>
       <div class="table_box">
-        <div class="th-title">
-          <div>问题内容</div>
-          <div>提交人</div>
-          <div>提交时间</div>
-        </div>
-        <div class="question-list">
-          <div
-            class="item"
-            v-for="item in questionList"
-            :key="item.id"
-            @click="onViewFeedBack(item)"
+        <ElTable :data="questionList" style="width: 100%; max-height: 200px" :border="true">
+          <ElTableColumn
+            label="序号"
+            type="index"
+            align="center"
+            width="60"
+            header-align="center"
+          />
+          <ElTableColumn
+            label="问题内容"
+            prop="remark"
+            align="center"
+            width="260"
+            show-overflow-tooltip
+            header-align="center"
+          />
+          <ElTableColumn
+            label="提交人"
+            prop="creater"
+            align="center"
+            show-overflow-tooltip
+            header-align="center"
+          />
+          <ElTableColumn
+            label="提交时间"
+            prop="unit"
+            align="center"
+            show-overflow-tooltip
+            header-align="center"
           >
-            <div class="name">{{ item.remark }}</div>
-            <div class="names">{{ item.creater }}</div>
-            <div class="time">
-              {{ dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
-            </div>
-          </div>
-        </div>
+            <template #default="{ row }">
+              {{ dayjs(row.createdDate).format('YYYY-MM-DD') }}
+            </template>
+          </ElTableColumn>
+        </ElTable>
       </div>
     </div>
     <ElDialog
-      title="文章内容查看"
+      :title="dialogTitle"
       v-model="contentDialog"
       :width="800"
       @close="contentDialog = false"
@@ -103,7 +124,16 @@
 <script lang="ts" setup>
 import Label from './label.vue'
 import { ref, onMounted } from 'vue'
-import { ElTabs, ElSelect, ElOption, ElTabPane, ElInput, ElDialog } from 'element-plus'
+import {
+  ElTabs,
+  ElSelect,
+  ElOption,
+  ElTabPane,
+  ElInput,
+  ElDialog,
+  ElTable,
+  ElTableColumn
+} from 'element-plus'
 
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -119,14 +149,13 @@ const activeName2 = ref('水库要闻')
 const newsList = ref<any>([])
 const option = ref<any>([])
 
-const input = ref('')
+const searchContent = ref('')
 const reason = ref('移民户')
 const tokenStr = ref<string>('')
 const appStore = useAppStore()
 const newsTypes = ref<any[]>([])
 const dictName = 'news' // 字典名称
 const panelLoading = ref<boolean>(false)
-<<<<<<< HEAD
 option.value = [
   {
     code: '1',
@@ -145,11 +174,10 @@ option.value = [
     name: '分户土地'
   }
 ]
-=======
 const content = ref<string>() // 文章内容
 const contentDialog = ref<boolean>(false)
+const dialogTitle = ref<string>('')
 
->>>>>>> 52a55eb16e8dac78bf15c8a501e66c39fba5be95
 const getNewsDict = async () => {
   const res = await listDictDetailApi({
     name: dictName,
@@ -157,6 +185,7 @@ const getNewsDict = async () => {
   })
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
+    activeName2.value = newsTypes.value[0]?.value // 默认选中
   }
 }
 
@@ -170,12 +199,12 @@ const feedback = async () => {
 
 const checkNews = (item: any) => {
   content.value = item.content
+  dialogTitle.value = item.title
   contentDialog.value = true
 }
 
 // 点击新闻跳转
-const newsHandleClick = (pane: any, ev: Event) => {
-  console.log('ev', ev)
+const newsHandleClick = (pane: any, _ev?: Event) => {
   requestNewsData(pane.props.name)
 }
 
@@ -192,6 +221,7 @@ const requestNewsData = (type = '1') => {
         }
         return item
       })
+
       panelLoading.value = false
     },
     (err) => {
@@ -201,21 +231,13 @@ const requestNewsData = (type = '1') => {
   )
 }
 
-const onViewFeedBack = (item: any) => {
-  push(`/Feedback/FeedbackDetail?id=${item.id}`)
-}
-// 路由跳转
-const routerJump = (path: string) => {
-  push(path)
-}
-
 const goLink = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
-    let url = `http://test-jingling.jldt.top?token=${tokenStr.value}&value=${input.value}&callback=${window.location.href}`
+    // let url = `https://jingling-reservoir-demo.jldt.top?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}`
+    let url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}` // 12.1 宗浩要求修改
     window.location.href = url
-    console.log('QPP', url)
   } catch {}
 }
 
@@ -383,6 +405,7 @@ onMounted(() => {
         .news_li {
           display: flex;
           flex: 1;
+          cursor: pointer;
 
           .li_l_top {
             width: 158px;
@@ -429,7 +452,7 @@ onMounted(() => {
     box-sizing: border-box;
 
     .table_box {
-      padding: 8px 16px;
+      padding: 0 16px;
 
       .th-title {
         display: flex;
@@ -441,14 +464,36 @@ onMounted(() => {
         font-weight: 500;
         line-height: 36px;
         color: #171718;
-        // font-weight: bold;
         background: #f2f6ff;
         box-sizing: border-box;
         align-items: center;
         justify-content: space-between;
+
+        .head-index {
+          width: 45px;
+          text-align: center;
+        }
+
+        .head-content {
+          flex: 1;
+          text-align: center;
+        }
+
+        .commit {
+          width: 180px;
+          text-align: center;
+        }
+
+        .commit-time {
+          width: 140px;
+          text-align: center;
+        }
       }
 
       .question-list {
+        max-height: 176px;
+        overflow: hidden;
+
         .item {
           display: flex;
           height: 44px;
@@ -456,13 +501,16 @@ onMounted(() => {
           border-bottom: 1px solid #ebebeb;
           box-sizing: border-box;
           align-items: center;
-          justify-content: space-between;
+
+          .table-index {
+            width: 45px;
+            text-align: center;
+          }
 
           .name {
             width: 70px;
             overflow: hidden;
             font-size: 14px;
-
             font-weight: 500;
             color: #333333;
             text-overflow: ellipsis; //溢出用省略号显示
@@ -470,17 +518,15 @@ onMounted(() => {
           }
 
           .names {
-            margin-left: 70px;
+            width: 70px;
             overflow: hidden;
             font-size: 14px;
-
             font-weight: 500;
             color: #666666;
           }
 
           .time {
             font-size: 14px;
-
             font-weight: 500;
             color: rgba(19, 19, 19, 0.4);
           }

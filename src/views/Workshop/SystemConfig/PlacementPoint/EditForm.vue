@@ -56,7 +56,8 @@
       <ElFormItem label="建筑面积(㎡):" prop="floorSpace">
         <ElInput type="text" v-model="form.floorSpace" placeholder="请输入建筑面积(㎡)" />
       </ElFormItem>
-      <ElFormItem label="地理位置:" required prop="address">
+      <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
+      <ElFormItem prop="address">
         <ElInput type="text" v-model="form.address" placeholder="请输入地理位置" />
       </ElFormItem>
       <ElFormItem label="户型类型:" required prop="type">
@@ -112,7 +113,6 @@
       <ElFormItem label="医院:" prop="hospital">
         <ElInput type="text" v-model="form.hospital" placeholder="请输入医院" />
       </ElFormItem>
-      <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
     </ElForm>
 
     <template #footer>
@@ -171,9 +171,11 @@ const position = reactive({
   address: ''
 })
 const onChosePosition = (ps) => {
+  console.log(ps, 'ps')
   position.latitude = ps.latitude
   position.longitude = ps.longitude
   position.address = ps.address
+  form.value.address = position.address
 }
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
@@ -197,10 +199,13 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
+
       form.value = { ...val }
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+    } else {
+      form.value = {}
     }
   },
   {
@@ -216,9 +221,9 @@ const initData = () => {}
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  nextTick(() => {
+  /*nextTick(() => {
     formRef.value?.resetFields()
-  })
+  })*/
 }
 
 const submit = (data: any) => {
@@ -246,6 +251,7 @@ const onSubmit = debounce((formEl) => {
           pic: JSON.stringify(relocateVerifyPic.value || []), // 规划图
           id: form.value.id
         }
+        console.log('params', params)
         submit(params)
       }
     } else {

@@ -74,13 +74,8 @@
         </template>
         <template #fillStatus="{ row }">
           <div class="flex items-center justify-center">
-            <span
-              :class="[
-                'status',
-                row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
-              ]"
-            ></span>
-            {{ row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
+            <span :class="['status', showFillColor(row)]"></span>
+            {{ showFillStatus(row) }}</div
           >
         </template>
         <template #reportDate="{ row }">
@@ -213,6 +208,8 @@ const headInfo = ref<LandlordHeadInfoType>({
 })
 const printDialog = ref(false)
 const exportDialog = ref(false)
+const { currentRoute } = useRouter()
+const { type } = currentRoute.value.query as any
 interface exportListType {
   name: string
   value: string | number
@@ -274,6 +271,16 @@ const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({ type: 'IndividualHousehold' })
   headInfo.value = info
 }
+
+const checkIsOpenDialog = () => {
+  if (type === 'individualCheck') {
+    actionType.value = 'add'
+    tableObject.currentRow = null
+    dialog.value = true
+  }
+}
+
+checkIsOpenDialog()
 
 onMounted(() => {
   getVillageTree()
@@ -603,6 +610,26 @@ const fillData = (row) => {
       type: 'IndividualB'
     }
   })
+}
+
+const showFillStatus = (row: any) => {
+  // 采集
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Survey) {
+    return row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报'
+  } else {
+    // 复核
+    return row.fillStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报'
+  }
+}
+
+const showFillColor = (row: any) => {
+  // 采集
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Survey) {
+    return row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+  } else {
+    // 复核
+    return row.fillStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+  }
 }
 
 const onSurveyDialogClose = () => {

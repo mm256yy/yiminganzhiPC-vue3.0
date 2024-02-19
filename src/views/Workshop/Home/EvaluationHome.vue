@@ -3,15 +3,8 @@
     <!-- 具体内容 -->
     <div class="main-enter">
       <!--居民区-->
-      <div
-        class="enter-item"
-        @click="
-          toTarget(
-            role == 'assessor' || role == 'assessorland' ? 'Household' : 'PeasantHouseholdImp'
-          )
-        "
-      >
-        <div class="title-field" @click="toTarget('householdList')">
+      <div class="enter-item" @click="toTarget('LandlordEva')">
+        <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
           </div>
@@ -24,7 +17,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 0 })">
+          <div class="field-box">
             <div class="line-1">{{ statisticsObj?.peasantCompleteCount }}</div>
             <div class="flex">
               <div
@@ -40,7 +33,7 @@
               <div class="line-2">已评估</div>
             </div>
           </div>
-          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 1 })">
+          <div class="field-box">
             <div class="line-1">{{ statisticsObj?.peasantUncompletedCount }}</div>
             <div class="flex">
               <div
@@ -56,7 +49,7 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 2 })">
+          <div class="field-box">
             <div class="line-1">{{ statisticsObj?.peasantMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -75,14 +68,7 @@
         </div>
       </div>
       <!--企业-->
-      <div
-        class="enter-item"
-        @click="
-          toTarget(
-            role == 'assessor' || role == 'assessorland' ? 'FileEnterprise' : 'EnterpriseImp'
-          )
-        "
-      >
+      <div class="enter-item" @click="toTarget('EnterpriseEva')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
@@ -147,12 +133,7 @@
         </div>
       </div>
       <!--个体户-->
-      <div
-        class="enter-item"
-        @click="
-          toTarget(role == 'assessor' || role == 'assessorland' ? 'Individual' : 'IndividualImp')
-        "
-      >
+      <div class="enter-item" @click="toTarget('IndividualEva')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
@@ -217,12 +198,7 @@
         </div>
       </div>
       <!--村集体-->
-      <div
-        class="enter-item"
-        @click="
-          toTarget(role == 'assessor' || role == 'assessorland' ? 'VillageFile' : 'VillageImp')
-        "
-      >
+      <div class="enter-item" @click="toTarget('VillageCollectiveEva')">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -236,7 +212,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 0 })">
+          <div class="field-box">
             <div class="line-1">{{ statisticsObj?.villageCompleteCount }}</div>
             <div class="flex">
               <div
@@ -268,7 +244,7 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box" @click.prevent.stop="toTarget('homeHoldList', { type: 2 })">
+          <div class="field-box">
             <div class="line-1">{{ statisticsObj?.villageMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -313,6 +289,7 @@ import iconNationalEmblemSrc from '@/assets/imgs/home/icon_national_emblem.png'
 import type { EvaluatorStatisticsDtoType } from '@/api/home-types'
 import { getEvaluatorStatistics } from '@/api/home-service'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 interface PropsType {
   role?: string
 }
@@ -332,10 +309,14 @@ const getStatistics = async () => {
 }
 
 const toTarget = (routeName: string, query = {}) => {
-  push({
-    name: routeName,
-    query
-  })
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
 }
 
 onMounted(() => {

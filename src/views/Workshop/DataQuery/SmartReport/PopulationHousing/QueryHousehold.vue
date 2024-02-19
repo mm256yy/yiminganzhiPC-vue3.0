@@ -29,6 +29,7 @@
         headerAlign="center"
         show-overflow-tooltip
         align="center"
+        height="500"
         @register="register"
       />
     </div>
@@ -90,9 +91,9 @@ const schema = reactive<CrudSchema[]>([
           value: 'code',
           label: 'name'
         },
-        showCheckbox: false,
-        checkStrictly: false,
-        checkOnClickNode: false
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
       }
     },
     table: {
@@ -100,7 +101,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -143,7 +144,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     width: 180,
     search: {
@@ -350,8 +351,8 @@ onMounted(() => {
 
 .title-hint {
   padding: 15px 0 0 15px;
-  color: 14px;
   font-size: 14px;
+  color: 14px;
 }
 
 :deep(.el-table .el-table__cell) {

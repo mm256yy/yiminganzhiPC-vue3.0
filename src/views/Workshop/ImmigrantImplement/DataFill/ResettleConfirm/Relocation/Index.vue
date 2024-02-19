@@ -69,7 +69,11 @@
         </ElSpace>
       </div>
 
-      <el-table v-if="showTable" :data="tableData" style="width: 100%">
+      <el-table
+        v-if="houseType === HouseType.homestead || houseType === HouseType.flat"
+        :data="tableData"
+        style="width: 100%"
+      >
         <el-table-column type="index" label="序号" width="100" align="center" />
         <el-table-column prop="settleAddressText" label="安置区" align="center" />
         <el-table-column prop="area" label="户型/套型" align="center" />
@@ -162,6 +166,7 @@
 
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+    <!-- 打印模板 -->
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
       <div
@@ -174,7 +179,8 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.doorNo} `
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号
+${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -196,9 +202,11 @@
         </el-table-column>
       </el-table>
       <div style="display: flex; justify-content: space-between; height: 50px">
-        <div style="flex: 1; border: 1px solid black; border-top: 0px"
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
           >户主代表或收委托人(签名)：</div
-        ><div style="flex: 1; border: 1px solid black; border-top: 0px"> 联系移民干部(签名)：</div>
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
       </div>
     </div>
   </WorkContentWrap>
@@ -228,7 +236,7 @@ import {
   homesteadAreaSize,
   apartmentAreaSize,
   resettleArea,
-  apartmentArea
+  resettleAreaFlat
 } from '../../config'
 import { getProduceListApi } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 import Homestead from '../../SchemeBase/components/Homestead.vue'
@@ -237,7 +245,12 @@ import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { htmlToPdf } from '@/utils/ptf'
+import { debounce } from '@/utils/index'
+
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
+import { useAppStore } from '@/store/modules/app'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -259,7 +272,6 @@ const form = ref<any>({})
 
 onMounted(async () => {
   form.value = props.baseInfo
-
   await getMockData()
   await getRelocationInfo()
   await getPeopleList()
@@ -307,14 +319,34 @@ const getRelocationInfo = async () => {
   const res = await getRelocationInfoApi(props.doorNo)
   if (res) {
     houseType.value = res.houseAreaType
+    await getSettleAddressList()
     immigrantSettle.value = res
+    console.log(res, 'bbq')
   }
 }
-
+const appStore = useAppStore()
+let apartmentArea: any = []
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    apartmentArea = result.content
+    console.log(apartmentArea, '测试数据')
+  } catch {}
+}
 watch(
   () => immigrantSettle.value,
-  (res) => {
+  async (res) => {
     // 整成数组
+    let m = await resettleArea()
+    console.log(m, res, 'bbqs')
+
     if (!res) return
     if (res.houseAreaType === HouseType.homestead || res.houseAreaType === HouseType.flat) {
       const houseAreaTypeText = resettleHouseType.find(
@@ -324,7 +356,8 @@ watch(
         tableData.value = [
           {
             houseAreaTypeText,
-            settleAddressText: resettleArea.find((item) => item.id === res.settleAddress)?.name,
+            // settleAddressText: m.find((item) => item.code === res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: homesteadAreaSize.find((item) => item.id === res.areaType)?.name,
             num: 1
           }
@@ -334,7 +367,8 @@ watch(
         if (res.typeOneNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            // apartmentArea.find((item) => item.code == res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[0].name,
             num: res.typeOneNum
           })
@@ -342,7 +376,7 @@ watch(
         if (res.typeTwoNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[1].name,
             num: res.typeTwoNum
           })
@@ -350,7 +384,7 @@ watch(
         if (res.typeThreeNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[2].name,
             num: res.typeThreeNum
           })
@@ -358,7 +392,7 @@ watch(
         if (res.typeFourNum) {
           array.push({
             houseAreaTypeText,
-            settleAddressText: apartmentArea.find((item) => item.id === res.settleAddress)?.name,
+            settleAddressText: res.settleAddress,
             area: apartmentAreaSize[3].name,
             num: res.typeFourNum
           })
@@ -425,6 +459,7 @@ const onImportData = async () => {
   }
   houseType.value = houseAreaType
   onEditSubmit(immigrantSettle.value)
+  console.log(immigrantSettle.value, '测试测试')
 }
 
 const onClose = () => {
@@ -454,16 +489,27 @@ const onEditSubmit = async (params: any) => {
   const res = await saveRelocationInfoApi(params)
   if (res) {
     editDialogVisible.value = false
-    immigrantSettle.value = res
+    let m = await resettleArea()
+    let f = await resettleAreaFlat()
+    console.log(m, res, 'bbqsssssssssss')
+    console.log(f, '数据')
+    if (res.houseAreaType == 'homestead') {
+      res.settleAddress = m.find((item) => item.code === res.settleAddress)?.name
+      immigrantSettle.value = res
+    } else if (res.houseAreaType == 'flat') {
+      res.settleAddress = f.find((item) => item.code === res.settleAddress)?.name
+      immigrantSettle.value = res
+    }
     ElMessage.success('保存成功！')
   }
 }
 let data = ref()
 let comdbe = () => {
-  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
-  setTimeout(() => {
+  debounce(() => {
+    data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+
     htmlToPdf('#anztable')
-  }, 3000)
+  })
 }
 </script>
 

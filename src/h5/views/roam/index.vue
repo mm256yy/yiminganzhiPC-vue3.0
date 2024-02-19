@@ -5,25 +5,42 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getTokenApi } from './service'
+import { isIOS } from '@/h5/utils'
+
 // 测试跳转链接
-const url =
-  'https://mp.weixin.qq.com/mp/homepage?__biz=MzkyNjQ0ODE5NA==&hid=7&sn=5fd8e9ea3ee74013d3e88a80818693e5&scene=18&uin=&key=&devicetype=Windows+10+x64&version=6309080f&lang=zh_CN&ascene=1&session_us=gh_043f634f675b'
+const url = 'https://jingling-h5-test.jldt.top/token?'
 const route = useRoute()
 const tokenStr = ref<string>()
-// 区别两端不同url
-const getTypeUrl = () => {
-  return route.meta.type === 'leader' ? 'a' : 'b'
+
+// 统一跳转
+const uniformJump = (targetUrl: string) => {
+  if (isIOS()) {
+    window.location.href = targetUrl
+  } else {
+    window.open(targetUrl)
+  }
 }
 
 const requestToken = async () => {
   try {
     const result = await getTokenApi()
     tokenStr.value = result.token
+    let targetUrl = `${url}token=${tokenStr.value}`
+    uniformJump(targetUrl)
   } catch {}
 }
 
 onMounted(() => {
-  window.open(url)
+  if (route.meta.type === 'leader') {
+    // 领导端
+    // 动态获取
+    requestToken()
+  } else {
+    // 移民端
+    const h5Token = sessionStorage.getItem('h5token')
+    let targetUrl = `${url}token=${h5Token}`
+    uniformJump(targetUrl)
+  }
 })
 </script>
 

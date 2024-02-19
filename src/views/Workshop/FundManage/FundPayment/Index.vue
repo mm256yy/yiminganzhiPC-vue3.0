@@ -330,7 +330,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-
   // table
   {
     width: 80,

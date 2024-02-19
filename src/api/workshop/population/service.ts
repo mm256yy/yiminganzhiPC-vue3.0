@@ -76,6 +76,17 @@ export const getExcelList = (): Promise<TableResponse<ExcelListType>> => {
     }
   })
 }
+/**
+ * 评估文件列表
+ */
+export const getPgExcelList = (type: any): Promise<any> => {
+  return request.get({
+    url: `/import_file?type=${type}`
+    // params: {
+    //   sort: ['id', 'desc']
+    // }
+  })
+}
 
 // 获取字典表数据
 export const getDictByName = (name: string) => {

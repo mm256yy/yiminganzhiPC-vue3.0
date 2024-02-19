@@ -19,17 +19,22 @@
     </div>
 
     <div class="common-form-item">
-      <div class="common-label">可选安置点：</div>
+      <div class="common-label">可选安置点1：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
-          <el-radio :label="item.id" size="large" v-for="item in apartmentArea" :key="item.id">
+          <el-radio
+            :label="item.code"
+            size="large"
+            v-for="item in settleAddressList"
+            :key="item.id * 1"
+          >
             {{ item.name }}
           </el-radio>
         </el-radio-group>
         <div class="blue-row">
           <div
             class="blue-view"
-            v-for="item in apartmentArea"
+            v-for="item in settleAddressList"
             :key="item.id"
             @click="viewAreaDetail(item.id)"
           >
@@ -213,7 +218,7 @@
     </div>
 
     <el-dialog class="detail-pup" v-model="areaDetailPup" title="安置点详情" width="900">
-      <AreaDetail :placementPointInfo="placementPointInfo" />
+      <AreaDetail :placementPointInfo="placementPointInfo" ref="AreaDetailRef" />
     </el-dialog>
 
     <el-dialog v-model="housePicPup" title="户型图" width="900">
@@ -231,16 +236,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { ElRadioGroup, ElRadio, ElInputNumber, ElDialog, ElMessage } from 'element-plus'
 import { getBestResettlePlanApi } from '@/api/workshop/datafill/mockResettle-service'
 
-import { apartmentArea, apartmentAreaSize, HouseType } from '../../config'
+import { apartmentAreaSize, HouseType } from '../../config'
 import AreaDetail from './AreaDetail.vue'
 import HousePic from './HousePic.vue'
 import FindSelf from './FindSelf.vue'
 import BuyHousePrice from './BuyHousePrice.vue'
-import { getPlacementPointByIdApi } from '@/api/systemConfig/placementPoint-service'
+import type { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
+import { useAppStore } from '@/store/modules/app'
+
+import {
+  getPlacementPointListApi,
+  getPlacementPointByIdApi
+} from '@/api/systemConfig/placementPoint-service'
+
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -250,9 +262,9 @@ interface PropsType {
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
-const settleAddress = ref('1')
+const settleAddress = ref(1)
 const areaSize = ref(apartmentAreaSize)
-
+const AreaDetailRef: any = ref(null)
 const areaDetailPup = ref(false)
 const housePicPup = ref(false)
 const pricePup = ref(false)
@@ -260,6 +272,22 @@ const buyHousePup = ref(false)
 
 // 方案数据
 const tableData = ref<any>([])
+const appStore = useAppStore()
+const settleAddressList = ref<PlacementPointDtoType[]>([])
+
+const getSettleAddressList = async () => {
+  const params = {
+    projectId: appStore.getCurrentProjectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    settleAddressList.value = result.content
+  } catch {}
+}
 
 const getPlans = async () => {
   const res = await getBestResettlePlanApi(props.doorNo)
@@ -276,6 +304,7 @@ onMounted(() => {
   if (!props.fromResettleConfirm) {
     getPlans()
   }
+  getSettleAddressList()
 })
 
 watch(
@@ -285,7 +314,7 @@ watch(
       console.log(val, 'val')
       const { settleAddress: settleArea, typeOneNum, typeTwoNum, typeThreeNum, typeFourNum } = val
 
-      settleAddress.value = settleArea
+      settleAddress.value = parseInt(settleArea)
       areaSize.value = areaSize.value.map((item, index) => {
         if (index === 0) {
           item.num = typeOneNum
@@ -343,19 +372,19 @@ const selectPlan = (type: string, item: any) => {
     }
     return item
   })
-  console.log(real)
   tableData.value = [...real]
 }
 const placementPointInfo = ref({})
 const viewAreaDetail = async (id: any) => {
-  const res = await getPlacementPointByIdApi(id)
-  placementPointInfo.value = res as any
-  areaDetailPup.value = true
+  try {
+    const res = await getPlacementPointByIdApi(id)
+    placementPointInfo.value = res as any
+    areaDetailPup.value = true
+    nextTick(() => {
+      AreaDetailRef.value.init()
+    })
+  } catch (error) {}
 }
-/*const viewAreaDetail = (id: string) => {
-  console.log(id, 'id')
-  areaDetailPup.value = true
-}*/
 
 // 补偿补助明细
 const viewSubsidyClick = (id: number) => {

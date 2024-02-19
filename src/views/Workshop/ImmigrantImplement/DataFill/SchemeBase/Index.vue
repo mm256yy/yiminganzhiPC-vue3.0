@@ -98,6 +98,7 @@
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
                 :baseInfo="props.baseInfo"
+                :dataList="dataList"
                 @submit="immigrantSettleSubmit"
               />
             </template>
@@ -158,7 +159,6 @@ import {
   saveSimulateImmigrantSettleApi
 } from '@/api/workshop/datafill/mockResettle-service'
 
-import { DemographicDtoType } from '@/api/workshop/population/types'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { resettleHouseType, HouseType, apartmentArea } from '../config'
@@ -181,6 +181,7 @@ interface PropsType {
   baseInfo: any
 }
 
+const dataList = ref<any>()
 const props = defineProps<PropsType>()
 
 // 步骤条
@@ -279,7 +280,7 @@ const filterWay = (data) => {
     // }
     // return item
     item.disabled = false
-    if (isProductionLand.value != '1' && item.value == '1') {
+    if (data.isProductionLand != '1' && item.value == '1') {
       item.disabled = true
     }
     if (data.populationNature != '1' && item.value == '1') {
@@ -288,18 +289,21 @@ const filterWay = (data) => {
     if (data.age < 14 && item.value == '2') {
       item.disabled = true
     }
-    if (data.age < 14 && item.value != '3') {
-      item.disabled = true
-    }
+    // if (data.age < 14 && item.value != '3') {
+    //   item.disabled = true
+    // }
     return item
   })
   console.log(arr, data)
 
   return arr
 }
-
+4
 const stepClick = (id) => {
   stepIndex.value = id
+  // if (stepIndex.value == 1) {
+  //   console.log(dataList.value, '点击成功')
+  // }
 }
 
 /**
@@ -342,6 +346,7 @@ const immigrantSettleSubmit = async (params: any) => {
   }
   const datas: any = await getPlacementPointByIdApi(params.settleAddress)
   isProductionLand.value = datas.isProductionLand
+  dataList.value = res
   console.log(datas.isProductionLand, 'bbq')
 }
 const isShow = (row) => {

@@ -24,7 +24,7 @@ const router = createRouter({
           component: () => import('../views/roam/index.vue'),
           meta: {
             name: '库区漫游',
-            type: 'leader'
+            type: 'user'
           }
         },
         {
@@ -230,6 +230,7 @@ const router = createRouter({
 
 const whiteList = ['/login'] // 不重定向白名单
 router.beforeEach(async (to, from, next) => {
+  console.log(from)
   if (whiteList.indexOf(to.path) != -1 || sessionStorage.getItem('h5token')) {
     next()
   } else {
