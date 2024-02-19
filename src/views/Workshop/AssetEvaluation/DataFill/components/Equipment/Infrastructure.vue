@@ -36,7 +36,15 @@
         </ElTableColumn>
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInput placeholder="请输入单位" v-model="row.unit" />
+            <!-- <ElInput placeholder="请输入单位" v-model="row.unit" /> -->
+            <ElSelect clearable placeholder="请选择" v-model="row.unit">
+              <ElOption
+                v-for="item in dictObj[268]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
