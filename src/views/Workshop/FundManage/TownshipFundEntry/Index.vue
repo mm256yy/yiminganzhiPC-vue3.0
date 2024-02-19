@@ -12,13 +12,6 @@
           <div class="content">
             <div class="sub-title">入账金额</div>
             <div class="amount">{{ amountItem?.allAmount }}&nbsp;元</div>
-<<<<<<< HEAD
-          </div>
-          <div class="content">
-            <div class="sub-title">发放金额</div>
-            <div class="amount">{{ amountItem?.issuedAmount }}&nbsp;元</div>
-=======
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
           </div>
           <div class="content">
             <div class="sub-title">发放金额</div>
