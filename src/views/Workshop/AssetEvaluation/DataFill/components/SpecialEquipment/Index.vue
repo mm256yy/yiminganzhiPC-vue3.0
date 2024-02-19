@@ -43,7 +43,15 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.facilitiesType" />
+            <!-- <ElInput placeholder="请输入" v-model="scope.row.facilitiesType" /> -->
+            <ElSelect clearable placeholder="请选择" v-model="scope.row.facilitiesType">
+              <ElOption
+                v-for="item in dictObj[236]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -59,7 +67,15 @@
         </ElTableColumn>
         <ElTableColumn label="单位" :width="150" prop="unit" align="center" header-align="center">
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.unit" />
+            <!-- <ElInput placeholder="请输入" v-model="scope.row.unit" /> -->
+            <ElSelect clearable placeholder="请选择" v-model="scope.row.unit">
+              <ElOption
+                v-for="item in dictObj[268]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="150" prop="number" align="center" header-align="center">
@@ -161,7 +177,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, computed } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -173,7 +189,9 @@ import {
   ElMessageBox,
   ElMessage,
   ElDialog,
-  ElFormItem
+  ElFormItem,
+  ElSelect,
+  ElOption
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
@@ -182,7 +200,9 @@ import {
   deleteSpecialEquipmentApi
 } from '@/api/AssetEvaluation/specialEquipment-service'
 import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
-
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
   doorNo: string
   householdId: number

@@ -4,7 +4,7 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div>
-          备设施评估合计：
+          设备设施评估合计：
           <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
         </div>
         <ElSpace>
@@ -31,14 +31,15 @@
         </ElTableColumn>
         <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.size">
+            <ElInput placeholder="请输入" v-model="row.size" />
+            <!-- <ElSelect clearable placeholder="请选择" v-model="row.size">
               <ElOption
                 v-for="item in dictObj[267]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
+            </ElSelect> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
@@ -66,14 +67,15 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.purpose">
+            <ElInput placeholder="请输入" v-model="row.purpose" />
+            <!-- <ElSelect clearable placeholder="请选择" v-model="row.purpose">
               <ElOption
                 v-for="item in dictObj[265]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
+            </ElSelect> -->
           </template>
         </ElTableColumn>
         <ElTableColumn
