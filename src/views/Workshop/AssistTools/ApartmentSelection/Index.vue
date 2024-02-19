@@ -215,7 +215,8 @@ const baseInfo = ref<any>()
 const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
-
+const pageSize = ref(10)
+const pageNum = ref(1)
 
 tableObject.params = {
   projectId,

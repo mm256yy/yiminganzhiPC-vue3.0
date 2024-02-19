@@ -219,8 +219,6 @@ const handleCollection = (row: any) => {
   console.log('row', row)
   const type = 'household'
   const routeName = 'Household' // 一户一档
-
-
   const query = { type }
   try {
     push({

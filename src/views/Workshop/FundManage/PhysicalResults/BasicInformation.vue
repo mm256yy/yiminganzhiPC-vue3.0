@@ -246,7 +246,6 @@ onMounted(() => {
 })
 </script>
 
-<<<<<<< HEAD
 <style lang="less" scoped>
 .line {
   width: 100%;
@@ -254,6 +253,3 @@ onMounted(() => {
   background-color: #e7edfd;
 }
 </style>
-=======
-<style lang="less" scoped></style>
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
