@@ -59,7 +59,7 @@
         border
       >
         <ElTableColumn label="序号" width="80" align="center" type="index" header-align="center" />
-        <ElTableColumn label="项目名称" align="center" prop="name" header-align="center" />
+        <ElTableColumn label="项目名称" align="left" prop="name" header-align="center" />
         <ElTableColumn label="项目编码" prop="code" align="center" header-align="center" />
         <ElTableColumn
           label="概算投资"

@@ -164,7 +164,7 @@ const setAllocationStatus = (targ) => {
   setSearchParams({
     type: 'Company',
     status: SurveyStatusEnum.Implementation,
-    allocationStatus: targ == 1 ? 1 : targ == 0 ? null : targ == 2 ? 0 : null
+    allocationStatus: targ == 1 ? 1 : targ == 0 ? null : targ == 2 ? '0' : null
   })
 }
 defineExpose({ setAllocationStatus })

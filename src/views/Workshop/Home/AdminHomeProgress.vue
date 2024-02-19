@@ -10,11 +10,16 @@
     </ElButton>
     <div>
       <div class="between process-segment" v-loading="processLoading">
-        <div class="between" v-for="(item, index) in newarr" :key="index" @click="checktab(index)">
+        <div
+          class="between"
+          v-for="(item, index) in newarr"
+          :key="index"
+          @click="checktab(index, item)"
+        >
           <div class="arrow" v-if="index > 0"><img :src="arrow" /></div>
           <ElPopover :width="200" placement="right">
             <template #reference>
-              <div class="header-list" :class="[currentCheckTabIndex === index ? 'active' : '']">
+              <div class="header-list" :class="[currentCheckTabIndex == item.name ? 'active' : '']">
                 <LiquidBall :title="item.name" :values="item.actual" />
               </div>
             </template>
@@ -187,7 +192,8 @@ const contentDialog = ref<boolean>(false)
 const contentLoading = ref<boolean>(false)
 const warnListLoading = ref<boolean>(false)
 const newarr = ref<any>([])
-const currentCheckTabIndex = ref<number>(0)
+const { back, currentRoute } = useRouter()
+const currentCheckTabIndex = ref<any>(currentRoute.value.query.name)
 
 const tableData1 = ref<any[]>([])
 const tableData2 = ref<any[]>([])
@@ -299,8 +305,8 @@ onMounted(() => {
   requestWarningTypeList()
 })
 
-const checktab = (index) => {
-  currentCheckTabIndex.value = index
+const checktab = (index, item) => {
+  currentCheckTabIndex.value = item.name
   type.value = index + 1
   getVillageScheduleList()
   parmas.value.type = type.value
@@ -395,7 +401,6 @@ const householdOption = ref({
   ]
 })
 
-const { back } = useRouter()
 const onBack = () => {
   back()
 }

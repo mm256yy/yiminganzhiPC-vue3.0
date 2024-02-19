@@ -33,10 +33,8 @@
         height="560"
         @register="register"
       >
-        <template #collection="{ row }">
-          <ElButton size="small" type="primary" text @click="handleCollection(row)"
-            >平台采集</ElButton
-          >
+        <template #collection>
+          <ElButton size="small" type="primary" text @click="handleCollection()">平台采集</ElButton>
         </template>
         <template #archiving="{ row }">
           <ElButton size="small" type="primary" text @click="handleArchiving(row)"
@@ -214,7 +212,7 @@ const getVillageTree = async () => {
 }
 
 // 平台采集查看
-const handleCollection = (row: any) => {
+const handleCollection = () => {
   const type = 'FileProfessionalProject'
   const routeName = 'FileProfessionalProject' // 专业项目
 
@@ -276,15 +274,15 @@ onMounted(() => {
   color: 14px;
 
   .title-label {
+    font-size: 16px;
     font-weight: bold;
     color: #333;
-    font-size: 16px;
   }
 
   .title-number {
     font-size: 16px;
-    color: #1890ff;
     font-weight: bold;
+    color: #1890ff;
   }
 }
 

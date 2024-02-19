@@ -29,12 +29,7 @@
         :cell-style="handelCellStyle"
       >
         <template #name="{ row }">
-          <el-select
-            v-model="row.name"
-            class="m-2"
-            placeholder="Select"
-            @change="(val) => handelSelectchange(row, val)"
-          >
+          <el-select v-model="row.name" class="m-2" @change="(val) => handelSelectchange(row, val)">
             <el-option
               v-for="item in row.familyMembers"
               :key="item.id"
@@ -53,7 +48,7 @@
             type="textnumber"
             :disabled="!row.pid"
           >
-            <!-- <template #prepend v-if="row.pid">{{ row.noDoor }}</template> -->
+            <template #prepend>{{ row.noDoor }}</template>
           </el-input>
           <el-input
             v-else
@@ -63,7 +58,7 @@
             type="textnumber"
             :disabled="!row.pid"
           >
-            <!-- <template #prepend v-if="row.pid">{{ row.noDoor }}</template> -->
+            <!-- <template #prepend>{{ row.noDoor }}</template> -->
           </el-input>
         </template>
         <template #totalPrice="{ row }">
@@ -312,7 +307,7 @@ let handleEdit = (row) => {
             pid: row.showDoorNo,
             familyMembers: row.familyMembers,
             listBoy: [],
-            noDoor: row.doorNo.slice(0, 2)
+            noDoor: row.doorNo.slice(2, 5)
           })
         : (item.children = [
             {
@@ -326,7 +321,7 @@ let handleEdit = (row) => {
               pid: row.showDoorNo,
               familyMembers: row.familyMembers,
               listBoy: [],
-              noDoor: row.doorNo.slice(0, 2)
+              noDoor: row.doorNo.slice(2, 5)
             }
           ])
     }

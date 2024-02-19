@@ -50,7 +50,7 @@ export default defineComponent({
   },
   emits: ['update:pageSize', 'update:currentPage', 'register'],
   setup(props, { attrs, slots, emit, expose }) {
-    const elTableRef = ref<ComponentRef<typeof ElTable>>()
+    const elTableRef: any = ref<ComponentRef<typeof ElTable>>()
 
     // 注册
     onMounted(() => {
@@ -106,13 +106,25 @@ export default defineComponent({
     const selectionChange = (selection: Recordable[]) => {
       selections.value = selection
     }
-
+    let setSelection = (selection) => {
+      //多选回显
+      unref(getProps).data.forEach((item) => {
+        let m = false
+        selection.forEach((six) => {
+          if (item.id === six.id) {
+            m = true
+          }
+        })
+        elTableRef.value.toggleRowSelection(item, m ? true : false)
+      })
+    }
     expose({
       setProps,
       setColumn,
       selections,
       elTableRef,
-      setColumns
+      setColumns,
+      setSelection
     })
 
     const pagination = computed(() => {

@@ -107,7 +107,7 @@ const onTabList = (tabItem) => {
     return
   }
   tabListId.value = tabItem.id
-  console.log(tabCurrentId.value, '123123123')
+  console.log(tabCurrentId.value, '123123123', tabItem)
   vill.value.setAllocationStatus(tabItem.id)
 }
 </script>

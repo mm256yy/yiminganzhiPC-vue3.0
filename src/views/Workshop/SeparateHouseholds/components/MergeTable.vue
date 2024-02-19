@@ -17,12 +17,17 @@
       >
         <ElTableColumn type="selection" width="55" />
         <ElTableColumn prop="name" label="户主姓名" />
-        <ElTableColumn prop="doorNo" label="户号" />
+        <ElTableColumn prop="showDoorNo" label="户号" />
         <ElTableColumn prop="villageName" label="行政村" />
         <ElTableColumn prop="familyMembers" label="家庭成员">
           <template #default="{ row }"> {{ joninFamily(row.familyMembers) }}</template>
         </ElTableColumn>
         <ElTableColumn prop="address" label="户籍地址" />
+        <ElTableColumn fixed="right" label="操作">
+          <template #default="{ row }">
+            <el-button link type="primary" size="small" @click="handleClick(row)">删除</el-button>
+          </template>
+        </ElTableColumn>
       </ElTable>
       <div class="pb-12px pt-12px">
         <div> <ElSwitch v-model="switchs" @change="switchChange" /> 是否指定新户主</div>
@@ -161,7 +166,7 @@ const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
   {
     field: 'blurry',
-    label: '输入待拆分农户',
+    label: '输入农户',
     search: {
       show: true,
       component: 'Input',
@@ -187,7 +192,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: false
@@ -234,14 +239,34 @@ let switchChange = (val) => {
   }
 }
 let select = () => {
+  // tabalRef.value?.selections = tableData.value
   setSearchParams({ type: 'PeasantHousehold' })
   dialogTableVisible.value = true
+  setTimeout(() => {
+    setSelection()
+  }, 1000)
+}
+let setSelection = () => {
+  console.log(tableData.value)
+
+  tabalRef.value.setSelection(tableData.value)
 }
 let selectAdd = () => {
   dialogTableVisible.value = false
+  console.log(tabalRef.value.selections)
+  tableData.value = tableData.value.concat(tabalRef.value.selections)
+  console.log(tableData.value)
 
-  tableData.value = tabalRef.value.selections
-  tabalRef.value.selections = []
+  tableData.value = tableData.value.reduce((pre, item) => {
+    if (pre.find((pix) => pix.id == item.id)) {
+      return pre
+    } else {
+      pre.push(item)
+      return pre
+    }
+  }, [])
+
+  // tabalRef.value.selections = []
   form.options = tableData.value.reduce((pre, item) => {
     pre = pre.concat(item.familyMembers)
     return pre
@@ -264,44 +289,66 @@ let handleSelectionChange = (val) => {
   form.selenctTable = val
 }
 let selectsum = () => {
-  let params = {
-    doorNos: [],
-    type: '',
-    doorNo: '',
-    villageCode: '',
-    householderId: 0,
-    virutalVillageCode: ''
-  }
-  params.doorNos = tableData.value.map((item) => item.doorNo)
-  if (switchs.value) {
-    params.type = '2'
-    params.doorNo = form.doorn
-    params.householderId = form.valueFamliy
-    params.villageCode = form.value[2]
-    params.virutalVillageCode = form.value[3]
+  if (form.selenctTable.length == 0 && !switchs.value) {
+    ElMessage({
+      message: '请选择户主',
+      type: 'warning'
+    })
+  } else if (switchs.value && !form.value) {
+    ElMessage({
+      message: '请选择自然村',
+      type: 'warning'
+    })
+  } else if (switchs.value && !form.valueFamliy) {
+    ElMessage({
+      message: '请选择新户主',
+      type: 'warning'
+    })
+  } else if (switchs.value && !form.doorn) {
+    ElMessage({
+      message: '请选择新户号',
+      type: 'warning'
+    })
   } else {
-    params.type = '1'
-    params.doorNo = form.selenctTable.map((item) => item.doorNo)[0]
-    form.selenctTable[0].familyMembers.forEach((item) => {
-      if (item.name == form.selenctTable[0].name) {
-        params.householderId = item.id
+    let params = {
+      doorNos: [],
+      type: '',
+      doorNo: '',
+      villageCode: '',
+      householderId: 0,
+      virutalVillageCode: ''
+    }
+    params.doorNos = tableData.value.map((item) => item.doorNo)
+    if (switchs.value) {
+      params.type = '2'
+      params.doorNo = form.doorn
+      params.householderId = form.valueFamliy
+      params.villageCode = form.value[2]
+      params.virutalVillageCode = form.value[3]
+    } else {
+      params.type = '1'
+      params.doorNo = form.selenctTable.map((item) => item.doorNo)[0]
+      form.selenctTable[0].familyMembers.forEach((item) => {
+        if (item.name == form.selenctTable[0].name) {
+          params.householderId = item.id
+        }
+      })
+      params.villageCode = form.selenctTable[0].villageCode
+    }
+
+    console.log(params)
+    postMerge(params).then((res) => {
+      console.log(res)
+      if (res) {
+        ElMessage({
+          message: '合并成功',
+          type: 'success'
+        })
+        tableData.value = []
+        switchs.value = false
       }
     })
-    params.villageCode = form.selenctTable[0].villageCode
   }
-
-  console.log(params)
-  postMerge(params).then((res) => {
-    console.log(res)
-    if (res) {
-      ElMessage({
-        message: '合并成功',
-        type: 'success'
-      })
-      tableData.value = []
-      switchs.value = false
-    }
-  })
 }
 const onSearch = (data) => {
   //解决是否户主relation入参变化
@@ -353,6 +400,12 @@ const onSearch = (data) => {
 let setSearchParamss = () => {
   tableObject.params = {}
   setSearchParams({ type: 'PeasantHousehold' })
+}
+let handleClick = (row) => {
+  console.log(row)
+  tableData.value = tableData.value.filter((item) => {
+    return item.doorNo != row.doorNo
+  })
 }
 </script>
 

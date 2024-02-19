@@ -20,8 +20,8 @@
       <ElRow :gutter="30">
         <ElCol :span="8">
           <ElFormItem label="设施名称" prop="facilitiesName">
-            <!-- <ElInput v-model="form.facilitiesName" placeholder="设施名称" class="!w-full" /> -->
-            <ElSelect
+            <ElInput v-model="form.facilitiesName" placeholder="设施名称" class="!w-full" />
+            <!-- <ElSelect
               clearable
               filterable
               v-model="form.facilitiesName"
@@ -34,7 +34,7 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
+            </ElSelect> -->
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">

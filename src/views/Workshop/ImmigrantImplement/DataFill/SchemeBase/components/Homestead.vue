@@ -82,7 +82,7 @@ interface PropsType {
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
-  dataList: any
+  dataList?: any
 }
 
 const emit = defineEmits(['submit'])
