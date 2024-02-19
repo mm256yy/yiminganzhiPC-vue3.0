@@ -1,6 +1,5 @@
 <template>
   <WorkContentWrap>
-<<<<<<< HEAD
     <div class="search-wrap">
       <Search
         :schema="allSchemas.searchSchema"
@@ -20,13 +19,6 @@
         ref="tableRef"
         :data="tableObject.tableList"
         :columns="schemas.columns"
-=======
-    <div class="table-wrap" v-loading="tableLoading">
-      <Table
-        ref="tableRef"
-        :data="tableObject.tableList"
-        :columns="allSchemas.columns"
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
         :showOverflowTooltip="true"
         tableLayout="auto"
         row-key="id"
@@ -41,7 +33,6 @@
 
 <script lang="ts" setup>
 import { reactive, onMounted, ref } from 'vue'
-<<<<<<< HEAD
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
@@ -119,19 +110,6 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-=======
-import { WorkContentWrap } from '@/components/ContentWrap'
-import { Table } from '@/components/Table'
-import { useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getEnterpriseAppendant } from '@/api/fundManage/fundPayment-service'
-
-let tableRef = ref()
-const tableLoading = ref<boolean>(false)
-let allSchemas = reactive<any>({
-  columns: []
-})
-
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
 let tableObject = reactive({
   tableList: []
 })
@@ -199,11 +177,7 @@ const requestHouseAccessory = async () => {
       }
     })
     let allData = useCrudSchemas(column)
-<<<<<<< HEAD
     schemas.columns = allData.allSchemas.tableColumns
-=======
-    allSchemas.columns = allData.allSchemas.tableColumns
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
     tableObject.tableList = result.list.reduce((pre, iem) => {
       pre.push({ ...iem })
       return pre
@@ -214,7 +188,6 @@ const requestHouseAccessory = async () => {
   }
 }
 
-<<<<<<< HEAD
 const onSearch = (data) => {
   // 处理参数
   let params = {
@@ -275,9 +248,3 @@ onMounted(() => {
   background-color: #e7edfd;
 }
 </style>
-=======
-onMounted(() => {
-  requestHouseAccessory()
-})
-</script>
->>>>>>> a36f2fa55c4167857a1f4d6a5f9b2c205ab62912
