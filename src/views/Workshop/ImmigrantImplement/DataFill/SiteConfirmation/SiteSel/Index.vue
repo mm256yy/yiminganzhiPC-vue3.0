@@ -34,7 +34,13 @@
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center" />
+        <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center">
+          <template #default="{ row }">
+            {{
+              homesteadAreaSize.filter((item) => item.id == row.area).map((item) => item.name)[0]
+            }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
@@ -94,7 +100,13 @@
           prop="area"
           align="center"
           header-align="center"
-        />
+        >
+          <template #default="{ row }">
+            {{
+              homesteadAreaSize.filter((item) => item.id == row.area).map((item) => item.name)[0]
+            }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
@@ -344,7 +356,7 @@ import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-serv
 import dayjs from 'dayjs'
 import { htmlToPdf } from '@/utils/ptf'
 import { debounce } from '@/utils/index'
-
+import { homesteadAreaSize } from '../../config'
 interface PropsType {
   doorNo: string
   baseInfo: any

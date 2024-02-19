@@ -72,7 +72,12 @@
         </template>
       </Label>
       <div class="table_box">
-        <ElTable :data="questionList" style="width: 100%; max-height: 200px" :border="true">
+        <ElTable
+          :data="questionList"
+          style="width: 100%; max-height: 200px"
+          :border="true"
+          @row-dblclick="checkNewsss"
+        >
           <ElTableColumn
             label="序号"
             type="index"
@@ -252,7 +257,10 @@ const handleClickItem = (type: number) => {
   }
   push({ name: pathMap[type] })
 }
-
+let checkNewsss = (row) => {
+  console.log(row)
+  push(`/Feedback/FeedbackDetail?id=${row.id}`)
+}
 onMounted(() => {
   requestNewsData()
   feedback()

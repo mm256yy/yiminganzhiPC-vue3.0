@@ -247,6 +247,8 @@ let select = () => {
   }, 1000)
 }
 let setSelection = () => {
+  console.log(tableData.value)
+
   tabalRef.value.setSelection(tableData.value)
 }
 let selectAdd = () => {

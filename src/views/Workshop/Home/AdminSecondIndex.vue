@@ -252,7 +252,12 @@
           </div>
           <div v-if="typeNumber != 4" class="display-flex gender-list">
             <div>总人口</div>
-            <div class="gender-txt">{{ villageAnalysisNumber }}人</div>
+            <div class="gender-txt"
+              >{{ villageAnalysisNumber
+              }}{{
+                typeNumber == 2 ? '户' : typeNumber == 3 ? '元' : typeNumber == 5 ? '元' : '人'
+              }}</div
+            >
           </div>
           <div v-else class="center gender-list">
             <div>总土地</div>
