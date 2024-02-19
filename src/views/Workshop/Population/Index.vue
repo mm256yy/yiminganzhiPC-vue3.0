@@ -44,7 +44,7 @@
                 <div class="flex-none w-398px m-lr-20px">
                   {{ item.remark }}
                 </div>
-                <div class="status flex-shrink-0">
+                <div class="status flex-shrink-0" style="display: flex">
                   <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px">
                       ( 共导入 <span class="number">{{ item.demographicNum }}</span> 人，
