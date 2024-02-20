@@ -140,7 +140,7 @@ const getSummaries = (params: any) => {
       sums[index] = '合计'
       return
     }
-    if (index < 3) {
+    if (index < 4) {
       sums[index] = ''
       return
     }

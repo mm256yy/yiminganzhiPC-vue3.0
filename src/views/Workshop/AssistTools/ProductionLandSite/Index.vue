@@ -58,7 +58,6 @@
             align="center"
             header-align="center"
           />
-          <ElTableColumn label="户型" prop="area" align="center" header-align="center" />
           <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
             <template #default="{ row }">
               <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
@@ -140,6 +139,7 @@ import { useAppStore } from '@/store/modules/app'
 import DefaultUpload from '../components/DefaultUpload.vue'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { useTable } from '@/hooks/web/useTable'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
 const dictStore = useDictStoreWithOut()
@@ -152,14 +152,36 @@ const emit = defineEmits(['updateData'])
 const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
 const pageNum = ref(1)
-// const totalNum = ref(0)
 tableObject.params = {
   projectId,
   status: 'implementation'
+}
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        label: item.name,
+        value: item.name
+      }
+    })
+    placementPointList.value = list
+  } catch {
+    placementPointList.value = []
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -212,13 +234,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settleAddress"',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入户主名称'
+        options: placementPointList as any
       }
     },
     table: {
@@ -296,7 +318,6 @@ const getList = async () => {
     })
 
     arr.map(async (item: any) => {
-      // item.settleAddress
       item.landNoOptions = await getLandNoList()
     })
 
@@ -353,6 +374,7 @@ const getLandNoList = async () => {
 onMounted(() => {
   getVillageTree()
   getList()
+  getPlacementPointList()
 })
 </script>
 <style lang="less" scoped>

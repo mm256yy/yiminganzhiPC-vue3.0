@@ -146,6 +146,7 @@ import { useAppStore } from '@/store/modules/app'
 import FileUpload from '../components/FileUpload.vue'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { useTable } from '@/hooks/web/useTable'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
 const dictStore = useDictStoreWithOut()
@@ -159,6 +160,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>()
+const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
@@ -166,6 +168,28 @@ const pageNum = ref(1)
 tableObject.params = {
   projectId,
   status: 'implementation'
+}
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        label: item.name,
+        value: item.name
+      }
+    })
+    placementPointList.value = list
+  } catch {
+    placementPointList.value = []
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -222,9 +246,9 @@ const schema = reactive<CrudSchema[]>([
     label: '安置点',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入户主名称'
+        options: placementPointList as any
       }
     },
     table: {
@@ -365,6 +389,7 @@ const getLandNoList = async (settleAddress?: string) => {
 onMounted(() => {
   getVillageTree()
   getList()
+  getPlacementPointList()
 })
 </script>
 <style lang="less" scoped>

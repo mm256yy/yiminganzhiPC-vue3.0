@@ -201,8 +201,6 @@ import { useTable } from '@/hooks/web/useTable'
 import FileUpload from '../components/FileUpload.vue'
 
 const dialog = ref<boolean>(false)
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const doorNo = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
@@ -221,6 +219,28 @@ const pageNum = ref(1)
 tableObject.params = {
   projectId,
   status: 'implementation'
+}
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        label: item.name,
+        value: item.name
+      }
+    })
+    placementPointList.value = list
+  } catch {
+    placementPointList.value = []
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -277,33 +297,16 @@ const schema = reactive<CrudSchema[]>([
     label: '安置点',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入户主名称'
+        options: placementPointList as any
       }
+    },
+    table: {
+      show: false
     }
   }
 ])
-
-const getPlacementPointList = async () => {
-  const params = {
-    projectId,
-    status: 'implementation',
-    type: '2',
-    size: 9999,
-    page: 0
-  }
-  try {
-    const result = await getPlacementPointListApi(params)
-    const list = result.content.map((item) => {
-      return {
-        value: item.name,
-        label: item.name
-      }
-    })
-    placementPointList.value = list
-  } catch {}
-}
 
 const { allSchemas } = useCrudSchemas(schema)
 

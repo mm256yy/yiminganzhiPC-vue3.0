@@ -57,7 +57,13 @@
           <ElTableColumn prop="number" label="数量" align="center" />
           <ElTableColumn prop="handleWay" label="处理方式" align="center">
             <template #default="{ row }">
-              <ElSelect clearable filterable placeholder="请选择" v-model="row.handleWay">
+              <ElSelect
+                clearable
+                filterable
+                placeholder="请选择"
+                v-model="row.handleWay"
+                @change="handleSelectChange"
+              >
                 <ElOption
                   v-for="item in dictObj[238]"
                   :key="item.value"
@@ -69,7 +75,13 @@
           </ElTableColumn>
           <ElTableColumn prop="settingGrave" label="安置公墓/择址地址" align="center">
             <template #default="{ row }">
-              <ElSelect clearable filterable placeholder="请选择" v-model="row.settingGrave">
+              <ElSelect
+                v-if="isTomb"
+                clearable
+                filterable
+                placeholder="请选择"
+                v-model="row.settingGrave"
+              >
                 <ElOption
                   v-for="item in dictObj[377]"
                   :key="item.value"
@@ -77,6 +89,7 @@
                   :value="item.value"
                 />
               </ElSelect>
+              <ElInput v-else placeholder="请输入" v-model="row.settingGrave" />
             </template>
           </ElTableColumn>
           <ElTableColumn prop="graveNo" label="坟墓编号" align="center">
@@ -154,6 +167,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const tableLoading = ref<boolean>(false)
+const isTomb = ref<boolean>(false)
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
@@ -247,6 +261,10 @@ const onReset = () => {
     status: 'implementation'
   }
   getList()
+}
+
+const handleSelectChange = (value: any) => {
+  isTomb.value = value === '2'
 }
 
 const handleSizeChange = (val: number) => {
