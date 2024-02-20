@@ -260,45 +260,63 @@ const filterHouseType = () => {
 /**
  * 安置方式过滤
  */
+// const filterWay = (data) => {
+//   const arr = cloneDeep(dictObj.value[375]).map((item) => {
+//     // 农村移民的 其他性质
+//     // const notFarmer = data.populationNature !== '1'
+//     // if (
+//     //   notFarmer &&
+//     //   item.value === '1' &&
+//     //   immigrantSettle.value &&
+//     //   immigrantSettle.value.settingAddress !== apartmentArea[1].id
+//     // ) {
+//     //   item.disabled = true
+//     // }
+//     // if (data.age < 14 && item.value !== '3') {
+//     //   item.disabled = true
+//     // }
+//     // if (item.value == '1' && !notFarmer) {
+//     //   item.disabled = true
+//     // }
+//     // return item
+//     item.disabled = false
+//     if (data.isProductionLand != '1' && item.value == '1') {
+//       item.disabled = true
+//     }
+//     if (data.populationNature != '1' && item.value == '1') {
+//       item.disabled = true
+//     }
+//     if (data.age < 14 && item.value == '2') {
+//       item.disabled = true
+//     }
+//     // if (data.age < 14 && item.value != '3') {
+//     //   item.disabled = true
+//     // }
+//     return item
+//   })
+//   console.log(arr, data)
+
+//   return arr
+// }
 const filterWay = (data) => {
   const arr = cloneDeep(dictObj.value[375]).map((item) => {
     // 农村移民的 其他性质
-    // const notFarmer = data.populationNature !== '1'
-    // if (
-    //   notFarmer &&
-    //   item.value === '1' &&
-    //   immigrantSettle.value &&
-    //   immigrantSettle.value.settingAddress !== apartmentArea[1].id
-    // ) {
-    //   item.disabled = true
-    // }
-    // if (data.age < 14 && item.value !== '3') {
-    //   item.disabled = true
-    // }
-    // if (item.value == '1' && !notFarmer) {
-    //   item.disabled = true
-    // }
-    // return item
     item.disabled = false
-    if (data.isProductionLand != '1' && item.value == '1') {
+    const notFarmer = data.populationNature !== '1'
+    if (notFarmer && item.value === '1') {
       item.disabled = true
     }
-    if (data.populationNature != '1' && item.value == '1') {
+    if (item.value === '1' && data.isProductionLand != '1') {
       item.disabled = true
     }
-    if (data.age < 14 && item.value == '2') {
+    data.age = data.birthday ? parseInt(dayjs(data.birthday).fromNow().replace(/\D+/, '')) : 0
+    if (data.age < 14 && item.value !== '3' && item.value != '1') {
       item.disabled = true
     }
-    // if (data.age < 14 && item.value != '3') {
-    //   item.disabled = true
-    // }
     return item
   })
-  console.log(arr, data)
-
   return arr
 }
-4
 const stepClick = (id) => {
   stepIndex.value = id
   // if (stepIndex.value == 1) {

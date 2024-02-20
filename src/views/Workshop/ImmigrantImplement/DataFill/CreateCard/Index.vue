@@ -149,20 +149,11 @@
       :show="rewardConfirmDialog"
       :door-no="props.doorNo"
       @close="close('rewardConfirm')"
+      :id="1"
     />
 
-    <div
-      style="
-        position: fixed;
-        left: -1000px;
-        display: flex;
-        width: 340mm;
-        padding: 0 10px 0 10px;
-        border: 1px solid black;
-      "
-      id="print"
-    >
-      <div style="width: 50%">
+    <div style="display: flex; width: 340mm; padding: 10px 10px 0px 10px" id="print">
+      <div style="width: 50%; padding-right: 10px">
         <h1 style="font-size: 24px; text-align: center">移民协议补偿登记卡</h1>
         <div
           style="
@@ -236,19 +227,11 @@
             :key="item.field"
           />
         </el-table>
-        <div
-          style="
-            display: flex;
-            width: 100%;
-            height: 55%;
-            border: 1px solid black;
-            align-items: center;
-          "
-        >
+        <div style="display: flex; width: 100%; height: 55%; align-items: center">
           <div style="padding-left: 20px">制发单位（盖章）：</div>
         </div>
       </div>
-      <div style="width: 50%">
+      <div style="width: 50%; padding-left: 10px">
         <ElTable
           :data="feeTableData"
           :span-method="objectSpanMethod"
@@ -258,6 +241,7 @@
           show-summary
           :summary-method="getSummariese"
           border
+          :row-style="{ height: '27px' }"
         >
           <ElTableColumn label="类型" align="center" prop="type" header-align="center">
             <template #default="{ row }">
@@ -265,12 +249,12 @@
             </template>
           </ElTableColumn>
           <ElTableColumn label="指标名称" prop="name" align="center" header-align="center" />
-          <ElTableColumn label="单位" prop="unit" align="center" header-align="center">
+          <ElTableColumn label="单位" width="60" prop="unit" align="center" header-align="center">
             <template #default="{ row }">
               {{ row.unit ? row.unit : '——' }}
             </template>
           </ElTableColumn>
-          <ElTableColumn label="数量" prop="number" align="center" header-align="center">
+          <ElTableColumn label="数量" width="60" prop="number" align="center" header-align="center">
             <template #default="{ row }">
               <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
                 {{ row.number }}
@@ -341,7 +325,7 @@ import {
 
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
+import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted } from 'vue'
 import { htmlToPdf } from '@/utils/ptf'
 import { getRelocationInfoApi } from '@/api/putIntoEffect/relocation'

@@ -321,7 +321,7 @@ const getRelocationInfo = async () => {
     houseType.value = res.houseAreaType
     await getSettleAddressList()
     immigrantSettle.value = res
-    console.log(res, 'bbq')
+    console.log(res, 'aaaa')
   }
 }
 const appStore = useAppStore()
@@ -397,6 +397,8 @@ watch(
             num: res.typeFourNum
           })
         }
+        console.log(array, 'aaa')
+
         tableData.value = array
       }
     } else {

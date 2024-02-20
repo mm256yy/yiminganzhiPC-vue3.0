@@ -32,7 +32,7 @@
           <ElRow>
             <ElCol :span="24">
               <ElFormItem label="区块：">
-                {{ getSettleAddress(form.settleAddress) }}
+                {{ form.settleAddressText }}
               </ElFormItem>
             </ElCol>
           </ElRow>

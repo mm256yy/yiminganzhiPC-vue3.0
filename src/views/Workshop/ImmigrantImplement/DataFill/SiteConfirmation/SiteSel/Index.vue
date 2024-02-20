@@ -37,7 +37,11 @@
         <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center">
           <template #default="{ row }">
             {{
-              homesteadAreaSize.filter((item) => item.id == row.area).map((item) => item.name)[0]
+              row.houseAreaType === 'flat'
+                ? row.area
+                : homesteadAreaSize
+                    .filter((item) => item.id == row.area)
+                    .map((item) => item.name)[0]
             }}
           </template>
         </ElTableColumn>
@@ -102,9 +106,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            {{
-              homesteadAreaSize.filter((item) => item.id == row.area).map((item) => item.name)[0]
-            }}
+            {{ row.area }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
@@ -405,6 +407,8 @@ const getList = () => {
           '测试数据'
         )
       })
+      console.log(arr, 'bbq')
+
       tableData.value = arr
       // setTimeout(() => {
       //   tableData.value = [...arr]

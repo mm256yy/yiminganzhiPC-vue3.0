@@ -85,23 +85,23 @@
 
           <div class="row">
             <span class="label">税务登记编号：</span>
-            <span class="value">{{ formList.taxLicenceNo || '无' }}</span>
+            <span class="value">{{ formList?.taxLicenceNo || '无' }}</span>
           </div>
         </div>
         <div class="row-cont">
           <div class="row">
             <span class="label">注册资金（万元）：</span>
-            <span class="value">{{ formList.registeredAmount || '无' }}</span>
+            <span class="value">{{ formList?.registeredAmount || '无' }}</span>
           </div>
 
           <div class="row">
             <span class="label">登记注册类型：</span>
-            <span class="value">{{ formList.registerTypeText || '无' }}</span>
+            <span class="value">{{ formList?.registerTypeText || '无' }}</span>
           </div>
           <div class="row">
             <span class="label">成立日期：</span>
             <span class="value">{{
-              formList.establishDate
+              formList?.establishDate
                 ? dayjs(formList.establishDate).format('YYYY-MM-DD HH:mm:ss')
                 : '-'
             }}</span>
@@ -109,7 +109,7 @@
         </div>
         <div class="row">
           <span class="label">经营范围：</span>
-          <span class="value">{{ formList.natureBusiness || '无' }}</span>
+          <span class="value">{{ formList?.natureBusiness || '无' }}</span>
         </div>
       </div>
       <div class="flex items-center justify-between pb-12px mt-20px">
@@ -194,6 +194,7 @@
       :show="rewardConfirmDialog"
       :door-no="props.doorNo"
       @close="close('rewardConfirm')"
+      :id="2"
     />
   </WorkContentWrap>
 </template>
@@ -227,7 +228,8 @@ import {
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
+import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
+// import ConfirmReward from './ConfirmReward.vue'
 import { onMounted } from 'vue'
 
 interface PropsType {
