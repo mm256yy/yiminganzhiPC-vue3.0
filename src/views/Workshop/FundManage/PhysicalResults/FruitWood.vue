@@ -9,14 +9,19 @@
         @reset="onReset"
       />
     </div>
+    <div class="line"></div>
     <div class="table-wrap" v-loading="tableLoading">
+      <div class="flex items-center justify-between pb-5px">
+        <div class="table-left-title">零星林（果）木统计表 </div>
+        <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
+      </div>
       <Table
         ref="tableRef"
         :data="tableObject.tableList"
         :columns="schemas.columns"
         highlightCurrentRow
-        height="550"
-        style="width: 100%; max-height: 550px"
+        height="600"
+        style="width: 100%; max-height: 600px"
       />
     </div>
   </WorkContentWrap>
@@ -192,8 +197,35 @@ const getdistrictTree = async () => {
   return list || []
 }
 
+const onExport = () => {
+  // const params = {}
+  // const res = await exportIndividualHouseholdTree(params)
+  // let filename = res.headers
+  // filename = filename['content-disposition']
+  // filename = filename.split(';')[1].split('filename=')[1]
+  // filename = decodeURIComponent(filename)
+  // let elink = document.createElement('a')
+  // document.body.appendChild(elink)
+  // elink.style.display = 'none'
+  // elink.download = filename
+  // let blob = new Blob([res.data])
+  // const URL = window.URL || window.webkitURL
+  // elink.href = URL.createObjectURL(blob)
+  // elink.click()
+  // document.body.removeChild(elink)
+  // URL.revokeObjectURL(elink.href)
+}
+
 onMounted(() => {
   requestFruitWood()
   getdistrictTree()
 })
 </script>
+
+<style lang="less" scoped>
+.line {
+  width: 100%;
+  height: 10px;
+  background-color: #e7edfd;
+}
+</style>

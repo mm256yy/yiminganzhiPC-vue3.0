@@ -290,7 +290,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchTombFileApi(tableList).then(() => {

@@ -12,7 +12,7 @@
     <div class="line"></div>
     <div class="table-wrap" v-loading="tableLoading">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title">企业基本情况统计表 </div>
+        <div class="table-left-title">房屋及其附属物统计表 </div>
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
@@ -33,6 +33,7 @@
 
 <script lang="ts" setup>
 import { reactive, onMounted, ref } from 'vue'
+import { ElButton } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'

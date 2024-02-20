@@ -243,6 +243,8 @@ const onRowUpload = (row: any) => {
     houseAreaType: 'homestead' // 宅基地
   }
 
+  console.log('ZZZX', baseInfo.value)
+
   dialog.value = true
 }
 
@@ -324,7 +326,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchFileApi(tableList).then(() => {

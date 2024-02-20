@@ -56,12 +56,9 @@ import { useTable } from '@/hooks/web/useTable'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { ElTable, ElTableColumn, ElPagination, ElButton } from 'element-plus'
-import {
-  getEnterprise,
-  deleteFunPayApi,
-  getFunPaySumAmountApi
-} from '@/api/fundManage/fundPayment-service'
+import { getEnterprise, getFunPaySumAmountApi } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { exportReportApi } from '@/api/fundManage/fundPayment-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -75,17 +72,11 @@ let tableData1 = reactive<any>({
   currentPageRef: 1,
   total: 0
 })
-const { tableObject, methods } = useTable({
-  getListApi: getEnterprise,
-  delListApi: deleteFunPayApi
-})
-const { getList } = methods
+const { tableObject } = useTable()
 
 tableObject.params = {
   projectId
 }
-
-getList()
 
 const getHeadInfo = async () => {
   const info = await getFunPaySumAmountApi()
@@ -136,29 +127,29 @@ const handleCurrentChange = (val: number) => {
   getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
 
-const onExport = () => {
-  // const params = {}
-  // const res = await exportIndividualHouseholdTree(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = tableObject.params
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'code',
+    field: 'villageCode',
     label: '所属区域',
     search: {
       show: true,
@@ -180,7 +171,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'code',
+    field: 'doorNo',
     label: '企业编码',
     search: {
       show: true,
@@ -229,20 +220,25 @@ const onSearch = (data) => {
     }
   }
 
-  // setSearchParams({ ...params })
+  tableObject.params = {
+    ...tableObject.params,
+    ...params
+  }
+
+  getEnterpriseAsync(tableObject.params)
 }
 
 const onReset = () => {
   tableObject.params = {
     projectId
   }
-  // setSearchParams({})
+  getEnterpriseAsync(tableObject.params)
 }
 
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
-  getEnterpriseAsync({ projectId, size: 10, page: 0 })
+  getEnterpriseAsync(tableObject.params)
 })
 </script>
 

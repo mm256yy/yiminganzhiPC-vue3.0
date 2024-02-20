@@ -273,7 +273,6 @@ const handleSizeChange = (val: number) => {
   getList()
 }
 const handleCurrentChange = (val: number) => {
-  console.log(val, '测试数据')
   pageNum.value = val
   getList()
 }
@@ -315,7 +314,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchProductionLandFileApi(tableList).then(() => {

@@ -20,7 +20,7 @@
       <div class="row-item" v-for="(item, index) in form" :key="index">
         <ElRow>
           <ElCol :span="24">
-            <ElFormItem label="区块："> {{ getSettleAddress(item) }}</ElFormItem>
+            <ElFormItem label="区块："> {{ settleAddressText }}</ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -230,7 +230,7 @@ import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveBatchDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
-import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
+import { resettleArea, resettleAreaFlat } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
 
 interface PropsType {
   show: boolean
@@ -248,22 +248,7 @@ const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const formLoading = ref<boolean>(false)
-
-// 宅基地安置区块
-const resettleArea = [
-  {
-    id: '3',
-    name: '棠村安置区'
-  },
-  {
-    id: '4',
-    name: '麻家田安置区'
-  },
-  {
-    id: '5',
-    name: '东坪安置区'
-  }
-]
+const settleAddressText = ref<string>('')
 
 const form = ref<any[]>([])
 const imgUrl = ref<string>('')
@@ -411,49 +396,23 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-/**
- * 获取当前行安置区
- * @param data 当前行信息
- */
-let apartmentArea: any = []
-const getSettleAddressList = async () => {
-  const params = {
-    projectId: appStore.getCurrentProjectId,
-    status: 'implementation',
-    type: '2',
-    size: 9999,
-    page: 0
-  }
-  try {
-    const result = await getPlacementPointListApi(params)
-    apartmentArea = result.content
-  } catch {}
-}
-const getSettleAddress = (data: any) => {
+
+const getSettleAddress = async (data: any) => {
   // 选择了公寓房的安置方式
   if (data.houseAreaType === 'flat') {
-    let str = ''
-    apartmentArea.map((item: any) => {
-      if (item.id == data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
+    let f = await resettleAreaFlat()
+    const str = f.find((item) => item.code === data.settleAddress)?.name
+    settleAddressText.value = str
   } else {
-    let str = ''
-    resettleArea.map((item: any) => {
-      if (item.id === data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
+    let m = await resettleArea()
+    const str = m.find((item) => item.code === data.settleAddress)?.name
+    settleAddressText.value = str
   }
 }
 watch(
   () => props.show,
-  async () => {
+  () => {
     // 处理表单数据
-    await getSettleAddressList()
     const params = {
       ...props.baseInfo,
       lotteryOrderPic: props.baseInfo?.lotteryOrderPic
@@ -466,7 +425,7 @@ watch(
       otherPic: props.baseInfo?.otherPic ? JSON.parse(props.baseInfo?.otherPic) : [] // 其他附件
     }
     form.value = [params]
-    console.log(form.value, '测试数据')
+    getSettleAddress(params)
   },
   {
     immediate: true,

@@ -302,7 +302,6 @@ const getPlacementPointList = async () => {
       }
     })
     placementPointList.value = list
-    // console.log('placementPointList', placementPointList.value)
   } catch {}
 }
 
@@ -403,7 +402,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchFileApi(tableList).then(() => {
