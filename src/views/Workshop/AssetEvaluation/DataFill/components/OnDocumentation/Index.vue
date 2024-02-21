@@ -121,6 +121,40 @@
             </div>
           </ElCol>
         </ElRow>
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required"> 其他档案 </div>
+              <div class="card-img-list">
+                <ElUpload
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  :on-error="onError"
+                  :list-type="'picture-card'"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="true"
+                  :file-list="otherPic"
+                  :headers="headers"
+                  :on-success="uploadFileChange5"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile5"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <div class="card-img-custom">
+                        <Icon icon="ant-design:plus-outlined" :size="22" />
+                      </div>
+                      <div class="card-txt">点击上传</div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </div>
+          </ElCol>
+        </ElRow>
       </template>
 
       <template v-if="role === RoleCodeType.assessorland || role === RoleCodeType.other">
@@ -228,6 +262,7 @@ const houseEstimatePic = ref<FileItemType[]>([]) // 房屋评估报告文件列�
 const landEstimatePic = ref<FileItemType[]>([]) // 土地评估报告列表
 const devicePic = ref<FileItemType[]>([]) // 设施设备评估报告列表
 const specialPic = ref<FileItemType[]>([]) // 农村小型专项设施评估报告列表
+const otherPic = ref<FileItemType[]>([])
 const role = ref<RoleCodeType>(RoleCodeType.assessor) // 角色代码 assessor 房屋评估的 assessorland 土地评估的
 const userInfo = computed(() => appStore.getUserInfo)
 
@@ -270,7 +305,9 @@ const initData = () => {
       if (form.value.devicePic) {
         devicePic.value = JSON.parse(form.value.devicePic)
       }
-
+      if (form.value.otherPic) {
+        otherPic.value = JSON.parse(form.value.otherPic)
+      }
       if (form.value.specialPic) {
         specialPic.value = JSON.parse(form.value.specialPic)
       }
@@ -317,6 +354,7 @@ const onSubmit = debounce((formEl) => {
           params.houseEstimatePic = JSON.stringify(houseEstimatePic.value || [])
           params.devicePic = JSON.stringify(devicePic.value || [])
           params.specialPic = JSON.stringify(specialPic.value || [])
+          params.otherPic = JSON.stringify(otherPic.value || [])
         }
       }
       // 土地 或者 其他
@@ -356,6 +394,8 @@ const handleFileList = (fileList: UploadFiles, type: string) => {
     devicePic.value = list
   } else if (type === 'special') {
     specialPic.value = list
+  } else if (type === 'otherPic') {
+    otherPic.value = list
   }
 }
 
@@ -375,7 +415,9 @@ const uploadFileChange3 = (_response: any, _file: UploadFile, fileList: UploadFi
 const uploadFileChange4 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'special')
 }
-
+const uploadFileChange5 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'otherPic')
+}
 // 文件移除
 const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'houseEstimate')
@@ -392,7 +434,9 @@ const removeFile3 = (_file: UploadFile, fileList: UploadFiles) => {
 const removeFile4 = (_file: UploadFile, fileList: UploadFiles) => {
   handleFileList(fileList, 'special')
 }
-
+const removeFile5 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'otherPic')
+}
 // 移除之前
 const beforeRemove = (uploadFile: UploadFile) => {
   return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(

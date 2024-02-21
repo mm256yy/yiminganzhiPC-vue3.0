@@ -44,7 +44,7 @@
             :icon="EscalationIcon"
             @click="onReportData"
           >
-            填报完成2
+            填报完成
           </ElButton>
 
           <ElButton

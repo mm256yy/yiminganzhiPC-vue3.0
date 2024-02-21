@@ -418,7 +418,12 @@ const getParamsKey = (key: string) => {
 const getLocationText = (key: string) => {
   return locationTypes.find((item) => item.value === key)?.label
 }
-
+const maps = {
+  Country: 'areaCode',
+  Township: 'townCode',
+  Village: 'villageCode', // 行政村 code
+  NaturalVillage: 'virutalVillageCode' // 自然村 code
+}
 const onSearch = (data) => {
   console.log('======================================')
   let searchData = JSON.parse(JSON.stringify(data))
@@ -444,11 +449,19 @@ const onSearch = (data) => {
       console.log(item)
 
       if (item) {
+        let m = maps
         params[getParamsKey(item.districtType)] = params.code
+        delete m[item.districtType]
+        for (const key in m) {
+          params[m[key]] = ''
+        }
       }
-      params.type = 'PeasantHousehold'
-      setSearchParams({ ...params, status: 'implementation' })
     })
+    tableObject.params = params
+    console.log(params)
+
+    params.type = 'PeasantHousehold'
+    setSearchParams({ ...params, status: 'implementation' })
   } else {
     params.type = 'PeasantHousehold'
     setSearchParams({ ...params, status: 'implementation' })
