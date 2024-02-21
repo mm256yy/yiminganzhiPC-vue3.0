@@ -320,6 +320,7 @@ onMounted(async () => {
       projectUser.value.position = first.position
       projectUser.value.dingId = first.dingId
       projectUser.value.projectId = first.projectId
+      projectUser.value.townshipCode = props.row?.townshipCode
       // console.log(projectUser.value.projectRole, '项目权限')
     }
   }

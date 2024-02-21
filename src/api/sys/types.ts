@@ -72,6 +72,7 @@ export type UserInfoType = {
   projectUsers: ProjectUserType[]
   // 权限
   permissions?: string[]
+  townshipCode?: string
 }
 
 /**
