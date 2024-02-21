@@ -149,6 +149,7 @@
     </div>
     <Export
       :show="exportDialog"
+      :serse="tableObject.params"
       @close="onExportDialogClose"
       :list="exportList"
       :type="'PeasantHousehold'"
@@ -285,7 +286,6 @@ tableObject.params = {
 }
 
 setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
-
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []
@@ -534,9 +534,9 @@ const getParamsKey = (key: string) => {
 const getLocationText = (key: string) => {
   return locationTypes.find((item) => item.value === key)?.label
 }
-
 const onSearch = (data) => {
   // 处理参数
+
   let params = {
     ...data
   }
@@ -603,6 +603,7 @@ const fillData = (row) => {
   box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
   align-items: center;
 }
+
 .filling-btn {
   display: flex;
   width: 80px;

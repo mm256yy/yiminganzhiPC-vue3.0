@@ -111,9 +111,7 @@
       >
         <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
         <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
-          <template #default="{ row }">
-            {{ getSettleAddress(row) }}
-          </template>
+          <template #default="{ row }"> {{ row.settleAddressText }} </template>
         </ElTableColumn>
         <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
           <template #default="{ row }">
@@ -242,8 +240,8 @@ const getSettleAddressList = async () => {
 }
 const getSettleAddress = async (data: any) => {
   // 选择了公寓房的安置方式
+  let str = ''
   if (data.houseAreaType === 'flat') {
-    let str = ''
     apartmentArea.map((item: any) => {
       if (item.id == data.settleAddress) {
         str = item.name
@@ -253,13 +251,15 @@ const getSettleAddress = async (data: any) => {
   } else {
     let m = await resettleArea()
     let str = ''
+
     m.map((item: any) => {
-      if (item.code === data.settleAddress) {
+      if (item.code == data.settleAddress) {
         str = item.name
       }
     })
-    return str
+    console.log(str)
   }
+  return str
 }
 let tableData = ref()
 const getList = () => {

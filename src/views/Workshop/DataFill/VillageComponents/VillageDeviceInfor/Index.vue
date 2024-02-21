@@ -22,9 +22,6 @@
         highlightCurrentRow
         @register="register"
       >
-        <template #facilitiesName="{ row }">
-          {{ fmtDict(dictObj[235], row.facilitiesName.toString()) }}
-        </template>
         <template #completedTime="{ row }">
           <div>
             {{ standardFormatDate(row.completedTime) }}

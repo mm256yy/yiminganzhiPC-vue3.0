@@ -47,6 +47,7 @@ interface PropsType {
   list: ExportListType[]
   type?: string
   flag?: number
+  serse?: any
 }
 
 const props = defineProps<PropsType>()
@@ -60,11 +61,21 @@ const onClose = () => {
 }
 
 const onDownLoad = async () => {
+  console.log(props.serse)
+
   if (props.flag != 1) {
-    const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
+    const res = await getExportApi({
+      peasantHouseholdType: props.type,
+      type: checkList.value,
+      ...props.serse
+    })
     getRes(res)
   } else {
-    const res = await getPgExportApi({ type: props.type, templateKey: checkList.value })
+    const res = await getPgExportApi({
+      peasantHouseholdType: props.type,
+      type: checkList.value,
+      ...props.serse
+    })
     getRes(res)
   }
 }

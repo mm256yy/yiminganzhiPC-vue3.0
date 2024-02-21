@@ -194,6 +194,7 @@
       :show="rewardConfirmDialog"
       :door-no="props.doorNo"
       @close="close('rewardConfirm')"
+      :id="2"
     />
   </WorkContentWrap>
 </template>
@@ -227,7 +228,7 @@ import {
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-import ConfirmReward from './ConfirmReward.vue' // 引入奖励费确认组件
+import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 interface PropsType {

@@ -101,7 +101,11 @@
         </el-table-column>
         <el-table-column prop="number" label="数量" align="center" />
         <el-table-column prop="handleWayText" label="户型/处理方式" align="center" />
-        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center">
+          <template #default="{ row }">
+            {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
+          </template>
+        </el-table-column>
         <el-table-column label="备注" align="center">
           <template #default></template>
         </el-table-column>

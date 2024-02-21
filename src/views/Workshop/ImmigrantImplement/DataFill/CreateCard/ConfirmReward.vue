@@ -103,6 +103,7 @@ import { onMounted } from 'vue'
 interface PropsType {
   show: boolean
   doorNo: string
+  id: number
 }
 
 const props = defineProps<PropsType>()
@@ -114,7 +115,17 @@ const emit = defineEmits(['close'])
 const initData = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
     if (res && res.length) {
-      tableData.value = res.filter((item: any) => item.type === '3')
+      tableData.value =
+        props.id == 1
+          ? res.filter((item: any) => item.type === '3')
+          : props.id == 2
+          ? res.filter(
+              (item: any) =>
+                item.isUpdate == '1' &&
+                (item.phType == 'Company' || item.phType == 'IndividualHousehold') &&
+                item.type == '3'
+            )
+          : []
     }
   })
 }

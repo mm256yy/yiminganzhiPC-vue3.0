@@ -19,7 +19,7 @@
     </div>
 
     <div class="common-form-item">
-      <div class="common-label">可选安置点1：</div>
+      <div class="common-label">可选安置点：</div>
       <div class="common-value">
         <el-radio-group v-model="settleAddress">
           <el-radio
@@ -312,9 +312,9 @@ watch(
   (val) => {
     if (val) {
       console.log(val, 'val')
-      const { settleAddress: settleArea, typeOneNum, typeTwoNum, typeThreeNum, typeFourNum } = val
+      const { typeOneNum, typeTwoNum, typeThreeNum, typeFourNum, settleAddressCode } = val
 
-      settleAddress.value = parseInt(settleArea)
+      settleAddress.value = settleAddressCode
       areaSize.value = areaSize.value.map((item, index) => {
         if (index === 0) {
           item.num = typeOneNum

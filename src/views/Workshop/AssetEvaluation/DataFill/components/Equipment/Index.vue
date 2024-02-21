@@ -56,7 +56,12 @@
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInputNumber :min="0" v-model="row.number" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(row)"
+              v-model="row.number"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -126,7 +131,12 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber :min="0" v-model="row.valuationPrice" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(row)"
+              v-model="row.valuationPrice"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -137,7 +147,12 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber :min="0" v-model="row.newnessRate" :precision="2" />
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(row)"
+              v-model="row.newnessRate"
+              :precision="2"
+            />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -366,6 +381,12 @@ const total = () => {
     })
   }
   return sum.toFixed(2)
+}
+// 自动计算评估金额
+const getModelValue = (row: any) => {
+  const totalPrice = Number(row.number) * Number(row.valuationPrice) * Number(row.newnessRate)
+  row.valuationAmount = totalPrice
+  row.compensationAmount = totalPrice
 }
 onMounted(() => {
   getList()

@@ -118,9 +118,9 @@ watch(
         areaType.value = props.dataList.areaType
         settleAddress.value = props.dataList.settleAddress
       } else {
-        const { areaType: area, settleAddress: settleArea } = val
+        const { areaType: area, settleAddressCode } = val
         areaType.value = area
-        settleAddress.value = settleArea
+        settleAddress.value = settleAddressCode
       }
     }
   },
