@@ -8,20 +8,14 @@
     appendToBody
     :closeOnClickModal="false"
   >
-    <ElForm
-      class="form"
-      ref="formRef"
-      :model="form"
-      label-width="110px"
-      :label-position="'right'"
-      :rules="rules"
-    >
+    <ElForm class="form" ref="formRef" :model="form" label-width="110px" :label-position="'right'">
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
             <div class="col-label">坟墓确认单：</div>
             <div class="card-img-list">
               <ElUpload
+                ref="tombUploadRef"
                 action="/api/file/type"
                 :data="{
                   type: 'archives'
@@ -56,6 +50,7 @@
           <ElFormItem label="其他附件：">
             <div class="card-img-list">
               <ElUpload
+                ref="otherUploadRef"
                 action="/api/file/type"
                 :data="{
                   type: 'archives'
@@ -88,7 +83,7 @@
 
     <template #footer>
       <ElButton @click="onClose">取消</ElButton>
-      <ElButton type="primary" @click="onSubmit(formRef)">确认</ElButton>
+      <ElButton :loading="btnLoading" type="primary" @click="onSubmit(formRef)">确认</ElButton>
     </template>
     <el-dialog title="查看图片" :width="920" v-model="dialogVisible">
       <img class="block w-full" :src="imgUrl" alt="Preview Image" />
@@ -103,20 +98,19 @@ import {
   ElFormItem,
   ElButton,
   FormInstance,
-  FormRules,
   ElUpload,
   ElRow,
   ElCol,
   ElMessage,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, onMounted, nextTick } from 'vue'
-import { debounce } from 'lodash-es'
+import { ref, nextTick, watch } from 'vue'
 import type { UploadFile, UploadFiles } from 'element-plus'
 
 import { useAppStore } from '@/store/modules/app'
 import { saveFileUploadApi } from '@/api/immigrantImplement/common-service'
 import type { GraveType } from '@/api/immigrantImplement/siteConfirmation/tombSiteSel-types'
+import { getDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 
 interface PropsType {
   show: boolean
@@ -132,6 +126,8 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const tombUploadRef = ref()
+const otherUploadRef = ref()
 
 const defaultValue: Omit<GraveType, 'id'> = {
   tombConfirmPic: '', // 坟墓确认单
@@ -143,25 +139,23 @@ const graveChooseOtherPic = ref<FileItemType[]>([])
 
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
+const btnLoading = ref<boolean>(false)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
 
-// 规则校验
-const rules = reactive<FormRules>({})
-
 const initData = () => {
-  //   getDocumentationApi(props.doorNo).then((res: any) => {
-  //     form.value = res
-  //     if (form.value.graveChoosePic) {
-  //       graveChoosePic.value = JSON.parse(form.value.graveChoosePic)
-  //     }
-  //     if (form.value.otherPic) {
-  //       graveChooseOtherPic.value = JSON.parse(form.value.graveChooseOtherPic)
-  //     }
-  //   })
+  getDocumentationApi(props.doorNo).then((res: any) => {
+    form.value = res
+    if (form.value?.graveChoosePic) {
+      graveChoosePic.value = JSON.parse(form.value.graveChoosePic)
+    }
+    if (form.value?.graveChooseOtherPic) {
+      graveChooseOtherPic.value = JSON.parse(form.value.graveChooseOtherPic)
+    }
+  })
 }
 
 // 关闭弹窗
@@ -169,36 +163,39 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
+    tombUploadRef.value.clearFiles()
+    otherUploadRef.value.clearFiles()
   })
 }
 
 const submit = async (data: any) => {
-  await saveFileUploadApi({
-    ...data
-  })
+  btnLoading.value = true
+  try {
+    await saveFileUploadApi({
+      ...data
+    })
+    btnLoading.value = false
+  } catch {
+    btnLoading.value = false
+  }
   ElMessage.success('操作成功！')
   onClose(true)
 }
 
 // 提交表单
-const onSubmit = debounce((formEl) => {
-  formEl?.validate((valid: any) => {
-    if (valid) {
-      if (!graveChoosePic.value || !graveChoosePic.value.length) {
-        ElMessage.error('请上传坟墓确认单')
-        return
-      }
-      const data: any = {
-        ...form.value,
-        graveChoosePic: JSON.stringify(graveChoosePic.value || []),
-        graveChooseOtherPic: JSON.stringify(graveChooseOtherPic.value || [])
-      }
-      submit(data)
-    } else {
-      return false
-    }
-  })
-}, 600)
+const onSubmit = () => {
+  if (!graveChoosePic.value || graveChoosePic.value?.length <= 0) {
+    ElMessage.error('请上传坟墓确认单')
+    return
+  }
+  const data: any = {
+    ...form.value,
+    doorNo: props.doorNo,
+    graveChoosePic: JSON.stringify(graveChoosePic.value || []),
+    graveChooseOtherPic: JSON.stringify(graveChooseOtherPic.value || [])
+  }
+  submit(data)
+}
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
@@ -256,9 +253,16 @@ const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 
-onMounted(() => {
-  initData()
-})
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      initData()
+    } else {
+      form.value = { ...defaultValue }
+    }
+  }
+)
 </script>
 
 <style lang="less" scoped>

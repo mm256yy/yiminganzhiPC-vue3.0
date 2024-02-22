@@ -67,13 +67,14 @@
             <ElFormItem label="摇号顺序凭证：">
               <div class="card-img-list">
                 <ElUpload
+                  ref="lotteryOrderRef"
                   :list-type="'picture-card'"
                   action="/api/file/type"
                   :data="{
                     type: 'archives'
                   }"
                   accept=".*"
-                  :multiple="false"
+                  :multiple="true"
                   :file-list="item.lotteryOrderPic"
                   :headers="headers"
                   :on-error="onError"
@@ -95,10 +96,15 @@
           <ElCol :span="12">
             <div class="col-wrapper">
               <div class="col-labels">
-                {{ item.houseAreaType === 'housestead' ? '择房顺序号凭证：' : '选房顺序号凭证：' }}
+                {{
+                  props.baseInfo?.houseAreaType === 'homestead'
+                    ? '选房顺序号凭证：'
+                    : '择房顺序号凭证：'
+                }}
               </div>
               <div class="card-img-list">
                 <ElUpload
+                  ref="placeOrderRef"
                   action="/api/file/type"
                   :data="{
                     type: 'archives'
@@ -132,10 +138,13 @@
           <ElCol :span="24">
             <div class="col-wrapper">
               <div class="col-label-required">
-                {{ item.houseAreaType === 'housestead' ? '择房确认单：' : '选房确认单：' }}
+                {{
+                  props.baseInfo?.houseAreaType === 'homestead' ? '择房确认单：' : '选房确认单：'
+                }}
               </div>
               <div class="card-img-list">
                 <ElUpload
+                  ref="chooseHouseRef"
                   action="/api/file/type"
                   :data="{
                     type: 'archives'
@@ -170,6 +179,7 @@
             <ElFormItem label="其他附件：">
               <div class="card-img-list">
                 <ElUpload
+                  ref="otherRef"
                   action="/api/file/type"
                   :data="{
                     type: 'archives'
@@ -231,6 +241,7 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveBatchDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { resettleArea, resettleAreaFlat } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
+import { getChooseHouseApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 
 interface PropsType {
   show: boolean
@@ -249,6 +260,11 @@ const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const formLoading = ref<boolean>(false)
 const settleAddressText = ref<string>('')
+const btnLoading = ref<boolean>(false)
+const lotteryOrderRef = ref()
+const placeOrderRef = ref()
+const chooseHouseRef = ref()
+const otherRef = ref()
 
 const form = ref<any[]>([])
 const imgUrl = ref<string>('')
@@ -267,13 +283,25 @@ const onClose = (flag = false) => {
   emit('close', flag)
   nextTick(() => {
     formRef.value?.resetFields()
+    lotteryOrderRef.value?.clearFiles()
+    placeOrderRef.value?.clearFiles()
+    chooseHouseRef.value?.clearFiles()
+    otherRef.value?.clearFiles()
   })
 }
 
 const submit = (data: any) => {
-  saveBatchDocumentationApi(data).then(() => {
-    ElMessage.success('操作成功！')
-  })
+  btnLoading.value = true
+  saveBatchDocumentationApi(data).then(
+    () => {
+      ElMessage.success('操作成功！')
+      btnLoading.value = false
+    },
+    (error) => {
+      btnLoading.value = false
+      console.log(error)
+    }
+  )
   onClose(true)
 }
 
@@ -409,27 +437,29 @@ const getSettleAddress = async (data: any) => {
     settleAddressText.value = str
   }
 }
-watch(
-  () => props.show,
-  () => {
+
+const requestChooseHouseApi = async () => {
+  try {
+    const result = await getChooseHouseApi(props.baseInfo.id)
+    getSettleAddress(result)
     // 处理表单数据
     const params = {
-      ...props.baseInfo,
-      lotteryOrderPic: props.baseInfo?.lotteryOrderPic
-        ? JSON.parse(props.baseInfo?.lotteryOrderPic)
-        : [], // 摇号顺序凭证
-      placeOrderPic: props.baseInfo?.placeOrderPic ? JSON.parse(props.baseInfo.placeOrderPic) : [], // 择房顺序号凭证
-      chooseHousePic: props.baseInfo?.chooseHousePic
-        ? JSON.parse(props.baseInfo?.chooseHousePic)
-        : [], // 择房确认单
-      otherPic: props.baseInfo?.otherPic ? JSON.parse(props.baseInfo?.otherPic) : [] // 其他附件
+      ...result,
+      lotteryOrderPic: result?.lotteryOrderPic ? JSON.parse(result?.lotteryOrderPic) : [], // 摇号顺序凭证
+      placeOrderPic: result?.placeOrderPic ? JSON.parse(result?.placeOrderPic) : [], // 择房顺序号凭证
+      chooseHousePic: result?.chooseHousePic ? JSON.parse(result?.chooseHousePic) : [], // 择房确认单
+      otherPic: result?.otherPic ? JSON.parse(result?.otherPic) : [] // 其他附件
     }
     form.value = [params]
-    getSettleAddress(params)
-  },
-  {
-    immediate: true,
-    deep: true
+  } catch (error) {}
+}
+
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      requestChooseHouseApi()
+    }
   }
 )
 </script>

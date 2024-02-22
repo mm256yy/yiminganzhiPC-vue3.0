@@ -216,10 +216,13 @@ const onReset = () => {
 
 // 平台采集查看
 const handleCollection = (row: any) => {
-  console.log('row', row)
-  const type = 'household'
-  const routeName = 'Household' // 一户一档
-  const query = { type }
+  const type = 0
+  const routeName = 'FileMngCheck' // 一户一档
+  const query = {
+    householdId: row.id,
+    doorNo: row.doorNo,
+    type
+  }
   try {
     push({
       name: routeName,

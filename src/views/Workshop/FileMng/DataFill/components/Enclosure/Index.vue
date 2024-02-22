@@ -61,10 +61,10 @@ const getList = () => {
     householdId: props.householdId
   }
   getEnclosureListApi(params).then((res) => {
-    if (res && res.content && res.content.length) {
-      id.value = res.content[0].id
-      otherPic.value = JSON.parse(res.content[0].otherPic)
-      uid.value = res.content[0].uid
+    if (res && res.content && res.content?.length) {
+      id.value = res.content[0]?.id
+      otherPic.value = JSON.parse(res.content[0]?.otherPic)
+      uid.value = res.content[0]?.uid
     }
   })
 }
@@ -81,7 +81,7 @@ const onSave = () => {
     updateEnclosureListApi({
       id: id.value,
       doorNo: props.doorNo,
-      householdId: +props.householdId,
+      householdId: props.householdId as any,
       otherPic: JSON.stringify(otherPic.value),
       uid: uid.value
     })

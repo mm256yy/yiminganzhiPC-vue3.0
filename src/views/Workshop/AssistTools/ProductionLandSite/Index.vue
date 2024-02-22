@@ -105,13 +105,12 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <DefaultUpload :show="dialog" :door-no="doorNo" @close="close" />
+      <DefaultUpload :show="dialog" :id="itemId" :door-no="doorNo" @close="close" />
     </WorkContentWrap>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -142,9 +141,8 @@ import { useTable } from '@/hooks/web/useTable'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const doorNo = ref<string>('')
+const itemId = ref<any>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const tableLoading = ref<boolean>(false)
@@ -254,6 +252,7 @@ const { allSchemas } = useCrudSchemas(schema)
 // 档案上传
 const onRowUpload = (row: any) => {
   doorNo.value = row.doorNo
+  itemId.value = row.id
   dialog.value = true
 }
 
@@ -276,9 +275,11 @@ const onSearch = (data) => {
   getList()
 }
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 // 重置
@@ -357,17 +358,14 @@ const getVillageTree = async () => {
 // 获取宅基地地块编号选项列表
 const getLandNoList = async () => {
   let arr: any = []
-  // if (settleAddress) {
   let params = {
     projectId,
     type: 1
-    // settleAddress
   }
   const res = await getChooseConfigApi(params)
   if (res && res?.content.length) {
     arr = [...res.content]
   }
-  // }
   return arr
 }
 

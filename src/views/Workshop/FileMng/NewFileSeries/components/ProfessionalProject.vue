@@ -33,8 +33,10 @@
         height="560"
         @register="register"
       >
-        <template #collection>
-          <ElButton size="small" type="primary" text @click="handleCollection()">平台采集</ElButton>
+        <template #collection="{ row }">
+          <ElButton size="small" type="primary" text @click="handleCollection(row)"
+            >平台采集</ElButton
+          >
         </template>
         <template #archiving="{ row }">
           <ElButton size="small" type="primary" text @click="handleArchiving(row)"
@@ -212,11 +214,14 @@ const getVillageTree = async () => {
 }
 
 // 平台采集查看
-const handleCollection = () => {
-  const type = 'FileProfessionalProject'
-  const routeName = 'FileProfessionalProject' // 专业项目
-
-  const query = { type }
+const handleCollection = (row: any) => {
+  const type = 4
+  const routeName = 'FileMngCheck' // 专业项目
+  const query = {
+    householdId: row.id,
+    doorNo: row.doorNo,
+    type
+  }
   try {
     push({
       name: routeName,

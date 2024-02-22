@@ -214,13 +214,14 @@ const onReset = () => {
   setSearchParams({})
 }
 
-// 查看电子档案
-const handleArchiving = (row: any) => {
-  const routeName = 'FileMngDetail'
-  const type = 'Company'
+// 平台采集查看
+const handleCollection = (row: any) => {
+  const type = 1
+  const routeName = 'FileMngCheck' // 企业
   const query = {
-    type,
-    pId: row.id
+    householdId: row.id,
+    doorNo: row.doorNo,
+    type
   }
   try {
     push({
@@ -232,11 +233,14 @@ const handleArchiving = (row: any) => {
   }
 }
 
-const handleCollection = (row: any) => {
-  console.log('row', row)
-  const type = 'FileEnterprise'
-  const routeName = 'FileEnterprise' // 企业
-  const query = {}
+// 查看电子档案
+const handleArchiving = (row: any) => {
+  const routeName = 'FileMngDetail'
+  const type = 'Company'
+  const query = {
+    type,
+    pId: row.id
+  }
   try {
     push({
       name: routeName,

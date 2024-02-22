@@ -168,8 +168,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -340,9 +339,11 @@ const onSearch = (data) => {
   getList()
 }
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 // 重置

@@ -117,8 +117,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -149,8 +148,6 @@ import { useTable } from '@/hooks/web/useTable'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const doorNo = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
@@ -266,9 +263,6 @@ const onRowUpload = (row: any) => {
     ...row,
     houseAreaType: 'homestead' // 宅基地
   }
-
-  console.log('ZZZX', baseInfo.value)
-
   dialog.value = true
 }
 
@@ -291,9 +285,11 @@ const onSearch = (data) => {
   getList()
 }
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 // 重置

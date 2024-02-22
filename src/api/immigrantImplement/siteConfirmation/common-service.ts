@@ -26,3 +26,30 @@ export const getChooseConfigApi = (data: ConfigDtoType): Promise<TableResponse<C
 export const documentationCheckApi = (doorNo: string, type: string) => {
   return request.get({ url: '/immigrantDocumentation/check', params: { doorNo, type } })
 }
+
+/**
+ * 获取档案数据
+ * @param doorNo 户号
+ * @returns
+ */
+export const getDocumentationApi = (doorNo: string) => {
+  return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
+}
+
+/**
+ * 择房查看
+ * @param id
+ * @returns
+ */
+export const getChooseHouseApi = (id: any) => {
+  return request.get({ url: `/immigrantChooseHouse/getById?id=${id}` })
+}
+
+/**
+ * 生产用地查看
+ * @param id
+ * @returns
+ */
+export const getImmigrantLandApi = (id: any) => {
+  return request.get({ url: `/immigrantLand/getById?id=${id}` })
+}

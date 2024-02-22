@@ -62,7 +62,7 @@
                 filterable
                 placeholder="请选择"
                 v-model="row.handleWay"
-                @change="handleSelectChange"
+                @change="handleSelectChange($event, row)"
               >
                 <ElOption
                   v-for="item in dictObj[238]"
@@ -76,7 +76,7 @@
           <ElTableColumn prop="settingGrave" label="安置公墓/择址地址" align="center">
             <template #default="{ row }">
               <ElSelect
-                v-if="isTomb"
+                v-if="row.handleWay === '2'"
                 clearable
                 filterable
                 placeholder="请选择"
@@ -230,9 +230,11 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 const onSearch = (data) => {
@@ -263,8 +265,9 @@ const onReset = () => {
   getList()
 }
 
-const handleSelectChange = (value: any) => {
-  isTomb.value = value === '2'
+const handleSelectChange = (value: any, row: any) => {
+  row.settingGrave = undefined
+  console.log(value)
 }
 
 const handleSizeChange = (val: number) => {
@@ -337,8 +340,7 @@ onMounted(() => {
   getVillageTree()
   getList()
   getLandTypeOptions()
-
-  console.log('LPP', dictObj.value[238])
+  console.log('PPK', dictObj.value[377])
 })
 </script>
 <style lang="less" scoped>
