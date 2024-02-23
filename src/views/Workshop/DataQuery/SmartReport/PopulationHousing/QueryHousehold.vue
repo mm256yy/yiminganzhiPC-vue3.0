@@ -50,7 +50,7 @@ import {
   exportReportApi
 } from '@/api/workshop/dataQuery/populationHousing-service'
 import { PopulationHousingDtoType } from '@/api/workshop/dataQuery/populationHousing-types'
-import { screeningTree } from '@/api/workshop/village/service'
+import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
 interface SpanMethodProps {
@@ -71,6 +71,7 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 const villageTree = ref<any[]>([])
+const districtTree = ref<any[]>([])
 
 tableObject.params = {
   projectId,
@@ -85,7 +86,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'TreeSelect',
       componentProps: {
-        data: villageTree,
+        data: districtTree,
         nodeKey: 'code',
         props: {
           value: 'code',
@@ -248,7 +249,7 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   const index = tableObject.tableList.findIndex(
     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
   )
-  if (column && columnIndex < 5) {
+  if (column && columnIndex < 7) {
     if (index === rowIndex) {
       return {
         rowspan: num,
@@ -263,6 +264,17 @@ const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProp
   }
 }
 
+const maps = {
+  Country: 'areaCode',
+  Township: 'townCode',
+  Village: 'villageCode', // 行政村 code
+  NaturalVillage: 'virutalVillageCode' // 自然村 code
+}
+
+const getParamsKey = (key: string) => {
+  return maps[key]
+}
+
 const onSearch = (data) => {
   // 处理参数
   let params = {
@@ -273,6 +285,23 @@ const onSearch = (data) => {
     if (!params[key]) {
       delete params[key]
     }
+  }
+
+  if (params.code) {
+    // 拿到对应的参数key
+    findRecursion(districtTree.value, params.code, (item) => {
+      console.log(item)
+
+      if (item) {
+        let m = maps
+        params[getParamsKey(item.districtType)] = params.code
+        delete m[item.districtType]
+        for (const key in m) {
+          params[m[key]] = ''
+        }
+      }
+    })
+    tableObject.params = params
   }
 
   setSearchParams({ ...params })
@@ -315,6 +344,12 @@ const getVillageTree = async () => {
   return list || []
 }
 
+const getdistrictTree = async () => {
+  const list = await getVillageTreeApi(projectId)
+  districtTree.value = list || []
+  return list || []
+}
+
 // 递归查找
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
@@ -330,6 +365,7 @@ const findRecursion = (data, code, callback) => {
 
 onMounted(() => {
   getVillageTree()
+  getdistrictTree()
   setSearchParams({})
 })
 </script>

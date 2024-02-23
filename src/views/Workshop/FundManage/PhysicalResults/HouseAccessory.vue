@@ -24,8 +24,8 @@
         row-key="id"
         headerAlign="center"
         highlightCurrentRow
-        height="550"
-        style="width: 100%; max-height: 550px"
+        height="600"
+        style="width: 100%; max-height: 600px"
       />
     </div>
   </WorkContentWrap>
@@ -38,7 +38,10 @@ import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { getEnterpriseAppendant } from '@/api/fundManage/fundPayment-service'
+import {
+  getEnterpriseAppendant,
+  exportHouseAttachments
+} from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 
 const districtTree = ref<any[]>([])
@@ -211,23 +214,25 @@ const onReset = () => {
   requestHouseAccessory()
 }
 
-const onExport = () => {
-  // const params = {}
-  // const res = await exportIndividualHouseholdTree(params)
-  // let filename = res.headers
-  // filename = filename['content-disposition']
-  // filename = filename.split(';')[1].split('filename=')[1]
-  // filename = decodeURIComponent(filename)
-  // let elink = document.createElement('a')
-  // document.body.appendChild(elink)
-  // elink.style.display = 'none'
-  // elink.download = filename
-  // let blob = new Blob([res.data])
-  // const URL = window.URL || window.webkitURL
-  // elink.href = URL.createObjectURL(blob)
-  // elink.click()
-  // document.body.removeChild(elink)
-  // URL.revokeObjectURL(elink.href)
+const onExport = async () => {
+  const params = {
+    type: 'Company'
+  }
+  const res = await exportHouseAttachments(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
 }
 
 const getdistrictTree = async () => {

@@ -224,7 +224,6 @@ const getPlacementPointList = async () => {
   const params = {
     projectId,
     status: 'implementation',
-    type: '2',
     size: 9999,
     page: 0
   }
@@ -479,6 +478,7 @@ const getCarNoList = async (settleAddress?: string) => {
 onMounted(() => {
   getVillageTree()
   getList()
+
   getPlacementPointList()
 })
 </script>

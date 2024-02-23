@@ -20,9 +20,8 @@
         :data="tableData1.tableList"
         style="width: 100%; max-height: 520px"
         height="520"
-        :span-method="objectSpanMethod1"
       >
-        <ElTableColumn type="index" width="100" label="序号" />
+        <ElTableColumn type="index" width="80" label="序号" align="center" />
         <ElTableColumn prop="townCodeText" label="行政村" show-overflow-tooltip />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
@@ -75,7 +74,8 @@ let tableData1 = reactive<any>({
 const { tableObject } = useTable()
 
 tableObject.params = {
-  projectId
+  projectId,
+  type: 'Company'
 }
 
 const getHeadInfo = async () => {
@@ -230,7 +230,8 @@ const onSearch = (data) => {
 
 const onReset = () => {
   tableObject.params = {
-    projectId
+    projectId,
+    type: 'Company'
   }
   getEnterpriseAsync(tableObject.params)
 }
