@@ -25,7 +25,7 @@
         height="600"
       >
         <ElTableColumn type="index" label="序号" width="100" align="center" />
-        <ElTableColumn prop="name" label="名称" show-overflow-tooltip align="center" />
+        <ElTableColumn prop="name" label="名称" show-overflow-tooltip width="200" align="center" />
         <ElTableColumn label="房屋建筑面积（㎡）" header-align="center">
           <ElTableColumn prop="brickStructure" label="砖混" show-overflow-tooltip align="center" />
           <ElTableColumn prop="brickJoisted" label="砖木" show-overflow-tooltip align="center" />

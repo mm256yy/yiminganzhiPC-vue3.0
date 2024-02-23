@@ -82,10 +82,10 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 const handleCollection = (row: any) => {
-  console.log('row', row)
-  const type = 'ReportApproval'
-  const routeName = 'ReportApproval' // 报告及批文
-  const query = { type }
+  const type = row.type
+  const title = row.name
+  const routeName = 'workshopReport' // 报告及批文
+  const query = { type, title }
   try {
     push({
       name: routeName,
@@ -156,15 +156,15 @@ onMounted(() => {
   color: 14px;
 
   .title-label {
+    font-size: 16px;
     font-weight: bold;
     color: #333;
-    font-size: 16px;
   }
 
   .title-number {
     font-size: 16px;
-    color: #1890ff;
     font-weight: bold;
+    color: #1890ff;
   }
 }
 

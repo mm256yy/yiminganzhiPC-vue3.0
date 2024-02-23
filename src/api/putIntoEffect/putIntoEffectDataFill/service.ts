@@ -9,6 +9,15 @@ export const getLandlordByIdApi = (id: number | string): Promise<LandlordDtoType
 }
 
 /**
+ * 查询专业项目详情
+ * @param id
+ * @returns
+ */
+export const getProfessionalDetailByIdApi = (id: number | string) => {
+  return request.get({ url: `/professionalProjects/${id}` })
+}
+
+/**
  * 填报完成
  * @param id 居民户 ID
  * @returns

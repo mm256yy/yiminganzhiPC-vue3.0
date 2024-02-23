@@ -1,16 +1,30 @@
 <template>
   <WorkContentWrap>
+    <div class="search-wrap">
+      <Search
+        :schema="allSchemas.searchSchema"
+        :defaultExpand="false"
+        :expand-field="'card'"
+        @search="onSearch"
+        @reset="onReset"
+      />
+    </div>
+    <div class="line"></div>
     <div class="table-wrap">
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-left-title">企业基本情况统计表 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
+      </div>
       <ElTable
         v-loading="tableLoading"
         :data="tableData1.tableList"
-        style="width: 100%; max-height: 500px"
-        height="500"
+        style="width: 100%; max-height: 520px"
+        height="520"
         :span-method="objectSpanMethod1"
       >
         <ElTableColumn type="index" width="100" label="序号" />
-        <ElTableColumn prop="townCodeText" label="行政村" />
-        <ElTableColumn prop="name" label="名称" />
+        <ElTableColumn prop="townCodeText" label="行政村" show-overflow-tooltip />
+        <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
         <ElTableColumn prop="landUseNature" label="用地性质" />
         <ElTableColumn prop="industryType" label="所属行业" />
@@ -39,13 +53,12 @@ import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useTable } from '@/hooks/web/useTable'
-import { ElTable, ElTableColumn, ElPagination } from 'element-plus'
-import {
-  getEnterprise,
-  deleteFunPayApi,
-  getFunPaySumAmountApi
-} from '@/api/fundManage/fundPayment-service'
+import { Search } from '@/components/Search'
+import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { ElTable, ElTableColumn, ElPagination, ElButton } from 'element-plus'
+import { getEnterprise, getFunPaySumAmountApi } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { exportReportApi } from '@/api/fundManage/fundPayment-service'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -59,17 +72,11 @@ let tableData1 = reactive<any>({
   currentPageRef: 1,
   total: 0
 })
-const { tableObject, methods } = useTable({
-  getListApi: getEnterprise,
-  delListApi: deleteFunPayApi
-})
-const { getList } = methods
+const { tableObject } = useTable()
 
 tableObject.params = {
   projectId
 }
-
-getList()
 
 const getHeadInfo = async () => {
   const info = await getFunPaySumAmountApi()
@@ -120,11 +127,125 @@ const handleCurrentChange = (val: number) => {
   getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
 }
 
+const onExport = async () => {
+  const params = tableObject.params
+  const res = await exportReportApi(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
+  let elink = document.createElement('a')
+  document.body.appendChild(elink)
+  elink.style.display = 'none'
+  elink.download = filename
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
+  elink.click()
+  document.body.removeChild(elink)
+  URL.revokeObjectURL(elink.href)
+}
+
+const schema = reactive<CrudSchema[]>([
+  // 搜索字段定义
+  {
+    field: 'villageCode',
+    label: '所属区域',
+    search: {
+      show: true,
+      component: 'TreeSelect',
+      componentProps: {
+        data: districtTree,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '企业编码',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'name',
+    label: '企业名称',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  }
+])
+
+const { allSchemas } = useCrudSchemas(schema)
+
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  tableObject.params = {
+    ...tableObject.params,
+    ...params
+  }
+
+  getEnterpriseAsync(tableObject.params)
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+  getEnterpriseAsync(tableObject.params)
+}
+
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
-  getEnterpriseAsync({ projectId, size: 10, page: 0 })
+  getEnterpriseAsync(tableObject.params)
 })
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.line {
+  width: 100%;
+  height: 10px;
+  background-color: #e7edfd;
+}
+</style>

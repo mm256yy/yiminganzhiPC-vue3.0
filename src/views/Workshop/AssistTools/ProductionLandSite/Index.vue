@@ -58,7 +58,6 @@
             align="center"
             header-align="center"
           />
-          <!-- <ElTableColumn label="户型" prop="area" align="center" header-align="center" /> -->
           <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
             <template #default="{ row }">
               <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
@@ -106,13 +105,12 @@
           @current-change="handleCurrentChange"
         />
       </div>
-      <DefaultUpload :show="dialog" :door-no="doorNo" @close="close" />
+      <DefaultUpload :show="dialog" :id="itemId" :door-no="doorNo" @close="close" />
     </WorkContentWrap>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -140,11 +138,11 @@ import { useAppStore } from '@/store/modules/app'
 import DefaultUpload from '../components/DefaultUpload.vue'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { useTable } from '@/hooks/web/useTable'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const doorNo = ref<string>('')
+const itemId = ref<any>()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
 const tableLoading = ref<boolean>(false)
@@ -152,14 +150,36 @@ const emit = defineEmits(['updateData'])
 const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
 const pageNum = ref(1)
-// const totalNum = ref(0)
 tableObject.params = {
   projectId,
   status: 'implementation'
+}
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        label: item.name,
+        value: item.name
+      }
+    })
+    placementPointList.value = list
+  } catch {
+    placementPointList.value = []
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -212,13 +232,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settleAddress"',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入户主名称'
+        options: placementPointList as any
       }
     },
     table: {
@@ -232,6 +252,7 @@ const { allSchemas } = useCrudSchemas(schema)
 // 档案上传
 const onRowUpload = (row: any) => {
   doorNo.value = row.doorNo
+  itemId.value = row.id
   dialog.value = true
 }
 
@@ -254,9 +275,11 @@ const onSearch = (data) => {
   getList()
 }
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 // 重置
@@ -273,7 +296,6 @@ const handleSizeChange = (val: number) => {
   getList()
 }
 const handleCurrentChange = (val: number) => {
-  console.log(val, '测试数据')
   pageNum.value = val
   getList()
 }
@@ -297,7 +319,6 @@ const getList = async () => {
     })
 
     arr.map(async (item: any) => {
-      // item.settleAddress
       item.landNoOptions = await getLandNoList()
     })
 
@@ -315,7 +336,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchProductionLandFileApi(tableList).then(() => {
@@ -336,23 +358,21 @@ const getVillageTree = async () => {
 // 获取宅基地地块编号选项列表
 const getLandNoList = async () => {
   let arr: any = []
-  // if (settleAddress) {
   let params = {
     projectId,
     type: 1
-    // settleAddress
   }
   const res = await getChooseConfigApi(params)
   if (res && res?.content.length) {
     arr = [...res.content]
   }
-  // }
   return arr
 }
 
 onMounted(() => {
   getVillageTree()
   getList()
+  getPlacementPointList()
 })
 </script>
 <style lang="less" scoped>
@@ -375,15 +395,15 @@ onMounted(() => {
 }
 
 .box-wrapper {
-  min-width: 100%;
   position: relative;
   top: 0;
   left: 0;
+  min-width: 100%;
 }
 
 .save-btn {
   position: relative;
-  right: 10px;
   top: 2px;
+  right: 10px;
 }
 </style>

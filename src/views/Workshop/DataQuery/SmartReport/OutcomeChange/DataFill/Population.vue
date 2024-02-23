@@ -228,7 +228,7 @@ const handleCollection = (row: any) => {
 // 查看复核人员
 const handleReviewers = (row: any) => {
   push({
-    name: 'DataFillCheck',
+    name: 'ReCheck',
     query: {
       name: row.urlParamName,
       householdId: row.urlParamHouseholdId,

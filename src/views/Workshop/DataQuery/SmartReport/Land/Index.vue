@@ -9,9 +9,10 @@
       <el-table
         :data="tableDataList"
         border
-        :height="getHeight(tableDataList)"
-        style="width: 100%; max-height: 600px"
+        style="width: 100%; min-height: 700px"
         :span-method="objectSpanMethod"
+        show-summary
+        height="700"
       >
         <el-table-column
           prop="locationType"
@@ -442,19 +443,35 @@ const objectSpanMethod = ({ rowIndex, columnIndex }: any) => {
     }
   }
 }
-/**
- * 计算 table 的高度
- * @param arr 当前 table 的数据
- */
-const getHeight = (arr: any) => {
-  if (arr.length === 0) {
-    return 150
-  } else if (arr.length > 9) {
-    return 500
-  } else {
-    return 'auto'
-  }
-}
+
+// // 合计
+// const getSummaries = (params: any) => {
+//   const { columns, data } = params
+//   const sums: string[] = []
+//   columns.forEach((column, index) => {
+//     if (index === 0) {
+//       sums[index] = '合计'
+//       return
+//     }
+//     if (index < 5) {
+//       sums[index] = ''
+//       return
+//     }
+//     const values = data.map((item) => Number(item[column.property]))
+//     if (!values.every((value) => Number.isNaN(value))) {
+//       sums[index] = `${values.reduce((prev, curr) => {
+//         const value = Number(curr)
+//         if (!Number.isNaN(value)) {
+//           return (prev + curr).toFixed(2)
+//         } else {
+//           return prev.toFixed(2)
+//         }
+//       }, 0)}`
+//     }
+//   })
+
+//   return sums
+// }
 
 /**
  * 获取表格数据
@@ -474,7 +491,8 @@ const getTableList = (params: ParamsType) => {
               total[i] = value[i] + (total[i] ? total[i] : 0)
             }
           }
-          return total
+          const resultTotal = total.fixed(2)
+          return resultTotal
         }, {})
         let result1 = tableDataList.value.reduce((total, value, index, arr) => {
           if (arr[index].landType == '4') {
@@ -482,13 +500,15 @@ const getTableList = (params: ParamsType) => {
               total[i] = value[i] + (total[i] ? total[i] : 0)
             }
           }
-          return total
+          const resultTotal = total.fixed(2)
+          return resultTotal
         }, {})
         let result2 = tableDataList.value.reduce((total, value) => {
           for (let i in tableDataList.value[0]) {
             total[i] = value[i] + (total[i] ? total[i] : 0)
           }
-          return total
+          const resultTotal = total.fixed(2)
+          return resultTotal
         }, {})
 
         tableDataList.value.push(result, result1, result2)

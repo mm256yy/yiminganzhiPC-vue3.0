@@ -88,7 +88,7 @@ import { getsummaryApi } from '@/api/workshop/dataQuery/fruitWood-service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
 
-const titles = ['智能报表', '实物成果', '居民户', '实物成果汇总']
+const titles = ['智能报表', '实物成果', '实物成果', '实物成果汇总']
 const feeTableData = ref<any[]>([]) // 费用补偿情况列表
 
 const tableRowClassName = ({ row }: any) => {

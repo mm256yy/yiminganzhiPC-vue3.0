@@ -32,36 +32,52 @@
           </div>
         </div>
         <ElSpace>
-          <ElPopover :width="1000" trigger="click">
+          <ElPopover v-if="excelList && excelList.length" :width="1000" trigger="click">
             <template #reference>
               <div class="view-upload">
-                <span class="pr-10px">批量导入日志</span>
+                <span class="pr-10px">批量导入记录</span>
                 <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
               </div>
             </template>
-
             <div class="file-list">
-              <div class="file-item">
+              <div class="file-item" v-for="item in excelList" :key="item.id">
                 <div class="file-name flex items-center flex-none w-272px">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-250px ml-5px"> 1 </div>
+                  <div class="w-250px ml-5px">
+                    {{ item.name }}
+                  </div>
                 </div>
-                <div class="flex-none w-150px">2</div>
-                <div class="flex-none w-398px m-lr-20px"> 3 </div>
-                <div class="status flex-shrink-0">
-                  <!-- <div class="flex items-center">
+                <div class="flex-none w-150px">{{
+                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
+                }}</div>
+                <div class="flex-none w-398px m-lr-20px">
+                  {{ item.remark }}
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px">
-                      ( 共导入 <span class="number">3</span> 人， <span class="number">5</span> 户 )
+                      ( 共导入
+                      <span class="number">{{
+                        item.demographicNum ? '' + item.demographicNum : '-'
+                      }}</span>
+                      人，
+                      <span class="number">{{
+                        item.peasantHouseholdNum ? '' + item.peasantHouseholdNum : '-'
+                      }}</span>
+                      户 )
                     </span>
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
-                  </div> -->
+                  </div>
 
-                  <!-- <div class="flex items-center text-[#F93F3F]">
+                  <div
+                    class="flex items-center text-[#F93F3F]"
+                    v-else-if="item.status === FileReportStatus.failure"
+                  >
                     <span class="pr-10px">上传失败</span>
                     <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
-                  </div> -->
+                  </div>
 
-                  <!-- <div>导入中</div> -->
+                  <div v-else>导入中</div>
                 </div>
               </div>
             </div>
@@ -148,7 +164,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, onMounted, computed, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -168,8 +184,13 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import Export from '@/views/Workshop/components/Export.vue'
 import InExport from '@/views/Workshop/components/InExport.vue'
-import { getExcelList } from '@/api/workshop/population/service'
+import { getPgExcelList } from '@/api/workshop/population/service'
 import dayjs from 'dayjs'
+enum FileReportStatus {
+  success = 'Succeed',
+  failure = 'Failure',
+  importing = 'Importing'
+}
 
 const excelList = ref<any[]>([])
 const dictStore = useDictStoreWithOut()
@@ -192,6 +213,7 @@ interface exportListType {
   name: string
   value: string | number
 }
+let timer = 0
 const exportList = ref<exportListType[]>([
   {
     name: '房屋评估表',
@@ -280,15 +302,24 @@ const getLandlordHeadInfo = async () => {
   headInfo.value = info
 }
 const getExcelUploadList = async () => {
-  const res = await getExcelList()
+  const type = 'assetEval_village'
+  const res = await getPgExcelList(type)
   if (res && res.content) {
     excelList.value = res.content
   }
 }
+
+onBeforeUnmount(() => {
+  clearInterval(timer)
+  timer = 0
+})
 onMounted(() => {
   getVillageTree()
   getLandlordHeadInfo()
   getExcelUploadList()
+  timer = window.setInterval(() => {
+    getExcelUploadList()
+  }, 3000)
 })
 const schema = reactive<CrudSchema[]>([
   {
@@ -549,6 +580,7 @@ const fillData = (row) => {
   box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
   align-items: center;
 }
+
 .filling-btn {
   display: flex;
   width: 80px;
@@ -580,6 +612,7 @@ const fillData = (row) => {
     background-color: #0cc029;
   }
 }
+
 .file-list {
   height: 210px;
   overflow-y: scroll;

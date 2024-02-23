@@ -69,12 +69,12 @@
       </ElRow>
 
       <ElRow>
-        <ElCol :span="12">
+        <!-- <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">收款方:</div>
             <div class="content">{{ form.payee ? fmtDict(dictObj[396], form.payee) : '-' }}</div>
           </div>
-        </ElCol>
+        </ElCol> -->
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">申请总金额:</div>
@@ -87,7 +87,7 @@
           <div class="col-wrap">
             <div class="label">付款对象:</div>
             <!-- <div class="content">境岭镇</div> -->
-            <div class="content">{{ form.type == 1 ? '支付' : '预拨' }}</div>
+            <!-- <div class="content">{{ form.type == 1 ? '支付' : '预拨' }}</div> -->
           </div>
         </ElCol>
       </ElRow>

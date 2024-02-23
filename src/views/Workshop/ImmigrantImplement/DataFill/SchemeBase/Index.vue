@@ -216,10 +216,7 @@ const getPeopleList = async () => {
     if (!notFill) {
       stepArray.value[1].done = true
     }
-    // tableData.value = res.content.map((item) => {
-    //   item.age = item.birthday ? parseInt(dayjs(item.birthday).fromNow().replace(/\D+/, '')) : ''
-    //   return item
-    // })
+    tableData.value = res.content
   }
   console.log(tableData.value)
 }

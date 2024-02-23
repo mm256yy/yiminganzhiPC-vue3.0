@@ -72,7 +72,10 @@ import PictureDialog from './components/PictureDialog/Index.vue'
 import UploadField from './components/UploadField/Index.vue'
 import Enclosure from '@/views/Workshop/FileMng/DataFill/components/Enclosure/Index.vue' // 附件上传
 import BaseInfo from './components/BaseInfo.vue'
-import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
+import {
+  getLandlordByIdApi,
+  getProfessionalDetailByIdApi
+} from '@/api/putIntoEffect/putIntoEffectDataFill/service'
 import { breadcrumbTitles, houseHoldTabs, commonTabs, professionTabs } from './config'
 
 const { currentRoute, back } = useRouter()
@@ -98,15 +101,6 @@ const loading = ref<boolean>(false)
 const baseInfo = ref<any>({}) // 基础信息
 const requestType = ref<number>(1) // 请求类型
 
-const getLandlordInfo = () => {
-  if (!householdId) return
-  getLandlordByIdApi(householdId).then((res) => {
-    baseInfo.value = { ...res }
-  })
-}
-
-getLandlordInfo()
-
 // 是否专业项目
 const isProfessional = computed(() => {
   return type === '4'
@@ -119,6 +113,22 @@ const showEnclosure = computed(() => {
 const showUploadField = computed(() => {
   return type === '4' ? tabCurrentId.value > 1 : tabCurrentId.value === 4
 })
+
+const getLandlordInfo = () => {
+  if (!householdId) return
+
+  if (isProfessional.value) {
+    getProfessionalDetailByIdApi(householdId).then((res) => {
+      baseInfo.value = { ...res }
+    })
+  } else {
+    getLandlordByIdApi(householdId).then((res) => {
+      baseInfo.value = { ...res }
+    })
+  }
+}
+
+getLandlordInfo()
 
 const onImageClick = (item: FileDtoType) => {
   dialogTitle.value = item.name

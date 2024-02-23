@@ -12,19 +12,19 @@
         >关联个体户：<span
           class="pl-8px text-size-14px text-[#1C5DF1]"
           @click="handleHouseholdClick"
-          >{{ props.baseInfo.relateIndividualName || '-' }}</span
+          >{{ props.baseInfo.relateIndividualName || '' }}</span
         ></div
       >
       <div v-if="props.type == 'Landlord'"
         >关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]" @click="handleCompanyClick">{{
-          props.baseInfo.relateCompanyName || '-'
+          props.baseInfo.relateCompanyName || ''
         }}</span></div
       >
       <div v-if="props.type == 'Enterprise' || props.type == 'IndividualB'">
         关联居民户：<span
           class="pl-8px text-size-14px text-[#1C5DF1]"
           @click="handleLandlordClick"
-          >{{ props.baseInfo.householderName || '-' }}</span
+          >{{ props.baseInfo.householderName || '' }}</span
         ></div
       >
       <div

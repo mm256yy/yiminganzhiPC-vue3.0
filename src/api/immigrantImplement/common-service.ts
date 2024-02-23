@@ -125,3 +125,8 @@ export const getFillingStatusApi = (doorNo: string) => {
 export const saveFileUploadApi = (data: any) => {
   return request.post({ url: '/immigrantDocumentation/save', data })
 }
+
+// 保存其他附件
+export const saveOtherAttachUploadApi = (data: any) => {
+  return request.post({ url: '/immigrantLand/save', data })
+}

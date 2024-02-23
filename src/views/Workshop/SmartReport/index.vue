@@ -132,7 +132,7 @@ const listArray = ref([
         list: [
           {
             text: '企业',
-            value: 'physicalResults'
+            value: 'enterprisePhysicalResults'
           },
           {
             text: '水电站',

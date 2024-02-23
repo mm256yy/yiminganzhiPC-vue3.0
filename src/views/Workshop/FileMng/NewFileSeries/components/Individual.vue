@@ -215,10 +215,13 @@ const onReset = () => {
 
 // 平台采集查看
 const handleCollection = (row: any) => {
-  console.log('row', row)
-  const type = 'Individual'
-  const routeName = 'Individual' // 个体户
-  const query = { type }
+  const type = 2
+  const routeName = 'FileMngCheck' // 个体户
+  const query = {
+    householdId: row.id,
+    doorNo: row.doorNo,
+    type
+  }
   try {
     push({
       name: routeName,
@@ -281,15 +284,15 @@ onMounted(() => {
   color: 14px;
 
   .title-label {
+    font-size: 16px;
     font-weight: bold;
     color: #333;
-    font-size: 16px;
   }
 
   .title-number {
     font-size: 16px;
-    color: #1890ff;
     font-weight: bold;
+    color: #1890ff;
   }
 }
 

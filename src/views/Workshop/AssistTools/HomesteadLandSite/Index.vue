@@ -117,8 +117,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
-import { useDictStoreWithOut } from '@/store/modules/dict'
+import { ref, onMounted, reactive } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -146,10 +145,9 @@ import { useAppStore } from '@/store/modules/app'
 import FileUpload from '../components/FileUpload.vue'
 import { getChooseConfigApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
 import { useTable } from '@/hooks/web/useTable'
+import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 
 const dialog = ref<boolean>(false)
-const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const doorNo = ref<string>('')
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const tableData = ref<any[]>([])
@@ -159,6 +157,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>()
+const placementPointList = ref<any[]>([])
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
@@ -166,6 +165,28 @@ const pageNum = ref(1)
 tableObject.params = {
   projectId,
   status: 'implementation'
+}
+
+const getPlacementPointList = async () => {
+  const params = {
+    projectId,
+    status: 'implementation',
+    type: '2',
+    size: 9999,
+    page: 0
+  }
+  try {
+    const result = await getPlacementPointListApi(params)
+    const list = result.content.map((item) => {
+      return {
+        label: item.name,
+        value: item.name
+      }
+    })
+    placementPointList.value = list
+  } catch {
+    placementPointList.value = []
+  }
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -222,9 +243,9 @@ const schema = reactive<CrudSchema[]>([
     label: '安置点',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入户主名称'
+        options: placementPointList as any
       }
     },
     table: {
@@ -242,7 +263,6 @@ const onRowUpload = (row: any) => {
     ...row,
     houseAreaType: 'homestead' // 宅基地
   }
-
   dialog.value = true
 }
 
@@ -265,9 +285,11 @@ const onSearch = (data) => {
   getList()
 }
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 // 重置
@@ -324,7 +346,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchFileApi(tableList).then(() => {
@@ -362,6 +385,7 @@ const getLandNoList = async (settleAddress?: string) => {
 onMounted(() => {
   getVillageTree()
   getList()
+  getPlacementPointList()
 })
 </script>
 <style lang="less" scoped>
@@ -384,15 +408,15 @@ onMounted(() => {
 }
 
 .box-wrapper {
-  min-width: 100%;
   position: relative;
   top: 0;
   left: 0;
+  min-width: 100%;
 }
 
 .save-btn {
   position: relative;
-  right: 10px;
   top: 2px;
+  right: 10px;
 }
 </style>

@@ -623,7 +623,16 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             component: () =>
               import('@/views/Workshop/FundManage/PhysicalResults/IndividualBase.vue'),
             meta: {
-              title: '基本信息',
+              title: '个体户基本信息',
+              hidden: false
+            }
+          },
+          {
+            path: 'enterprisePhysicalResults',
+            name: 'enterprisePhysicalResults',
+            component: () => import('@/views/Workshop/FundManage/PhysicalResults/Index.vue'),
+            meta: {
+              title: '企业基本信息',
               hidden: false
             }
           },

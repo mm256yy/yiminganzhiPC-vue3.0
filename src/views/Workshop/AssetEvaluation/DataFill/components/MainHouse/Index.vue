@@ -276,7 +276,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="宅基地面积"
           :width="160"
           prop="homesteadArea"
@@ -285,6 +285,17 @@
         >
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.homesteadArea" :disabled="true" />
+          </template>
+        </ElTableColumn> -->
+        <ElTableColumn
+          label="占地面积(㎡)"
+          :width="180"
+          prop="occupyArea"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber :min="0" v-model="scope.row.occupyArea" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn

@@ -10,13 +10,13 @@
     destroy-on-close
   >
     <div>
-      <el-checkbox-group v-model="checkList" @change="onCheckChange">
+      <ElRadioGroup v-model="checkList">
         <div class="collopase-item" v-for="item in props.list" :key="item.value">
           <div class="collopase-item-head">
-            <el-checkbox :label="item.value">{{ item.name }}</el-checkbox>
+            <ElRadio :label="item.value">{{ item.name }}</ElRadio>
           </div>
         </div>
-      </el-checkbox-group>
+      </ElRadioGroup>
     </div>
     <template #footer>
       <div style="display: flex; justify-content: right">
@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getExportApi } from '@/api/workshop/export/service'
-import { ElDialog, ElButton, ElCheckbox, ElCheckboxGroup, ElMessage, ElUpload } from 'element-plus'
+import { ElDialog, ElButton, ElRadio, ElRadioGroup, ElMessage, ElUpload } from 'element-plus'
 const uploadLoading = ref(false)
 import { useAppStore } from '@/store/modules/app'
 const appStore = useAppStore()
@@ -88,10 +88,10 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close'])
 let downloadLoading = ref(false)
-const checkList = ref([])
+const checkList = ref('')
 
 const onClose = () => {
-  checkList.value = []
+  checkList.value = ''
   emit('close')
 }
 const params = ref<any>({
@@ -99,11 +99,6 @@ const params = ref<any>({
   householdType: props.type,
   templateKey: ''
 })
-const onCheckChange = (val) => {
-  console.log(val, props.type)
-  params.value.templateKey = val.join(',')
-  // params.value.householdType = props.type
-}
 const onDownLoad = async () => {
   const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
   let filename = res.headers

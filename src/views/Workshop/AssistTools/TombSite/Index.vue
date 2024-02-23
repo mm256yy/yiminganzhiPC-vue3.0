@@ -57,7 +57,13 @@
           <ElTableColumn prop="number" label="数量" align="center" />
           <ElTableColumn prop="handleWay" label="处理方式" align="center">
             <template #default="{ row }">
-              <ElSelect clearable filterable placeholder="请选择" v-model="row.handleWay">
+              <ElSelect
+                clearable
+                filterable
+                placeholder="请选择"
+                v-model="row.handleWay"
+                @change="handleSelectChange($event, row)"
+              >
                 <ElOption
                   v-for="item in dictObj[238]"
                   :key="item.value"
@@ -69,7 +75,13 @@
           </ElTableColumn>
           <ElTableColumn prop="settingGrave" label="安置公墓/择址地址" align="center">
             <template #default="{ row }">
-              <ElSelect clearable filterable placeholder="请选择" v-model="row.settingGrave">
+              <ElSelect
+                v-if="row.handleWay === '2'"
+                clearable
+                filterable
+                placeholder="请选择"
+                v-model="row.settingGrave"
+              >
                 <ElOption
                   v-for="item in dictObj[377]"
                   :key="item.value"
@@ -77,6 +89,7 @@
                   :value="item.value"
                 />
               </ElSelect>
+              <ElInput v-else placeholder="请输入" v-model="row.settingGrave" />
             </template>
           </ElTableColumn>
           <ElTableColumn prop="graveNo" label="坟墓编号" align="center">
@@ -154,6 +167,7 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const tableLoading = ref<boolean>(false)
+const isTomb = ref<boolean>(false)
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
@@ -216,9 +230,11 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const close = () => {
+const close = (value: boolean) => {
   dialog.value = false
-  getList()
+  if (value) {
+    getList()
+  }
 }
 
 const onSearch = (data) => {
@@ -247,6 +263,11 @@ const onReset = () => {
     status: 'implementation'
   }
   getList()
+}
+
+const handleSelectChange = (value: any, row: any) => {
+  row.settingGrave = undefined
+  console.log(value)
 }
 
 const handleSizeChange = (val: number) => {
@@ -290,7 +311,8 @@ const onSave = () => {
     .then(async () => {
       const tableList = tableData.value.map((item) => {
         return {
-          ...item
+          ...item,
+          projectId
         }
       })
       saveBatchTombFileApi(tableList).then(() => {
@@ -318,8 +340,7 @@ onMounted(() => {
   getVillageTree()
   getList()
   getLandTypeOptions()
-
-  console.log('LPP', dictObj.value[238])
+  console.log('PPK', dictObj.value[377])
 })
 </script>
 <style lang="less" scoped>
@@ -342,15 +363,15 @@ onMounted(() => {
 }
 
 .box-wrapper {
-  min-width: 100%;
   position: relative;
   top: 0;
   left: 0;
+  min-width: 100%;
 }
 
 .save-btn {
   position: relative;
-  right: 10px;
   top: 2px;
+  right: 10px;
 }
 </style>

@@ -69,7 +69,7 @@ export const saveImmigrantChooseHouseApi = (data: any): Promise<TableResponse<Si
  */
 export const saveBatchDocumentationApi = (data: any): Promise<TableResponse<SiteType>> => {
   return request.post({
-    url: '/immigrantDocumentation/save ',
+    url: '/immigrantChooseHouse/saveOne',
     data
   })
 }

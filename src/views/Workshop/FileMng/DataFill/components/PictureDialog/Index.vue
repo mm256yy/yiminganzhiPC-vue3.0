@@ -34,7 +34,7 @@ interface PropType {
 const props = defineProps<PropType>()
 const fileList = ref<FilesDtoType[]>([])
 const showList = computed(() => {
-  return fileList.value && fileList.value.length > 0
+  return fileList.value && fileList.value?.length > 0
 })
 
 const emit = defineEmits<{
@@ -43,15 +43,16 @@ const emit = defineEmits<{
 
 watch(
   () => props.isShow,
-  () => {
-    parseData()
+  (val) => {
+    if (val) {
+      parseData()
+    }
   }
 )
 
 const parseData = () => {
   if (!props.files) return
   fileList.value = JSON.parse(props.files)
-  console.log('res', fileList.value)
 }
 
 //关闭弹窗
@@ -64,7 +65,10 @@ const onImageClick = (item: FilesDtoType) => {
 }
 
 const formatText = (str: string) => {
-  return str.length > 12 ? str.substring(0, 10) + '...' : str
+  if (!str.length) {
+    return str
+  }
+  return str?.length > 12 ? str.substring(0, 10) + '...' : str
 }
 </script>
 
