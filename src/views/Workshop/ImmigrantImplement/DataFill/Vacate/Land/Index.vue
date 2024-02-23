@@ -69,10 +69,34 @@
         >土地腾让确认单</h1
       >
       <el-descriptions class="margin-top" :column="2" border>
-        <el-descriptions-item align="center" label="户主姓名" label-class-name="bbqs">
+        <el-descriptions-item
+          align="center"
+          :label="
+            props.type == 'Enterprise'
+              ? '企业名称'
+              : type == 'IndividualB'
+              ? '个体户名称'
+              : type == 'PeasantHousehold'
+              ? '户主姓名'
+              : '村集体名称'
+          "
+          label-class-name="bbqs"
+        >
           {{ baseInfo.name }}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" align="center" label="户号">
+        <el-descriptions-item
+          label-class-name="bbqs"
+          align="center"
+          :label="
+            props.type == 'Enterprise'
+              ? '企业编码'
+              : type == 'IndividualB'
+              ? '个体户编码'
+              : type == 'PeasantHousehold'
+              ? '户号'
+              : '村集体编码'
+          "
+        >
           {{ baseInfo.showDoorNo }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="户内人口">
@@ -87,11 +111,34 @@
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
           土地腾让情况
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" :span="2" label="移民户主意见" align="center">
+        <el-descriptions-item
+          label-class-name="bbqs"
+          :span="2"
+          :label="
+            props.type == 'Enterprise'
+              ? '企业意见'
+              : type == 'IndividualB'
+              ? '个体户意见'
+              : type == 'PeasantHousehold'
+              ? '移民户主意见'
+              : '村集体意见'
+          "
+          align="center"
+        >
           <template #default>
             <div style="display: flex; flex-direction: column">
               <div style="flex: 1">{{ form.landEmptyOpinion }}</div>
-              <div style="flex: 1; text-align: left"> 移民户主:</div></div
+              <div style="flex: 1; text-align: left">
+                {{
+                  props.type == 'Enterprise'
+                    ? '企业盖章'
+                    : type == 'IndividualB'
+                    ? '个体户盖章'
+                    : type == 'PeasantHousehold'
+                    ? '移民户主'
+                    : '村集体盖章'
+                }}:</div
+              ></div
             >
           </template>
         </el-descriptions-item>
@@ -158,6 +205,7 @@ import { htmlToPdf } from '@/utils/ptf'
 interface PropsType {
   doorNo: string
   baseInfo: any
+  type: any
 }
 
 const props = defineProps<PropsType>()
@@ -188,6 +236,8 @@ onMounted(() => {
 })
 
 const init = async () => {
+  console.log(props.type)
+
   const res = await getLandVacateInfoApi(props.doorNo)
   console.log(res, 'res')
   if (res) {
