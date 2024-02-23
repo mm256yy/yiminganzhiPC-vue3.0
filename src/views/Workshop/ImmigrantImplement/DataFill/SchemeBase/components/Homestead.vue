@@ -112,16 +112,17 @@ watch(
   () => props.immigrantSettle,
   (val) => {
     if (val) {
-      console.log(val, 'bbq')
-      console.log(props.dataList, '测试数据')
+      console.log(val, 'kks')
+      console.log(props.dataList, '测试数据', 'kks')
       if (props.dataList) {
         areaType.value = props.dataList.areaType
-        settleAddress.value = props.dataList.settleAddress
+        settleAddress.value = val.settleAddress
       } else {
-        const { areaType: area, settleAddressCode } = val
+        const { areaType: area, settleAddressCode, settleAddress: settleAddresss } = val
         areaType.value = area
-        settleAddress.value = settleAddressCode
+        settleAddress.value = settleAddressCode ? settleAddressCode : settleAddresss
       }
+      console.log(settleAddress.value, 'kks', val)
     }
   },
   {
