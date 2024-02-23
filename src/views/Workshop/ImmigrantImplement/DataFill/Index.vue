@@ -201,10 +201,20 @@
       <!-- 腾空过渡 -->
       <template v-if="tabCurrentId == 8">
         <!-- 房屋腾空 -->
-        <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[0]" />
+        <house-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[0]"
+        />
 
         <!-- 土地腾让 -->
-        <land-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[1]" />
+        <land-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[1]"
+        />
 
         <!-- 过渡安置 -->
         <transition-resettle
@@ -324,10 +334,20 @@
       <!-- 腾空 -->
       <template v-if="tabCurrentId === 2">
         <!-- 房屋腾空 -->
-        <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[0]" />
+        <house-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[0]"
+        />
 
         <!-- 土地腾让 -->
-        <land-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[1]" />
+        <land-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[1]"
+        />
       </template>
 
       <!-- 动迁协议 -->
@@ -373,10 +393,20 @@
       <!-- 腾空 -->
       <template v-if="tabCurrentId === 2">
         <!-- 房屋腾空 -->
-        <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[0]" />
+        <house-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[0]"
+        />
 
         <!-- 土地腾让 -->
-        <land-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="subTabCurrentId === TabIds[1]" />
+        <land-vacate
+          :type="type"
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[1]"
+        />
       </template>
 
       <!-- 动迁协议 -->
@@ -413,7 +443,7 @@
       </template>
 
       <!-- 腾空(村集体只有房屋腾空) -->
-      <house-vacate :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
+      <house-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
 
       <!-- 动迁协议 -->
       <village-relocation-agreement
