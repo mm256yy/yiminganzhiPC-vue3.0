@@ -16,6 +16,31 @@
           {{ props.baseInfo.showDoorNo }}
         </div>
       </div>
+      <div
+        v-if="props.type == 'PeasantHousehold'"
+        @click="fillData('IndividualB', props.baseInfo.relateIndividualName)"
+      >
+        关联个体户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.relateIndividualName || ''
+        }}</span>
+      </div>
+      <div
+        v-if="props.type == 'PeasantHousehold'"
+        @click="fillData('Enterprise', props.baseInfo.relateCompanyName)"
+      >
+        关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.relateCompanyName || ''
+        }}</span>
+      </div>
+      <div
+        v-if="props.type == 'Enterprise' || props.type == 'IndividualB'"
+        @click="fillData('PeasantHousehold', props.baseInfo.householderName)"
+      >
+        关联居民户：
+        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.householderName || ''
+        }}</span>
+      </div>
       <ElSpace>
         <!-- 居民户信息中的模拟安置没有完成状态 -->
         <div
@@ -274,7 +299,7 @@
 import { ref, onMounted } from 'vue'
 import { ElRow, ElCol, ElSpace } from 'element-plus'
 import { fmtStr } from '@/utils/index'
-
+import { useRouter } from 'vue-router'
 interface PropsType {
   baseInfo: any
   type: any
@@ -283,10 +308,41 @@ interface PropsType {
   householdId: number
   fillingStatus: string
 }
-
+const { push } = useRouter()
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
-
+const fillData = (row, name: any) => {
+  if (!name) return false
+  console.log(row)
+  if (row == 'IndividualB') {
+    push({
+      name: 'ImmigrantImpDataFill',
+      query: {
+        householdId: props.baseInfo.relateIndividualId,
+        doorNo: props.baseInfo.relateIndividualDoorNo,
+        type: 'IndividualB'
+      }
+    })
+  } else if (row == 'Enterprise') {
+    push({
+      name: 'ImmigrantImpDataFill',
+      query: {
+        householdId: props.baseInfo.relateCompanyId,
+        doorNo: props.baseInfo.relateCompanyDoorNo,
+        type: 'Enterprise'
+      }
+    })
+  } else {
+    push({
+      name: 'ImmigrantImpDataFill',
+      query: {
+        householdId: props.baseInfo.householderId,
+        doorNo: props.baseInfo.householderName,
+        type: 'PeasantHousehold'
+      }
+    })
+  }
+}
 onMounted(() => {
   if (props.type === 'PeasantHousehold') {
     infoData.value = { icon: 'mdi:user-circle' }

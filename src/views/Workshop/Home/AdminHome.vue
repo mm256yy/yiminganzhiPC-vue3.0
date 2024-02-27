@@ -80,7 +80,7 @@
         </div>
       </div>
       <!--企业-->
-      <div class="enter-item" @click="toTarget('EnterpriseImp')">
+      <div class="enter-item">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('EnterpriseImp', { warnStatus: 2 })">
             <div class="line-1">{{ statisticsObj?.companyLagCount }} </div>
             <div class="flex">
               <div
@@ -110,7 +110,7 @@
               <div class="line-2 red">滞后</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('EnterpriseImp', { warnStatus: 1 })">
             <div class="line-1">{{ statisticsObj?.companyWarnCount }}</div>
             <div class="flex">
               <div
@@ -126,7 +126,7 @@
               <div class="line-2">预警</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('EnterpriseImp', { warnStatus: 0 })">
             <div class="line-1">{{ statisticsObj?.companyNormalCount }}</div>
             <div class="flex">
               <div
@@ -145,7 +145,7 @@
         </div>
       </div>
       <!--个体户-->
-      <div class="enter-item" @click="toTarget('IndividualImp')">
+      <div class="enter-item">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
@@ -159,7 +159,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('IndividualImp', { warnStatus: 2 })">
             <div class="line-1">{{ statisticsObj?.individualLagCount }}</div>
             <div class="flex">
               <div
@@ -175,7 +175,7 @@
               <div class="line-2 red">滞后</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('IndividualImp', { warnStatus: 1 })">
             <div class="line-1">{{ statisticsObj?.individualWarnCount }}</div>
             <div class="flex">
               <div
@@ -191,7 +191,7 @@
               <div class="line-2">预警</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('IndividualImp', { warnStatus: 0 })">
             <div class="line-1">{{ statisticsObj?.individualNormalCount }}</div>
             <div class="flex">
               <div
@@ -210,7 +210,7 @@
         </div>
       </div>
       <!--村集体-->
-      <div class="enter-item" @click="toTarget('VillageImp')">
+      <div class="enter-item">
         <div class="title-field">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -224,7 +224,7 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('VillageImp', { warnStatus: 2 })">
             <div class="line-1">{{ statisticsObj?.villageLagCount }}</div>
             <div class="flex">
               <div
@@ -240,7 +240,7 @@
               <div class="line-2 red">滞后</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('VillageImp', { warnStatus: 1 })">
             <div class="line-1">{{ statisticsObj?.villageWarnCount }}</div>
             <div class="flex">
               <div
@@ -256,7 +256,7 @@
               <div class="line-2">预警</div>
             </div>
           </div>
-          <div class="field-box">
+          <div class="field-box" @click="toTarget('VillageImp', { warnStatus: 0 })">
             <div class="line-1">{{ statisticsObj?.villageNormalCount }}</div>
             <div class="flex">
               <div

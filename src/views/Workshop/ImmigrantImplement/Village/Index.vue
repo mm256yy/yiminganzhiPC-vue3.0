@@ -110,7 +110,7 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, currentRoute } = useRouter()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const villageTree = ref<any[]>([])
@@ -131,7 +131,11 @@ tableObject.params = {
   projectId
 }
 
-setSearchParams({ type: 'Village', status: 'implementation' })
+setSearchParams({
+  type: 'Village',
+  status: 'implementation',
+  warnStatus: currentRoute.value.query['warnStatus']
+})
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'Village')
