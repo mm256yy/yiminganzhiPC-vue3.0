@@ -2,6 +2,10 @@ export interface ExportType {
   peasantHouseholdType?: string
   templateKey?: any
   type?: any
+  projectId?: any
+  status?: any
+  page?: any
+  size?: any
 }
 
 export interface LandlordDtoType {
