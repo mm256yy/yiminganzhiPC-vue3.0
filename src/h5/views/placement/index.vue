@@ -3,7 +3,7 @@
     <div class="flex-col group_step">
       <div v-for="(item, index) in stepList" :key="index" class="step-list">
         <div class="step" :style="{ background: getTypeBgColor(item.field) }">
-          <img width="40" height="40" :src="getTypeImage(item.field)" />
+          <img style="width: 25px; height: 25px" :src="getTypeImage(item.field)" />
           <div class="step-word" :style="{ color: getTypeNameColor(item.field) }">
             {{ item.name }}
           </div>
@@ -109,7 +109,7 @@ onMounted(() => {
 
       .step {
         display: flex;
-        width: 270px;
+        // width: 270px;
         height: 104px;
         padding: 30px;
         background: #3e73ec;

@@ -20,7 +20,7 @@
                 <img class="section-door-field" :src="doorImgSrc" />
                 <div class="section-door-txt">
                   <span class="special">户号：</span>
-                  <span class="special bold-txt">{{ nameDta.doorNo }}</span>
+                  <span class="special bold-txt">{{ nameDta?.showDoorNo }}</span>
                 </div>
               </div>
             </div>

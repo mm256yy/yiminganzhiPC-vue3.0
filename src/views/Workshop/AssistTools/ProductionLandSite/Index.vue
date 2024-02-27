@@ -164,7 +164,6 @@ const getPlacementPointList = async () => {
   const params = {
     projectId,
     status: 'implementation',
-    type: '2',
     size: 9999,
     page: 0
   }
@@ -318,8 +317,10 @@ const getList = async () => {
       })
     })
 
-    arr.map(async (item: any) => {
-      item.landNoOptions = await getLandNoList()
+    const optionsResult = await getLandNoList()
+
+    arr.map((item: any) => {
+      item.landNoOptions = optionsResult
     })
 
     tableData.value = arr || []

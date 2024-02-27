@@ -1,6 +1,6 @@
 <template>
   <div class="flex-col page">
-    <div class="flex-col group_garden">
+    <div v-if="false" class="flex-col group_garden">
       <div class="flex-col relative section" v-for="i in dataList" :key="i.id">
         <ElImage
           class="garden-section"
@@ -26,6 +26,7 @@
         </div>
       </div>
     </div>
+    <Expect :title="expectStr" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -36,7 +37,11 @@ import iconVrLive from '@/h5/assets/imgs/icon_vr_live.png'
 import { useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
 import { getsettleAddress } from './service'
+import Expect from '@/h5/components/Expect/index.vue'
+
 const { push } = useRouter()
+
+const expectStr = '建设中，敬请期待...'
 
 const toLink = (routeName: string, query = {}) => {
   push({

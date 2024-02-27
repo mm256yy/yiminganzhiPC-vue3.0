@@ -170,8 +170,8 @@ tableObject.params = {
 const getPlacementPointList = async () => {
   const params = {
     projectId,
-    status: 'implementation',
-    type: '2',
+    // status: 'implementation',
+    // type: '2',
     size: 9999,
     page: 0
   }

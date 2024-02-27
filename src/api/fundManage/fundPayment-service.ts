@@ -183,3 +183,16 @@ export const getfindByDoorNoAndType = (data: any): Promise<any> => {
     data
   })
 }
+
+/**
+ * 导出房屋附属物
+ * @param params
+ * @returns
+ */
+export const exportHouseAttachments = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/new/individualHouseholdTree`,
+    params,
+    responseType: 'blob'
+  })
+}

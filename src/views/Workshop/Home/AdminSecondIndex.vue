@@ -261,7 +261,7 @@
           </div>
           <div v-else class="center gender-list">
             <div>总土地</div>
-            <div class="ground-txt">{{ villageAnalysisNumber }}亩</div>
+            <div class="ground-txt">{{ villageAnalysisNumber }}㎡</div>
           </div>
           <div v-loading="analysisLoading">
             <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />
@@ -633,7 +633,6 @@ const getVillageAnalysisLists = async () => {
       }
     }
     tudiArr.value.series = sseries
-    console.log(sseries, tudiArr.value.xAxis)
   } else {
     const dataList = ref<any>([])
     const numberList = ref<any>([])

@@ -61,19 +61,18 @@ const onClose = () => {
 }
 
 const onDownLoad = async () => {
-  console.log(props.serse)
+  console.log(props.serse, checkList.value, '1111')
 
   if (props.flag != 1) {
     const res = await getExportApi({
       peasantHouseholdType: props.type,
-      type: checkList.value,
-      ...props.serse
+      type: checkList.value
     })
     getRes(res)
   } else {
     const res = await getPgExportApi({
-      peasantHouseholdType: props.type,
-      type: checkList.value,
+      type: props.type,
+      templateKey: checkList.value,
       ...props.serse
     })
     getRes(res)

@@ -1,7 +1,10 @@
 <template>
-  <div class="page"> 库区漫游 </div>
+  <Expect :title="expectStr" />
 </template>
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import Expect from '@/h5/components/Expect/index.vue'
+const expectStr = '建设中，敬请期待...'
+</script>
 
 <style lang="less" scoped>
 .page {

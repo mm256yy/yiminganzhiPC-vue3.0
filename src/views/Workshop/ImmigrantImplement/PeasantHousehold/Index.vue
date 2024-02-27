@@ -182,12 +182,7 @@ onMounted(() => {
   getdistrictTree()
   getLandlordHeadInfo()
 })
-const toTarget = (routeName: string, query = {}) => {
-  push({
-    name: routeName,
-    query
-  })
-}
+
 const toTargetNew = () => {
   push('/WorkshopEffect/separateHouseholds')
 }
@@ -458,7 +453,6 @@ const onSearch = (data) => {
       }
     })
     tableObject.params = params
-    console.log(params)
 
     params.type = 'PeasantHousehold'
     setSearchParams({ ...params, status: 'implementation' })
