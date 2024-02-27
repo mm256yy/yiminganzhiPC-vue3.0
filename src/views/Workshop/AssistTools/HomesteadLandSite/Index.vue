@@ -408,15 +408,15 @@ onMounted(() => {
 }
 
 .box-wrapper {
-  min-width: 100%;
   position: relative;
   top: 0;
   left: 0;
+  min-width: 100%;
 }
 
 .save-btn {
   position: relative;
-  right: 10px;
   top: 2px;
+  right: 10px;
 }
 </style>

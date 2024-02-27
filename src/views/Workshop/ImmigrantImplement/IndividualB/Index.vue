@@ -105,7 +105,7 @@ import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landl
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, currentRoute } = useRouter()
 const projectId = appStore.currentProjectId
 let valueForme = appStore.serchValue
 
@@ -130,7 +130,11 @@ tableObject.params = {
   ...valueForme['个体工商信息']
 }
 
-setSearchParams({ type: 'IndividualHousehold', status: 'implementation' })
+setSearchParams({
+  type: 'IndividualHousehold',
+  status: 'implementation',
+  warnStatus: currentRoute.value.query['warnStatus']
+})
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'IndividualHousehold')

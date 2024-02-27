@@ -381,6 +381,7 @@ const onSave = async () => {
 const doSave = async () => {
   loading.value = true
   const user = (await methods.getFormData()) || {}
+  user.townshipCode = projectUser.value.townshipCode
   if (appStore.getIsProjectAdmin) {
     const pu = unref(projectUser.value)
 
