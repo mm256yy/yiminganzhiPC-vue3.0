@@ -123,6 +123,18 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
+        <template #houseImplementEscalationStatus="{ row }">
+          <div>
+            <span
+              :class="[
+                'report-status',
+                row.houseImplementEscalationStatus === '1' ? 'status-suc' : 'status-err'
+              ]"
+            >
+              {{ row.houseImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+            </span>
+          </div>
+        </template>
         <template #estimateStatus="{ row }">
           <div class="flex items-center justify-center">
             <span
@@ -234,14 +246,6 @@ const exportList = ref<exportListType[]>([
     name: '零星林果木调查表',
     value: 'assetEval_household_tree'
   }
-  // {
-  //   name: '土地基本情况评估表',
-  //   value: ''
-  // },
-  // {
-  //   name: '土地青苗及附着物评估表',
-  //   value: ''
-  // }
 ])
 const importList = ref<exportListType[]>([
   {
@@ -263,7 +267,6 @@ const importList = ref<exportListType[]>([
 ])
 const onExport = () => {
   exportDialog.value = true
-  console.log('1111111')
 }
 const onImport = () => {
   inExportDialog.value = true
@@ -447,7 +450,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'estimateStatus',
+    field: 'houseImplementEscalationStatus',
     label: '报告上传状态',
     search: {
       show: false
@@ -633,6 +636,16 @@ const fillData = (row) => {
 
   &.status-suc {
     background-color: #0cc029;
+  }
+}
+
+.report-status {
+  &.status-err {
+    color: #ff3939;
+  }
+
+  &.status-suc {
+    color: #0cc029;
   }
 }
 
