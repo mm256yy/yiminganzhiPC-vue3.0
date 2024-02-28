@@ -105,7 +105,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, currentRoute } = useRouter()
 const projectId = appStore.currentProjectId
 let valueForme = appStore.serchValue
 const dialog = ref(false) // 弹窗标识
@@ -122,7 +122,11 @@ tableObject.params = {
   ...valueForme['企业信息']
 }
 
-setSearchParams({ type: 'Company', status: 'implementation' })
+setSearchParams({
+  type: 'Company',
+  status: 'implementation',
+  warnStatus: currentRoute.value.query['warnStatus']
+})
 
 const districtTree = ref<any>([])
 const getDistrictTree = async () => {

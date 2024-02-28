@@ -580,6 +580,7 @@ const fillData = (row) => {
   box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
   align-items: center;
 }
+
 .filling-btn {
   display: flex;
   width: 80px;
@@ -611,6 +612,7 @@ const fillData = (row) => {
     background-color: #0cc029;
   }
 }
+
 .file-list {
   height: 210px;
   overflow-y: scroll;

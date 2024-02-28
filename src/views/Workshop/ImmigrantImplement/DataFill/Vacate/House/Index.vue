@@ -101,10 +101,20 @@
         >
           {{ baseInfo.showDoorNo }}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" align="center" label="户内人口">
+        <el-descriptions-item
+          label-class-name="bbqs"
+          align="center"
+          label="户内人口"
+          v-if="props.type == 'PeasantHousehold'"
+        >
           {{ baseInfo.familyNum }}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" align="center" label="联系方式">
+        <el-descriptions-item
+          label-class-name="bbqs"
+          align="center"
+          label="联系方式"
+          v-if="props.type == 'PeasantHousehold'"
+        >
           {{ baseInfo.phone }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
