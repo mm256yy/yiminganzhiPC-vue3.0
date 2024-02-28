@@ -178,8 +178,10 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请上传房屋腾空确认单')
         return
       } else {
+        console.log('KKKKL', props.doorNo)
         let params: any = {
           ...form.value,
+          doorNo: props.doorNo,
           houseEmptyPic: JSON.stringify(houseEmptyPic.value || []), // 交房协议
           houseEmptyOtherPic: JSON.stringify(houseEmptyOtherPic.value || []) // 其他附件
         }

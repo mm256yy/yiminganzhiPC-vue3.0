@@ -88,7 +88,7 @@ import iconSituation from '@/h5/assets/imgs/icon_general_situation.png'
 import imageBannerNotice from '@/h5/assets/imgs/image_banner_notice.png'
 import iconRehouseSrc from '@/h5/assets/imgs/icon_rehouse.png'
 import { useRouter } from 'vue-router'
-import { getNewsList, getHomesickness } from './service'
+import { getNewsList, getHomesicknessNewList } from './service'
 const { push } = useRouter()
 
 const toLink = (routeName: string, query = {}) => {
@@ -117,7 +117,7 @@ let getNewsLists = async () => {
   }
 }
 let getHomesicknesss = async () => {
-  let data = await getHomesickness()
+  let data = await getHomesicknessNewList()
   dataList.value = data.content
   if (dataList.value.length > 2) {
     dataList.value.length = 2

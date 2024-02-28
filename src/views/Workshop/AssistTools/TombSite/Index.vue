@@ -167,7 +167,6 @@ const villageTree = ref<any[]>([])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const tableLoading = ref<boolean>(false)
-const isTomb = ref<boolean>(false)
 
 const { tableObject } = useTable()
 const pageSize = ref(10)
@@ -340,7 +339,6 @@ onMounted(() => {
   getVillageTree()
   getList()
   getLandTypeOptions()
-  console.log('PPK', dictObj.value[377])
 })
 </script>
 <style lang="less" scoped>

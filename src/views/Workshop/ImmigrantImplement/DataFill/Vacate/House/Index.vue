@@ -61,7 +61,11 @@
       </template>
     </el-dialog>
 
-    <OnDocumentation :door-no="doorNo" :show="houseArchivesPup" @close="onDocumentationClose" />
+    <OnDocumentation
+      :door-no="props.doorNo"
+      :show="houseArchivesPup"
+      @close="onDocumentationClose"
+    />
     <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="margin-bottom: 20px; font-size: 24px; font-weight: bold; text-align: center"
         >房屋腾空确认单</h1

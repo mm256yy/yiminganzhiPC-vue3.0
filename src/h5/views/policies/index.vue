@@ -1,9 +1,9 @@
 <template>
   <div class="flex-col app-container">
     <div class="flex-col flex-auto group-policies">
-      <div class="flex-col section-policies">
+      <div v-if="items && items.length > 0" class="flex-col section-policies">
         <img class="image-header" :src="lawsBgSrc" />
-        <div class="flex-col section">
+        <div v-if="items && items.length > 0" class="flex-col section">
           <div
             class="flex-row justify-between items-center policies-item"
             v-for="(item, index) in items"
@@ -15,6 +15,7 @@
           </div>
         </div>
       </div>
+      <Empty v-else title="暂无数据" />
     </div>
   </div>
 </template>
@@ -24,25 +25,10 @@ import rightSrc from '@/h5/assets/imgs/icon_right.png'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { getPolicyLaw } from './service'
+import Empty from '@/h5/components/Empty/index.vue'
 const { push } = useRouter()
 
-const items = ref<any>([
-  {
-    title: '技能技能培训一'
-  },
-  {
-    title: '技能技能培训二'
-  },
-  {
-    title: '技能技能培训三'
-  },
-  {
-    title: '技能技能培训四'
-  },
-  {
-    title: '技能技能培训五'
-  }
-])
+const items = ref<any>([])
 
 const toLink = (routeName: string, query = {}) => {
   push({
@@ -52,7 +38,6 @@ const toLink = (routeName: string, query = {}) => {
 }
 let getPolicyLaws = async () => {
   let data = await getPolicyLaw()
-  console.log(data.content)
   items.value = data.content
   return data
 }

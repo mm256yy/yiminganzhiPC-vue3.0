@@ -52,7 +52,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 购房测算表： </div>
+            <div> 购房测算表： </div>
             <div class="card-img-list">
               <ElUpload
                 action="/api/file/type"

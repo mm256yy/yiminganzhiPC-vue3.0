@@ -98,7 +98,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" disabled v-model="scope.row.valuationAmount" :precision="2" />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -311,10 +311,7 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice =
-    Number(row.number) *
-    Number(row.price) *
-    (Number(row.discountRate) == 0 ? 1 : Number(row.discountRate))
+  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }
