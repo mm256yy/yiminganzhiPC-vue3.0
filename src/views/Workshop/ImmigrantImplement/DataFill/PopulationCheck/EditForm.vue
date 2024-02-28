@@ -31,7 +31,7 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-      <ElRow>
+      <ElRow v-if="form.addReason !== '3'">
         <ElCol :span="12">
           <ElFormItem label="人口性质" prop="populationNature">
             <ElSelect clearable filterable v-model="form.populationNature" class="!w-full">

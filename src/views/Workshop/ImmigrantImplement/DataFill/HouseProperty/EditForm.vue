@@ -48,9 +48,7 @@
         <ElCol :span="12">
           <ElFormItem label="建筑面积" prop="landArea">
             <ElInput v-model="form.landArea" class="!w-full" type="number" placeholder="请输入">
-              <template #append>
-                m<span style="position: absolute; top: -4px; right: 12px; font-size: 1px">2</span>
-              </template>
+              <template #append> ㎡ </template>
             </ElInput>
           </ElFormItem>
         </ElCol>

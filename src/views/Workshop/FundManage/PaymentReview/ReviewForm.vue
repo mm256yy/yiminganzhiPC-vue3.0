@@ -164,7 +164,7 @@
         </ElTableColumn>
       </ElTable>
       <div class="col-wrapper">
-        <div class="col-label-required"> 申请凭证： </div>
+        <div> 申请凭证： </div>
         <div class="card-img-list">
           <ElUpload
             :list-type="'picture-card'"
@@ -539,6 +539,32 @@ onMounted(() => {
 </script>
 
 <style lang="less">
+.col-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 16px 16px 0;
+
+  .col-label-required {
+    display: inline-flex;
+    width: 100px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
+
+    &::before {
+      margin-right: 4px;
+      color: #f56c6c;
+      content: '*';
+    }
+  }
+}
+
 .col-wrap {
   display: flex;
   align-items: center;

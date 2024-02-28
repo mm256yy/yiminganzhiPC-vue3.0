@@ -19,7 +19,7 @@
       <div class="row-item" v-for="(item, index) in form" :key="index">
         <ElRow>
           <ElCol :span="24">
-            <ElFormItem label="区块："> {{ getSettleAddress(item) }}</ElFormItem>
+            <ElFormItem label="区块："> {{ settleAddressText }}</ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -230,9 +230,8 @@ import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import type { SiteType } from '@/api/immigrantImplement/siteConfirmation/siteSel-types'
-import { resettleArea } from '../../config'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
-
+import { resettleArea, resettleAreaFlat } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
 interface PropsType {
   show: boolean
   doorNo: string
@@ -249,6 +248,7 @@ const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'submit'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
+const settleAddressText = ref<string>('')
 
 const form = ref<any[]>([])
 const imgUrl = ref<string>('')
@@ -395,50 +395,25 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
-/**
- * 获取当前行安置区
- * @param data 当前行信息
- */
-let apartmentArea: any = []
-const getSettleAddressList = async () => {
-  const params = {
-    projectId: appStore.getCurrentProjectId,
-    status: 'implementation',
-    type: '2',
-    size: 9999,
-    page: 0
-  }
-  try {
-    const result = await getPlacementPointListApi(params)
-    apartmentArea = result.content
-  } catch {}
-}
+
 const getSettleAddress = async (data: any) => {
   // 选择了公寓房的安置方式
   if (data.houseAreaType === 'flat') {
-    let str = ''
-    apartmentArea.map((item: any) => {
-      if (item.id == data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
+    let f = await resettleAreaFlat()
+    const str = f.find((item) => item.code === data.settleAddress)?.name
+    settleAddressText.value = str
   } else {
     let m = await resettleArea()
-    let str = ''
-    m.map((item: any) => {
-      if (item.code === data.settleAddress) {
-        str = item.name
-      }
-    })
-    return str
+    const str = m.find((item) => item.code === data.settleAddress)?.name
+    settleAddressText.value = str
   }
 }
+
 watch(
   () => props.show,
   async () => {
     // 处理表单数据
-    await getSettleAddressList()
+    // await getSettleAddressList()
     let arr: any = []
     if (props.dataList) {
       props.dataList?.map((item: any) => {
@@ -455,6 +430,7 @@ watch(
       form.value = [props.baseInfo]
     }
     console.log('bbq-2', form.value)
+    getSettleAddress(form.value[0])
   },
   {
     immediate: true,
