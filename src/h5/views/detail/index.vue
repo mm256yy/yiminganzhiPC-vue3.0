@@ -4,16 +4,16 @@
       <ElCarousel height="250px">
         <ElCarouselItem v-for="item in 3" :key="item">
           <ElImage
-            :src="dataList.coverPic ? JSON.parse(dataList.coverPic)[0].url : bannerBgSrc"
+            :src="dataList?.coverPic ? JSON.parse(dataList?.coverPic)[0].url : bannerBgSrc"
             fit="cover"
           />
         </ElCarouselItem>
       </ElCarousel>
     </div>
     <div class="flex-col relative section-content">
-      <span class="self-center content-title">{{ dataList.title }}</span>
+      <span class="self-center content-title">{{ dataList?.title }}</span>
       <div class="flex-col">
-        <span class="content-txt indent" v-html="dataList.content"> </span>
+        <span class="content-txt indent" v-html="dataList?.content"> </span>
       </div>
     </div>
   </div>
@@ -25,12 +25,9 @@ import { useRoute } from 'vue-router'
 import { getHomesicknessId, getNews } from './service'
 import { onMounted, ref } from 'vue'
 const { query } = useRoute()
-// const { projectId} = currentRoute.value.query as any
-// console.log('meta', query.id)
 let dataList: any = ref({})
 let getHomesicknessIds = async () => {
   let data = await getHomesicknessId(query.id)
-  console.log(data)
   dataList.value = data
 }
 let getNewss = async () => {

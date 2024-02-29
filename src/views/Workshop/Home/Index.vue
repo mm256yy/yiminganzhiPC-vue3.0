@@ -1,6 +1,5 @@
 <template>
   <div class="home-wrap">
-    <!-- <ScaleBox> -->
     <div class="big-box big-box-1 bg-white">
       <div
         class="big-box-container"
@@ -17,7 +16,9 @@
                 ? '企业'
                 : item.type == 'IndividualHousehold'
                 ? '个体工商'
-                : '村集体'
+                : item.type == 'Village'
+                ? '村集体'
+                : ''
             }}
           </div>
           <div>
@@ -631,16 +632,14 @@ const getNewsDict = async () => {
 const initPolicyData = () => {
   getPolicyListApi({ size: 9999 }).then((res: any) => {
     policyList.value = res.content
-    // policyList.value.forEach((item) => {
-    //   item.coverPic = item.coverPic ? JSON.parse(item.coverPic)[0].url : ''
-    // })
   })
 }
 
 // 初始化获取统计数据
 const initHomeStatisticsData = () => {
   homeStatistics().then((res: any) => {
-    statisticsData.value = res
+    statisticsData.value = res.filter((item) => item.type !== 'LandNoMove')
+    console.log('MPL', statisticsData.value)
   })
 }
 
@@ -1060,6 +1059,7 @@ const onAll = async () => {
 .mright {
   margin-right: -4px;
 }
+
 .news_info {
   display: flex;
   flex-wrap: wrap;

@@ -3,7 +3,7 @@
     <div class="flex-col flex-auto section-homesickness">
       <div class="flex-col justify-start group-homesickness">
         <ListView :loading="loading" :no-more="noMore" @refresh="initData" @load-more="loadMore">
-          <div class="flex-col">
+          <div v-if="items && items.length > 0" class="flex-col">
             <div
               class="flex-col justify-start items-center relative list-item"
               v-for="(item, index) in items"
@@ -20,6 +20,7 @@
               </div>
             </div>
           </div>
+          <Empty v-else title="暂无数据" />
         </ListView>
       </div>
     </div>
@@ -30,14 +31,16 @@
   </div>
 </template>
 <script lang="ts" setup>
-import homesicknessBgSrc from '@/h5/assets/imgs/homesickness_bg.png'
 import { ref, onMounted } from 'vue'
 import { ElImage } from 'element-plus'
 import iconContributeSrc from '@/h5/assets/imgs/icon_contribute.png'
 import { useRouter } from 'vue-router'
 import ListView from '@/h5/components/ListView/index.vue'
-import { getHomesickness } from './service'
+import { getHomesicknessNewList } from './service'
+import Empty from '@/h5/components/Empty/index.vue'
+
 const { push } = useRouter()
+const pageLoading = ref<boolean>(false)
 
 const toLink = (routeName: string, query = {}) => {
   push({
@@ -46,49 +49,23 @@ const toLink = (routeName: string, query = {}) => {
   })
 }
 
-const items = ref<any>([
-  {
-    title: '古茗苏遗址',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '古茗苏遗址',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
-  },
-  {
-    title: '四季如村',
-    desc: '留影·镜岭水库丨古民宿遗址'
+const items = ref<any>([])
+let getHomeSickNess = async () => {
+  pageLoading.value = true
+  try {
+    let data = await getHomesicknessNewList()
+    items.value = data.content
+    pageLoading.value = false
+  } catch {
+    pageLoading.value = false
+    items.value = []
   }
-])
-let getHomesicknesss = async () => {
-  let data = await getHomesickness()
-  console.log(data.content)
-  items.value = data.content
 }
 //第一次加载和加载更多不同,需要手动调用,初始化内容数组和数据总量
 onMounted(() => {
   initData()
-  getHomesicknesss()
+  getHomeSickNess()
+  window.scrollTo(0, 0) // 将页面滚动至顶部
 })
 
 //分页参数,当前页码

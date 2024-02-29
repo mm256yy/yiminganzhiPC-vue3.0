@@ -8,3 +8,11 @@ export const getHomesickness = (): Promise<any> => {
     params: { sort: ['createdDate,desc'], size: 9999 }
   })
 }
+
+//乡愁新列表
+export const getHomesicknessNewList = (): Promise<any> => {
+  return request.get({
+    url: `/h5/getCanUseHomesicknessList`,
+    params: { sort: ['createdDate,desc'], size: 9999 }
+  })
+}

@@ -138,6 +138,18 @@
             </span>
           </div>
         </template>
+        <template #houseImplementEscalationStatus="{ row }">
+          <div>
+            <span
+              :class="[
+                'report-status',
+                row.houseImplementEscalationStatus === '1' ? 'status-suc' : 'status-err'
+              ]"
+            >
+              {{ row.houseImplementEscalationStatus === '1' ? '报告已上传' : '报告未上传' }}
+            </span>
+          </div>
+        </template>
         <template #estimateTime="{ row }">
           <div>{{ formatTime(row.estimateTime, 'yyyy-MM-dd HH:mm:ss') }}</div>
         </template>
@@ -268,7 +280,6 @@ const importList = ref<exportListType[]>([
 ])
 const onExport = () => {
   exportDialog.value = true
-  console.log('1111111')
 }
 const onImport = () => {
   inExportDialog.value = true
@@ -463,7 +474,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'estimateStatus',
+    field: 'houseImplementEscalationStatus',
     label: '报告上传状态',
     search: {
       show: false
@@ -622,6 +633,16 @@ const fillData = (row) => {
 
   &.status-suc {
     background-color: #0cc029;
+  }
+}
+
+.report-status {
+  &.status-err {
+    color: #ff3939;
+  }
+
+  &.status-suc {
+    color: #0cc029;
   }
 }
 

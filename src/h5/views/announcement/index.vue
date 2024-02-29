@@ -2,7 +2,7 @@
   <div class="flex-col app-container">
     <div class="flex-col flex-auto group-announcement">
       <div class="flex-col section" style="overflow: auto">
-        <div class="flex-col">
+        <div v-if="items && items.length > 0" class="flex-col">
           <div
             class="flex-col list-item"
             v-for="(item, index) in items"
@@ -13,6 +13,7 @@
             <span class="self-start item-time">{{ item.releaseTime }}</span>
           </div>
         </div>
+        <Empty v-else title="暂无数据" />
       </div>
     </div>
   </div>
@@ -21,26 +22,11 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getNewsList } from '../home/service'
+import Empty from '@/h5/components/Empty/index.vue'
 const { push } = useRouter()
+const pageLoading = ref<boolean>(false)
 
-const items = ref<any>([
-  {
-    title: '浙江省镜岭水库第一次选房通知公告公示时间为2023年8月13日',
-    time: '2023-04-11'
-  },
-  {
-    title: '浙江省镜岭水库第一次选房通知公告公示时间为2023年8月13日',
-    time: '2023-04-11'
-  },
-  {
-    title: '浙江省镜岭水库第一次选房通知公告公示时间为2023年8月13日',
-    time: '2023-04-11'
-  },
-  {
-    title: '浙江省镜岭水库第一次选房通知公告公示时间为2023年8月13日',
-    time: '2023-04-11'
-  }
-])
+const items = ref<any>([])
 
 const toLink = (routeName: string, query = {}) => {
   push({
@@ -49,12 +35,19 @@ const toLink = (routeName: string, query = {}) => {
   })
 }
 let getNewsLists = async () => {
-  let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
-  console.log(data)
-  items.value = data.content
+  pageLoading.value = true
+  try {
+    let data = await getNewsList({ size: 9999, sort: ['releaseTime', 'desc'], type: '1' })
+    items.value = data.content
+    pageLoading.value = false
+  } catch {
+    pageLoading.value = false
+    items.value = []
+  }
 }
 onMounted(() => {
   getNewsLists()
+  window.scrollTo(0, 0) // 将页面滚动至顶部
 })
 </script>
 

@@ -6,11 +6,7 @@
           <div class="flex-col justify-start items-center self-start image-wrapper">
             <img
               class="image-avatar"
-              :src="
-                nameDta.otherPic
-                  ? JSON.parse(nameDta.otherPic)[0].url
-                  : 'https://codefun-proj-user-res-1256085488.cos.ap-guangzhou.myqcloud.com/64e83d955a7e3f0310414dfe/64e842454d98100011acce52/16929431142229801130.png'
-              "
+              :src="nameDta.otherPic ? JSON.parse(nameDta?.otherPic)[0]?.url : iconAvatar"
             />
           </div>
           <div class="flex-col flex-auto user-info">
@@ -69,16 +65,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue'
 import doorImgSrc from '@/h5/assets/imgs/icon_door.png'
 import locationSrc from '@/h5/assets/imgs/icon_location.png'
 import mobileSrc from '@/h5/assets/imgs/icon_mobile.png'
 import rightSrc from '@/h5/assets/imgs/icon_right.png'
 import memberSrc from '@/h5/assets/imgs/icon_member.png'
 import phoneSrc from '@/h5/assets/imgs/icon_phone.png'
-import fileSrc from '@/h5/assets/imgs/icon_file.png'
+import iconAvatar from '@/h5/assets/imgs/icon_avatar.png'
 import { useRouter } from 'vue-router'
 import { getPersonalInformation } from './service'
-import { ref, onMounted } from 'vue'
+
 const { push } = useRouter()
 
 const toTargetByIndex = (index: number) => {
@@ -93,15 +90,20 @@ const toTargetByIndex = (index: number) => {
 let nameDta: any = ref({})
 const onClickItem = (index) => {
   push({ path: toTargetByIndex(index) })
-  console.log('index', index)
 }
-let getPersonalInformations = async () => {
-  let data = await getPersonalInformation()
-  console.log(JSON.parse(data.otherPic)[0].url)
-  nameDta.value = data
+
+let getPersonalInfo = async () => {
+  try {
+    let data = await getPersonalInformation()
+    nameDta.value = data
+    console.log('LKK', nameDta.value)
+  } catch {
+    nameDta.value = {}
+  }
 }
+
 onMounted(() => {
-  getPersonalInformations()
+  getPersonalInfo()
 })
 </script>
 

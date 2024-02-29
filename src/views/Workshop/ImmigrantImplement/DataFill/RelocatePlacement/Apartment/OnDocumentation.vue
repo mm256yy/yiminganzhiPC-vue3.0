@@ -52,7 +52,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 购房测算表： </div>
+            <div class="col-label"> 购房测算表： </div>
             <div class="card-img-list">
               <ElUpload
                 action="/api/file/type"
@@ -220,9 +220,6 @@ const onSubmit = debounce((formEl) => {
       if (!flatAgreementPic.value.length) {
         ElMessage.error('请上传交房协议')
         return
-      } else if (!flatMeasurementPic.value.length) {
-        ElMessage.error('请上传购房测算表')
-        return
       } else {
         let params: any = {
           ...form.value,
@@ -316,6 +313,12 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin: 0 16px 16px 0;
+
+  .col-label {
+    display: inline-flex;
+    width: 120px;
+    height: 32px;
+  }
 
   .col-label-required {
     display: inline-flex;

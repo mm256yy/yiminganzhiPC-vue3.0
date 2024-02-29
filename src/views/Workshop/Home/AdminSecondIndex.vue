@@ -261,7 +261,7 @@
           </div>
           <div v-else class="center gender-list">
             <div>总土地</div>
-            <div class="ground-txt">{{ villageAnalysisNumber }}㎡</div>
+            <div class="ground-txt">{{ totalLandNumber }}㎡</div>
           </div>
           <div v-loading="analysisLoading">
             <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />
@@ -306,7 +306,8 @@ let aalls: any = ref()
 let renjuntd: any = ref({})
 let dataSum = 0
 const reason = ref()
-const villageAnalysisNumber = ref<number>()
+const villageAnalysisNumber = ref<number>() // 总人口
+const totalLandNumber = ref<number>()
 const typeNumber = ref<number>(1)
 let numberMan: any = ref()
 let numberWoman: any = ref()
@@ -633,6 +634,11 @@ const getVillageAnalysisLists = async () => {
       }
     }
     tudiArr.value.series = sseries
+    totalLandNumber.value = list
+      .map((item) => item.total)
+      .reduce((accumulator, currentValue) => {
+        return accumulator + currentValue
+      })
   } else {
     const dataList = ref<any>([])
     const numberList = ref<any>([])
