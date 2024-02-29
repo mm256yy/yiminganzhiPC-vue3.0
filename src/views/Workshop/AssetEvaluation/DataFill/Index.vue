@@ -150,7 +150,7 @@
       <!-- 基础设备评估 -->
       <Infrastructure
         v-show="
-          (type === 'Enterprise' || type === 'IndividualB') &&
+          (type === 'Enterprise' || type === 'IndividualB' || type === 'VillageInfoC') &&
           (tabCurrentId === TabIds[8] || tabCurrentId === TabIds[9])
         "
         :doorNo="doorNo"
@@ -175,7 +175,8 @@ import {
   EnterpriseTabs,
   IndividualBTabs,
   VillageInfoCTabs,
-  LandlordLandTabs
+  LandlordLandTabs,
+  EnterpriseTabsOther
 } from './config'
 import { useAppStore } from '@/store/modules/app'
 import { getLandlordByIdApi } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
@@ -302,7 +303,7 @@ const getRefresh = () => {
     } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
     } else {
-      tabsType.value = [...IndividualBTabs, ...LandlordLandTabs]
+      tabsType.value = [...IndividualBTabs, ...LandlordLandTabs, ...EnterpriseTabsOther]
     }
   } else if (type === 'VillageInfoC') {
     if (role.value === RoleCodeType.assessor) {
@@ -310,7 +311,7 @@ const getRefresh = () => {
     } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
     } else {
-      tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs]
+      tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs, EnterpriseTabsOther[0]]
     }
   }
   // 初始化tab页面显示

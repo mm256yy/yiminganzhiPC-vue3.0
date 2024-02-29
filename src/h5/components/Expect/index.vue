@@ -26,11 +26,11 @@ const props = defineProps<{
   margin-top: 200px;
 
   .label-title {
+    margin-top: 40px;
     font-size: 34px;
     font-weight: 600;
-    color: #666;
-    margin-top: 40px;
     font-weight: bold;
+    color: #666;
   }
 }
 </style>

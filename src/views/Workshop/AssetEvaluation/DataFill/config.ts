@@ -267,3 +267,20 @@ export const RelocationResettleTypes = {
   SocialSecurity: 'SocialSecurity', // 社保缴费确认单
   ChooseHouseCheck: 'ChooseHouseCheck' // 自建房验收告知单
 }
+export const EnterpriseTabsOther = [
+  {
+    name: '基础设施评估',
+    id: TabIds[8],
+    icon: 'mdi:pine-tree',
+    active: false,
+    key: 'Infrastructure'
+  },
+
+  {
+    name: '其他评估',
+    id: TabIds[9],
+    icon: 'fluent-mdl2:product-variant',
+    active: false,
+    key: 'Other'
+  }
+]

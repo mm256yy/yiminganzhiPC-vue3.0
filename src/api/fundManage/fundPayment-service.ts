@@ -196,3 +196,32 @@ export const exportHouseAttachments = (params: any) => {
     responseType: 'blob'
   })
 }
+//土地查询
+export const getLandEstimate = (params: any) => {
+  return request.get({
+    url: `/landEstimate`,
+    params
+  })
+}
+//土地查询
+export const getDeleteById = (data: any) => {
+  return request.post({
+    url: `/landEstimate/deleteById`,
+    data
+  })
+}
+//土地导出
+export const getExportLandList = (params: any) => {
+  return request.get({
+    url: `/landEstimate/exportLandList`,
+    params,
+    responseType: 'blob'
+  })
+}
+//土地导出模板
+export const getEexportData = () => {
+  return request.get({
+    url: `/landEstimate/exportData`,
+    responseType: 'blob'
+  })
+}
