@@ -225,3 +225,17 @@ export const getEexportData = () => {
     responseType: 'blob'
   })
 }
+export const postLandEstimate = (data: any) => {
+  return request.post({
+    url: `/landEstimate`,
+    data
+  })
+}
+//土地关联导出
+export const getEexportRelationList = (params: any) => {
+  return request.get({
+    url: `/landEstimate/exportRelationList`,
+    params,
+    responseType: 'blob'
+  })
+}
