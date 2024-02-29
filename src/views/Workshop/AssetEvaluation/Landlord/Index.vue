@@ -42,7 +42,7 @@
               <div class="file-item" v-for="item in excelList" :key="item.id">
                 <div class="file-name flex items-center flex-none w-272px">
                   <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-250px ml-5px">
+                  <div class="w-350px ml-5px">
                     {{ item.name }}
                   </div>
                 </div>
