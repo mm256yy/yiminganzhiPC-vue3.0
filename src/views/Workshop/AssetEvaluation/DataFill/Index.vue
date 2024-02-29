@@ -299,7 +299,7 @@ const getRefresh = () => {
     }
   } else if (type === 'IndividualB') {
     if (role.value === RoleCodeType.assessor) {
-      tabsType.value = IndividualBTabs
+      tabsType.value = [...IndividualBTabs, ...EnterpriseTabsOther]
     } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
     } else {
@@ -307,7 +307,7 @@ const getRefresh = () => {
     }
   } else if (type === 'VillageInfoC') {
     if (role.value === RoleCodeType.assessor) {
-      tabsType.value = VillageInfoCTabs
+      tabsType.value = [...VillageInfoCTabs, EnterpriseTabsOther[0]]
     } else if (role.value === RoleCodeType.assessorland) {
       tabsType.value = LandlordLandTabs
     } else {
