@@ -17,6 +17,7 @@
           </div>
         </div>
         <ElSpace style="align-items: baseline">
+          <ElButton type="primary" @click="onBind"> 关联绑定 </ElButton>
           <ElButton
             type="primary"
             @click="onExport(getEexportRelationList, { projectId, ...tableObject.params })"
@@ -179,7 +180,9 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
+        :selection="true"
         @register="register"
+        :header-cell-style="headerRow"
       >
         <template #totalPrice="{ row }">
           <div>{{
@@ -204,13 +207,32 @@
         <template #estimateFlag="{ row }">
           {{ row.estimateFlag == '1' ? '已评估' : '未评估' }}
         </template>
-        <template #filling>
+        <template #filling="{ row }">
           <div class="flex">
-            <ElButton link>评估</ElButton>
+            <ElButton
+              link
+              style="color: blue"
+              @click="handleEdit(row)"
+              v-if="row.relationFlag == '1'"
+              >评估</ElButton
+            >
           </div>
         </template>
       </Table>
     </div>
+    <Edit
+      :show="EditShow"
+      :row="rows"
+      :id="ids"
+      :data="datas"
+      @close="
+        () => {
+          EditShow = false
+          getList()
+          ElMessage.success('关联成功')
+        }
+      "
+    />
   </WorkContentWrap>
 </template>
 
@@ -222,11 +244,11 @@ import {
   ElBreadcrumb,
   ElBreadcrumbItem,
   ElMessage,
-  ElMessageBox,
   ElSpace,
   ElUpload,
   ElPopover,
-  ElButtonGroup
+  ElButtonGroup,
+  ElMessageBox
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -237,15 +259,15 @@ import dayjs from 'dayjs'
 import {
   getLandEstimate,
   getDeleteById,
-  getExportLandList,
   getEexportRelationList
 } from '@/api/fundManage/fundPayment-service'
 import { getDistrictTreeApi } from '@/api/district'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDictByName, getPgExcelList } from '@/api/workshop/population/service'
 import type { UploadInstance } from 'element-plus'
-import { downLandlordTemplateApi } from '@/api/workshop/landlord/service'
+import { useRouter } from 'vue-router'
 import { getExportData } from '@/api/fundManage/landimport'
+import Edit from '@/views/Workshop/LandAssociation/EditForm.vue'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
@@ -258,6 +280,7 @@ const { register, tableObject, methods } = useTable({
   delListApi: getDeleteById
 })
 const { getList, setSearchParams } = methods
+const { push } = useRouter()
 enum FileReportStatus {
   success = 'Succeed',
   failure = 'Failure',
@@ -274,6 +297,10 @@ let upload = ref<UploadInstance>()
 const getdistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
   districtTree.value = list || []
+  districtTree.value.push({
+    name: '其他',
+    code: '1'
+  })
   return list || []
 }
 const headers = ref({
@@ -640,6 +667,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'avgElevat',
+    width: 100,
     label: '平均高程点',
     search: {
       show: false
@@ -648,6 +676,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'minElevat',
     label: '最低高程点',
+    width: 100,
     search: {
       show: false
     }
@@ -655,6 +684,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'maxElevat',
     label: '最高高程点',
+    width: 100,
     search: {
       show: false
     }
@@ -711,6 +741,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'relationBy',
     label: '关联办理人',
+    width: 100,
     search: {
       show: false
     }
@@ -765,11 +796,15 @@ const onSearch = (data) => {
   } else {
     delete searchData.relation
   }
-  console.log(searchData)
   // 处理参数
   let params = {
     ...searchData
   }
+  params[getParamsKey('Country')] = null
+  params[getParamsKey('Township')] = null
+  params[getParamsKey('Village')] = null
+  params[getParamsKey('NaturalVillage')] = null
+  params.ownershipUnitIsNull = null
   if (params.grantTime) {
     params.grantTime = [params.grantTime]
   }
@@ -777,6 +812,12 @@ const onSearch = (data) => {
     if (!params[i]) {
       delete params[i]
     }
+  }
+  console.log(params)
+
+  if (params.code == '1') {
+    params.ownershipUnitIsNull = '1'
+    delete params.code
   }
   if (params.code) {
     findRecursion(districtTree.value, params.code, (item) => {
@@ -793,8 +834,10 @@ const onSearch = (data) => {
     } else {
       params.landLevelOne = params.landLeve
     }
-    delete params.code
+    delete params.landLeve
   }
+  console.log(params)
+
   setSearchParams({ ...params })
 }
 
@@ -841,7 +884,7 @@ let onExport = async (callback, name) => {
 let excelList = ref()
 let loading = ref(false)
 const getExcelUploadList = async () => {
-  const type = 'importLandAllocation'
+  const type = 'landEstimateRelation'
   const res = await getPgExcelList(type)
   if (res && res.content) {
     excelList.value = res.content
@@ -851,6 +894,85 @@ const getExcelUploadList = async () => {
 let handelshow = () => {
   loading.value = true
   getExcelUploadList()
+}
+let handleEdit = (row) => {
+  let type = ''
+  switch (row.householdType) {
+    case 'PeasantHousehold':
+      type = 'Landlord'
+      break
+    case 'Company':
+      type = 'Enterprise'
+      break
+    case 'IndividualHousehold':
+      type = 'IndividualB'
+      break
+    case 'Village':
+      type = 'VillageInfoC'
+      break
+    case 'LandNoMove':
+      type = ''
+      break
+    default:
+      break
+  }
+  if (type.length > 0) {
+    push({
+      name: 'AssetEvaDataFill',
+      query: {
+        projectId,
+        householdId: row.householdId,
+        doorNo: row.doorNo,
+        type,
+        estimateStatus: []
+      }
+    })
+  } else {
+    ElMessage.info('暂未开发')
+  }
+}
+let ids: any = ref([])
+let rows: any = ref([])
+let datas: any = ref([])
+let onBind = () => {
+  console.log(tabalRef.value.selections)
+  datas.value = tabalRef.value.selections
+  if (tabalRef.value.selections.length == 0) {
+    ElMessage.info('请选择关联土地')
+    return
+  }
+  let m = ''
+  rows.value = []
+  ids.value = []
+  tabalRef.value.selections.forEach((item: any) => {
+    rows.value.push(item.landNumber)
+    ids.value.push(item.id)
+    if (item.relationFlag == '1') {
+      m += item.landNumber + `,`
+    }
+  })
+  if (m.length > 0) {
+    ElMessageBox.confirm(
+      `土地编号：${m}已关联，是否继续关联，如选择继续关联，则以最新一次关联为准`,
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }
+    ).then(() => {
+      EditShow.value = true
+    })
+  } else {
+    EditShow.value = true
+  }
+}
+let headerRow = (data) => {
+  console.log(data, 'bbq')
+  if (data.columnIndex > 5 && data.columnIndex < 10) {
+    return {
+      background: 'rgb(161 252 253)'
+    }
+  }
 }
 </script>
 

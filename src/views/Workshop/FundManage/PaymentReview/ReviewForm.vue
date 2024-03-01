@@ -407,7 +407,9 @@ watch(
     if (val) {
       // 处理行政区划
       console.log(userInfo.value, 'bbq')
-
+      relocateVerifyPic.value = props.parmasList.financeReceipt
+        ? JSON.parse(props.parmasList.financeReceipt)
+        : []
       form.value = { ...(val as {}) }
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude

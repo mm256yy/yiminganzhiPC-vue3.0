@@ -202,6 +202,10 @@ let upload = ref<UploadInstance>()
 const getdistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
   districtTree.value = list || []
+  districtTree.value.push({
+    name: '其他',
+    code: '1'
+  })
   return list || []
 }
 const headers = ref({
@@ -605,6 +609,10 @@ const onSearch = (data) => {
     if (!params[i]) {
       delete params[i]
     }
+  }
+  if (params.code == '1') {
+    params.ownershipUnitIsNull = '1'
+    delete params.code
   }
   if (params.code) {
     findRecursion(districtTree.value, params.code, (item) => {
