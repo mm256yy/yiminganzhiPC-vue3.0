@@ -58,7 +58,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="单价"
+          label="评估单价（元）"
           :width="180"
           prop="valuationPrice"
           align="center"
@@ -74,7 +74,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="折率"
+          label="成新率"
           :width="180"
           prop="newnessRate"
           align="center"
