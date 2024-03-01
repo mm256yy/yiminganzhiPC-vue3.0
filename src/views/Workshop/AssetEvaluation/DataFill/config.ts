@@ -100,7 +100,7 @@ export const EnterpriseTabs = [
     id: TabIds[8],
     icon: 'mdi:pine-tree',
     active: false,
-    key: 'Infrastructure'
+    key: 'infrastructureStatus'
   },
 
   {
@@ -108,7 +108,7 @@ export const EnterpriseTabs = [
     id: TabIds[9],
     icon: 'fluent-mdl2:product-variant',
     active: false,
-    key: 'Other'
+    key: 'otherStatus'
   }
 ]
 
@@ -273,7 +273,7 @@ export const EnterpriseTabsOther = [
     id: TabIds[8],
     icon: 'mdi:pine-tree',
     active: false,
-    key: 'Infrastructure'
+    key: 'infrastructureStatus'
   },
 
   {
@@ -281,6 +281,6 @@ export const EnterpriseTabsOther = [
     id: TabIds[9],
     icon: 'fluent-mdl2:product-variant',
     active: false,
-    key: 'Other'
+    key: 'otherStatus'
   }
 ]

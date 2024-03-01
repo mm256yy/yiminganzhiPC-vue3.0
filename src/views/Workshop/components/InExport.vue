@@ -10,7 +10,7 @@
     destroy-on-close
   >
     <div>
-      <ElRadioGroup v-model="checkList">
+      <ElRadioGroup v-model="checkList" @change="onCheck">
         <div class="collopase-item" v-for="item in props.list" :key="item.value">
           <div class="collopase-item-head">
             <ElRadio :label="item.value">{{ item.name }}</ElRadio>
@@ -97,7 +97,7 @@ const onClose = () => {
 const params = ref<any>({
   projectId,
   householdType: props.type,
-  templateKey: ''
+  templateKey: checkList.value
 })
 const onDownLoad = async () => {
   const res = await getExportApi({ peasantHouseholdType: props.type, type: checkList.value })
@@ -115,6 +115,10 @@ const onDownLoad = async () => {
   elink.click()
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
+}
+let onCheck = (e) => {
+  console.log(e)
+  params.value.templateKey = e
 }
 </script>
 

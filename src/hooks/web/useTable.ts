@@ -141,15 +141,15 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     },
     // 与Search组件结合
     setSearchParams: (data: Recordable) => {
-      console.log(data)
+      // console.log(data)
 
       tableObject.currentPage = 1
-      tableObject.params = Object.assign(tableObject.params, {
+      tableObject.params = {
         size: tableObject.size,
         page: tableObject.currentPage,
         ...data
-      })
-      console.log(tableObject.params)
+      }
+      // console.log(tableObject.params)
 
       for (const i in tableObject.params) {
         if (!tableObject.params[i]) {

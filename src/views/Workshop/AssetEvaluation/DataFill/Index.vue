@@ -331,7 +331,7 @@ const getFillingStatus = () => {
 // 填报状态判断
 const getStatus = (data: any) => {
   let tabsTypeCopy = deepClone(tabsType.value)
-  console.log(data, type, tabsTypeCopy)
+  console.log(data, type, tabsTypeCopy, 'bbq')
 
   tabsTypeCopy.forEach((item) => {
     if (data[item.key] == '1') {
