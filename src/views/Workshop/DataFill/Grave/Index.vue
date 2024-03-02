@@ -78,7 +78,7 @@
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.gravePosition">
               <ElOption
-                v-for="item in dictObj[288]"
+                v-for="item in dictObj[326]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"

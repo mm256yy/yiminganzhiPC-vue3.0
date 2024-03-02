@@ -11,7 +11,7 @@
         :defaultExpand="false"
         :expand-field="'doorNo'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
     </div>
 
@@ -384,7 +384,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'showDoorNo',
+    field: 'doorNo',
     label: '个体工商编码',
 
     search: {
@@ -571,6 +571,17 @@ const onSearch = (data) => {
     params.type = 'IndividualHousehold'
     setSearchParams({ ...params })
   }
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+  }
+
+  const params = {
+    type: 'IndividualHousehold'
+  }
+  setSearchParams({ ...params })
 }
 
 const onPrint = async () => {

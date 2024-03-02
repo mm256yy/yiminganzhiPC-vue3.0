@@ -56,6 +56,21 @@
             </div>
           </div>
 
+          <div class="common-form-item">
+            <div class="common-label">附件：</div>
+            <div class="common-value">
+              <div>
+                <ElLink
+                  type="primary"
+                  v-for="(item, index) in fileList"
+                  :key="index"
+                  @click="handleLink(item)"
+                  >{{ item.name }}</ElLink
+                >
+              </div>
+            </div>
+          </div>
+
           <div class="flex items-center pb-12px pl-140px">
             <ElButton
               type="primary"
@@ -120,7 +135,7 @@
 
 <script lang="ts" setup>
 import { ref, unref, onMounted } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElLink } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
@@ -135,6 +150,7 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const editIcon = useIcon({ icon: 'material-symbols:edit-square-outline-rounded' })
 const reasonShow = ref<boolean>(false)
 const detail = ref<any>({})
+const fileList = ref<any[]>()
 
 const addReason = () => {
   reasonShow.value = true
@@ -147,6 +163,8 @@ const getDetail = () => {
   getFeedBackByIdApi(id).then((res) => {
     if (res) {
       detail.value = res
+      fileList.value = res.feedbackPic ? JSON.parse(res.feedbackPic) : []
+      console.log('ZKL', fileList.value)
     }
   })
 }
@@ -158,6 +176,10 @@ onMounted(() => {
 const onEditFormClose = () => {
   reasonShow.value = false
   getDetail()
+}
+
+const handleLink = (item: any) => {
+  window.open(item.url)
 }
 
 const onBack = () => {

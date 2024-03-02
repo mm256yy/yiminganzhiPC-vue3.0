@@ -55,7 +55,7 @@
         <ElRow v-if="type === 'Enterprise' || type === 'IndividualB'">
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label-required"> 设施设备评估报告： </div>
+              <div class="col-label"> 设施设备评估报告： </div>
               <div class="card-img-list">
                 <ElUpload
                   action="/api/file/type"
@@ -124,7 +124,7 @@
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label-required"> 其他档案 </div>
+              <div class="col-label"> 其他档案 </div>
               <div class="card-img-list">
                 <ElUpload
                   action="/api/file/type"
@@ -344,9 +344,6 @@ const onSubmit = debounce((formEl) => {
         if (!houseEstimatePic.value.length) {
           ElMessage.error('请上传房屋评估报告')
           return
-        } else if ((type === 'Enterprise' || type === 'IndividualB') && !devicePic.value.length) {
-          ElMessage.error('请上传设施设备评估报告')
-          return
         } else if (type === 'VillageInfoC' && !specialPic.value.length) {
           ElMessage.error('请上传农村小型专项设施评估报告')
           return
@@ -488,6 +485,20 @@ onMounted(() => {
       color: #f56c6c;
       content: '*';
     }
+  }
+
+  .col-label {
+    display: inline-flex;
+    width: 150px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
   }
 }
 
