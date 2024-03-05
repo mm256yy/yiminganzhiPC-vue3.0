@@ -19,7 +19,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label">自建房告知单：</div>
+            <div class="col-label-required">自建房告知单：</div>
             <div class="card-img-list">
               <ElUpload
                 :list-type="'picture-card'"
@@ -52,7 +52,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 自建房验收告知单： </div>
+            <div class="col-label"> 自建房验收告知单： </div>
             <div class="card-img-list">
               <ElUpload
                 action="/api/file/type"
