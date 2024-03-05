@@ -121,7 +121,19 @@
           {{ baseInfo.locationTypeText }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
-          房屋腾让情况
+          <div
+            style="
+              position: relative;
+              left: -119px;
+              width: 100%;
+              height: 119%;
+              font-size: 20px;
+              /* align-items: center; */
+              line-height: 75px;
+              background: white;
+            "
+            >房屋腾空情况</div
+          >
         </el-descriptions-item>
         <el-descriptions-item
           label-class-name="bbqs"

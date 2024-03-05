@@ -25,7 +25,7 @@
     <div class="head-top">
       <div class="tabs">
         <div
-          :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+          :class="['tab-item', tabCurrentId == item.id ? 'active' : '']"
           v-for="item in getTabsByType(type)"
           :key="item.id"
           @click="onTabClick(item)"
@@ -61,7 +61,7 @@
   <PictureDialog :isShow="dialogShow" :title="dialogTitle" :files="files" @close="onDialogClose" />
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElImage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getFileMangeList } from '@/api/fileMng/service'
@@ -80,7 +80,7 @@ import { breadcrumbTitles, houseHoldTabs, commonTabs, professionTabs } from './c
 
 const { currentRoute, back } = useRouter()
 const tabCurrentId = ref<number>(1)
-const { householdId, doorNo, type } = currentRoute.value.query as any
+const { householdId, doorNo, type, setTop } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const getTabsByType = (type) => {
@@ -93,6 +93,9 @@ const getTabsByType = (type) => {
   }
   return map[type]
 }
+onMounted(() => {
+  tabCurrentId.value = setTop
+})
 const dialogShow = ref<boolean>(false)
 const fileList = ref<FileDtoType[]>([])
 const dialogTitle = ref<string>('')
@@ -159,6 +162,8 @@ const requestFileMngList = (type) => {
 
 const chooseType = (type) => {
   // 一户一档
+  console.log(1, tabCurrentId.value)
+
   if (type === '0') {
     requestType.value = tabCurrentId.value
   } else if (type === '1') {
