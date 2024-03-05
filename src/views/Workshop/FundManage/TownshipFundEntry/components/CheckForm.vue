@@ -70,7 +70,10 @@
           </template>
           <template #receipt="{ row }">
             <div class="proof-container">
-              <ElImage :src="row.receipt" @click="onShowImage(row.receipt)" alt="相关凭证"
+              <ElImage
+                :src="row.receipt ? JSON.parse(row.receipt)[0].url : ''"
+                @click="onShowImage(row.receipt)"
+                alt="相关凭证"
             /></div>
           </template>
         </Table>
@@ -123,7 +126,7 @@ const isOther = computed(() => {
 })
 
 const onShowImage = (e) => {
-  avatarSrc.value = e
+  avatarSrc.value = e ? JSON.parse(e)[0].url : ''
   dialogVisible.value = true
 }
 
