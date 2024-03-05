@@ -340,8 +340,16 @@ const onSearch = (data) => {
 
 // 查看档案
 const onCheckRow = (row) => {
+  console.log(appStore.getUserInfo?.id == 1150)
+  let m = ''
+  if (appStore.getUserInfo?.id == 1150) {
+    m = 'FileMngChecksa'
+  } else {
+    m = 'FileMngCheck'
+  }
+
   push({
-    name: 'FileMngCheck',
+    name: m,
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
