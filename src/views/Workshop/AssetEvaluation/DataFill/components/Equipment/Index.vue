@@ -32,14 +32,6 @@
         <ElTableColumn label="规格" :width="180" prop="size" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入" v-model="row.size" />
-            <!-- <ElSelect clearable placeholder="请选择" v-model="row.size">
-              <ElOption
-                v-for="item in dictObj[267]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="单位" :width="160" prop="unit" align="center" header-align="center">
@@ -126,7 +118,7 @@
         <ElTableColumn
           label="评估单价"
           :width="180"
-          prop="valuationPrice"
+          prop="price"
           align="center"
           header-align="center"
         >
@@ -134,7 +126,7 @@
             <ElInputNumber
               :min="0"
               @change="getModelValue(row)"
-              v-model="row.valuationPrice"
+              v-model="row.price"
               :precision="2"
             />
           </template>
@@ -163,7 +155,7 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElInputNumber :min="0" v-model="row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="row.valuationAmount" :precision="2" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -384,7 +376,7 @@ const total = () => {
 }
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.number) * Number(row.valuationPrice) * Number(row.newnessRate)
+  const totalPrice = Number(row.number) * Number(row.price) * Number(row.newnessRate)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }

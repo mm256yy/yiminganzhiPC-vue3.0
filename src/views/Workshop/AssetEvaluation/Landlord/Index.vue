@@ -11,7 +11,7 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
     </div>
 
@@ -381,13 +381,22 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'implementFillStatus',
-    label: '填报状态',
+    field: 'estimateStatus',
+    label: '评估状态',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
-        options: ImplementFillStatusEnums
+        options: [
+          {
+            label: '已评估',
+            value: '1'
+          },
+          {
+            label: '未评估',
+            value: '0'
+          }
+        ]
       }
     },
     table: {
@@ -572,6 +581,19 @@ const onSearch = (data) => {
     params.status = SurveyStatusEnum.Implementation
     setSearchParams({ ...params })
   }
+}
+
+const onReset = () => {
+  // 需要重置一次params
+  tableObject.params = {
+    projectId
+  }
+
+  const params = {
+    type: 'PeasantHousehold',
+    status: SurveyStatusEnum.Implementation
+  }
+  setSearchParams({ ...params })
 }
 
 // 数据填报

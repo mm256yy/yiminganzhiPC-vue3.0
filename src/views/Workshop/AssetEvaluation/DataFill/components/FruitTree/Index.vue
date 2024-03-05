@@ -134,7 +134,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn

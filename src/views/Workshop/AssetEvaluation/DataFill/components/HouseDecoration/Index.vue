@@ -166,6 +166,7 @@
               :min="0"
               v-model="scope.row.valuationAmount"
               :precision="2"
+              disabled
               v-if="scope.row.isBuyItNow == '0'"
             />
             <div v-else></div>
