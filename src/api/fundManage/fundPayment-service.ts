@@ -206,7 +206,7 @@ export const getLandEstimate = (params: any) => {
 //土地查询
 export const getDeleteById = (data: any) => {
   return request.post({
-    url: `/landEstimate/deleteById`,
+    url: `/landEstimate/delete/${data.id}`,
     data
   })
 }

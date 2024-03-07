@@ -114,7 +114,7 @@ tableObject.params = {
   projectId,
   status: 4
 }
-setSearchParams({})
+setSearchParams({ status: 4 })
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -472,7 +472,7 @@ const onReset = () => {
     projectId,
     status: '4'
   }
-  setSearchParams({})
+  setSearchParams({ status: '4' })
 }
 
 // 获取资金科目选项列表

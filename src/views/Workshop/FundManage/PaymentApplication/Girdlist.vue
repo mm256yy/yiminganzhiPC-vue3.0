@@ -2,7 +2,7 @@
   <ElDialog
     title="付款对象选择"
     :model-value="props.show"
-    :width="1700"
+    :width="1200"
     @close="onClose"
     alignCenter
     appendToBody
@@ -56,46 +56,64 @@
 
       <div>合计金额:{{ amountPrice }}元</div>
     </div>
-    <ElTable
-      :data="tableData"
-      style="width: 100%"
-      class="mb-20"
-      :border="true"
-      v-if="props.type == false"
-      row-key="id"
-    >
-      <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
-      <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
-      <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
-      <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
-      <ElTableColumn
-        label="合同金额(元)"
-        prop="contractAmount"
-        align="center"
-        header-align="center"
-      />
-      <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
-        <template #default="{ row }">
-          <ElCheckboxGroup
-            v-model:model-value="check"
-            @change="
-              (val) => {
-                checkList(val, row, row.id)
-              }
-            "
-          >
-            <ElCheckbox v-for="item in row.nodeDtoList" :label="item.id" :key="item.id">{{
-              formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
-            }}</ElCheckbox>
-          </ElCheckboxGroup>
-        </template>
-      </ElTableColumn>
-      <ElTableColumn label="申请金额" align="center" header-align="center">
-        <template #default="{ row }">
-          <ElInputNumber class="!w-200px" style="width: 50px" v-model="row.amount" />
-        </template>
-      </ElTableColumn>
-    </ElTable>
+    <div v-else>
+      <div
+        style="
+          display: flex;
+          align-items: baseline;
+          font-size: 12px;
+          justify-content: space-between;
+        "
+      >
+        <div style="display: flex; align-items: baseline">
+          <span style="margin-right: 10px">关键字:</span>
+          <ElInput type="primary" style=" width: 240px;margin-bottom: 10px" v-model="search"
+        /></div>
+
+        <ElButton type="primary" style="margin-bottom: 10px" @click="searchClick">搜索</ElButton>
+      </div>
+
+      <ElTable
+        :data="tableData"
+        style="width: 100%"
+        class="mb-20"
+        :border="true"
+        v-if="props.type == false"
+        row-key="id"
+      >
+        <ElTableColumn label="序号" align="center" width="50" type="index" header-align="center" />
+        <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
+        <ElTableColumn label="合同名称" prop="contractName" align="center" header-align="center" />
+        <ElTableColumn label="合同编号" prop="contractCode" align="center" header-align="center" />
+        <ElTableColumn
+          label="合同金额(元)"
+          prop="contractAmount"
+          align="center"
+          header-align="center"
+        />
+        <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElCheckboxGroup
+              v-model:model-value="check"
+              @change="
+                (val) => {
+                  checkList(val, row, row.id)
+                }
+              "
+            >
+              <ElCheckbox v-for="item in row.nodeDtoList" :label="item.id" :key="item.id">{{
+                formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+              }}</ElCheckbox>
+            </ElCheckboxGroup>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="申请金额" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInputNumber class="!w-200px" style="width: 50px" v-model="row.amount" />
+          </template>
+        </ElTableColumn>
+      </ElTable>
+    </div>
 
     <template #footer>
       <ElButton @click="onClose(false)">取消</ElButton>
@@ -116,7 +134,8 @@ import {
   ElInputNumber,
   ElMessage,
   ElCheckboxGroup,
-  ElCheckbox
+  ElCheckbox,
+  ElInput
 } from 'element-plus'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getPaymentApplicationPpsList } from '@/api/fundManage/paymentApplication-service'
@@ -127,6 +146,7 @@ interface PropsType {
   show: any
   type: any
   selence?: any
+  tableList?: any
 }
 // const formRef = ref<any>()
 const props = defineProps<PropsType>()
@@ -190,21 +210,24 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
-const ppsList = () => {
-  getPaymentApplicationPpsList().then((res: any) => {
+const ppsList = (e) => {
+  getPaymentApplicationPpsList({ keywords: e }).then((res: any) => {
     if (res) {
       tableData.value = res
       console.log(tableData.value, '付款对象数据')
     }
   })
 }
-
+let search = ref('')
+let searchClick = () => {
+  ppsList(search.value)
+}
 watch(
   () => props.show,
   () => {
     if (props.show) {
       check.value = props.selence
-      ppsList()
+      // ppsList()
       console.log(props)
     }
   },
