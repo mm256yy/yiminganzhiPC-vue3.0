@@ -505,7 +505,7 @@ const onSubmit = async (status: string) => {
     ElMessage.error('请选择财务凭证')
     return
   }
-  console.log(relocateVerifyPic.value)
+  console.log(relocateVerifyPic.value, '测试数据')
   btnLoading.value = true
   let params: any = {
     ...formAudit.value,
