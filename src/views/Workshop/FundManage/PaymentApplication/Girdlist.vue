@@ -67,7 +67,7 @@
       >
         <div style="display: flex; align-items: baseline">
           <span style="margin-right: 10px">关键字:</span>
-          <ElInput type="primary" style=" width: 240px;margin-bottom: 10px" v-model="search"
+          <ElInput type="primary" style="width: 240px; margin-bottom: 10px" v-model="search"
         /></div>
 
         <ElButton type="primary" style="margin-bottom: 10px" @click="searchClick">搜索</ElButton>
