@@ -191,7 +191,7 @@ const findRecursion = (data, code, callback) => {
   })
 }
 const ppsList = () => {
-  getPaymentApplicationPpsList({ keywords: '1' }).then((res: any) => {
+  getPaymentApplicationPpsList().then((res: any) => {
     if (res) {
       tableData.value = res
       console.log(tableData.value, '付款对象数据')
