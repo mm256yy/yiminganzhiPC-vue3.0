@@ -337,6 +337,7 @@ onMounted(() => {
       content: '*';
     }
   }
+
   .col-label {
     display: inline-flex;
     width: 150px;

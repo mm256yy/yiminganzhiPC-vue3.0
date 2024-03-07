@@ -505,14 +505,15 @@ const onSubmit = async (status: string) => {
     ElMessage.error('请选择财务凭证')
     return
   }
-  console.log(status)
+  console.log(relocateVerifyPic.value)
   btnLoading.value = true
   let params: any = {
     ...formAudit.value,
     businessId: form.value.id,
     status: status,
     type: 1, //付款申请
-    receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+    receipt:
+      relocateVerifyPic.value.length > 0 ? JSON.stringify(relocateVerifyPic.value || []) : null // 申请凭证
   }
   getPaymentReviewListSSApi(params).then(() => {
     ElMessage.success('操作成功！')
