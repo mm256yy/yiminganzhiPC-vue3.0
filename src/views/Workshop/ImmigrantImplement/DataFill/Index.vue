@@ -478,7 +478,9 @@ import {
   HouseholdSubTabs,
   EnterpriseSubTabs,
   IndividualSubTabs,
-  VillageSubTabs
+  VillageSubTabs,
+  LandNoMoveTabs,
+  LandNoMoveTabss
 } from './config'
 import { HouseType } from './config'
 
@@ -553,11 +555,16 @@ const titleMsg = (type: string, index: number) => {
       return '个体工商信息'
     }
     return '个体工商户实施'
-  } else {
+  } else if (type == 'Village') {
     if (index === 1) {
       return '村集体信息'
     }
     return '村集体实施'
+  } else {
+    if (index === 1) {
+      return '只征地不搬迁信息'
+    }
+    return '只征地不搬迁实施'
   }
 }
 
@@ -567,7 +574,7 @@ const tabsList = ref<any>([])
 const subTabsList = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const subTabCurrentId = ref<number>(TabIds[0])
-const { doorNo, householdId, type } = currentRoute.value.query as any
+const { doorNo, householdId, type, nowbody } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const fillingStatus = ref<string>('')
 
@@ -778,6 +785,12 @@ onMounted(() => {
   } else if (type == 'Village') {
     tabsList.value = VillageTabs
     subTabsList.value = VillageSubTabs
+  } else if (nowbody == 'PeasantHousehold') {
+    tabsList.value = LandNoMoveTabs
+    subTabsList.value = []
+  } else if (nowbody == 'Other') {
+    tabsList.value = LandNoMoveTabss
+    subTabsList.value = []
   }
   getLandlordInfo()
   times.value = setInterval(() => {

@@ -15,6 +15,12 @@ export interface StatisticsDtoType {
   villageLagCount: number
   villageWarnCount: number
   villageNormalCount: number
+  landNoMoveCount: number
+  landNoMoveLagCount: number
+  landNoMoveNormalCount: number
+  landNoMoveWarnCount: number
+  landNoMoveCompleteCount: number
+  landNoMoveIncompletCount: number
 }
 
 export interface MessageListDtoType {

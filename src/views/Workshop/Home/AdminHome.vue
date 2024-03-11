@@ -274,6 +274,55 @@
           </div>
         </div>
       </div>
+      <!-- 只征地不搬迁 -->
+      <div class="enter-item">
+        <div class="title-field">
+          <div class="enter-icon">
+            <img class="img" src="@/assets/imgs/home/icon_village.png" />
+          </div>
+          <div class="enter-title">
+            <span class="title-txt">只征地不搬迁</span>
+            <div class="flex">
+              <span class="count-num">{{ statisticsObj?.landNoMoveCount }}</span>
+              <span class="count-unit">户</span>
+            </div>
+          </div>
+        </div>
+        <div class="row-field">
+          <div class="field-box" @click="toTarget('LandNoMove', { warnStatus: 1 })">
+            <div class="line-1">{{ statisticsObj?.landNoMoveCompleteCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #30a952;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2 red">已完成</div>
+            </div>
+          </div>
+          <div class="field-box" @click="toTarget('LandNoMove', { warnStatus: 0 })">
+            <div class="line-1">{{ statisticsObj?.landNoMoveIncompletCount }}</div>
+            <div class="flex">
+              <div
+                style="
+                  width: 8px;
+                  height: 8px;
+                  margin-top: 8px;
+                  margin-right: 8px;
+                  background-color: #fec44c;
+                  border-radius: 50%;
+                "
+              ></div>
+              <div class="line-2">未完成</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="group">
@@ -422,7 +471,7 @@ onMounted(() => {
     justify-content: center;
 
     .enter-item {
-      width: 362px;
+      width: 232px;
       height: 163px;
       padding: 20px;
       margin-right: 60px;

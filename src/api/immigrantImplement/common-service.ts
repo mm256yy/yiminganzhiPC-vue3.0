@@ -130,3 +130,21 @@ export const saveFileUploadApi = (data: any) => {
 export const saveOtherAttachUploadApi = (data: any) => {
   return request.post({ url: '/immigrantLand/save', data })
 }
+//查询之征地不搬迁
+export const getLandNoMoveApi = (
+  query: Partial<LandlordDtoType>
+): Promise<TableResponse<LandlordDtoType>> => {
+  if (!query.code) {
+    delete query.areaCode
+    delete query.townCode
+    delete query.villageCode
+    delete query.virutalVillageCode
+  }
+
+  return request.get({
+    url: 'peasantHousehold/landNoMove',
+    params: {
+      ...query
+    }
+  })
+}

@@ -418,7 +418,51 @@ export const VillageSubTabs = [
     key: 'specialStatus'
   }
 ]
-
+// 只征地不搬迁
+export const LandNoMoveTabs = [
+  {
+    id: 0,
+    name: '资产评估'
+  },
+  {
+    id: 1,
+    name: '生产安置确认'
+  },
+  {
+    id: 2,
+    name: '土地腾让'
+  },
+  {
+    id: 3,
+    name: '补偿卡'
+  },
+  {
+    id: 4,
+    name: '征地协议'
+  },
+  {
+    id: 5,
+    name: '生产安置办理'
+  }
+]
+export const LandNoMoveTabss = [
+  {
+    id: 0,
+    name: '资产评估'
+  },
+  {
+    id: 2,
+    name: '土地腾让'
+  },
+  {
+    id: 3,
+    name: '补偿卡'
+  },
+  {
+    id: 4,
+    name: '征地协议'
+  }
+]
 // 淹没区，建设区，影响区，重叠区
 export const locationTypes = [
   {
