@@ -454,6 +454,17 @@
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>
+    <div class="data-fill-body" v-if="type === 'LandNoMove'">
+      <!-- 只征地不搬迁资产评估 -->
+      <AssetEvaluationZ
+        v-if="tabCurrentId === 0"
+        :type="type"
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+      />
+      <!-- 只征地不搬迁补偿卡 -->
+      <CompensationCard v-if="tabCurrentId === 3" :doorNo="doorNo" :baseInfo="baseInfo" />
+    </div>
 
     <FeedbackForm
       :show="feedbackShow"
@@ -533,7 +544,8 @@ import EntProcedures from './EntProcedures/Index.vue' // 企业 -- 相关手续
 import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户 -- 相关手续
 
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
-
+import AssetEvaluationZ from './AssetEvaluationZ/Index.vue' // 只征地不搬迁资产评估
+import CompensationCard from './CompensationCard/Index.vue' // 只征地不搬迁补偿卡
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
 import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
