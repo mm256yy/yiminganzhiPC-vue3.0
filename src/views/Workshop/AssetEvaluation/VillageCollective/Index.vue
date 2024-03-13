@@ -239,10 +239,10 @@ const exportList = ref<exportListType[]>([
     name: '附属物调查表',
     value: 'assetEval_village_appendage'
   },
-  // {
-  //   name: '基础设施评估表',
-  //   value: 'exportAppendage'
-  // },
+  {
+    name: '基础设施评估表',
+    value: 'assetEval_village_infra'
+  },
   {
     name: '零星林果木调查表',
     value: 'assetEval_village_tree'
@@ -268,6 +268,10 @@ const importList = ref<exportListType[]>([
   {
     name: '附属物调查表',
     value: 'assetEval_village_appendage'
+  },
+  {
+    name: '基础设施评估表',
+    value: 'assetEval_village_infra'
   },
   {
     name: '小型专项及农副业设施表',
