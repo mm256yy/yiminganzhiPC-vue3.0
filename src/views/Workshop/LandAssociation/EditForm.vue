@@ -40,11 +40,15 @@
       </ElFormItem>
       <ElFormItem label="类别:" v-if="form.chek" prop="type">
         <ElSelect style="width: 390px" v-model="form.type" placeholder="请选择类别">
-          <ElOption label="农户" value="0" />
-          <ElOption label="其他" value="1" />
+          <ElOption
+            v-for="item in dictObj[418]"
+            :key="item.value"
+            :value="item.value"
+            :label="item.label"
+          />
         </ElSelect>
       </ElFormItem>
-      <ElFormItem label="身份证号:" v-if="form.chek && form.type == '0'" prop="card">
+      <ElFormItem label="身份证号:" v-if="form.chek && form.type == 'PeasantHousehold'" prop="card">
         <ElInput style="width: 390px" v-model="form.card" placeholder="请输入身份证号" />
       </ElFormItem>
       <ElFormItem label="所属区域:" v-if="form.chek" prop="code">
