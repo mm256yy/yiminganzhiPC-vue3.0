@@ -19,3 +19,24 @@ export const getProduceLandInfoApi = (doorNo: any): Promise<any> => {
     }
   })
 }
+// 新增生产安置
+export const AddProduceListApi = (data: any): Promise<any> => {
+  return request.post({ url: '/demographic/create', data })
+}
+// 删除生产安置
+export const deleteProduceListApi = (id: any): Promise<any> => {
+  return request.post({ url: `/demographic/delete/${id}` })
+}
+//更新生产安置
+export const updateProduceListApi = (data: any): Promise<any> => {
+  return request.post({ url: '/demographic/update', data })
+}
+// 参保人数 landEstimate/getLandAreaByDoorNo?doorNo=XXXX
+export const getLandAreaByDoorNoApi = (doorNo: any): Promise<any> => {
+  return request.get({
+    url: '/landEstimate/getLandAreaByDoorNo',
+    params: {
+      doorNo
+    }
+  })
+}

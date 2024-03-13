@@ -454,7 +454,9 @@
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
     </div>
-
+    <div class="data-fill-body" v-if="type === 'LandNoMove'">
+      <Produce :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
+    </div>
     <FeedbackForm
       :show="feedbackShow"
       :householder="baseInfo.name"
@@ -533,7 +535,7 @@ import EntProcedures from './EntProcedures/Index.vue' // 企业 -- 相关手续
 import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户 -- 相关手续
 
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
-
+import Produce from '@/views/Workshop/ImmigrantImplement/DataFill/Lander/Produce.vue'
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
 import FeedbackForm from '@/views/Workshop/Feedback/FeedbackForm.vue'
 import { useRouter } from 'vue-router'
