@@ -133,7 +133,8 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'DatePicker',
       componentProps: {
-        type: 'daterange'
+        type: 'daterange',
+        valueFormat: 'YYYY-MM-DD'
       }
     },
     table: {

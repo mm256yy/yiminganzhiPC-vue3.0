@@ -463,6 +463,24 @@ export const LandNoMoveTabss = [
     name: '征地协议'
   }
 ]
+export const LandNoMoveSubTabs = [
+  {
+    type: 5,
+    name: '养老保险',
+    id: TabIds[1],
+    icon: 'fa6-solid:hospital-user',
+    active: false,
+    key: 'retirementStatus'
+  },
+  {
+    type: 5,
+    name: '自谋职业',
+    id: TabIds[2],
+    icon: 'pepicons-print:people-off',
+    active: false,
+    key: 'selfEmploymentStatus'
+  }
+]
 // 淹没区，建设区，影响区，重叠区
 export const locationTypes = [
   {

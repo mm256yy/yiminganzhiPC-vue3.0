@@ -468,6 +468,26 @@
       <CompensationCard v-if="tabCurrentId === 3" :doorNo="doorNo" :baseInfo="baseInfo" />
       <!-- 土地腾让 -->
       <land-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 2" />
+      <!-- 只征地不搬迁 -- 协议签订 -->
+      <Zd-xy :doorNo="doorNo" v-if="tabCurrentId === 4" @update-data="getLandlordInfo" />
+      <!-- 生产安置确认 -->
+      <template v-if="tabCurrentId === 5">
+        <!-- 养老保险 -->
+        <insure-resettle
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[1]"
+          @update-data="getLandlordInfo"
+        />
+
+        <!-- 自谋职业 -->
+        <self-resettle
+          :doorNo="doorNo"
+          :baseInfo="baseInfo"
+          v-if="subTabCurrentId === TabIds[2]"
+          @update-data="getLandlordInfo"
+        />
+      </template>
     </div>
 
     <FeedbackForm
@@ -495,7 +515,8 @@ import {
   IndividualSubTabs,
   VillageSubTabs,
   LandNoMoveTabs,
-  LandNoMoveTabss
+  LandNoMoveTabss,
+  LandNoMoveSubTabs
 } from './config'
 import { HouseType } from './config'
 
@@ -548,7 +569,8 @@ import EntProcedures from './EntProcedures/Index.vue' // 企业 -- 相关手续
 import IndividualProcedures from './IndividualProcedures/Index.vue' // 个体户 -- 相关手续
 
 import CollectiveAssetDisposal from './CollectiveAssetDisposal/Index.vue' // 村集体 -- 集体资产处置方法
-import Produce from '@/views/Workshop/ImmigrantImplement/DataFill/Lander/Produce.vue'
+import Produce from '@/views/Workshop/ImmigrantImplement/DataFill/Lander/Produce.vue' //资产评估 只征地不搬迁
+import ZdXy from '@/views/Workshop/ImmigrantImplement/DataFill/Lander/ZdXy.vue' //征地协议 只征地不搬迁
 import AssetEvaluationZ from './AssetEvaluationZ/Index.vue' // 只征地不搬迁资产评估
 import CompensationCard from './CompensationCard/Index.vue' // 只征地不搬迁补偿卡
 import UserInfo from './components/UserInfo.vue' // 用户基本信息
@@ -804,7 +826,7 @@ onMounted(() => {
     subTabsList.value = VillageSubTabs
   } else if (nowbody == 'PeasantHousehold') {
     tabsList.value = LandNoMoveTabs
-    subTabsList.value = []
+    subTabsList.value = LandNoMoveSubTabs
   } else if (nowbody == 'Other') {
     tabsList.value = LandNoMoveTabss
     subTabsList.value = []
