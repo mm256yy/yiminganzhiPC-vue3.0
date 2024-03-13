@@ -190,7 +190,9 @@
             '-' +
             (row.areaCodeText || '') +
             '-' +
-            (row.townCodeText || '')
+            (row.townCodeText || '') +
+            '-' +
+            (row.villageCodeText || '')
           }}</div>
         </template>
         <template #landLevel="{ row }">

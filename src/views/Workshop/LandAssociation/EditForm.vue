@@ -205,6 +205,7 @@ watch(
   (val) => {
     if (val) {
       getdistrictTree()
+      form.value.peasantHouseholdIdOne = ''
       form.value.peasantHouseholdIdTwo = props.data[0].rightHolder
     }
   }
