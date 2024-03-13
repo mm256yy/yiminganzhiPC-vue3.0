@@ -321,6 +321,7 @@ const filterWay = (data) => {
   return arr
 }
 const stepClick = (id) => {
+  getSimulateImmigrantSettle()
   stepIndex.value = id
   // if (stepIndex.value == 1) {
   //   console.log(dataList.value, '点击成功')
