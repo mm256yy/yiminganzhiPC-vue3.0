@@ -186,7 +186,11 @@
       >
         <template #totalPrice="{ row }">
           <div>{{
-            (row.cityCode || '') + '-' + (row.areaCode || '') + '-' + (row.townCode || '')
+            (row.cityCodeText || '') +
+            '-' +
+            (row.areaCodeText || '') +
+            '-' +
+            (row.townCodeText || '')
           }}</div>
         </template>
         <template #landLevel="{ row }">

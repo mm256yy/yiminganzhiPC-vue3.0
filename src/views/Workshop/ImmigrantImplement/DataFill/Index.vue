@@ -466,6 +466,8 @@
       />
       <!-- 只征地不搬迁补偿卡 -->
       <CompensationCard v-if="tabCurrentId === 3" :doorNo="doorNo" :baseInfo="baseInfo" />
+      <!-- 土地腾让 -->
+      <land-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 2" />
     </div>
 
     <FeedbackForm
