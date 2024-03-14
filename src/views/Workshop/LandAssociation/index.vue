@@ -917,20 +917,21 @@ let handleEdit = (row) => {
       type = 'VillageInfoC'
       break
     case 'LandNoMove':
-      type = ''
+      type = 'LandNoMoveL'
       break
     default:
       break
   }
   if (type.length > 0) {
     push({
-      name: 'AssetEvaDataFill',
+      name: 'AssetEvaDataFillX',
       query: {
         projectId,
         householdId: row.householdId,
+        name: row.householder,
         doorNo: row.doorNo,
         type,
-        estimateStatus: []
+        estimateStatus: row.estimateFlag
       }
     })
   } else {
