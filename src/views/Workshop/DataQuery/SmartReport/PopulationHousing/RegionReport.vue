@@ -136,7 +136,7 @@ const getTableDepends = (titles: any[], list: any[]) => {
       ...commonTableItemSchema
     },
     {
-      label: '房屋建筑面积（m2)',
+      label: '房屋建筑面积（m²)',
       children: [],
       ...commonTableItemSchema
     }
