@@ -94,7 +94,7 @@
           <ElCol :span="12">
             <div class="col-wrapper">
               <div class="col-labels">
-                {{ item.houseAreaType === 'housestead' ? '择房顺序号凭证：' : '选房顺序号凭证：' }}
+                {{ item.houseAreaType === 'homestead' ? '择房顺序号凭证：' : '选房顺序号凭证：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload
@@ -131,7 +131,7 @@
           <ElCol :span="24">
             <div class="col-wrapper">
               <div class="col-label-required">
-                {{ item.houseAreaType === 'housestead' ? '择房确认单：' : '选房确认单：' }}
+                {{ item.houseAreaType === 'homestead' ? '择房确认单：' : '选房确认单：' }}
               </div>
               <div class="card-img-list">
                 <ElUpload

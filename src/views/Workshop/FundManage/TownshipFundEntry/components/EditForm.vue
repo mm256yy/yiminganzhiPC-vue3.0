@@ -229,26 +229,26 @@ const onSubmit = debounce((formEl) => {
         return
       } else {
         form.value.amount = allamount.value
-        if (getTabType(props.type) == 'other') {
-          let params: any = {
-            id: form.value.id,
-            paymentTime: form.value.paymentTime,
-            remark: form.value.remark,
-            projectId: form.value.projectId,
-            receipt: JSON.stringify(relocateOtherPic.value || []),
-            doorNo: form.value.doorNo,
-            type: getTabType(props.type),
-            amount: form.value.amount
-          }
-          submit(params)
-        } else {
-          let params: any = {
-            ...form.value,
-            relocateOtherPic: JSON.stringify(relocateOtherPic.value || []), // 其他附件
-            type: getTabType(props.type)
-          }
-          submit(params)
+        // if (getTabType(props.type) == 'other') {
+        let params: any = {
+          id: form.value.id,
+          paymentTime: form.value.paymentTime,
+          remark: form.value.remark,
+          projectId: form.value.projectId,
+          receipt: JSON.stringify(relocateOtherPic.value || []),
+          doorNo: form.value.doorNo,
+          type: getTabType(props.type),
+          amount: form.value.amount
         }
+        submit(params)
+        // } else {
+        //   let params: any = {
+        //     ...form.value,
+        //     relocateOtherPic: JSON.stringify(relocateOtherPic.value || []), // 其他附件
+        //     type: getTabType(props.type)
+        //   }
+        //   submit(params)
+        // }
       }
     } else {
       return false

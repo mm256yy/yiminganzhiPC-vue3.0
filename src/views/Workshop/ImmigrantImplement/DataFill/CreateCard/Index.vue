@@ -250,7 +250,7 @@
           show-summary
           :summary-method="getSummariese"
           border
-          :row-style="{ height: '27px' }"
+          :row-style="{ height: '39px' }"
         >
           <ElTableColumn label="类型" align="center" prop="type" header-align="center">
             <template #default="{ row }">
@@ -803,6 +803,7 @@ const getRelocationInfo = async () => {
   }
 
   :deep(.el-table .el-table__cell) {
+    height: 39px;
     padding: 0px;
   }
 }

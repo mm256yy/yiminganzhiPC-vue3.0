@@ -15,6 +15,9 @@
         个体户
       </ElButton>
       <ElButton type="primary" @click="selenceTable('村集体', 'Village')"> 村集体 </ElButton>
+      <ElButton type="primary" @click="selenceTable('只征地不搬迁', 'LandNoMove ')">
+        只征地不搬迁
+      </ElButton>
     </div>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />

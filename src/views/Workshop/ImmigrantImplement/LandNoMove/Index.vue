@@ -174,7 +174,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '户主或人口/户号/联系方式'
+        placeholder: '使用权人，户号或联系方式'
       }
     },
     table: {
