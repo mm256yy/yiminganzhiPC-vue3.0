@@ -312,7 +312,13 @@ const printReport = async () => {
       type: 'exportHouseEvalVillage',
       doorNo: props.doorNo
     }
+  } else if (props.type == 'LandNoMoveL') {
+    parmas.value = {
+      type: '', //type不详，后端暂未开发
+      doorNo: props.doorNo
+    }
   }
+  console.log(props.type, '传递的type')
   const res = await getExportReportApi(parmas.value)
   getRes(res)
 }

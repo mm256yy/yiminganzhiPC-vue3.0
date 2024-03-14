@@ -217,11 +217,16 @@ const titleMsg = (type: string, index: number) => {
       return '个体工商户信息'
     }
     return '个体工商户资产评估'
-  } else {
+  } else if (type == 'VillageInfoC') {
     if (index === 1) {
       return '村集体信息'
     }
     return '村集体资产评估'
+  } else if (type == 'LandNoMoveL') {
+    if (index === 1) {
+      return '只征地不搬迁信息'
+    }
+    return '只征地不搬迁评估'
   }
 }
 
@@ -313,6 +318,11 @@ const getRefresh = () => {
     } else {
       tabsType.value = [...VillageInfoCTabs, ...LandlordLandTabs, EnterpriseTabsOther[0]]
     }
+  } else if (type == 'LandNoMoveL') {
+    // if (role.value === RoleCodeType.assessorland) {
+    console.log(LandlordLandTabs, '配置是啥')
+    tabsType.value = LandlordLandTabs
+    // }
   }
   // 初始化tab页面显示
   tabCurrentId.value = tabsType.value[0].id

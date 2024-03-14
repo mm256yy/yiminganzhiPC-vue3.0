@@ -10,7 +10,7 @@
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
             评估完成
           </ElButton>
-          <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
+          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"
             type="primary"
@@ -24,36 +24,47 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="组别"
+          label="村名小组"
           :width="150"
-          prop="groupName"
+          prop="villagerGroup"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.groupName" />
+            <ElInput placeholder="请输入" v-model="scope.row.villagerGroup" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
           label="地块编号"
+          :width="150"
+          prop="landNumber"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.landNumber" disabled />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="地块名称"
           :width="150"
           prop="landName"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landName" />
+            <ElInput placeholder="请输入" v-model="scope.row.landName" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
           label="所在位置"
           :width="120"
-          prop="locationType"
+          prop="area"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.locationType">
+            <ElSelect clearable placeholder="请选择" v-model="row.area" disabled>
               <ElOption
                 v-for="item in dictObj[326]"
                 :key="item.value"
@@ -63,51 +74,43 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <!-- <ElTableColumn
-          label="种植户"
-          :width="150"
-          prop="growers"
-          align="center"
-          header-align="center"
-        >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.growers" />
-          </template>
-        </ElTableColumn> -->
         <ElTableColumn
-          label="地块面积(亩)"
+          label="淹没范围"
+          :width="120"
+          prop="inundationRange"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.inundationRange" disabled>
+              <ElOption
+                v-for="item in dictObj[346]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="地块面积(m²)"
           :width="180"
-          prop="landArea"
+          prop="shapeArea"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber
-              :min="0"
-              v-model="scope.row.landArea"
-              @change="getModelValue(scope.row)"
-              :precision="2"
-            />
+            <ElInputNumber :min="0" v-model="scope.row.shapeArea" :precision="2" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
           label="地类"
           :width="200"
-          prop="landType"
+          prop="landLevel"
           align="center"
           header-align="center"
         >
-          <template #default="{ row }">
-            <ElCascader class="!w-full" v-model="row.landType" :options="landTypeOptions" />
-            <!-- <ElSelect clearable placeholder="请选择" v-model="row.landType">
-              <ElOption
-                v-for="item in dictObj[233]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect> -->
-          </template>
+          <ElCascader class="!w-full" v-model="landLevel" :options="landTypeOptions" />
         </ElTableColumn>
         <ElTableColumn
           label="土地性质"
@@ -184,7 +187,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" />
+            <ElInputNumber :min="0" v-model="scope.row.valuationAmount" :precision="2" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -196,17 +199,6 @@
         >
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="新增原因"
-          :width="180"
-          prop="addReason"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElInput placeholder="请输入" v-model="row.addReason" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
@@ -234,7 +226,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
+import { ref, computed, onMounted, reactive, watch } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -284,7 +276,8 @@ const dialogVisible = ref<boolean>(false)
 const btnLoading = ref<boolean>(false)
 const deleteReason = ref('') // 删除原因
 let rowItem = reactive({ id: '' }) // 行信息
-
+let arr = ref<any>([])
+let landLevel = ref()
 const defaultRow = {
   doorNo: props.doorNo,
   householdId: props.householdId,
@@ -322,15 +315,6 @@ const onReportData = async () => {
     emit('updateData')
   }
 }
-
-// 添加行
-const onAddRow = () => {
-  const params = {
-    ...defaultRow
-  }
-  tableData.value.push(params)
-}
-
 // 获取列表数据
 const getList = () => {
   const params: any = {
@@ -341,7 +325,12 @@ const getList = () => {
     size: 1000
   }
   getLandBasicInfoListApi(params).then((res) => {
-    tableData.value = res.content
+    tableData.value = res.content.filter(
+      (item: any) => item.landNature == '4' && item.evalIsDelete != '1'
+    ) //只显示国有数据
+    tableData.value.forEach((item: any) => {
+      landLevel.value = [item.landLevelOne, item.landLevelTwo]
+    })
   })
 }
 
@@ -354,7 +343,7 @@ const getLandTypeOptions = () => {
 }
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.valuationPrice) * Number(row.landArea)
+  const totalPrice = Number(row.valuationPrice) * Number(row.shapeArea)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }
@@ -376,15 +365,17 @@ const onDeleteSubmit = async () => {
     ElMessage.error('删除原因不能为空')
     return
   }
-
+  arr.value = []
   const params = {
     ...rowItem,
-    deleteReason: deleteReason.value
+    deleteReason: deleteReason.value,
+    evalIsDelete: '1'
   }
-
+  arr.value.push(params)
+  console.log(arr.value, '测试数据')
   btnLoading.value = true
   try {
-    await deleteLandBasicInfoApi(params.id)
+    await saveLandBasicInfoApi(arr.value)
     btnLoading.value = false
     getList()
     emit('updateData')
@@ -415,7 +406,8 @@ const onSave = () => {
   const tableList = tableData.value.map((item) => {
     return {
       ...item,
-      landType: item.landType ? JSON.stringify(item.landType) : ''
+      landLevelOne: landLevel.value[0],
+      landLevelTwo: landLevel.value[1]
     }
   })
   saveLandBasicInfoApi(tableList).then(() => {

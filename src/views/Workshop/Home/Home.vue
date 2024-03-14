@@ -66,7 +66,7 @@ const currentProjectId = appStore.currentProjectId
 const role = ref<RoleCodeType>(RoleCodeType.other) // 角色代码 other为普通首页
 
 const isEvaluation = computed(() => {
-  return role.value == RoleCodeType.assessor || role.value == RoleCodeType.assessorland
+  return role.value == RoleCodeType.assessor
 })
 
 /**

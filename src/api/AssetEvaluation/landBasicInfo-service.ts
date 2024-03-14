@@ -9,7 +9,7 @@ import { LandBasicInfoDtoType } from './landBasicInfo-types'
 export const getLandBasicInfoListApi = (
   query: Partial<LandBasicInfoDtoType>
 ): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.get({ url: '/assetLand', params: query })
+  return request.get({ url: '/landEstimate', params: query })
 }
 
 /**
@@ -18,7 +18,7 @@ export const getLandBasicInfoListApi = (
  * @returns
  */
 export const saveLandBasicInfoApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.post({ url: '/assetLand/createAll', data })
+  return request.post({ url: '/landEstimate/createAll', data })
 }
 
 /**
@@ -27,7 +27,7 @@ export const saveLandBasicInfoApi = (data: any): Promise<TableResponse<LandBasic
  * @returns
  */
 export const deleteLandBasicInfoApi = (id: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
-  return request.post({ url: `/assetLand/delete/${id}` })
+  return request.post({ url: `/landEstimate/delete/${id}` })
 }
 
 /**

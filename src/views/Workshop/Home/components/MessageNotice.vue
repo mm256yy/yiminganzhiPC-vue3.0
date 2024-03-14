@@ -3,7 +3,7 @@
     <div class="statistic-item">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_notice.png" class="icon" />
-        <div>消息通知</div>
+        <div>消息通知222</div>
         <!-- <div class="more-box">更多</div> -->
       </div>
       <!--消息通知-->

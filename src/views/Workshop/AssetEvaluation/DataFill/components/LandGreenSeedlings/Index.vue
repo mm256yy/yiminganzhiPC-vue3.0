@@ -32,12 +32,40 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.landNumber" />
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="scope.row.landNumber"
+              @change="currStationChange"
+            >
+              <ElOption
+                v-for="item in landLists"
+                :key="item.landNumber"
+                :label="item.landNumber"
+                :value="item.landNumber"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="名称" :width="150" prop="name" align="center" header-align="center">
+        <ElTableColumn label="地名" :width="150" prop="name" align="center" header-align="center">
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.name" />
+            <ElInput placeholder="请输入" v-model="scope.row.name" disabled />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="青苗户主"
+          :width="150"
+          prop="householder"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.householder" />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="品种" :width="150" prop="breed" align="center" header-align="center">
+          <template #default="scope">
+            <ElInput placeholder="请输入" v-model="scope.row.breed" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="规格" :width="150" prop="size" align="center" header-align="center">
@@ -45,45 +73,51 @@
             <ElInput placeholder="请输入" v-model="scope.row.size" />
           </template>
         </ElTableColumn>
+        <ElTableColumn label="株树" :width="150" prop="number" align="center" header-align="center">
+          <template #default="scope">
+            <ElInput
+              placeholder="请输入"
+              v-model="scope.row.number"
+              @change="getModelValue(scope.row)"
+            />
+          </template>
+        </ElTableColumn>
         <ElTableColumn
-          label="数量(㎡)"
-          :width="180"
-          prop="number"
+          label="单价(元/株)"
+          :width="150"
+          prop="numPrice"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber
-              :min="0"
+            <ElInput
+              placeholder="请输入"
+              v-model="scope.row.numPrice"
               @change="getModelValue(scope.row)"
-              v-model="scope.row.number"
-              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="面积" :width="150" prop="area" align="center" header-align="center">
+          <template #default="scope">
+            <ElInput
+              placeholder="请输入"
+              v-model="scope.row.area"
+              @change="getModelValue(scope.row)"
             />
           </template>
         </ElTableColumn>
         <ElTableColumn
           label="单价(元/㎡)"
-          :width="180"
+          :width="150"
           prop="price"
           align="center"
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber
-              :min="0"
-              @change="getModelValue(scope.row)"
+            <ElInput
+              placeholder="请输入"
               v-model="scope.row.price"
-              :precision="2"
-            />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn label="费率" :width="180" prop="rate" align="center" header-align="center">
-          <template #default="scope">
-            <ElInputNumber
-              :min="0"
               @change="getModelValue(scope.row)"
-              v-model="scope.row.rate"
-              :precision="2"
             />
           </template>
         </ElTableColumn>
@@ -107,17 +141,6 @@
         >
           <template #default="scope">
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
-          </template>
-        </ElTableColumn>
-        <ElTableColumn
-          label="新增原因"
-          :width="180"
-          prop="addReason"
-          align="center"
-          header-align="center"
-        >
-          <template #default="{ row }">
-            <ElInput placeholder="请输入" v-model="row.addReason" />
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
@@ -156,7 +179,9 @@ import {
   ElTableColumn,
   ElDialog,
   ElFormItem,
-  ElMessage
+  ElMessage,
+  ElSelect,
+  ElOption
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
@@ -164,6 +189,7 @@ import {
   saveLandGreenSeedlingsApi,
   deleteLandGreenSeedlingsApi
 } from '@/api/AssetEvaluation/landGreenSeedlings-service'
+import { getLandBasicInfoListApi } from '@/api/AssetEvaluation/landBasicInfo-service'
 import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
@@ -187,7 +213,7 @@ const dialogVisible = ref<boolean>(false)
 const btnLoading = ref<boolean>(false)
 const deleteReason = ref('') // 删除原因
 let rowItem = reactive({ id: '' }) //
-
+const landLists = ref<any>()
 const defaultRow = {
   doorNo: props.doorNo,
   householdId: props.householdId,
@@ -240,6 +266,34 @@ const getList = () => {
   })
 }
 
+// 获取土地编号下拉列表数据
+const getLandLists = () => {
+  const params: any = {
+    doorNo: props.doorNo,
+    householdId: props.householdId,
+    projectId: props.projectId,
+    status: 'implementation',
+    size: 1000
+  }
+  getLandBasicInfoListApi(params).then((res) => {
+    landLists.value = res.content.map((item) => {
+      return {
+        landNumber: item.landNumber,
+        name: item.landName
+      }
+    })
+    console.log(landLists.value, 'landLists数据')
+  })
+}
+const currStationChange = (val) => {
+  landLists.value.forEach((item1) => {
+    tableData.value.forEach((item) => {
+      if (item.landNumber === val) {
+        item.name = item1.name
+      }
+    })
+  })
+}
 // 房屋主体评估合计
 const total = () => {
   let sum = 0
@@ -304,12 +358,13 @@ const onSave = () => {
 // 自动计算评估金额
 const getModelValue = (row: any) => {
   const totalPrice =
-    Number(row.number) * Number(row.price) * (Number(row.rate) == 0 ? 1 : Number(row.rate))
+    Number(row.number) * Number(row.numPrice) + Number(row.area) * Number(row.price)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }
 onMounted(() => {
   getList()
+  getLandLists()
 })
 </script>
 <style lang="less" scoped>
