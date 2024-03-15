@@ -226,25 +226,20 @@
         </template>
       </Table>
     </div>
-    <Edit
-      :show="EditShow"
-      :row="rows"
-      :id="ids"
-      :data="datas"
-      @close="
-        () => {
-          EditShow = false
-          getList()
-          ElMessage.success('关联成功')
-        }
-      "
-    />
+    <Edit :show="EditShow" :row="rows" :id="ids" :data="datas" @close="closeEdit" />
+    <Dialog :model-value="flag" title="绑定成功" style="width: 600px" :max-height="150">
+      绑定成功，是否继续进行资产评估？
+      <template #footer>
+        <ElButton type="primary" @click="onToPg">进行评估</ElButton>
+        <ElButton @click="onClosePg">暂时不评</ElButton>
+      </template>
+    </Dialog>
   </WorkContentWrap>
 </template>
-
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, onMounted, computed, nextTick, toRaw } from 'vue'
 import { useAppStore } from '@/store/modules/app'
+import { Dialog } from '@/components/Dialog'
 import {
   ElButton,
   ElBreadcrumb,
@@ -287,6 +282,31 @@ const { register, tableObject, methods } = useTable({
 })
 const { getList, setSearchParams } = methods
 const { push } = useRouter()
+const flag = ref<any>(false)
+const dataList = reactive({
+  doorNo: '',
+  householdId: '',
+  name: '',
+  type: '',
+  estimateStatus: '1'
+})
+const closeEdit = (e) => {
+  console.log(e, 'e是啥')
+  dataList.doorNo = e.doorNo
+  dataList.householdId = e.id
+  dataList.name = e.name
+  dataList.type = e.type
+  // EditShow.value = false
+  // getList()
+  // flag.value = true
+  // ElMessage.success('关联成功')
+  // const { doorNo, householdId, name, type } = e||{}
+  console.log(dataList, 'dataList是啥')
+  EditShow.value = false
+  getList()
+  flag.value = true
+  ElMessage.success('关联成功')
+}
 enum FileReportStatus {
   success = 'Succeed',
   failure = 'Failure',
@@ -333,7 +353,47 @@ onMounted(() => {
   getLandTypeOptions()
   console.log(tableObject)
 })
-
+const onClosePg = () => {
+  flag.value = false
+}
+const onToPg = () => {
+  console.log(dataList, 'dataList')
+  let type = ''
+  switch (dataList.type) {
+    case 'PeasantHousehold':
+      type = 'Landlord'
+      break
+    case 'Company':
+      type = 'Enterprise'
+      break
+    case 'IndividualHousehold':
+      type = 'IndividualB'
+      break
+    case 'Village':
+      type = 'VillageInfoC'
+      break
+    case 'LandNoMove':
+      type = 'LandNoMoveL'
+      break
+    default:
+      break
+  }
+  if (type.length > 0) {
+    push({
+      name: 'AssetEvaDataFillX',
+      query: {
+        projectId,
+        householdId: dataList.householdId,
+        name: dataList.name,
+        doorNo: dataList.doorNo,
+        type: dataList.type
+        // estimateStatus: 1
+      }
+    })
+  } else {
+    ElMessage.info('暂未开发')
+  }
+}
 const schema = reactive<CrudSchema[]>([
   {
     field: 'code',

@@ -143,10 +143,10 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
-let onSubmit = async () => {
+let onSubmit = () => {
   console.log(form.value)
   if (!formRef.value) return
-  await formRef.value.validate((valid, fields) => {
+  formRef.value.validate((valid, fields) => {
     if (valid) {
       callback()
     } else {
@@ -156,8 +156,8 @@ let onSubmit = async () => {
 }
 let postRelateUsers = async (e) => {
   let data = await postRelateUser(e)
-  emit('close', '1')
-  console.log(data)
+  emit('close', data)
+  console.log(data, '测试保存成功后是啥？')
 }
 let treeRef = ref()
 let callback = () => {
