@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="report-tabs">
+    <div v-if="tabCurrentId !== 4" class="report-tabs">
       <div
         :class="['report-tab-item', tabListId === item.id ? 'active' : '']"
         v-for="item in subTabsList"
@@ -32,27 +32,24 @@
     </div>
   </div>
   <div class="data-fill-body">
-    <!-- 人口核定 -->
     <Resident v-if="tabCurrentId === 0" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
     <Individuality v-if="tabCurrentId === 1" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
     <Enterprise v-if="tabCurrentId === 2" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
     <VillageCollective v-if="tabCurrentId === 3" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
-    <!-- 1 -->
+    <LandNoMove v-if="tabCurrentId === 4" ref="vill" :roleInfo="tabObject[tabCurrentId]" />
   </div>
 </template>
 
 <script setup lang="ts">
-// import { reactive } from 'vue'
-// import { useAppStore } from '@/store/modules/app'
 import { ref } from 'vue'
 import { ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import Resident from './GirdData/Resident.vue'
 import VillageCollective from './GirdData/VillageCollective.vue'
 import Individuality from './GirdData/Individuality.vue'
 import Enterprise from './GirdData/Enterprise.vue'
+import LandNoMove from './GirdData/LandNoMove.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 
-// const tabsList = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const tabListId = ref<number>(0)
 const vill = ref<any>()
@@ -72,6 +69,10 @@ const tabsList = [
   {
     id: 3,
     name: '村集体划分'
+  },
+  {
+    id: 4,
+    name: '只征地不搬迁'
   }
 ]
 const subTabsList = [
@@ -92,7 +93,8 @@ const tabObject = {
   0: '居民户',
   1: '个体户',
   2: '企业',
-  3: '村集体'
+  3: '村集体',
+  4: '只征地不搬迁'
 }
 const onTabClick = (tabItem) => {
   if (tabCurrentId.value === tabItem.id) {
@@ -107,7 +109,6 @@ const onTabList = (tabItem) => {
     return
   }
   tabListId.value = tabItem.id
-  console.log(tabCurrentId.value, '123123123', tabItem)
   vill.value.setAllocationStatus(tabItem.id)
 }
 </script>
