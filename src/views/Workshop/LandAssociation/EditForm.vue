@@ -52,7 +52,6 @@
         <ElInput style="width: 390px" v-model="form.card" placeholder="请输入身份证号" />
       </ElFormItem>
       <ElFormItem label="所属区域:" v-if="form.chek" prop="code">
-        <!-- <ElInput style="width: 390px" v-model="form.code" placeholder="请输入所属区域" /> -->
         <ElTreeSelect
           ref="treeRef"
           v-model="form.code"
@@ -76,10 +75,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, unref } from 'vue'
+import { ref, watch, computed } from 'vue'
 import {
   ElButton,
-  ElCascader,
   ElForm,
   ElFormItem,
   ElSelectV2,
@@ -104,7 +102,7 @@ interface Props {
 }
 let formRef = ref()
 const props = defineProps<Props>()
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'getField'])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const loading = ref(false)
@@ -156,8 +154,7 @@ let onSubmit = () => {
 }
 let postRelateUsers = async (e) => {
   let data = await postRelateUser(e)
-  emit('close', data)
-  console.log(data, '测试保存成功后是啥？')
+  emit('getField', data)
 }
 let treeRef = ref()
 let callback = () => {
@@ -198,7 +195,6 @@ const rules = {
   type: [required()],
   code: [required()],
   card: [{ validator: validateIdNo, trigger: 'blur' }, required()]
-  // enabled: [{ type: 'boolean', required: true }]
 }
 watch(
   () => props.row,

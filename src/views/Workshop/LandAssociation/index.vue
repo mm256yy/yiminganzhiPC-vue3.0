@@ -226,7 +226,14 @@
         </template>
       </Table>
     </div>
-    <Edit :show="EditShow" :row="rows" :id="ids" :data="datas" @close="closeEdit" />
+    <Edit
+      :show="EditShow"
+      :row="rows"
+      :id="ids"
+      :data="datas"
+      @close="closeEdit"
+      @get-field="getField"
+    />
     <Dialog :model-value="flag" title="绑定成功" style="width: 600px" :max-height="150">
       绑定成功，是否继续进行资产评估？
       <template #footer>
@@ -290,23 +297,22 @@ const dataList = reactive({
   type: '',
   estimateStatus: '1'
 })
-const closeEdit = (e) => {
-  console.log(e, 'e是啥')
+const closeEdit = () => {
+  EditShow.value = false
+}
+
+const getField = (e: any) => {
+  console.log('HHHH', e)
   dataList.doorNo = e.doorNo
   dataList.householdId = e.id
   dataList.name = e.name
   dataList.type = e.type
-  // EditShow.value = false
-  // getList()
-  // flag.value = true
-  // ElMessage.success('关联成功')
-  // const { doorNo, householdId, name, type } = e||{}
-  console.log(dataList, 'dataList是啥')
   EditShow.value = false
   getList()
   flag.value = true
   ElMessage.success('关联成功')
 }
+
 enum FileReportStatus {
   success = 'Succeed',
   failure = 'Failure',
