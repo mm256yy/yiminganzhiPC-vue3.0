@@ -392,7 +392,7 @@ const onToPg = () => {
         householdId: dataList.householdId,
         name: dataList.name,
         doorNo: dataList.doorNo,
-        type: dataList.type
+        type
         // estimateStatus: 1
       }
     })
