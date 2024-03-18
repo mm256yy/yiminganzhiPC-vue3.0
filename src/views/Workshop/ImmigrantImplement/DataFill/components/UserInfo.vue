@@ -342,6 +342,7 @@ const fillData = (row, name: any) => {
       }
     })
   }
+  console.log(1)
 }
 onMounted(() => {
   if (props.type === 'PeasantHousehold') {
