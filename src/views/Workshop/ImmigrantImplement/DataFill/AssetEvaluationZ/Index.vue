@@ -1,7 +1,7 @@
 <template>
   <WorkContentWrap>
     <!-- 只征地不搬迁 -- 资产评估 -->
-    <div class="table-wrap !py-12px !mt-0px">
+    <div class="table-wrap !py-12px !mt-0px" v-if="data.length > 0">
       <div class="center">
         <div>镜岭水库青苗评估汇总表</div>
       </div>
@@ -24,7 +24,9 @@
       </div>
       <div class="flex"> <span>评估单位： </span><span>评估人员：</span></div>
     </div>
-    <div v-if="data.length === 0">该户资产评估还未完成，无法查看评估报告!</div>
+    <div v-else class="table-wrap !py-12px !mt-0px no-data"
+      >该户资产评估还未完成，无法查看评估报告!</div
+    >
   </WorkContentWrap>
 </template>
 
@@ -170,5 +172,14 @@ onMounted(() => {
 .flex {
   display: flex;
   justify-content: space-between;
+}
+
+.no-data {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+  font-size: 15px;
 }
 </style>
