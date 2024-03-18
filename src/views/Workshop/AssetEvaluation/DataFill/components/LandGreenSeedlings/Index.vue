@@ -168,7 +168,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, watch } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
   ElButton,
@@ -283,6 +283,13 @@ const getLandLists = () => {
       }
     })
     console.log(landLists.value, 'landLists数据')
+    landLists.value.forEach((item1) => {
+      tableData.value.forEach((item) => {
+        if (item.landNumber === item1.landNumber) {
+          item.name = item1.name
+        }
+      })
+    })
   })
 }
 const currStationChange = (val) => {
@@ -354,13 +361,30 @@ const onSave = () => {
     emit('updateData')
   })
 }
+// watch(
+//   () => landLists.value,
+//   () => {
 
+//   },
+//   // 可选 immediate: true 马上执行
+//   { deep: true, immediate: true }
+// )
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice =
-    Number(row.number) * Number(row.numPrice) + Number(row.area) * Number(row.price)
-  row.valuationAmount = totalPrice
-  row.compensationAmount = totalPrice
+  console.log(row.area, row.price, '评估金额')
+  if (row.numPrice == undefined || row.area == undefined) {
+    row.numPrice = 0
+    row.area = 0
+    const totalPrice =
+      Number(row.number) * Number(row.numPrice) + Number(row.area) * Number(row.price)
+    row.valuationAmount = totalPrice
+    row.compensationAmount = totalPrice
+  } else {
+    const totalPrice =
+      Number(row.number) * Number(row.numPrice) + Number(row.area) * Number(row.price)
+    row.valuationAmount = totalPrice
+    row.compensationAmount = totalPrice
+  }
 }
 onMounted(() => {
   getList()
