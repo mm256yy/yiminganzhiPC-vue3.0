@@ -337,7 +337,7 @@ const fillData = (row, name: any) => {
       name: 'ImmigrantImpDataFill',
       query: {
         householdId: props.baseInfo.householderId,
-        doorNo: props.baseInfo.householderName,
+        doorNo: props.baseInfo.householderDoorNo,
         type: 'PeasantHousehold'
       }
     })
