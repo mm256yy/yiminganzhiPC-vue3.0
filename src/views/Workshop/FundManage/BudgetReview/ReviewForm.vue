@@ -143,7 +143,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
-          <div class="content">{{ form.typeTxt }}</div>
+          <div class="content">{{ form.gsAdjustTxt }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -160,7 +160,7 @@
           <div class="label">审核意见:</div>
           <div class="content">
             <ElInput
-              v-model="form.gsNode"
+              v-model="form.shremark"
               :rows="4"
               type="textarea"
               class="!w-600px"
@@ -285,6 +285,7 @@ const onSubmit = async (status: string) => {
   console.log(status)
   btnLoading.value = true
   btnLoading.value = false
+  form.value.remark = null
   let params: any = {
     ...form.value,
     // paymentObjectList: [
@@ -295,7 +296,8 @@ const onSubmit = async (status: string) => {
     // ],
     businessId: form.value.id,
     status: status,
-    type: 2 //概算申请申请
+    type: 2, //概算申请申请
+    remark: form.value.shremark
     // receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
   }
   getPaymentReviewListSSApi(params).then(() => {

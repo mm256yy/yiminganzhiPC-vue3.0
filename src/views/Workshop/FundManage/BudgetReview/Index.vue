@@ -313,7 +313,8 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 
 tableObject.params = {
-  projectId
+  projectId,
+  auditType: tabVal.value
 }
 
 const onSearch = (data) => {

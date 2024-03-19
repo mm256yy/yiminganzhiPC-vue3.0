@@ -127,16 +127,22 @@
       />
       <ElTableColumn
         label="支付节点"
-        prop="paymentNode"
+        prop="nodeDtoList"
         align="center"
         header-align="center"
         width="200"
       >
         <template #default="{ row }">
-          <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+          <div v-for="(item, index) in row.nodeDtoList" :key="index"
+            >{{ dayjs(item.paymentDate).format('YYYY-MM-DD') }}{{ `金额：${item.amount}` }}</div
+          >
         </template>
       </ElTableColumn>
-      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
+        <template #default="{ row }">
+          {{ row.nodeDtoList[0].payStatus + '元' }}
+        </template>
+      </ElTableColumn>
     </ElTable>
 
     <ElRow>
