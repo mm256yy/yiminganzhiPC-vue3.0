@@ -769,6 +769,40 @@ const getStatus = (data: any) => {
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[3].active = true // 集体资产处置方法
     }
+  } else if (type === 'LandNoMove' && nowbody == 'PeasantHousehold') {
+    // 第一层 Tab
+    if (data.estimateeStatus === '1') {
+      tabsListCopy[0].active = true // 资产评估
+    }
+    if (data.arrangementStatus === '1') {
+      tabsListCopy[1].active = true // 安置确认
+    }
+    if (data.landSoarStatus === '1') {
+      tabsListCopy[2].active = true // 土地腾让
+    }
+    if (data.cardStatus === '1') {
+      tabsListCopy[3].active = true // 补偿卡
+    }
+    if (data.agreementStatus === '1') {
+      tabsListCopy[4].active = true // 征地协议
+    }
+    if (data.productionArrangementAllStatus === '1') {
+      tabsListCopy[5].active = true // 生产安置办理
+    }
+  } else if (type === 'LandNoMove' && nowbody == 'Other') {
+    // 第一层 Tab
+    if (data.estimateeStatus === '1') {
+      tabsListCopy[0].active = true // 资产评估
+    }
+    if (data.landSoarStatus === '1') {
+      tabsListCopy[1].active = true // 土地腾让
+    }
+    if (data.cardStatus === '1') {
+      tabsListCopy[2].active = true // 补偿卡
+    }
+    if (data.agreementStatus === '1') {
+      tabsListCopy[3].active = true // 征地协议
+    }
   }
 
   // 触发重新渲染
@@ -879,6 +913,19 @@ const onFeedback = () => {
       feedbacktypeCopy = '6'
     } else if (tabCurrentId.value === 3) {
       feedbacktypeCopy = '12' // 集体资产处置方法
+    }
+  }
+  if (type === 'LandNoMove') {
+    if (tabCurrentId.value === 1) {
+      feedbacktypeCopy = '4'
+    } else if (tabCurrentId.value === 2) {
+      feedbacktypeCopy = '8'
+    } else if (tabCurrentId.value === 3) {
+      feedbacktypeCopy = '7'
+    } else if (tabCurrentId.value === 4) {
+      feedbacktypeCopy = '6'
+    } else if (tabCurrentId.value === 4) {
+      feedbacktypeCopy = '10'
     }
   }
   console.log(feedbacktypeCopy, 'type')
