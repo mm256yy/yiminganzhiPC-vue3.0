@@ -29,7 +29,7 @@
           }"
         >
           <span class="point"></span>
-          {{ props.datarole?.landAllStatus === '1' ? '已填报' : '未填报' }}
+          {{ props.datarole?.landAllStatus === '1' ? '已评估' : '未评估' }}
         </div>
         <div
           v-if="props.role === 'assessor'"
