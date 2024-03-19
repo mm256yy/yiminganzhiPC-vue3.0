@@ -1,7 +1,7 @@
 <template>
   <WorkContentWrap>
     <!-- 只征地不搬迁 -- 资产评估 -->
-    <div class="table-wrap !py-12px !mt-0px" v-if="data.length > 0">
+    <div class="table-wrap !py-12px !mt-0px">
       <div class="center">
         <div>镜岭水库青苗评估汇总表</div>
       </div>
