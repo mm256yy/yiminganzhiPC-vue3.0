@@ -314,7 +314,7 @@ const printReport = async () => {
     }
   } else if (props.type == 'LandNoMoveL') {
     parmas.value = {
-      type: '', //type不详，后端暂未开发
+      type: 'exportHouseEvalLand', //type不详，后端暂未开发
       doorNo: props.doorNo
     }
   }
