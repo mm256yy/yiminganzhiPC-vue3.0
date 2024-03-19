@@ -118,7 +118,7 @@
     />
     <!-- style="
         position: fixed;
-        left: -1000px;
+        left: -1500px;
         display: flex;
         width: 340mm;
         padding: 10px 10px 0px 10px;
@@ -732,6 +732,7 @@ onMounted(() => {
 :deep(.fylist .el-table--border .el-table__inner-wrapper::after) {
   background: #fff;
 }
+
 :deep(.el-descriptions) {
   --el-descriptions-table-border: 1px solid black;
 
@@ -749,6 +750,7 @@ onMounted(() => {
     }
   }
 }
+
 #print {
   :deep(.table-headers) {
     font-size: 8px;
