@@ -1,7 +1,7 @@
 <template>
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">移民实施</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">档案管理</ElBreadcrumbItem>
       <ElBreadcrumbItem class="text-size-12px">企（事）业单位</ElBreadcrumbItem>
     </ElBreadcrumb>
     <div class="search-form-wrap">
@@ -24,11 +24,11 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家企业
+            共 <span class="num">{{ tableObject.total }}</span> 家企业
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家水电站
+            <span class="num">{{ headInfo?.sdzNum }}</span> 家水电站
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum || 20 }}</span> 家矿业权
+            <span class="num">{{ headInfo?.tkqNum }}</span> 家矿业权
           </div>
         </div>
       </div>
@@ -90,18 +90,12 @@ import { getLandlordListApi, getLandlordHeadApi } from '@/api/immigrantImplement
 import { screeningTree } from '@/api/workshop/village/service'
 import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
-import type { LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
-const headInfo = ref<LandlordHeadInfoType>({
-  demographicNum: 0,
-  peasantHouseholdNum: 0,
-  reportSucceedNum: 0,
-  unReportNum: 0
-})
+const headInfo = ref<any>(null)
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
@@ -123,7 +117,7 @@ const getDistrictTree = async () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Company' })
+  const info = await getLandlordHeadApi({ type: 'Company', status: 'implementation' })
   headInfo.value = info
 }
 
@@ -162,7 +156,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入姓名'
+        placeholder: '请输入企业名称'
       }
     },
     table: {
@@ -250,26 +244,11 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reportUserName',
-    label: '填报人',
+    field: 'locationTypeText',
+    label: '所在位置',
     search: {
       show: false
     }
-  },
-  {
-    field: 'schedule',
-    label: '完成进度',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'reportDate',
-    label: '填报时间',
-    search: {
-      show: false
-    },
-    showOverflowTooltip: false
   },
   {
     field: 'action',

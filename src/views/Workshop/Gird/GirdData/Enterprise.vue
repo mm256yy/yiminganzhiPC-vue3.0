@@ -8,7 +8,7 @@
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
-        @reset="setSearchParams"
+        @reset="onReset"
       />
     </div>
 
@@ -172,6 +172,14 @@ const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []
   return list || []
+}
+
+const onReset = () => {
+  // 需要重置一次params
+  tableObject.params = {
+    projectId
+  }
+  setSearchParams({ type: 'Company', status: SurveyStatusEnum.Implementation })
 }
 
 const getdistrictTree = async () => {

@@ -203,18 +203,18 @@ const getTypeColumns = (type) => {
         field: 'index',
         type: 'index',
         label: '序号',
-        width: 80
+        width: 60
       },
       {
         field: 'doorNo',
-        label: '户号',
+        label: getTypeNumber(type),
         search: {
           show: false
         }
       },
       {
         field: 'name',
-        label: '户主姓名',
+        label: getTypeName(type),
         search: {
           show: false
         }
@@ -279,6 +279,7 @@ const getTypeColumns = (type) => {
         field: 'action',
         label: '操作',
         fixed: 'right',
+        width: 200,
         search: {
           show: false
         },
@@ -380,6 +381,28 @@ const getTypeColumns = (type) => {
   }
 
   return targetList
+}
+
+// 获取类型编号
+const getTypeNumber = (type: string) => {
+  const map = {
+    PeasantHousehold: '户号',
+    Company: '企业编号',
+    IndividualHousehold: '个体户编号',
+    Village: '村集体编号'
+  }
+  return map[type]
+}
+
+// 获取类型名
+const getTypeName = (type: string) => {
+  const map = {
+    PeasantHousehold: '户主姓名',
+    Company: '企业名称',
+    IndividualHousehold: '个体户名称',
+    Village: '村集体名称'
+  }
+  return map[type]
 }
 
 const onClose = () => {

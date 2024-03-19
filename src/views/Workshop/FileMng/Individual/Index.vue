@@ -23,7 +23,7 @@
             <Icon icon="heroicons-outline:light-bulb" color="#fff" :size="18" />
           </div>
           <div class="text">
-            共 <span class="num">{{ tableObject.total }}</span> 家个体工商
+            共 <span class="num">{{ tableObject.total }}</span> 家个体工商户
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入编码'
+        placeholder: '请输入个体工商编码'
       }
     },
     table: {
@@ -217,6 +217,13 @@ const schema = reactive<CrudSchema[]>([
     field: 'regionText',
     label: '所属区域',
     width: 180,
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'locationTypeText',
+    label: '所在位置',
     search: {
       show: false
     }
