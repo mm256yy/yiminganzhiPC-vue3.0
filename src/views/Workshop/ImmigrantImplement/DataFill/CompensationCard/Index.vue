@@ -664,14 +664,6 @@ onMounted(() => {
   padding: 0 10px;
 }
 
-.printStyle {
-  position: fixed;
-  left: -1000px;
-  display: flex;
-  width: 340mm;
-  padding: 10px 10px 0px 10px;
-}
-
 .title {
   margin: 5px 0;
   font-family: PingFang SC-Bold, PingFang SC;
