@@ -60,8 +60,8 @@
                 action: () => onViewRow(row)
               }
             ]"
-            :edit="row.status === 0"
-            :delete="row.status === 0"
+            :edit="row.status === 0 || row.entryType === 1"
+            :delete="row.status === 0 || row.entryType === 1"
             :row="row"
             @delete="onDelRow"
             @edit="onEditRow"
@@ -119,7 +119,8 @@ const { register, tableObject, methods } = useTable({
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  entryStatus: '1'
 }
 
 getList()
@@ -177,7 +178,8 @@ const sumAmountApi = async () => {
   try {
     sumAmount.value = await getSumAmountApi({
       projectId,
-      type: '1'
+      type: '1',
+      entryStatus: '1'
     })
   } catch (error) {}
 }

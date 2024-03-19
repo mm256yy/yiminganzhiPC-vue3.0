@@ -605,11 +605,15 @@ const onSearch = (data) => {
   if (params.grantTime) {
     params.grantTime = [params.grantTime]
   }
-  for (let i in params) {
-    if (!params[i]) {
-      delete params[i]
-    }
-  }
+  params[getParamsKey('Country')] = null
+  params[getParamsKey('Township')] = null
+  params[getParamsKey('Village')] = null
+  params[getParamsKey('NaturalVillage')] = null
+  // for (let i in params) {
+  //   if (!params[i]) {
+  //     delete params[i]
+  //   }
+  // }
   if (params.code == '1') {
     params.ownershipUnitIsNull = '1'
     delete params.code

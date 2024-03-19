@@ -860,6 +860,7 @@ const getParamsKey = (key: string) => {
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
+  console.log(searchData, tableObject.params)
 
   if (searchData.relation == '1') {
     searchData.relation = ['is', 1]
@@ -880,11 +881,11 @@ const onSearch = (data) => {
   if (params.grantTime) {
     params.grantTime = [params.grantTime]
   }
-  for (let i in params) {
-    if (!params[i]) {
-      delete params[i]
-    }
-  }
+  // for (let i in params) {
+  //   if (!params[i]) {
+  //     delete params[i]
+  //   }
+  // }
   console.log(params)
 
   if (params.code == '1') {
@@ -1040,7 +1041,6 @@ let onBind = () => {
   }
 }
 let headerRow = (data) => {
-  console.log(data, 'bbq')
   if (data.columnIndex > 5 && data.columnIndex < 10) {
     return {
       background: 'rgb(161 252 253)'
