@@ -1,14 +1,14 @@
 <template>
   <WorkContentWrap>
     <!-- 只征地不搬迁 -- 资产评估 -->
-    <div class="table-wrap !py-12px !mt-0px" v-if="data.length > 0">
+    <div class="table-wrap !py-12px !mt-0px">
       <div class="center">
         <div>镜岭水库青苗评估汇总表</div>
       </div>
       <div>
         使用权人 镜岭采石场有限公司，属坝址周边村只征地不搬迁农户及单位，青苗评估共有{{
-          data.length
-        }}个地块，面积{{ areaNumber }}亩，株数{{ plantsNumber }}株，金额{{ price }}元。
+          lengths?.length
+        }}个地块，面积{{ areaNumber?.toFixed(2) }}亩，株数{{ plantsNumber }}株，金额{{ price }}元。
       </div>
       <div>详见地块明细如下:</div>
       <div class="table-wrap">
@@ -24,14 +24,14 @@
       </div>
       <div class="flex"> <span>评估单位： </span><span>评估人员：</span></div>
     </div>
-    <div v-else class="table-wrap !py-12px !mt-0px no-data"
+    <!-- <div v-else class="table-wrap !py-12px !mt-0px no-data"
       >该户资产评估还未完成，无法查看评估报告!</div
-    >
+    > -->
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, toRaw } from 'vue'
+import { reactive, ref, onMounted, toRaw, watch, nextTick } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { Table } from '@/components/Table'
@@ -43,8 +43,8 @@ interface PropsType {
   baseInfo: any
 }
 const tableObject = ref<any>()
-let data = reactive<any>({})
-
+let data = reactive<any>([])
+let lengths = ref<any>()
 let areaNumber = ref<any>()
 let plantsNumber = ref<any>()
 let price = ref<any>()
@@ -98,7 +98,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'breed',
     label: '品种',
     search: {
       show: false
@@ -142,20 +142,31 @@ const requestList = async () => {
     doorNo: props.doorNo
   })
   tableObject.value = list
-  data = toRaw(tableObject.value)
-  areaNumber.value = data.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.shapeArea,
-    0
-  )
-  plantsNumber.value = data.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.number,
-    0
-  )
-  price.value = data.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.compensationAmount,
-    0
-  )
 }
+watch(
+  () => tableObject.value,
+  (val) => {
+    data = toRaw(val)
+    lengths.value = [...new Map(data?.map((item) => [item.landNumber, item])).values()]
+    areaNumber.value = data?.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.shapeArea,
+      0
+    )
+    plantsNumber.value = data?.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.number,
+      0
+    )
+    price.value = data?.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.compensationAmount,
+      0
+    )
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
 onMounted(() => {
   requestList()
 })

@@ -47,9 +47,15 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="地名" :width="150" prop="name" align="center" header-align="center">
+        <ElTableColumn
+          label="地名"
+          :width="150"
+          prop="landName"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.name" disabled />
+            <ElInput placeholder="请输入" v-model="scope.row.landName" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -221,7 +227,7 @@ const defaultRow = {
   uid: props.uid,
   status: 'implementation',
   landNumber: '',
-  name: '',
+  landName: '',
   size: '',
   number: 0,
   price: 0,
@@ -279,14 +285,14 @@ const getLandLists = () => {
     landLists.value = res.content.map((item) => {
       return {
         landNumber: item.landNumber,
-        name: item.landName
+        landName: item.landName
       }
     })
     console.log(landLists.value, 'landLists数据')
     landLists.value.forEach((item1) => {
       tableData.value.forEach((item) => {
         if (item.landNumber === item1.landNumber) {
-          item.name = item1.name
+          item.landName = item1.landName
         }
       })
     })
@@ -296,7 +302,7 @@ const currStationChange = (val) => {
   landLists.value.forEach((item1) => {
     tableData.value.forEach((item) => {
       if (item.landNumber === val) {
-        item.name = item1.name
+        item.landName = item1.landName
       }
     })
   })
