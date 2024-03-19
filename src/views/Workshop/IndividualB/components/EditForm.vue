@@ -143,7 +143,7 @@
           v-model="form.householderDoorNo"
         />
       </ElFormItem> -->
-      <!-- <ElFormItem label="高程" prop="altitude">
+      <ElFormItem label="高程" prop="altitude">
         <ElInput
           clearable
           filterable
@@ -152,11 +152,11 @@
           class="!w-350px"
           v-model="form.altitude"
         />
-      </ElFormItem> -->
+      </ElFormItem>
 
-      <!-- <div class="w-466px">
+      <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
-      </div> -->
+      </div>
     </ElForm>
 
     <VillageEditForm
@@ -199,6 +199,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { MapFormItem } from '@/components/Map'
 
 interface PropsType {
   show: boolean
@@ -329,20 +330,20 @@ const remoteMethod = (query: string) => {
 }
 
 // 定位
-// const onChosePosition = (ps) => {
-//   position.latitude = ps.latitude
-//   position.longitude = ps.longitude
-//   position.address = ps.address
-// }
+const onChosePosition = (ps) => {
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      // if (!position.latitude || !position.longitude) {
-      //   ElMessage.error('请选择位置')
-      //   return
-      // }
+      if (!position.latitude || !position.longitude) {
+        ElMessage.error('请选择位置')
+        return
+      }
       form.value.showHouseholderDoorNo = 'jl' + form.value.showHouseholderDoorNo
 
       btnLoading.value = true

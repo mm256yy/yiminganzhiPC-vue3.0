@@ -165,7 +165,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入姓名'
+        placeholder: '请输入村集体名称'
       }
     },
     table: {
@@ -220,7 +220,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'showDoorNo',
     label: '村集体编码',
-    width: 100,
     search: {
       show: false
     }
@@ -235,22 +234,14 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'regionText',
     label: '所属区域',
-    width: 180,
     search: {
       show: false
     }
   },
   {
-    field: 'locationType',
+    field: 'locationTypeText',
     label: '所在位置',
     search: {
-      show: true,
-      component: 'Select',
-      componentProps: {
-        options: dictObj.value[326]
-      }
-    },
-    table: {
       show: false
     }
   },

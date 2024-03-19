@@ -149,9 +149,9 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'underlyingCompany',
-    label: '权属单位名称',
+    label: '权属单位',
     width: 100,
-    table: {
+    search: {
       show: false
     }
   },
@@ -176,21 +176,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     },
     showOverflowTooltip: false
-  },
-  {
-    field: 'filling',
-    label: '填报',
-    fixed: 'right',
-    width: 115,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
   },
   {
     field: 'action',

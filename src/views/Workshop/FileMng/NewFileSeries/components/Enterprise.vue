@@ -30,7 +30,6 @@
         headerAlign="center"
         show-overflow-tooltip
         align="center"
-        height="560"
         @register="register"
       >
         <template #collection="{ row }">

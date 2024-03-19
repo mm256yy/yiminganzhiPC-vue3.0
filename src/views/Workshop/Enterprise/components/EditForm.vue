@@ -89,7 +89,18 @@
           v-model="form.householderDoorNo"
         />
       </ElFormItem> -->
-      <!-- <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
+      <ElFormItem label="高程" prop="altitude">
+        <ElInput
+          clearable
+          filterable
+          placeholder="请输入高程"
+          type="number"
+          class="!w-350px"
+          v-model="form.altitude"
+        />
+      </ElFormItem>
+
+      <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
             v-for="item in dictObj[346]"
@@ -98,7 +109,10 @@
             :value="item.value"
           />
         </ElSelect>
-      </ElFormItem> -->
+      </ElFormItem>
+      <div class="w-466px">
+        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+      </div>
     </ElForm>
 
     <VillageEditForm
@@ -141,6 +155,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
+import { MapFormItem } from '@/components/Map'
 
 interface PropsType {
   show: any
@@ -227,11 +242,11 @@ const onClose = (flag = false) => {
 }
 
 // 定位
-// const onChosePosition = (ps) => {
-//   position.latitude = ps.latitude
-//   position.longitude = ps.longitude
-//   position.address = ps.address
-// }
+const onChosePosition = (ps) => {
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 
 const doorTypeChange = (val) => {
   console.log(options.value, val, '测试数据下拉')

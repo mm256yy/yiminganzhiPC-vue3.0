@@ -11,7 +11,6 @@
         headerAlign="center"
         show-overflow-tooltip
         align="center"
-        height="600"
         style="max-height: 600px"
       >
         <template #collection="{ row }">
