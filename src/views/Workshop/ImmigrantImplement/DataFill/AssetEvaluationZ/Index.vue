@@ -6,9 +6,9 @@
         <div>镜岭水库青苗评估汇总表</div>
       </div>
       <div>
-        使用权人 镜岭采石场有限公司，属坝址周边村只征地不搬迁农户及单位，青苗评估共有{{
+        使用权人{{ householder }}，属坝址周边村只征地不搬迁农户及单位，青苗评估共有{{
           lengths?.length
-        }}个地块，面积{{ areaNumber?.toFixed(2) }}亩，株数{{ plantsNumber }}株，金额{{ price }}元。
+        }}个地块，面积{{ areaNumber?.toFixed(2) }}㎡，株数{{ plantsNumber }}株，金额{{ price }}元。
       </div>
       <div>详见地块明细如下:</div>
       <div class="table-wrap">
@@ -48,6 +48,7 @@ let lengths = ref<any>()
 let areaNumber = ref<any>()
 let plantsNumber = ref<any>()
 let price = ref<any>()
+let householder = ref<any>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const schema = reactive<CrudSchema[]>([
@@ -160,6 +161,7 @@ watch(
       (accumulator, currentValue) => accumulator + currentValue.compensationAmount,
       0
     )
+    householder.value = data ? data[0].householder : '-'
   },
   {
     immediate: true,

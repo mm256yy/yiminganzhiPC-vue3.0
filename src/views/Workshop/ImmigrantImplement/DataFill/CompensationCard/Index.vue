@@ -116,16 +116,17 @@
       @close="close('rewardConfirm')"
       :id="2"
     />
-
-    <div
-      id="print"
-      style="
+    <!-- style="
         position: fixed;
         left: -1500px;
         display: flex;
         width: 340mm;
         padding: 10px 10px 0px 10px;
-      "
+      " -->
+    <div
+      id="print"
+      class="printStyle"
+      :style="{ display: feeTableData.length > 0 ? 'block' : 'none' }"
     >
       <div style="width: 50%; padding-right: 10px">
         <h1 style="font-size: 24px; text-align: center">只征地不搬迁补偿登记卡</h1>
@@ -363,16 +364,21 @@ const getSummar = (param: any) => {
       sums[index] = '合计'
       return
     }
-    const values = data.map((item) => Number(item[column.property]))
+    const values = data.map((item) => {
+      return { num: Number(item[column.property]), key: item.name }
+    })
+    console.log(values, '测试叠加数据')
     if (index == 5) {
-      sums[index] = `${values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return prev + curr
+      console.log(param, values)
+
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr.num)
+        if (!Number.isNaN(value) && !curr.key.includes('小计')) {
+          return prev + curr.num
         } else {
           return prev
         }
-      }, 0)}`
+      }, 0)
     } else {
       sums[index] = '——'
     }
@@ -540,23 +546,13 @@ const getSummaries = (row: any) => {
     }
   })
   let arr: any[] = []
-  const incentivefeeArr = [
-    '签订动迁安置协议',
-    '房屋腾空奖励',
-    '签订安置村对接协议',
-    '启动建房奖励',
-    '完成建房奖励',
-    '搬迁入住奖励',
-    '随迁人口补助费奖励',
-    '应迁未迁人口补助奖励',
-    '其他奖励费'
-  ]
+  const incentivefeeArr = ['签约奖', '腾空奖', '其他奖励费', '奖励费小计']
   if (row.name !== '奖励费小计') {
     arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
   } else {
     arr = feeTableData.value.filter((item) => incentivefeeArr.includes(item.name))
   }
-
+  console.log(arr, 'arr是什么？')
   sums = arr.reduce((totalPrice, currentItem) => {
     return totalPrice + computedTotalPrice(currentItem)
   }, 0)
@@ -667,7 +663,13 @@ onMounted(() => {
 :deep(.el-form-item) {
   padding: 0 10px;
 }
-
+.printStyle {
+  position: fixed;
+  left: -1000px;
+  display: flex;
+  width: 340mm;
+  padding: 10px 10px 0px 10px;
+}
 .title {
   margin: 5px 0;
   font-family: PingFang SC-Bold, PingFang SC;

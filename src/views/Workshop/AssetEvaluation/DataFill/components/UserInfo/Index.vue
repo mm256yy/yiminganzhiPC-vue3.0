@@ -363,6 +363,7 @@ watch(
   () => props.baseInfo.implementEscalationStatus,
   (val) => {
     console.log(val)
+    console.log(props.baseInfo, '测试传输数据')
   },
   { deep: true }
 )
