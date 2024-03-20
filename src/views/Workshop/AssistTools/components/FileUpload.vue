@@ -58,7 +58,13 @@
             <ElFormItem label="套型："> {{ item.area }} </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="幢号-室号："> {{ item.roomNo }} </ElFormItem>
+            <ElFormItem label="幢号-室号：">
+              {{
+                item.roomNo
+                  ? baseInfo.roomNoOptions.filter((ket) => ket.value === item.roomNo)[0].label
+                  : ''
+              }}
+            </ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -236,7 +242,7 @@ import {
   ElMessageBox
 } from 'element-plus'
 import { ref, reactive, watch, nextTick } from 'vue'
-import { debounce } from 'lodash-es'
+import { debounce, filter } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import { saveBatchDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
