@@ -6,7 +6,7 @@
         <ElButton type="primary" @click="handleadd">增加</ElButton>
       </div>
       <div>
-        本户共计征收土地：{{ headerData?.area }}亩，参保系数为：{{
+        本户共计征收土地：{{ (headerData?.area / 666.66).toFixed(2) }}亩，参保系数为：{{
           dictObj[420][0].value
         }}，可参保{{ headerData?.cbNum }}人
       </div>
