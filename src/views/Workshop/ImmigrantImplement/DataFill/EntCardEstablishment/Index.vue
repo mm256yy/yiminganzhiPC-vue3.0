@@ -3,7 +3,7 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div class="title"> 个体工商户账户信息 </div>
+        <div class="title"> 企业账户信息 </div>
       </div>
       <ElForm
         class="form"
