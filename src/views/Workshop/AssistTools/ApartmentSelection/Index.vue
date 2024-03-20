@@ -67,15 +67,17 @@
             header-align="center"
           >
             <template #default="{ row }">
-              <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+              <!-- <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
                 <ElOption
-                  v-for="item in row.roomNoOptions.content"
+                  v-for="item in row.roomNoOptions"
                   :key="item.id"
-                  :label="item.showName"
-                  :value="item.code"
+                  :label="item.label"
+                  :value="item.value"
                   :disabled="item.isOccupy === '1'"
-                />
-              </ElSelect>
+                  >{{ item.label }}</ElOption
+                >
+              </ElSelect> -->
+              <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable />
             </template>
           </ElTableColumn>
           <ElTableColumn
@@ -182,7 +184,8 @@ import {
   ElBreadcrumb,
   ElBreadcrumbItem,
   ElPagination,
-  ElMessageBox
+  ElMessageBox,
+  ElSelectV2
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import {
@@ -198,6 +201,7 @@ import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/sit
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import { useTable } from '@/hooks/web/useTable'
 import FileUpload from '../components/FileUpload.vue'
+import label from '../../ExternalLink/components/label.vue'
 
 const dialog = ref<boolean>(false)
 const doorNo = ref<string>('')
@@ -232,7 +236,7 @@ const getPlacementPointList = async () => {
     const list = result.content.map((item) => {
       return {
         label: item.name,
-        value: item.name
+        value: item.code
       }
     })
     placementPointList.value = list
@@ -384,13 +388,21 @@ const getList = async () => {
       })
     })
 
-    arr.map(async (item: any) => {
+    // arr.map(async (item: any) => {})
+    for (let item of arr) {
       item.landNoOptions = await getLandNoList(item.settleAddress)
       item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
       item.carNoOptions = await getCarNoList(item.settleAddress)
-      item.roomNoOptions = await getHouseConfigApi(projectId, 3, item.settleAddress)
-    })
-
+      let { content } = await getHouseConfigApi(projectId, 3, item.settleAddress)
+      // console.log(content, 'bbq')
+      item.roomNoOptions = content.map((item) => {
+        return {
+          label: item.showName,
+          value: item.code,
+          disabled: item.isOccupy === '1' ? true : false
+        }
+      })
+    }
     tableData.value = arr || []
     tableObject.params.total = result.total
     tableLoading.value = false

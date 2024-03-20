@@ -72,34 +72,36 @@
           <el-radio label="2" size="large">无</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <div class="col-wrapper">
-        <div class="col-label-required"> 规划图： </div>
-        <div class="card-img-list">
-          <ElUpload
-            :list-type="'picture-card'"
-            action="/api/file/type"
-            :data="{
-              type: 'archives'
-            }"
-            accept=".jpg,.png,jpeg,.pdf"
-            :multiple="false"
-            :file-list="relocateVerifyPic"
-            :headers="headers"
-            :on-error="onError"
-            :on-success="uploadFileChange1"
-            :before-remove="beforeRemove"
-            :on-remove="removeFile1"
-            :on-preview="imgPreview"
-          >
-            <template #trigger>
-              <div class="card-img-box">
-                <img class="card-img" src="@/assets/imgs/house.png" alt="" />
-                <div class="card-txt">点击上传</div>
-              </div>
-            </template>
-          </ElUpload>
+      <ElFormItem label="规划图：" required prop="pic">
+        <div class="col-wrapper">
+          <div class="card-img-list">
+            <ElUpload
+              :list-type="'picture-card'"
+              action="/api/file/type"
+              :data="{
+                type: 'archives'
+              }"
+              accept=".jpg,.png,jpeg,.pdf"
+              :multiple="false"
+              :file-list="relocateVerifyPic"
+              :headers="headers"
+              :on-error="onError"
+              :on-success="uploadFileChange1"
+              :before-remove="beforeRemove"
+              :on-remove="removeFile1"
+              :on-preview="imgPreview"
+            >
+              <template #trigger>
+                <div class="card-img-box">
+                  <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                  <div class="card-txt">点击上传</div>
+                </div>
+              </template>
+            </ElUpload>
+          </div>
         </div>
-      </div>
+      </ElFormItem>
+
       <div style="font-weight: bolder">周边配套</div>
       <ElFormItem label="交通:" prop="traffic">
         <ElInput type="text" v-model="form.traffic" placeholder="请输入交通" />
@@ -155,6 +157,8 @@ import { editPlacementPointApi } from '@/api/systemConfig/placementPoint-service
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { MapFormItem } from '@/components/Map'
 import { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
+import { useValidator } from '@/hooks/web/useValidator'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -214,8 +218,14 @@ watch(
   }
 )
 // 规则校验
-const rules = reactive<FormRules>({})
-
+const { required } = useValidator()
+const rules = {
+  name: [required()],
+  address: [required()],
+  type: [required()],
+  isProductionLand: [required()],
+  pic: [required()]
+}
 const initData = () => {}
 
 // 关闭弹窗
