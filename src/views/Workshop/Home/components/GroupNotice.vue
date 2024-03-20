@@ -96,7 +96,7 @@ const getMessage = async () => {
 }
 
 onMounted(() => {
-  getMessage()
+  // getMessage()
 })
 
 // const tabChange = (id: number) => {

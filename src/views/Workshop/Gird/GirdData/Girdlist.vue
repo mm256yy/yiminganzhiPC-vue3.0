@@ -166,6 +166,13 @@ const schema = reactive<CrudSchema[]>([
     search: {
       show: false
     }
+  },
+  {
+    field: 'landNoMoveNumber',
+    label: '只征地不搬迁',
+    search: {
+      show: false
+    }
   }
 ])
 

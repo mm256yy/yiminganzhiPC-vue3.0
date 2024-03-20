@@ -331,7 +331,7 @@
       @close="onFormPupClose"
       :type="type"
       @objlist="objListArr"
-      @tableList="tableArr"
+      @table-list="tableArr"
       :selence="selence"
     />
   </ElDialog>
@@ -532,7 +532,7 @@ const tableArr = (val: any) => {
 }
 const girdList = () => {
   girdDialog.value = true
-  form.value.paymentType == 2 ? (type.value = true) : (type.value = false)
+  type.value = form.value.paymentType == 2
   selence.value = tableData.value.reduce((pre, item) => {
     item.nodeDtoList.forEach((res) => {
       pre.push(res.id)
