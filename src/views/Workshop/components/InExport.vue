@@ -57,6 +57,7 @@ const uploadError = (error) => {
     const response = JSON.parse(error.message)
     ElMessage.error(response.message)
     uploadLoading.value = false
+    emit('close')
   } catch (err) {
     // err
   }
@@ -67,6 +68,7 @@ const uploadDone = () => {
     message: '导入成功',
     type: 'success'
   })
+  emit('close')
   // getList()
 }
 
