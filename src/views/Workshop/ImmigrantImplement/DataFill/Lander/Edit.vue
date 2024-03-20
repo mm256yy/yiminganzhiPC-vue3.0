@@ -14,7 +14,7 @@
         <!-- {{ filterWay(row).filter((item) => item.value === row.settingWay)[0].label }} -->
       </template>
       <template #settingWay>
-        <ElSelect style="width: 100%" v-model="settingWay" placeholder="请选择">
+        <ElSelect style="width: 100%" v-model="settingWay" placeholder="请选择" @change="changes">
           <ElOption
             v-for="item in filterWayArr"
             :key="`${item.value}${row.id}`"
@@ -115,8 +115,8 @@ let onClose = () => {
 let onSubmit = async () => {
   const formRef = unref(elFormRef)
   const user = (await methods.getFormData()) || {}
-  user.settingWay = settingWay.value
-  user.card = card.value
+  // user.settingWay = settingWay.value
+  // user.card = card.value
   await formRef?.validate(async (isValid) => {
     if (isValid) {
       if (props.title == '添加生产安置人口') {
@@ -153,6 +153,16 @@ const filterWay = (data) => {
 }
 let change = async (e) => {
   filterWayArr.value = filterWay({ card: e })
+  methods.setValues({ card: card.value })
+  // user.card = card.value
+}
+let changes = async (e) => {
+  console.log(e)
+  methods.setValues({ settingWay: '1' })
+  // const user = (await methods.getFormData()) || {}
+  // user.settingWay = settingWay.value
+  methods.setValues({ settingWay: settingWay.value })
+  // console.log(user)
 }
 let filterWayArr: any = ref([])
 watch(
