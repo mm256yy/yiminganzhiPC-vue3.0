@@ -221,19 +221,19 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请上传自建房告知单')
       //   return
       // } else
-      if (!buildOneselfCheckPic.value.length) {
-        ElMessage.error('请上传自建房验收告知单')
-        return
-      } else {
-        let params: any = {
-          ...form.value,
-          doorNo: props.doorNo,
-          buildOneselfPic: JSON.stringify(buildOneselfPic.value || []), // 自建房告知单
-          buildOneselfCheckPic: JSON.stringify(buildOneselfCheckPic.value || []), // 自建房验收告知单
-          buildOneselfOtherPic: JSON.stringify(buildOneselfOtherPic.value || []) // 其他附件
-        }
-        submit(params)
+      // if (!buildOneselfCheckPic.value.length) {
+      //   ElMessage.error('请上传自建房验收告知单')
+      //   return
+      // } else {
+      let params: any = {
+        ...form.value,
+        doorNo: props.doorNo,
+        buildOneselfPic: JSON.stringify(buildOneselfPic.value || []), // 自建房告知单
+        buildOneselfCheckPic: JSON.stringify(buildOneselfCheckPic.value || []), // 自建房验收告知单
+        buildOneselfOtherPic: JSON.stringify(buildOneselfOtherPic.value || []) // 其他附件
       }
+      submit(params)
+      // }
     } else {
       return false
     }
