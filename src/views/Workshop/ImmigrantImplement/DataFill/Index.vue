@@ -49,7 +49,7 @@
         :tabCurrentId="tabCurrentId"
         :fillingStatus="fillingStatus"
         @update-data="getLandlordInfo"
-        v-if="tabCurrentId != 1"
+        v-if="title != '资格认定'"
       />
 
       <!-- Tabs -->
@@ -824,13 +824,14 @@ const getLandlordInfo = () => {
   })
   getFillingStatus()
 }
-
+let title = ref('')
 const onTabClick = (tabItem) => {
   // if (tabCurrentId.value === tabItem.id) {
   //   return
   // }
   getLandlordInfo()
   console.log('ty', tabItem)
+  title.value = tabItem.name
   tabCurrentId.value = tabItem.id
   subTabCurrentId.value = 1
   getFillingStatus()
