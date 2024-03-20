@@ -54,7 +54,7 @@
         </ElTableColumn>
       </ElTable>
 
-      <div>合计金额:{{ amountPrice }}元</div>
+      <div>合计金额:{{ amountPricess }}元</div>
     </div>
     <div v-else>
       <div
@@ -66,9 +66,19 @@
         "
       >
         <div style="display: flex; align-items: baseline">
+          <span style="margin-right: 10px">区域:</span>
+          <!-- <ElInput type="primary" style="width: 240px; margin-bottom: 10px" v-model="code" /> -->
+          <ElTreeSelect
+            v-model="code"
+            :data="districtTree"
+            :props="{ value: 'code', label: 'name' }"
+            check-strictly
+          />
+        </div>
+        <div style="display: flex; align-items: baseline">
           <span style="margin-right: 10px">关键字:</span>
-          <ElInput type="primary" style="width: 240px; margin-bottom: 10px" v-model="search"
-        /></div>
+          <ElInput type="primary" style="width: 240px; margin-bottom: 10px" v-model="search" />
+        </div>
 
         <ElButton type="primary" style="margin-bottom: 10px" @click="searchClick">搜索</ElButton>
       </div>
@@ -135,11 +145,17 @@ import {
   ElMessage,
   ElCheckboxGroup,
   ElCheckbox,
-  ElInput
+  ElInput,
+  ElTreeSelect
 } from 'element-plus'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getPaymentApplicationPpsList } from '@/api/fundManage/paymentApplication-service'
 import { formatDate } from '@/utils/index'
+import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { useAppStore } from '@/store/modules/app'
+
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 interface PropsType {
@@ -194,6 +210,9 @@ const addDemo = () => {
   amountPrice.value = tableDatas.value.reduce((c, item) => c + item.amount * 1, 0)
   console.log(tableDatas.value, amountPrice.value, '打印传递的计算值')
 }
+let amountPricess = computed(() => {
+  return tableDatas.value.reduce((c, item) => c + item.amount * 1, 0)
+})
 const delDemo = (row: any) => {
   tableDatas.value.splice(row.index, 1)
   ElMessage.success('删除成功！')
@@ -210,8 +229,17 @@ const findRecursion = (data, code, callback) => {
     }
   })
 }
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const ppsList = (e) => {
-  getPaymentApplicationPpsList({ keywords: e }).then((res: any) => {
+  getPaymentApplicationPpsList(e).then((res: any) => {
     if (res) {
       tableData.value = res
       console.log(tableData.value, '付款对象数据')
@@ -220,7 +248,23 @@ const ppsList = (e) => {
 }
 let search = ref('')
 let searchClick = () => {
-  ppsList(search.value)
+  let params: any = { code: code.value, keywords: search.value }
+  if (code.value) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
+  ppsList(params)
+}
+let districtTree: any = ref([])
+let code = ref('')
+const getdistrictTree = async () => {
+  const list = await getVillageTreeApi(projectId)
+  districtTree.value = list || []
+  return list || []
 }
 watch(
   () => props.show,
@@ -228,6 +272,7 @@ watch(
     if (props.show) {
       check.value = props.selence
       // ppsList()
+      getdistrictTree()
       console.log(props)
     }
   },
