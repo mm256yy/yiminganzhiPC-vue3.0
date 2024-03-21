@@ -44,6 +44,7 @@
       </ElFormItem>
       <ElFormItem label="资金科目:" required prop="funSubjectId">
         <ElTreeSelect
+          v-if="actionType !== 'view'"
           class="!w-full"
           v-model="form.funSubjectId"
           :data="form.type == '1' ? fundAccountLists : props.fundAccountList"
@@ -54,6 +55,7 @@
           checkOnClickNode
           :default-checked-keys="[form.funSubjectId]"
         />
+        <span v-else>{{ form.funSubjectIdText }}</span>
       </ElFormItem>
       <ElFormItem label="付款说明:" required prop="remark">
         <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入" />
@@ -305,6 +307,18 @@
                   <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
                   <div class="remark" v-if="item.status && index != 0">
                     审核意见: {{ item.remark }}
+                  </div>
+                  <div
+                    class="receipt-img"
+                    v-if="item.receipt && item.receipt != '[]'"
+                    @click="showImgPreview(JSON.parse(item.receipt)[0]?.url)"
+                  >
+                    财务凭证:
+                    <img
+                      :src="JSON.parse(item.receipt)[0]?.url"
+                      style="height: 200px; height: 200px"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
@@ -682,6 +696,12 @@ const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 
+// 查看凭证大图
+const showImgPreview = (img: string) => {
+  imgUrl.value = img
+  dialogVisible.value = true
+}
+
 onMounted(() => {
   initData()
   // getFundSubjectList()
@@ -836,5 +856,12 @@ onMounted(() => {
       }
     }
   }
+}
+
+.receipt-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
 }
 </style>

@@ -60,8 +60,6 @@
                 action: () => onViewRow(row)
               }
             ]"
-            :edit="row.status === 0 || row.entryType === 1"
-            :delete="row.status === 0 || row.entryType === 1"
             :row="row"
             @delete="onDelRow"
             @edit="onEditRow"

@@ -197,6 +197,10 @@ const listArray = ref([
           {
             value: 'Land',
             text: '土地报批'
+          },
+          {
+            value: 'Ownership',
+            text: '权属明细'
           }
         ]
       }
@@ -262,6 +266,16 @@ const listArray = ref([
       },
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(8).png', import.meta.url).href,
+        name: '只征地不搬迁',
+        list: [
+          {
+            value: 'EnterpriseFundDetail',
+            text: '资金发放明细'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(9).png', import.meta.url).href,
         name: '专业项目',
         list: [
           {

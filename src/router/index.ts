@@ -599,6 +599,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           },
           {
+            path: 'Ownership',
+            name: 'Ownership',
+            component: () => import('@/views/Workshop/DataQuery/SmartReport/Ownership/Index.vue'),
+            meta: {
+              title: '权属明细',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
             path: 'Grave',
             name: 'Grave',
             component: () => import('@/views/Workshop/DataQuery/SmartReport/Grave/Index.vue'),

@@ -58,7 +58,7 @@
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">所属网格：</div>
-            <div class="txt"> {{ fmtStr(props.baseInfo?.gridmanId) }} </div>
+            <div class="txt"> {{ fmtStr(props.baseInfo?.gridmanName) }} </div>
           </div>
         </el-col>
       </el-row>

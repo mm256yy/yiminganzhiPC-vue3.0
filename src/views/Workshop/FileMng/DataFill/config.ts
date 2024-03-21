@@ -20,7 +20,14 @@ export const locationTypes = [
 ]
 
 // 面包屑标题列表
-export const breadcrumbTitles = ['一户一档', '企（事）业单位', '个体户', '村集体', '专业项目']
+export const breadcrumbTitles = [
+  '一户一档',
+  '企（事）业单位',
+  '个体户',
+  '村集体',
+  '专业项目',
+  '只征地不搬迁'
+]
 
 // 一户一档 tabs
 export const houseHoldTabs = [
@@ -91,6 +98,22 @@ export const reportApprovalTabs = [
   {
     id: 2,
     name: '其他报告'
+  }
+]
+
+// 只征地不搬迁 tabs
+export const fileLandNoMoveTabs = [
+  {
+    id: 1,
+    name: '资产'
+  },
+  {
+    id: 2,
+    name: '协议/确认单'
+  },
+  {
+    id: 3,
+    name: '其它档案'
   }
 ]
 

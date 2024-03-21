@@ -39,7 +39,7 @@
   <div class="data-fill-body">
     <Enclosure v-if="showEnclosure" :doorNo="doorNo" :householdId="householdId" />
     <UploadField
-      v-else-if="showUploadField"
+      v-else-if="showUploadField || showUpload"
       :type="type"
       :tabIndex="tabCurrentId"
       :doorNo="doorNo"
@@ -76,7 +76,13 @@ import {
   getLandlordByIdApi,
   getProfessionalDetailByIdApi
 } from '@/api/putIntoEffect/putIntoEffectDataFill/service'
-import { breadcrumbTitles, houseHoldTabs, commonTabs, professionTabs } from './config'
+import {
+  breadcrumbTitles,
+  houseHoldTabs,
+  commonTabs,
+  professionTabs,
+  fileLandNoMoveTabs
+} from './config'
 
 const { currentRoute, back } = useRouter()
 const tabCurrentId = ref<number>(1)
@@ -89,7 +95,8 @@ const getTabsByType = (type) => {
     1: commonTabs,
     2: commonTabs,
     3: commonTabs,
-    4: professionTabs
+    4: professionTabs, // 专业项目
+    5: fileLandNoMoveTabs // 只征地不搬迁
   }
   return map[type]
 }
@@ -113,8 +120,13 @@ const showEnclosure = computed(() => {
   return type !== '4' && tabCurrentId.value === 3
 })
 
+// 显示上传模块
 const showUploadField = computed(() => {
   return type === '4' ? tabCurrentId.value > 1 : tabCurrentId.value === 4
+})
+
+const showUpload = computed(() => {
+  return type === '5' && tabCurrentId.value === 3
 })
 
 const getLandlordInfo = () => {
@@ -160,9 +172,9 @@ const requestFileMngList = (type) => {
   )
 }
 
-const chooseType = (type) => {
+const chooseType = (type: string) => {
   // 一户一档
-  console.log(1, tabCurrentId.value)
+  console.log('chooseTypeTag', tabCurrentId.value)
 
   if (type === '0') {
     requestType.value = tabCurrentId.value
@@ -175,9 +187,12 @@ const chooseType = (type) => {
   } else if (type === '3') {
     // 村集体
     requestType.value = tabCurrentId.value === 1 ? 6 : 7
-  } else {
+  } else if (type === '4') {
     // 专业项目
     requestType.value = tabCurrentId.value === 1 ? 8 : 1
+  } else {
+    // 只征地不搬迁
+    requestType.value = tabCurrentId.value === 1 ? 9 : 10
   }
   requestFileMngList(requestType.value)
 }

@@ -279,22 +279,16 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '草稿',
-            value: 0
+            value: '0'
           },
           {
             label: '正常',
-            value: 1
+            value: '1'
           }
         ]
       }
     },
     table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
       show: false
     }
   },

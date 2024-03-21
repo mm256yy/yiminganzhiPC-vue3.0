@@ -85,7 +85,13 @@ const { back } = useRouter()
 const dialogShow = ref<boolean>(false)
 const actionType = ref<string>('add')
 const currentRow = ref<DetailUpdateType>()
-const normalTabTypes = ['PeasantHousehold', 'IndividualHousehold', 'Company', 'Village']
+const normalTabTypes = [
+  'PeasantHousehold',
+  'IndividualHousehold',
+  'Company',
+  'Village',
+  'landNoMove'
+]
 let schemas = reactive<any>({
   columns: []
 })
@@ -389,7 +395,8 @@ const getTypeNumber = (type: string) => {
     PeasantHousehold: '户号',
     Company: '企业编号',
     IndividualHousehold: '个体户编号',
-    Village: '村集体编号'
+    Village: '村集体编号',
+    landNoMove: '户号'
   }
   return map[type]
 }
@@ -400,7 +407,8 @@ const getTypeName = (type: string) => {
     PeasantHousehold: '户主姓名',
     Company: '企业名称',
     IndividualHousehold: '个体户名称',
-    Village: '村集体名称'
+    Village: '村集体名称',
+    landNoMove: '使用权人'
   }
   return map[type]
 }
