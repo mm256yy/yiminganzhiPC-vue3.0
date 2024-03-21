@@ -159,7 +159,7 @@ const initData = () => {
       graveChoosePic.value = JSON.parse(form.value.graveChoosePic)
     }
 
-    if (form.value.otherPic) {
+    if (form.value.graveChooseOtherPic) {
       graveChooseOtherPic.value = JSON.parse(form.value.graveChooseOtherPic)
     }
   })
