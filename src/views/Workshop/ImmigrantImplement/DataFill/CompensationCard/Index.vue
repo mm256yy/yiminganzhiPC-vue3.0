@@ -567,7 +567,7 @@ const onDocumentation = () => {
 // 打印报表
 const onPrint = () => {
   console.log('打印报表')
-  htmlToPdf('#print')
+  htmlToPdf('#print', '只征地不搬迁补偿登记卡')
 }
 
 // 奖励费确认
@@ -663,6 +663,7 @@ onMounted(() => {
 :deep(.el-form-item) {
   padding: 0 10px;
 }
+
 .printStyle {
   position: fixed;
   left: -1000px;
@@ -670,6 +671,7 @@ onMounted(() => {
   width: 340mm;
   padding: 10px 10px 0px 10px;
 }
+
 .title {
   margin: 5px 0;
   font-family: PingFang SC-Bold, PingFang SC;

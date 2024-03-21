@@ -402,7 +402,7 @@ let comdbe = () => {
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 
-    htmlToPdf('#anztable')
+    htmlToPdf('#anztable', '生产安置')
   })
 }
 </script>

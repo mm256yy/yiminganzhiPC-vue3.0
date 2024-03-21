@@ -92,13 +92,13 @@
               <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
                 {{ row.number }}
               </div>
-              <div v-if="row.isUpdate !== '1'">——</div>
+              <div v-if="row.isUpdate !== '1' || row.name == '奖励费小计'">——</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
             <template #default="{ row }">
               <!-- <div v-if="row.isUpdate === '1' && row.isVerify === '1'"> -->
-              {{ row.price }}
+              {{ row.name == '奖励费小计' ? '——' : row.price }}
               <!-- </div> -->
               <!-- <div v-if="row.isUpdate !== '1'">——</div> -->
             </template>
@@ -601,7 +601,7 @@ const onDocumentation = () => {
 // 打印报表
 const onPrint = () => {
   console.log('打印报表')
-  htmlToPdf('#print')
+  htmlToPdf('#print', '移民协议补偿登记卡')
 }
 
 // 奖励费确认
@@ -681,8 +681,8 @@ const getRelocationInfo = async () => {
   const res = await getRelocationInfoApi(props.doorNo)
   if (res) {
     console.log(res, 'bbq')
-    let m = await resettleArea()
-    AddressText.value = m.find((item) => item.code === res.settleAddress)?.name
+
+    AddressText.value = res.settleAddress
   }
 }
 </script>

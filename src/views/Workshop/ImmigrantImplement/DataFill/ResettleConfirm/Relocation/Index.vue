@@ -510,7 +510,7 @@ let comdbe = () => {
   debounce(() => {
     data.value = dayjs(new Date()).format('YYYY年MM月DD日')
 
-    htmlToPdf('#anztable')
+    htmlToPdf('#anztable', '搬迁安置确认单')
   })
 }
 </script>

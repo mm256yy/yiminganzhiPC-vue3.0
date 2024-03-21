@@ -570,7 +570,10 @@ let comdbe = () => {
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 
-    htmlToPdf('#anztable')
+    htmlToPdf(
+      '#anztable',
+      props.baseInfo.houseAreaType === 'homestead' ? '选址确认单' : '选房确认单'
+    )
   })
 }
 
