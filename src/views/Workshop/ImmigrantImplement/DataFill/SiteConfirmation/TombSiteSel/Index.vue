@@ -200,7 +200,7 @@ let comdbe = () => {
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 
-    htmlToPdf('#anztable')
+    htmlToPdf('#anztable', '坟墓择址确认单')
   })
 }
 

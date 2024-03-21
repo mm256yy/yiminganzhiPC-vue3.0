@@ -255,7 +255,7 @@ const onPrintTable = () => {
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 
-    htmlToPdf('#anztable', '无', false)
+    htmlToPdf('#anztable', '过渡安置确认单', false)
   })
 }
 

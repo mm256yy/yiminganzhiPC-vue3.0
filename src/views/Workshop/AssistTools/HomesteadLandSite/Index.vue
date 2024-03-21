@@ -180,7 +180,7 @@ const getPlacementPointList = async () => {
     const list = result.content.map((item) => {
       return {
         label: item.name,
-        value: item.name
+        value: item.code
       }
     })
     placementPointList.value = list
@@ -239,7 +239,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settleAddress"',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
@@ -274,7 +274,7 @@ const onSearch = (data) => {
 
   for (let key in params) {
     if (!params[key]) {
-      delete params[key]
+      params[key] = null
     }
   }
 

@@ -62,6 +62,7 @@
       <ElTableColumn label="确认状态" prop="price" align="center" header-align="center">
         <template #default="{ row }">
           <div v-if="row.isVerify === '1' && row.unit">已确认</div>
+          <div v-else-if="row.name == '奖励费小计'">——</div>
           <div v-else>未确认</div>
         </template>
       </ElTableColumn>
@@ -78,8 +79,10 @@
       </ElTableColumn>
       <ElTableColumn label="操作" width="180" align="center" header-align="center" fixed="right">
         <template #default="{ row }">
-          <ElButton @click="onSave(row, '0')"> 编辑 </ElButton>
-          <ElButton type="primary" @click="onSave(row, '1')"> 确认 </ElButton>
+          <ElButton v-show="row.name != '奖励费小计'" @click="onSave(row, '0')"> 编辑 </ElButton>
+          <ElButton v-show="row.name != '奖励费小计'" type="primary" @click="onSave(row, '1')">
+            确认
+          </ElButton>
         </template>
       </ElTableColumn>
     </ElTable>
@@ -204,7 +207,7 @@ const onSave = (data: any, isVerify: string) => {
   }
 }
 //如果不为奖励费小计就展示输入框
-const showInput = (name) => name !== '奖励费小计' && name !== '其他奖励费'
+const showInput = (name) => name !== '奖励费小计'
 
 // 确认
 

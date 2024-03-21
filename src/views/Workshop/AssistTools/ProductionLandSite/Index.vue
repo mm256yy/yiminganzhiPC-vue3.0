@@ -172,7 +172,7 @@ const getPlacementPointList = async () => {
     const list = result.content.map((item) => {
       return {
         label: item.name,
-        value: item.name
+        value: item.code
       }
     })
     placementPointList.value = list
