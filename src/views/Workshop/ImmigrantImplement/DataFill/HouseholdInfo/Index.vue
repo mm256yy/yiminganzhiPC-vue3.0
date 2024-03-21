@@ -27,7 +27,16 @@
           <div class="titleBox">
             <span class="text">居民户信息补全</span>
           </div>
-
+          <ElRow>
+            <ElCol :span="12">
+              <ElFormItem label="联系方式">
+                <ElInput v-model="position.phone" placeholder="请输入" />
+              </ElFormItem>
+            </ElCol>
+            <ElCol :span="12">
+              <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+            </ElCol>
+          </ElRow>
           <ElRow>
             <ElCol :span="12">
               <div class="col-wrapper">
@@ -168,7 +177,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue'
 import {
   ElMessage,
   ElMessageBox,
@@ -179,13 +188,15 @@ import {
   ElRow,
   ElCol,
   ElUpload,
-  ElDialog
+  ElDialog,
+  ElInput
 } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useAppStore } from '@/store/modules/app'
 import { updateHouseholdInfo } from '@/api/immigrantImplement/householdInfo/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import { MapFormItem } from '@/components/Map'
 
 interface PropsType {
   doorNo: string
@@ -211,7 +222,15 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref(false)
 
 const emit = defineEmits(['updateData'])
-
+const position: {
+  latitude: number
+  longitude: number
+  address?: string
+  phone?: string
+} = reactive({
+  latitude: 0,
+  longitude: 0
+})
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
@@ -229,7 +248,10 @@ watch(
     familyPic.value = []
     housePic.value = []
     resettlePic.value = []
-
+    position.latitude = 0
+    position.longitude = 0
+    position.address = ''
+    position.phone = ''
     try {
       if (form.value.householdPic) {
         householdPic.value = JSON.parse(form.value.householdPic)
@@ -246,6 +268,9 @@ watch(
       if (form.value.resettlePic) {
         resettlePic.value = JSON.parse(form.value.resettlePic)
       }
+      position.latitude = form.value.latitude
+      position.longitude = form.value.longitude
+      position.phone = form.value.phone
     } catch (error) {
       console.log(error, 'bbq')
     }
@@ -322,7 +347,14 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => false
   )
 }
+// 定位
+const onChosePosition = (ps) => {
+  console.log(ps, 'bbq')
 
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
@@ -341,10 +373,21 @@ const onSave = () => {
     householdPic: householdPic.value ? JSON.stringify(householdPic.value) : '',
     familyPic: familyPic.value ? JSON.stringify(familyPic.value) : '',
     housePic: housePic.value ? JSON.stringify(housePic.value) : '',
-    resettlePic: resettlePic.value ? JSON.stringify(resettlePic.value) : ''
+    resettlePic: resettlePic.value ? JSON.stringify(resettlePic.value) : '',
+    latitude: position.latitude,
+    longitude: position.longitude,
+    phone: position.phone
   }
   if (!householdPic.value.length) {
     ElMessage.error('请上传户主照片')
+    return
+  }
+  if (!position.phone) {
+    ElMessage.error('请输入联系方式')
+    return
+  }
+  if (!position.latitude || !position.longitude) {
+    ElMessage.error('请选择地理位置')
     return
   }
   updateHouseholdInfo(params).then(() => {

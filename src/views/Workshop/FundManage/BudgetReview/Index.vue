@@ -72,7 +72,7 @@ const projectId = appStore.currentProjectId
 const dialog = ref(false) // 审核弹窗标识
 const tabVal = ref<string>('1')
 const fundAccountList = ref<any[]>([]) // 资金科目
-const parmasList = ref<any[]>([])
+const parmasList: any = ref([])
 const actionType = ref<'view' | 'add' | 'edit'>('view')
 const showButton = ref(true)
 const { register, tableObject, methods } = useTable({
@@ -381,6 +381,7 @@ const getFundSubjectList = () => {
 
 const onReviewRow = async (row) => {
   tableObject.currentRow = row
+  parmasList.value = await PaymentApplicationByIdDetailApi(row.id, 2)
   dialog.value = true
   actionType.value = 'edit'
 }

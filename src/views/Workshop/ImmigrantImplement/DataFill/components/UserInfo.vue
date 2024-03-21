@@ -87,12 +87,12 @@
             <div class="txt">{{ fmtStr(props.baseInfo.locationTypeText) }}</div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <div class="info-item">
             <div class="tit">联系方式：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.phone) }}</div>
           </div>
-        </el-col>
+        </el-col> -->
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">家庭人数：</div>

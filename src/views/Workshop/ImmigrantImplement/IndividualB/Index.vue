@@ -319,22 +319,22 @@ const schema = reactive<CrudSchema[]>([
     detail: {
       show: false
     }
-  },
-  {
-    field: 'action',
-    label: '操作',
-    fixed: 'right',
-    width: 80,
-    search: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
   }
+  // {
+  //   field: 'action',
+  //   label: '操作',
+  //   fixed: 'right',
+  //   width: 80,
+  //   search: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   }
+  // }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)

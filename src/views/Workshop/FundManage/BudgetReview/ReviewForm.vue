@@ -132,11 +132,17 @@
         header-align="center"
         width="200"
       >
-        <template #default="{ row }">
-          <div v-for="(item, index) in row.paymentNode" :key="index">{{ item }}</div>
+        <template #default="scope">
+          <div v-for="(item, index) in scope.row.nodeDtoList" :key="index">{{
+            formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+          }}</div>
         </template>
       </ElTableColumn>
-      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center" />
+      <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
+        <template #default="{ $index }">
+          <div> {{ parmasList.paymentObjectList[$index]?.amount }} </div>
+        </template>
+      </ElTableColumn>
     </ElTable>
 
     <ElRow>
@@ -251,6 +257,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { getPaymentReviewListSSApi } from '@/api/fundManage/budgetAdjustment-service'
 import { fmtDict } from '@/utils'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { formatDate } from '@/utils/index'
 
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'

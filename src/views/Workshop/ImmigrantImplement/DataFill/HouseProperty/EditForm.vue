@@ -287,7 +287,12 @@
       <ElRow>
         <ElDivider />
       </ElRow>
-
+      <ElRow>
+        <ElCol :span="12">
+          <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="是否合法" prop="isCompliance">
@@ -413,7 +418,7 @@ import { getLandlordListApi } from '@/api/immigrantImplement/common-service'
 import type { LandlordDtoType } from '@/api/immigrantImplement/common-types'
 import { getDemographicListApi } from '@/api/workshop/population/service'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
-
+import { MapFormItem } from '@/components/Map'
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -434,7 +439,14 @@ const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
-
+const position: {
+  latitude: number
+  longitude: number
+  address?: string
+} = reactive({
+  latitude: 0,
+  longitude: 0
+})
 const defaultValue: Omit<HouseDtoType, 'id'> = {
   // addReason: '', // 新增原因
   houseNo: '', // 房屋编号
@@ -471,7 +483,14 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
+// 定位
+const onChosePosition = (ps) => {
+  console.log(ps, 'bbq')
 
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 watch(
   () => props.show,
   () => {
@@ -513,6 +532,8 @@ watch(
       if (form.value.otherProofPic) {
         otherProofPic.value = JSON.parse(form.value.otherProofPic)
       }
+      position.latitude = form.value.latitude
+      position.longitude = form.value.longitude
     } catch (error) {
       console.log(error)
     }
@@ -628,6 +649,10 @@ const submit = async (data: any) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
+      if (!position.latitude || !position.longitude) {
+        ElMessage.warning('请先定位位置！')
+        return false
+      }
       const data: any = {
         ...form.value,
         ownersSituation: form.value.ownersSituation.toString(),
@@ -636,7 +661,9 @@ const onSubmit = debounce((formEl) => {
         landPic: JSON.stringify(landPic.value || []),
         homePic: JSON.stringify(homePic.value || []),
         otherPic: JSON.stringify(otherPic.value || []),
-        otherProofPic: JSON.stringify(otherProofPic.value || [])
+        otherProofPic: JSON.stringify(otherProofPic.value || []),
+        latitude: position.latitude,
+        longitude: position.longitude
       }
       submit(data)
     } else {
