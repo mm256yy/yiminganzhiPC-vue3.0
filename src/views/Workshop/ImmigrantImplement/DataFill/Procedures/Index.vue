@@ -87,7 +87,9 @@ const submit = (row: any) => {
     doorNo: props.doorNo, // 户号
     type: row.type, // 字典373
     needHandle: '0', // 是否需要办理01
-    isComplete: '1'
+    isComplete: '1',
+    id: row.id ? row.id : null,
+    uid: row.uid ? row.uid : null
   }).then(() => {
     ElMessage.success('操作成功！')
     getList()

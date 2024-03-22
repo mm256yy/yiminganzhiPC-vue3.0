@@ -310,10 +310,7 @@ const filterWay = (data) => {
     if (data.age < 14 && item.value !== '3' && item.value != '1') {
       item.disabled = true
     }
-    if (
-      item.value == '1' &&
-      (HouseType.concentrate == 'concentrate' || HouseType.oneself == 'oneself')
-    ) {
+    if (item.value == '1' && (houseType.value == 'concentrate' || houseType.value == 'oneself')) {
       item.disabled = true
     }
     return item
