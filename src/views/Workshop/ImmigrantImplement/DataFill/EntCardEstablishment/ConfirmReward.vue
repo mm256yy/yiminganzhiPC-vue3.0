@@ -116,7 +116,7 @@ const emit = defineEmits(['close'])
 const initData = () => {
   getCompensationCardList(props.doorNo).then((res: any) => {
     if (res && res.length) {
-      tableData.value = res.filter((item: any) => item.isUpdate == '1' && item.phType == 'Company')
+      tableData.value = res.filter((item: any) => item.isUpdate == '1' && item.phType == 'Company2')
     }
     loading.value = false
   })

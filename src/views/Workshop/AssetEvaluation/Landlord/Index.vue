@@ -56,14 +56,12 @@
                   <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px">
                       ( 共导入
-                      <span class="number">{{
-                        item.demographicNum ? '' + item.demographicNum : '-'
-                      }}</span>
-                      人，
-                      <span class="number">{{
+                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
+                      户数据
+                      <!-- <span class="number">{{
                         item.peasantHouseholdNum ? '' + item.peasantHouseholdNum : '-'
                       }}</span>
-                      户 )
+                      户 ) -->
                     </span>
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
                   </div>
@@ -211,7 +209,7 @@ const excelList = ref<any[]>([])
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, currentRoute } = useRouter()
 const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
@@ -288,7 +286,11 @@ tableObject.params = {
   status: 'implementation'
 }
 
-setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+setSearchParams({
+  type: 'PeasantHousehold',
+  status: SurveyStatusEnum.Implementation,
+  estimateStatus: currentRoute.value.query['estimateStatus']
+})
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []

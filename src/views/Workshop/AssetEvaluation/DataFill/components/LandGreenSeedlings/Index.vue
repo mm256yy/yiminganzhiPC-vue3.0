@@ -103,7 +103,13 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="面积" :width="150" prop="area" align="center" header-align="center">
+        <ElTableColumn
+          label="面积(㎡)"
+          :width="150"
+          prop="area"
+          align="center"
+          header-align="center"
+        >
           <template #default="scope">
             <ElInput
               placeholder="请输入"

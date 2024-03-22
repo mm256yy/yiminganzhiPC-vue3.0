@@ -17,7 +17,10 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('LandlordEva', { estimateStatus: '1' })"
+          >
             <div class="line-1">{{ statisticsObj?.peasantCompleteCount }}</div>
             <div class="flex">
               <div
@@ -33,7 +36,10 @@
               <div class="line-2">已评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('LandlordEva', { estimateStatus: '0' })"
+          >
             <div class="line-1">{{ statisticsObj?.peasantUncompletedCount }}</div>
             <div class="flex">
               <div
@@ -49,7 +55,10 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('LandlordEva', { estimateStatus: '2' })"
+          >
             <div class="line-1">{{ statisticsObj?.peasantMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -82,7 +91,10 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('EnterpriseEva', { estimateStatus: '1' })"
+          >
             <div class="line-1">{{ statisticsObj?.companyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -98,7 +110,10 @@
               <div class="line-2">已评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('EnterpriseEva', { estimateStatus: '0' })"
+          >
             <div class="line-1">{{ statisticsObj?.companyUncompletedCount }}</div>
             <div class="flex">
               <div
@@ -114,7 +129,10 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('EnterpriseEva', { estimateStatus: '2' })"
+          >
             <div class="line-1">{{ statisticsObj?.companyMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -147,7 +165,10 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('IndividualEva', { estimateStatus: '1' })"
+          >
             <div class="line-1">{{ statisticsObj?.individualCompleteCount }}</div>
             <div class="flex">
               <div
@@ -163,7 +184,10 @@
               <div class="line-2">已评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('IndividualEva', { estimateStatus: '0' })"
+          >
             <div class="line-1">{{ statisticsObj?.individualUncompletedCount }}</div>
             <div class="flex">
               <div
@@ -179,7 +203,10 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('IndividualEva', { estimateStatus: '2' })"
+          >
             <div class="line-1">{{ statisticsObj?.individualMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -212,7 +239,10 @@
           </div>
         </div>
         <div class="row-field">
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('VillageCollectiveEva', { estimateStatus: '1' })"
+          >
             <div class="line-1">{{ statisticsObj?.villageCompleteCount }}</div>
             <div class="flex">
               <div
@@ -228,7 +258,10 @@
               <div class="line-2">已评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('VillageCollectiveEva', { estimateStatus: '0' })"
+          >
             <div class="line-1">{{ statisticsObj?.villageUncompletedCount }}</div>
             <div class="flex">
               <div
@@ -244,7 +277,10 @@
               <div class="line-2">未评估</div>
             </div>
           </div>
-          <div class="field-box">
+          <div
+            class="field-box"
+            @click.prevent.stop="toTargetOver('VillageCollectiveEva', { estimateStatus: '2' })"
+          >
             <div class="line-1">{{ statisticsObj?.villageMyCompleteCount }}</div>
             <div class="flex">
               <div
@@ -309,6 +345,17 @@ const getStatistics = async () => {
 }
 
 const toTarget = (routeName: string, query = {}) => {
+  try {
+    push({
+      name: routeName,
+      query
+    })
+  } catch (err) {
+    ElMessage.error('该角色缺少相关配置路由页面')
+  }
+}
+const toTargetOver = (routeName: string, query = {}) => {
+  console.log('测试小点击')
   try {
     push({
       name: routeName,

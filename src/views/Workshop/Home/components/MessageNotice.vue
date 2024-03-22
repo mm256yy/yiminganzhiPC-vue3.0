@@ -3,7 +3,7 @@
     <div class="statistic-item">
       <div class="echart-title active">
         <img src="@/assets/imgs/icon_notice.png" class="icon" />
-        <div>消息通知222</div>
+        <div>消息通知</div>
         <!-- <div class="more-box">更多</div> -->
       </div>
       <!--消息通知-->
@@ -16,41 +16,13 @@
           <span class="time">发送时间</span>
         </div>
         <div class="list">
-          <!-- <div class="item-title">
+          <div class="item-title" v-for="(item, index) in notifyList" :key="index">
             <div>
-              <span class="item-index">1</span>
-              <span class="item-content">您有5还有居民已严重滞后，请推进实施工作</span>
+              <span class="item-index">{{ index + 1 }}</span>
+              <span class="item-content">{{ item.title }}</span>
             </div>
-            <span class="item-time">2023-05-11</span>
+            <span class="item-time">{{ dayjs(item.createdDate).format('YYYY-MM-DD') }}</span>
           </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">2</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">3</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">4</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div>
-          <div class="item-title">
-            <div>
-              <span class="item-index">5</span>
-              <span class="item-content">您有2户居民未开始填报，请推进实施工作</span>
-            </div>
-            <span class="item-time">2023-05-11</span>
-          </div> -->
         </div>
       </div>
     </div>
@@ -89,16 +61,44 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { getMessageFeedback } from '@/api/home-service'
+import { ref, onMounted, computed } from 'vue'
+import { getMessageFeedback, getNotify } from '@/api/home-service'
 import type { MessageDtoType } from '@/api/home-types'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
+import { useAppStore } from '@/store/modules/app'
 
+const appStore = useAppStore()
+const userInfo = computed(() => appStore.getUserInfo)
+const currentProjectId = appStore.currentProjectId
 const { push } = useRouter()
 const messageList = ref<MessageDtoType[]>([])
+const notifyList = ref<any[]>([])
+const role = ref<RoleCodeType>(RoleCodeType.other)
 const more = () => {
   push('/Feedback/FeedbackIndex')
+}
+// 角色代码
+enum RoleCodeType {
+  implementation = 'implementation', // 移民实施
+  assessor = 'assessor', // 房屋评估
+  assessorland = 'assessorland', // 土地评估
+  other = 'other' // 其他 注意不是字典 用作区别 领导角色的,
+}
+/**
+ * 判断角色
+ */
+const getRole = () => {
+  if (userInfo.value) {
+    const project = userInfo.value.projectUsers.find((x: any) => x.projectId === currentProjectId)
+    const role =
+      project && project.roles && project.roles.length
+        ? (project.roles[0].code as RoleCodeType)
+        : RoleCodeType.other
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return RoleCodeType.other
 }
 // 获取消息
 const getMessage = async () => {
@@ -110,12 +110,31 @@ const getMessage = async () => {
   }
 }
 
+// 获取消息通知
+const getNotifyList = async () => {
+  try {
+    const result = await getNotify()
+    // notifyList.value = result.content
+    if (role.value == RoleCodeType.implementation) {
+      console.log('实施阶段')
+      notifyList.value = result.content.filter((item: any) => item.type == 'implementation')
+    } else if (role.value == RoleCodeType.assessor || role.value == RoleCodeType.assessorland) {
+      console.log('土地或者房屋阶段')
+      notifyList.value = result.content.filter((item: any) => item.type != 'implementation')
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const handleItemClick = (item: MessageDtoType) => {
   push(`/Feedback/FeedbackDetail?id=${item.id}`)
 }
 
 onMounted(() => {
   getMessage()
+  getNotifyList()
+  role.value = getRole()
 })
 </script>
 

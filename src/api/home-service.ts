@@ -34,6 +34,14 @@ export const getMessageFeedback = () => {
 }
 
 /**
+ * 获取消息通知
+ * @returns
+ */
+export const getNotify = () => {
+  return request.get({ url: '/notify' })
+}
+
+/**
  * 获取评估统计
  * @returns
  */

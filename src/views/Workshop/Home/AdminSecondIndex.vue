@@ -251,7 +251,15 @@
             />
           </div>
           <div v-if="typeNumber != 4" class="display-flex gender-list">
-            <div>总人口</div>
+            <div>{{
+              typeNumber == 2
+                ? '总户数'
+                : typeNumber == 3
+                ? '总金额'
+                : typeNumber == 5
+                ? '总金额'
+                : '总人口'
+            }}</div>
             <div class="gender-txt"
               >{{ villageAnalysisNumber
               }}{{

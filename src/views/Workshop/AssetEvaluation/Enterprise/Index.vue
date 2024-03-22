@@ -58,14 +58,12 @@
                   <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px">
                       ( 共导入
-                      <span class="number">{{
-                        item.demographicNum ? '' + item.demographicNum : '-'
-                      }}</span>
-                      人，
-                      <span class="number">{{
+                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
+                      户数据
+                      <!-- <span class="number">{{
                         item.peasantHouseholdNum ? '' + item.peasantHouseholdNum : '-'
                       }}</span>
-                      户 )
+                      户 ) -->
                     </span>
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
                   </div>
@@ -203,7 +201,7 @@ const excelList = ref<any[]>([])
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
 const appStore = useAppStore()
-const { push } = useRouter()
+const { push, currentRoute } = useRouter()
 const projectId = appStore.currentProjectId
 const exportDialog = ref(false)
 const inExportDialog = ref(false)
@@ -263,7 +261,7 @@ const importList = ref<exportListType[]>([
   },
   {
     name: '附属物调查表',
-    value: 'aassetEval_company_appendage'
+    value: 'assetEval_company_appendage'
   },
   {
     name: '基础设施表',
@@ -302,7 +300,11 @@ tableObject.params = {
   status: 'implementation'
 }
 
-setSearchParams({ type: 'Company', status: SurveyStatusEnum.Implementation })
+setSearchParams({
+  type: 'Company',
+  status: SurveyStatusEnum.Implementation,
+  estimateStatus: currentRoute.value.query['estimateStatus']
+})
 
 const districtTree = ref<any>([])
 const getDistrictTree = async () => {
@@ -325,7 +327,7 @@ const getExcelUploadList = async () => {
   if (res && res.content) {
     excelList.value = res.content
   }
-  console.log('测试')
+  console.log(res.content, '测试')
 }
 
 onBeforeUnmount(() => {

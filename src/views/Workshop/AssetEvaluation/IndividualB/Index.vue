@@ -57,14 +57,12 @@
                   <div class="flex items-center" v-if="item.status === FileReportStatus.success">
                     <span class="pr-10px">
                       ( 共导入
-                      <span class="number">{{
-                        item.demographicNum ? '' + item.demographicNum : '-'
-                      }}</span>
-                      人，
-                      <span class="number">{{
+                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
+                      户数据
+                      <!-- <span class="number">{{
                         item.peasantHouseholdNum ? '' + item.peasantHouseholdNum : '-'
                       }}</span>
-                      户 )
+                      户 ) -->
                     </span>
                     <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
                   </div>
@@ -193,6 +191,8 @@ import Export from '@/views/Workshop/components/Export.vue'
 import InExport from '@/views/Workshop/components/InExport.vue'
 import { getPgExcelList } from '@/api/workshop/population/service'
 import dayjs from 'dayjs'
+const { currentRoute } = useRouter()
+
 let timer = 0
 enum FileReportStatus {
   success = 'Succeed',
@@ -263,7 +263,7 @@ const importList = ref<exportListType[]>([
   },
   {
     name: '附属物调查表',
-    value: 'aassetEval_company_appendage'
+    value: 'assetEval_company_appendage'
   },
   {
     name: '基础设施表',
@@ -302,7 +302,11 @@ tableObject.params = {
   status: 'implementation'
 }
 
-setSearchParams({ type: 'IndividualHousehold', status: SurveyStatusEnum.Implementation })
+setSearchParams({
+  type: 'IndividualHousehold',
+  status: SurveyStatusEnum.Implementation,
+  estimateStatus: currentRoute.value.query['estimateStatus']
+})
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'IndividualHousehold')

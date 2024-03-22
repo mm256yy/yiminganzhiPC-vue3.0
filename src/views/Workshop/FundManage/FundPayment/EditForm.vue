@@ -173,7 +173,8 @@ const rules = reactive<FormRules>({
   type: [required()],
   funSubjectId: [required()],
   remark: [required()],
-  paymentTime: [required()]
+  paymentTime: [required()],
+  receivePaymentUnit: [required()]
 })
 
 watch(
