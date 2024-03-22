@@ -75,6 +75,8 @@
           class="mb-20"
           :row-class-name="tableRowClassName"
           :border="true"
+          show-summary
+          :summary-method="getSummar"
         >
           <ElTableColumn label="类型" align="center" prop="type" header-align="center">
             <template #default="{ row }">
@@ -593,6 +595,37 @@ const getSummaries = (row: any) => {
   return sums
 }
 
+// 做合计动作
+const getSummar = (param: any) => {
+  const { columns, data } = param
+  const sums: any = []
+  columns.forEach((column: any, index: any) => {
+    // 设置第一列想显示的字
+    if (index === 0) {
+      sums[index] = '合计'
+      return
+    }
+    const values = data.map((item) => {
+      return { num: Number(item[column.property]), key: item.name }
+    })
+    console.log(values, '测试叠加数据')
+    if (index == 5) {
+      console.log(param, values)
+
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr.num)
+        if (!Number.isNaN(value) && !curr.key.includes('小计')) {
+          return prev + curr.num
+        } else {
+          return prev
+        }
+      }, 0)
+    } else {
+      sums[index] = '——'
+    }
+  })
+  return sums
+}
 // 归档
 const onDocumentation = () => {
   dialog.value = true

@@ -143,13 +143,13 @@
           <ElTableColumn label="数量" prop="number" align="center" header-align="center">
             <template #default="{ row }">
               <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.number }}</div>
-              <div v-if="row.isUpdate !== '1' || row.name == '奖励费小计'"> —— </div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
             <template #default="{ row }">
               <div v-if="row.isUpdate === '1' && row.isVerify === '1'">{{ row.price }}</div>
-              <div v-if="row.isUpdate !== '1' || row.name == '奖励费小计'"> —— </div>
+              <div v-if="row.isUpdate !== '1'"> —— </div>
             </template>
           </ElTableColumn>
           <ElTableColumn
@@ -310,16 +310,21 @@ const getSummar = (param: any) => {
       sums[index] = '合计'
       return
     }
-    const values = data.map((item) => Number(item[column.property]))
+    const values = data.map((item) => {
+      return { num: Number(item[column.property]), key: item.name }
+    })
+    console.log(values, '测试叠加数据')
     if (index == 5) {
-      sums[index] = `${values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return prev + curr
+      console.log(param, values)
+
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr.num)
+        if (!Number.isNaN(value) && !curr.key.includes('小计')) {
+          return prev + curr.num
         } else {
           return prev
         }
-      }, 0)}`
+      }, 0)
     } else {
       sums[index] = '——'
     }
