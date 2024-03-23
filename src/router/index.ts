@@ -194,6 +194,15 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           },
           {
+            path: 'FundLandNoMove',
+            name: 'FundLandNoMove',
+            component: () => import('@/views/Workshop/FundReport/FundLandNoMove.vue'),
+            meta: {
+              title: '资金管理-只征地不搬迁',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
             path: 'HydropowerFundDetail',
             name: 'HydropowerFundDetail',
             component: () => import('@/views/Workshop/FundReport/HydropowerFundDetail.vue'),

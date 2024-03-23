@@ -61,6 +61,8 @@
               }
             ]"
             :row="row"
+            :edit="showOperate(row)"
+            :delete="showOperate(row)"
             @delete="onDelRow"
             @edit="onEditRow"
           />
@@ -108,6 +110,11 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 const sumAmount = ref<string>('')
+
+// 是否展示操作按钮
+const showOperate = (row: any) => {
+  return row?.status === 0 || row?.entryType === '1'
+}
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFundEntryListApi,

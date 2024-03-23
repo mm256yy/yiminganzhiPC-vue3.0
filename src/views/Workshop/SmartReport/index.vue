@@ -269,7 +269,7 @@ const listArray = ref([
         name: '只征地不搬迁',
         list: [
           {
-            value: 'EnterpriseFundDetail',
+            value: 'FundLandNoMove',
             text: '资金发放明细'
           }
         ]
