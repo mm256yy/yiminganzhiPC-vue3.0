@@ -172,7 +172,6 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 let { allSchemas } = useCrudSchemas(schema)
-
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
   data.forEach((item, index, arr) => {
