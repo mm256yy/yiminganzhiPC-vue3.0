@@ -65,3 +65,14 @@ export const screeningTree = (projectId: number, type: any) => {
     }
   })
 }
+/**
+ * 查询行政村树
+ */
+export const getdistrictTreeApi = (projectId: number): Promise<any[]> => {
+  return request.get({
+    url: `/district/tree`,
+    params: {
+      projectId
+    }
+  })
+}

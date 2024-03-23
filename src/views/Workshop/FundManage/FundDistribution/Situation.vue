@@ -15,7 +15,7 @@
         个体户
       </ElButton>
       <ElButton type="primary" @click="selenceTable('村集体', 'Village')"> 村集体 </ElButton>
-      <ElButton type="primary" @click="selenceTable('只征地不搬迁', 'LandNoMove ')">
+      <ElButton type="primary" @click="selenceTable('使用权人', 'LandNoMove ')">
         只征地不搬迁
       </ElButton>
     </div>
@@ -94,7 +94,7 @@ import {
   getSumAmount
 } from '@/api/fundManage/fundPayment-service'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { getVillageTreeApi, getdistrictTreeApi } from '@/api/workshop/village/service'
 const appStore = useAppStore()
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
@@ -126,10 +126,10 @@ const { register, tableObject, methods } = useTable({
   delListApi: deleteFunPayApi
 })
 const { getList, setSearchParams } = methods
-
+let typeNow = ref('PeasantHousehold')
 tableObject.params = {
   projectId,
-  type: 'PeasantHousehold'
+  type: typeNow.value
 }
 
 getList()
@@ -146,7 +146,7 @@ const getLpListHandle = async () => {
   }
 }
 const getdistrictTree = async () => {
-  const list = await getVillageTreeApi(projectId)
+  const list = await getdistrictTreeApi(projectId)
   districtTree.value = list || []
   return list || []
 }
@@ -173,6 +173,7 @@ const selenceTable = (e: string, value: string) => {
   allSchemas = useCrudSchemas(schema).allSchemas
   console.log(allSchemas)
   tabalRef.value.setColumns(allSchemas.tableColumns)
+  typeNow.value = value
   tableObject.params.type = value
   getList()
 }
@@ -365,7 +366,8 @@ const onSearch = (data) => {
     ...searchData
   }
   tableObject.params = {
-    projectId
+    projectId,
+    type: typeNow.value
   }
   for (let i in params) {
     if (!params[i]) {
@@ -394,7 +396,7 @@ const onEditFormClose = (flag: boolean) => {
   dialog.value = false
 }
 let setSearchParamss = () => {
-  tableObject.params = {}
+  tableObject.params = { type: typeNow.value }
   setSearchParams({})
 }
 </script>
