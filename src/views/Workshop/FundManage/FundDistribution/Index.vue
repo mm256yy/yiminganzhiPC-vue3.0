@@ -274,20 +274,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'card',
-    label: '身份证号',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '请输入身份证号'
-      }
-    },
-    table: {
-      show: false
-    }
-  },
-  {
     field: 'cardType',
     label: '发放批次',
     search: {

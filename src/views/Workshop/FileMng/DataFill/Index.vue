@@ -37,9 +37,9 @@
   </div>
 
   <div class="data-fill-body">
-    <Enclosure v-if="showEnclosure" :doorNo="doorNo" :householdId="householdId" />
+    <!-- <Enclosure v-if="showEnclosure" :doorNo="doorNo" :householdId="householdId" /> -->
     <UploadField
-      v-else-if="showUploadField || showUpload"
+      v-if="showUploadField || showUpload"
       :type="type"
       :tabIndex="tabCurrentId"
       :doorNo="doorNo"
@@ -174,7 +174,7 @@ const requestFileMngList = (type) => {
 
 const chooseType = (type: string) => {
   // 一户一档
-  console.log('chooseTypeTag', tabCurrentId.value)
+  // console.log('chooseTypeTag', tabCurrentId.value)
 
   if (type === '0') {
     requestType.value = tabCurrentId.value
@@ -193,6 +193,10 @@ const chooseType = (type: string) => {
   } else {
     // 只征地不搬迁
     requestType.value = tabCurrentId.value === 1 ? 9 : 10
+  }
+
+  if (tabCurrentId.value === 3) {
+    requestType.value = 11
   }
   requestFileMngList(requestType.value)
 }

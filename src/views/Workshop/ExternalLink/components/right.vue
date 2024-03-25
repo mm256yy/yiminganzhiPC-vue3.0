@@ -124,7 +124,7 @@ const customColor_a = ref('#3E73EC')
 const progressList: any = ref([])
 
 const computedProperty = computed(() => {
-  return (fundScreenDto.value.ljsyzj / fundScreenDto.value.gszj) * 100
+  return ((fundScreenDto.value.ljsyzj / fundScreenDto.value.gszj) * 100).toFixed(2)
 })
 
 onMounted(() => {
@@ -309,7 +309,7 @@ const toCapitalPool = () => {
 
             .round_bom {
               font-family: DIN Medium, DIN Medium;
-              font-size: 18px;
+              font-size: 16px;
               font-weight: 400;
               line-height: 18px;
               color: #3e73ec;

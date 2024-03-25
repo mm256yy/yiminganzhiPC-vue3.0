@@ -27,16 +27,6 @@
         <ElInput type="text" v-model="form.greeningRate" placeholder="请输入绿化率(%)" />
       </ElFormItem>
       <ElFormItem label="结构类型:">
-        <!-- <el-radio-group class="ml-4">
-          <el-radio label="1" size="large">Option 1</el-radio>
-          <el-radio label="2" size="large">Option 2</el-radio>
-        </el-radio-group> -->
-        <!-- <ElTreeSelect
-          class="!w-full"
-          v-model="form.structure"
-          :data="dictObj[252]"
-          node-key="code"
-        /> -->
         <ElSelect v-model="form.structure" style="width: 100%">
           <ElOption
             v-for="item in dictObj[252]"
@@ -72,8 +62,8 @@
           <el-radio label="2" size="large">无</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="规划图：" required prop="pic">
-        <div class="col-wrapper">
+      <ElFormItem label="规划图：" prop="pic" style="margin-bottom: 15px">
+        <div class="col-label">
           <div class="card-img-list">
             <ElUpload
               :list-type="'picture-card'"
@@ -101,7 +91,6 @@
           </div>
         </div>
       </ElFormItem>
-
       <div style="font-weight: bolder">周边配套</div>
       <ElFormItem label="交通:" prop="traffic">
         <ElInput type="text" v-model="form.traffic" placeholder="请输入交通" />
@@ -219,21 +208,28 @@ watch(
 )
 // 规则校验
 const { required } = useValidator()
-const rules = {
+
+// 规则校验
+const rules = reactive<FormRules>({
   name: [required()],
   address: [required()],
   type: [required()],
   isProductionLand: [required()],
-  pic: [required()]
-}
+  pic: [
+    {
+      required: false
+    }
+  ]
+})
 const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
   emit('close', flag)
-  /*nextTick(() => {
+  form.value = {}
+  nextTick(() => {
     formRef.value?.resetFields()
-  })*/
+  })
 }
 
 const submit = (data: any) => {
@@ -245,6 +241,12 @@ const submit = (data: any) => {
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
+  // 规划图不能为空
+  if (relocateVerifyPic.value?.length <= 0) {
+    ElMessage.error('规划图不能为空')
+    return
+  }
+
   formEl?.validate((valid: any) => {
     if (valid) {
       if (props.actionType === 'add') {
@@ -327,25 +329,25 @@ onMounted(() => {
   display: flex;
   align-items: center;
   margin: 0 16px 16px 0;
+}
 
-  .col-label-required {
-    display: inline-flex;
-    width: 150px;
-    height: 32px;
-    padding: 0 12px 0 0;
-    font-size: 14px;
-    line-height: 32px;
-    color: #606266;
-    box-sizing: border-box;
-    justify-content: flex-end;
-    align-items: flex-start;
-    flex: 0 0 auto;
+.col-label-required {
+  display: inline-flex;
+  width: 120px;
+  height: 32px;
+  padding: 0 12px 0 0;
+  font-size: 14px;
+  line-height: 32px;
+  color: #606266;
+  box-sizing: border-box;
+  justify-content: flex-end;
+  align-items: flex-start;
+  flex: 0 0 auto;
 
-    &::before {
-      margin-right: 4px;
-      color: #f56c6c;
-      content: '*';
-    }
+  &::before {
+    margin-right: 4px;
+    color: #f56c6c;
+    content: '*';
   }
 }
 
