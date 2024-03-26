@@ -83,7 +83,8 @@ enum RoleCodeType {
   implementation = 'implementation', // 移民实施
   assessor = 'assessor', // 房屋评估
   assessorland = 'assessorland', // 土地评估
-  other = 'other' // 其他 注意不是字典 用作区别 领导角色的,
+  other = 'other', // 其他 注意不是字典 用作区别 领导角色的,
+  implementleader = 'implementleader' //实施组长
 }
 /**
  * 判断角色
@@ -115,12 +116,16 @@ const getNotifyList = async () => {
   try {
     const result = await getNotify()
     // notifyList.value = result.content
-    if (role.value == RoleCodeType.implementation) {
+    if (role.value == RoleCodeType.implementation || role.value == RoleCodeType.implementleader) {
       console.log('实施阶段')
-      notifyList.value = result.content.filter((item: any) => item.type == 'implementation')
+      notifyList.value = result.content.filter(
+        (item: any) => item.type == 'implementation,implementleader'
+      )
     } else if (role.value == RoleCodeType.assessor || role.value == RoleCodeType.assessorland) {
       console.log('土地或者房屋阶段')
-      notifyList.value = result.content.filter((item: any) => item.type != 'implementation')
+      notifyList.value = result.content.filter(
+        (item: any) => item.type != 'implementation,implementleader'
+      )
     }
   } catch (error) {
     console.log(error)

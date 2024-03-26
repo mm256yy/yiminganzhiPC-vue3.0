@@ -98,7 +98,7 @@ const newsTypes = ref<any[]>([
     label: '资产评估人员'
   },
   {
-    value: 'implementation',
+    value: 'implementation,implementleader',
     label: '实施人员'
   }
 ])

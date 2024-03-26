@@ -149,7 +149,10 @@ watch(
   (val) => {
     data = toRaw(val)
     lengths.value = [...new Map(data?.map((item) => [item.landNumber, item])).values()]
-    areaNumber.value = data?.reduce(
+    let arr = data?.filter((obj, index, self) => {
+      return self.findIndex((o) => o.landNumber == obj.landNumber) == index
+    })
+    areaNumber.value = arr?.reduce(
       (accumulator, currentValue) => accumulator + currentValue.shapeArea,
       0
     )
