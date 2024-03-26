@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted, watch, computed } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ElButton } from 'element-plus'
@@ -83,23 +83,10 @@ const commonTableItemSchema = {
 }
 
 const { tableObject } = useTable()
-
-// const paramsObj = computed(() => {
-//   return {
-//     ...tableObject.params,
-//     size: tableObject.size,
-//     page: tableObject.currentPage
-//   }
-// })
-
 const tableLoading = ref<boolean>()
 let schemas = reactive<any>({
   columns: []
 })
-
-// let tableObject = reactive({
-//   tableList: []
-// })
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义

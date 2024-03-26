@@ -65,3 +65,53 @@ export const exportWorkGroupApi = (params: any) => {
     responseType: 'blob'
   })
 }
+
+// 只征地不搬迁详情列表
+export const getLandNoMoveProgressDetailListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/landnomoveStatistics',
+    params
+  })
+}
+
+// 导出只征地不搬迁详情列表
+export const exportLandNoMoveProgressDetailListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/exportFilling',
+    params,
+    responseType: 'blob'
+  })
+}
+
+// 只征地不搬迁区域统计列表
+export const getLandNoMoveRegionalStatisiListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/landnomoveAreaStatistics',
+    params
+  })
+}
+
+// 导出只征地不搬迁区域统计详情列表
+export const exportLandNoMoveRegionalStatisiListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/exportFillingByArea',
+    params,
+    responseType: 'blob'
+  })
+}
+// 只征地不搬迁工作组统计列表
+export const getLandNoMoveWorkGroupStatisiListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/landNoMoveGridStatistics',
+    params
+  })
+}
+
+// 导出只征地不搬迁工作组统计详情列表
+export const exportLandNoMoveWorkGroupStatisiListApi = (params: any) => {
+  return request.get({
+    url: '/progressReport/exportFillingByGrid',
+    params,
+    responseType: 'blob'
+  })
+}

@@ -354,7 +354,9 @@ const onSubmit = debounce((formEl) => {
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
         virutalVillageCode: form.value.parentCode[3] || '',
-        type: 'IndividualHousehold'
+        type: 'IndividualHousehold',
+        latitude: position.latitude,
+        longitude: position.longitude
       }
       delete data.parentCode
       submit(data)

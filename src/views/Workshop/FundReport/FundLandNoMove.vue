@@ -19,12 +19,7 @@
           </div>
         </div>
         <ElSpace style="align-items: baseline">
-          <ElButton
-            type="primary"
-            @click="onExport(getEexportRelationList, { projectId, ...tableObject.params })"
-          >
-            数据导出
-          </ElButton>
+          <ElButton type="primary" @click="onExport()"> 数据导出 </ElButton>
         </ElSpace>
       </div>
       <Table
@@ -34,18 +29,17 @@
         :pagination="{
           total: tableObject.total
         }"
-        :loading="tableObject.loading"
+        :loading="tableLoading"
         :data="tableObject.tableList"
-        :columns="allSchemas.tableColumns"
+        :columns="schemas.columns"
         row-key="id"
         headerAlign="center"
         align="center"
         highlightCurrentRow
         :selection="true"
         @register="register"
-        :header-cell-style="headerRow"
       >
-        <template #totalPrice="{ row }">
+        <template #ownership="{ row }">
           <div>{{
             (row.cityCodeText || '') +
             '-' +
@@ -59,63 +53,51 @@
         <template #landLevel="{ row }">
           <div>{{ row.landTypeText }}</div>
         </template>
-        <template #area="{ row }">
-          {{ dictObj[326].filter((item) => item.value == row.area)[0].label }}
-        </template>
-        <template #landNature="{ row }">
-          {{ dictObj[222].filter((item) => item.value == row.landNature)[0].label }}
-        </template>
-        <template #inundationRange="{ row }">
-          {{ dictObj[346].filter((item) => item.value == row.inundationRange)[0].label }}
-        </template>
-        <template #relationFlag="{ row }">
-          {{ row.relationFlag == '1' ? '已关联' : '未关联' }}
-        </template>
-        <template #estimateFlag="{ row }">
-          {{ row.estimateFlag == '1' ? '已评估' : '未评估' }}
-        </template>
       </Table>
     </div>
   </WorkContentWrap>
 </template>
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed, nextTick, toRaw } from 'vue'
+import { reactive, ref, onMounted, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElMessage, ElSpace } from 'element-plus'
+import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElSpace } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import {
-  getLandEstimate,
-  getDeleteById,
-  getEexportRelationList
+  getFundDetailLandNoMoveList,
+  exportFundDetailLandNoMoveList
 } from '@/api/fundManage/fundPayment-service'
 import { getDistrictTreeApi } from '@/api/district'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getDictByName } from '@/api/workshop/population/service'
-import type { UploadInstance } from 'element-plus'
+
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
 const dictStore = useDictStoreWithOut()
-const dictObj = computed(() => dictStore.getDictObj)
 const districtTree = ref<any[]>([])
-const landTypeOptions = ref<any>([])
-const { register, tableObject, methods } = useTable({
-  getListApi: getLandEstimate,
-  delListApi: getDeleteById
+const tableLoading = ref<boolean>()
+let schemas = reactive<any>({
+  columns: []
 })
-const { getList, setSearchParams } = methods
 
-tableObject.params = {
-  projectId,
-  type: 'PeasantHousehold'
+const commonTableItemSchema = {
+  search: {
+    show: false
+  },
+  form: {
+    show: false
+  },
+  detail: {
+    show: false
+  }
 }
 
-getList()
-let upload = ref<UploadInstance>()
+const { register, tableObject } = useTable()
+
+// getList()
 const getdistrictTree = async () => {
   const list = await getDistrictTreeApi(projectId)
   districtTree.value = list || []
@@ -126,24 +108,8 @@ const getdistrictTree = async () => {
   return list || []
 }
 
-// 获取地类选项列表
-const getLandTypeOptions = () => {
-  getDictByName('土地类型').then((res: any) => {
-    landTypeOptions.value = res
-    landTypeOptions.value.forEach((item: any) => {
-      item.id = item.value
-      if (item.children) {
-        item.children.forEach((key: any) => {
-          key.id = item.value + '-' + key.value
-        })
-      }
-    })
-  })
-}
 onMounted(() => {
   getdistrictTree()
-  getLandTypeOptions()
-  console.log(tableObject)
 })
 
 const schema = reactive<CrudSchema[]>([
@@ -202,45 +168,11 @@ const schema = reactive<CrudSchema[]>([
     table: {
       show: false
     }
-  },
-  // table
-  {
-    width: 80,
-    field: 'index',
-    type: 'index',
-    label: '序号'
-  },
-  {
-    field: 'totalPrice',
-    label: '权属单位',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'showDoorNo',
-    label: '户号',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'relationFlag',
-    label: '关联状态',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'rightHolder',
-    label: '使用权人',
-    search: {
-      show: false
-    }
   }
 ])
 
 let { allSchemas } = useCrudSchemas(schema)
+
 const findRecursion = (data, code, callback) => {
   if (!data || !Array.isArray(data)) return null
   data.forEach((item, index, arr) => {
@@ -262,18 +194,137 @@ const getParamsKey = (key: string) => {
   }
   return map[key]
 }
+
+const getTableDepends = (list: any) => {
+  let columns: any = [
+    {
+      field: 'index',
+      label: '序号',
+      type: 'index',
+      width: 80
+    },
+    {
+      field: '0',
+      label: '权属单位',
+      width: 120,
+      ...commonTableItemSchema
+    },
+    {
+      field: '1',
+      label: '户号',
+      ...commonTableItemSchema
+    },
+    {
+      field: '2',
+      label: '使用权人',
+      ...commonTableItemSchema
+    },
+    {
+      field: '3',
+      label: '地上青苗及附着物补偿费',
+      children: [
+        {
+          field: '3',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '4',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '4',
+      label: '土地补偿费(集体土地)',
+      children: [
+        {
+          field: '5',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '6',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '5',
+      label: '土地补偿费(国有土地)',
+      children: [
+        {
+          field: '7',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '8',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '6',
+      label: '签约奖',
+      children: [
+        {
+          field: '9',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '10',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '7',
+      label: '腾空奖',
+      children: [
+        {
+          field: '11',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '12',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '8',
+      label: '其他奖励费',
+      children: [
+        {
+          field: '13',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '14',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    }
+  ]
+  let allData = useCrudSchemas(columns)
+  schemas.columns = allData.allSchemas.tableColumns
+  tableObject.tableList = list
+}
+
 const onSearch = (data) => {
   //解决是否户主relation入参变化
   let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData, tableObject.params)
 
-  if (searchData.relation == '1') {
-    searchData.relation = ['is', 1]
-  } else if (searchData.relation == '0') {
-    searchData.relation = ['not', 1]
-  } else {
-    delete searchData.relation
-  }
   // 处理参数
   let params = {
     ...searchData
@@ -299,68 +350,83 @@ const onSearch = (data) => {
     })
     delete params.code
   }
-  if (params.landLeve) {
-    if (params.landLeve.includes('-')) {
-      params.landLevelOne = params.landLeve.split('-')[0]
-      params.landLevelTwo = params.landLeve.split('-')[1]
-    } else {
-      params.landLevelOne = params.landLeve
-    }
-    delete params.landLeve
-  }
-  console.log(params)
 
-  setSearchParams({ ...params })
+  tableObject.params = {
+    ...params
+  }
+
+  getTableList()
 }
 
 const onReset = () => {
-  tableObject.params = {
-    projectId,
-    type: 'PeasantHousehold'
-  }
-
-  getList()
+  tableObject.params = {}
+  getTableList()
 }
 
-let onImport = () => {
-  ElMessage.success('导入成功')
-  getList()
-  upload.value!.clearFiles()
-}
-let onExport = async (callback, name) => {
-  let res = await callback(name)
-  console.log(res)
-  let filename = ''
-  let url = ''
-  if (res.headers) {
-    filename = res.headers
-    filename = filename['content-disposition']
-    filename = filename.split(';')[1].split('filename=')[1]
-    filename = decodeURIComponent(filename)
-    let blob = new Blob([res.data])
-    const URL = window.URL || window.webkitURL
-    url = URL.createObjectURL(blob)
-  } else {
-    filename = res.name
-    url = res.templateUrl
-  }
+let onExport = async () => {
+  const params = getSearchParams()
+  const res = await exportFundDetailLandNoMoveList(params)
+  let filename = res.headers
+  filename = filename['content-disposition']
+  filename = filename.split(';')[1].split('filename=')[1]
+  filename = decodeURIComponent(filename)
   let elink = document.createElement('a')
   document.body.appendChild(elink)
   elink.style.display = 'none'
   elink.download = filename
-  elink.href = url
+  let blob = new Blob([res.data])
+  const URL = window.URL || window.webkitURL
+  elink.href = URL.createObjectURL(blob)
   elink.click()
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
 }
 
-let headerRow = (data) => {
-  if (data.columnIndex > 5 && data.columnIndex < 10) {
-    return {
-      background: 'rgb(161 252 253)'
-    }
+const getSearchParams = () => {
+  return {
+    ...tableObject.params,
+    size: tableObject.size,
+    page: tableObject.currentPage
   }
 }
+
+const getTableList = async () => {
+  tableLoading.value = true
+  const params = getSearchParams()
+  const res = await getFundDetailLandNoMoveList(params).finally(() => {
+    tableLoading.value = false
+  })
+  if (res) {
+    // 赋值表格数据
+    res.list.content.forEach((item) => {
+      return item.shift()
+    })
+    tableObject.total = res.list.total
+    getTableDepends(res.list.content)
+  }
+}
+
+getTableList()
+
+watch(
+  () => tableObject.currentPage,
+  () => {
+    getTableList()
+  }
+)
+
+watch(
+  () => tableObject.size,
+  () => {
+    // 当前页不为1时，修改页数后会导致多次调用getList方法
+    if (tableObject.currentPage === 1) {
+      getTableList()
+    } else {
+      tableObject.currentPage = 1
+      getTableList()
+    }
+  }
+)
 </script>
 
 <style lang="less" scoped>

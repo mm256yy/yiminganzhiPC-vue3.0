@@ -280,7 +280,9 @@ const onSubmit = debounce((formEl) => {
         areaCode: form.value.parentCode[0],
         townCode: form.value.parentCode[1],
         villageCode: form.value.parentCode[2],
-        virutalVillageCode: form.value.parentCode[3] || ''
+        virutalVillageCode: form.value.parentCode[3] || '',
+        latitude: position.latitude,
+        longitude: position.longitude
       }
 
       delete data.parentCode

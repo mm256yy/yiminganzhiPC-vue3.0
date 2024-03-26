@@ -171,6 +171,7 @@ const emit = defineEmits(['close', 'updateDistrict', 'objlist', 'tableList'])
 // 关闭弹窗
 const onClose = (flag: boolean) => {
   check.value = []
+  tableDatas.value = []
   emit('close', flag)
 }
 const addSubmit = (flag: boolean) => {
@@ -271,12 +272,12 @@ watch(
   () => {
     if (props.show) {
       check.value = props.selence
-      // ppsList()
       getdistrictTree()
-      console.log(props)
     }
+    tableDatas.value = []
+    console.log('Tbb', tableDatas.value)
   },
-  { deep: true }
+  { deep: true, immediate: true }
 )
 </script>
 

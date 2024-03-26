@@ -8,7 +8,6 @@
       popper-class="popper-class"
     >
       <Map ref="mapRef" :h="400" :point="position" @chose="onChosePosition" v-if="mapShow" />
-      <!-- :model-value="position.longitude ? `${position.longitude},${position.latitude}` : ''" -->
       <template #reference>
         <div class="flex items-center w-full">
           <el-input
@@ -19,10 +18,6 @@
             style="cursor: pointer"
             @change="inputchange"
           />
-          <!-- :suffix-icon="locationIcon" -->
-          <!-- <el-tooltip placement="top" content="请点击地图选择经纬度">
-            <Icon class="ml-5px" icon="bi:question-circle" color="#231815" />
-          </el-tooltip> -->
           <Icon class="ml-10px" icon="fa6-solid:map-location-dot" color="var(--el-color-primary)" />
         </div>
       </template>

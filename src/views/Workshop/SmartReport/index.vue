@@ -365,6 +365,24 @@ const listArray = ref([
         ]
       },
       {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(11).png', import.meta.url).href,
+        name: '只征地不搬迁',
+        list: [
+          {
+            value: 'landNoMoveStatistics',
+            text: '进度明细'
+          },
+          {
+            value: 'landNoMoveRegionalStatistics',
+            text: '区域统计'
+          },
+          {
+            value: 'landNoMoveWorkgroupStatistics',
+            text: '工作组统计'
+          }
+        ]
+      },
+      {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(12).png', import.meta.url).href,
         name: '专业项目',
         list: [

@@ -54,18 +54,10 @@ import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { individualWorkGroupApi } from '@/api/workshop/individualRegion/service'
-import { IndividualWorkType } from '@/api/workshop/individualWork/types'
 import { exportWorkGroupApi } from '@/api/workshop/scheduleReport/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 const { back } = useRouter()
-
-interface SpanMethodProps {
-  row: IndividualWorkType
-  column: IndividualWorkType
-  rowIndex: number
-  columnIndex: number
-}
 
 const emit = defineEmits(['export'])
 const BackIcon = useIcon({ icon: 'iconoir:undo' })

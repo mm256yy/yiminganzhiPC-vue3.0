@@ -239,3 +239,20 @@ export const getEexportRelationList = (params: any) => {
     responseType: 'blob'
   })
 }
+
+// 获取只征地不搬迁资金详情
+export const getFundDetailLandNoMoveList = (params: any) => {
+  return request.get({
+    url: `/fundsForms/landNoMoveCard`,
+    params
+  })
+}
+
+//土地关联导出
+export const exportFundDetailLandNoMoveList = (params: any) => {
+  return request.get({
+    url: `/fundsForms/landNoMoveCardDownload`,
+    params,
+    responseType: 'blob'
+  })
+}

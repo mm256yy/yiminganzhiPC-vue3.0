@@ -437,6 +437,36 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
             }
           },
           {
+            path: 'landNoMoveStatistics',
+            name: 'landNoMoveStatistics',
+            component: () =>
+              import('@/views/Workshop/ScheduleReport/LandNoMove/ProgressDetails.vue'),
+            meta: {
+              title: '进度管理-只征地不搬迁',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'landNoMoveRegionalStatistics',
+            name: 'landNoMoveRegionalStatistics',
+            component: () =>
+              import('@/views/Workshop/ScheduleReport/LandNoMove/RegionalStatistics.vue'),
+            meta: {
+              title: '进度管理-只征地不搬迁区域',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
+            path: 'landNoMoveWorkgroupStatistics',
+            name: 'landNoMoveWorkgroupStatistics',
+            component: () =>
+              import('@/views/Workshop/ScheduleReport/LandNoMove/WorkgroupStatistics.vue'),
+            meta: {
+              title: '进度管理-只征地不搬迁工作组',
+              icon: 'ant-design:home-outlined'
+            }
+          },
+          {
             path: 'individualProgressDetails',
             name: 'individualProgressDetails',
             component: () =>

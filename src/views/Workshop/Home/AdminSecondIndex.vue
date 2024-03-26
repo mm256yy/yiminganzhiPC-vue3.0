@@ -342,20 +342,20 @@ const getChartScreenLists = async () => {
   } catch {
     groundLoading.value = false
   }
-  perPersonMapTotal.value = list.perPersonMapTotal[0].areaTotal
-  perHouseholdTotal.value = list.perHouseholdTotal[0].areaTotal
+  perPersonMapTotal.value = list.perPersonMapTotal[0]?.areaTotal
+  perHouseholdTotal.value = list.perHouseholdTotal[0]?.areaTotal
   aalls.value = zhiji.avgMoney
   fundOption.value.series[0].data = zhiji.data.reduce((pre, item) => {
     pre.push({ value: item.totalPrice, name: item.name })
     return pre
   }, [])
   dataAll.value = list
-  careerOption.value.legend.data = dataAll.value.education.reduce((pre, item) => {
+  careerOption.value.legend.data = dataAll.value?.education.reduce((pre, item) => {
     pre.push(item.label)
     return pre
   }, [])
   careerOption.value.series.forEach((item) => {
-    item.data = dataAll.value.education.reduce((pre, item) => {
+    item.data = dataAll.value?.education.reduce((pre, item) => {
       pre.push({ value: item.number, name: item.label })
       return pre
     }, [])
@@ -772,40 +772,30 @@ const insuredOption: any = ref({
 })
 const tab = (index) => {
   if (index == 0) {
-    careerOption.value.legend.data = dataAll.value.education.reduce((pre, item) => {
+    careerOption.value.legend.data = dataAll.value?.education.reduce((pre, item) => {
       pre.push(item.label)
       return pre
     }, [])
     careerOption.value.series.forEach((item) => {
-      item.data = dataAll.value.education.reduce((pre, item) => {
+      item.data = dataAll.value?.education.reduce((pre, item) => {
         pre.push({ value: item.number, name: item.label })
         return pre
       }, [])
     })
   } else if (index == 1) {
-    careerOption.value.legend.data = dataAll.value.career.reduce((pre, item) => {
+    careerOption.value.legend.data = dataAll.value?.career.reduce((pre, item) => {
       pre.push(item.name)
       return pre
     }, [])
     careerOption.value.series.forEach((item) => {
-      item.data = dataAll.value.career.reduce((pre, item) => {
+      item.data = dataAll.value?.career.reduce((pre, item) => {
         pre.push({ value: item.number, name: item.name })
         return pre
       }, [])
     })
   }
 }
-function arrCount(arr) {
-  let count = 0
-  arr.forEach((item) => {
-    count = count + item.value
-  })
-  return count
-}
 
-const getImageSrc = async () => {
-  return await import('@/assets/imgs/homes/icon_edu.png')
-}
 //职业分布
 const careerOption = ref({
   color: ['#0041D7', '#3E73EC', '#7CA4FF', '#A2BEFF', '#BFD3FF', '#D4E1FF'],
@@ -835,22 +825,6 @@ const careerOption = ref({
 
       return name + ' | ' + ((singleData[0].value / m) * 100).toFixed(2) + '%'
     }
-  },
-  graphic: {
-    //图形中间图片
-    elements: [
-      {
-        type: 'image',
-        style: {
-          image: getImageSrc(), //你的图片地址
-          width: 70,
-          height: 70
-        },
-        left: 'center',
-        top: 'center',
-        level: '999'
-      }
-    ]
   },
   tooltip: {
     trigger: 'item',

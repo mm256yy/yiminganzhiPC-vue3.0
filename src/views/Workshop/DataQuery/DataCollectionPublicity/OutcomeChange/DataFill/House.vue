@@ -30,12 +30,6 @@
           show-overflow-tooltip
         />
         <el-table-column prop="differenceVal" label="变动差值" />
-        <el-table-column
-          prop="populationIncrement"
-          label="增计人口"
-          show-overflow-tooltip
-          align="center"
-        />
         <el-table-column prop="cause" label="变动原因" />
         <el-table-column prop="operation" label="操作" width="250" align="center">
           <template #default="scope">
