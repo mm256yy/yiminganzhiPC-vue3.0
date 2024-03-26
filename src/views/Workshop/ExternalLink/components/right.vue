@@ -123,7 +123,7 @@ const fundScreenDto = ref<any>({})
 const customColor_a = ref('#3E73EC')
 const progressList: any = ref([])
 
-const computedProperty = computed(() => {
+const computedProperty: any = computed(() => {
   return ((fundScreenDto.value.ljsyzj / fundScreenDto.value.gszj) * 100).toFixed(2)
 })
 

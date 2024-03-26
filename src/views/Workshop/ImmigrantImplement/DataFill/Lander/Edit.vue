@@ -131,24 +131,26 @@ let onSubmit = async () => {
  * 安置方式过滤
  */
 const filterWay = (data) => {
-  const arr = cloneDeep(dictObj.value[375]).map((item) => {
-    // 农村移民的 其他性质
-    item.disabled = false
-    const notFarmer = data.populationNature !== '1'
-    if (notFarmer && item.value === '1') {
-      item.disabled = true
-    }
-    if (item.value === '1' && data.isProductionLand != '1') {
-      item.disabled = true
-    }
-    data.age = analyzeIDCard(data.card)
-    console.log(data)
+  const arr = cloneDeep(dictObj.value[375].filter((item) => item.label !== '农业安置')).map(
+    (item) => {
+      // 农村移民的 其他性质
+      item.disabled = false
+      const notFarmer = data.populationNature !== '1'
+      if (notFarmer && item.value === '1') {
+        item.disabled = true
+      }
+      if (item.value === '1' && data.isProductionLand != '1') {
+        item.disabled = true
+      }
+      data.age = analyzeIDCard(data.card)
+      console.log(data)
 
-    if (data.age < 14 && item.value !== '3' && item.value != '1') {
-      item.disabled = true
+      if (data.age < 14 && item.value !== '3' && item.value != '1') {
+        item.disabled = true
+      }
+      return item
     }
-    return item
-  })
+  )
   return arr
 }
 let change = async (e) => {

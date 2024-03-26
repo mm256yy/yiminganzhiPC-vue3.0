@@ -74,7 +74,7 @@ const currentProjectId = appStore.currentProjectId
 const { push } = useRouter()
 const messageList = ref<MessageDtoType[]>([])
 const notifyList = ref<any[]>([])
-const role = ref<RoleCodeType>(RoleCodeType.other)
+
 const more = () => {
   push('/Feedback/FeedbackIndex')
 }
@@ -86,6 +86,7 @@ enum RoleCodeType {
   other = 'other', // 其他 注意不是字典 用作区别 领导角色的,
   implementleader = 'implementleader' //实施组长
 }
+const role = ref<RoleCodeType>(RoleCodeType.other)
 /**
  * 判断角色
  */

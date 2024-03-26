@@ -289,7 +289,7 @@
       </ElRow>
       <ElRow>
         <ElCol :span="12">
-          <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
         </ElCol>
         <ElCol :span="12" />
       </ElRow>
