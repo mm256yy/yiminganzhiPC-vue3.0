@@ -106,7 +106,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'shapeArea',
+    field: 'area',
     label: '面积',
     search: {
       show: false

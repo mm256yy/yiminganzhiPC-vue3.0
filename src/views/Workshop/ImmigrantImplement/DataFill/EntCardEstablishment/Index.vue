@@ -228,7 +228,7 @@ import {
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
+import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/EntCardEstablishment/ConfirmReward.vue' // 引入奖励费确认组件
 // import ConfirmReward from './ConfirmReward.vue'
 import { onMounted } from 'vue'
 
@@ -304,6 +304,7 @@ const objectSpanMethod = ({ row, rowIndex, columnIndex }: any) => {
 // 做合计动作
 const getSummar = (param: any) => {
   const { columns, data } = param
+  console.log(param, '测试数据')
   const sums: any = []
   columns.forEach((column: any, index: any) => {
     // 设置第一列想显示的字
@@ -311,16 +312,21 @@ const getSummar = (param: any) => {
       sums[index] = '合计'
       return
     }
-    const values = data.map((item) => Number(item[column.property]))
+    const values = data.map((item) => {
+      return { num: Number(item[column.property]), key: item.name }
+    })
+    // console.log(values, '测试叠加数据')
     if (index == 5) {
-      sums[index] = `${values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return prev + curr
+      console.log(param, values)
+
+      sums[index] = values.reduce((prev, curr) => {
+        const value = Number(curr.num)
+        if (!Number.isNaN(value) && !curr.key.includes('小计')) {
+          return prev + curr.num
         } else {
           return prev
         }
-      }, 0)}`
+      }, 0)
     } else {
       sums[index] = '——'
     }
@@ -488,17 +494,7 @@ const getSummaries = (row: any) => {
     }
   })
   let arr: any[] = []
-  const incentivefeeArr = [
-    '签订动迁安置协议',
-    '房屋腾空奖励',
-    '签订安置村对接协议',
-    '启动建房奖励',
-    '完成建房奖励',
-    '搬迁入住奖励',
-    '随迁人口补助费奖励',
-    '应迁未迁人口补助奖励',
-    '其他奖励费'
-  ]
+  const incentivefeeArr = ['签约奖', '腾空奖', '其他奖励费']
   if (row.name !== '奖励费小计') {
     arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
   } else {
