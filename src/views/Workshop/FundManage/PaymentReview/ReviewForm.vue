@@ -63,7 +63,7 @@
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">付款类型:</div>
-            <div class="content">{{ form.paymentType == 1 ? '支付' : '预拔' }}</div>
+            <div class="content">{{ form.payType == 1 ? '支付' : '预拔' }}</div>
           </div>
         </ElCol>
       </ElRow>

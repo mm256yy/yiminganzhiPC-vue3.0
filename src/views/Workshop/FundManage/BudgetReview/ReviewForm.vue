@@ -18,7 +18,7 @@
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">申请名称:</div>
-          <div class="content">{{ form.applyUserName }}</div>
+          <div class="content">{{ form.name }}</div>
         </div>
       </ElCol>
     </ElRow>
