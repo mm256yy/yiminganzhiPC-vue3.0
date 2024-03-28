@@ -28,9 +28,11 @@ export const htmlToPdf = (dom = '', name = '无', centen = true) => {
       pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
     } else {
       while (leftHeight > 0) {
+        console.log(leftHeight, pageHeight)
+
         pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
         leftHeight -= pageHeight
-        position -= 841.89
+        position -= 595.28
         //避免添加空白页
         if (leftHeight > 0) {
           pdf.addPage()

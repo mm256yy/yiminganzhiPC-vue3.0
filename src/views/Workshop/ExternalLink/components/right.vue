@@ -94,7 +94,11 @@
             </div>
             <div class="li_right">
               <div class="li_title">{{ item.name }}</div>
-              <ElProgress :color="customColor_a" class="progress_top" :percentage="item.actual" />
+              <ElProgress
+                :color="customColor_a"
+                class="progress_top"
+                :percentage="item.actual * 100"
+              />
             </div>
           </div>
         </div>
@@ -137,7 +141,7 @@ const getInfo = (e: any) => {
   progressList.value = e.progressManagementDto.map((item: any, index: number) => {
     item.img = new URL(`../../../../assets/imgs/homes/logo_${index + 1}.png`, import.meta.url).href
     if (item.actual != 0) {
-      item.actual = item.actual * 100
+      // item.actual = item.actual * 100
     }
     if (item.plan != 0) {
       item.plan = item.plan * 100
