@@ -7,7 +7,14 @@
     :max-height="maxHeight"
     @close="onClose"
   >
-    <Form :schema="schema" @register="register" :labelWidth="120" :rules="rules" :isCol="false">
+    <Form
+      :schema="schema"
+      @register="register"
+      :labelWidth="120"
+      :rules="rules"
+      :isCol="false"
+      status-icon
+    >
       <template #card>
         <ElInput v-model="card" style="width: 100%" placeholder="请选择" @change="change" />
 
@@ -69,7 +76,7 @@ const rules = {
   name: [required()],
   relation: [required()],
   card: [{ validator: validateIdNo, trigger: 'blur' }, required()],
-  settingWay: [required()]
+  settingWay: [{ trigger: 'change' }, required()]
 
   // enabled: [{ type: 'boolean', required: true }]
 }
@@ -160,11 +167,22 @@ let change = async (e) => {
 }
 let changes = async (e) => {
   console.log(e)
-  methods.setValues({ settingWay: '1' })
+  // methods.setValues({ settingWay: '1' })
   // const user = (await methods.getFormData()) || {}
   // user.settingWay = settingWay.value
   methods.setValues({ settingWay: settingWay.value })
   // console.log(user)
+  setTimeout(async () => {
+    await elFormRef.value?.validateField('settingWay', (val) => {
+      console.log(val, 'bbq')
+
+      if (!val) {
+        return false
+      } else {
+        return true
+      }
+    })
+  }, 1000)
 }
 let filterWayArr: any = ref([])
 watch(

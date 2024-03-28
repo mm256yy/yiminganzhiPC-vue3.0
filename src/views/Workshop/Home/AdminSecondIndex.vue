@@ -504,13 +504,13 @@ const getVillageAnalysisLists = async () => {
   })
   if (typeNumber.value == 4) {
     tudiArr.value.xAxis[0].data = list.reduce((pre, item) => {
-      pre.push(item.qsdw)
+      pre.push(item.name)
       return pre
     }, [])
     let arr = {}
     list.forEach((item) => {
       for (let i in item) {
-        if (i != 'qsdw') {
+        if (i != 'name') {
           if (!arr[i]) arr[i] = []
           arr[i].push(item[i])
         }
@@ -642,6 +642,7 @@ const getVillageAnalysisLists = async () => {
       }
     }
     tudiArr.value.series = sseries
+    console.log(tudiArr.value.series)
     totalLandNumber.value = list
       .map((item) => item.total)
       .reduce((accumulator, currentValue) => {

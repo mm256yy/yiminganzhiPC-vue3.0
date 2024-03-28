@@ -24,13 +24,15 @@
           props.baseInfo.relateIndividualName || ''
         }}</span>
       </div>
-      <div
-        v-if="props.type == 'PeasantHousehold'"
-        @click="fillData('Enterprise', props.baseInfo.relateCompanyName)"
-      >
-        关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
-          props.baseInfo.relateCompanyName || ''
-        }}</span>
+      <div v-if="props.type == 'PeasantHousehold'">
+        关联企业：<ElLink
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          v-for="(item, index) in props.baseInfo.relateCompanyName?.split(',')"
+          :key="item"
+          @click="fillData('Enterprise', props.baseInfo.relateCompanyName, index)"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
       </div>
       <div
         v-if="props.type == 'Enterprise' || props.type == 'IndividualB'"
@@ -297,7 +299,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
-import { ElRow, ElCol, ElSpace } from 'element-plus'
+import { ElRow, ElCol, ElSpace, ElLink } from 'element-plus'
 import { fmtStr } from '@/utils/index'
 import { useRouter } from 'vue-router'
 interface PropsType {
@@ -311,7 +313,7 @@ interface PropsType {
 const { push } = useRouter()
 const props = defineProps<PropsType>()
 const infoData = ref<any>({ icon: 'mdi:user-circle' })
-const fillData = (row, name: any) => {
+const fillData = (row, name: any, index?: any) => {
   if (!name) return false
   console.log(row)
   if (row == 'IndividualB') {
@@ -327,8 +329,8 @@ const fillData = (row, name: any) => {
     push({
       name: 'ImmigrantImpDataFill',
       query: {
-        householdId: props.baseInfo.relateCompanyId,
-        doorNo: props.baseInfo.relateCompanyDoorNo,
+        householdId: props.baseInfo.relateCompanyId.split(',')[index],
+        doorNo: props.baseInfo.relateCompanyDoorNo.split(',')[index],
         type: 'Enterprise'
       }
     })

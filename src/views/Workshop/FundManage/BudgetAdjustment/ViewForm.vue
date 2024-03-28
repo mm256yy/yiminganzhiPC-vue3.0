@@ -134,13 +134,14 @@
       >
         <template #default="{ row }">
           <div v-for="(item, index) in row.nodeDtoList" :key="index"
-            >{{ dayjs(item.paymentDate).format('YYYY-MM-DD') }}{{ `金额：${item.amount}` }}</div
+            >{{ dayjs(item.paymentDate).format('YYYY-MM-DD')
+            }}{{ `金额：${item.amount}` + '元' }}</div
           >
         </template>
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
         <template #default="{ row }">
-          {{ row.nodeDtoList[0].payStatus + '元' }}
+          {{ row.nodeDtoList[0].amount + '元' }}
         </template>
       </ElTableColumn>
     </ElTable>

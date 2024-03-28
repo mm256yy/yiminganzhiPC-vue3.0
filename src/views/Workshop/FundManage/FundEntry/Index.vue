@@ -174,7 +174,8 @@ const onSearch = (data) => {
 
 const onReset = () => {
   tableObject.params = {
-    projectId
+    projectId,
+    entryStatus: '1'
   }
   setSearchParams(tableObject.params)
 }

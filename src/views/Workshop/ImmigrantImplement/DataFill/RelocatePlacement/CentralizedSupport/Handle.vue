@@ -57,8 +57,8 @@
 
       <ElRow>
         <ElCol :span="24">
-          <ElFormItem label="安置方式：">
-            {{ form.settingWayText }}
+          <ElFormItem label="搬迁安置方式：">
+            {{ form.houseAreaTypeText }}
           </ElFormItem>
         </ElCol>
       </ElRow>
