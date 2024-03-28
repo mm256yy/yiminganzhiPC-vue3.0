@@ -109,6 +109,15 @@
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
+      <!-- 坟墓调查信息 -->
+      <Grave
+        :name="name"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :classifyType="classifyType"
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :surveyStatus="surveyStatus"
+      />
 
       <!-- 家庭收入情况信息 -->
       <FamilyIncome
@@ -126,16 +135,6 @@
         :householdId="householdId"
         :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
-        :surveyStatus="surveyStatus"
-      />
-
-      <!-- 坟墓调查信息 -->
-      <Grave
-        :name="name"
-        :doorNo="doorNo"
-        :householdId="householdId"
-        :classifyType="classifyType"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
 

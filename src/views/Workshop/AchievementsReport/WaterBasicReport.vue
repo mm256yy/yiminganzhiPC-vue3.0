@@ -8,6 +8,7 @@
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
         <ElBreadcrumbItem class="text-size-12px">水电站</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>

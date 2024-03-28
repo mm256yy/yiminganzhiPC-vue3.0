@@ -37,12 +37,11 @@
   </div>
 
   <div class="data-fill-body">
-    <!-- <Enclosure v-if="showEnclosure" :doorNo="doorNo" :householdId="householdId" /> -->
-    <UploadField
-      v-if="showUploadField || showUpload"
-      :type="type"
-      :tabIndex="tabCurrentId"
+    <UploadField v-if="showEnclosure" :type="type" :tabIndex="tabCurrentId" :doorNo="doorNo" />
+    <Enclosure
+      v-else-if="showUploadField || showUpload"
       :doorNo="doorNo"
+      :householdId="householdId"
     />
     <div v-else v-loading="loading" class="flex-display">
       <div
@@ -100,9 +99,6 @@ const getTabsByType = (type) => {
   }
   return map[type]
 }
-onMounted(() => {
-  tabCurrentId.value = setTop
-})
 const dialogShow = ref<boolean>(false)
 const fileList = ref<FileDtoType[]>([])
 const dialogTitle = ref<string>('')
@@ -117,12 +113,12 @@ const isProfessional = computed(() => {
 })
 
 const showEnclosure = computed(() => {
-  return type !== '4' && tabCurrentId.value === 3
+  return type === '4' && tabCurrentId.value === 3
 })
 
 // 显示上传模块
 const showUploadField = computed(() => {
-  return type === '4' ? tabCurrentId.value > 1 : tabCurrentId.value === 4
+  return tabCurrentId.value === 4
 })
 
 const showUpload = computed(() => {
@@ -173,9 +169,8 @@ const requestFileMngList = (type) => {
 }
 
 const chooseType = (type: string) => {
+  // type是前端需要的类型, tabCurrentId.value为后端需要类型
   // 一户一档
-  // console.log('chooseTypeTag', tabCurrentId.value)
-
   if (type === '0') {
     requestType.value = tabCurrentId.value
   } else if (type === '1') {
@@ -195,20 +190,26 @@ const chooseType = (type: string) => {
     requestType.value = tabCurrentId.value === 1 ? 9 : 10
   }
 
-  if (tabCurrentId.value === 3) {
-    requestType.value = 11
+  if (isProfessional.value) {
+    if (tabCurrentId.value <= 2) {
+      requestFileMngList(requestType.value)
+    }
+  } else {
+    if (tabCurrentId.value === 3) {
+      requestType.value = 11
+    }
+    requestFileMngList(requestType.value)
   }
-  requestFileMngList(requestType.value)
 }
 
-chooseType(type)
-
 const onTabClick = (tabItem) => {
-  if (tabCurrentId.value === tabItem.id) {
-    return
-  }
+  // if (tabCurrentId.value === tabItem.id) {
+  //   return
+  // }
   tabCurrentId.value = tabItem.id
   chooseType(type)
+  console.log('tabCurrentId-onTabClick', tabCurrentId.value)
+  console.log('type-onTabClick', type)
 }
 
 const onDialogClose = () => {
@@ -218,6 +219,12 @@ const onDialogClose = () => {
 const onBack = () => {
   back()
 }
+
+onMounted(() => {
+  tabCurrentId.value = setTop || 1
+  console.log('tabCurrentId-mounted', tabCurrentId.value)
+  chooseType(type)
+})
 </script>
 
 <style lang="less" scoped>

@@ -58,7 +58,7 @@
           v-model="form.phone"
         />
       </ElFormItem>
-      <ElFormItem label="关联居民户" prop="householderName" align="center" header-align="center">
+      <ElFormItem label="" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
           filterable
@@ -202,8 +202,6 @@ watch(
   () => props.row,
   (val) => {
     if (val) {
-      console.log(val)
-
       // 处理行政区划
       form.value = {
         ...val,
@@ -212,6 +210,30 @@ watch(
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+    } else {
+      form.value = defaultValue
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      console.log('JJP', val)
+
+      // // 处理行政区划
+      // form.value = {
+      //   ...val,
+      //   parentCode: [val.areaCode, val.townCode, val.villageCode]
+      // }
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
     } else {
       form.value = defaultValue
     }

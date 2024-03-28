@@ -206,8 +206,8 @@ const onCheckRow = (row) => {
     name: 'FileMngCheck',
     query: {
       householdId: row.id,
-      doorNo: row.doorNo,
-      type: 4
+      doorNo: row.code,
+      type: '4'
     }
   })
 }

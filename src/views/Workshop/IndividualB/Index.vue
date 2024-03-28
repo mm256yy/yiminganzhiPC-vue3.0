@@ -72,10 +72,15 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <template #fillStatus="{ row }">
+        <template #reportStatus="{ row }">
           <div class="flex items-center justify-center">
-            <span :class="['status', showFillColor(row)]"></span>
-            {{ showFillStatus(row) }}</div
+            <span
+              :class="[
+                'status',
+                row.reportStatus === ReportStatus.ReportSucceed ? 'status-suc' : 'status-err'
+              ]"
+            ></span>
+            {{ row.reportStatus === ReportStatus.ReportSucceed ? '已填报' : '未填报' }}</div
           >
         </template>
         <template #reportDate="{ row }">
@@ -414,7 +419,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'fillStatus',
+    field: 'reportStatus',
     label: '填报状态',
     search: {
       show: false

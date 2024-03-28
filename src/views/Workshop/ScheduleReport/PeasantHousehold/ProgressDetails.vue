@@ -77,6 +77,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
                 <div e-else></div>
               </template>
             </el-table-column>
@@ -91,6 +92,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
 
@@ -102,6 +104,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
 
@@ -113,6 +116,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -126,6 +130,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column prop="chooseHouseStatus" label="选房择址" align="center">
@@ -136,6 +141,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column prop="chooseGraveStatus" label="坟墓择址" align="center">
@@ -146,12 +152,19 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column prop="cardStatus" label="移民建卡" align="center">
             <template #default="{ row }">
-              <Icon v-if="row.cardStatus == '1'" class="active-icon" icon="ep:check" color="#000" />
+              <Icon
+                v-if="row.cardStatus === '1'"
+                class="active-icon"
+                icon="ep:check"
+                color="#000"
+              />
+              <div v-else></div>
             </template>
           </el-table-column>
           <el-table-column label="腾空过渡" align="center">
@@ -163,6 +176,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column prop="landSoarStatus" label="土地腾让" align="center">
@@ -173,6 +187,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column prop="excessStatus" label="过渡安置" align="center">
@@ -183,6 +198,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -194,6 +210,7 @@
                 icon="ep:check"
                 color="#000"
               />
+              <div v-else></div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -207,6 +224,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
 
@@ -218,6 +236,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column
@@ -233,6 +252,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
             <el-table-column prop="selfSeekingStatus" label="自谋出路" align="center" width="120">
@@ -243,6 +263,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
           </el-table-column>
@@ -260,7 +281,8 @@
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
-                /> </template
+                />
+                <div v-else></div> </template
             ></el-table-column>
 
             <el-table-column prop="retirementStatus" label="养老保险" align="center" width="120">
@@ -270,7 +292,8 @@
                   class="active-icon"
                   icon="ep:check"
                   color="#000"
-                /> </template
+                />
+                <div v-else></div> </template
             ></el-table-column>
             <el-table-column
               prop="selfEmploymentStatus"
@@ -285,16 +308,11 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else></div>
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column
-            prop="proceduresStatus"
-            label="相关手续
-    "
-            align="center"
-            width="120"
-          >
+          <el-table-column prop="proceduresStatus" label="相关手续" align="center" width="120">
             <template #default="{ row }">
               <Icon
                 v-if="row.proceduresStatus == '1'"
@@ -302,6 +320,7 @@
                 icon="ep:check"
                 color="#000"
               />
+              <div v-else></div>
             </template>
           </el-table-column>
         </el-table-column>

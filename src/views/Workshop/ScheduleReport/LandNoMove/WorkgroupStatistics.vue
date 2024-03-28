@@ -14,7 +14,7 @@
     <div class="line"></div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 只征地不搬迁进度明细报表 </div>
+        <div class="table-left-title"> 只征地不搬迁工作组统计报表 </div>
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table

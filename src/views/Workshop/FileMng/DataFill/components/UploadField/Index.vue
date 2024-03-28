@@ -45,7 +45,7 @@
                     :list-type="'picture'"
                     accept=".jpg,.jpeg,.png,.pdf"
                     :multiple="true"
-                    :file-list="collectiveAssetsPic"
+                    :file-list="imagePic"
                     :headers="headers"
                     :on-success="uploadFileChange"
                     :before-remove="beforeRemove"
@@ -142,18 +142,10 @@ const rules = ref()
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 
 const form = ref<any>({})
-const collectiveAssetsPic = ref<FileItemType[]>([]) // 户主照片
+const imagePic = ref<FileItemType[]>([]) // 户主照片
 const imgUrl = ref<string>('')
 const dialogVisible = ref(false)
 const emit = defineEmits(['updateData'])
-
-const isImageAttach = computed(() => {
-  return props.type === '4' && props.tabIndex === 3
-})
-
-const isArchivesOtherPic = computed(() => {
-  return props.type === '4' && props.tabIndex === 4
-})
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
@@ -163,8 +155,8 @@ const headers = {
 // 初始化数据
 const initData = () => {
   getDocumentationApi(props.doorNo).then((res: any) => {
-    if (res && res.collectiveAssetsPic) {
-      collectiveAssetsPic.value = res.collectiveAssetsPic ? JSON.parse(res.collectiveAssetsPic) : []
+    if (res && res.imagePic) {
+      imagePic.value = res.imagePic ? JSON.parse(res.imagePic) : []
     }
   })
 }
@@ -183,7 +175,7 @@ const handleFileList = (fileList: UploadFiles) => {
       })
   }
 
-  collectiveAssetsPic.value = list
+  imagePic.value = list
 }
 
 // 文件上传
@@ -220,15 +212,7 @@ const onSave = () => {
     ...form.value,
     doorNo: props.doorNo,
     status: 'implementation',
-    collectiveAssetsPic: props.type !== '4' ? JSON.stringify(collectiveAssetsPic.value) : undefined,
-    imagePic: isImageAttach.value ? JSON.stringify(collectiveAssetsPic.value) : undefined,
-    archivesOtherPic: isArchivesOtherPic.value
-      ? JSON.stringify(collectiveAssetsPic.value)
-      : undefined
-  }
-  if (!collectiveAssetsPic.value.length) {
-    ElMessage.error('请上传凭证')
-    return
+    imagePic: imagePic.value ? JSON.stringify(imagePic.value) : undefined
   }
   saveDocumentationApi(params).then(() => {
     ElMessage.success('操作成功！')
@@ -236,10 +220,10 @@ const onSave = () => {
   })
 }
 let removeFiles = (data) => {
-  collectiveAssetsPic.value = collectiveAssetsPic.value.filter((item: any) => {
+  imagePic.value = imagePic.value.filter((item: any) => {
     return item.uid != data.uid
   })
-  console.log(data, collectiveAssetsPic)
+  console.log(data, imagePic)
 }
 onMounted(() => {
   initData()

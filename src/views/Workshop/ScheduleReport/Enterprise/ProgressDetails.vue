@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -394,18 +394,43 @@ const onBack = () => {
 
 const requestListApi = () => {
   tableObject.loading = true
-  getEnterpriseReportApi(tableObject.params).then((res) => {
+  const params = {
+    ...tableObject.params,
+    size: tableObject.size,
+    page: tableObject.currentPage - 1
+  }
+  getEnterpriseReportApi(params).then((res) => {
     tableObject.tableList = res.content
     totalCountObj.value = res.other
+    tableObject.total = res.total
     tableObject.loading = false
   })
 }
 
-requestListApi()
-
 onMounted(() => {
   getVillageTree()
+  requestListApi()
 })
+
+watch(
+  () => tableObject.currentPage,
+  () => {
+    requestListApi()
+  }
+)
+
+watch(
+  () => tableObject.size,
+  () => {
+    // 当前页不为1时，修改页数后会导致多次调用getList方法
+    if (tableObject.currentPage === 1) {
+      requestListApi()
+    } else {
+      tableObject.currentPage = 1
+      requestListApi()
+    }
+  }
+)
 </script>
 <style lang="less" scoped>
 .search-form-wrap {

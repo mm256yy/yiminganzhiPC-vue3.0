@@ -94,8 +94,12 @@ export const getDocumentationApi = (doorNo: string) => {
   return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
 }
 
+export const getDocumentationApiByCode = (doorNo: string) => {
+  return request.get({ url: '/immigrantDocumentation/findByDoorNo', params: { doorNo } })
+}
+
 /**
- * 档案上传
+ * 档案上传meiymeimeiy
  * @param data 表单提交数据
  * @returns
  */

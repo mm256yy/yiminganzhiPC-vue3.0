@@ -351,6 +351,12 @@ const onSearch = (data) => {
     delete params.code
   }
 
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
   tableObject.params = {
     ...params
   }

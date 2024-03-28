@@ -107,7 +107,15 @@
         v-else-if="reportTabCurrentId === ReportTabIds[3]"
         :surveyStatus="surveyStatus"
       />
-
+      <!-- 坟墓调查信息 -->
+      <Grave
+        :name="name"
+        :doorNo="doorNo"
+        :householdId="householdId"
+        :classifyType="classifyType"
+        v-else-if="reportTabCurrentId === ReportTabIds[4]"
+        :surveyStatus="surveyStatus"
+      />
       <!-- 家庭收入情况信息 -->
       <FamilyIncome
         :doorNo="doorNo"
@@ -124,16 +132,6 @@
         :householdId="householdId"
         :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[6]"
-        :surveyStatus="surveyStatus"
-      />
-
-      <!-- 坟墓调查信息 -->
-      <Grave
-        :name="name"
-        :doorNo="doorNo"
-        :householdId="householdId"
-        :classifyType="classifyType"
-        v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
 
@@ -403,7 +401,7 @@ import Demographic from '../Demographic/Index.vue' // 人口信息
 import House from '../House/Index.vue' // 房屋信息
 import Accessory from '../Accessory/Index.vue' // 附属物信息
 import Fruitwood from '../Fruitwood/Index.vue' // 零星(林)果木信息
-import Grave from '../Index.vue' // 居民户 -- 坟墓信息
+import Grave from '../Grave/Index.vue' // 居民户 -- 坟墓信息
 import Enclosure from '../Enclosure/Index.vue' // 附件上传
 import FamilyIncome from '../FamilyIncome/Index.vue' // 家庭收入
 import VillageGrave from '../VillageComponents/Grave/Index.vue' // 村集体 -- 坟墓信息
