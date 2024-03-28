@@ -58,7 +58,7 @@
           v-model="form.phone"
         />
       </ElFormItem>
-      <ElFormItem label="关联居民户" prop="householderName" align="center" header-align="center">
+      <ElFormItem label="" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
           filterable
