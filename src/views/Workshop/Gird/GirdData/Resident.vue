@@ -66,28 +66,9 @@
         <template #hasPropertyAccount="{ row }">
           <div>{{ row.hasPropertyAccount ? '是' : '否' }}</div>
         </template>
-        <!-- <template #locationType="{ row }">
-          <div>{{ getLocationText(row.locationType) }}</div>
-        </template> -->
         <template #gridmanName="{ row }">
           <div>{{ row.gridmanName == '0' ? '' : row.gridmanName }}</div>
         </template>
-        <!-- <template #implementFillStatus="{ row }">
-          <div class="flex items-center justify-center">
-            <span
-              :class="['status', row.implementFillStatus === '1' ? 'status-suc' : 'status-err']"
-            ></span>
-            <span :class="[row.implementFillStatus === '0' ? 'red' : '']">
-              {{ row.implementFillStatus === '0' ? '未填报' : '已填报' }}
-            </span>
-            <span :class="['ml-5', row.implementEscalationStatus === '0' ? 'red' : '']">
-              {{ row.implementEscalationStatus === '0' ? '未上传报告' : '已上传报告' }}
-            </span>
-          </div>
-        </template>
-        <template #reportDate="{ row }">
-          <div>{{ formatDate(row.reportDate) }}</div>
-        </template> -->
         <template #filling="{ row }">
           <div class="filling-btn" @click="adjust(row)">调整网格</div>
         </template>
@@ -212,6 +193,28 @@ onMounted(() => {
   getdistrictTree()
   requestList()
 })
+
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code == code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
+
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 
 const schema = reactive<CrudSchema[]>([
   {
@@ -358,61 +361,43 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
-}
-
-const getParamsKey = (key: string) => {
-  const map = {
-    Country: 'areaCode',
-    Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
-    NaturalVillage: 'virutalVillageCode' // 自然村 code
-  }
-  return map[key]
-}
-
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
-  }
-  if (!data.implementFillStatus) {
-    Reflect.deleteProperty(params, 'implementFillStatus')
   }
 
   // 需要重置一次params
   tableObject.params = {
     projectId
   }
-  if (!params.hasPropertyAccount) {
-    delete params.hasPropertyAccount
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
   }
-  if (!params.fillStatus) {
-    delete params.fillStatus
-  }
+
+  params[getParamsKey('Country')] = null
+  params[getParamsKey('Township')] = null
+  params[getParamsKey('Village')] = null
+  params[getParamsKey('NaturalVillage')] = null
   if (params.code) {
     // 拿到对应的参数key
-    findRecursion(villageTree.value, params.code, (item) => {
+    findRecursion(districtTree.value, params.code, (item) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-      params.type = 'PeasantHousehold'
-      params.status = SurveyStatusEnum.Implementation
-      setSearchParams({ ...params })
+      tableObject.params = {
+        ...params
+      }
+      setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
     })
   } else {
-    params.type = 'PeasantHousehold'
-    params.status = SurveyStatusEnum.Implementation
-    setSearchParams({ ...params })
+    tableObject.params = {
+      ...params
+    }
+    setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
   }
 }
 
@@ -430,15 +415,6 @@ const onSubmit = () => {
   }
   updateLandlordApi(params).then(() => {
     ElMessage.success('操作成功')
-    // const params = {
-    //   type: 'PeasantHousehold',
-    //   status: SurveyStatusEnum.Implementation,
-    //   ...tableObject.params
-    // }
-
-    // console.log('OPO', params)
-
-    // setSearchParams(params)
     getList()
   })
   dialogVisible.value = false

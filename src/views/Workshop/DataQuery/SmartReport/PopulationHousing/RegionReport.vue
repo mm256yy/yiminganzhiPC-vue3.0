@@ -49,7 +49,6 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const emit = defineEmits(['export'])
 const districtTree = ref<any[]>([])
-
 const villageTree = ref<any[]>([])
 const code = ref<any>(null)
 const tableLoading = ref<boolean>()

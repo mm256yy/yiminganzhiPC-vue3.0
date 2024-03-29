@@ -88,10 +88,16 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
-const getEnterpriseAsync = async (e: any) => {
+const getEnterpriseAsync = async () => {
+  const params = {
+    ...tableObject.params,
+    page: tableData1.currentPageRef,
+    size: tableData1.pageSizeRef
+  }
+
   tableLoading.value = true
   try {
-    let list = await getEnterprise(e)
+    let list = await getEnterprise(params)
     tableData1.tableList = list.content
     tableData1.total = list.total
     tableLoading.value = false
@@ -101,30 +107,15 @@ const getEnterpriseAsync = async (e: any) => {
   }
 }
 
-const objectSpanMethod1 = ({ rowIndex, columnIndex }) => {
-  if (columnIndex === 1) {
-    if (rowIndex === 0) {
-      return {
-        rowspan: 20,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
-
 const handleSizeChange = (val: number) => {
   tableData1.pageSizeRef = val
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
+  console.log('size-change', val)
+  getEnterpriseAsync()
 }
 
 const handleCurrentChange = (val: number) => {
   tableData1.currentPageRef = val - 1
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
+  getEnterpriseAsync()
 }
 
 const onExport = async () => {

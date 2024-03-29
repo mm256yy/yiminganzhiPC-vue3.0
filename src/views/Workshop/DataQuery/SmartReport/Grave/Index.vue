@@ -31,10 +31,8 @@
         headerAlign="center"
         align="center"
         border
+        :span-method="spanMethod"
         @register="register"
-        :span-method="arraySpanMethod"
-        height="450"
-        style="width: 100%; max-height: 550px"
       />
     </div>
   </WorkContentWrap>
@@ -154,19 +152,27 @@ const { allSchemas } = useCrudSchemas(schema)
  * @param{Object} rowIndex 当前行下标
  * @param{Object} columnInex 当前列下标
  */
-const arraySpanMethod = ({ row, column, rowIndex, columnIndex }) => {
-  if (column && columnIndex < 2) {
-    const num = tableObject.tableList.filter((item) => item.doorNo === row.doorNo)?.length
-    const index = tableObject.tableList.findIndex((item) => item.doorNo === row.doorNo)
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
+const spanMethod = ({ row, column, rowIndex }) => {
+  //定义需要合并的列字段，有哪些列需要合并，就自定义添加字段即可
+  const fields = ['showDoorNo', 'householdName']
+  const data = tableObject.tableList
+  // 当前行的数据
+  const cellValue = row[column.property]
+  // 判断只合并定义字段的列数据
+  if (cellValue && fields.includes(column.property)) {
+    const prevRow = data[rowIndex - 1] //上一行数据
+    let nextRow = data[rowIndex + 1] //下一行数据
+    // 当上一行的数据等于当前行数据时，当前行单元格隐藏
+    if (prevRow && prevRow[column.property] === cellValue) {
+      return { rowspan: 0, colspan: 0 }
     } else {
-      return {
-        rowspan: 0,
-        colspan: 0
+      // 反之，则循环判断若下一行数据等于当前行数据，则当前行开始进行合并单元格
+      let countRowspan = 1 //用于合并计数多少单元格
+      while (nextRow && nextRow[column.property] === cellValue) {
+        nextRow = data[++countRowspan + rowIndex]
+      }
+      if (countRowspan > 1) {
+        return { rowspan: countRowspan, colspan: 1 }
       }
     }
   }

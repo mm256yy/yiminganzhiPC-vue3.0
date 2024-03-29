@@ -106,6 +106,8 @@
     <EditForm
       :show="dialog"
       :actionType="actionType"
+      :doorNo="doorNo"
+      :name="name"
       :row="tableObject.currentRow"
       @close="onFormPupClose"
     />
@@ -201,7 +203,7 @@ const outsideData = ref<any>([])
 const printDialog = ref(false)
 const exportDialog = ref(false)
 const { currentRoute } = useRouter()
-let { type } = currentRoute.value.query as any
+let { type, name, doorNo } = currentRoute.value.query as any
 const currentType = ref<string>('')
 
 interface exportListType {

@@ -205,6 +205,8 @@ interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
+  name?: string
+  doorNo?: string
 }
 const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()
@@ -393,6 +395,22 @@ const onVillageDialogClose = (flag?: boolean) => {
     emit('updateDistrict')
   }
 }
+
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      form.value.householderName = props.name
+      form.value.showHouseholderDoorNo = props.doorNo
+    } else {
+      form.value = defaultValue
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 </script>
 
 <style lang="less">

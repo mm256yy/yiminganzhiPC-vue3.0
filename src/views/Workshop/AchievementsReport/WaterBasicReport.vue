@@ -1,235 +1,205 @@
 <template>
-  <WorkContentWrap>
-    <!-- 水电站 -->
-    <div class="flex items-center">
-      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
-        返回
-      </ElButton>
-      <ElBreadcrumb separator="/">
-        <ElBreadcrumbItem class="text-size-12px">智能报表</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">实物成果</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">企(事)业单位</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">水电站</ElBreadcrumbItem>
-      </ElBreadcrumb>
-    </div>
-    <div v-if="false" class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" />
-    </div>
-    <div class="table-wrap">
-      <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 水电站报表 </div>
-        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
+  <div class="flex items-center">
+    <ElButton
+      @click="onBack"
+      :icon="BackIcon"
+      type="default"
+      class="px-9px py-0px !h-28px mr-8px !text-12px"
+    >
+      返回
+    </ElButton>
+    <ElBreadcrumb separator="/">
+      <ElBreadcrumbItem class="text-size-12px"> 智慧报表 </ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px"> 实物成果 </ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px"> 企(事)业单位 </ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px"> 水电站 </ElBreadcrumbItem>
+    </ElBreadcrumb>
+  </div>
+
+  <div class="data-fill-head">
+    <div class="head-top">
+      <div class="tabs">
+        <div
+          :class="['tab-item', tabCurrentId === item.id ? 'active' : '']"
+          v-for="item in tabsList"
+          :key="item.id"
+          @click="onTabClick(item)"
+        >
+          {{ item.name }}
+        </div>
       </div>
-      <ElTable
-        v-loading="tableLoading"
-        :data="tableData"
-        style="width: 100%; max-height: 600px"
-        height="600"
-      >
-        <ElTableColumn type="index" label="序号" width="100" align="center" />
-        <ElTableColumn prop="location" label="所在地点" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="name" label="名称" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="legalPerson" label="法人代表" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="ownership" label="权属性质" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="ownershipUnit" label="权属单位" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="landUse" label="用地性质" show-overflow-tooltip align="center" />
-        <ElTableColumn
-          prop="completionDate"
-          label="建成年月"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn prop="scale" label="规模" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="volume" label="库容（万m³）" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="drinkingWater" label="引水来源" show-overflow-tooltip align="center" />
-        <ElTableColumn prop="lift" label="杨程（m）" show-overflow-tooltip align="center" />
-        <ElTableColumn
-          prop="channel"
-          label="渠（管）道（m）"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="yearGeneratedEnergy"
-          label="年发电量（万KW.h）"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn prop="volume_t" label="库容（万m³）" show-overflow-tooltip align="center" />
-        <ElTableColumn
-          prop="mainStructure"
-          label="主要建筑物"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="businessCertificate"
-          label="工商证"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="registeredCapital"
-          label="注册资金（万元）"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="yearProductionValue"
-          label="年产总值（万元）"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="annualProfit"
-          label="年利润（万元）"
-          show-overflow-tooltip
-          align="center"
-        />
-        <ElTableColumn
-          prop="grossAnnualWages"
-          label="年工资总额（万元）"
-          show-overflow-tooltip
-          align="center"
-        />
-      </ElTable>
     </div>
-  </WorkContentWrap>
+  </div>
+
+  <div class="data-fill-body">
+    <!-- 基本情况 -->
+    <WaterBasicInfo v-if="tabCurrentId === 1" />
+
+    <!-- 房屋及其附属物 -->
+    <WaterHouseAttachment v-if="tabCurrentId === 2" />
+  </div>
 </template>
-
 <script setup lang="ts">
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElTable, ElTableColumn } from 'element-plus'
-
-import { WorkContentWrap } from '@/components/ContentWrap'
-import { Search } from '@/components/Search'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { ref, reactive } from 'vue'
-import { getCommonReportApi, exportPhysicalApi } from '@/api/workshop/achievementsReport/service'
-
+import { ref } from 'vue'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
+import WaterBasicInfo from './components/WaterBasicInfo.vue' // 基本情况
+import WaterHouseAttachment from './components/WaterHouseAttachment.vue' // 房屋及其附属物
 import { useRouter } from 'vue-router'
+
 const { back } = useRouter()
-const tableData = ref<any>([])
-const tableLoading = ref<boolean>(false)
-
+const tabCurrentId = ref<number>(1)
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
-
-const getList = async () => {
-  tableLoading.value = true
-  try {
-    const result = await getCommonReportApi(1)
-    tableData.value = result
-    tableLoading.value = false
-  } catch {
-    tableLoading.value = false
+const tabsList = [
+  {
+    id: 1,
+    name: '基本情况'
+  },
+  {
+    id: 2,
+    name: '房屋及其附属物'
   }
+]
+
+const onTabClick = (tabItem) => {
+  if (tabCurrentId.value === tabItem.id) {
+    return
+  }
+  tabCurrentId.value = tabItem.id
 }
 
-getList()
-
-const schema = reactive<CrudSchema[]>([
-  // 搜索字段定义
-  {
-    field: 'qy',
-    label: '区域',
-    search: {
-      show: true,
-      component: 'Select'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'doorNo',
-    label: '户号',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
-    field: 'name',
-    label: '姓名',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  }
-])
-const { allSchemas } = useCrudSchemas(schema)
 const onBack = () => {
   back()
-}
-
-const onExport = async () => {
-  const res = await exportPhysicalApi(1)
-  let filename = res.headers
-  filename = filename['content-disposition']
-  filename = filename.split(';')[1].split('filename=')[1]
-  filename = decodeURIComponent(filename)
-  let elink = document.createElement('a')
-  document.body.appendChild(elink)
-  elink.style.display = 'none'
-  elink.download = filename
-  let blob = new Blob([res.data])
-  const URL = window.URL || window.webkitURL
-  elink.href = URL.createObjectURL(blob)
-  elink.click()
-  document.body.removeChild(elink)
-  URL.revokeObjectURL(elink.href)
 }
 </script>
 
 <style lang="less" scoped>
-.container {
-  width: 100%;
-  overflow-x: auto;
-}
-/*定义滚动条高宽及背景
- 高宽分别对应横竖滚动条的尺寸*/
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: rgba(0, 0, 0, 0.2);
+.data-fill-head {
+  position: relative;
+  padding: 14px 16px;
+  margin-top: 6px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0px 4px 6px 0px rgba(33, 63, 98, 0.17);
+
+  .head-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .tabs {
+    display: flex;
+    align-items: center;
+
+    .tab-item {
+      display: flex;
+      height: 32px;
+      padding: 0 20px;
+      margin-right: 4px;
+      font-size: 14px;
+      color: #000;
+      cursor: pointer;
+      background: #f0f2f7;
+      border-radius: 10px 10px 0px 0px;
+      align-items: center;
+
+      &.active {
+        color: #fff;
+        background-color: var(--el-color-primary);
+      }
+    }
+  }
 }
 
-/*定义滚动条轨道
- 内阴影+圆角*/
-::-webkit-scrollbar-track {
-  background-color: #f5f5f5;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+.report-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .report-tab-item {
+    display: flex;
+    height: 32px;
+    padding: 0 16px;
+    margin: 14px 8px 0 0;
+    font-size: 14px;
+    cursor: pointer;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    align-items: center;
+
+    .tit {
+      margin-left: 6px;
+      // user-select: none;
+    }
+
+    &.active {
+      color: var(--el-color-primary);
+      background: #e9f0ff;
+      border: 1px solid var(--el-color-primary);
+    }
+  }
 }
-/*定义滑块
-     内阴影+圆角*/
-::-webkit-scrollbar-thumb {
-  background-color: #ece6e6;
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+
+.data-fill-body {
+  padding-top: 10px;
+  margin-top: -10px;
+  background-color: #fff;
+}
+
+.report-dialog {
+  .report-cont {
+    padding: 22px 55px;
+    margin: 0 auto;
+    background: #f5f7fa;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+
+    .report-item {
+      display: flex;
+      height: 32px;
+      font-size: 14px;
+      line-height: 32px;
+      align-items: center;
+
+      .report-tit {
+        margin-right: 16px;
+        color: rgba(19, 19, 19, 0.6);
+        text-align: right;
+      }
+
+      .report-txt {
+        font-weight: 500;
+        color: var(--text-color-1);
+      }
+    }
+  }
+
+  .tips {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-color-1);
+  }
+}
+</style>
+
+<style lang="less">
+.el-divider--horizontal {
+  margin: 8px 0 24px;
+}
+
+.report-dialog {
+  .el-dialog__body {
+    padding: 16px 40px !important;
+  }
+}
+
+.datafill-content {
+  padding: 12px 16px 16px;
+  background: #ffffff;
+  border-radius: 4px;
 }
 </style>

@@ -34,14 +34,9 @@
         style="width: 100%"
       >
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
+        <el-table-column prop="doorNo" label="村集体编号" align="center" header-align="center" />
         <el-table-column
-          prop="villageCode"
-          label="村集体编号"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="villageText"
+          prop="householder"
           label="村集体名称"
           align="center"
           header-align="center"
@@ -74,14 +69,9 @@
         style="width: 100%"
       >
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
+        <el-table-column prop="doorNo" label="村集体编号" align="center" header-align="center" />
         <el-table-column
-          prop="villageCode"
-          label="村集体编号"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="villageText"
+          prop="householder"
           label="村集体名称"
           align="center"
           header-align="center"
@@ -99,14 +89,9 @@
         style="width: 100%"
       >
         <el-table-column prop="index" label="序号" align="center" header-align="center" />
+        <el-table-column prop="doorNo" label="村集体编号" align="center" header-align="center" />
         <el-table-column
-          prop="villageCode"
-          label="村集体编号"
-          align="center"
-          header-align="center"
-        />
-        <el-table-column
-          prop="villageText"
+          prop="householder"
           label="村集体名称"
           align="center"
           header-align="center"

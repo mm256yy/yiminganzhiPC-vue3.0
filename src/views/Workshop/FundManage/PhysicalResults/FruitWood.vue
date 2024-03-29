@@ -1,6 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div class="search-wrap">
+    <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
         :defaultExpand="false"
@@ -12,8 +12,8 @@
     <div class="line"></div>
     <div class="table-wrap" v-loading="tableLoading">
       <div class="flex items-center justify-between pb-5px">
-        <div class="table-left-title">零星林（果）木统计表 </div>
-        <!-- <ElButton type="primary" @click="onExport"> 数据导出 </ElButton> -->
+        <div class="table-left-title">零星林（果）木统计表123 </div>
+        <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
         ref="tableRef"
@@ -21,7 +21,11 @@
         :columns="schemas.columns"
         highlightCurrentRow
         height="600"
+        row-key="id"
+        header-align="center"
+        align="center"
         style="width: 100%; max-height: 600px"
+        @register="register"
       />
     </div>
   </WorkContentWrap>
@@ -35,12 +39,17 @@ import { Table } from '@/components/Table'
 import { getEnterpriseTree } from '@/api/fundManage/fundPayment-service'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import { ElButton } from 'element-plus'
+import { Search } from '@/components/Search'
+import { useTable } from '@/hooks/web/useTable'
 
 const districtTree = ref<any[]>([])
 let tableRef = ref()
 const tableLoading = ref<boolean>(false)
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
+
+const { register, tableObject } = useTable()
 
 let schemas = reactive<any>({
   columns: []
@@ -70,23 +79,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'code',
-    label: '企业编码',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
-  {
     field: 'name',
     label: '企业名称',
     search: {
@@ -95,21 +87,11 @@ const schema = reactive<CrudSchema[]>([
     },
     table: {
       show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
     }
   }
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
-let tableObject = reactive({
-  tableList: []
-})
 
 const commonTableItemSchema = {
   search: {
@@ -139,7 +121,7 @@ const requestFruitWood = async () => {
     },
     {
       field: '1',
-      label: '名称',
+      label: '企业名称',
       ...commonTableItemSchema
     },
     {
@@ -149,8 +131,11 @@ const requestFruitWood = async () => {
     }
   ]
   tableLoading.value = true
+  const params = {
+    ...tableObject.params
+  }
   try {
-    const result: any = await getEnterpriseTree()
+    const result: any = await getEnterpriseTree(params)
     result.titles.forEach((item: any, index: any) => {
       if (result.usageTitles.includes(item)) {
         column[3].children.push({
@@ -184,10 +169,15 @@ const onSearch = (data) => {
     }
   }
 
+  tableObject.params = {
+    ...params
+  }
+
   requestFruitWood()
 }
 
 const onReset = () => {
+  tableObject.params = {}
   requestFruitWood()
 }
 
@@ -223,6 +213,11 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+.search-form-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
 .line {
   width: 100%;
   height: 10px;

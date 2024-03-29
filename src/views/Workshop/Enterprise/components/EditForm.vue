@@ -58,7 +58,7 @@
           v-model="form.phone"
         />
       </ElFormItem>
-      <ElFormItem label="" prop="householderName" align="center" header-align="center">
+      <ElFormItem label="关联居民户" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
           filterable
@@ -161,6 +161,8 @@ interface PropsType {
   show: any
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
+  name?: string
+  doorNo?: string
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
@@ -224,16 +226,8 @@ watch(
   () => props.show,
   (val) => {
     if (val) {
-      console.log('JJP', val)
-
-      // // 处理行政区划
-      // form.value = {
-      //   ...val,
-      //   parentCode: [val.areaCode, val.townCode, val.villageCode]
-      // }
-      // position.longitude = form.value.longitude
-      // position.latitude = form.value.latitude
-      // position.address = form.value.address
+      form.value.householderName = props.name
+      form.value.showHouseholderDoorNo = props.doorNo
     } else {
       form.value = defaultValue
     }

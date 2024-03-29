@@ -80,7 +80,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -286,22 +286,20 @@ const onSearch = (data) => {
       delete params[key]
     }
   }
-
   if (params.code) {
     // 拿到对应的参数key
     findRecursion(districtTree.value, params.code, (item) => {
-      console.log(item)
-
       if (item) {
-        let m = maps
         params[getParamsKey(item.districtType)] = params.code
-        delete m[item.districtType]
-        for (const key in m) {
-          params[m[key]] = ''
-        }
+      }
+      tableObject.params = {
+        ...params
       }
     })
-    tableObject.params = params
+  } else {
+    tableObject.params = {
+      ...params
+    }
   }
 
   setSearchParams({ ...params })

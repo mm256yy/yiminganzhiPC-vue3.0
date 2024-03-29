@@ -73,6 +73,7 @@
           placeholder="请输入联系方式"
           type="text"
           class="!w-350px"
+          maxLength="11"
           v-model="form.phone"
         />
       </ElFormItem>
@@ -314,7 +315,7 @@ const onSubmit = debounce((formEl) => {
       //   ElMessage.error('请选择位置')
       //   return
       // }
-      btnLoading.value = true
+
       const data: any = {
         ...form.value,
         ...position,
@@ -334,22 +335,34 @@ const onSubmit = debounce((formEl) => {
 }, 600)
 
 const submit = async (data: LandlordDtoType) => {
+  btnLoading.value = true
   if (props.actionType === 'add') {
-    await addLandlordApi({
-      ...data,
-      type: 'PeasantHousehold',
-      projectId
-    })
+    try {
+      await addLandlordApi({
+        ...data,
+        type: 'PeasantHousehold',
+        projectId
+      })
+      btnLoading.value = false
+      ElMessage.success('操作成功！')
+      onClose(true)
+    } catch (error) {
+      btnLoading.value = false
+    }
   } else {
-    await updateLandlordApi({
-      ...data,
-      type: 'PeasantHousehold',
-      projectId
-    })
+    try {
+      await updateLandlordApi({
+        ...data,
+        type: 'PeasantHousehold',
+        projectId
+      })
+      btnLoading.value = false
+      ElMessage.success('操作成功！')
+      onClose(true)
+    } catch (error) {
+      btnLoading.value = false
+    }
   }
-  btnLoading.value = false
-  ElMessage.success('操作成功！')
-  onClose(true)
 }
 
 const onVillageDialogOpen = () => {

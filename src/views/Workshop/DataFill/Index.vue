@@ -476,7 +476,9 @@ watch(
 // 新增企业
 const addEnterprise = () => {
   const query = {
-    type: 'enterpriseCheck'
+    type: 'enterpriseCheck',
+    name,
+    doorNo
   }
 
   sessionStorage.setItem('isDefaultOpen', '1')
@@ -490,7 +492,9 @@ const addEnterprise = () => {
 // 新增个体工商户
 const addIndividual = () => {
   const query = {
-    type: 'individualCheck'
+    type: 'individualCheck',
+    name,
+    doorNo
   }
   sessionStorage.setItem('isDefaultOpen', '1')
   const routeName = 'IndividualBCheck'
