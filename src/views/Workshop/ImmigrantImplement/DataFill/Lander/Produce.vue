@@ -3,7 +3,12 @@
     <div style="padding: 14px 16px">
       <div style="display: flex; justify-content: space-between">
         <div>生产安置信息</div>
-        <ElButton type="primary" @click="handleadd">增加</ElButton>
+        <div>
+          <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
+
+          <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
+          <ElButton type="primary" @click="handleadd">增加</ElButton>
+        </div>
       </div>
       <div>
         本户共计征收土地：{{ (headerData?.area / 666.66).toFixed(2) }}亩，参保系数为：{{
@@ -35,6 +40,8 @@
         </template>
       </Table>
     </div>
+    <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
+
     <Edit
       :show="dialogVisible"
       :row="rows"
@@ -47,11 +54,50 @@
       "
       @save="handleEdit"
     />
+    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+      <h1 style="font-size: 24px; font-weight: bold; text-align: center">生产安置</h1>
+      <div
+        style="
+          display: flex;
+          margin: 20px 0 20px 0;
+          font-size: 18px;
+          justify-content: space-between;
+        "
+      >
+        <div>
+          {{
+            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+          }}</div
+        >
+
+        <div>{{ data }}</div>
+      </div>
+      <el-table
+        :data="tableObject.tableList"
+        style="width: 100%"
+        border
+        header-cell-class-name="table-headers"
+        cell-class-name="table-cellss"
+      >
+        <el-table-column prop="name" label="姓名" align="center" />
+        <el-table-column prop="relationText" label="与户主关系" align="center" />
+        <el-table-column prop="card" label="身份证号" align="center" />
+        <el-table-column prop="phone" label="联系方式" align="center" />
+        <el-table-column prop="settingWayText" label="安置类型" align="center" />
+      </el-table>
+      <div style="display: flex; justify-content: space-between; height: 50px">
+        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
+          >户主代表或收委托人(签名)：</div
+        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+          联系移民干部(签名)：</div
+        >
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ElButton, ElDialog, ElMessage } from 'element-plus'
+import { ElButton, ElDialog, ElMessage, ElTable, ElTableColumn } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import {
@@ -66,6 +112,11 @@ import { reactive, ref, onMounted, computed } from 'vue'
 import Edit from './Edit.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useAppStore } from '@/store/modules/app'
+import OnDocumentation from '@/views/Workshop/ImmigrantImplement/DataFill/ResettleConfirm/Produce/OnDocumentation.vue' // 引入档案上传组件
+import { debounce } from '@/utils/index'
+import { htmlToPdf } from '@/utils/ptf'
+import dayjs from 'dayjs'
+
 const { register, tableObject, methods } = useTable({
   getListApi: getProduceListApi,
   delListApi: deleteProduceListApi
@@ -135,7 +186,7 @@ tableObject.params = {
   projectId: props.baseInfo.projectId,
   status: props.baseInfo.status
 }
-getList()
+
 let dialogVisible = ref(false)
 let rows = ref({})
 let title = ref('')
@@ -193,7 +244,47 @@ const onEditRow = (row) => {
   dialogVisible.value = true
 }
 let headerData = ref()
+let dialog = ref(false)
+let data = ref()
+const onDocumentation = () => {
+  dialog.value = true
+}
+const closeDocumentation = () => {
+  dialog.value = false
+}
+let comdbe = () => {
+  data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+  console.log(tableObject.tableList)
+
+  debounce(() => {
+    // ElMessage.error('待业主提供模板')
+    htmlToPdf('#anztable', '生产安置')
+  })
+}
 onMounted(async () => {
   headerData.value = await getLandAreaByDoorNoApi(props.doorNo)
+  getList()
+  console.log(tableObject.tableList, 'bbq')
 })
 </script>
+<style lang="less" scoped>
+#anztable {
+  :deep(.table-headers) {
+    font-size: 12px;
+    font-weight: bold;
+    background: none;
+  }
+
+  .el-table {
+    --el-table-border-color: black;
+    --el-table-border: 1px solid black;
+  }
+
+  :deep(.table-cellss) {
+    .cell {
+      font-size: 10px;
+      background: none;
+    }
+  }
+}
+</style>

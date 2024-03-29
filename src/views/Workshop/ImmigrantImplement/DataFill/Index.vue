@@ -763,7 +763,7 @@ const getStatus = (data: any) => {
     if (data.excessSoarStatus === '1') {
       tabsListCopy[1].active = true // 腾空
     }
-    if (data.excessSoarStatus === '1') {
+    if (data.agreementStatus === '1') {
       tabsListCopy[2].active = true // 协议签订
     }
     if (data.disposalMeasuresStatus === '1') {

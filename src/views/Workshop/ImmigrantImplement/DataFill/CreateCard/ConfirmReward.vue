@@ -125,10 +125,11 @@ const initData = () => {
           ? res.filter(
               (item: any) =>
                 item.isUpdate == '1' &&
-                (item.phType == 'Company' || item.phType == 'IndividualHousehold') &&
+                (item.phType.includes('Company') || item.phType == 'IndividualHousehold') &&
                 item.type == '3'
             )
           : []
+      console.log(tableData.value, 'bbq', res)
     }
   })
 }

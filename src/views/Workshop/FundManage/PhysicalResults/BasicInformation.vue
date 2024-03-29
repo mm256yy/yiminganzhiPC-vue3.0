@@ -22,7 +22,7 @@
         height="520"
       >
         <ElTableColumn type="index" width="80" label="序号" align="center" />
-        <ElTableColumn prop="townCodeText" label="行政村" show-overflow-tooltip />
+        <ElTableColumn prop="villageText" label="行政村" show-overflow-tooltip />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
         <ElTableColumn prop="landUseNature" label="用地性质" />
