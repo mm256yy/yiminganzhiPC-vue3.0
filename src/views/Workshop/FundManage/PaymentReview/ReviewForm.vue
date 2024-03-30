@@ -42,7 +42,7 @@
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">概算科目:</div>
-            <div class="content">{{ form.type == 1 ? '概算内' : '概算外' }}</div>
+            <div class="content">{{ form.type === '1' ? '概算内' : '概算外' }}</div>
           </div>
         </ElCol>
         <ElCol :span="12">
@@ -57,13 +57,13 @@
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">付款对象类型:</div>
-            <div class="content">{{ form.paymentType == 1 ? '专业项目' : '其他' }}</div>
+            <div class="content">{{ form.paymentType === '1' ? '专业项目' : '其他' }}</div>
           </div>
         </ElCol>
         <ElCol :span="12">
           <div class="col-wrap">
             <div class="label">付款类型:</div>
-            <div class="content">{{ form.payType == 1 ? '支付' : '预拔' }}</div>
+            <div class="content">{{ form.payType === '1' ? '支付' : '预拔' }}</div>
           </div>
         </ElCol>
       </ElRow>
@@ -401,6 +401,7 @@ const userInfo: any = computed(() => {
   }
   return ''
 })
+
 watch(
   () => props.row,
   (val) => {
@@ -414,6 +415,21 @@ watch(
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      relocateVerifyPic.value = props.parmasList.financeReceipt
+        ? JSON.parse(props.parmasList.financeReceipt)
+        : []
+      form.value = { ...(val as {}) }
     }
   },
   {
@@ -515,13 +531,16 @@ const onSubmit = async (status: string) => {
     receipt:
       relocateVerifyPic.value.length > 0 ? JSON.stringify(relocateVerifyPic.value || []) : null // 申请凭证
   }
-  getPaymentReviewListSSApi(params).then(() => {
+
+  try {
+    await getPaymentReviewListSSApi(params)
     ElMessage.success('操作成功！')
     onClose()
     btnLoading.value = false
-  })
-  // ElMessage.success('操作成功！')
-  onClose()
+  } catch (error) {
+    ElMessage.error('操作失败')
+    btnLoading.value = false
+  }
 }
 
 // 关闭弹窗

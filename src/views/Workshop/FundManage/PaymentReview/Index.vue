@@ -62,7 +62,6 @@
       </Table>
     </div>
 
-    <!-- <EditForm :show="dialog" @close="onEditFormClose" /> -->
     <ReviewForm
       :show="dialog"
       @close="onCloseReview"
@@ -221,7 +220,6 @@ const onReviewRow = async (row) => {
   actionType.value = 'edit'
   tableObject.currentRow = {
     ...row
-    // parmasList: parmasList.value
   }
   tableObject.currentRow = row
   dialog.value = true
@@ -234,7 +232,6 @@ const onViewRow = async (row: any) => {
   actionType.value = 'view'
   tableObject.currentRow = {
     ...row
-    // parmasList: parmasList.value
   }
 
   tableObject.currentRow = row

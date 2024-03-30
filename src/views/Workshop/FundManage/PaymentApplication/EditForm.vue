@@ -384,7 +384,6 @@ import { useValidator } from '@/hooks/web/useValidator'
 import GirdList from './Girdlist.vue'
 import dayjs from 'dayjs'
 import { formatDate, fmtDict } from '@/utils'
-// import { fmtDict } from '@/utils'
 
 interface PropsType {
   show: boolean
@@ -578,7 +577,6 @@ const submit = (data: any, status?: number) => {
 }
 // 提交表单
 const onSubmit = debounce((formEl, status?: number) => {
-  // console.log(parmasLists.value.professionalContractList, '提交测试')
   formEl?.validate((valid: any) => {
     if (valid) {
       if (!relocateVerifyPic.value.length) {
@@ -588,7 +586,8 @@ const onSubmit = debounce((formEl, status?: number) => {
         let params: any = {
           ...form.value,
           paymentObjectList: [{}],
-          receipt: JSON.stringify(relocateVerifyPic.value || []) // 申请凭证
+          receipt: JSON.stringify(relocateVerifyPic.value || []), // 申请凭证
+          payType: form.value.payType || '1' // 默认支付
         }
         console.log(tableData.value, '提交测试')
         if (form.value.paymentType == 1) {
@@ -704,8 +703,6 @@ const showImgPreview = (img: string) => {
 
 onMounted(() => {
   initData()
-  // getFundSubjectList()
-  // onViewRow()
 })
 </script>
 

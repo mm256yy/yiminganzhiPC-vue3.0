@@ -256,3 +256,12 @@ export const exportFundDetailLandNoMoveList = (params: any) => {
     responseType: 'blob'
   })
 }
+
+// 导出报表
+export const exportEnterpriseFruitWoodApi = (params: any) => {
+  return request.get({
+    url: `/resultForms/export/enterpriseTree`,
+    params,
+    responseType: 'blob'
+  })
+}
