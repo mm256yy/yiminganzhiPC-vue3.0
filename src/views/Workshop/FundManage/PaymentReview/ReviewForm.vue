@@ -407,11 +407,11 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
-      console.log(userInfo.value, 'bbq')
       relocateVerifyPic.value = props.parmasList.financeReceipt
         ? JSON.parse(props.parmasList.financeReceipt)
         : []
-      form.value = { ...(val as {}) }
+      form.value = { ...val }
+      formAudit.value = { ...val }
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address
@@ -517,7 +517,7 @@ const onSubmit = async (status: string) => {
     ElMessage.error('请选择付款时间')
     return
   }
-  if (userInfo.value == 'financevoucher' && !relocateVerifyPic.value) {
+  if (userInfo.value == 'financevoucher' && relocateVerifyPic.value?.length <= 0) {
     ElMessage.error('请选择财务凭证')
     return
   }

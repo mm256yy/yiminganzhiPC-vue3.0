@@ -22,7 +22,7 @@
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label-required"> 房屋评估报告： </div>
+              <div class="col-label-required"> 房屋评估报告123： </div>
               <div class="card-img-list">
                 <ElUpload
                   :list-type="'picture-card'"
@@ -224,7 +224,7 @@ import {
   ElMessage,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, nextTick, onMounted, computed } from 'vue'
+import { ref, reactive, nextTick, onMounted, computed, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -457,8 +457,22 @@ const onError = () => {
 onMounted(() => {
   role.value = getRole()
   console.log('role-T', role.value)
-  initData()
 })
+
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      initData()
+    } else {
+      houseEstimatePic.value = []
+      landEstimatePic.value = []
+      devicePic.value = []
+      specialPic.value = []
+      otherPic.value = []
+    }
+  }
+)
 </script>
 
 <style lang="less" scoped>
