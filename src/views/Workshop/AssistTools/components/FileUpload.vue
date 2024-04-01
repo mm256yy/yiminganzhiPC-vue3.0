@@ -105,7 +105,7 @@
                 {{
                   props.baseInfo?.houseAreaType === 'homestead'
                     ? '选房顺序号凭证：'
-                    : '择房顺序号凭证：'
+                    : '择址顺序号凭证：'
                 }}
               </div>
               <div class="card-img-list">
