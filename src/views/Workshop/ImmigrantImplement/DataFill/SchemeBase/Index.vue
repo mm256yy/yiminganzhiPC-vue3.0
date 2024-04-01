@@ -218,7 +218,7 @@ const getPeopleList = async () => {
     }
     tableData.value = res.content
   }
-  console.log(tableData.value)
+  console.log(tableData.value, 'bbbqq')
 }
 
 // 查询安置信息
@@ -367,6 +367,7 @@ const immigrantSettleSubmit = async (params: any) => {
   isProductionLand.value = datas.isProductionLand
   dataList.value = res
   console.log(datas.isProductionLand, 'bbq')
+  await getPeopleList()
 }
 const isShow = (row) => {
   return row.populationNatureText != '增计人口' && row.populationNatureText

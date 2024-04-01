@@ -200,6 +200,19 @@ ${baseInfo.showDoorNo} `
         <el-table-column label="备注" align="center">
           <template #default></template>
         </el-table-column>
+        <template #empty>
+          <div>{{
+            houseType === HouseType.homestead || houseType === HouseType.flat
+              ? '暂无数据1'
+              : houseType === HouseType.oneself
+              ? '该户选择自谋职业'
+              : `该户选择集中供养（选择养老院:${
+                  nursingHomeList[416].filter(
+                    (item) => item.value == mockImmigrantSettle.nursingHome
+                  )[0].label
+                }）`
+          }}</div>
+        </template>
       </el-table>
       <div style="display: flex; justify-content: space-between; height: 50px">
         <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
@@ -246,6 +259,7 @@ import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { htmlToPdf } from '@/utils/ptf'
 import { debounce } from '@/utils/index'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
@@ -255,7 +269,9 @@ interface PropsType {
   doorNo: string
   baseInfo: any
 }
+const dictStore = useDictStoreWithOut()
 
+const nursingHomeList = computed(() => dictStore.getDictObj)
 const props = defineProps<PropsType>()
 const actionType = ref<'add' | 'edit' | 'view'>('add') // 操作类型
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
@@ -506,8 +522,9 @@ const onEditSubmit = async (params: any) => {
   }
 }
 let data = ref()
-let comdbe = () => {
-  debounce(() => {
+let comdbe = async () => {
+  debounce(async () => {
+    await getMockData()
     data.value = dayjs(new Date()).format('YYYY年MM月DD日')
 
     htmlToPdf('#anztable', '搬迁安置确认单')
