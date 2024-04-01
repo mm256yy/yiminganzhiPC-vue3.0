@@ -43,7 +43,7 @@
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
-        :data="tableObject.tableList"
+        :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
@@ -220,12 +220,12 @@
             label-class-name="my-label"
             class-name="my-content"
           >
-            {{ tableObject.tableList.length }}
+            {{ tableObject.tableList.filter((item) => item.populationNature != '5').length }}
           </ElDescriptionsItem>
         </ElDescriptions>
         <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>
         <el-table
-          :data="tableObject.tableList"
+          :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
           style="width: 100%"
           header-cell-class-name="table-headers"
           cell-class-name="table-cellss"

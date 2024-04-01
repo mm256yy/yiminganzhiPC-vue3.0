@@ -191,8 +191,10 @@ const chooseType = (type: string) => {
   }
 
   if (isProfessional.value) {
-    if (tabCurrentId.value <= 2) {
+    if (tabCurrentId.value < 2) {
       requestFileMngList(requestType.value)
+    } else if (tabCurrentId.value == 2) {
+      fileList.value = []
     }
   } else {
     if (tabCurrentId.value === 3) {

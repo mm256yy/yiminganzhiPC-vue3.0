@@ -22,7 +22,7 @@
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label-required"> 房屋评估报告123： </div>
+              <div class="col-label-required"> 房屋评估报告： </div>
               <div class="card-img-list">
                 <ElUpload
                   :list-type="'picture-card'"

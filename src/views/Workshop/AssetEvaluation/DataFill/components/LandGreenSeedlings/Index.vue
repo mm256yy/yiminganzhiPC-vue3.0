@@ -36,7 +36,7 @@
               clearable
               placeholder="请选择"
               v-model="scope.row.landNumber"
-              @change="currStationChange"
+              @change="(e) => currStationChange(e, scope.row)"
             >
               <ElOption
                 v-for="item in landLists"
@@ -304,13 +304,11 @@ const getLandLists = () => {
     })
   })
 }
-const currStationChange = (val) => {
+const currStationChange = (val, row) => {
   landLists.value.forEach((item1) => {
-    tableData.value.forEach((item) => {
-      if (item.landNumber === val) {
-        item.landName = item1.landName
-      }
-    })
+    if (item1.landNumber === val) {
+      row.landName = item1.landName
+    }
   })
 }
 // 房屋主体评估合计

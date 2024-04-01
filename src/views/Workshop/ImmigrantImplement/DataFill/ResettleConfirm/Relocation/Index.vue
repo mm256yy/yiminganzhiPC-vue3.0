@@ -203,7 +203,7 @@ ${baseInfo.showDoorNo} `
         <template #empty>
           <div>{{
             houseType === HouseType.homestead || houseType === HouseType.flat
-              ? '暂无数据1'
+              ? '暂无数据'
               : houseType === HouseType.oneself
               ? '该户选择自谋职业'
               : `该户选择集中供养（选择养老院:${
