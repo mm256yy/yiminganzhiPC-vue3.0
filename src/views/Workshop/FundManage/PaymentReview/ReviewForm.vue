@@ -410,26 +410,13 @@ watch(
       relocateVerifyPic.value = props.parmasList.financeReceipt
         ? JSON.parse(props.parmasList.financeReceipt)
         : []
+      console.log(val, 'bbq')
+
       form.value = { ...val }
       formAudit.value = { ...val }
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
-watch(
-  () => props.show,
-  (val) => {
-    if (val) {
-      relocateVerifyPic.value = props.parmasList.financeReceipt
-        ? JSON.parse(props.parmasList.financeReceipt)
-        : []
-      form.value = { ...(val as {}) }
     }
   },
   {

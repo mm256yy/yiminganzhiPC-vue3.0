@@ -216,7 +216,7 @@ const onSearch = (data) => {
     ...params
   }
 
-  getEnterpriseAsync(tableObject.params)
+  getEnterpriseAsync()
 }
 
 const onReset = () => {
@@ -224,13 +224,13 @@ const onReset = () => {
     projectId,
     type: 'Company'
   }
-  getEnterpriseAsync(tableObject.params)
+  getEnterpriseAsync()
 }
 
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
-  getEnterpriseAsync(tableObject.params)
+  getEnterpriseAsync()
 })
 </script>
 
