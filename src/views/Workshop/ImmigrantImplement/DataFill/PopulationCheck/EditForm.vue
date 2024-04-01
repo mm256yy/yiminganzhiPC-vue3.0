@@ -478,6 +478,9 @@ const onSubmit = debounce((formEl) => {
           ElMessage.warning('请上传户口本照片')
           return
         }
+      } else {
+        form.value.populationNature = '5'
+        form.value.name = '增计人口'
       }
 
       // form.value.birthday = standardFormatDate(form.value.birthday)
