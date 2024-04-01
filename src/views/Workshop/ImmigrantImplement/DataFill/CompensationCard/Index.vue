@@ -671,7 +671,13 @@ onMounted(() => {
   font-weight: bold;
   color: #171718;
 }
-
+.printStyle {
+  position: fixed;
+  left: -1500px;
+  display: flex;
+  width: 340mm;
+  padding: 10px 10px 0px 10px;
+}
 .fylist {
   el-pagination {
     display: none !important;
