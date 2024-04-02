@@ -305,12 +305,12 @@
                   <div class="name">{{ item.name }}</div>
                 </div>
                 <!-- <div class="time" v-if="item.isAudit === '1' && item.type == '0'"> 待审核 </div> -->
-                <div class="time" v-if="item.status">
+                <div class="time" v-if="item.status != null">
                   {{ index == 0 ? '提交时间：' : '审核时间:'
                   }}{{ dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') }}
                 </div>
                 <!-- <div class="remark"> 审核意见: {{ item.status == 1 ? '通过' : '驳回' }} </div> -->
-                <div class="remark" v-if="item.status">
+                <div class="remark" v-if="item.status != null">
                   审核意见: {{ index == 0 ? '发起申请' : item.remark }}
                 </div>
                 <div

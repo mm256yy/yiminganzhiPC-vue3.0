@@ -11,7 +11,7 @@
         headerAlign="center"
         show-overflow-tooltip
         align="center"
-        style="max-height: 600px"
+        style="max-height: 1000px"
       >
         <template #collection="{ row }">
           <ElButton size="small" type="primary" text @click="handleCollection(row)"
