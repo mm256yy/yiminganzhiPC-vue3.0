@@ -113,7 +113,7 @@ const isProfessional = computed(() => {
 })
 
 const showEnclosure = computed(() => {
-  return type === '4' && tabCurrentId.value === 3
+  return (type === '4' || type === '3' || type === '2' || type === '1') && tabCurrentId.value === 3
 })
 
 // 显示上传模块

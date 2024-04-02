@@ -89,6 +89,12 @@
           </div>
           <div e-else></div>
         </template>
+        <template #proceduresStatus="{ row }">
+          <div v-if="row.proceduresStatus == '1'">
+            <Icon icon="ep:check" color="#000000" />
+          </div>
+          <div e-else></div>
+        </template>
       </Table>
     </div>
   </WorkContentWrap>
@@ -360,7 +366,8 @@ const getSummaries = (params: any) => {
       8: totalCountObj.value.productionArrangementStatusTotal,
       9: totalCountObj.value.relocateArrangementStatusTotal,
       10: totalCountObj.value.graveArrangementStatusTotal,
-      11: totalCountObj.value.landUseStatusTotal,
+      // 11: totalCountObj.value.landUseStatusTotal,
+      11: totalCountObj.value.proceduresStatusTotal,
       12: totalCountObj.value.chooseHouseStatusTotal,
       13: totalCountObj.value.chooseGraveStatusTotal,
       14: totalCountObj.value.cardStatusTotal,
