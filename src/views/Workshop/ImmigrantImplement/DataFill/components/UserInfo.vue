@@ -20,9 +20,16 @@
         v-if="props.type == 'PeasantHousehold'"
         @click="fillData('IndividualB', props.baseInfo.relateIndividualName)"
       >
-        关联个体户：<span class="pl-8px text-size-14px text-[#1C5DF1]">{{
-          props.baseInfo.relateIndividualName || ''
-        }}</span>
+        关联个体户：
+        <ElLink
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          v-for="(item, index) in props.baseInfo.relateIndividualName?.split(',')"
+          :key="item"
+          @click="fillData('Enterprise', props.baseInfo.relateIndividualName, index)"
+          style="color: #1c5df1"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
       </div>
       <div v-if="props.type == 'PeasantHousehold'">
         关联企业：<ElLink
@@ -30,6 +37,7 @@
           v-for="(item, index) in props.baseInfo.relateCompanyName?.split(',')"
           :key="item"
           @click="fillData('Enterprise', props.baseInfo.relateCompanyName, index)"
+          style="color: #1c5df1"
         >
           {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
         </ElLink>

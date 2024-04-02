@@ -9,17 +9,29 @@
         }}</span>
       </div>
       <div v-if="props.type == 'Landlord'"
-        >关联个体户：<span
+        >关联个体户：
+        <ElLink
           class="pl-8px text-size-14px text-[#1C5DF1]"
-          @click="handleHouseholdClick"
-          >{{ props.baseInfo.relateIndividualName || '' }}</span
-        ></div
-      >
+          v-for="(item, index) in props.baseInfo.relateIndividualName?.split(',')"
+          :key="item"
+          @click="handleHouseholdClick(index)"
+          style="color: #1c5df1"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
+      </div>
       <div v-if="props.type == 'Landlord'"
-        >关联企业：<span class="pl-8px text-size-14px text-[#1C5DF1]" @click="handleCompanyClick">{{
-          props.baseInfo.relateCompanyName || ''
-        }}</span></div
-      >
+        >关联企业：
+        <ElLink
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          v-for="(item, index) in props.baseInfo.relateCompanyName?.split(',')"
+          :key="item"
+          @click="handleCompanyClick(index)"
+          style="color: #1c5df1"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
+      </div>
       <div v-if="props.type == 'Enterprise' || props.type == 'IndividualB'">
         关联居民户：<span
           class="pl-8px text-size-14px text-[#1C5DF1]"
@@ -143,6 +155,8 @@ import { ReportStatus } from '../config'
 import { ref, onMounted } from 'vue'
 import { filterViewDoorNo } from '@/utils'
 import { useRouter } from 'vue-router'
+import { ElLink } from 'element-plus'
+
 const { push } = useRouter()
 
 interface PropsType {
@@ -164,7 +178,7 @@ onMounted(() => {
   }
   console.log(props.baseInfo, 'baseInfo')
 })
-const handleHouseholdClick = () => {
+const handleHouseholdClick = (index) => {
   console.log('跳转居民户')
   if (!props.baseInfo.relateIndividualName) return false
   let routerName = 'DataFill'
@@ -174,13 +188,13 @@ const handleHouseholdClick = () => {
   push({
     name: routerName,
     query: {
-      householdId: props.baseInfo.relateIndividualId,
-      doorNo: props.baseInfo.relateIndividualDoorNo,
+      householdId: props.baseInfo.relateIndividualId.split(',')[index],
+      doorNo: props.baseInfo.relateIndividualDoorNo.split(',')[index],
       type: 'IndividualB'
     }
   })
 }
-const handleCompanyClick = () => {
+const handleCompanyClick = (index) => {
   console.log('跳转企业')
   if (!props.baseInfo.relateCompanyName) return false
   let routerName = 'DataFill'
@@ -190,8 +204,8 @@ const handleCompanyClick = () => {
   push({
     name: routerName,
     query: {
-      householdId: props.baseInfo.relateCompanyId,
-      doorNo: props.baseInfo.relateCompanyDoorNo,
+      householdId: props.baseInfo.relateCompanyId.split(',')[index],
+      doorNo: props.baseInfo.relateCompanyDoorNo.split(',')[index],
       type: 'Enterprise'
     }
   })
