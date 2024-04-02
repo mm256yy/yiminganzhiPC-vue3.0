@@ -26,7 +26,11 @@
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
         <ElTableColumn prop="landUseNature" label="用地性质" />
-        <ElTableColumn prop="industryType" label="所属行业" />
+        <ElTableColumn prop="industryType" label="所属行业">
+          <template #default="{ row }">
+            {{ dictObj[215].filter((item) => item.value == row.industryType)[0]?.label }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn prop="licenceNo" label="工商证" />
         <ElTableColumn prop="productCategory" label="主要产品" />
         <ElTableColumn prop="averageAnnualOutputValue" label="年产值（万元）" />
@@ -48,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useTable } from '@/hooks/web/useTable'
@@ -58,6 +62,7 @@ import { ElTable, ElTableColumn, ElPagination, ElButton } from 'element-plus'
 import { getEnterprise, getFunPaySumAmountApi } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { exportReportApi } from '@/api/fundManage/fundPayment-service'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -72,7 +77,8 @@ let tableData1 = reactive<any>({
   total: 0
 })
 const { tableObject } = useTable()
-
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 tableObject.params = {
   projectId,
   type: 'Company'

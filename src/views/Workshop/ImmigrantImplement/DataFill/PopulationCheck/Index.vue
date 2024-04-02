@@ -203,7 +203,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'deleteReason',
+    field: 'deleteReasonText',
     label: '删除原因',
     search: {
       show: false
