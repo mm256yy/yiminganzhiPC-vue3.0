@@ -123,10 +123,17 @@
         width: 340mm;
         padding: 10px 10px 0px 10px;
       " -->
+    <!-- class="printStyle" -->
+    <!-- :style="{ display: feeTableData.length > 0 ? 'block' : 'none' }" -->
     <div
       id="print"
-      class="printStyle"
-      :style="{ display: feeTableData.length > 0 ? 'block' : 'none' }"
+      style="
+        position: fixed;
+        left: -1500px;
+        display: flex;
+        width: 340mm;
+        padding: 10px 10px 0px 10px;
+      "
     >
       <div style="width: 50%; padding-right: 10px">
         <h1 style="font-size: 24px; text-align: center">只征地不搬迁补偿登记卡</h1>
@@ -148,7 +155,17 @@
           </div>
           <div style="width: 33%">
             <span style="font-weight: bold">权属单位:</span>
-            <span style="margin-left: 5px">{{ baseInfo.underlyingCompany }}</span>
+            <span style="margin-left: 5px">
+              {{
+                `
+              ${baseInfo.cityCodeText ? baseInfo.cityCodeText + '/' : ''}
+              ${baseInfo.areaCodeText ? baseInfo.areaCodeText : ''}
+              ${baseInfo.townCodeText ? '/' + baseInfo.townCodeText : ''}
+              ${baseInfo.villageText ? '/' + baseInfo.villageText : ''}
+              ${baseInfo.virutalVillageText ? '/' + baseInfo.virutalVillageText : ''}
+              `
+              }}</span
+            >
           </div>
         </div>
         <ElDescriptions class="margin-top" :column="2" border>
@@ -395,12 +412,6 @@ getList()
 
 const schema = reactive<CrudSchema[]>([
   {
-    width: 80,
-    type: 'index',
-    field: 'index',
-    label: '序号'
-  },
-  {
     field: 'name',
     label: '姓名',
     search: {
@@ -415,21 +426,6 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'sexText',
-    label: '性别',
-    search: {
-      show: false
-    }
-  },
-
-  {
-    field: 'censusTypeText',
-    label: '户籍册类别',
-    search: {
-      show: false
-    }
-  },
-  {
     width: 180,
     field: 'card',
     label: '身份证号',
@@ -438,29 +434,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'maritalText',
-    label: '婚姻状况',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'populationNatureText',
-    label: '人口性质',
-    search: {
-      show: false
-    }
-  },
-  {
     field: 'remark',
     label: '备注',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'addReasonText',
-    label: '新增原因',
     search: {
       show: false
     }

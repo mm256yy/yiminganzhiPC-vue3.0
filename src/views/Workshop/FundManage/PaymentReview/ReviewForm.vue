@@ -410,6 +410,7 @@ watch(
 
       form.value = { ...val }
       formAudit.value = { ...val }
+      formAudit.value.remark = ''
       // position.longitude = form.value.longitude
       // position.latitude = form.value.latitude
       // position.address = form.value.address
