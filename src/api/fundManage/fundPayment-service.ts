@@ -265,3 +265,10 @@ export const exportEnterpriseFruitWoodApi = (params: any) => {
     responseType: 'blob'
   })
 }
+
+// 资金报表
+export const getScreenFunAmountDetail = () => {
+  return request.get({
+    url: `/leadershipScreen/getScreenFunAmountDetail`
+  })
+}

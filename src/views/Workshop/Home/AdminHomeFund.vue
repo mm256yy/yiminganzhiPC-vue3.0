@@ -82,10 +82,11 @@
 import Echart from '@/components/Echart/src/Echart.vue'
 import { ElButton } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import tabButton from '../Home/components/tabButton.vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
 import { useIcon } from '@/hooks/web/useIcon'
+import { getScreenFunAmountDetail } from '@/api/fundManage/fundPayment-service'
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tabList = [
   {
@@ -356,7 +357,12 @@ const enterpriseOption = ref({
       '新昌县镜屏欣欣纺织器材厂',
       '新昌县新亚建筑工程有限公司',
       '新昌县明盛纺织有限公司'
-    ]
+    ],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     name: '单位(元)',
@@ -368,7 +374,7 @@ const enterpriseOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000],
       type: 'bar',
-      barWidth: 62,
+      barWidth: 18,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -392,7 +398,7 @@ const enterpriseOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100],
       type: 'bar',
-      barWidth: 62,
+      barWidth: 18,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -724,6 +730,58 @@ const taxationOption = ref({
 const { back } = useRouter()
 const onBack = () => {
   back()
+}
+onMounted(() => {
+  getScreenFunAmountDetail().then((res) => {
+    console.log(res)
+    for (let i in res) {
+      console.log(i)
+      switch (i) {
+        case 'peasantHouseMap':
+          setValue(res[i], householdOption)
+          break
+        case 'villageMap':
+          setValue(res[i], villageOption)
+          break
+        case 'companyMap':
+          setValue(res[i], enterpriseOption)
+          break
+        case 'professionalProjectMap':
+          setValue(res[i], specialityOption)
+          break
+        case 'otherMap':
+          setValue(res[i], otherOption)
+          break
+        case 'taxMap':
+          setValue(res[i], taxationOption)
+          break
+        default:
+          break
+      }
+    }
+  })
+})
+let setValue = (value, arr) => {
+  arr.value.xAxis.data = []
+  arr.value.series[0].data = []
+  arr.value.series[1].data = []
+  value.forEach((item) => {
+    arr.value.xAxis.data.push(item.name)
+    arr.value.series[0].data.push(item.pendingAmount)
+    arr.value.series[1].data.push(item.issuedAmount)
+  })
+  if (arr.value.xAxis.data.length == 0) {
+    arr.value.title = {
+      show: true, // 没数据才显示
+      extStyle: {
+        color: 'grey',
+        fontSize: 20
+      },
+      text: '暂无数据',
+      left: 'center',
+      top: 'center'
+    }
+  }
 }
 </script>
 
