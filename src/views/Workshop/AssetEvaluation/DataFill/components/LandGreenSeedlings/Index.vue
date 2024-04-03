@@ -382,11 +382,12 @@ const onSave = () => {
 // 自动计算评估金额
 const getModelValue = (row: any) => {
   console.log(row.area, row.price, '评估金额')
-  if (row.numPrice == undefined || row.area == undefined) {
-    row.numPrice = 0
-    row.area = 0
-    const totalPrice =
-      Number(row.number) * Number(row.numPrice) + Number(row.area) * Number(row.price)
+  if (row.numPrice == undefined) {
+    const totalPrice = Number(row.area) * Number(row.price)
+    row.valuationAmount = totalPrice
+    row.compensationAmount = totalPrice
+  } else if (row.area == undefined) {
+    const totalPrice = Number(row.number) * Number(row.numPrice)
     row.valuationAmount = totalPrice
     row.compensationAmount = totalPrice
   } else {
