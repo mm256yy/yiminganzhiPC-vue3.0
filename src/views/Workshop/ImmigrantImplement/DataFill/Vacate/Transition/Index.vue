@@ -97,7 +97,7 @@
           {{ baseInfo.phone }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
-          {{ baseInfo.locationTypeText }}
+          {{ baseInfo.address }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
           过渡去向情况

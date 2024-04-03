@@ -149,7 +149,12 @@ const householdOption = ref({
       '里镜屏村',
       '溪西村',
       '安山村'
-    ]
+    ],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     type: 'value',
@@ -256,7 +261,12 @@ const villageOption = ref({
       '里镜屏村',
       '溪西村',
       '安山村'
-    ]
+    ],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     name: '单位(元)',
@@ -469,7 +479,12 @@ const specialityOption = ref({
       '溪西水文站',
       '县级文保站',
       '宗教设施'
-    ]
+    ],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     name: '单位(元)',
@@ -573,7 +588,12 @@ const otherOption = ref({
       '技术培训费',
       '监督评估费',
       ''
-    ]
+    ],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     name: '单位(元)',
@@ -669,7 +689,12 @@ const taxationOption = ref({
   },
   xAxis: {
     type: 'category',
-    data: ['耕地占用费', '耕地开垦费', '森林植被恢复费', '养老保险缴费补贴']
+    data: ['耕地占用费', '耕地开垦费', '森林植被恢复费', '养老保险缴费补贴'],
+    axisLabel: {
+      color: '#6c706f',
+      interval: 0,
+      rotate: 45
+    }
   },
   yAxis: {
     name: '单位(元)',
@@ -767,8 +792,8 @@ let setValue = (value, arr) => {
   arr.value.series[1].data = []
   value.forEach((item) => {
     arr.value.xAxis.data.push(item.name)
-    arr.value.series[0].data.push(item.pendingAmount)
-    arr.value.series[1].data.push(item.issuedAmount)
+    arr.value.series[0].data.push(item.pendingAmount || 0)
+    arr.value.series[1].data.push(item.issuedAmount || 0)
   })
   if (arr.value.xAxis.data.length == 0) {
     arr.value.title = {
@@ -782,6 +807,7 @@ let setValue = (value, arr) => {
       top: 'center'
     }
   }
+  console.log(arr.value.series[0].data, arr.value.series[1].data)
 }
 </script>
 
