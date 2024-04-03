@@ -73,7 +73,7 @@ const tableLoading = ref<boolean>(false)
 let tableData1 = reactive<any>({
   tableList: [],
   pageSizeRef: 10,
-  currentPageRef: 1,
+  currentPageRef: 0,
   total: 0
 })
 const { tableObject } = useTable()

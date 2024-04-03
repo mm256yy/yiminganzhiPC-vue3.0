@@ -101,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -116,7 +116,9 @@ import { locationTypes } from '../DataFill/config'
 import { useRouter } from 'vue-router'
 import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { filterViewDoorNo } from '@/utils/index'
-
+import { useDictStoreWithOut } from '@/store/modules/dict'
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const appStore = useAppStore()
 const { push } = useRouter()
 const projectId = appStore.currentProjectId
@@ -260,14 +262,28 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
+  // {
+  //   field: 'card',
+  //   label: '所在位置',
+  //   search: {
+  //     show: true,
+  //     component: 'Input',
+  //     componentProps: {
+  //       placeholder: '请输入所在位置'
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   }
+  // },
   {
-    field: 'card',
+    field: 'locationType',
     label: '所在位置',
     search: {
       show: true,
-      component: 'Input',
+      component: 'Select',
       componentProps: {
-        placeholder: '请输入所在位置'
+        options: dictObj.value[326]
       }
     },
     table: {

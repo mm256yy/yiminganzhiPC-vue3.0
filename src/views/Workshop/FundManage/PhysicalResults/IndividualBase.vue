@@ -11,6 +11,15 @@
         <ElBreadcrumbItem class="text-size-12px">基本情况</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
+    <div class="search-wrap">
+      <Search
+        :schema="allSchemas.searchSchema"
+        :defaultExpand="false"
+        :expand-field="'card'"
+        @search="onSearch"
+        @reset="onReset"
+      />
+    </div>
     <div class="table-wrap" v-loading="tableLoading">
       <div class="flex items-center justify-between pb-12px">
         <div class="table-left-title">个体户基本情况表 </div>
@@ -21,17 +30,18 @@
         <ElTableColumn prop="townCodeText" label="行政村" />
         <ElTableColumn prop="name" label="名称" show-overflow-tooltip />
         <ElTableColumn prop="legalPersonName" label="法人代表" />
-        <ElTableColumn prop="landUseNature" label="用地性质" />
+        <!-- <ElTableColumn prop="landUseNature" label="用地性质" /> -->
+        <ElTableColumn prop="licenceNo" label="工商证" />
         <ElTableColumn prop="industryType" label="所属行业">
           <template #default="{ row }">
             {{ dictObj[215].filter((item) => item.value == row.industryType)[0]?.label }}
           </template>
         </ElTableColumn>
-        <ElTableColumn prop="licenceNo" label="工商证" />
-        <ElTableColumn prop="productCategory" label="主要产品" />
+        <!-- <ElTableColumn prop="productCategory" label="主要产品" />
         <ElTableColumn prop="averageAnnualOutputValue" label="年产值（万元）" />
         <ElTableColumn prop="averageAnnualProfit" label="年利润（万元）" />
-        <ElTableColumn prop="workNum" label="从业人员（人）" />
+        <ElTableColumn prop="workNum" label="从业人员（人）" /> -->
+        <ElTableColumn prop="locationTypeText" label="所在位置" />
       </ElTable>
       <ElPagination
         v-model:pageSize="tableData1.pageSizeRef"
@@ -64,6 +74,8 @@ import { getVillageTreeApi } from '@/api/workshop/village/service'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
+import { Search } from '@/components/Search'
 
 const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
@@ -78,7 +90,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 let tableData1 = reactive<any>({
   tableList: [],
   pageSizeRef: 10,
-  currentPageRef: 1,
+  currentPageRef: 0,
   total: 0
 })
 const { tableObject, methods } = useTable({
@@ -103,10 +115,15 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
-const getEnterpriseAsync = async (e: any) => {
+const getEnterpriseAsync = async () => {
+  const params = {
+    ...tableObject.params,
+    page: tableData1.currentPageRef,
+    size: tableData1.pageSizeRef
+  }
   tableLoading.value = true
   try {
-    let list = await getEnterprise(e)
+    let list = await getEnterprise(params)
     tableData1.tableList = list.content
     tableData1.total = list.total
     tableLoading.value = false
@@ -134,11 +151,11 @@ const objectSpanMethod1 = ({ rowIndex, columnIndex }) => {
 }
 const handleSizeChange = (val: number) => {
   tableData1.pageSizeRef = val
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
+  getEnterpriseAsync()
 }
 const handleCurrentChange = (val: number) => {
   tableData1.currentPageRef = val - 1
-  getEnterpriseAsync({ projectId, size: tableData1.pageSizeRef, page: tableData1.currentPageRef })
+  getEnterpriseAsync()
 }
 
 const onBack = () => {
@@ -162,11 +179,98 @@ const onExport = async () => {
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
 }
+const schema = reactive<CrudSchema[]>([
+  // 搜索字段定义
+  {
+    field: 'villageCode',
+    label: '所属区域',
+    search: {
+      show: true,
+      component: 'TreeSelect',
+      componentProps: {
+        data: districtTree,
+        nodeKey: 'code',
+        props: {
+          value: 'code',
+          label: 'name'
+        },
+        showCheckbox: true,
+        checkStrictly: true,
+        checkOnClickNode: true
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'doorNo',
+    label: '个体工商户编号',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'name',
+    label: '个体工商户名称',
+    search: {
+      show: true,
+      component: 'Input'
+    },
+    table: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  }
+])
+const { allSchemas } = useCrudSchemas(schema)
 
+const onSearch = (data) => {
+  // 处理参数
+  let params = {
+    ...data
+  }
+
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+
+  tableObject.params = {
+    ...tableObject.params,
+    ...params
+  }
+
+  getEnterpriseAsync()
+}
+
+const onReset = () => {
+  tableObject.params = {
+    projectId
+    // type: 'Company'
+  }
+  getEnterpriseAsync()
+}
 onMounted(() => {
   getHeadInfo()
   getdistrictTree()
-  getEnterpriseAsync({ projectId, size: 10, page: 0 })
+  getEnterpriseAsync()
 })
 </script>
 
