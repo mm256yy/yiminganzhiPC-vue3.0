@@ -167,7 +167,7 @@
     <!-- 档案上传 -->
     <OnDocumentation :show="dialog" :door-no="props.doorNo" @close="closeDocumentation" />
     <!-- 打印模板 -->
-    <div style="position: fixed; left: -1000px; width: 210mm; padding: 0 40px 0 40px" id="anztable">
+    <div style="width: 210mm; padding: 0 40px 0 40px" id="anztable">
       <h1 style="font-size: 24px; font-weight: bold; text-align: center">搬迁安置确认单</h1>
       <div
         style="
@@ -208,8 +208,8 @@ ${baseInfo.showDoorNo} `
               ? '该户选择自谋职业'
               : `该户选择集中供养（选择养老院:${
                   nursingHomeList[416].filter(
-                    (item) => item.value == mockImmigrantSettle.nursingHome
-                  )[0].label
+                    (item) => item.value == mockImmigrantSettle?.nursingHome
+                  )[0]?.label || '-'
                 }）`
           }}</div>
         </template>
