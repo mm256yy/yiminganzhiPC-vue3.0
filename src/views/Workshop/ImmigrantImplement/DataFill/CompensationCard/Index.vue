@@ -161,7 +161,7 @@
               ${baseInfo.cityCodeText ? baseInfo.cityCodeText + '/' : ''}
               ${baseInfo.areaCodeText ? baseInfo.areaCodeText : ''}
               ${baseInfo.townCodeText ? '/' + baseInfo.townCodeText : ''}
-              ${baseInfo.villageText ? '/' + baseInfo.villageText : ''}
+              ${baseInfo.villageCodeText ? '/' + baseInfo.villageCodeText : ''}
               ${baseInfo.virutalVillageText ? '/' + baseInfo.virutalVillageText : ''}
               `
               }}</span

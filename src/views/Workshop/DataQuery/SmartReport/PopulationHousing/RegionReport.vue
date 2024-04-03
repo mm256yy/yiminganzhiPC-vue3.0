@@ -83,11 +83,11 @@ const schema = reactive<CrudSchema[]>([
 
 const { allSchemas } = useCrudSchemas(schema)
 
-const requestListApi = async () => {
-  const params = {
-    projectId,
-    villageCode: code.value
-  }
+const requestListApi = async (params) => {
+  // const params = {
+  //   projectId,
+  //   villageCode: code.value
+  // }
   tableLoading.value = true
   try {
     let result: any = await getAreaHouseReportApi(params)
@@ -101,7 +101,7 @@ const requestListApi = async () => {
 let tableObject = reactive({
   tableList: []
 })
-
+let tableObjects = reactive({ params: {} })
 const commonTableItemSchema = {
   search: {
     show: false
@@ -112,6 +112,17 @@ const commonTableItemSchema = {
   detail: {
     show: false
   }
+}
+
+const maps = {
+  Country: 'areaCode',
+  Township: 'townCode',
+  Village: 'villageCode', // 行政村 code
+  NaturalVillage: 'virutalVillageCode' // 自然村 code
+}
+
+const getParamsKey = (key: string) => {
+  return maps[key]
 }
 
 const getTableDepends = (titles: any[], list: any[]) => {
@@ -165,19 +176,55 @@ const getTableDepends = (titles: any[], list: any[]) => {
   }, [])
 }
 
+// const onSearch = (data) => {
+//   // 处理参数
+//   let params = {
+//     ...data
+//   }
+
+//   code.value = params.villageCode
+//   requestListApi()
+// }
+
+// const onReset = () => {
+//   code.value = null
+//   requestListApi()
+// }
+
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
 
-  code.value = params.villageCode
-  requestListApi()
+  for (let key in params) {
+    if (!params[key]) {
+      delete params[key]
+    }
+  }
+  if (params.code) {
+    // 拿到对应的参数key
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+      tableObjects.params = {
+        ...params
+      }
+    })
+  } else {
+    tableObjects.params = {
+      ...params
+    }
+  }
+  requestListApi({ ...params })
 }
 
 const onReset = () => {
-  code.value = null
-  requestListApi()
+  tableObjects.params = {
+    projectId
+  }
+  requestListApi(tableObjects.params)
 }
 
 // 数据导出
@@ -217,10 +264,23 @@ const getdistrictTree = async () => {
   return list || []
 }
 
+// 递归查找
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
+
 onMounted(() => {
   getVillageTree()
   getdistrictTree()
-  requestListApi()
+  requestListApi({ projectId })
 })
 </script>
 <style lang="less" scoped>
