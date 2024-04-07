@@ -21,7 +21,7 @@
       </div>
       <div>
         <ElTable v-loading="tableLoading" :data="tableData" style="width: 100%" height="600">
-          <ElTableColumn type="index" width="100" label="序号" align="center" />
+          <ElTableColumn prop="seq" width="100" label="序号" align="center" />
           <ElTableColumn prop="project" label="项目名称" show-overflow-tooltip align="center" />
           <ElTableColumn prop="unit" label="单位" show-overflow-tooltip align="center" />
           <ElTableColumn prop="quantity" label="数量" show-overflow-tooltip align="center" />

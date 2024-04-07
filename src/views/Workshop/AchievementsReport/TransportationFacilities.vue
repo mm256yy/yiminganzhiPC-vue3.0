@@ -19,7 +19,7 @@
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <ElTable :data="tableData" v-loading="tableLoading" height="620">
-        <ElTableColumn type="index" label="序号" width="100" align="center" />
+        <ElTableColumn prop="seq" label="序号" width="100" align="center" />
         <ElTableColumn prop="projectName" label="项目名称" show-overflow-tooltip align="center" />
         <ElTableColumn prop="unit" label="单位" show-overflow-tooltip align="center" />
         <ElTableColumn prop="remark" label="规格" show-overflow-tooltip align="center" />

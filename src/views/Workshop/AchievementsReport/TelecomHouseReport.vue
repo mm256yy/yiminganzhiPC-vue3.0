@@ -14,7 +14,7 @@
         style="width: 100%; max-height: 600px"
         height="600"
       >
-        <ElTableColumn type="index" label="序号" width="100" align="center" />
+        <ElTableColumn prop="seq" label="序号" width="100" align="center" />
         <ElTableColumn prop="projectName" label="项目名称" show-overflow-tooltip align="center" />
         <ElTableColumn prop="unit" label="单位" show-overflow-tooltip align="center" />
         <ElTableColumn prop="quantity" label="数量" show-overflow-tooltip align="center" />
