@@ -61,7 +61,7 @@
             <ElFormItem label="幢号-室号：">
               {{
                 item.roomNo
-                  ? baseInfo.roomNoOptions.filter((ket) => ket.value === item.roomNo)[0].label
+                  ? baseInfo.roomNoOptions.filter((ket) => ket.value === item.roomNo)[0]?.label
                   : ''
               }}
             </ElFormItem>
