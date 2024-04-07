@@ -3,7 +3,7 @@
   <WorkContentWrap>
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
-        <div class="title"> 只征地不搬迁类账户信息111 </div>
+        <div class="title"> 只征地不搬迁类账户信息 </div>
       </div>
       <ElForm
         class="form"
