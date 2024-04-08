@@ -206,7 +206,7 @@ interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   row?: LandlordDtoType | null | undefined
   name?: string
-  doorNo?: string
+  doorNo?: any
 }
 const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()
@@ -346,7 +346,7 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请选择位置')
         return
       }
-      form.value.showHouseholderDoorNo = 'jl' + form.value.showHouseholderDoorNo
+      // form.value.householderDoorNo = form.value.showHouseholderDoorNo
 
       btnLoading.value = true
       const data: any = {
@@ -361,6 +361,8 @@ const onSubmit = debounce((formEl) => {
         longitude: position.longitude
       }
       delete data.parentCode
+      console.log(data)
+
       submit(data)
     } else {
       return false
@@ -401,7 +403,8 @@ watch(
   (val) => {
     if (val) {
       form.value.householderName = props.name
-      form.value.showHouseholderDoorNo = props.doorNo
+      form.value.showHouseholderDoorNo = props.doorNo.slice(2)
+      form.value.householderDoorNo = props.doorNo
     } else {
       form.value = defaultValue
     }
