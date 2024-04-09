@@ -110,7 +110,7 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="折率"
           :width="180"
           prop="discountRate"
@@ -125,7 +125,7 @@
               :precision="2"
             />
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn
           label="评估金额(元)"
           :width="180"
@@ -245,7 +245,7 @@ const defaultRow = {
   unit: '',
   number: 0,
   price: 0,
-  discountRate: 0,
+  // discountRate: 0,
   valuationAmount: 0,
   compensationAmount: 0,
   addReason: '',
@@ -349,7 +349,7 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
+  const totalPrice = Number(row.number) * Number(row.price)
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }

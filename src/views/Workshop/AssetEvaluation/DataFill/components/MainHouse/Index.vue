@@ -7,6 +7,9 @@
           房屋主体评估合计：
           <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
         </div>
+        <div class="flex items-center" style="color: red">
+          *若需修改房屋基础信息，请联系指挥部工作人员
+        </div>
         <ElSpace>
           <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
             评估完成
@@ -90,7 +93,12 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.constructionType">
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="row.constructionType"
+              :disabled="true"
+            >
               <ElOption
                 v-for="item in dictObj[252]"
                 :key="item.value"
@@ -108,7 +116,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInputNumber :min="0" v-model="scope.row.storeyNumber" />
+            <ElInputNumber :min="0" v-model="scope.row.storeyNumber" :disabled="true" />
           </template>
         </ElTableColumn>
         <ElTableColumn

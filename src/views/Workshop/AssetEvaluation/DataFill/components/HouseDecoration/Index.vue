@@ -32,8 +32,20 @@
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+          <template #default="{ row }">
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="row.houseNo"
+              @change="getModelValue(row)"
+            >
+              <ElOption
+                v-for="item in houseList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -44,7 +56,12 @@
           header-align="center"
         >
           <template #default="{ row }">
-            <ElSelect clearable placeholder="请选择" v-model="row.isBuyItNow">
+            <ElSelect
+              clearable
+              placeholder="请选择"
+              v-model="row.isBuyItNow"
+              @change="getModelValue(row)"
+            >
               <ElOption
                 v-for="item in fixedPriceOptions"
                 :key="item.value"
@@ -100,7 +117,8 @@
               clearable
               placeholder="请选择"
               v-model="row.unit"
-              v-if="row.isBuyItNow == '0'"
+              :disabled="row.isBuyItNow == '1' ? true : false"
+              @change="getModelValue(row)"
             >
               <ElOption
                 v-for="item in dictObj[268]"
@@ -109,7 +127,6 @@
                 :value="item.value"
               />
             </ElSelect>
-            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="数量" :width="180" prop="number" align="center" header-align="center">
@@ -119,9 +136,8 @@
               @change="getModelValue(scope.row)"
               v-model="scope.row.number"
               :precision="2"
-              v-if="scope.row.isBuyItNow == '0'"
+              :disabled="scope.row.isBuyItNow == '1' ? true : false"
             />
-            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn label="单价" :width="180" prop="price" align="center" header-align="center">
@@ -131,9 +147,7 @@
               @change="getModelValue(scope.row)"
               v-model="scope.row.price"
               :precision="2"
-              v-if="scope.row.isBuyItNow == '0'"
             />
-            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -166,10 +180,8 @@
               :min="0"
               v-model="scope.row.valuationAmount"
               :precision="2"
-              disabled
-              v-if="scope.row.isBuyItNow == '0'"
+              :disabled="scope.row.isBuyItNow == '0' ? true : false"
             />
-            <div v-else></div>
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -183,7 +195,7 @@
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="新增原因"
           :width="180"
           prop="addReason"
@@ -193,7 +205,7 @@
           <template #default="{ row }">
             <ElInput placeholder="请输入" v-model="row.addReason" />
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />
@@ -207,9 +219,9 @@
       </ElTable>
       <ElDialog title="提示" :width="500" v-model="dialogVisible">
         <div class="title-hint"> 是否删除该条记录 </div>
-        <ElFormItem label="删除原因" prop="reason">
+        <!-- <ElFormItem label="删除原因" prop="reason">
           <ElInput v-model="deleteReason" placeholder="请输入删除原因" />
-        </ElFormItem>
+        </ElFormItem> -->
         <template #footer>
           <ElButton @click="handleClose">取消</ElButton>
           <ElButton type="primary" :loading="btnLoading" @click="onDeleteSubmit">确认</ElButton>
@@ -241,6 +253,7 @@ import {
   saveHouseDecorationApi,
   deleteHouseDecorationApi
 } from '@/api/AssetEvaluation/houseDecoration-service'
+import { getMainHouseListApi } from '@/api/AssetEvaluation/mainHouse-service'
 import { saveImmigrantFillingApi } from '@/api/AssetEvaluation/service'
 
 interface PropsType {
@@ -264,8 +277,10 @@ const reportResult = ref<string[]>([])
 const emit = defineEmits(['updateData'])
 const dialogVisible = ref<boolean>(false)
 const btnLoading = ref<boolean>(false)
-const deleteReason = ref('') // 删除原因
+// const deleteReason = ref('') // 删除原因
 let rowItem = reactive({ id: '' }) // 行信息
+const houseList = ref<any[]>([])
+const tableDataF = ref<any[]>([])
 const fixedPriceOptions = [
   {
     label: '是',
@@ -292,7 +307,7 @@ const defaultRow = {
   discountRate: 0,
   valuationAmount: 0,
   compensationAmount: 0,
-  addReason: '',
+  // addReason: '',
   remark: ''
 }
 
@@ -328,17 +343,26 @@ const getList = () => {
   getHouseDecorationListApi(params).then((res) => {
     tableData.value = res.content
   })
+  getMainHouseListApi(params).then((res) => {
+    tableDataF.value = res.content
+    houseList.value = res.content.map((item: any) => {
+      return {
+        label: item.houseNo,
+        value: item.houseNo
+      }
+    })
+  })
 }
 
 const onDeleteSubmit = async () => {
-  if (!deleteReason.value) {
-    ElMessage.error('删除原因不能为空')
-    return
-  }
+  // if (!deleteReason.value) {
+  //   ElMessage.error('删除原因不能为空')
+  //   return
+  // }
 
   const params = {
-    ...rowItem,
-    deleteReason: deleteReason.value
+    ...rowItem
+    // deleteReason: deleteReason.value
   }
 
   btnLoading.value = true
@@ -378,7 +402,7 @@ const onDelRow = (row) => {
 }
 
 const handleClose = () => {
-  deleteReason.value = ''
+  // deleteReason.value = ''
   dialogVisible.value = false
 }
 
@@ -393,9 +417,21 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
-  const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
-  row.valuationAmount = totalPrice
-  row.compensationAmount = totalPrice
+  if (row.isBuyItNow == '1') {
+    tableDataF.value.map((item: any) => {
+      if (item.houseNo == row.houseNo) {
+        row.number = item.landArea
+      }
+    })
+    row.unit = 'm²'
+    const totalPrice = Number(row.number) * Number(row.price)
+    row.valuationAmount = totalPrice
+    row.compensationAmount = totalPrice
+  } else {
+    const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
+    row.valuationAmount = totalPrice
+    row.compensationAmount = totalPrice
+  }
 }
 onMounted(() => {
   getList()
