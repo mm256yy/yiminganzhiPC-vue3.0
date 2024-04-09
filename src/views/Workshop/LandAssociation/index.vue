@@ -444,6 +444,26 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'householder',
+    label: '户主',
+    search: {
+      show: true,
+      component: 'Input',
+      componentProps: {
+        placeholder: '可输入户主'
+      }
+    },
+    table: {
+      show: false
+    },
+    detail: {
+      show: false
+    },
+    form: {
+      show: false
+    }
+  },
+  {
     field: 'landNumber',
     label: '地块编号',
     search: {

@@ -79,7 +79,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.size" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="株树" :width="150" prop="number" align="center" header-align="center">
+        <ElTableColumn label="株数" :width="150" prop="number" align="center" header-align="center">
           <template #default="scope">
             <ElInput
               placeholder="请输入"
@@ -261,7 +261,8 @@ const onReportData = async () => {
 
 // 添加行
 const onAddRow = () => {
-  tableData.value.push({ ...defaultRow })
+  tableData.value.push({ ...defaultRow, householder: props.baseInfo.name })
+  console.log(props.baseInfo)
 }
 
 // 获取列表数据

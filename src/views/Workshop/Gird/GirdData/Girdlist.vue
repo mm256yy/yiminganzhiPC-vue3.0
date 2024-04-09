@@ -2,7 +2,7 @@
   <ElDialog
     title="网格员列表"
     :model-value="props.show"
-    :width="1000"
+    :width="1200"
     @close="onClose"
     alignCenter
     appendToBody
@@ -140,14 +140,14 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'peasantHouseholdNumber',
-    label: '负责居民户数',
+    label: '负责居民(户)',
     search: {
       show: false
     }
   },
   {
     field: 'companyNumber',
-    label: '负责企业',
+    label: '负责企业(家)',
     width: 190,
     search: {
       show: false
@@ -155,21 +155,21 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'individualHouseholdNumber',
-    label: '负责个体户',
+    label: '负责个体户(家)',
     search: {
       show: false
     }
   },
   {
     field: 'villageNumber',
-    label: '负责村集体',
+    label: '负责村集体(个)',
     search: {
       show: false
     }
   },
   {
     field: 'landNoMoveNumber',
-    label: '只征地不搬迁',
+    label: '只征地不搬迁(家/户)',
     search: {
       show: false
     }

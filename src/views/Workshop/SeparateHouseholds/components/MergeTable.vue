@@ -14,8 +14,9 @@
         style="width: 100%"
         @selection-change="handleSelectionChange"
         ref="multipleTableRef"
+        class="tableBbq"
       >
-        <ElTableColumn type="selection" width="55" />
+        <ElTableColumn type="selection" label="指定户主" width="110" />
         <ElTableColumn prop="name" label="户主姓名" />
         <ElTableColumn prop="showDoorNo" label="户号" />
         <ElTableColumn prop="villageName" label="行政村" />
@@ -477,5 +478,20 @@ let handleClick = (row) => {
 
 :deep(.el-dialog__body) {
   padding-top: 10px;
+}
+
+.tableBbq {
+  :deep(.el-table__header-wrapper) {
+    //找到表头那一行，然后把里面的复选框隐藏掉
+    .el-checkbox {
+      display: none;
+    }
+  }
+
+  :deep(.el-table__header-wrapper .el-table-column--selection .cell) {
+    &::after {
+      content: '指定户主';
+    }
+  }
 }
 </style>
