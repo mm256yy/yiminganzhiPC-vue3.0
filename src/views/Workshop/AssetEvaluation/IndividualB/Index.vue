@@ -336,8 +336,8 @@ onBeforeUnmount(() => {
 onMounted(() => {
   getVillageTree()
   getLandlordHeadInfo()
-  getExcelUploadList()
-  getExcelUploadList()
+  // getExcelUploadList()
+  // getExcelUploadList()
   timer = window.setInterval(() => {
     getExcelUploadList()
   }, 3000)

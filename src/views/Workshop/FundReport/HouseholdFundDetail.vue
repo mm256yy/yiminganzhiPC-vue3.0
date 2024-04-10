@@ -294,7 +294,8 @@ const onFormPupClose = () => {
 
 // 点击事件
 const handleClickItem = (row: any) => {
-  console.log('row', row)
+  console.log('row', row[1])
+  currentDoorNo.value = row[1]
   dialog.value = true
 }
 

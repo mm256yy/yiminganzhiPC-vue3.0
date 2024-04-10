@@ -195,8 +195,8 @@
       <div v-if="userInfo == 'financevoucher'">
         <ElRow>
           <ElCol :span="24" style="margin-top: 20px">
-            <div class="col-wrap">
-              <div class="label">付款日期</div>
+            <div class="col-wrapper">
+              <div class="col-label-required">付款日期：</div>
               <ElDatePicker
                 v-model="formAudit.paymentTime"
                 type="date"
@@ -237,8 +237,8 @@
       </div>
       <ElRow v-if="actionType === 'edit'" style="margin-top: 20px">
         <ElCol :span="24">
-          <div class="col-wrap">
-            <div class="label">审核意见</div>
+          <div class="col-wrapper">
+            <div class="label">审核意见：</div>
             <div class="content">
               <ElInput
                 v-model="formAudit.remark"

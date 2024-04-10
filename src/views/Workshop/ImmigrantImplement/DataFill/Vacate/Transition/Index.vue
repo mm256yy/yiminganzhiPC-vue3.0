@@ -3,12 +3,13 @@
     <div class="empty-head">
       <div class="title">过渡安置办理情况</div>
       <div>
-        <ElSpace v-if="!isExcess">
-          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle">无须办理</ElButton>
-          <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
+        <ElSpace>
+          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle" v-if="!isExcess"
+            >无须办理</ElButton
+          >
+          <ElButton :icon="editIcon" type="primary" @click="onHandle" v-if="flag">办理</ElButton>
         </ElSpace>
-
-        <ElSpace v-else-if="isExcess && isExcess === '1'">
+        <ElSpace v-if="isExcess && isExcess === '1'">
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">档案上传</ElButton>
         </ElSpace>
@@ -212,6 +213,7 @@ const rules = reactive<FormRules>({
   excessStartDate: [required()]
 })
 
+const flag = ref<boolean>(true)
 onMounted(() => {
   init()
 })
@@ -225,7 +227,8 @@ const init = async () => {
     form.value = {
       excessAddress: res.excessAddress || '',
       excessStartDate: timeStart,
-      excessEndDate: timeEnd
+      excessEndDate: timeEnd,
+      id: res.id
     }
     isExcess.value = res.isExcess
     startTime.value = timeStart
@@ -239,6 +242,7 @@ const onHandle = () => {
 
 const onNoHandle = () => {
   isExcess.value = '0'
+  flag.value = false
   handleSave()
 }
 
@@ -272,7 +276,9 @@ const handleSave = async (data?: any) => {
     params.excessAddress = data.excessAddress
     params.excessStartDate = data.excessStartDate ? dayjs(data.excessStartDate) : ''
     params.excessEndDate = data.excessEndDate ? dayjs(data.excessEndDate) : ''
+    params.id = data.id
   }
+  console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)
   if (res) {
     ElMessage.success('保存成功！')

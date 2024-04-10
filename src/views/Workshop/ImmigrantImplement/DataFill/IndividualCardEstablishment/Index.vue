@@ -492,17 +492,7 @@ const getSummaries = (row: any) => {
     }
   })
   let arr: any[] = []
-  const incentivefeeArr = [
-    '签订动迁安置协议',
-    '房屋腾空奖励',
-    '签订安置村对接协议',
-    '启动建房奖励',
-    '完成建房奖励',
-    '搬迁入住奖励',
-    '随迁人口补助费奖励',
-    '应迁未迁人口补助奖励',
-    '其他奖励费'
-  ]
+  const incentivefeeArr = ['签约奖', '腾空奖', '其他奖励费']
   if (row.name !== '奖励费小计') {
     arr = feeTableData.value.filter((item, index) => item && index !== sumIndex)
   } else {
