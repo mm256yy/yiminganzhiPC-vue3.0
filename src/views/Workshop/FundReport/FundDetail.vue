@@ -66,23 +66,23 @@ const commonTableItemSchema = {
 }
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
-  {
-    field: 'code',
-    label: '代码',
-    search: {
-      show: true,
-      component: 'Input'
-    },
-    table: {
-      show: false
-    },
-    form: {
-      show: false
-    },
-    detail: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'code',
+  //   label: '代码',
+  //   search: {
+  //     show: true,
+  //     component: 'Input'
+  //   },
+  //   table: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'name',
     label: '项目',
@@ -113,11 +113,11 @@ const schema = reactive<CrudSchema[]>([
     label: '项目',
     ...commonTableItemSchema
   },
-  {
-    field: 'code',
-    label: '代码',
-    ...commonTableItemSchema
-  },
+  // {
+  //   field: 'code',
+  //   label: '代码',
+  //   ...commonTableItemSchema
+  // },
   {
     field: 'gsInvest',
     label: '概算投资(元)',

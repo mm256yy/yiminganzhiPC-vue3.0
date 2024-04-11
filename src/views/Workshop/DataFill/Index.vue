@@ -38,23 +38,44 @@
           >
             打印表格
           </ElButton>
-          <ElButton
-            v-if="baseInfo.reportStatus === ReportStatus.UnReport"
-            type="primary"
-            :icon="EscalationIcon"
-            @click="onReportData"
-          >
-            填报完成
-          </ElButton>
 
-          <ElButton
-            v-if="baseInfo.signStatus === SignStatus.UnSign"
-            type="primary"
-            :icon="SignIcon"
-            @click="onSignData"
-          >
-            表单签字
-          </ElButton>
+          <ElPopover :width="150" trigger="click">
+            <template #reference>
+              <ElButton
+                type="primary"
+                v-if="
+                  baseInfo.reportStatus === ReportStatus.UnReport ||
+                  baseInfo.signStatus === SignStatus.UnSign
+                "
+              >
+                进度上报
+              </ElButton>
+              <ElButton v-else disabled type="primary">填报完成</ElButton>
+            </template>
+            <div>
+              <ElButtonGroup>
+                <ElButton
+                  v-if="baseInfo.reportStatus === ReportStatus.UnReport"
+                  type="primary"
+                  text
+                  :icon="EscalationIcon"
+                  @click="onReportData"
+                >
+                  填报完成
+                </ElButton>
+
+                <ElButton
+                  v-if="baseInfo.signStatus === SignStatus.UnSign"
+                  type="primary"
+                  text
+                  :icon="SignIcon"
+                  @click="onSignData"
+                >
+                  表单签字
+                </ElButton>
+              </ElButtonGroup>
+            </div>
+          </ElPopover>
         </ElSpace>
       </div>
 
@@ -380,7 +401,9 @@ import {
   ElButton,
   ElDialog,
   ElMessage,
-  ElSpace
+  ElSpace,
+  ElPopover,
+  ElButtonGroup
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
@@ -546,7 +569,7 @@ const onReportData = async () => {
   } else {
     ElMessage.success('上报成功！')
     getLandlordInfo()
-    back()
+    // back()
   }
 }
 

@@ -1,11 +1,17 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">智慧报表</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">只征地不搬迁</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金发放明细</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <div class="flex items-center">
+      <ElButton @click="onBack" :icon="BackIcon" class="px-9px py-0px !h-28px mr-8px !text-12px">
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">智慧报表</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">只征地不搬迁</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">资金发放明细</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
+
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
@@ -72,6 +78,8 @@ import {
 } from '@/api/fundManage/fundPayment-service'
 import { getDistrictTreeApi } from '@/api/district'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useIcon } from '@/hooks/web/useIcon'
+import { useRouter } from 'vue-router'
 
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
@@ -82,7 +90,12 @@ const tableLoading = ref<boolean>()
 let schemas = reactive<any>({
   columns: []
 })
+const { back } = useRouter()
 
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
+const onBack = () => {
+  back()
+}
 const commonTableItemSchema = {
   search: {
     show: false

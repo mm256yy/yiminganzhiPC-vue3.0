@@ -326,8 +326,8 @@ const onClose = (flag = false) => {
 const submit = (data: any) => {
   saveDocumentationApi(data).then(() => {
     ElMessage.success('操作成功！')
+    onClose(true)
   })
-  onClose(true)
 }
 
 // 提交表单

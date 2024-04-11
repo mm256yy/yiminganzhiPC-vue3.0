@@ -24,6 +24,7 @@
         }"
         highlightCurrentRow
         @register="register"
+        empty-text="未搜索到该户"
       >
         <template #birthday="{ row }">
           <div>

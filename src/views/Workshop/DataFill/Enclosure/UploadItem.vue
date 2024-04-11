@@ -7,7 +7,7 @@
           type: 'image'
         }"
         class="upload-trigger"
-        accept=".jpg,.jpeg,.png"
+        accept=".jpg,.jpeg,.png,.pdf"
         :multiple="true"
         :file-list="fileListData"
         :list-type="'picture'"
@@ -30,7 +30,9 @@
                 @blur="file.edit = false"
               />
               <div v-else class="flex items-center justify-between">
-                <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
+                <div class="w-234px" style="word-wrap: break-word" @click="imgPreview(file)">{{
+                  file.name
+                }}</div>
                 <ElTooltip placement="top" content="修改附件名称">
                   <Icon
                     icon="uil:edit-alt"
@@ -152,9 +154,14 @@ const removeFile = (file: any) => {
   emit('change', fileListData.value)
 }
 
-const imgPreview = (uploadFile: UploadFile) => {
-  imgUrl.value = uploadFile.url!
-  dialogVisible.value = true
+const imgPreview = (uploadFile: any) => {
+  console.log(uploadFile)
+  if (uploadFile.url.includes('.pdf')) {
+    window.open(uploadFile.url!)
+  } else {
+    imgUrl.value = uploadFile.url!
+    dialogVisible.value = true
+  }
 }
 </script>
 

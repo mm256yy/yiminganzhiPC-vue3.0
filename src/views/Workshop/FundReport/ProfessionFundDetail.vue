@@ -283,8 +283,7 @@ const onSearch = (data) => {
 
   // 需要重置一次params
   tableObject.params = {
-    projectId,
-    type: 23
+    projectId
   }
 
   for (let key in params) {

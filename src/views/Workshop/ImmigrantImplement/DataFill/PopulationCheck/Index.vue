@@ -23,6 +23,7 @@
         }"
         highlightCurrentRow
         @register="register"
+        :row-class-name="tableRowClassName"
       >
         <template #birthday="{ row }">
           <div>
@@ -212,7 +213,6 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'action',
     label: '操作',
-    fixed: 'right',
     width: 130,
     search: {
       show: false
@@ -302,6 +302,14 @@ const onFilling = () => {
     }
   })
 }
+let tableRowClassName = (row: any) => {
+  console.log(row.row, 'ssq')
+
+  if (row.row.deleteReason) {
+    return 'warning-row'
+  }
+  return ''
+}
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {
@@ -311,5 +319,9 @@ const onFilling = () => {
 
 :deep(.el-form-item) {
   padding: 0 10px;
+}
+
+:deep(.warning-row) {
+  background: #f1f1f1;
 }
 </style>

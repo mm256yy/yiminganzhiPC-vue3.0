@@ -92,7 +92,8 @@ let rolerToRouter = ref([
   { name: 'finance', path: 'PaymentReview' },
   { name: 'executive', path: 'PaymentReview' },
   { name: 'financevoucher', path: 'PaymentReview' },
-  { name: 'township', path: 'TownshipFundEntry' }
+  { name: 'township', path: 'TownshipFundEntry' },
+  { name: 'assessorland', path: 'LandAssociation' }
 ])
 const Router = useRouter()
 onBeforeMount(() => {

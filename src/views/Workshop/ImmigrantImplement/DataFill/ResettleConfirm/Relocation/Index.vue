@@ -84,11 +84,17 @@
       <div class="flex justify-center items-center h-[60px]" v-else>
         <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
         <div class="txt">
-          该户选择{{ houseTypeText[houseType] }},{{
-            nursingHomeList[416].filter((item) => item.value == mockImmigrantSettle?.nursingHome)[0]
-              ?.label || '-'
-          }}</div
-        >
+          该户选择{{
+            houseType == 'concentrate'
+              ? houseTypeText[houseType] +
+                `（选择养老院:${
+                  nursingHomeList[416].filter(
+                    (item) => item.value == mockImmigrantSettle?.nursingHome
+                  )[0]?.label || '-'
+                }）`
+              : houseTypeText[houseType]
+          }}
+        </div>
       </div>
     </div>
     <el-dialog title="提示" v-model="dialogVisible" width="500">

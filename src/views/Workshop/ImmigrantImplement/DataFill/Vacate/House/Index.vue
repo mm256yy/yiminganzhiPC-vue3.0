@@ -118,7 +118,13 @@
           {{ baseInfo.phone }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
-          {{ props.type == 'PeasantHousehold' ? baseInfo.address : baseInfo.beforeAddress }}
+          {{
+            props.type == 'PeasantHousehold'
+              ? baseInfo.address
+              : props.type == 'Village'
+              ? (baseInfo.areaCodeText || '') + (baseInfo.villageText || '')
+              : baseInfo.beforeAddress
+          }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
           <div
@@ -175,9 +181,10 @@
           <template #default>
             <div style="display: flex; flex-direction: column">
               <div style="flex: 1">&nbsp;</div>
-              <div style="flex: 1; display: flex; justify-content: space-around">
-                <div>验收人：</div><div>验收时间：</div></div
-              >
+              <div style="flex: 1; display: flex; justify-content: flex-start">
+                <div style="flex: 1; text-align: left">验收人：</div>
+                <div style="flex: 1; text-align: left">验收时间：</div>
+              </div>
             </div>
           </template>
         </el-descriptions-item>
@@ -190,9 +197,10 @@
           <template #default>
             <div style="display: flex; flex-direction: column">
               <div style="flex: 1">&nbsp;</div>
-              <div style="flex: 1; display: flex; justify-content: space-around">
-                <div>审核人：</div><div>审核时间：</div></div
-              >
+              <div style="flex: 1; display: flex; justify-content: flex-start">
+                <div style="flex: 1; text-align: left">审核人：</div>
+                <div style="flex: 1; text-align: left">审核时间：</div>
+              </div>
             </div>
           </template>
         </el-descriptions-item>

@@ -774,7 +774,7 @@ const getStatus = (data: any) => {
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
     }
-    if (data.arrangementStatus === '1') {
+    if (data.productionArrangementAllStatus === '1') {
       tabsListCopy[1].active = true // 安置确认
     }
     if (data.landSoarStatus === '1') {
@@ -786,7 +786,7 @@ const getStatus = (data: any) => {
     if (data.agreementStatus === '1') {
       tabsListCopy[4].active = true // 征地协议
     }
-    if (data.productionArrangementAllStatus === '1') {
+    if (data.arrangementStatus === '1') {
       tabsListCopy[5].active = true // 生产安置办理
     }
   } else if (type === 'LandNoMove' && nowbody == 'Other') {

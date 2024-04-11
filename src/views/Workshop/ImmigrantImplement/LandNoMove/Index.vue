@@ -287,6 +287,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'schedule',
+    label: '完成进度',
+    width: 100,
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'landUserTypeText',
     label: '类别',
     width: 100,

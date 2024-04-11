@@ -147,6 +147,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { MapFormItem } from '@/components/Map'
 import { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
 import { useValidator } from '@/hooks/web/useValidator'
+import { json } from 'stream/consumers'
 
 interface PropsType {
   show: boolean
@@ -194,6 +195,8 @@ watch(
       // 处理行政区划
 
       form.value = { ...val }
+      console.log(JSON.parse(form.value.pic))
+      relocateVerifyPic.value = form.value.pic ? JSON.parse(form.value.pic) : []
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
@@ -225,11 +228,13 @@ const initData = () => {}
 
 // 关闭弹窗
 const onClose = (flag = false) => {
+  formRef.value?.resetFields()
   emit('close', flag)
   form.value = {}
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
+  relocateVerifyPic.value = []
+  position.longitude = 0
+  position.latitude = 0
+  position.address = ''
 }
 
 const submit = (data: any) => {

@@ -18,54 +18,52 @@
         </div>
         <ElSpace style="align-items: baseline">
           <ElButton type="primary" @click="onBind"> 关联绑定 </ElButton>
-          <ElButton
-            type="primary"
-            @click="onExport(getEexportRelationList, { projectId, ...tableObject.params })"
-          >
-            数据导出
-          </ElButton>
-          <ElPopover :width="1000" trigger="click" @show="handelshow">
+          <ElPopover :width="250" trigger="click">
             <template #reference>
-              <div class="view-upload">
-                <span class="pr-10px">批量导入日志</span>
-                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
-              </div>
+              <ElButton type="primary"> 模板下载 </ElButton>
             </template>
-            <div class="file-list" v-loading="loading">
-              <div class="file-item" v-for="item in excelList" :key="item.id">
-                <div class="file-name flex items-center flex-none w-372px">
-                  <Icon icon="ant-design:file-sync-outlined" />
-                  <div class="w-350px ml-5px">
-                    {{ item.name }}
-                  </div>
-                </div>
-                <div class="flex-none w-150px">{{
-                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
-                }}</div>
-                <div class="flex-none w-398px m-lr-20px">
-                  {{ item.remark }}
-                </div>
-                <div class="flex-shrink-0">
-                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
-                    <span class="pr-10px">
-                      ( 共导入
-                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
-                      条)
-                    </span>
-                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
-                  </div>
-
-                  <div
-                    class="flex items-center text-[#F93F3F]"
-                    v-else-if="item.status === FileReportStatus.failure"
-                  >
-                    <span class="pr-10px">上传失败</span>
-                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
-                  </div>
-
-                  <div v-else>导入中</div>
-                </div>
-              </div>
+            <div>
+              <ElButtonGroup>
+                <ElButton
+                  type="primary"
+                  text
+                  @click="
+                    onExport(getExportData, {
+                      templateKey: 'land_relation',
+                      ProjectId: projectId,
+                      ProjectStatus: 'implementation'
+                    })
+                  "
+                >
+                  关联关系模板
+                </ElButton>
+                <ElButton
+                  type="primary"
+                  text
+                  @click="
+                    onExport(getExportData, {
+                      templateKey: 'land_estimate',
+                      ProjectId: projectId,
+                      ProjectStatus: 'implementation'
+                    })
+                  "
+                >
+                  土地评估结果模板
+                </ElButton>
+                <ElButton
+                  type="primary"
+                  text
+                  @click="
+                    onExport(getExportData, {
+                      templateKey: 'land_appendage',
+                      ProjectId: projectId,
+                      ProjectStatus: 'implementation'
+                    })
+                  "
+                >
+                  土地青苗及附着物评估结果模板
+                </ElButton>
+              </ElButtonGroup>
             </div>
           </ElPopover>
           <ElPopover :width="250" trigger="click">
@@ -116,52 +114,54 @@
               </ElButtonGroup>
             </div>
           </ElPopover>
-          <ElPopover :width="250" trigger="click">
+          <ElButton
+            type="primary"
+            @click="onExport(getEexportRelationList, { projectId, ...tableObject.params })"
+          >
+            数据导出
+          </ElButton>
+          <ElPopover :width="1000" trigger="click" @show="handelshow">
             <template #reference>
-              <ElButton type="primary"> 模板下载 </ElButton>
+              <div class="view-upload">
+                <span class="pr-10px">批量导入日志</span>
+                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
+              </div>
             </template>
-            <div>
-              <ElButtonGroup>
-                <ElButton
-                  type="primary"
-                  text
-                  @click="
-                    onExport(getExportData, {
-                      templateKey: 'land_relation',
-                      ProjectId: projectId,
-                      ProjectStatus: 'implementation'
-                    })
-                  "
-                >
-                  关联关系模板
-                </ElButton>
-                <ElButton
-                  type="primary"
-                  text
-                  @click="
-                    onExport(getExportData, {
-                      templateKey: 'land_estimate',
-                      ProjectId: projectId,
-                      ProjectStatus: 'implementation'
-                    })
-                  "
-                >
-                  土地评估结果模板
-                </ElButton>
-                <ElButton
-                  type="primary"
-                  text
-                  @click="
-                    onExport(getExportData, {
-                      templateKey: 'land_appendage',
-                      ProjectId: projectId,
-                      ProjectStatus: 'implementation'
-                    })
-                  "
-                >
-                  土地青苗及附着物评估结果模板
-                </ElButton>
-              </ElButtonGroup>
+            <div class="file-list" v-loading="loading">
+              <div class="file-item" v-for="item in excelList" :key="item.id">
+                <div class="file-name flex items-center flex-none w-372px">
+                  <Icon icon="ant-design:file-sync-outlined" />
+                  <div class="w-350px ml-5px">
+                    {{ item.name }}
+                  </div>
+                </div>
+                <div class="flex-none w-150px">{{
+                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
+                }}</div>
+                <div class="flex-none w-398px m-lr-20px">
+                  {{ item.remark }}
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
+                    <span class="pr-10px">
+                      ( 共导入
+                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
+                      条)
+                    </span>
+                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
+                  </div>
+
+                  <div
+                    class="flex items-center text-[#F93F3F]"
+                    v-else-if="item.status === FileReportStatus.failure"
+                  >
+                    <span class="pr-10px">上传失败</span>
+                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
+                  </div>
+
+                  <div v-else>导入中</div>
+                </div>
+              </div>
             </div>
           </ElPopover>
         </ElSpace>
@@ -183,11 +183,10 @@
         :selection="true"
         @register="register"
         :header-cell-style="headerRow"
+        max-height="700px"
       >
         <template #totalPrice="{ row }">
           <div>{{
-            (row.cityCodeText || '') +
-            '-' +
             (row.areaCodeText || '') +
             '-' +
             (row.townCodeText || '') +

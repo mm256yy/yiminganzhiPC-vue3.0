@@ -173,10 +173,12 @@ const requestIndividualHouseAccessory = async () => {
       label: '行政村'
     },
     {
+      width: 200,
       field: '2',
       label: '个体户编号'
     },
     {
+      width: 240,
       field: '3',
       label: '个体工商户名称'
     },

@@ -147,7 +147,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
+    field: 'code',
     label: '所属区域',
     search: {
       show: true,
@@ -209,9 +209,30 @@ const getTitles = (type: string) => {
   }
   return map[type]
 }
-
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
+  console.log(data)
+
   let params = {
     ...data
   }
@@ -221,8 +242,15 @@ const onSearch = (data) => {
       delete params[key]
     }
   }
-
-  getTableList({})
+  if (params.code) {
+    findRecursion(villageTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
+  getTableList(params)
 }
 
 const onReset = () => {
