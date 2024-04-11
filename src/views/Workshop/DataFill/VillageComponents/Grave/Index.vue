@@ -357,7 +357,10 @@ const onSave = () => {
 
 // 下载模板
 const onDownloadTemplate = () => {
-  exportGraveTemplate().then((res) => {
+  const params = {
+    doorNo: props.doorNo
+  }
+  exportGraveTemplate(params).then((res) => {
     let a = document.createElement('a')
     // ArrayBuffer 转为 Blob
     let blob = new Blob([res.data], { type: 'application/vnd.ms-excel' })

@@ -47,7 +47,7 @@
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
+            <!-- <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
               <ElOption
                 v-for="item in row.landNoOptions"
                 :key="item.id"
@@ -55,7 +55,8 @@
                 :value="item.name"
                 :disabled="item.isOccupy === '1'"
               />
-            </ElSelect>
+            </ElSelect> -->
+            <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable />
           </template>
         </ElTableColumn>
         <ElTableColumn label="摇号顺序号" prop="lotteryOrder" align="center" header-align="center">
@@ -111,7 +112,7 @@
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+            <!-- <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
               <ElOption
                 v-for="item in row.roomNoOptions.content"
                 :key="item.id"
@@ -119,7 +120,8 @@
                 :value="item.code"
                 :disabled="item.isOccupy === '1'"
               />
-            </ElSelect>
+            </ElSelect> -->
+            <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable />
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -298,14 +300,16 @@
           <template #default="{ row }">
             {{
               row.storeroomNo
-                ? row.storeroomNoOptions.filter((e) => row.storeroomNo == e.name)[0].name
+                ? row.storeroomNoOptions?.filter((e: any) => row.storeroomNo == e.name)[0].name
                 : '-'
             }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="车库编号" prop="carNo" align="center" header-align="center">
           <template #default="{ row }">
-            {{ row.carNo ? row.carNoOptions.filter((e) => row.carNo == e.name)[0].name : '-' }}
+            {{
+              row.carNo ? row.carNoOptions?.filter((e: any) => row.carNo == e.name)[0].name : '-'
+            }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="备注" align="center" />
@@ -338,7 +342,8 @@ import {
   ElTableColumn,
   ElSelect,
   ElOption,
-  ElMessage
+  ElMessage,
+  ElSelectV2
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue'
@@ -394,11 +399,7 @@ const getList = () => {
         item.landNoOptions = await getlandNoList(item.settleAddress)
         item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
         item.carNoOptions = await getcarNoList(item.settleAddress)
-        item.roomNoOptions = await getHouseConfigApi(
-          props.baseInfo.projectId,
-          3,
-          item.settleAddress
-        )
+        let { content } = await getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress)
         console.log(
           item.landNoOptions,
           item.storeroomNoOptions,
@@ -406,6 +407,13 @@ const getList = () => {
           item.roomNoOptions,
           '测试数据'
         )
+        item.roomNoOptions = content.map((item) => {
+          return {
+            label: item.showName,
+            value: item.code,
+            disabled: item.isOccupy === '1' ? true : false
+          }
+        })
       })
       console.log(arr, 'bbq')
 

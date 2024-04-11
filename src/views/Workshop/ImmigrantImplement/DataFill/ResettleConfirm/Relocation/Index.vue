@@ -83,7 +83,12 @@
 
       <div class="flex justify-center items-center h-[60px]" v-else>
         <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
-        <div class="txt"> 该户选择{{ houseTypeText[houseType] }} </div>
+        <div class="txt">
+          该户选择{{ houseTypeText[houseType] }},{{
+            nursingHomeList[416].filter((item) => item.value == mockImmigrantSettle?.nursingHome)[0]
+              ?.label || '-'
+          }}</div
+        >
       </div>
     </div>
     <el-dialog title="提示" v-model="dialogVisible" width="500">
@@ -431,6 +436,7 @@ const getMockData = async () => {
   const res = await getSimulateImmigrantSettleApi(props.doorNo)
   if (res) {
     mockImmigrantSettle.value = res
+    console.log(res, 'res')
   }
 }
 

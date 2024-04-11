@@ -10,7 +10,7 @@
       </ElSpace>
     </div>
 
-    <div class="common-wrap">
+    <div class="common-wrap" v-if="hasFarmingResettle">
       <div class="common-head">
         <div class="icon"></div>
         <div class="tit">生产用地</div>
@@ -41,10 +41,7 @@
       </div>
 
       <div class="common-cont">
-        <div class="flex-center" v-if="!hasFarmingResettle">
-          <div class="txt">该户无农业安置</div>
-        </div>
-        <div class="flex-center" v-else-if="hasFarmingResettle && farmingResettleStatus === '0'">
+        <div class="flex-center" v-if="hasFarmingResettle && farmingResettleStatus === '0'">
           <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
           <div class="txt">该户农业安置办理未完成</div>
         </div>
@@ -54,7 +51,10 @@
         </div>
       </div>
     </div>
-
+    <div class="flex-center" v-if="!hasFarmingResettle">
+      <Icon icon="ant-design:exclamation-circle-filled" color="#FEC44C" :size="20" />
+      <div class="txt">该户无农业安置</div>
+    </div>
     <OnDocumentation
       :door-no="props.doorNo"
       :show="farmingArchivesPup"

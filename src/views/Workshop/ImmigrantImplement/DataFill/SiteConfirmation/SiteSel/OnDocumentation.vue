@@ -57,7 +57,13 @@
             <ElFormItem label="套型："> {{ item.area }} </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="幢号-室号："> {{ item.roomNo }} </ElFormItem>
+            <ElFormItem label="幢号-室号：">
+              {{
+                item.roomNo
+                  ? item.roomNoOptions.filter((ket: any) => ket.value == item.roomNo)[0]?.label
+                  : ''
+              }}
+            </ElFormItem>
           </ElCol>
         </ElRow>
 
@@ -429,7 +435,7 @@ watch(
     } else {
       form.value = [props.baseInfo]
     }
-    console.log('bbq-2', form.value)
+    console.log('bbq-2', form.value, props.baseInfo)
     getSettleAddress(form.value[0])
   },
   {

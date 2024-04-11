@@ -40,7 +40,6 @@
         row-key="id"
         headerAlign="center"
         align="center"
-        height="600"
         @register="register"
       >
         <template #regionText="{ row }">

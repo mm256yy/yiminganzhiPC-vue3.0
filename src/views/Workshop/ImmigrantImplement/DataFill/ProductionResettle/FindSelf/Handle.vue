@@ -65,7 +65,7 @@
 
       <ElRow>
         <ElCol :span="24">
-          <div class="sub-title">办理信息</div>
+          <div class="sub-title"></div>
         </ElCol>
       </ElRow>
 

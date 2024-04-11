@@ -25,7 +25,6 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
@@ -198,27 +197,27 @@ const { allSchemas } = useCrudSchemas(schema)
  * @param{Object} rowIndex 当前行下标
  * @param{Object} columnInex 当前列下标
  */
-const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
-  const num = tableObject.tableList.filter(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  ).length
-  const index = tableObject.tableList.findIndex(
-    (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
-  )
-  if (column && columnIndex < 5) {
-    if (index === rowIndex) {
-      return {
-        rowspan: num,
-        colspan: 1
-      }
-    } else {
-      return {
-        rowspan: 0,
-        colspan: 0
-      }
-    }
-  }
-}
+// const objectSpanMethod = ({ row, column, rowIndex, columnIndex }: SpanMethodProps) => {
+//   const num = tableObject.tableList.filter(
+//     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+//   ).length
+//   const index = tableObject.tableList.findIndex(
+//     (item: any) => item.householdName === row.householdName && item.doorNo === row.doorNo
+//   )
+//   if (column && columnIndex < 5) {
+//     if (index === rowIndex) {
+//       return {
+//         rowspan: num,
+//         colspan: 1
+//       }
+//     } else {
+//       return {
+//         rowspan: 0,
+//         colspan: 0
+//       }
+//     }
+//   }
+// }
 
 // 数据导出
 const onExport = async () => {

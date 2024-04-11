@@ -38,7 +38,11 @@
           公寓房
         </ElTableColumn>
         <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center" />
-        <ElTableColumn label="幢号-室号" prop="roomNo" align="center" header-align="center" />
+        <ElTableColumn label="幢号-室号" prop="roomNo" align="center" header-align="center">
+          <template #default="{ row }">
+            {{ row.roomNo ? roomNoOptions.filter((ket) => ket.value == row.roomNo)[0]?.label : '' }}
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="储藏室编号" prop="storeroomNo" align="center" header-align="center" />
         <ElTableColumn label="车位编号" prop="carNo" align="center" header-align="center" />
       </ElTable>
@@ -57,6 +61,7 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue'
 import { getImmigrantChooseHouseApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 import { documentationCheckApi } from '@/api/immigrantImplement/siteConfirmation/common-service'
+import { getHouseConfigApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
 
 interface PropsType {
   doorNo: string
@@ -72,11 +77,21 @@ const tableData = ref<any[]>([])
 const dialog = ref<boolean>(false)
 const isHandled = ref<boolean>(false)
 const emit = defineEmits(['updateData'])
-
+const roomNoOptions = ref<any[]>([])
 // 获取列表数据
 const getList = () => {
   getImmigrantChooseHouseApi(props.doorNo).then((res) => {
     tableData.value = res.content
+    console.log(res.content, '11111111111111')
+  })
+  getHouseConfigApi(56, 3, 2).then((res) => {
+    roomNoOptions.value = res.content.map((item) => {
+      return {
+        label: item.showName,
+        value: item.code
+      }
+    })
+    console.log(roomNoOptions.value, '数据')
   })
 }
 

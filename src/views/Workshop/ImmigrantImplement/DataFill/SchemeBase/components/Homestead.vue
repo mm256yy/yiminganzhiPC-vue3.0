@@ -105,6 +105,7 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     settleAddressList.value = result.content
+    console.log(settleAddressList.value, '测试数据')
   } catch {}
 }
 
@@ -118,9 +119,12 @@ watch(
         areaType.value = props.dataList.areaType
         settleAddress.value = val.settleAddress
       } else {
+        getSettleAddressList()
         const { areaType: area, settleAddressCode, settleAddress: settleAddresss } = val
         areaType.value = area
-        settleAddress.value = settleAddressCode ? settleAddressCode : settleAddresss
+        settleAddress.value = settleAddressCode ? settleAddressCode : val.settleAddress
+        // settleAddressList.value.find((item) => item.name == settleAddresss).code
+        console.log(settleAddress.value, '测试呀')
       }
       console.log(settleAddress.value, 'kks', val)
     }

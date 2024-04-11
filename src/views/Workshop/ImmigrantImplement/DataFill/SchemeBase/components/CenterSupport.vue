@@ -92,7 +92,6 @@ const submitResettle = async () => {
   if (props.immigrantSettle && props.immigrantSettle.id) {
     params.id = props.immigrantSettle.id
   }
-
   const ScreeningObj = nursingHomeList.value[416].find((item) => item.value === nursingHome.value)
   params.nursingHome = ScreeningObj && ScreeningObj.value
   emit('submit', params)

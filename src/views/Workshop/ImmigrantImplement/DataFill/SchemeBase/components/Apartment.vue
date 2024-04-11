@@ -314,7 +314,7 @@ watch(
       console.log(val, 'val')
       const { typeOneNum, typeTwoNum, typeThreeNum, typeFourNum, settleAddressCode } = val
 
-      settleAddress.value = val.settleAddress
+      settleAddress.value = val.settleAddressCode
       areaSize.value = areaSize.value.map((item, index) => {
         if (index === 0) {
           item.num = typeOneNum

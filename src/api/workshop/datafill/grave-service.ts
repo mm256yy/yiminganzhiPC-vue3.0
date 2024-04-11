@@ -28,9 +28,10 @@ export const saveGraveListApi = (data: any[]): Promise<TableResponse<GraveDtoTyp
 }
 
 // 坟墓模板导出
-export const exportGraveTemplate = () => {
+export const exportGraveTemplate = (params: any) => {
   return request.get({
     url: '/peasantHousehold/exportGraveTemplate',
+    params,
     responseType: 'blob'
   })
 }

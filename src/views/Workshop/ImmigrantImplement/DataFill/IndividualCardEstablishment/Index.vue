@@ -200,7 +200,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from 'vue'
 import {
   ElTable,
   ElTableColumn,
@@ -427,7 +427,7 @@ const tableRowClassName = ({ row }: any) => {
 const { allSchemas } = useCrudSchemas(schema)
 
 const formRef = ref<FormInstance>()
-const form = ref<any>({ ...props.baseInfo })
+const form = ref<any>()
 const rules = reactive<FormRules>({
   beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
 })
@@ -438,7 +438,18 @@ const getRewardFeeList = () => {
     feeTableData.value = res
   })
 }
-
+watch(
+  () => props.baseInfo,
+  () => {
+    console.log(props.baseInfo, '数据是什么？')
+    form.value = { ...props.baseInfo }
+    form.value.beforeAddress == 'null' ? null : form.value.beforeAddress
+    form.value.afterAddress == 'null' ? null : form.value.afterAddress
+    form.value.peopleNumber == 'null' ? null : form.value.peopleNumber
+  },
+  // 可选 immediate: true 马上执行
+  { deep: true, immediate: true }
+)
 /**
  * 获取金额类型
  * @param type 类型 1 补偿, 2 补助, 3 奖励, 4 其他
