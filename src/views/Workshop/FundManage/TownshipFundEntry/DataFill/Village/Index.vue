@@ -183,7 +183,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'doorNo',
-    label: '户号',
+    label: '村集体编号',
     width: 180,
     search: {
       show: false

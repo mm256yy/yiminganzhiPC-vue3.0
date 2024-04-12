@@ -13,8 +13,16 @@
           :preview-src-list="[item.url]"
           :src="item.url"
           fit="cover"
+          v-if="item.url.split('.').pop().toLowerCase() != 'pdf'"
         />
-        <div class="image-txt" :title="item.name">{{ formatText(item.name) }}</div>
+        <ElImage style="width: 100px; height: 80px" v-else src="../src/assets/imgs/pdf.png" />
+        <div
+          class="image-txt"
+          :title="item.name"
+          v-if="item.url.split('.').pop().toLowerCase() != 'pdf'"
+          >{{ formatText(item.name) }}</div
+        >
+        <div class="image-txt" :title="item.name" v-else>{{ item.name }}</div>
       </div>
     </div>
     <ElEmpty v-else description="暂无数据" />
@@ -53,6 +61,7 @@ watch(
 const parseData = () => {
   if (!props.files) return
   fileList.value = JSON.parse(props.files)
+  console.log('fileList', fileList.value)
 }
 
 //关闭弹窗
@@ -60,8 +69,12 @@ const closeDialog = () => {
   emit('close')
 }
 
-const onImageClick = (item: FilesDtoType) => {
+const onImageClick = (item: any) => {
   console.log('item-click', item)
+  const extension = item.url.split('.').pop().toLowerCase()
+  if (extension == 'pdf') {
+    window.open(item.url)
+  }
 }
 
 const formatText = (str: string) => {

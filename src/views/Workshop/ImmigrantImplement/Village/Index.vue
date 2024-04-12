@@ -148,7 +148,7 @@ const onUpdateDistrict = () => {
 }
 
 const getLandlordHeadInfo = async () => {
-  const info = await getLandlordHeadApi({ type: 'Village' })
+  const info = await getLandlordHeadApi({ type: 'Village', status: 'implementation' })
   headInfo.value = info
 }
 
