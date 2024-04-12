@@ -113,7 +113,7 @@ const getRewardFeeList = () => {
 // 数据导出
 const onExport = () => {
   const url =
-    'https://oss.zdwp.tech/migrate/files/archives/82bada98-d8b6-43d5-9d9d-699a3e1ce3f0.xlsx'
+    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/migrate/files/archives/82bada98-d8b6-43d5-9d9d-699a3e1ce3f0.xlsx'
   window.open(url)
 }
 

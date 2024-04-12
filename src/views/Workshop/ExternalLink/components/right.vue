@@ -163,7 +163,7 @@ const handleClickItem = (type: number) => {
 
 const handleClickFundManage = () => {
   const pdfUlr =
-    'https://oss.zdwp.tech/migrate/files/172关于印发《浙江长龙山抽水蓄能电站2017年度移民安置工作任务及资金计划》的通知.pdf'
+    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/migrate/files/172关于印发《浙江长龙山抽水蓄能电站2017年度移民安置工作任务及资金计划》的通知.pdf'
   window.open(pdfUlr, '_blank')
 }
 

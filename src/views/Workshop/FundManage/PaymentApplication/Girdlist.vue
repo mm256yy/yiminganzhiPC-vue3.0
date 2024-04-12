@@ -133,7 +133,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import {
   ElTable,
   ElTableColumn,
@@ -279,6 +279,10 @@ watch(
   },
   { deep: true, immediate: true }
 )
+onMounted(() => {
+  let params: any = { code: code.value, keywords: search.value }
+  ppsList(params)
+})
 </script>
 
 <style lang="less">

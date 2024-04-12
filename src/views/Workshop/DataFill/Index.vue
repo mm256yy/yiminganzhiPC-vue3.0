@@ -22,8 +22,12 @@
       <div v-if="classifyType !== 'check'" class="head-top">
         <div class="tabs"> </div>
         <ElSpace>
-          <ElButton type="primary" @click="addEnterprise"> 添加企业 </ElButton>
-          <ElButton type="primary" @click="addIndividual"> 添加个体户 </ElButton>
+          <ElButton type="primary" @click="addEnterprise" v-if="type == 'Landlord'">
+            添加企业
+          </ElButton>
+          <ElButton type="primary" @click="addIndividual" v-if="type == 'Landlord'">
+            添加个体户
+          </ElButton>
           <ElButton
             :icon="printIcon"
             v-if="

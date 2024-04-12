@@ -205,7 +205,7 @@ export const handleLandlordWithPrint = (landlords: LandlordType[], graveList: Gr
                   // 处理图片链接
                   item.url.replace(
                     'https://zdwp.oss-cn-hangzhou.aliyuncs.com/',
-                    'https://oss.zdwp.tech/'
+                    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/'
                   )
                 )
               }

@@ -710,7 +710,8 @@ const uploadError = (error) => {
 
 // 下载模板
 const onDownloadTemplate = () => {
-  window.location.href = 'https://oss.zdwp.tech/migrate/files/zdbim/print/土地模板.xlsx'
+  window.location.href =
+    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/migrate/files/zdbim/print/土地模板.xlsx'
 }
 </script>
 
