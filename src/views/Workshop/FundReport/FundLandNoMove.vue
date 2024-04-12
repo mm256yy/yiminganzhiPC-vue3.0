@@ -59,6 +59,9 @@
         <template #landLevel="{ row }">
           <div>{{ row.landTypeText }}</div>
         </template>
+        <template #1="{ row }">
+          {{ row[1].includes('jl') ? row[1].replace('jl', '') : row[1] }}
+        </template>
       </Table>
     </div>
   </WorkContentWrap>
@@ -223,6 +226,7 @@ const getTableDepends = (list: any) => {
       ...commonTableItemSchema
     },
     {
+      width: 120,
       field: '1',
       label: '户号',
       ...commonTableItemSchema
