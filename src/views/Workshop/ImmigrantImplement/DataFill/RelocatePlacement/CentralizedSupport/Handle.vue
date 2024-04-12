@@ -184,6 +184,8 @@ watch(
 
     if (form.value.relocatePic) {
       relocatePic.value = JSON.parse(form.value.relocatePic)
+    } else {
+      relocatePic.value = []
     }
   },
   // 可选 immediate: true 马上执行

@@ -155,13 +155,13 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
-let moneyList = async () => {
-  let list = await getSumAmount({ projectId: projectId })
+let moneyList = async (e) => {
+  let list = await getSumAmount(e)
   molingData.value = list
   console.log(molingData)
 }
 onMounted(() => {
-  moneyList()
+  moneyList({ projectId: projectId })
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
@@ -180,6 +180,7 @@ const selenceTable = (e: string, value: any) => {
   tabalRef.value.setColumns(allSchemas.tableColumns)
   tableObject.params.type = value
   getList()
+  moneyList(tableObject.params)
 }
 const IssueClick = () => {
   let all = 0
@@ -218,7 +219,7 @@ const IssueClick = () => {
             message: '发放成功'
           })
           getList()
-          moneyList()
+          moneyList(tableObject.params)
         })
       })
       .catch(() => {
@@ -451,6 +452,7 @@ const onSearch = (data) => {
     })
     delete params.code
   }
+  moneyList({ ...tableObject.params, ...params })
   setSearchParams({ ...params })
 }
 

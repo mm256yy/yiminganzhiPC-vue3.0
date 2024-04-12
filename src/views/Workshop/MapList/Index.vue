@@ -32,7 +32,7 @@ const initCoordinatesData = (obj: any) => {
 const mapJson: any = appStore.currentMapJson ? JSON.parse(appStore.currentMapJson) : null
 // console.log('mapJson:', mapJson)
 const points = mapJson ? initCoordinatesData(mapJson)[0] : []
-// console.log('points:', points)
+console.log('points:', points)
 const pointsLength = points.length
 
 interface LocationType {
@@ -42,8 +42,8 @@ interface LocationType {
 
 // 初始地图坐标, 如果没有该区域的中心经、纬度，默认杭州经、纬度显示
 const centerLocation = ref<LocationType>({
-  longitude: pointsLength ? points[pointsLength / 2][0] : 120.153576, // 经度
-  latitude: pointsLength ? points[pointsLength / 2][1] : 30.287459 // 纬度
+  longitude: pointsLength ? points[(pointsLength / 2).toFixed()][0] : 120.153576, // 经度
+  latitude: pointsLength ? points[(pointsLength / 2).toFixed()][1] : 30.287459 // 纬度
 })
 
 let AMap: any = null

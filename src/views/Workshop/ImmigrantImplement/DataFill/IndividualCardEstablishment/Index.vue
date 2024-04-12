@@ -80,7 +80,7 @@
         <div class="row-cont">
           <div class="row">
             <span class="label">营业执照编号：</span>
-            <span class="value">无</span>
+            <span class="value">{{ formList?.licenceNo || '无' }}</span>
           </div>
 
           <div class="row">
