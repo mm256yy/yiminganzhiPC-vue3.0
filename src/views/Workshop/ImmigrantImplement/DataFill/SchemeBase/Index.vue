@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import {
   ElTable,
   ElTableColumn,
@@ -205,6 +205,18 @@ const tableData: any = ref([])
 const immigrantSettle = ref<any>()
 const houseType = ref<HouseType>(HouseType.homestead)
 
+watch(
+  () => props.baseInfo,
+  (val) => {
+    if (val) {
+      console.log(val, 'baseInfo数据是什么？')
+    }
+  },
+  {
+    deep: true,
+    immediate: true
+  }
+)
 // 查询人口列表
 const getPeopleList = async () => {
   const res = await getSimulateDemographicApi({
