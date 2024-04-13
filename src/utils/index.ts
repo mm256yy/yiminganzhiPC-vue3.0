@@ -181,6 +181,7 @@ export function analyzeIDCard(identityCard) {
 export const cardReg =
   /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
 
+export const phoneReg = /^1[3,4,5,6,7,8,9][0-9]{9}$/
 export function validateIdNo(rule, value, callback) {
   console.log(rule)
 

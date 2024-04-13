@@ -59,7 +59,7 @@
         <ElDatePicker type="date" v-model="form.paymentTime" />
       </ElFormItem>
       <ElFormItem label="申请金额:" prop="amount">
-        <ElInputNumber type="text" v-model="form.amount" />
+        <ElInputNumber type="text" v-model="form.amount" :min="0" />
       </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 申请凭证： </div>
@@ -342,7 +342,12 @@ const getFundSubjectList = () => {
     }
   })
 }
-
+// const handleChange = (val: any) => {
+//   if (val < 0) {
+//     this.$message.error('只能输入正数！')
+//     form.value.amount = 0
+//   }
+// }
 onMounted(() => {
   getFundSubjectList()
 })

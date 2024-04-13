@@ -4,6 +4,11 @@
     <div class="table-wrap !py-12px !mt-0px">
       <div class="flex items-center justify-between pb-12px">
         <div class="title"> 企业账户信息 </div>
+        <div>
+          <ElButton type="primary" @click="onDocumentation">归档</ElButton>
+          <ElButton type="primary" @click="onPrint">打印报表</ElButton>
+          <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
+        </div>
       </div>
       <ElForm
         class="form"
@@ -44,11 +49,11 @@
               <ElInput v-model="form.bankAccount" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
-          <ElCol :span="6">
+          <!-- <ElCol :span="6">
             <ElButton type="primary" @click="onDocumentation">归档</ElButton>
             <ElButton type="primary" @click="onPrint">打印报表</ElButton>
             <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
-          </ElCol>
+          </ElCol> -->
         </ElRow>
       </ElForm>
 

@@ -436,7 +436,7 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
-import { cardReg } from '@/utils'
+import { cardReg, phoneReg } from '@/utils'
 import type { UploadFile, UploadFiles } from 'element-plus'
 // import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
@@ -503,7 +503,22 @@ const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
 }
-
+watch(
+  () => form.value.card,
+  (val) => {
+    if (val && cardReg.test(val)) {
+      const genderCode = val.slice(-2, -1)
+      genderCode % 2 === 0 ? (form.value.sex = '2') : (form.value.sex = '1')
+      const birthDatePart = val.substring(6, 14)
+      const birthYearMonth = birthDatePart.substring(0, 4) + '-' + birthDatePart.substring(4, 6)
+      form.value.birthday = birthYearMonth
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 //处理表单不同状态下的placeholder
 watch(
   () => props.actionType,
@@ -571,6 +586,13 @@ const rules = reactive<FormRules>({
       pattern: cardReg,
       trigger: 'change',
       message: '请输入正确的身份证号'
+    }
+  ],
+  phone: [
+    {
+      pattern: phoneReg,
+      message: '请输入正确的手机号',
+      trigger: 'change'
     }
   ],
   addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }]
