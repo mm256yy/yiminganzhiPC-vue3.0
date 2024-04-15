@@ -261,7 +261,7 @@ const schema = reactive<CrudSchema[]>([
         },
         children: [
           {
-            field: 'inCohouseSoarStatusunt',
+            field: 'houseSoarStatus',
             label: '房屋腾空',
             search: {
               show: false

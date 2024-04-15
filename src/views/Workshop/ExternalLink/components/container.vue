@@ -102,7 +102,7 @@
           />
           <ElTableColumn
             label="提交时间"
-            prop="unit"
+            prop="createdDate"
             align="center"
             show-overflow-tooltip
             header-align="center"
@@ -196,10 +196,11 @@ const getNewsDict = async () => {
 
 const feedback = async () => {
   const list = await feedbackList({})
-  list.content.sort(function (a, b) {
-    return b.createdDate < a.createdDate ? -1 : 1
-  })
+  // list.content.sort(function (a, b) {
+  //   return b.createdDate < a.createdDate ? -1 : 1
+  // })
   questionList.value = list.content
+  console.log('list', questionList.value)
 }
 
 const checkNews = (item: any) => {
