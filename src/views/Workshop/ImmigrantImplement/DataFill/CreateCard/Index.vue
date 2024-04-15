@@ -159,16 +159,7 @@
       :id="1"
     />
 
-    <div
-      style="
-        position: fixed;
-        left: -1000px;
-        display: flex;
-        width: 340mm;
-        padding: 10px 10px 0px 10px;
-      "
-      id="print"
-    >
+    <div style="display: flex; width: 340mm; padding: 10px 10px 0px 10px" id="print">
       <div style="width: 50%; padding-right: 10px">
         <h1 style="font-size: 24px; text-align: center">移民协议补偿登记卡</h1>
         <div
@@ -230,10 +221,10 @@
         </ElDescriptions>
         <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>
         <el-table
-          :data="tableObject.tableList"
+          :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
           header-cell-class-name="table-headers"
           border
-          style="width: 100%; font-size: 7px"
+          style="font-size: 7px; width: 100%"
         >
           <el-table-column
             :prop="item.field"
