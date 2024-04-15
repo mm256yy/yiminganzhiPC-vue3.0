@@ -23,7 +23,12 @@
       </ElSpace>
     </div>
 
-    <UploadItem :fileList="otherPic" title="其他附件上传" @change="fileChange" />
+    <UploadItem
+      :fileList="otherPic"
+      title="其他附件上传"
+      @change="fileChange"
+      @progress="progress"
+    />
   </div>
 </template>
 
@@ -111,6 +116,9 @@ const onSave = () => {
         loading.value = false
       })
   }
+}
+let progress = (e) => {
+  loading.value = e
 }
 </script>
 

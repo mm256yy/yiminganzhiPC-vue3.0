@@ -122,7 +122,9 @@
             props.type == 'PeasantHousehold'
               ? baseInfo.address
               : props.type == 'Village'
-              ? (baseInfo.areaCodeText || '') + (baseInfo.villageText || '')
+              ? (baseInfo.areaCodeText || '') +
+                (baseInfo.townCodeText || '') +
+                (baseInfo.villageText || '')
               : baseInfo.beforeAddress
           }}
         </el-descriptions-item>

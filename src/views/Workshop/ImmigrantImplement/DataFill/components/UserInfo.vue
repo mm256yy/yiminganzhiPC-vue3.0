@@ -263,6 +263,10 @@
         <div class="tit">法人：</div>
         <div class="txt">{{ props.baseInfo.legalPersonName || '-' }}</div>
       </div>
+      <div class="info-item">
+        <div class="tit">联系方式：</div>
+        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
+      </div>
     </div>
 
     <div class="other" v-if="type === 'IndividualB'">
@@ -281,6 +285,10 @@
       <div class="info-item">
         <div class="tit">法人：</div>
         <div class="txt">{{ props.baseInfo.legalPersonName || '-' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="tit">联系方式：</div>
+        <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
       </div>
     </div>
 

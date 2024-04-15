@@ -13,15 +13,12 @@
           :preview-src-list="[item.url]"
           :src="item.url"
           fit="cover"
-          v-if="item.url.split('.').pop().toLowerCase() != 'pdf'"
+          v-if="!item.url.includes('pdf')"
         />
         <ElImage style="width: 100px; height: 80px" v-else src="../src/assets/imgs/pdf.png" />
-        <div
-          class="image-txt"
-          :title="item.name"
-          v-if="item.url.split('.').pop().toLowerCase() != 'pdf'"
-          >{{ formatText(item.name) }}</div
-        >
+        <div class="image-txt" :title="item.name" v-if="!item.url.includes('pdf')">{{
+          formatText(item.name)
+        }}</div>
         <div class="image-txt" :title="item.name" v-else>{{ item.name }}</div>
       </div>
     </div>

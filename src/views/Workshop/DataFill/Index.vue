@@ -592,7 +592,8 @@ const onConfirmReport = async () => {
   if (result && Object.prototype.toString.call(result) === '[object String]') {
     ElMessage.success('上报成功！')
     getLandlordInfo()
-    back()
+    onClose()
+    // back()
   }
 }
 

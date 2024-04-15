@@ -15,6 +15,7 @@
         :on-success="uploadFileChange"
         :on-error="onError"
         :before-remove="() => false"
+        :on-progress="() => emit('progress', true)"
       >
         <template #file="{ file }">
           <div class="flex items-center w-full">
@@ -84,7 +85,7 @@ const dialogVisible = ref<boolean>(false)
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const props = defineProps<PropsType>()
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'progress'])
 
 watch(
   () => props.fileList,
@@ -124,10 +125,12 @@ const handleFileList = (_file) => {
   nextTick(() => {
     emit('change', fileListData.value)
   })
+  emit('progress', false)
 }
 
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+  emit('progress', false)
 }
 
 // 文件上传

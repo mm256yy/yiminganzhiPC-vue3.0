@@ -8,7 +8,7 @@
       <Search
         :schema="allSchemas.searchSchema"
         expand
-        :showFhHh="true"
+        :showFhHh="getRole() == 'implementleader'"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
@@ -491,6 +491,21 @@ const fillData = (row) => {
       uid: row.uid
     }
   })
+}
+/**
+ * 判断角色
+ */
+const userInfo = computed(() => appStore.getUserInfo)
+const currentProjectId = appStore.currentProjectId
+
+const getRole = () => {
+  if (userInfo.value) {
+    const project = userInfo.value.projectUsers.find((x: any) => x.projectId === currentProjectId)
+    const role = project && project.roles && project.roles.length ? project.roles[0].code : 'other'
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return 'other'
 }
 </script>
 
