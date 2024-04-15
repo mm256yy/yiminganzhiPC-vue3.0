@@ -510,7 +510,12 @@ const getSummaries = (params: any) => {
       18: totalCountObj.value.agreementStatusTotal,
       19: totalCountObj.value.buildOneselfStatusTotal,
       20: totalCountObj.value.flatsStatusTotal,
-      21: totalCountObj.value.centralizedSupportStatusTotal
+      21: totalCountObj.value.centralizedSupportStatusTotal,
+      22: totalCountObj.value.selfSeekingStatusTotal,
+      23: totalCountObj.value.agricultureArrangementStatusTotal,
+      24: totalCountObj.value.retirementStatusTotal,
+      25: totalCountObj.value.selfEmploymentStatusTotal,
+      26: totalCountObj.value.proceduresStatusTotal
     }
     sums[index] = totalMap[index]
     return

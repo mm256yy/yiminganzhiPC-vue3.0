@@ -25,7 +25,6 @@
         }"
         :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
-        :span-method="objectSpanMethod"
         row-key="id"
         headerAlign="center"
         align="center"
@@ -135,7 +134,7 @@ const schema = reactive<CrudSchema[]>([
       },
       {
         field: 'cardStatusCount',
-        label: '个体户建卡',
+        label: '企业建卡',
         search: {
           show: false
         }
