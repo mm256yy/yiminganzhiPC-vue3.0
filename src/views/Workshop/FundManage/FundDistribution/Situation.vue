@@ -150,13 +150,13 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
-let moneyList = async () => {
-  let list = await getSumAmount({ projectId: projectId })
+let moneyList = async (e) => {
+  let list = await getSumAmount(e)
   molingData.value = list
   console.log(molingData)
 }
 onMounted(() => {
-  moneyList()
+  moneyList({ projectId: projectId, type: typeNow.value })
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
@@ -176,6 +176,7 @@ const selenceTable = (e: string, value: string) => {
   typeNow.value = value
   tableObject.params.type = value
   getList()
+  moneyList(tableObject.params)
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -382,6 +383,7 @@ const onSearch = (data) => {
     })
     delete params.code
   }
+  moneyList({ ...tableObject.params, ...params })
   setSearchParams({ ...params })
 }
 let handelShowform = (e: any) => {
@@ -397,6 +399,7 @@ const onEditFormClose = (flag: boolean) => {
 }
 let setSearchParamss = () => {
   tableObject.params = { type: typeNow.value }
+  moneyList({ ...tableObject.params })
   setSearchParams({})
 }
 </script>

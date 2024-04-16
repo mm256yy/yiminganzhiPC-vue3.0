@@ -161,7 +161,7 @@ let moneyList = async (e) => {
   console.log(molingData)
 }
 onMounted(() => {
-  moneyList({ projectId: projectId })
+  moneyList({ projectId: projectId, type: 'PeasantHousehold' })
   getHeadInfo()
   getLpListHandle()
   getdistrictTree()
@@ -459,9 +459,9 @@ const onSearch = (data) => {
 const onReset = () => {
   tableObject.params = {
     projectId,
-    type: 'PeasantHousehold'
+    type: tableObject.params.type
   }
-
+  moneyList({ ...tableObject.params })
   getList()
 }
 
