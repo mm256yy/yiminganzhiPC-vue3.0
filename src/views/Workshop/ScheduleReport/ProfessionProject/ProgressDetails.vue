@@ -37,7 +37,6 @@
         row-key="id"
         headerAlign="center"
         align="center"
-        height="600"
         show-overflow-tooltip
         @register="register"
       >
