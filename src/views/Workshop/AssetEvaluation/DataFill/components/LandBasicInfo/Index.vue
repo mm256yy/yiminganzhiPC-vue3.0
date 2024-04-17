@@ -148,8 +148,15 @@
           align="center"
           header-align="center"
         >
-          <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.getType" />
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.getType">
+              <ElOption
+                v-for="item in dictObj[421]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </template>
         </ElTableColumn>
         <ElTableColumn
