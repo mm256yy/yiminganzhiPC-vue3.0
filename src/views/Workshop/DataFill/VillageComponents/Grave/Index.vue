@@ -6,7 +6,7 @@
           <ElUpload
             action="/api/immigrantGrave/import"
             :headers="headers"
-            :data="{ peasanHouseId }"
+            :data="{ peasanHouseId, templateKey }"
             :show-file-list="false"
             accept=".xls,.xlsx"
             :before-upload="beforeUpload"
@@ -22,6 +22,50 @@
           <ElButton :icon="downloadIcon" type="default" @click="onDownloadTemplate">
             模版下载
           </ElButton>
+          <ElPopover :width="1000" trigger="click" @show="handelshow">
+            <template #reference>
+              <div class="view-upload">
+                <span class="pr-10px">批量导入日志</span>
+                <Icon icon="ant-design:eye-outlined" color="var(--el-color-primary)" />
+              </div>
+            </template>
+            <div class="file-list" v-loading="loading">
+              <div class="file-item" v-for="item in excelList" :key="item.id">
+                <div class="file-name flex items-center flex-none w-372px">
+                  <Icon icon="ant-design:file-sync-outlined" />
+                  <div class="w-350px ml-5px">
+                    {{ item.name }}
+                  </div>
+                </div>
+                <div class="flex-none w-150px">{{
+                  item.createdDate ? dayjs(item.createdDate).format('YYYY-MM-DD HH:mm:ss') : ''
+                }}</div>
+                <div class="flex-none w-398px m-lr-20px">
+                  {{ item.remark }}
+                </div>
+                <div class="flex-shrink-0">
+                  <div class="flex items-center" v-if="item.status === FileReportStatus.success">
+                    <span class="pr-10px">
+                      ( 共导入
+                      <span class="number">{{ item.num ? '' + item.num : '-' }}</span>
+                      条)
+                    </span>
+                    <Icon icon="ant-design:check-circle-outlined" color="#30A952" />
+                  </div>
+
+                  <div
+                    class="flex items-center text-[#F93F3F]"
+                    v-else-if="item.status === FileReportStatus.failure"
+                  >
+                    <span class="pr-10px">上传失败</span>
+                    <Icon icon="ant-design:close-circle-outlined" color="#F93F3F" />
+                  </div>
+
+                  <div v-else>导入中</div>
+                </div>
+              </div>
+            </div>
+          </ElPopover>
         </ElSpace>
         <ElSpace v-if="type != 'Landlord'">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
@@ -179,6 +223,24 @@
             </ElSelect>
           </template>
         </ElTableColumn>
+        <ElTableColumn label="身份证号" prop="card" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInput
+              :placeholder="type == 'Landlord' ? '' : '请输入'"
+              v-model="row.card"
+              :disabled="type == 'Landlord'"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="联系方式" prop="phone" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInput
+              :placeholder="type == 'Landlord' ? '' : '请输入'"
+              v-model="row.phone"
+              :disabled="type == 'Landlord'"
+            />
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput
@@ -214,7 +276,8 @@ import {
   ElSelect,
   ElOption,
   ElMessage,
-  ElMessageBox
+  ElMessageBox,
+  ElPopover
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -226,6 +289,8 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useRouter } from 'vue-router'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
+import { getPgExcelList } from '@/api/workshop/population/service'
+import dayjs from 'dayjs'
 
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
@@ -240,6 +305,7 @@ const loading = ref(false)
 const uploadLoading = ref(false)
 const props = defineProps<PropsType>()
 const peasanHouseId = +props.householdId
+const templateKey = 'importGrave'
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const saveIcon = useIcon({ icon: 'mingcute:save-line' })
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
@@ -256,6 +322,12 @@ const headers = ref({
   'Project-Id': projectId,
   Authorization: appStore.getToken
 })
+
+enum FileReportStatus {
+  success = 'Succeed',
+  failure = 'Failure',
+  importing = 'Importing'
+}
 // const defaultRow = {
 //   villageDoorNo: props.doorNo,
 //   villageId: props.householdId,
@@ -282,7 +354,19 @@ const graveTypeChange = (val) => {
     }
   })
 }
-
+let handelshow = () => {
+  loading.value = true
+  getExcelUploadList()
+}
+let excelList = ref()
+const getExcelUploadList = async () => {
+  const type = 'importGrave'
+  const res = await getPgExcelList(type)
+  if (res && res.content) {
+    excelList.value = res.content
+  }
+  loading.value = false
+}
 const remoteMethod = (query: string) => {
   if (query) {
     loading.value = true
@@ -400,3 +484,52 @@ onMounted(() => {
   })
 })
 </script>
+<style lang="less" scoped>
+.view-upload {
+  display: flex;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-color-1);
+  white-space: nowrap;
+  cursor: default;
+  background: #ffffff;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
+  align-items: center;
+}
+.file-list {
+  height: 210px;
+  overflow-y: scroll;
+
+  .file-item {
+    display: flex;
+    padding: 5px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-color-1);
+    border-bottom: 1px solid #ebebeb;
+    align-items: center;
+
+    .m-lr-20px {
+      margin: 0 20px;
+    }
+
+    .file-name {
+      text-align: justify;
+      word-break: break-all;
+    }
+
+    .number {
+      font-weight: 500;
+      color: var(--el-color-primary);
+    }
+
+    .flex-none {
+      flex: none;
+    }
+  }
+}
+</style>
