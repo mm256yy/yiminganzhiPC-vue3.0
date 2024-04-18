@@ -190,7 +190,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号
 ${baseInfo.showDoorNo} `
           }}</div
         >
@@ -204,10 +204,10 @@ ${baseInfo.showDoorNo} `
         header-cell-class-name="table-headers"
         cell-class-name="table-cellss"
       >
-        <el-table-column type="index" label="序号" width="100" align="center" />
-        <el-table-column prop="settleAddressText" label="区块" align="center" />
-        <el-table-column prop="houseAreaTypeText" label="类型" align="center" />
-        <el-table-column prop="area" label="户型/套型" align="center" />
+        <el-table-column type="index" label="序号" width="50" align="center" />
+        <el-table-column prop="settleAddressText" label="区块" width="100" align="center" />
+        <el-table-column prop="houseAreaTypeText" label="类型" width="80" align="center" />
+        <el-table-column prop="area" label="户型/套型" width="90" align="center" />
         <el-table-column label="备注" align="center">
           <template #default></template>
         </el-table-column>

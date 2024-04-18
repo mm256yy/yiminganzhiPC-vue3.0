@@ -92,7 +92,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -109,19 +109,35 @@
         cell-class-name="table-cellss"
         border
       >
-        <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
-        <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
+        <ElTableColumn label="序号" width="50" type="index" align="center" header-align="center" />
+        <ElTableColumn
+          label="区块"
+          width="100"
+          prop="settleAddress"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }"> {{ row.settleAddressText }} </template>
         </ElTableColumn>
-        <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
+        <ElTableColumn
+          label="类型"
+          width="100"
+          prop="houseAreaType"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
-          <template #default="{ row }">
-            {{ row.landNo }}
-          </template>
+        <ElTableColumn
+          label="地块编号"
+          width="130"
+          prop="landNo"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }"> {{ row.landNo }} </template>
         </ElTableColumn>
         <ElTableColumn label="备注" align="center" />
       </ElTable>

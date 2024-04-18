@@ -81,7 +81,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -94,14 +94,14 @@
         header-cell-class-name="table-headers"
         cell-class-name="table-cellss"
       >
-        <el-table-column prop="relation" label="坟墓与登记人关系" align="center">
+        <el-table-column prop="relation" width="140" label="坟墓与登记人关系" align="center">
           <template #default="{ row }">
             {{ dictFmt(row.relation, 307) }}
           </template>
         </el-table-column>
-        <el-table-column prop="number" label="数量" align="center" />
-        <el-table-column prop="handleWayText" label="处理方式" align="center" />
-        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center">
+        <el-table-column width="60" prop="number" label="数量" align="center" />
+        <el-table-column prop="handleWayText" width="80" label="处理方式" align="center" />
+        <el-table-column prop="settingGrave" width="140" label="安置公墓/择址地址" align="center">
           <template #default="{ row }">
             {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
           </template>

@@ -305,6 +305,7 @@ const onSubmit = debounce((formEl) => {
 
       submit(data)
     } else {
+      btnLoading.value = false
       return false
     }
   })

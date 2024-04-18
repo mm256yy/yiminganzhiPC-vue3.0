@@ -79,7 +79,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -92,21 +92,21 @@
         header-cell-class-name="table-headers"
         cell-class-name="table-cellss"
       >
-        <el-table-column prop="relation" label="坟墓与登记人关系" align="center">
+        <el-table-column prop="relation" width="130" label="坟墓与登记人关系" align="center">
           <template #default="{ row }">
             {{ dictFmt(row.relation, 307) }}
           </template>
         </el-table-column>
-        <el-table-column prop="number" label="数量" align="center" />
-        <el-table-column prop="handleWayText" label="处理方式" align="center" />
-        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center">
+        <el-table-column prop="number" label="数量" width="50" align="center" />
+        <el-table-column prop="handleWayText" label="处理方式" width="80" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" width="130" align="center">
           <template #default="{ row }">
             <!-- handleWay 处理方式，1 择址地址 2 安置公墓 -->
             <dib v-if="row.handleWay == 1">{{ row.settingAddress }}</dib>
             <div v-else-if="row.handleWay == 2">{{ row.settingGraveText }}</div>
           </template>
         </el-table-column>
-        <el-table-column prop="graveNo" label="编号" align="center" />
+        <el-table-column prop="graveNo" label="编号" width="50" align="center" />
         <el-table-column label="备注" align="center">
           <template #default></template>
         </el-table-column>

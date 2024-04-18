@@ -123,7 +123,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -136,11 +136,11 @@
         header-cell-class-name="table-headers"
         cell-class-name="table-cellss"
       >
-        <el-table-column prop="name" label="姓名" width="80" align="center" />
-        <el-table-column prop="relationText" label="与户主关系" width="100" align="center" />
-        <el-table-column prop="card" label="身份证号" width="180" align="center" />
-        <el-table-column prop="populationNatureText" label="人口性质" align="center" />
-        <el-table-column prop="settingWay" label="安置类型" align="center">
+        <el-table-column prop="name" label="姓名" width="60" align="center" />
+        <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
+        <el-table-column prop="card" label="身份证号" width="140" align="center" />
+        <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
+        <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
           <template #default="{ row }">
             {{ filterWay(row).filter((item) => item.value === row.settingWay)[0].label }}
           </template>

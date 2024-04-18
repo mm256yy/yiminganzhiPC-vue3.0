@@ -237,7 +237,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -251,18 +251,36 @@
         cell-class-name="table-cellss"
         border
       >
-        <ElTableColumn label="序号" width="80" type="index" align="center" header-align="center" />
-        <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
+        <ElTableColumn label="序号" width="50" type="index" align="center" header-align="center" />
+        <ElTableColumn
+          label="区块"
+          prop="settleAddress"
+          align="center"
+          width="100"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
+        <ElTableColumn
+          label="类型"
+          prop="houseAreaType"
+          align="center"
+          width="80"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
+        <ElTableColumn
+          label="地块编号"
+          prop="landNo"
+          align="center"
+          width="80"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{ row.landNo ? row.landNoOptions.filter((e) => row.landNo == e.name)[0].name : '-' }}
           </template>
@@ -277,10 +295,10 @@
         v-if="baseInfo.houseAreaType === 'flat'"
         border
       >
-        <ElTableColumn label="序号" type="index" align="center" header-align="center" />
+        <ElTableColumn label="序号" type="index" align="center" width="50" header-align="center" />
         <ElTableColumn
           label="区块"
-          width="120"
+          width="100"
           prop="settleAddress"
           align="center"
           header-align="center"
@@ -289,14 +307,32 @@
             {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="房型" prop="houseAreaType" align="center" header-align="center">
+        <ElTableColumn
+          label="房型"
+          prop="houseAreaType"
+          width="80"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="幢号" prop="houseNo" align="center" header-align="center" />
-        <ElTableColumn label="室号" prop="roomNo" align="center" header-align="center" />
-        <ElTableColumn label="储藏室编号" prop="storeroomNo" align="center" header-align="center">
+        <ElTableColumn
+          label="幢号"
+          prop="houseNo"
+          align="center"
+          width="50"
+          header-align="center"
+        />
+        <ElTableColumn label="室号" prop="roomNo" align="center" width="70" header-align="center" />
+        <ElTableColumn
+          label="储藏室编号"
+          prop="storeroomNo"
+          align="center"
+          width="90"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{
               row.storeroomNo
@@ -305,7 +341,13 @@
             }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="车库编号" prop="carNo" align="center" header-align="center">
+        <ElTableColumn
+          label="车库编号"
+          prop="carNo"
+          align="center"
+          width="80"
+          header-align="center"
+        >
           <template #default="{ row }">
             {{
               row.carNo ? row.carNoOptions?.filter((e: any) => row.carNo == e.name)[0].name : '-'

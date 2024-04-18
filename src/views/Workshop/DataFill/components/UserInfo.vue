@@ -14,7 +14,7 @@
           class="pl-8px text-size-14px text-[#1C5DF1]"
           v-for="(item, index) in props.baseInfo.relateIndividualName?.split(',')"
           :key="item"
-          @click="handleHouseholdClick(index)"
+          @click="fillData('IndividualB', props.baseInfo.relateIndividualName, index)"
           style="color: #1c5df1"
         >
           {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -26,7 +26,7 @@
           class="pl-8px text-size-14px text-[#1C5DF1]"
           v-for="(item, index) in props.baseInfo.relateCompanyName?.split(',')"
           :key="item"
-          @click="handleCompanyClick(index)"
+          @click="fillData('Enterprise', props.baseInfo.relateCompanyName, index)"
           style="color: #1c5df1"
         >
           {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -35,7 +35,7 @@
       <div v-if="props.type == 'Enterprise' || props.type == 'IndividualB'">
         关联居民户：<span
           class="pl-8px text-size-14px text-[#1C5DF1]"
-          @click="handleLandlordClick"
+          @click="fillData('PeasantHousehold', props.baseInfo.householderName)"
           >{{ props.baseInfo.householderName || '' }}</span
         ></div
       >
@@ -225,6 +225,43 @@ const handleLandlordClick = () => {
       type: 'Landlord'
     }
   })
+}
+const fillData = (row, name: any, index?: any) => {
+  if (!name) return false
+  console.log(row)
+  let routerName = 'DataFill'
+  if (globalData.currentSurveyStatus === SurveyStatusEnum.Review) {
+    routerName = 'DataFillCheck'
+  }
+  if (row == 'IndividualB') {
+    push({
+      name: routerName,
+      query: {
+        householdId: props.baseInfo.relateIndividualId,
+        doorNo: props.baseInfo.relateIndividualDoorNo,
+        type: 'IndividualB'
+      }
+    })
+  } else if (row == 'Enterprise') {
+    push({
+      name: routerName,
+      query: {
+        householdId: props.baseInfo.relateCompanyId.split(',')[index],
+        doorNo: props.baseInfo.relateCompanyDoorNo.split(',')[index],
+        type: 'Enterprise'
+      }
+    })
+  } else {
+    push({
+      name: routerName,
+      query: {
+        householdId: props.baseInfo.householderId,
+        doorNo: props.baseInfo.householderDoorNo,
+        type: 'Landlord'
+      }
+    })
+  }
+  console.log(1)
 }
 </script>
 
