@@ -398,7 +398,11 @@ watch(
   (val) => {
     if (val) {
       form.value.householderName = props.name
+<<<<<<< HEAD
       // form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
+=======
+      form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
+>>>>>>> 72e08a2c (fix: 提交备注13)
       form.value.householderDoorNo = props.doorNo
     } else {
       form.value = defaultValue
