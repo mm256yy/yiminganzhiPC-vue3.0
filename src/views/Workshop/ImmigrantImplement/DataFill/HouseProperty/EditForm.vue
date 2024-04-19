@@ -18,48 +18,11 @@
       :rules="rules"
     >
       <ElRow>
-        <!-- <ElCol :span="12">
-          <ElFormItem label="新增原因" prop="addReason">
-            <ElSelect clearable filterable v-model="form.addReason" class="!w-full">
+        <ElCol :span="12">
+          <ElFormItem label="是否合法" prop="isCompliance">
+            <ElSelect clearable filterable v-model="form.isCompliance" class="!w-full">
               <ElOption
-                v-for="item in dictObj[369]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol> -->
-        <ElCol :span="12">
-          <ElFormItem label="房屋编号" prop="houseNo">
-            <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="层数" prop="storeyNumber">
-            <ElInput v-model="form.storeyNumber" class="!w-full" type="number" placeholder="请输入">
-              <template #append> 层 </template>
-            </ElInput>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="建筑面积" prop="landArea">
-            <ElInput v-model="form.landArea" class="!w-full" type="number" placeholder="请输入">
-              <template #append> ㎡ </template>
-            </ElInput>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="房屋结构" prop="constructionType">
-            <ElSelect clearable filterable v-model="form.constructionType" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[252]"
+                v-for="item in dictObj[371]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -67,6 +30,11 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
+        <ElCol :span="12">
+          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
+        </ElCol>
+      </ElRow>
+      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="房屋来源" prop="houseNature">
             <ElSelect clearable filterable v-model="form.houseNature" class="!w-full">
@@ -79,9 +47,6 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow>
         <ElCol :span="12">
           <ElFormItem label="房屋产权人" prop="demographicId">
             <ElSelect class="!w-full" v-model="form.demographicId" clearable placeholder="请选择">
@@ -94,8 +59,10 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
+      </ElRow>
+      <ElRow>
         <ElCol :span="12">
-          <ElFormItem label="共有人情况" prop="ownersSituation">
+          <ElFormItem label="共有人" prop="ownersSituation">
             <ElSelect
               v-model="form.ownersSituation"
               class="!w-full"
@@ -117,7 +84,84 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="其他共有人" prop="outdoorOwners">
+            <ElInput
+              v-model="form.outdoorOwners"
+              maxlength="200"
+              class="!w-full"
+              placeholder="请输入其他共有人"
+              :autosize="{ minRows: 2, maxRows: 7 }"
+              show-word-limit
+              type="textarea"
+            />
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="房屋编号" prop="houseNo">
+            <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12">
+          <ElFormItem label="层数" prop="storeyNumber">
+            <ElInput v-model="form.storeyNumber" class="!w-full" type="number" placeholder="请输入">
+              <template #append> 层 </template>
+            </ElInput>
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="建筑面积(㎡)" prop="landArea">
+            <ElInput v-model="form.landArea" class="!w-full" type="number" placeholder="请输入">
+              <template #append> ㎡ </template>
+            </ElInput>
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12">
+          <ElFormItem label="房屋结构" prop="constructionType">
+            <ElSelect clearable filterable v-model="form.constructionType" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[252]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="集体土地使用权证" prop="landNo">
+            <ElInput v-model="form.landNo" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12">
+          <ElFormItem label="土地证面积(㎡)" prop="landCardArea">
+            <ElInput v-model="form.landCardArea" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="房屋所有权证" prop="propertyNo">
+            <ElInput v-model="form.propertyNo" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="备注" prop="remark">
+            <ElInput v-model="form.remark" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
       <ElRow>
         <ElCol :span="24">
           <ElFormItem label="房屋平面示意图">
@@ -250,92 +294,6 @@
 
       <ElRow>
         <ElCol :span="24">
-          <ElFormItem label="其他附件">
-            <div class="card-img-list">
-              <ElUpload
-                :class="[actionType === 'view' ? 'upload' : '']"
-                action="/api/file/type"
-                :data="{
-                  type: 'image'
-                }"
-                :on-error="onError"
-                :list-type="'picture-card'"
-                accept=".jpg,.jpeg,.png"
-                :multiple="true"
-                :file-list="otherPic"
-                :headers="headers"
-                :on-success="uploadFileChange4"
-                :before-remove="beforeRemove"
-                :on-remove="removeFile4"
-                :on-preview="imgPreview"
-              >
-                <template #trigger v-if="actionType !== 'view'">
-                  <div class="card-img-box">
-                    <div class="card-img-custom">
-                      <Icon icon="ant-design:plus-outlined" :size="22" />
-                    </div>
-                    <div class="card-txt">点击上传</div>
-                  </div>
-                </template>
-              </ElUpload>
-            </div>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-
-      <!-- 分割线 -->
-      <ElRow>
-        <ElDivider />
-      </ElRow>
-      <ElRow>
-        <ElCol :span="12">
-          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="是否合法" prop="isCompliance">
-            <ElSelect clearable filterable v-model="form.isCompliance" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[371]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="集体土地使用权证" prop="landNo">
-            <ElInput v-model="form.landNo" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="房屋所有权证" prop="propertyNo">
-            <ElInput v-model="form.propertyNo" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="宅基地面积" prop="homesteadArea">
-            <ElInput v-model="form.homesteadArea" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="12" />
-      </ElRow>
-      <ElRow>
-        <ElCol :span="24">
           <ElFormItem label="其他佐证材料">
             <div class="card-img-list">
               <ElUpload
@@ -369,12 +327,38 @@
         </ElCol>
       </ElRow>
       <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="备注" prop="remark">
-            <ElInput v-model="form.remark" class="!w-full" placeholder="请输入" />
+        <ElCol :span="24">
+          <ElFormItem label="其他附件">
+            <div class="card-img-list">
+              <ElUpload
+                :class="[actionType === 'view' ? 'upload' : '']"
+                action="/api/file/type"
+                :data="{
+                  type: 'image'
+                }"
+                :on-error="onError"
+                :list-type="'picture-card'"
+                accept=".jpg,.jpeg,.png"
+                :multiple="true"
+                :file-list="otherPic"
+                :headers="headers"
+                :on-success="uploadFileChange4"
+                :before-remove="beforeRemove"
+                :on-remove="removeFile4"
+                :on-preview="imgPreview"
+              >
+                <template #trigger v-if="actionType !== 'view'">
+                  <div class="card-img-box">
+                    <div class="card-img-custom">
+                      <Icon icon="ant-design:plus-outlined" :size="22" />
+                    </div>
+                    <div class="card-txt">点击上传</div>
+                  </div>
+                </template>
+              </ElUpload>
+            </div>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="12" />
       </ElRow>
     </ElForm>
 
