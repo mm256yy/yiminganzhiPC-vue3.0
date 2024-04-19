@@ -195,8 +195,9 @@ const rules = reactive<FormRules>({
   name: [required()],
   // doorNo: [required()],
   householdNumber: [required()],
-  // phone: [required()],
-  parentCode: [required()]
+  phone: [required()],
+  parentCode: [required()],
+  locationType: [required()]
 })
 
 // 关闭弹窗
