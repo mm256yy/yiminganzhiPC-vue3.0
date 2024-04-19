@@ -16,27 +16,35 @@
             <span class="text">搬迁安置人数统计：</span>
           </div>
           <div style="display: flex">
-            <ElFormItem label="家庭总人数" prop="familyNum">
-              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="家庭总人数" prop="familyNum" v-if="familyTotal">
+              <div class="!w-100px"
+                >{{ form.familyNum - form.addPopulationNum }}&nbsp; <span>(人)</span></div
+              >
             </ElFormItem>
-            <ElFormItem label="农村移民">
+            <ElFormItem label="农村移民" v-if="form.ruralMigrantNum">
               <div class="!w-100px">{{ form.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="非农村移民">
+            <ElFormItem label="非农村移民" v-if="form.unruralMigrantNum">
               <div class="!w-100px">{{ form.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="农业随迁" prop="familyNum">
+            <ElFormItem label="农业随迁" prop="familyNum" v-if="form.farmingMigrantNum">
               <div class="!w-100px">{{ form.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="非农业随迁" prop="familyNum">
+            <ElFormItem label="非农业随迁" prop="familyNum" v-if="form.unfarmingMigrantNum">
               <div class="!w-100px">{{ form.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="增计人口" prop="familyNum" v-if="form.addPopulationNum">
+              <div class="!w-100px">{{ form.addPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
           <div style="display: flex">
-            <ElFormItem label="其他人口" prop="familyNum">
+            <ElFormItem label="财产户" prop="familyNum" v-if="form.propertyNum">
+              <div class="!w-100px">{{ form.propertyNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="其他人口" prop="familyNum" v-if="form.otherPopulationNum">
               <div class="!w-100px">{{ form.otherPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="安置总人数" prop="familyNum">
+            <ElFormItem label="安置总人数" prop="familyNum" v-if="form.familyNum">
               <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
@@ -542,6 +550,10 @@ let comdbe = async () => {
     htmlToPdf('#anztable', '搬迁安置确认单')
   })
 }
+// 家庭总人数
+const familyTotal = computed(() => {
+  return form.value.familyNum - form.value.addPopulationNum
+})
 </script>
 
 <style lang="less" scoped>

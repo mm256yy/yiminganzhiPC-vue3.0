@@ -34,7 +34,10 @@
               </ElFormItem>
             </ElCol>
             <ElCol :span="12">
-              <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+              <!-- <MapFormItem :required="false" :positon="position" @change="onChosePosition" /> -->
+              <ElFormItem label="宅基地总面积(㎡)：" label-width="150px">
+                <ElInput v-model="position.homesteadArea" placeholder="请输入" />
+              </ElFormItem>
             </ElCol>
           </ElRow>
           <ElRow>
@@ -386,10 +389,10 @@ const onSave = () => {
     ElMessage.error('请输入联系方式')
     return
   }
-  if (!position.latitude || !position.longitude) {
-    ElMessage.error('请选择地理位置')
-    return
-  }
+  // if (!position.latitude || !position.longitude) {
+  //   ElMessage.error('请选择地理位置')
+  //   return
+  // }
   updateHouseholdInfo(params).then(() => {
     ElMessage.success('操作成功！')
     emit('updateData')

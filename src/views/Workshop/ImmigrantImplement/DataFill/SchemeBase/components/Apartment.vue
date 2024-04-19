@@ -4,9 +4,29 @@
       <div class="common-label flex-center">公寓房安置人数：</div>
       <div class="common-value">
         <div class="value-center">
-          {{ baseInfo.familyNum }}人，其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，
-          非农移民：{{ baseInfo.unruralMigrantNum }}人，随迁人口：
-          {{ baseInfo.familyNum - baseInfo.ruralMigrantNum - baseInfo.unruralMigrantNum }} 人
+          <span v-if="baseInfo.familyNum">{{ baseInfo.familyNum }}人，</span>
+          <span v-if="baseInfo.ruralMigrantNum"
+            >其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，</span
+          >
+          <span v-if="baseInfo.unruralMigrantNum"
+            >非农移民：{{ baseInfo.unruralMigrantNum }}人，</span
+          >
+          <span v-if="baseInfo.farmingMigrantNum"
+            >农业移民：{{ baseInfo.farmingMigrantNum }}人，</span
+          >
+          <span v-if="baseInfo.farmingMigrantNum"
+            >随迁人口： {{ baseInfo.farmingMigrantNum }}人，</span
+          >
+          <span v-if="baseInfo.unfarmingMigrantNum"
+            >非随迁人数：{{ baseInfo.unfarmingMigrantNum }}人，</span
+          >
+          <span v-if="baseInfo.addPopulationNum"
+            >增计人口数：{{ baseInfo.addPopulationNum }}人，</span
+          >
+          <span v-if="baseInfo.otherPopulationNum"
+            >其他人口数：{{ baseInfo.otherPopulationNum }}人，</span
+          >
+          <span v-if="baseInfo.propertyNum">财产户人数：{{ baseInfo.propertyNum }}人</span>
         </div>
       </div>
     </div>

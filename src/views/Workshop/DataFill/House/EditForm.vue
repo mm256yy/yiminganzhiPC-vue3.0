@@ -19,7 +19,7 @@
     >
       <ElRow :gutter="30">
         <ElCol :span="8">
-          <ElFormItem label="幢号" prop="houseNo">
+          <ElFormItem label="幢号111" prop="houseNo">
             <ElInput v-model="form.houseNo" placeholder="请输入幢号" />
           </ElFormItem>
         </ElCol>
@@ -55,7 +55,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="层高" prop="storeyHeight">
+          <ElFormItem label="层高（m²）" prop="storeyHeight">
             <ElInput type="number" v-model="form.storeyHeight" placeholder="请输入层高" />
           </ElFormItem>
         </ElCol>
@@ -92,7 +92,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="房屋高程" prop="houseHeight">
+          <ElFormItem label="房屋高程（m²）" prop="houseHeight">
             <ElInput
               clearable
               filterable
@@ -236,7 +236,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="建筑面积" prop="landArea">
+          <ElFormItem label="建筑面积（m²）" prop="landArea">
             <ElInput
               clearable
               filterable
@@ -309,7 +309,7 @@
               </div>
             </template>
           </ElUpload>
-          <div
+          <!-- <div
             style="display: flex; height: 88px"
             :class="[housePic.length == 0 ? 'CADuplogd' : '']"
           >
@@ -332,7 +332,7 @@
                 <el-button type="primary">点击上传</el-button>
               </template>
             </ElUpload>
-          </div>
+          </div> -->
         </div>
       </ElFormItem>
 

@@ -358,7 +358,13 @@ watch(
 
 // 规则校验
 const rules = reactive<FormRules>({
-  facilitiesName: [required()]
+  facilitiesName: [required()],
+  facilitiesType: [required()],
+  facilitiesCode: [required()],
+  number: [required()],
+  unit: [required()],
+  locationType: [required()],
+  inundationRang: [required()]
 })
 
 // 关闭弹窗
