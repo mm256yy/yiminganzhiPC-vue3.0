@@ -230,6 +230,7 @@ const position: {
   longitude: number
   address?: string
   phone?: string
+  homesteadArea?: string
 } = reactive({
   latitude: 0,
   longitude: 0
@@ -274,6 +275,7 @@ watch(
       position.latitude = form.value.latitude
       position.longitude = form.value.longitude
       position.phone = form.value.phone
+      position.homesteadArea = form.value.homesteadArea
     } catch (error) {
       console.log(error, 'bbq')
     }
@@ -379,7 +381,8 @@ const onSave = () => {
     resettlePic: resettlePic.value ? JSON.stringify(resettlePic.value) : '',
     latitude: position.latitude,
     longitude: position.longitude,
-    phone: position.phone
+    phone: position.phone,
+    homesteadArea: position.homesteadArea
   }
   if (!householdPic.value.length) {
     ElMessage.error('请上传户主照片')
