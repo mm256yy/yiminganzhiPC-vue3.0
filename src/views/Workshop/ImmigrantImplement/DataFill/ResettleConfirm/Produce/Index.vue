@@ -16,33 +16,38 @@
             <span class="text">生产安置人数统计：</span>
           </div>
           <div style="display: flex">
-            <ElFormItem label="家庭总人数" prop="familyNum">
-              <div class="!w-120px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="家庭总人数" prop="familyNum" v-if="familyTotal">
+              <div class="!w-100px"
+                >{{ baseInfo.familyNum - baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div
+              >
             </ElFormItem>
-            <ElFormItem label="农村移民" prop="familyNum">
-              <div class="!w-120px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="农村移民" v-if="baseInfo.ruralMigrantNum">
+              <div class="!w-100px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="非农村移民" prop="familyNum">
-              <div class="!w-120px">{{ baseInfo.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="非农村移民" v-if="baseInfo.unruralMigrantNum">
+              <div class="!w-100px">{{ baseInfo.unruralMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="农业随迁" prop="familyNum">
-              <div class="!w-120px">{{ baseInfo.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="农业随迁" prop="familyNum" v-if="baseInfo.farmingMigrantNum">
+              <div class="!w-100px">{{ baseInfo.farmingMigrantNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="非农业随迁" prop="familyNum">
-              <div class="!w-120px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="非农业随迁" prop="familyNum" v-if="baseInfo.unfarmingMigrantNum">
+              <div class="!w-100px">{{ baseInfo.unfarmingMigrantNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem>
+            <ElFormItem label="增计人口" prop="familyNum" v-if="baseInfo.addPopulationNum">
+              <div class="!w-100px">{{ baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
           </div>
-          <!-- <div style="display: flex">
-            <ElFormItem label="增计人口" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div>
+          <div style="display: flex">
+            <ElFormItem label="财产户" prop="familyNum" v-if="baseInfo.propertyNum">
+              <div class="!w-100px">{{ baseInfo.propertyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="其他人口" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.otherPopulationNum }}&nbsp; <span>(人)</span></div>
+            <ElFormItem label="其他人口" prop="familyNum" v-if="baseInfo.otherPopulationNum">
+              <div class="!w-100px">{{ baseInfo.otherPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
-            <ElFormItem label="安置总人数" prop="familyNum">
-              <div class="!w-150px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
-            </ElFormItem>
-          </div> -->
+            <!-- <ElFormItem label="安置总人数" prop="familyNum" v-if="form.familyNum">
+              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+            </ElFormItem> -->
+          </div>
         </ElForm>
       </div>
 
@@ -123,7 +128,7 @@
       >
         <div>
           {{
-            `${baseInfo.areaCodeText} ${baseInfo.townCodeText} ${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
+            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
           }}</div
         >
 
@@ -136,11 +141,11 @@
         header-cell-class-name="table-headers"
         cell-class-name="table-cellss"
       >
-        <el-table-column prop="name" label="姓名" width="80" align="center" />
-        <el-table-column prop="relationText" label="与户主关系" width="100" align="center" />
-        <el-table-column prop="card" label="身份证号" width="180" align="center" />
-        <el-table-column prop="populationNatureText" label="人口性质" align="center" />
-        <el-table-column prop="settingWay" label="安置类型" align="center">
+        <el-table-column prop="name" label="姓名" width="60" align="center" />
+        <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
+        <el-table-column prop="card" label="身份证号" width="140" align="center" />
+        <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
+        <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
           <template #default="{ row }">
             {{ filterWay(row).filter((item) => item.value === row.settingWay)[0].label }}
           </template>
@@ -405,6 +410,10 @@ let comdbe = () => {
     htmlToPdf('#anztable', '生产安置')
   })
 }
+// 家庭总人数
+const familyTotal = computed(() => {
+  return props.baseInfo.familyNum - props.baseInfo.addPopulationNum
+})
 </script>
 <style lang="less" scoped>
 :deep(.el-dialog__body) {

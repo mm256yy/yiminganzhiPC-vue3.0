@@ -17,14 +17,14 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="村集体编码" prop="doorNo">
+      <!-- <ElFormItem label="村集体编码" prop="doorNo">
         <ElInput
           v-model="form.doorNo"
           :disabled="actionType === 'edit'"
           class="!w-350px"
           placeholder="请输入村集体编码"
         />
-      </ElFormItem>
+      </ElFormItem> -->
       <ElFormItem label="村集体名称" prop="name">
         <ElInput v-model="form.name" class="!w-350px" placeholder="请输入村集体名称" />
       </ElFormItem>
@@ -58,6 +58,7 @@
           v-model="form.phone"
         />
       </ElFormItem>
+      <ElFormItem label="村集体属性：" prop="address">普通</ElFormItem>
       <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
@@ -192,7 +193,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  doorNo: [required()],
+  // doorNo: [required()],
   householdNumber: [required()],
   // phone: [required()],
   parentCode: [required()]

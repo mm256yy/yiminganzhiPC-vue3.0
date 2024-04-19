@@ -48,7 +48,7 @@
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :loading="tableObject.loading"
-        :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
+        :data="tableObject.tableList"
         :columns="allSchemas.tableColumns"
         row-key="id"
         headerAlign="center"
@@ -97,7 +97,7 @@
           <ElTableColumn label="数量" prop="number" align="center" header-align="center">
             <template #default="{ row }">
               <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
-                {{ row.number }}
+                {{ row.number ? row.number : '——' }}
               </div>
               <div v-if="row.isUpdate !== '1' || row.name == '奖励费小计'">——</div>
             </template>
@@ -105,7 +105,7 @@
           <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
             <template #default="{ row }">
               <!-- <div v-if="row.isUpdate === '1' && row.isVerify === '1'"> -->
-              {{ row.name == '奖励费小计' ? '——' : row.price }}
+              {{ row.name == '奖励费小计' ? '——' : row.price ? row.price : '——' }}
               <!-- </div> -->
               <!-- <div v-if="row.isUpdate !== '1'">——</div> -->
             </template>
@@ -159,7 +159,16 @@
       :id="1"
     />
 
-    <div style="display: flex; width: 340mm; padding: 10px 10px 0px 10px" id="print">
+    <div
+      style="
+        display: flex;
+        width: 340mm;
+        padding: 10px 10px 0px 10px;
+        position: fixed;
+        left: -1000px;
+      "
+      id="print"
+    >
       <div style="width: 50%; padding-right: 10px">
         <h1 style="font-size: 24px; text-align: center">移民协议补偿登记卡</h1>
         <div
@@ -216,12 +225,12 @@
             label-class-name="my-label"
             class-name="my-content"
           >
-            {{ tableObject.tableList.filter((item) => item.populationNature != '5').length }}
+            {{ tableObject.tableList.length }}
           </ElDescriptionsItem>
         </ElDescriptions>
         <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>
         <el-table
-          :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
+          :data="tableObject.tableList"
           header-cell-class-name="table-headers"
           border
           style="font-size: 7px; width: 100%"

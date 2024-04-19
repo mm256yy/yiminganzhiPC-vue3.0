@@ -663,7 +663,8 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'villageInfoC'
+      type: 'villageInfoC',
+      villageType: 1
     }
   })
 }

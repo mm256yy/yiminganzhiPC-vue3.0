@@ -463,7 +463,8 @@ const titleMsg = (type: string) => {
   }
 }
 const { currentRoute, back } = useRouter()
-const { doorNo, householdId, type, name, classifyType } = currentRoute.value.query as any
+const { doorNo, householdId, type, name, classifyType, villageType } = currentRoute.value
+  .query as any
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>({})
@@ -549,7 +550,15 @@ onMounted(() => {
   } else if (type == 'IndividualB') {
     tabsType.value = IndividualBTabs
   } else if (type == 'villageInfoC') {
-    tabsType.value = villageInfoCTabs
+    // tabsType.value = villageInfoCTabs
+    console.log(villageInfoCTabs, 'tab数据')
+    if (villageType == '1') {
+      tabsType.value = villageInfoCTabs.filter((item: any) => item.id !== 5)
+      console.log('普通')
+    } else if (villageType == '2') {
+      tabsType.value = villageInfoCTabs.filter((item: any) => item.id == '5')
+      console.log('坟墓')
+    }
   }
   surveyStatus.value = globalData.currentSurveyStatus
 })

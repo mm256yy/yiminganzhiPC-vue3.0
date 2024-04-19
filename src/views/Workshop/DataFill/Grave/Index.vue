@@ -74,7 +74,7 @@
             </ElInput>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
+        <ElTableColumn label="所在位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.gravePosition">
               <ElOption
@@ -86,7 +86,19 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所属村集体" prop="villageId" align="center" header-align="center">
+        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.inundationRange">
+              <ElOption
+                v-for="item in dictObj[346]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <!-- <ElTableColumn label="所属村集体" prop="villageId" align="center" header-align="center">
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -103,7 +115,7 @@
               />
             </ElSelect>
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入" v-model="row.remark" />

@@ -19,14 +19,14 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="个体工商编码" prop="showDoorNo">
+      <!-- <ElFormItem label="个体工商编码" prop="showDoorNo">
         <ElInput
           v-model="form.doorNo"
           :disabled="actionType === 'edit'"
           class="!w-350px"
           placeholder="请输入个体工商编码"
         />
-      </ElFormItem>
+      </ElFormItem> -->
       <ElFormItem label="个体工商名称" prop="name">
         <ElInput
           v-model="form.name"
@@ -126,13 +126,8 @@
           <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
         </el-select>
       </ElFormItem>
-      <ElFormItem
-        label="关联户号"
-        prop="showHouseholderDoorNo"
-        align="center"
-        header-align="center"
-      >
-        <ElInput type="text" v-model="form.showHouseholderDoorNo" disabled />
+      <ElFormItem label="关联户号" prop="householderDoorNo" align="center" header-align="center">
+        <ElInput type="text" v-model="form.householderDoorNo" disabled />
       </ElFormItem>
       <!-- <ElFormItem label="绑定居民户号" prop="householderDoorNo">
         <ElInput
@@ -231,8 +226,8 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   name: '',
   parentCode: [],
   locationType: 'SubmergedArea',
-  householderName: '',
-  showHouseholderDoorNo: '' // 绑定户号
+  householderName: ''
+  // showHouseholderDoorNo: '' // 绑定户号
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
@@ -280,7 +275,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   name: [required()],
-  doorNo: [required()],
+  // doorNo: [required()],
   // householdNumber: [required()],
   // phone: [required()],
   parentCode: [required()]
@@ -301,8 +296,8 @@ const onClose = (flag = false) => {
 const doorTypeChange = (val) => {
   options.value.forEach((item) => {
     if (item.name == val) {
-      form.value.showHouseholderDoorNo = item.doorNo.slice(2)
-      form.value.householderDoorNo = item.doorNo
+      form.value.householderDoorNo = item.doorNo.slice(2)
+      // form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {
       //     item2.registrantId = item.id
@@ -347,7 +342,7 @@ const onSubmit = debounce((formEl) => {
         return
       }
       // form.value.householderDoorNo = form.value.showHouseholderDoorNo
-
+      form.value.householderDoorNo = 'jl' + form.value.householderDoorNo
       btnLoading.value = true
       const data: any = {
         ...form.value,
@@ -403,7 +398,7 @@ watch(
   (val) => {
     if (val) {
       form.value.householderName = props.name
-      form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
+      // form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
       form.value.householderDoorNo = props.doorNo
     } else {
       form.value = defaultValue
