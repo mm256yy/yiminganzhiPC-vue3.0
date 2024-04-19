@@ -136,7 +136,20 @@
           </ElCol>
           <ElCol :span="12" />
         </ElRow>
-
+        <ElRow>
+          <ElCol :span="12">
+            <ElFormItem label="联系方式" :prop="form.relation == '1' ? 'phone' : ''">
+              <ElInput
+                clearable
+                filterable
+                type="text"
+                class="!w-full"
+                v-model="form.phone"
+                placeholder="请输入"
+              />
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
@@ -368,6 +381,9 @@ watch(
     form.value = {
       ...props.row
     }
+    if (!props.row?.phone) {
+      form.value.phone = props.baseInfo.phone
+    }
     cardFront.value = []
     cardEnd.value = []
     householdPic.value = []
@@ -427,7 +443,8 @@ const rules = reactive<FormRules>({
   relation: [required()],
   marital: [required()],
   censusType: [required()],
-  populationNature: [required()]
+  populationNature: [required()],
+  phone: [required()]
 })
 
 // 关闭弹窗
