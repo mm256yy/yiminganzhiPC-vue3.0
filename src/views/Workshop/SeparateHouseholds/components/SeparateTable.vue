@@ -10,6 +10,17 @@
           分户说明：人口分户；房屋、附属物和零星林果木等实物成果仍登记在原户主处!
         </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="
+              () => {
+                dialog = true
+                EditFormid = 1
+              }
+            "
+          >
+            分户日志
+          </ElButton>
           <ElButton type="primary" @click="submit"> 提交 </ElButton>
         </ElSpace>
       </div>
@@ -81,6 +92,7 @@
         </template>
       </Table>
     </div>
+    <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
   </WorkContentWrap>
 </template>
 
@@ -95,6 +107,10 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import { getSeparateList, postSeparate } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import EditForm from './EditForm.vue'
+
+let dialog = ref(false)
+let EditFormid = ref()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
@@ -501,6 +517,11 @@ let valueKey = (arr, value) => {
     return pre
   }, [])
   return m
+}
+const onEditFormClose = (flag: boolean) => {
+  console.log(flag)
+
+  dialog.value = false
 }
 </script>
 

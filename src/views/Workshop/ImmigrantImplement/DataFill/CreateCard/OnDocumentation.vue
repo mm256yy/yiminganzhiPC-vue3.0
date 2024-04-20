@@ -197,6 +197,8 @@ const onSubmit = debounce((formEl) => {
 
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
+  console.log(fileList)
+
   let list: FileItemType[] = []
   if (fileList && fileList.length) {
     list = fileList

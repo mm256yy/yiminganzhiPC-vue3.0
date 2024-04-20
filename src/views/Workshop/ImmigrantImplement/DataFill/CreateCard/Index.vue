@@ -334,7 +334,8 @@ import { standardFormatDate } from '@/utils/index'
 import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/population/service'
 import {
   updatePeasantHouseholdInfo,
-  getCompensationCardList
+  getCompensationCardList,
+  gettype
 } from '@/api/immigrantImplement/createCard/service'
 
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -343,6 +344,7 @@ import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCa
 import { onMounted } from 'vue'
 import { htmlToPdf } from '@/utils/ptf'
 import { getRelocationInfoApi } from '@/api/putIntoEffect/relocation'
+import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
 import { resettleArea } from '../config'
 interface PropsType {
   doorNo: string
@@ -637,7 +639,36 @@ const onDocumentation = () => {
 // 打印报表
 const onPrint = () => {
   console.log('打印报表')
-  htmlToPdf('#print', '移民协议补偿登记卡')
+  htmlToPdf('#print', '移民协议补偿登记卡').then((res) => {
+    if (res) {
+      let file = dataURLtoFile(res, '移民协议补偿登记卡.pdf')
+      console.log(file)
+      let formdata = new FormData()
+      formdata.append('file', file)
+      formdata.append('type', 'archives')
+      gettype(formdata).then((ress) => {
+        console.log(ress)
+        submits({
+          doorNo: props.doorNo,
+          compensationCardPdf: JSON.stringify([{ url: ress, name: '移民协议补偿登记卡.pdf' }])
+        })
+      })
+    }
+  })
+}
+const submits = (data: any) => {
+  saveDocumentationApi(data)
+}
+let dataURLtoFile = (dataurl, filename) => {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+  return new File([u8arr], filename, { type: mime })
 }
 
 // 奖励费确认

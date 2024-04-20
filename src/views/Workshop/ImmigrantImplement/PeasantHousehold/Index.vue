@@ -8,7 +8,7 @@
       <Search
         :schema="allSchemas.searchSchema"
         expand
-        :showFhHh="getRole() == 'implementleader'"
+        :showFhHh="getRole() == 'implementleader' || getRole() == 'tester'"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
