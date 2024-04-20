@@ -183,7 +183,10 @@ const { required } = useValidator()
 // 规则校验
 const rules = reactive<FormRules>({
   relation: [required()],
-  handleWay: [required()]
+  handleWay: [required()],
+  materials: [required()],
+  graveType: [required()],
+  number: [required()]
 })
 
 const dictFmt = (value, index) => {

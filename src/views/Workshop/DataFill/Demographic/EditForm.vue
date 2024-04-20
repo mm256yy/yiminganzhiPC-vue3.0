@@ -19,6 +19,11 @@
     >
       <ElRow :gutter="30">
         <ElCol :span="8">
+          <ElFormItem label="姓名" prop="name">
+            <ElInput v-model="form.name" :placeholder="placeholderList[0]" class="!w-full" />
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="8">
           <ElFormItem label="与户主关系" prop="relation">
             <ElSelect
               clearable
@@ -36,11 +41,7 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="姓名" prop="name">
-            <ElInput v-model="form.name" :placeholder="placeholderList[0]" class="!w-full" />
-          </ElFormItem>
-        </ElCol>
+
         <ElCol :span="8">
           <ElFormItem label="身份证号" prop="card">
             <ElInput
@@ -436,9 +437,9 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
-import { cardReg, phoneReg } from '@/utils'
+import { cardReg, validateIdNo, phoneReg } from '@/utils'
 import type { UploadFile, UploadFiles } from 'element-plus'
-// import { useValidator } from '@/hooks/web/useValidator'
+import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
@@ -554,6 +555,9 @@ watch(
     cardEnd.value = []
     householdPic.value = []
     otherPic.value = []
+    if (!form.value.nation) {
+      form.value.nation = '1'
+    }
     // }
     try {
       if (form.value.cardPic) {
@@ -578,16 +582,10 @@ watch(
     deep: true
   }
 )
-
+let { required } = useValidator()
 // 规则校验
 const rules = reactive<FormRules>({
-  card: [
-    {
-      pattern: cardReg,
-      trigger: 'change',
-      message: '请输入正确的身份证号'
-    }
-  ],
+  card: [{ validator: validateIdNo, trigger: 'blur' }, required('请输入正确的身份证号')],
   phone: [
     {
       pattern: phoneReg,

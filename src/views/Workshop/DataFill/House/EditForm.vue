@@ -19,7 +19,7 @@
     >
       <ElRow :gutter="30">
         <ElCol :span="8">
-          <ElFormItem label="幢号111" prop="houseNo">
+          <ElFormItem label="幢号" prop="houseNo">
             <ElInput v-model="form.houseNo" placeholder="请输入幢号" />
           </ElFormItem>
         </ElCol>
@@ -92,7 +92,24 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="房屋高程（m²）" prop="houseHeight">
+          <ElFormItem label="所在位置" prop="locationType">
+            <ElSelect class="w-350px" v-model="form.locationType">
+              <ElOption
+                v-for="item in dictObj[326]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow :gutter="30">
+        <ElCol :span="8">
+          <ElFormItem
+            label="房屋高程(m²)"
+            :prop="form.locationType == `InfluenceArea` ? 'houseHeight' : ''"
+          >
             <ElInput
               clearable
               filterable
@@ -104,7 +121,6 @@
           </ElFormItem>
         </ElCol>
       </ElRow>
-
       <ElDivider border-style="dashed" />
 
       <ElRow :gutter="30">
@@ -236,7 +252,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="建筑面积（m²）" prop="landArea">
+          <ElFormItem label="建筑面积(m²)" prop="landArea">
             <ElInput
               clearable
               filterable
@@ -245,18 +261,6 @@
               class="!w-full"
               v-model="form.landArea"
             />
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="8">
-          <ElFormItem label="所在位置" prop="locationType">
-            <ElSelect class="w-350px" v-model="form.locationType">
-              <ElOption
-                v-for="item in dictObj[326]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -271,10 +275,11 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
         <ElCol :span="8">
-          <MapFormItem :required="false" :positon="position" @change="onChosePosition"
+          <MapFormItem :required="true" :positon="position" @change="onChosePosition"
         /></ElCol>
       </ElRow>
 
@@ -488,6 +493,7 @@ import type { HouseDtoType } from '@/api/workshop/datafill/house-types'
 import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { addHouseApi, updateHouseApi } from '@/api/workshop/datafill/house-service'
+import { useValidator } from '@/hooks/web/useValidator'
 
 interface PropsType {
   show: boolean
@@ -592,6 +598,9 @@ watch(
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+      if (!form.value.propertyType) {
+        form.value.propertyType = '3'
+      }
 
       try {
         if (form.value.housePic) {
@@ -621,9 +630,18 @@ watch(
     deep: true
   }
 )
-
+const { required } = useValidator()
 // 规则校验
-const rules = reactive<FormRules>({})
+const rules = reactive<FormRules>({
+  houseType: [required()],
+  storeyNumber: [required()],
+  landArea: [required()],
+  constructionType: [required()],
+  landType: [required()],
+  inundationRange: [required()],
+  locationType: [required()],
+  houseHeight: [required()]
+})
 
 // 关闭弹窗
 const onClose = (flag = false) => {

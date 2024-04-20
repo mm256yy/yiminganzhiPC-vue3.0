@@ -191,7 +191,7 @@
                   </div>
                 </template>
               </ElUpload>
-              <div
+              <!-- <div
                 style="display: flex; height: 88px"
                 :class="[housePic.length == 0 ? 'CADuplogd' : '']"
               >
@@ -216,7 +216,7 @@
                     <el-button type="primary">点击上传</el-button>
                   </template>
                 </ElUpload>
-              </div>
+              </div> -->
             </div>
           </ElFormItem>
         </ElCol>
