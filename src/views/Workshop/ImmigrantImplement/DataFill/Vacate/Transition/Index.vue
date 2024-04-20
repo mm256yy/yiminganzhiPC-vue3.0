@@ -11,7 +11,7 @@
         </ElSpace>
         <ElSpace v-if="isExcess && isExcess === '1'">
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
-          <ElButton :icon="archivesIcon" type="default" @click="onSortSave">档案上传</ElButton>
+          <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度汇报</ElButton>
         </ElSpace>
       </div>
     </div>

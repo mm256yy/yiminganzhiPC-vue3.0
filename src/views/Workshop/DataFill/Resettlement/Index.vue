@@ -108,7 +108,7 @@
 
             <div v-else>
               <div class="radio-item">
-                <div>宅基地安置：</div>
+                <!-- <div>宅基地安置：</div> -->
                 <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
                   <ElRadio v-for="item in Homestead" :key="item.label" :label="item.value">{{
                     item.label
@@ -116,14 +116,14 @@
                 </ElRadioGroup>
               </div>
 
-              <div class="radio-item">
+              <!-- <div class="radio-item">
                 <div>公寓房安置：</div>
                 <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
                   <ElRadio v-for="item in flats" :key="item.label" :label="item.value">{{
                     item.label
                   }}</ElRadio>
                 </ElRadioGroup>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -161,6 +161,7 @@ import {
   saveResettlementListApi,
   getResettlementConfigApi
 } from '@/api/workshop/datafill/resettlement-service'
+import { getDemographicListApi } from '@/api/workshop/population/service'
 // import { ProductionPlaceWay } from '../config'
 import { useAppStore } from '@/store/modules/app'
 import { ResettlementDtoType } from '@/api/workshop/datafill/resettlement-types'
@@ -252,9 +253,9 @@ const getResettlementConfig = async () => {
         })
       }
     })
-
-    Homestead.value = map['宅基地安置']
-    flats.value = map['公寓安置']
+    console.log(map, '11111111111')
+    Homestead.value = map['']
+    flats.value = map['']
     placeWay.value = map
   }
 }
@@ -272,10 +273,21 @@ const getResettlement = async () => {
     immigrantWillProductionList.value = res.content[0].immigrantWillProductionList
   }
 }
+const demographicList = async () => {
+  const params = {
+    doorNo: props.doorNo,
+    status: 'review'
+  }
+  const res = await getDemographicListApi(params)
+  form.value.countryNum = res.content.filter((item: any) => item.censusType == 1).length
+  form.value.unCountryNum = res.content.filter((item: any) => item.censusType != 1).length
+}
 onMounted(async () => {
   await getResettlementConfig()
   await getResettlement()
+  console.log(props.baseInfo, '主体信息数据')
   form.value.familyNum = props.baseInfo.familyNum
+  await demographicList()
 })
 // 搬迁安置方式
 

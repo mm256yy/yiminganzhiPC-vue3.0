@@ -5,7 +5,7 @@
       <div class="title">农业安置</div>
       <ElSpace>
         <ElButton v-if="hasFarmingResettle" :icon="archivesIcon" type="default" @click="onSortSave">
-          档案上传
+          进度汇报
         </ElButton>
       </ElSpace>
     </div>
