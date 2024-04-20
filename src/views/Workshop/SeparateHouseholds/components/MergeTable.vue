@@ -3,10 +3,21 @@
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
         <div> 选择待合并户：</div>
-        <div
-          ><ElButton type="primary" @click="select">选择</ElButton
-          ><ElButton type="primary" @click="selectsum">确认</ElButton></div
-        >
+        <div>
+          <ElButton
+            type="primary"
+            @click="
+              () => {
+                dialog = true
+                EditFormid = 2
+              }
+            "
+          >
+            合户日志
+          </ElButton>
+          <ElButton type="primary" @click="select">选择</ElButton>
+          <ElButton type="primary" @click="selectsum">确认</ElButton>
+        </div>
       </div>
       <ElTable
         :data="tableData"
@@ -102,6 +113,7 @@
         <template #familyMembers="{ row }"> {{ joninFamily(row.familyMembers) }}</template>
       </Table>
     </ElDialog>
+    <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
   </WorkContentWrap>
 </template>
 
@@ -127,6 +139,10 @@ import { ref, reactive, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { Table } from '@/components/Table'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
+import EditForm from './EditForm.vue'
+
+let dialog = ref(false)
+let EditFormid = ref()
 const appStore = useAppStore()
 let multipleTableRef = ref()
 let tabalRef = ref()
@@ -407,6 +423,11 @@ let handleClick = (row) => {
   tableData.value = tableData.value.filter((item) => {
     return item.doorNo != row.doorNo
   })
+}
+const onEditFormClose = (flag: boolean) => {
+  console.log(flag)
+
+  dialog.value = false
 }
 </script>
 

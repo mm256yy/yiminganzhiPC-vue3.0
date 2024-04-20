@@ -368,6 +368,30 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     width: 160,
+    field: 'accountName',
+    label: '开户名',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
+    field: 'bankName',
+    label: '开户行',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
+    field: 'bankAccount',
+    label: '银行账户',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 160,
     field: 'type',
     label: '发放批次',
     search: {

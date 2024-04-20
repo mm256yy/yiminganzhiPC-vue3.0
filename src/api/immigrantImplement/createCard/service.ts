@@ -41,3 +41,10 @@ export const getcompanyList = (params) => {
     params
   })
 }
+
+export const gettype = (data) => {
+  return request.post({
+    url: `/file/type`,
+    data
+  })
+}

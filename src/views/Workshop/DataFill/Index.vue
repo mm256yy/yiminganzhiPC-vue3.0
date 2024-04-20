@@ -550,10 +550,8 @@ onMounted(() => {
   } else if (type == 'IndividualB') {
     tabsType.value = IndividualBTabs
   } else if (type == 'villageInfoC') {
-    // tabsType.value = villageInfoCTabs
-    console.log(villageInfoCTabs, 'tab数据')
     if (villageType == '1') {
-      tabsType.value = villageInfoCTabs.filter((item: any) => item.id !== 5)
+      tabsType.value = villageInfoCTabs.filter((item: any) => item.id !== '5')
       console.log('普通')
     } else if (villageType == '2') {
       tabsType.value = villageInfoCTabs.filter((item: any) => item.id == '5')

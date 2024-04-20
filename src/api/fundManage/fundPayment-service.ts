@@ -272,3 +272,10 @@ export const getScreenFunAmountDetail = () => {
     url: `/leadershipScreen/getScreenFunAmountDetail`
   })
 }
+// 资金报表
+export const getSeparateLog = (params) => {
+  return request.get({
+    url: `/separateLog`,
+    params
+  })
+}
