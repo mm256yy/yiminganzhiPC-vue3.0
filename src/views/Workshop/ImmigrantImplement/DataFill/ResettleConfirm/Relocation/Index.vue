@@ -56,7 +56,7 @@
         <ElSpace>
           <ElButton type="primary" @click="comdbe" style="margin-top: 17px"> 打印 </ElButton>
           <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
-            档案上传
+            进度汇报
           </ElButton>
           <ElButton
             :icon="addIcon"

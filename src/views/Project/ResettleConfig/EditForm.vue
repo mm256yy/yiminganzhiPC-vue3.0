@@ -37,8 +37,8 @@
         </ElSelect>
       </template>
       <template #way>
-        <ElInput v-model="way" v-if="row?.type == '生产安置'" />
-        <ElSelect
+        <ElInput v-model="way" placeholder="请填写安置方式" />
+        <!-- <ElSelect
           v-else
           style="width: 490px"
           placeholder="请填写或选择安置方式"
@@ -47,7 +47,7 @@
           v-model="way"
         >
           <ElOption v-for="item in currWayList" :key="item" :label="item" :value="item" />
-        </ElSelect>
+        </ElSelect> -->
       </template>
     </Form>
     <template #footer>
@@ -100,8 +100,8 @@ const title = computed(() => {
 
 const rules = {
   way: [{ type: String }, { required: true }],
-  type: [{ type: String }, { required: true }],
-  area: [required()]
+  type: [{ type: String }, { required: true }]
+  // area: [required()]
   // projectId: [{ type: Number }, { required: appStore.getIsSysAdmin }]
 }
 watch(
@@ -109,7 +109,9 @@ watch(
   (val) => {
     if (val == '生产安置') {
       schema[2].hidden = true
+      schema[1].hidden = false
     } else {
+      schema[1].hidden = true
       schema[2].hidden = false
     }
   }
@@ -131,9 +133,13 @@ watch(
     }
 
     if (props.row && props.row.type == '生产安置') {
+      console.log('生产安置')
       schema[2].hidden = true
-    } else {
+      schema[1].hidden = false
+    } else if (props.row && props.row.type == '搬迁安置') {
+      console.log('搬迁安置')
       schema[2].hidden = false
+      schema[1].hidden = true
     }
   }
 )
@@ -168,7 +174,7 @@ const schema = reactive<FormSchema[]>([
   },
   // props.row.type == '生产安置' ? true : !props.row && false,
   {
-    hidden: true,
+    // hidden: true,
     field: 'area',
     label: '安置区域',
     component: 'Input',
