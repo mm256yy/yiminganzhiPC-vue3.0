@@ -603,11 +603,12 @@ watch(
       position.longitude = props.actionType == 'add' ? props.longitude : form.value.longitude
       position.latitude = props.actionType == 'add' ? props.latitude : form.value.latitude
       position.address = props.actionType == 'add' ? props.address : form.value.address
+      console.log(props.type)
       if (!form.value.propertyType) {
-        console.log(props.type)
-
-        form.value.propertyType = props.type == 'villageInfoC' ? '2' : '3'
+        form.value.propertyType = '3'
       }
+
+      form.value.propertyType = props.type == 'villageInfoC' ? '2' : '3'
       // if (props.actionType == 'add') {
       //   position.longitude = props.longitude
       //   position.latitude = props.latitude
