@@ -244,6 +244,7 @@
       <!-- 房屋信息 -->
       <House
         :doorNo="doorNo"
+        :type="type"
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"

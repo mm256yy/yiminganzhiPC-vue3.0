@@ -96,62 +96,6 @@
       </el-row>
     </div>
 
-    <!-- 资产评估 -->
-    <div class="other" v-if="type == 'Landlord'" style="display: block">
-      <el-row>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">房屋主体评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.houseTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">房屋装修评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.fitUpTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">房屋附属设施评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.appendantTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">零星（林）果木评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.treeTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">土地基本情况评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.landTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">土地青苗及附着物评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.assetAppendantTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">坟墓评估合计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.graveTotalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="info-item">
-            <div class="tit">资产评估总计：</div>
-            <div class="txt">{{ fmtStr(props.baseInfo.totalAmount, '（元）') }}</div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-
     <div class="other" v-if="type == 'Enterprise'">
       <div class="info-item">
         <div class="tit">县（市/区）：</div>
@@ -207,6 +151,61 @@
         <div class="tit">联系方式：</div>
         <div class="txt">{{ props.baseInfo.phone || '-' }}</div>
       </div>
+    </div>
+    <!-- 资产评估 -->
+    <div class="other" style="display: block">
+      <el-row>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋主体评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.houseTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋装修评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.fitUpTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">房屋附属设施评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.appendantTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">零星（林）果木评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.treeTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">土地基本情况评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.landTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">土地青苗及附着物评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.assetAppendantTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">坟墓评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.graveTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="info-item">
+            <div class="tit">资产评估总计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.totalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 

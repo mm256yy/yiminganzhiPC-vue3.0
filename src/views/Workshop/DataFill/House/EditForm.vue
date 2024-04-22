@@ -285,7 +285,38 @@
 
       <ElDivider border-style="dashed" />
       <!-- :class="[actionType === 'view' && housePic.length > 0 ? 'upload' : '']" -->
-
+      <ElFormItem label="房屋照片" required>
+        <div class="card-img-list">
+          <ElUpload
+            :disabled="actionType === 'view'"
+            action="/api/file/type"
+            :data="{
+              type: 'image'
+            }"
+            :on-error="onError"
+            :list-type="'picture-card'"
+            accept=".jpg,.jpeg,.png"
+            :multiple="true"
+            :file-list="homePic"
+            :headers="headers"
+            :on-success="uploadFileChange3"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile3"
+            :class="[actionType === 'view' ? 'upload' : '']"
+            :on-preview="imgPreview"
+            :on-change="onchange"
+          >
+            <template #trigger v-if="actionType !== 'view'">
+              <div class="card-img-box">
+                <div class="card-img-custom">
+                  <Icon icon="ant-design:plus-outlined" :size="22" />
+                </div>
+                <div class="card-txt"> 点击上传 </div>
+              </div>
+            </template>
+          </ElUpload>
+        </div>
+      </ElFormItem>
       <ElFormItem label="房屋平面示意图">
         <div class="card-img-list">
           <ElUpload
@@ -366,39 +397,6 @@
               <div class="card-img-box">
                 <img class="card-img" src="@/assets/imgs/land.png" alt="" />
                 <div class="card-txt">点击上传</div>
-              </div>
-            </template>
-          </ElUpload>
-        </div>
-      </ElFormItem>
-
-      <ElFormItem label="房屋照片">
-        <div class="card-img-list">
-          <ElUpload
-            :disabled="actionType === 'view'"
-            action="/api/file/type"
-            :data="{
-              type: 'image'
-            }"
-            :on-error="onError"
-            :list-type="'picture-card'"
-            accept=".jpg,.jpeg,.png"
-            :multiple="true"
-            :file-list="homePic"
-            :headers="headers"
-            :on-success="uploadFileChange3"
-            :before-remove="beforeRemove"
-            :on-remove="removeFile3"
-            :class="[actionType === 'view' ? 'upload' : '']"
-            :on-preview="imgPreview"
-            :on-change="onchange"
-          >
-            <template #trigger v-if="actionType !== 'view'">
-              <div class="card-img-box">
-                <div class="card-img-custom">
-                  <Icon icon="ant-design:plus-outlined" :size="22" />
-                </div>
-                <div class="card-txt"> 点击上传 </div>
               </div>
             </template>
           </ElUpload>
@@ -599,7 +597,7 @@ watch(
       position.latitude = form.value.latitude
       position.address = form.value.address
       if (!form.value.propertyType) {
-        form.value.propertyType = '3'
+        form.value.propertyType = props.type == 'IndividualB' ? '2' : '3'
       }
 
       try {
@@ -663,6 +661,10 @@ const onChosePosition = (ps) => {
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
+  if (!homePic.value) {
+    ElMessage.error('请上传房屋照片')
+    return
+  }
   formEl?.validate((valid) => {
     if (valid) {
       const data: any = {
