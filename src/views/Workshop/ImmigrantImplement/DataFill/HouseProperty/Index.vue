@@ -33,6 +33,11 @@
             {{ splitStr(row.ownersSituationName) }}
           </div>
         </template>
+        <template #isCompliance="{ row }">
+          <div>
+            {{ row.isCompliance == '1' ? '是' : '否' }}
+          </div>
+        </template>
         <template #houseNature="{ row }">
           <div>
             {{
@@ -105,6 +110,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'houseNo',
     label: '房屋编号',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'isCompliance',
+    label: '是否合法',
     search: {
       show: false
     }

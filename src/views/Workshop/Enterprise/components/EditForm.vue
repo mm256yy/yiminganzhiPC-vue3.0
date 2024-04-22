@@ -158,6 +158,9 @@ interface PropsType {
   row?: LandlordDtoType | null | undefined
   name?: string
   doorNo?: string
+  longitude?: any
+  latitude?: any
+  address?: any
 }
 const dictStore = useDictStoreWithOut()
 const props = defineProps<PropsType>()
@@ -223,6 +226,11 @@ watch(
     if (val) {
       form.value.householderName = props.name
       form.value.householderDoorNo = props.doorNo?.slice(2)
+      if (props.longitude && props.latitude) {
+        position.latitude = props.latitude
+        position.longitude = props.longitude
+        position.address = props.address
+      }
     } else {
       form.value = defaultValue
     }

@@ -11,14 +11,14 @@
           <span v-if="baseInfo.unruralMigrantNum"
             >非农移民：{{ baseInfo.unruralMigrantNum }}人，</span
           >
-          <span v-if="baseInfo.farmingMigrantNum"
+          <!-- <span v-if="baseInfo.farmingMigrantNum"
             >农业移民：{{ baseInfo.farmingMigrantNum }}人，</span
-          >
+          > -->
           <span v-if="baseInfo.farmingMigrantNum"
-            >随迁人口： {{ baseInfo.farmingMigrantNum }}人，</span
+            >农业随迁： {{ baseInfo.farmingMigrantNum }}人，</span
           >
           <span v-if="baseInfo.unfarmingMigrantNum"
-            >非随迁人数：{{ baseInfo.unfarmingMigrantNum }}人，</span
+            >非农业随迁：{{ baseInfo.unfarmingMigrantNum }}人，</span
           >
           <span v-if="baseInfo.addPopulationNum"
             >增计人口数：{{ baseInfo.addPopulationNum }}人，</span

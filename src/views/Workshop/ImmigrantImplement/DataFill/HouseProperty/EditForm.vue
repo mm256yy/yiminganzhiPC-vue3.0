@@ -560,6 +560,7 @@ const getDemographicList = () => {
         }
         return pre
       }, [])
+      demographicList.value = demographicList.value.filter((item: any) => item.label != '增计人口')
     }
   })
 }

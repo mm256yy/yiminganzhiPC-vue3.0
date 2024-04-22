@@ -501,6 +501,9 @@ interface PropsType {
   doorNo: string
   surveyStatus: SurveyStatusEnum
   type?: string
+  latitude?: string
+  longitude?: string
+  address?: string
 }
 
 interface FileItemType {
@@ -550,8 +553,8 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const form = ref<Omit<HouseDtoType, 'id'>>(defaultValue)
 const position: {
-  latitude: number
-  longitude: number
+  latitude: any
+  longitude: any
   address?: string
 } = reactive({
   latitude: 0,
@@ -582,6 +585,22 @@ watch(
     }
   }
 )
+watch(
+  () => props.actionType,
+  (val) => {
+    if (props.actionType == 'add') {
+      console.log('add')
+      console.log(typeof props.longitude, props.latitude, props.address, '111111111')
+      position.longitude = props.longitude
+      position.latitude = props.latitude
+      position.address = props.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
@@ -593,13 +612,17 @@ watch(
       form.value = {
         ...props.row
       }
-      position.longitude = form.value.longitude
-      position.latitude = form.value.latitude
-      position.address = form.value.address
+      position.longitude = props.actionType == 'add' ? props.longitude : form.value.longitude
+      position.latitude = props.actionType == 'add' ? props.latitude : form.value.latitude
+      position.address = props.actionType == 'add' ? props.address : form.value.address
       if (!form.value.propertyType) {
         form.value.propertyType = props.type == 'IndividualB' ? '2' : '3'
       }
-
+      // if (props.actionType == 'add') {
+      //   position.longitude = props.longitude
+      //   position.latitude = props.latitude
+      //   position.address = props.address
+      // }
       try {
         if (form.value.housePic) {
           housePic.value = JSON.parse(form.value.housePic)
