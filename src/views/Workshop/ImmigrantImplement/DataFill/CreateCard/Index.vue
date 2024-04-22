@@ -233,7 +233,7 @@
           :data="tableObject.tableList"
           header-cell-class-name="table-headers"
           border
-          style=" width: 100%;font-size: 7px"
+          style=" width：100%;font-size: 7px"
         >
           <el-table-column
             :prop="item.field"
