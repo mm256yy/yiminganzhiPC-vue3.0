@@ -97,3 +97,9 @@ export const getDictByName = (name: string) => {
     }
   })
 }
+// 获取字典人口类别
+export const getGroups = () => {
+  return request.get({
+    url: '/dict/tree?name=人口类别'
+  })
+}

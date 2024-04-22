@@ -116,16 +116,10 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="所属分类" prop="companyType">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.companyType"
-              class="!w-full"
-              placeholder=""
-            >
+          <ElFormItem label="所属行业" prop="industryType">
+            <ElSelect clearable filterable v-model="form.industryType" class="!w-full">
               <ElOption
-                v-for="item in dictObj[216]"
+                v-for="item in dictObj[215]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -134,8 +128,15 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="经济性质" prop="economicNature">
-            <ElInput v-model="form.economicNature" placeholder="请输入" class="!w-full" />
+          <ElFormItem label="注册资金" prop="registeredAmount">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.registeredAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -163,35 +164,6 @@
             <el-date-picker v-model="form.establishDate" type="date" placeholder="请选择成立日期" />
           </ElFormItem>
         </ElCol>
-      </ElRow>
-
-      <ElRow justify="center">
-        <ElCol :span="7">
-          <ElFormItem label="所属行业" prop="industryType">
-            <ElSelect clearable filterable v-model="form.industryType" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[215]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-        <ElCol :span="7">
-          <ElFormItem label="注册资金" prop="registeredAmount">
-            <ElInput
-              type="number"
-              :min="0"
-              v-model="form.registeredAmount"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
-            >
-              <template #append>万元</template>
-            </ElInput>
-          </ElFormItem>
-        </ElCol>
-
-        <ElCol :span="7" />
       </ElRow>
 
       <ElRow justify="center">
@@ -337,7 +309,7 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="个体户涉及情况" prop="informationInvolved">
+          <ElFormItem label="个体户影响情况" prop="informationInvolved">
             <ElSelect clearable filterable v-model="form.informationInvolved" class="!w-full">
               <ElOption
                 v-for="item in dictObj[209]"
@@ -540,6 +512,9 @@ watch(
       licensePic.value = []
       otherPic.value = []
     }
+    if (!form.value.registerType) {
+      form.value.registerType = '31'
+    }
     try {
       if (form.value.licensePic) {
         licensePic.value = JSON.parse(form.value.licensePic)
@@ -562,7 +537,11 @@ watch(
 const rules = reactive<FormRules>({
   legalPersonName: [required()],
   legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
-  legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()]
+  legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()],
+  registerType: [required()],
+  taxLicenceNo: [required()],
+  taxPeriodValidity: [required()],
+  taxLicenceCompany: [required()]
 })
 
 // 关闭弹窗
