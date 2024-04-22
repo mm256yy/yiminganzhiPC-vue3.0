@@ -116,26 +116,27 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="所属分类" prop="companyType">
-            <ElSelect
-              clearable
-              filterable
-              v-model="form.companyType"
-              class="!w-full"
-              placeholder=""
-            >
+          <ElFormItem label="所属行业" prop="industryType">
+            <ElSelect clearable filterable v-model="form.industryType" class="!w-full">
               <ElOption
-                v-for="item in dictObj[216]"
+                v-for="item in dictObj[215]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
+            </ElSelect> </ElFormItem
+        ></ElCol>
+        <!-- :oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+6)}" -->
         <ElCol :span="7">
-          <ElFormItem label="经济性质" prop="economicNature">
-            <ElInput v-model="form.economicNature" placeholder="请输入" class="!w-full" />
+          <ElFormItem label="注册资金" prop="registeredAmount">
+            <ElInput
+              type="number"
+              :min="0"
+              v-model="form.registeredAmount"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+            >
+              <template #append>万元</template>
+            </ElInput>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -167,31 +168,6 @@
 
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="所属行业" prop="industryType">
-            <ElSelect clearable filterable v-model="form.industryType" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[215]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect> </ElFormItem
-        ></ElCol>
-        <!-- :oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+6)}" -->
-        <ElCol :span="7">
-          <ElFormItem label="注册资金" prop="registeredAmount">
-            <ElInput
-              type="number"
-              :min="0"
-              v-model="form.registeredAmount"
-              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
-            >
-              <template #append>万元</template>
-            </ElInput>
-          </ElFormItem>
-        </ElCol>
-
-        <ElCol :span="7">
           <ElFormItem label="企业类别" prop="industryType">
             <ElSelect clearable filterable v-model="form.type" class="!w-full">
               <ElOption
@@ -200,8 +176,11 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect> </ElFormItem
-        ></ElCol>
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="7" />
+        <ElCol :span="7" />
       </ElRow>
 
       <ElRow justify="center">
@@ -347,7 +326,7 @@
       </ElRow>
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="企业涉及情况" prop="informationInvolved">
+          <ElFormItem label="企业影响情况" prop="informationInvolved">
             <ElSelect clearable filterable v-model="form.informationInvolved" class="!w-full">
               <ElOption
                 v-for="item in dictObj[209]"
@@ -623,6 +602,9 @@ watch(
       licensePic.value = []
       otherPic.value = []
     }
+    if (!form.value.registerType) {
+      form.value.registerType = '14'
+    }
     try {
       if (form.value.licensePic) {
         licensePic.value = JSON.parse(form.value.licensePic)
@@ -645,7 +627,11 @@ watch(
 const rules = reactive<FormRules>({
   legalPersonName: [required()],
   legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
-  legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()]
+  legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()],
+  registerType: [required()],
+  taxLicenceNo: [required()],
+  taxPeriodValidity: [required()],
+  taxLicenceCompany: [required()]
 })
 
 // 关闭弹窗

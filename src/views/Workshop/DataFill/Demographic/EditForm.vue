@@ -243,7 +243,16 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="人口类别" prop="populationSort">
-            <ElSelect
+            <ElCascader
+              class="!w-full"
+              v-model="form.populationSort"
+              :options="occupopulationType"
+              :show-all-levels="false"
+              :props="{
+                emitPath: false
+              }"
+            />
+            <!-- <ElSelect
               clearable
               filterable
               v-model="form.populationSort"
@@ -256,7 +265,7 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </ElSelect>
+            </ElSelect> -->
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -446,7 +455,8 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
   addDemographicApi,
   updateDemographicApi,
-  getDictByName
+  getDictByName,
+  getGroups
 } from '@/api/workshop/population/service'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
@@ -491,6 +501,7 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const occupationOptions = ref<any>([]) // 职业选项
+const occupopulationType = ref<any>([]) // 职业选项
 const placeholderList = ref<string[]>([])
 const cardFront = ref<FileItemType[]>([])
 const cardEnd = ref<FileItemType[]>([])
@@ -546,6 +557,7 @@ watch(
   () => {
     // if (val) {
     //   // 处理表单数据
+
     form.value = {
       ...props.row
     }
@@ -753,6 +765,10 @@ let onchange = (file, fileList) => {
 }
 onMounted(() => {
   getOccupationOptions()
+  getGroups().then((res) => {
+    console.log(res)
+    occupopulationType.value = res
+  })
 })
 </script>
 

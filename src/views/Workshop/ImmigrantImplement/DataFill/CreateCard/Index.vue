@@ -5,7 +5,7 @@
         <div class="title">居民户账户信息</div>
         <div>
           <ElButton type="primary" @click="onDocumentation">归档</ElButton>
-          <ElButton type="primary" @click="onPrint">进度汇报</ElButton>
+          <ElButton type="primary" @click="onPrint">打印报表</ElButton>
           <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
         </div>
       </div>
@@ -161,11 +161,11 @@
 
     <div
       style="
+        position: fixed;
+        left: -1000px;
         display: flex;
         width: 340mm;
         padding: 10px 10px 0px 10px;
-        position: fixed;
-        left: -1000px;
       "
       id="print"
     >
@@ -233,7 +233,7 @@
           :data="tableObject.tableList"
           header-cell-class-name="table-headers"
           border
-          style="font-size: 7px; width: 100%"
+          style=" width: 100%;font-size: 7px"
         >
           <el-table-column
             :prop="item.field"

@@ -237,8 +237,8 @@ const fillData = (row, name: any, index?: any) => {
     push({
       name: routerName,
       query: {
-        householdId: props.baseInfo.relateIndividualId,
-        doorNo: props.baseInfo.relateIndividualDoorNo,
+        householdId: props.baseInfo.relateIndividualId.split(',')[index],
+        doorNo: props.baseInfo.relateIndividualDoorNo.split(',')[index],
         type: 'IndividualB'
       }
     })
