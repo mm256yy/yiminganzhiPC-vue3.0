@@ -114,6 +114,9 @@
       :row="tableObject.currentRow"
       :doorNo="doorNo"
       :name="name"
+      :longitude="longitude"
+      :latitude="latitude"
+      :address="address"
       @close="onFormPupClose"
       @update-district="onUpdateDistrict"
     />
@@ -216,7 +219,7 @@ const headInfo = ref<LandlordHeadInfoType>({
 const printDialog = ref(false)
 const exportDialog = ref(false)
 const { currentRoute } = useRouter()
-const { type, name, doorNo } = currentRoute.value.query as any
+const { type, name, doorNo, longitude, latitude, address } = currentRoute.value.query as any
 interface exportListType {
   name: string
   value: string | number

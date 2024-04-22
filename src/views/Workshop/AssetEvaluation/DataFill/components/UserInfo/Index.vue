@@ -8,6 +8,38 @@
           {{ props.baseInfo.showDoorNo }}
         </div>
       </div>
+      <div v-if="props.type == 'Landlord'">
+        关联个体户：
+        <ElLink
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          v-for="(item, index) in props.baseInfo.relateIndividualName?.split(',')"
+          :key="item"
+          @click="fillData('IndividualB', props.baseInfo.relateIndividualName, index)"
+          style="color: #1c5df1"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
+      </div>
+      <div v-if="props.type == 'Landlord'">
+        关联企业：<ElLink
+          class="pl-8px text-size-14px text-[#1C5DF1]"
+          v-for="(item, index) in props.baseInfo.relateCompanyName?.split(',')"
+          :key="item"
+          @click="fillData('Enterprise', props.baseInfo.relateCompanyName, index)"
+          style="color: #1c5df1"
+        >
+          {{ item }}&nbsp;&nbsp;&nbsp;&nbsp;
+        </ElLink>
+      </div>
+      <div
+        v-if="props.type == 'Enterprise' || props.type == 'IndividualB'"
+        @click="fillData('PeasantHousehold', props.baseInfo.householderName)"
+      >
+        关联居民户：
+        <span class="pl-8px text-size-14px text-[#1C5DF1]">{{
+          props.baseInfo.householderName || ''
+        }}</span>
+      </div>
       <ElSpace>
         <ElButton type="primary" @click="printReport"> 打印报表 </ElButton>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
@@ -226,6 +258,8 @@ import { fmtStr } from '@/utils/index'
 import OnDocumentation from '../OnDocumentation/Index.vue'
 import PrintReport from '@/views/Workshop/components/PrintReport.vue'
 import { getExportReportApi } from '@/api/workshop/export/service'
+import { useRouter } from 'vue-router'
+const { push } = useRouter()
 
 interface PropsType {
   doorNo: string
@@ -366,6 +400,42 @@ watch(
   },
   { deep: true }
 )
+const fillData = (row, name: any, index?: any) => {
+  if (!name) return false
+  console.log(row)
+  if (row == 'IndividualB') {
+    push({
+      name: 'AssetEvaDataFill',
+      query: {
+        projectId: 56,
+        householdId: props.baseInfo.relateIndividualId.split(',')[index],
+        doorNo: props.baseInfo.relateIndividualDoorNo.split(',')[index],
+        type: 'IndividualB'
+      }
+    })
+  } else if (row == 'Enterprise') {
+    push({
+      name: 'AssetEvaDataFill',
+      query: {
+        projectId: 56,
+        householdId: props.baseInfo.relateCompanyId.split(',')[index],
+        doorNo: props.baseInfo.relateCompanyDoorNo.split(',')[index],
+        type: 'Enterprise'
+      }
+    })
+  } else {
+    push({
+      name: 'AssetEvaDataFill',
+      query: {
+        projectId: 56,
+        householdId: props.baseInfo.householderId,
+        doorNo: props.baseInfo.householderDoorNo,
+        type: 'Landlord'
+      }
+    })
+  }
+  console.log(1)
+}
 </script>
 
 <style lang="less" scoped>

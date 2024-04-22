@@ -112,6 +112,7 @@
         :doorNo="doorNo"
         :householdId="householdId"
         :type="type"
+        :baseInfo="baseInfo"
         :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
@@ -186,6 +187,7 @@
       <House
         :doorNo="doorNo"
         :householdId="householdId"
+        :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
@@ -246,6 +248,7 @@
         :doorNo="doorNo"
         :type="type"
         :householdId="householdId"
+        :baseInfo="baseInfo"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
       />
@@ -289,6 +292,7 @@
       <House
         :doorNo="doorNo"
         :householdId="householdId"
+        :baseInfo="baseInfo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
       />
@@ -448,6 +452,8 @@ import Resettlement from './Resettlement/Index.vue'
 import UserInfo from './components/UserInfo.vue'
 import Print from './components/Print.vue'
 import { useRouter } from 'vue-router'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
+
 const router = useRouter()
 const titleStatus = router.currentRoute.value?.meta?.title?.split('-')[1]
   ? router.currentRoute.value?.meta?.title?.split('-')[1]
@@ -482,12 +488,14 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const printIcon = useIcon({ icon: 'ion:print-outline' })
 const SignIcon = useIcon({ icon: 'typcn:edit' })
 const { push } = useRouter()
-
+const longitude = ref<any>()
+const latitude = ref<any>()
+const address = ref<any>()
 // 农户详情
 const getLandlordInfo = () => {
   if (!householdId) return
   getLandlordByIdApi(householdId).then((res) => {
-    console.log(res)
+    console.log(res, '数据')
 
     baseInfo.value = res
   })
@@ -495,6 +503,23 @@ const getLandlordInfo = () => {
 
 getLandlordInfo()
 
+const getHouseList = () => {
+  getHouseListApi({
+    doorNo,
+    status: 'review',
+    size: 50,
+    page: 0
+  }).then((res) => {
+    const houseList = res.content.reduce(function (prev, current) {
+      return prev.id < current.id ? prev : current
+    })
+    console.log(houseList, '房屋列表数据')
+    longitude.value = houseList.longitude
+    latitude.value = houseList.latitude
+    address.value = houseList.address
+    console.log(longitude.value, latitude.value, houseList.address, '地址')
+  })
+}
 watch(
   () => globalData.currentSurveyStatus,
   (val) => {
@@ -507,7 +532,10 @@ const addEnterprise = () => {
   const query = {
     type: 'enterpriseCheck',
     name,
-    doorNo
+    doorNo,
+    longitude: longitude.value,
+    latitude: latitude.value,
+    address: address.value
   }
 
   sessionStorage.setItem('isDefaultOpen', '1')
@@ -523,7 +551,10 @@ const addIndividual = () => {
   const query = {
     type: 'individualCheck',
     name,
-    doorNo
+    doorNo,
+    longitude: longitude.value,
+    latitude: latitude.value,
+    address: address.value
   }
   sessionStorage.setItem('isDefaultOpen', '1')
   const routeName = 'IndividualBCheck'
@@ -560,6 +591,7 @@ onMounted(() => {
     }
   }
   surveyStatus.value = globalData.currentSurveyStatus
+  getHouseList()
 })
 // 填报完成
 const onReportData = async () => {

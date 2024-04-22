@@ -202,6 +202,9 @@ interface PropsType {
   row?: LandlordDtoType | null | undefined
   name?: string
   doorNo?: any
+  longitude?: any
+  latitude?: any
+  address?: any
 }
 const btnLoading = ref(false)
 const dictStore = useDictStoreWithOut()
@@ -400,6 +403,11 @@ watch(
       form.value.householderName = props.name
       // form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
       form.value.householderDoorNo = props.doorNo?.slice(2)
+      if (props.longitude && props.latitude) {
+        position.latitude = props.latitude
+        position.longitude = props.longitude
+        position.address = props.address
+      }
     } else {
       form.value = defaultValue
     }

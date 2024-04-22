@@ -70,6 +70,9 @@
       :doorNo="props.doorNo"
       :survey-status="surveyStatus"
       :type="type"
+      :longitude="props.baseInfo.longitude"
+      :latitude="props.baseInfo.latitude"
+      :address="props.baseInfo.address"
       @close="onFormPupClose"
     />
   </WorkContentWrap>
@@ -78,7 +81,7 @@
 <script lang="ts" setup>
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref, computed, watch } from 'vue'
 import { ElButton, ElSpace } from 'element-plus'
 import { Table, TableEditColumn } from '@/components/Table'
 import EditForm from './EditForm.vue'
@@ -98,6 +101,7 @@ interface PropsType {
   surveyStatus: SurveyStatusEnum
   type?: string
   classifyType?: string // 角色分类类型
+  baseInfo: any
 }
 // const { type } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
@@ -131,6 +135,16 @@ const recordClick = () => {
 }
 getList()
 
+watch(
+  () => props.baseInfo,
+  (val) => {
+    console.log(props.baseInfo, '测试传输的数据')
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const getLocationText = (key: string) => {
   return locationTypes.find((item) => item.value === key)?.label
 }
