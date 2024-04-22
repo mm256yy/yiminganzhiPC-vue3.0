@@ -398,7 +398,6 @@ watch(
   (val) => {
     if (val) {
       form.value.householderName = props.name
-      // form.value.showHouseholderDoorNo = props.doorNo?.slice(2)
       form.value.householderDoorNo = props.doorNo?.slice(2)
     } else {
       form.value = defaultValue
