@@ -589,6 +589,22 @@ watch(
     deep: true
   }
 )
+watch(
+  () => props.actionType,
+  (val) => {
+    if (props.actionType == 'add') {
+      console.log('add')
+      console.log(typeof props.longitude, props.latitude, props.address, '111111111')
+      position.longitude = props.longitude
+      position.latitude = props.latitude
+      position.address = props.address
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
