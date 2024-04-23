@@ -295,6 +295,7 @@
         :baseInfo="baseInfo"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
+        :type="type"
       />
 
       <!-- 零星(林)果木信息 -->

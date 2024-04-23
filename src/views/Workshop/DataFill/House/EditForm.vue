@@ -513,7 +513,7 @@ interface FileItemType {
 const CADfile: any = ref([])
 
 const props = defineProps<PropsType>()
-provide('mapType', props.actionType)
+// provide('mapType', props.actionType)
 const emit = defineEmits(['close', 'submit'])
 // const { required } = useValidator()
 const formRef = ref<FormInstance>()
@@ -574,21 +574,9 @@ const headers = {
 }
 
 watch(
-  () => props.show,
-  (val) => {
-    if (!val) {
-      housePic.value = []
-      CADfile.value = []
-      landPic.value = []
-      homePic.value = []
-      otherPic.value = []
-    }
-  }
-)
-watch(
   () => props.actionType,
   (val) => {
-    if (props.actionType == 'add') {
+    if (val == 'add') {
       console.log('add')
       console.log(typeof props.longitude, props.latitude, props.address, '111111111')
       position.longitude = props.longitude
@@ -616,7 +604,9 @@ watch(
       position.latitude = props.actionType == 'add' ? props.latitude : form.value.latitude
       position.address = props.actionType == 'add' ? props.address : form.value.address
       if (!form.value.propertyType) {
-        form.value.propertyType = props.type == 'IndividualB' ? '2' : '3'
+        console.log(props.type)
+
+        form.value.propertyType = props.type == 'villageInfoC' ? '2' : '3'
       }
       // if (props.actionType == 'add') {
       //   position.longitude = props.longitude
@@ -642,6 +632,9 @@ watch(
       } catch (error) {
         console.log(error)
       }
+      setTimeout(() => {
+        formRef.value?.clearValidate()
+      }, 100)
     } else {
       form.value = defaultValue
     }
@@ -669,10 +662,16 @@ const onClose = (flag = false) => {
   position.latitude = 0
   position.longitude = 0
   position.address = ''
+  housePic.value = []
+  CADfile.value = []
+  landPic.value = []
+  homePic.value = []
+  otherPic.value = []
+  console.log(formRef.value)
+
+  formRef.value?.resetFields()
+
   emit('close', flag)
-  nextTick(() => {
-    formRef.value?.resetFields()
-  })
 }
 
 // 定位
@@ -686,6 +685,10 @@ const onChosePosition = (ps) => {
 const onSubmit = debounce((formEl) => {
   if (!homePic.value) {
     ElMessage.error('请上传房屋照片')
+    return
+  }
+  if (form.value.locationType == `InfluenceArea` && !form.value.houseHeight) {
+    ElMessage.error('请填写房屋高程')
     return
   }
   formEl?.validate((valid) => {

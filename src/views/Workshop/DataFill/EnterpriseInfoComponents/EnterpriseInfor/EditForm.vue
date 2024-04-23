@@ -39,14 +39,14 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="法人联系方式" prop="legalPersonPhone">
+          <ElFormItem label="联系方式" prop="phone">
             <ElInput
               clearable
               filterable
-              placeholder="法人联系方式"
+              placeholder="联系方式"
               type="text"
               class="!w-full"
-              v-model="form.legalPersonPhone"
+              v-model="form.phone"
             />
           </ElFormItem>
         </ElCol>
@@ -603,7 +603,7 @@ watch(
       otherPic.value = []
     }
     if (!form.value.registerType) {
-      form.value.registerType = '14'
+      form.value.registerType = '1'
     }
     try {
       if (form.value.licensePic) {
@@ -626,7 +626,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   legalPersonName: [required()],
-  legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
+  phone: [{ validator: checkTel, trigger: 'blur' }, required()],
   legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()],
   registerType: [required()],
   taxLicenceNo: [required()],

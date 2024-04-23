@@ -605,7 +605,8 @@ const rules = reactive<FormRules>({
       trigger: 'change'
     }
   ],
-  addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }]
+  addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }],
+  relation: [required()]
 })
 
 // 关闭弹窗

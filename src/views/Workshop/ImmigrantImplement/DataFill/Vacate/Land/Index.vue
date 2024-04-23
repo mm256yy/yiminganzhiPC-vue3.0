@@ -91,7 +91,7 @@
         >
           {{ baseInfo.phone }}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
+        <el-descriptions-item label-class-name="bbqs" align="center" label="地块号" :span="2">
           {{ props.type == 'PeasantHousehold' ? baseInfo.address : baseInfo.beforeAddress }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
