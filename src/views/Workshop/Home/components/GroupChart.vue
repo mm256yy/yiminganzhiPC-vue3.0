@@ -3,9 +3,21 @@
     <div class="inner">
       <div class="echart-title">
         <img src="@/assets/imgs/Icon_workteam.png" class="icon" />
-        <div class="text">工作组TOP5</div>
+        <div class="text">工作进度晾晒</div>
       </div>
+
       <div class="bottom-wrapper" v-loading="chartLoading">
+        <div class="top5-tabs">
+          <div
+            v-for="item in tabs1"
+            :key="item.id"
+            class="top5-tab-item"
+            :class="[item.id === currentTab ? 'active' : '']"
+            @click="tabChange(item.id)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
         <div class="echart-wrap">
           <div class="echart-item" v-for="(item, index) in echartOptions" :key="index">
             <div class="echart-item-lt">
@@ -14,7 +26,7 @@
             </div>
 
             <div class="echart-item-ct">
-              <div class="progress" :style="{ width: `${item.progress}%` }"></div>
+              <div class="progress" :style="{ width: `${(item.progress * 100) / max}%` }"></div>
             </div>
 
             <div class="echart-item-rt">
@@ -53,9 +65,9 @@ interface OptionsType {
   img?: string
 }
 
-const echartOptions = ref<OptionsType[]>([])
+const echartOptions = ref<any>([])
 const chartLoading = ref<boolean>(false)
-
+let currentTab = ref('PeasantHousehold')
 const imgArr = [
   top5_1,
   top5_2,
@@ -73,18 +85,53 @@ const imgArr = [
   top5_14,
   top5_15
 ]
-
+const tabs1 = ref<any>([
+  {
+    name: '居民户',
+    id: 'PeasantHousehold'
+  },
+  {
+    name: '企业',
+    id: 'Company'
+  },
+  {
+    name: '个体工商户',
+    id: 'IndividualHousehold'
+  },
+  {
+    name: '村集体',
+    id: 'Village'
+  }
+])
+const tabChange = (id: any) => {
+  if (currentTab.value === id) {
+    return
+  }
+  currentTab.value = id
+  getTopGroupApi()
+}
 // 排行榜
+let max = ref(0)
 const getTopGroupApi = async () => {
   chartLoading.value = true
   try {
+    max.value = 0
     const result = await getEvaluatorTopGroup()
     chartLoading.value = false
-    echartOptions.value = result.map((item, index) => ({
+    echartOptions.value = result.filter((res: any) => {
+      if (res.type == currentTab.value) {
+        max.value += res.countComplete
+      }
+      return res.type == currentTab.value
+    })
+    echartOptions.value = echartOptions.value.map((item: any, index) => ({
+      ...item,
       name: item.userName,
       progress: item.countComplete,
-      img: imgArr[index]
+      img: imgArr[index],
+      max: max.value
     }))
+    echartOptions.value.sort((a: any, b: any) => b.progress - a.progress)
   } catch {
     chartLoading.value = false
   }
@@ -188,6 +235,7 @@ onMounted(() => {
         border-radius: 4px;
         align-items: center;
         justify-content: center;
+        border: 1px solid #d5d5d5;
 
         &.active {
           color: #ffffff;
@@ -199,8 +247,7 @@ onMounted(() => {
     .echart-wrap {
       display: flex;
       flex-direction: column;
-      width: 930px;
-      height: 546px;
+      height: 504px;
       box-sizing: border-box;
 
       .echart-item {
@@ -222,6 +269,7 @@ onMounted(() => {
           }
 
           .user-name {
+            width: 120px;
             overflow: hidden;
             font-size: 14px;
             font-weight: 400;
@@ -234,7 +282,7 @@ onMounted(() => {
         .echart-item-ct {
           display: flex;
           align-items: center;
-          width: 500px;
+          width: 719px;
 
           .progress {
             height: 10px;
@@ -247,10 +295,9 @@ onMounted(() => {
         .echart-item-rt {
           display: flex;
           align-items: center;
-          margin-right: 220px;
+          margin-right: 40px;
 
           .txt {
-            margin-right: 40px;
             font-size: 14px;
             font-weight: 400;
             color: #333333;
