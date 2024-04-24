@@ -50,7 +50,7 @@
         >
           <div>
             <img :src="item.img" alt="" style="width: 64px; height: 64px" />
-            <div style=" font-size: 16px;font-weight: bold; color: #333333">{{ item.name }}</div>
+            <div style="font-size: 16px; font-weight: bold; color: #333333">{{ item.name }}</div>
           </div>
         </div>
       </div>
