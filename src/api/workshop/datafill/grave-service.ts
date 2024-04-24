@@ -17,13 +17,15 @@ export const getGraveListApi = (
 /**
  * 保存
  */
-export const saveGraveListApi = (data: any[]): Promise<TableResponse<GraveDtoType>> => {
+export const saveGraveListApi = (data: any): Promise<TableResponse<GraveDtoType>> => {
+  data.immigrantGraveList.map((item) => {
+    item.status = globalData.currentSurveyStatus
+    return item
+  })
+  const param = { ...data, peasantHouseholdId: data.peasantHouseholdId }
   return request.post({
     url: '/immigrantGrave/createAll',
-    data: data.map((item) => {
-      item.status = globalData.currentSurveyStatus
-      return item
-    })
+    data: param
   })
 }
 

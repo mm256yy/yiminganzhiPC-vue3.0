@@ -160,6 +160,7 @@ import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+
 // import { useRouter } from 'vue-router'
 
 // const { currentRoute } = useRouter()
@@ -208,8 +209,7 @@ const defaultRow = {
   gravePosition: '',
   number: 0,
   remark: '',
-  isAdd: true,
-  peasantHouseholdId: props.householdId
+  isAdd: true
 }
 
 // 获取村集体列表
@@ -296,8 +296,9 @@ const onDelRow = (row) => {
 const onSave = () => {
   loading.value = true
   // tableData.value.push({ peasantHouseholdId: props.householdId })
-  // let parmas = [immigrantGraveList]
-  saveGraveListApi(tableData.value)
+  let parmas = { immigrantGraveList: tableData.value, peasantHouseholdId: props.householdId }
+  console.log(parmas, '入参是什么？')
+  saveGraveListApi(parmas)
     .then(() => {
       ElMessage.success('操作成功！')
       loading.value = false
