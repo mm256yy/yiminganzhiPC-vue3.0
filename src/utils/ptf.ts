@@ -6,7 +6,7 @@ import jsPDF from 'jspdf'
  * @param name 文件名称
  */
 export const htmlToPdf = (dom = '', name = '无', centen = true) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const value = document.querySelector(dom) as HTMLElement
     html2canvas(value, {
       useCORS: true,
