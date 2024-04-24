@@ -445,7 +445,7 @@ const beforeRemove = (uploadFile: UploadFile) => {
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
   console.log(uploadFile.url?.indexOf('pdf'))
-
+  console.log(uploadFile.url, '测试地址')
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
