@@ -91,8 +91,19 @@
         >
           {{ baseInfo.phone }}
         </el-descriptions-item>
-        <el-descriptions-item label-class-name="bbqs" align="center" label="地块号" :span="2">
-          {{ props.type == 'PeasantHousehold' ? baseInfo.address : baseInfo.beforeAddress }}
+        <el-descriptions-item
+          label-class-name="bbqs"
+          align="center"
+          :label="props.type == 'LandNoMove' ? '地块号' : '迁出地'"
+          :span="2"
+        >
+          {{
+            props.type == 'PeasantHousehold'
+              ? baseInfo.address
+              : props.type == 'LandNoMove'
+              ? baseInfo.landNumbers
+              : baseInfo.beforeAddress
+          }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
           <div
@@ -243,7 +254,7 @@ const onDocumentationClose = () => {
 }
 
 const onPrintTable = () => {
-  console.log('打印')
+  console.log(props.baseInfo)
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 

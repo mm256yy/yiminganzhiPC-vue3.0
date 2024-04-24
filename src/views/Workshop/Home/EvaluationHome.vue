@@ -83,10 +83,10 @@
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
           </div>
           <div class="enter-title">
-            <span class="title-txt">企业</span>
+            <span class="title-txt">企(事)业单位</span>
             <div class="flex">
               <span class="count-num"> {{ statisticsObj?.companyCount }} </span>
-              <span class="count-unit"> 户 </span>
+              <span class="count-unit"> 家 </span>
             </div>
           </div>
         </div>
@@ -157,10 +157,10 @@
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
           </div>
           <div class="enter-title">
-            <span class="title-txt">个体户</span>
+            <span class="title-txt">个体工商户</span>
             <div class="flex">
               <span class="count-num"> {{ statisticsObj?.individualCount }} </span>
-              <span class="count-unit"> 户 </span>
+              <span class="count-unit"> 家 </span>
             </div>
           </div>
         </div>
@@ -234,7 +234,7 @@
             <span class="title-txt">村集体</span>
             <div class="flex">
               <span class="count-num"> {{ statisticsObj?.villageCount }} </span>
-              <span class="count-unit"> 户 </span>
+              <span class="count-unit"> 个 </span>
             </div>
           </div>
         </div>

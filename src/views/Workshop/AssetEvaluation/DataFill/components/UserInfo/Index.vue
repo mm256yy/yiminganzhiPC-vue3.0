@@ -213,22 +213,46 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="6" v-if="type != 'IndividualB'">
           <div class="info-item">
             <div class="tit">土地基本情况评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.landTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-if="type != 'IndividualB'">
           <div class="info-item">
             <div class="tit">土地青苗及附着物评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.assetAppendantTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-if="type == 'Landlord'">
           <div class="info-item">
             <div class="tit">坟墓评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.graveTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6" v-if="type != 'Landlord' && type != 'VillageInfoC'">
+          <div class="info-item">
+            <div class="tit">设备设施评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.equipmentTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6" v-if="type != 'Landlord'">
+          <div class="info-item">
+            <div class="tit">基础设施评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.infrastructureTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6" v-if="type != 'Landlord' && type != 'VillageInfoC'">
+          <div class="info-item">
+            <div class="tit">其他评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.otherTotalAmount, '（元）') }}</div>
+          </div>
+        </el-col>
+        <el-col :span="6" v-if="type == 'VillageInfoC'">
+          <div class="info-item">
+            <div class="tit">小型专项及农副业设施评估合计：</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.facTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
         <el-col :span="6">
