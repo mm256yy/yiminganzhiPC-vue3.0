@@ -4,7 +4,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="title">居民户账户信息</div>
         <div>
-          <ElButton type="primary" @click="onDocumentation">归档</ElButton>
+          <ElButton type="primary" @click="onDocumentation">进度汇报</ElButton>
           <ElButton type="primary" @click="onPrint">打印报表</ElButton>
           <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
         </div>
