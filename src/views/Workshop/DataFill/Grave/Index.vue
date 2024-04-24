@@ -208,7 +208,8 @@ const defaultRow = {
   gravePosition: '',
   number: 0,
   remark: '',
-  isAdd: true
+  isAdd: true,
+  peasantHouseholdId: props.householdId
 }
 
 // 获取村集体列表
@@ -294,6 +295,8 @@ const onDelRow = (row) => {
 
 const onSave = () => {
   loading.value = true
+  // tableData.value.push({ peasantHouseholdId: props.householdId })
+  // let parmas = [immigrantGraveList]
   saveGraveListApi(tableData.value)
     .then(() => {
       ElMessage.success('操作成功！')

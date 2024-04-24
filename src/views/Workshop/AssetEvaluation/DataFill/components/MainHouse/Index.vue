@@ -35,7 +35,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.houseNo" />
+            <ElInput placeholder="请输入" v-model="scope.row.houseNo" :disabled="true" />
           </template>
         </ElTableColumn>
         <!-- <ElTableColumn
