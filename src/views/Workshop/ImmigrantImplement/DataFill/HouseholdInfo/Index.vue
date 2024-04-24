@@ -29,7 +29,7 @@
           </div>
           <ElRow>
             <ElCol :span="12">
-              <ElFormItem label="联系方式：">
+              <ElFormItem label="联系方式(户主)：" required>
                 <ElInput v-model="position.phone" placeholder="请输入" />
               </ElFormItem>
             </ElCol>
