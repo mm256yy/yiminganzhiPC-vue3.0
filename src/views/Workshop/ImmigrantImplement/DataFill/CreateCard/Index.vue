@@ -224,7 +224,7 @@
           :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
           header-cell-class-name="table-headers"
           border
-          style="font-size: 7px; width: 100%"
+          style="width: 100%; font-size: 7px"
         >
           <el-table-column
             :prop="item.field"
