@@ -241,7 +241,8 @@ const getList = () => {
     householdId: props.householdId,
     projectId: props.projectId,
     status: 'implementation',
-    size: 1000
+    size: 1000,
+    isNum: 1
   }
   getHouseAccessoryListApi(params).then((res) => {
     tableData.value = res.content

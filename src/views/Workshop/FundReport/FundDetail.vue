@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { ElButton } from 'element-plus'
@@ -152,33 +152,30 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
-
+let search = ref({})
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
-
-  for (let key in params) {
-    if (!params[key]) {
-      delete params[key]
-    }
-  }
-
-  setSearchParams({ ...params })
+  search.value = params
+  setSearchParams({ ...params, projectId })
+  console.log(tableObject.params)
 }
 
 const onReset = () => {
   tableObject.params = {
     projectId
   }
+  search.value = { projectId }
   setSearchParams({})
 }
 
 // 数据导出
 const onExport = async () => {
   const params = {
-    ...tableObject.params
+    ...search.value,
+    projectId
   }
   const res = await exportFundDetailApi(params)
   let filename = res.headers

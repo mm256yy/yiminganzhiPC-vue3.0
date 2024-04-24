@@ -163,7 +163,11 @@ const onBack = () => {
 }
 
 const onExport = async () => {
-  const res = await exportReportApi({})
+  const res = await exportReportApi({
+    ...tableObject.params,
+    size: tableData1.pageSizeRef,
+    page: 0
+  })
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]

@@ -38,3 +38,12 @@ export const exportReportApi = (params: any) => {
     responseType: 'blob'
   })
 }
+// 查询附属物公示列表
+export const getQueryTree = (
+  params: Partial<AccessoryDtoType>
+): Promise<TableResponse<AccessoryDtoType>> => {
+  return request.get({
+    url: '/resultForms/queryTree',
+    params
+  })
+}

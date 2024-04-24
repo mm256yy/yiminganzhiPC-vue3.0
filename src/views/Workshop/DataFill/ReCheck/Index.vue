@@ -88,6 +88,7 @@
         :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
+        :baseInfo="baseInfo"
       />
 
       <!-- 附属物信息 -->
@@ -160,6 +161,7 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
+        :baseInfo="baseInfo"
       />
 
       <!-- 附属物信息 -->
@@ -219,6 +221,7 @@
         :householdId="householdId"
         v-else-if="reportTabCurrentId === ReportTabIds[1]"
         :surveyStatus="surveyStatus"
+        :baseInfo="baseInfo"
       />
 
       <!-- 附属物信息 -->
@@ -262,6 +265,7 @@
         :householdId="householdId"
         v-if="reportTabCurrentId === ReportTabIds[0]"
         :surveyStatus="surveyStatus"
+        :baseInfo="baseInfo"
       />
 
       <!-- 零星(林)果木信息 -->

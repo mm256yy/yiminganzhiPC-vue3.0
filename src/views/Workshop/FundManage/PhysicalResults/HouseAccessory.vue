@@ -142,7 +142,7 @@ const requestHouseAccessory = async () => {
   tableLoading.value = true
 
   try {
-    const result: any = await getEnterpriseAppendant()
+    const result: any = await getEnterpriseAppendant(tableObject.params)
     result.titles.forEach((item: any, index: any) => {
       if (result.houseTitles.includes(item)) {
         column[3].children.push({
@@ -169,13 +169,40 @@ const requestHouseAccessory = async () => {
     tableLoading.value = false
   }
 }
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
-
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
   for (let key in params) {
     if (!params[key]) {
       delete params[key]
@@ -196,7 +223,8 @@ const onReset = () => {
 
 const onExport = async () => {
   const params = {
-    type: 'Company'
+    type: 'Company',
+    ...tableObject.params
   }
   const res = await exportHouseAttachments(params)
   let filename = res.headers

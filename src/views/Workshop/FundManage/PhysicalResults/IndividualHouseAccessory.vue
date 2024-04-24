@@ -55,7 +55,7 @@ const titles = ['智能报表', '实物成果', '个体户', '房屋及附属物
 let tableRef = ref()
 const tableLoading = ref<boolean>(false)
 const projectId = appStore.currentProjectId
-let searchParams = reactive({})
+let searchParams: any = reactive({})
 
 let schemas = reactive<any>({
   columns: []
@@ -223,13 +223,40 @@ const requestIndividualHouseAccessory = async () => {
     tableLoading.value = false
   }
 }
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
   searchParams = {
     ...data
   }
-
+  if (searchParams.villageCodeVal) {
+    findRecursion(districtTree.value, searchParams.villageCodeVal, (item) => {
+      if (item) {
+        searchParams[getParamsKey(item.districtType)] = searchParams.villageCodeVal
+      }
+    })
+    delete searchParams.villageCodeVal
+  }
   requestIndividualHouseAccessory()
 }
 
@@ -239,7 +266,7 @@ const onReset = () => {
 }
 
 const onExport = async () => {
-  const params = {}
+  const params = { ...searchParams }
   const res = await exportIndividualHouseholdTree(params)
   let filename = res.headers
   filename = filename['content-disposition']

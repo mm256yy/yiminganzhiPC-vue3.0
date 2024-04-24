@@ -135,11 +135,9 @@ const requestFruitWood = async () => {
   ]
   tableLoading.value = true
 
-  tableObject.params = {
-    projectId
-  }
   const params = {
-    ...tableObject.params
+    ...tableObject.params,
+    type: 'Company'
   }
   try {
     const result: any = await getEnterpriseTree(params)
@@ -163,13 +161,40 @@ const requestFruitWood = async () => {
     tableLoading.value = false
   }
 }
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
-
+  if (params.code) {
+    findRecursion(districtTree.value, params.code, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.code
+      }
+    })
+    delete params.code
+  }
   for (let key in params) {
     if (!params[key]) {
       delete params[key]
@@ -177,14 +202,15 @@ const onSearch = (data) => {
   }
 
   tableObject.params = {
-    ...params
+    ...params,
+    type: 'Company'
   }
 
   requestFruitWood()
 }
 
 const onReset = () => {
-  tableObject.params = {}
+  tableObject.params = { type: 'Company' }
   requestFruitWood()
 }
 
@@ -197,7 +223,8 @@ const getdistrictTree = async () => {
 const onExport = async () => {
   const params = {
     ...tableObject.params,
-    type: 'Company'
+    type: 'Company',
+    projectId
   }
   const res = await exportEnterpriseFruitWoodApi(params)
   let filename = res.headers

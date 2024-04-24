@@ -208,7 +208,9 @@ const onReset = () => {
 const onExport = async () => {
   const params = {
     exportType: '1',
-    ...tableObject.params
+    ...tableObject.params,
+    size: tableObject.total,
+    page: 0
   }
   const res = await exportReportApi(params)
   let filename = res.headers

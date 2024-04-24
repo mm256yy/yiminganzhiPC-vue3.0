@@ -41,10 +41,7 @@ import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
 import { useTable } from '@/hooks/web/useTable'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import {
-  getAccessoryListApi,
-  exportAccessoryReportApi
-} from '@/api/workshop/dataQuery/accessory-service'
+import { getQueryTree, exportAccessoryReportApi } from '@/api/workshop/dataQuery/accessory-service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 
@@ -52,10 +49,10 @@ const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getAccessoryListApi
+  getListApi: getQueryTree
 })
 
-const { setSearchParams } = methods
+const { setSearchParams, getList } = methods
 
 const villageTree = ref<any[]>([])
 
@@ -209,7 +206,9 @@ const onReset = () => {
 const onExport = async () => {
   const params = {
     exportType: '1',
-    ...tableObject.params
+    ...tableObject.params,
+    size: tableObject.total,
+    page: 0
   }
   const res = await exportAccessoryReportApi(params)
   let filename = res.headers
