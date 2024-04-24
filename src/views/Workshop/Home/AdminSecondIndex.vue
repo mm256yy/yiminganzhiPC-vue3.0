@@ -510,7 +510,7 @@ const getVillageAnalysisLists = async () => {
     let arr = {}
     list.forEach((item) => {
       for (let i in item) {
-        if (i != 'name') {
+        if (!'totalname'.includes(i)) {
           if (!arr[i]) arr[i] = []
           arr[i].push(item[i])
         }
@@ -518,128 +518,138 @@ const getVillageAnalysisLists = async () => {
     })
     let sseries: any = []
     for (let m in arr) {
-      if (m == 'caodi') {
-        sseries.push({
-          name: '草地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'gengdi') {
-        sseries.push({
-          name: '耕地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'gkccyd') {
-        sseries.push({
-          name: '工矿仓储用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'ggfwyd') {
-        sseries.push({
-          name: '公共管理与公共服务用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'jtyd') {
-        sseries.push({
-          name: '交通用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'lindi') {
-        sseries.push({
-          name: '林地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'sfyd') {
-        sseries.push({
-          name: '商服用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'syyd') {
-        sseries.push({
-          name: '水域及水利设施用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'tsyd') {
-        sseries.push({
-          name: '特殊用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'yuandi') {
-        sseries.push({
-          name: '园地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      } else if (m == 'zzyd') {
-        sseries.push({
-          name: '住宅用地',
-          type: 'bar',
-          stack: 'Ad',
-          barWidth: 57,
-          emphasis: {
-            focus: 'series'
-          },
-          data: arr[m]
-        })
-      }
+      sseries.push({
+        name: m,
+        type: 'bar',
+        stack: 'Ad',
+        barWidth: 57,
+        emphasis: {
+          focus: 'series'
+        },
+        data: arr[m]
+      })
+      // if (m == 'caodi') {
+      //   sseries.push({
+      //     name: '草地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'gengdi') {
+      //   sseries.push({
+      //     name: '耕地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'gkccyd') {
+      //   sseries.push({
+      //     name: '工矿仓储用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'ggfwyd') {
+      //   sseries.push({
+      //     name: '公共管理与公共服务用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'jtyd') {
+      //   sseries.push({
+      //     name: '交通用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'lindi') {
+      //   sseries.push({
+      //     name: '林地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'sfyd') {
+      //   sseries.push({
+      //     name: '商服用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'syyd') {
+      //   sseries.push({
+      //     name: '水域及水利设施用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'tsyd') {
+      //   sseries.push({
+      //     name: '特殊用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'yuandi') {
+      //   sseries.push({
+      //     name: '园地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // } else if (m == 'zzyd') {
+      //   sseries.push({
+      //     name: '住宅用地',
+      //     type: 'bar',
+      //     stack: 'Ad',
+      //     barWidth: 57,
+      //     emphasis: {
+      //       focus: 'series'
+      //     },
+      //     data: arr[m]
+      //   })
+      // }
     }
     tudiArr.value.series = sseries
     console.log(tudiArr.value.series)

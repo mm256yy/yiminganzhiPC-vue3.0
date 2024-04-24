@@ -49,7 +49,7 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="企业联系方式" prop="phone">
+      <!-- <ElFormItem label="企业联系方式" prop="phone">
         <ElInput
           clearable
           placeholder="请输入企业联系方式"
@@ -57,7 +57,7 @@
           class="!w-350px"
           v-model="form.phone"
         />
-      </ElFormItem>
+      </ElFormItem> -->
       <ElFormItem label="" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"

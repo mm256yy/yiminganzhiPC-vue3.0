@@ -56,7 +56,7 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="个体工商联系方式" prop="phone">
+      <!-- <ElFormItem label="个体工商联系方式" prop="phone">
         <ElInput
           clearable
           placeholder="请输入个体工商联系方式"
@@ -64,7 +64,7 @@
           class="!w-350px"
           v-model="form.phone"
         />
-      </ElFormItem>
+      </ElFormItem> -->
 
       <!-- <ElDivider border-style="dashed" />
 

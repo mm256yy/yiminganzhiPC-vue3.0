@@ -3,8 +3,11 @@
   <InvestigationHome v-if="role === RoleCodeType.investigator || role === RoleCodeType.reviewer" />
   <!-- 领导首页 -->
   <LeaderHome
-    v-else-if="role === RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision"
+    v-else-if="
+      role === (RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision) && !esey
+    "
   />
+  <Eseyhost v-else-if="esey" />
   <!--评估人员首页-->
   <EvaluationHome v-else-if="isEvaluation" />
   <!-- 实施人员首页 -->
@@ -15,6 +18,14 @@
   <FileMngHome v-else-if="role === RoleCodeType.fileadmin" />
   <!-- 其他首页 -->
   <OtherHome v-else />
+  <div
+    style="position: fixed; top: 20px; right: 112px"
+    v-if="role === RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision"
+  >
+    <div style=" padding: 0 10px;color: #fff; border: 1px solid #ffffff" @click="handelesey"
+      >版本切换</div
+    >
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -35,7 +46,7 @@ import OtherHome from './Other.vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
 import { usePermissionStore } from '@/store/modules/permission'
-
+import Eseyhost from './Easeyhost.vue'
 const permissionStore = usePermissionStore()
 // 角色代码
 enum RoleCodeType {
@@ -58,7 +69,10 @@ enum RoleCodeType {
   township = 'township',
   fileadmin = 'fileadmin' // 档案管理员
 }
-
+let esey = ref(false)
+let handelesey = () => {
+  esey.value = !esey.value
+}
 const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
 const currentProjectId = appStore.currentProjectId
