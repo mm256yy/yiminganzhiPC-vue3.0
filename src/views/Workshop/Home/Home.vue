@@ -22,7 +22,7 @@
     style="position: fixed; top: 20px; right: 112px"
     v-if="role === RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision"
   >
-    <div style=" padding: 0 10px;color: #fff; border: 1px solid #ffffff" @click="handelesey"
+    <div style="padding: 0 10px; color: #fff; border: 1px solid #ffffff" @click="handelesey"
       >版本切换</div
     >
   </div>
