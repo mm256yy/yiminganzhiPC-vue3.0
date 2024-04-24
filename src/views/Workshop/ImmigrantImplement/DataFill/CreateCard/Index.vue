@@ -225,7 +225,7 @@
             label-class-name="my-label"
             class-name="my-content"
           >
-            {{ tableObject.tableList.length }}
+            {{ tableObject.tableList.filter((item: any) => item.name != '增计人口').length }}
           </ElDescriptionsItem>
         </ElDescriptions>
         <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>

@@ -141,7 +141,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="土地证面积(㎡)" prop="landCardArea">
+          <ElFormItem label="土地使用权证面积(㎡)" prop="landCardArea">
             <ElInput v-model="form.landCardArea" class="!w-full" placeholder="请输入" />
           </ElFormItem>
         </ElCol>
