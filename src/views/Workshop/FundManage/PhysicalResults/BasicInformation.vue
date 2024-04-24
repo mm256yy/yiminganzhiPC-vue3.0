@@ -146,7 +146,7 @@ const onExport = async () => {
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
-    field: 'villageCode',
+    field: 'villageCodes',
     label: '所属区域',
     search: {
       show: true,
@@ -204,13 +204,40 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
 
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
-
+  if (params.villageCodes) {
+    findRecursion(districtTree.value, params.villageCodes, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.villageCodes
+      }
+    })
+    delete params.villageCodes
+  }
   for (let key in params) {
     if (!params[key]) {
       delete params[key]

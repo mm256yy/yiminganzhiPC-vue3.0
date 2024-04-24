@@ -137,7 +137,7 @@ getList()
 
 watch(
   () => props.baseInfo,
-  (val) => {
+  () => {
     console.log(props.baseInfo, '测试传输的数据')
   },
   {
