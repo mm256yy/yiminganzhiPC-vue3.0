@@ -107,7 +107,7 @@
 
       <ElRow :gutter="30">
         <ElCol :span="8">
-          <ElFormItem label="联系方式" prop="phone">
+          <ElFormItem label="联系方式" :prop="form.relation == '1' ? 'phone' : ''">
             <ElInput v-model="form.phone" class="!w-full" placeholder="请输入联系方式" />
           </ElFormItem>
         </ElCol>
@@ -446,7 +446,7 @@ import {
 } from 'element-plus'
 import { ref, reactive, watch, nextTick, computed, onMounted } from 'vue'
 import { debounce } from 'lodash-es'
-import { cardReg, validateIdNo, phoneReg } from '@/utils'
+import { cardReg, validateIdNo, phoneReg, checkTel } from '@/utils'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useValidator } from '@/hooks/web/useValidator'
 import type { DemographicDtoType } from '@/api/workshop/population/types'
@@ -598,13 +598,7 @@ let { required } = useValidator()
 // 规则校验
 const rules = reactive<FormRules>({
   card: [{ validator: validateIdNo, trigger: 'blur' }, required('请输入正确的身份证号')],
-  phone: [
-    {
-      pattern: phoneReg,
-      message: '请输入正确的手机号',
-      trigger: 'change'
-    }
-  ],
+  phone: [{ validator: checkTel, trigger: 'blur' }, required('请输入正确的手机号')],
   addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }],
   relation: [required()]
 })

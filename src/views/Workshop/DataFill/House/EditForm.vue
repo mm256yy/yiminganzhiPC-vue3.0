@@ -604,7 +604,7 @@ watch(
       position.latitude = props.actionType == 'add' ? props.latitude : form.value.latitude
       position.address = props.actionType == 'add' ? props.address : form.value.address
       console.log(props.type)
-      if (!form.value.propertyType) {
+      if (!form.value.propertyType && (props.type == 'Landlord' || props.type == 'villageInfoC')) {
         form.value.propertyType = props.type == 'villageInfoC' ? '2' : '3'
       }
 
