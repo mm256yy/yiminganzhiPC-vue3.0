@@ -19,17 +19,29 @@
       >
         <ElRow>
           <ElCol :span="6">
+            <ElFormItem label="安置方式" prop="placementWay">
+              <ElSelect class="w-350px" v-model="form.placementWay">
+                <ElOption
+                  v-for="item in dictObj[422]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElCol>
+          <ElCol :span="6">
             <ElFormItem label="迁前厂址" prop="beforeAddress">
               <ElInput v-model="form.beforeAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
-          <ElCol :span="6">
+          <ElCol :span="6" v-if="form.placementWay == '2'">
             <ElFormItem label="安置厂址" prop="afterAddress">
               <ElInput v-model="form.afterAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="企业总人数" prop="peopleNumber">
+            <ElFormItem label="员工总数" prop="peopleNumber">
               <ElInput v-model="form.peopleNumber" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
@@ -214,7 +226,9 @@ import {
   ElCol,
   ElButton,
   ElInput,
-  ElMessage
+  ElMessage,
+  ElSelect,
+  ElOption
 } from 'element-plus'
 import { debounce } from 'lodash-es'
 import { Table } from '@/components/Table'
@@ -232,13 +246,16 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
 // import ConfirmReward from './ConfirmReward.vue'
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
+import { useValidator } from '@/hooks/web/useValidator'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
-
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const props = defineProps<PropsType>()
 const dialog = ref<boolean>(false)
 const rewardConfirmDialog = ref<boolean>(false)
@@ -432,8 +449,11 @@ const { allSchemas } = useCrudSchemas(schema)
 
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
+const { required } = useValidator()
+
 const rules = reactive<FormRules>({
-  beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
+  beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  placementWay: [required()]
 })
 
 // 获取费用补偿情况列表
@@ -568,6 +588,9 @@ onMounted(() => {
       }
     }
   )
+  if (!props.baseInfo.placementWay) {
+    form.value.placementWay = '2'
+  }
   console.log(form)
 })
 </script>

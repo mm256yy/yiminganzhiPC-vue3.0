@@ -66,6 +66,9 @@
           style="width: 390px"
         />
       </ElFormItem>
+      <ElFormItem label="联系方式:" v-if="form.chek" prop="phone">
+        <ElInput style="width: 390px" v-model="form.phone" placeholder="请输入联系方式" />
+      </ElFormItem>
     </ElForm>
     <template #footer>
       <ElButton type="primary" @click="onSubmit">绑定</ElButton>
@@ -93,7 +96,7 @@ import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import { useValidator } from '@/hooks/web/useValidator'
-import { validateIdNo } from '@/utils/index'
+import { validateIdNo, checkTel } from '@/utils/index'
 interface Props {
   show: boolean
   row: any
@@ -194,7 +197,8 @@ const rules = {
   peasantHouseholdIdTwo: [required()],
   type: [required()],
   code: [required()],
-  card: [{ validator: validateIdNo, trigger: 'blur' }, required()]
+  card: [{ validator: validateIdNo, trigger: 'blur' }, required()],
+  phone: [{ validator: checkTel, trigger: 'blur' }, required()]
 }
 watch(
   () => props.row,

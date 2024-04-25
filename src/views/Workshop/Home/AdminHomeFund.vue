@@ -20,6 +20,7 @@
           align-items: center;
           justify-content: space-around;
         "
+        @click="toFundDetail"
       >
         <img style="width: 80px; height: 80px" src="@/assets/imgs/zjone.png" alt="" />
         <div style="width: 100px">
@@ -104,6 +105,7 @@
             align-items: center;
             justify-content: center;
           "
+          @click="handleClickFundManage"
         >
           <img style="width: 80px; height: 80px" src="@/assets/imgs/zjtwo.png" alt="" />
           <div>
@@ -126,6 +128,7 @@
             align-items: center;
             justify-content: center;
           "
+          @click="toCapitalPool"
         >
           <img style="width: 80px; height: 80px" src="@/assets/imgs/zjthere.png" alt="" />
           <div>
@@ -885,7 +888,7 @@ const taxationOption = ref({
     }
   ]
 })
-const { back } = useRouter()
+const { back, push } = useRouter()
 const onBack = () => {
   back()
 }
@@ -945,6 +948,21 @@ let setValue = (value, arr) => {
     }
   }
   console.log(arr.value.series[0].data, arr.value.series[1].data)
+}
+const toFundDetail = () => {
+  push({
+    name: 'FundUseDetail'
+  })
+}
+const handleClickFundManage = () => {
+  const pdfUlr =
+    'https://zdwp.oss-cn-hangzhou.aliyuncs.com/migrate/files/172关于印发《浙江长龙山抽水蓄能电站2017年度移民安置工作任务及资金计划》的通知.pdf'
+  window.open(pdfUlr, '_blank')
+}
+const toCapitalPool = () => {
+  push({
+    name: 'CapitalPoolCheck'
+  })
 }
 </script>
 

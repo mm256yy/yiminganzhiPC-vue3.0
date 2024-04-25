@@ -540,7 +540,7 @@ const addEnterprise = () => {
   }
 
   sessionStorage.setItem('isDefaultOpen', '1')
-  const routeName = 'EnterpriceCheck'
+  const routeName = appStore.getProjectStatus == 'review' ? 'EnterpriceCheck' : 'Enterprise'
   push({
     name: routeName,
     query
@@ -558,7 +558,7 @@ const addIndividual = () => {
     address: address.value
   }
   sessionStorage.setItem('isDefaultOpen', '1')
-  const routeName = 'IndividualBCheck'
+  const routeName = appStore.getProjectStatus == 'review' ? 'IndividualBCheck' : 'IndividualB'
   push({
     name: routeName,
     query

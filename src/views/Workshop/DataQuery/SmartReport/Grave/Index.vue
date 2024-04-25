@@ -69,7 +69,7 @@ tableObject.params = {
 
 const schema = reactive<CrudSchema[]>([
   {
-    field: 'villageCode',
+    field: 'villageCodes',
     label: '所属区域',
     search: {
       show: true,
@@ -177,13 +177,39 @@ const spanMethod = ({ row, column, rowIndex }) => {
     }
   }
 }
-
+const findRecursion = (data, code, callback) => {
+  if (!data || !Array.isArray(data)) return null
+  data.forEach((item, index, arr) => {
+    if (item.code === code) {
+      return callback(item, index, arr)
+    }
+    if (item.children) {
+      return findRecursion(item.children, code, callback)
+    }
+  })
+}
+const getParamsKey = (key: string) => {
+  const map = {
+    Country: 'areaCode',
+    Township: 'townCode',
+    Village: 'villageCode', // 行政村 code
+    NaturalVillage: 'virutalVillageCode' // 自然村 code
+  }
+  return map[key]
+}
 const onSearch = (data) => {
   // 处理参数
   let params = {
     ...data
   }
-
+  if (params.villageCodes) {
+    findRecursion(villageTree.value, params.villageCodes, (item) => {
+      if (item) {
+        params[getParamsKey(item.districtType)] = params.villageCodes
+      }
+    })
+    delete params.villageCodes
+  }
   for (let key in params) {
     if (!params[key]) {
       delete params[key]
@@ -201,7 +227,9 @@ const onReset = () => {
 // 数据导出
 const onExport = async () => {
   const params = {
-    ...tableObject.params
+    ...tableObject.params,
+    size: tableObject.total,
+    page: 0
   }
   const res = await exportReportApi(params)
   let filename = res.headers
@@ -225,19 +253,6 @@ const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'amdinVillage')
   villageTree.value = list || []
   return list || []
-}
-
-// 递归查找
-const findRecursion = (data, code, callback) => {
-  if (!data || !Array.isArray(data)) return null
-  data.forEach((item, index, arr) => {
-    if (item.code === code) {
-      return callback(item, index, arr)
-    }
-    if (item.children) {
-      return findRecursion(item.children, code, callback)
-    }
-  })
 }
 
 onMounted(() => {

@@ -90,10 +90,7 @@ const schema = reactive<CrudSchema[]>([
         props: {
           value: 'code',
           label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
+        }
       }
     },
     table: {
@@ -151,7 +148,9 @@ const getTableList = () => {
 
 const getSearchParams = () => {
   return {
-    ...searchParams
+    ...searchParams,
+    size: 99999,
+    page: 0
   }
 }
 const onSearch = (data) => {

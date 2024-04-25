@@ -1,5 +1,5 @@
 <template>
-  <div class="bodyBack">
+  <div class="bodyBack" id="LeaderSide_work_home_rem">
     <div class="cin_top">
       <div class="search">
         <ElInput
@@ -37,7 +37,7 @@
         style="
           display: flex;
           width: 60%;
-          height: 42vh;
+          height: 50vh;
           flex-wrap: wrap;
           justify-content: space-between;
         "
@@ -59,7 +59,8 @@
 </template>
 <script setup lang="ts">
 import { getTokenApi } from '@/api/common/index'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { changeScale, init } from '@/views/Workshop/ExternalLink/rem'
 import { ElSelect, ElOption, ElInput } from 'element-plus'
 import zhkq from '@/assets/imgs/zhkq.png'
 import zhaz from '@/assets/imgs/zhaz.png'
@@ -68,7 +69,15 @@ import jdgl from '@/assets/imgs/jdgl.png'
 import zhbb from '@/assets/imgs/zhbb.png'
 import dsjfx from '@/assets/imgs/dsjfx.png'
 import { useRouter } from 'vue-router'
-
+onMounted(() => {
+  changeScale()
+  window.addEventListener('resize', changeScale)
+})
+const loading = ref(false)
+onBeforeUnmount(() => {
+  init()
+  window.removeEventListener('resize', changeScale)
+})
 let option = ref([
   {
     code: '1',
@@ -153,7 +162,7 @@ let optionClick = (e) => {
 <style scoped lang="less">
 .bodyBack {
   display: flex;
-  height: 91vh;
+  height: 88vh;
   background-image: url(@/assets/imgs/backpake.png);
   flex-direction: column;
 }
@@ -235,7 +244,7 @@ let optionClick = (e) => {
 
 .option_click {
   display: flex;
-  width: 250px;
+  width: 32%;
   height: 160px;
   background: linear-gradient(180deg, #c9e0fe 0%, #fdfeff 50%);
   border: 1px solid;

@@ -264,7 +264,9 @@ const onReset = () => {
  * villageCode 所属区域 code
  * householdName 村集体名称
  */
+let paramsold = ref({})
 const getTableList = (params: ParamsType) => {
+  paramsold.value = params
   loading.value = true
   getVillageCollectiveListApi(params)
     .then((res: any) => {
@@ -282,7 +284,8 @@ const getTableList = (params: ParamsType) => {
 // 数据导出
 const onExport = async () => {
   const params = {
-    exportType: pageType
+    exportType: pageType,
+    ...paramsold.value
   }
   const res = await exportReportApi(params)
   let filename = res.headers

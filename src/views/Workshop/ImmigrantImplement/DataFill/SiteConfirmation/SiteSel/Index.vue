@@ -42,7 +42,7 @@
                 : homesteadAreaSize
                     .filter((item) => item.id == row.area)
                     .map((item) => item.name)[0]
-            }}
+            }}㎡
           </template>
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
@@ -106,9 +106,7 @@
           align="center"
           header-align="center"
         >
-          <template #default="{ row }">
-            {{ row.area }}
-          </template>
+          <template #default="{ row }"> {{ row.area }}㎡ </template>
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
@@ -252,40 +250,21 @@
         border
       >
         <ElTableColumn label="序号" width="50" type="index" align="center" header-align="center" />
-        <ElTableColumn
-          label="区块"
-          prop="settleAddress"
-          align="center"
-          width="100"
-          header-align="center"
-        >
+        <ElTableColumn label="区块" prop="settleAddress" align="center" header-align="center">
           <template #default="{ row }">
             {{ row.settleAddressText }}
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="类型"
-          prop="houseAreaType"
-          align="center"
-          width="80"
-          header-align="center"
-        >
+        <ElTableColumn label="类型" prop="houseAreaType" align="center" header-align="center">
           <template #default="{ row }">
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn
-          label="地块编号"
-          prop="landNo"
-          align="center"
-          width="80"
-          header-align="center"
-        >
+        <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
           <template #default="{ row }">
             {{ row.landNo ? row.landNoOptions.filter((e) => row.landNo == e.name)[0].name : '-' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="备注" align="center" />
       </ElTable>
       <ElTable
         :data="tableData"
