@@ -15,7 +15,7 @@
           fit="cover"
           v-if="!item.url.includes('pdf')"
         />
-        <ElImage style="width: 100px; height: 80px" v-else src="../src/assets/imgs/pdf.png" />
+        <ElImage style="width: 100px; height: 80px" v-else :src="IconCapital" />
         <div class="image-txt" :title="item.name" v-if="!item.url.includes('pdf')">{{
           formatText(item.name)
         }}</div>
@@ -30,6 +30,8 @@
 import { computed, watch, ref } from 'vue'
 import { ElDialog, ElImage, ElEmpty } from 'element-plus'
 import type { FilesDtoType } from '@/api/fileMng/types'
+import IconCapital from '@/assets/imgs/pdf.png'
+
 interface PropType {
   title: string // 弹框标题
   isShow: boolean //是否展示

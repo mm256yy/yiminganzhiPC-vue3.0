@@ -26,7 +26,7 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="幢号"
+          label="幢号111"
           :width="100"
           prop="houseNo"
           align="center"
@@ -281,7 +281,7 @@ const btnLoading = ref<boolean>(false)
 let rowItem = reactive({ id: '' }) // 行信息
 const houseList = ref<any[]>([])
 const tableDataF = ref<any[]>([])
-const fixedPriceOptions = [
+const fixedPriceOptions = ref<any>([
   {
     label: '是',
     value: '1'
@@ -290,7 +290,8 @@ const fixedPriceOptions = [
     label: '否',
     value: '0'
   }
-]
+])
+const cfNoList = ref<any>()
 
 const defaultRow = {
   doorNo: props.doorNo,
@@ -351,6 +352,30 @@ const getList = () => {
         value: item.houseNo
       }
     })
+    console.log(houseList.value, '4')
+    let dataListIsBuyItNow = tableData.value.filter((item: any) => item.isBuyItNow == '1')
+    let dataListNoBuyItNow = tableData.value.filter((item: any) => item.isBuyItNow == '0')
+    console.log(dataListIsBuyItNow, '1')
+    let cfIsList = dataListIsBuyItNow.map((item: any) => {
+      return {
+        label: item.houseNo,
+        value: item.houseNo
+      }
+    })
+    cfNoList.value = dataListNoBuyItNow.map((item: any) => {
+      return {
+        isBuyItNow: item.isBuyItNow,
+        houseNo: item.houseNo
+      }
+    })
+    console.log(cfIsList, '2')
+    let areObjectsEqual = (obj1, obj2) => {
+      return JSON.stringify(obj1) === JSON.stringify(obj2)
+    }
+    houseList.value = houseList.value.filter(
+      (item: any) => !cfIsList.some((objToRemove) => areObjectsEqual(item, objToRemove))
+    )
+    console.log(houseList.value, '3')
   })
 }
 
@@ -417,6 +442,28 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
+  console.log(row, 'row')
+  cfNoList.value.forEach((item: any) => {
+    if (item.houseNo == row.houseNo) {
+      fixedPriceOptions.value = [
+        {
+          label: '否',
+          value: '0'
+        }
+      ]
+    } else {
+      fixedPriceOptions.value = [
+        {
+          label: '是',
+          value: '1'
+        },
+        {
+          label: '否',
+          value: '0'
+        }
+      ]
+    }
+  })
   if (row.isBuyItNow == '1') {
     tableDataF.value.map((item: any) => {
       if (item.houseNo == row.houseNo) {
