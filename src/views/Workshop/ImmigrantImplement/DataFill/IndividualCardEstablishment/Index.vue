@@ -5,9 +5,8 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="title"> 个体工商户账户信息 </div>
         <div>
-          <ElButton type="primary" @click="onDocumentation">归档</ElButton>
+          <ElButton type="primary" @click="onDocumentation">进度汇报</ElButton>
           <ElButton type="primary" @click="onPrint">打印报表</ElButton>
-          <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
         </div>
       </div>
       <ElForm
@@ -49,11 +48,9 @@
               <ElInput v-model="form.bankAccount" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
-          <!-- <ElCol :span="6">
-            <ElButton type="primary" @click="onDocumentation">归档</ElButton>
-            <ElButton type="primary" @click="onPrint">打印报表</ElButton>
+          <ElCol :span="6">
             <ElButton type="primary" @click="onSubmit(formRef)">保存</ElButton>
-          </ElCol> -->
+          </ElCol>
         </ElRow>
       </ElForm>
 
