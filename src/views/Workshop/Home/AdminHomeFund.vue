@@ -21,12 +21,12 @@
           justify-content: space-around;
         "
       >
-        <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjone.png" alt="" />
+        <img style="width: 80px; height: 80px" src="@/assets/imgs/zjone.png" alt="" />
         <div style="width: 100px">
-          <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+          <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
             概算资金(万元)
           </div>
-          <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">{{
+          <text style="height: 28px; font-size: 30px; font-weight: 800; color: #333333">{{
             fundScreenDto?.gszj
           }}</text>
         </div>
@@ -57,27 +57,27 @@
               </div>
             </div>
             <div style="text-align: center">
-              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+              <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
                 累计使用(万元)
               </div>
-              <text style=" font-size: 30px;font-weight: 800; color: #333333; text-transform: none">
+              <text style="font-size: 30px; font-weight: 800; color: #333333; text-transform: none">
                 {{ fundScreenDto?.ljsyzj }}
               </text>
             </div>
-            <div style=" width: 1px; height: 30px;border: 1px solid #000000"></div>
+            <div style="width: 1px; height: 30px; border: 1px solid #000000"></div>
             <div style="text-align: center">
-              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+              <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
                 概算内(万元）
               </div>
-              <text style=" font-size: 20px;font-weight: 800; color: #333333; text-transform: none">
+              <text style="font-size: 20px; font-weight: 800; color: #333333; text-transform: none">
                 {{ fundScreenDto?.gsnzj }}
               </text>
             </div>
             <div style="text-align: center">
-              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+              <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
                 概算外(万元）
               </div>
-              <text style=" font-size: 20px;font-weight: 800; color: #333333; text-transform: none">
+              <text style="font-size: 20px; font-weight: 800; color: #333333; text-transform: none">
                 {{ fundScreenDto?.gswzj }}
               </text>
             </div>
@@ -105,12 +105,12 @@
             justify-content: center;
           "
         >
-          <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjtwo.png" alt="" />
+          <img style="width: 80px; height: 80px" src="@/assets/imgs/zjtwo.png" alt="" />
           <div>
-            <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+            <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
               本年计划资金(万元）
             </div>
-            <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">
+            <text style="height: 28px; font-size: 30px; font-weight: 800; color: #333333">
               {{ fundScreenDto?.bnjhzj }}
             </text>
           </div>
@@ -127,12 +127,12 @@
             justify-content: center;
           "
         >
-          <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjthere.png" alt="" />
+          <img style="width: 80px; height: 80px" src="@/assets/imgs/zjthere.png" alt="" />
           <div>
-            <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+            <div style="height: 21px; font-size: 14px; font-weight: 400; color: #666666">
               本年使用资金(万元）
             </div>
-            <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">
+            <text style="height: 28px; font-size: 30px; font-weight: 800; color: #333333">
               {{ fundScreenDto?.bnsyzj }}
             </text>
           </div>

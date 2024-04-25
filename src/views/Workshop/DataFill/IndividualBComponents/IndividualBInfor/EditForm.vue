@@ -39,14 +39,14 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="7">
-          <ElFormItem label="联系方式" prop="phone">
+          <ElFormItem label="联系方式" prop="legalPersonPhone">
             <ElInput
               clearable
               filterable
               placeholder="联系方式"
               type="text"
               class="!w-full"
-              v-model="form.phone"
+              v-model="form.legalPersonPhone"
             />
           </ElFormItem>
         </ElCol>
@@ -536,7 +536,7 @@ watch(
 // 规则校验
 const rules = reactive<FormRules>({
   legalPersonName: [required()],
-  phone: [{ validator: checkTel, trigger: 'blur' }, required()],
+  legalPersonPhone: [{ validator: checkTel, trigger: 'blur' }, required()],
   legalPersonCard: [{ validator: validateIdNo, trigger: 'blur' }, required()],
   registerType: [required()],
   taxLicenceNo: [required()],
