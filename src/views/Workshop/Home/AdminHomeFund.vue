@@ -8,6 +8,137 @@
     >
       返回
     </ElButton>
+    <div class="header" style="margin-top: 10px">
+      <div
+        style="
+          display: flex;
+          width: 49.5%;
+          height: 100%;
+          padding: 10px;
+          background: #ffffff;
+          border-radius: 5px;
+          align-items: center;
+          justify-content: space-around;
+        "
+      >
+        <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjone.png" alt="" />
+        <div style="width: 100px">
+          <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+            概算资金(万元)
+          </div>
+          <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">{{
+            fundScreenDto?.gszj
+          }}</text>
+        </div>
+        <div style="display: flex; align-items: center">
+          <img
+            style="width: 18px; height: 18px"
+            src="@/assets/imgs/homes/Polygon_right.png"
+            alt=""
+          />
+          <div
+            style="
+              display: flex;
+              width: 472px;
+              height: 74px;
+              background: #e8efff;
+              align-items: center;
+              justify-content: space-around;
+            "
+          >
+            <div class="round">
+              <div class="round_top">占比</div>
+              <div class="round_bom">
+                {{
+                  isNaN((fundScreenDto?.ljsyzj / fundScreenDto?.gszj) * 100)
+                    ? 0
+                    : ((fundScreenDto.ljsyzj / fundScreenDto.gszj) * 100).toFixed(2)
+                }}%
+              </div>
+            </div>
+            <div style="text-align: center">
+              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+                累计使用(万元)
+              </div>
+              <text style=" font-size: 30px;font-weight: 800; color: #333333; text-transform: none">
+                {{ fundScreenDto?.ljsyzj }}
+              </text>
+            </div>
+            <div style=" width: 1px; height: 30px;border: 1px solid #000000"></div>
+            <div style="text-align: center">
+              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+                概算内(万元）
+              </div>
+              <text style=" font-size: 20px;font-weight: 800; color: #333333; text-transform: none">
+                {{ fundScreenDto?.gsnzj }}
+              </text>
+            </div>
+            <div style="text-align: center">
+              <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+                概算外(万元）
+              </div>
+              <text style=" font-size: 20px;font-weight: 800; color: #333333; text-transform: none">
+                {{ fundScreenDto?.gswzj }}
+              </text>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="
+          display: flex;
+          width: 49.5%;
+          height: 100%;
+          align-items: center;
+          justify-content: space-between;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            width: 49%;
+            height: 100%;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 5px;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjtwo.png" alt="" />
+          <div>
+            <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+              本年计划资金(万元）
+            </div>
+            <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">
+              {{ fundScreenDto?.bnjhzj }}
+            </text>
+          </div>
+        </div>
+        <div
+          style="
+            display: flex;
+            width: 49%;
+            height: 100%;
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 5px;
+            align-items: center;
+            justify-content: center;
+          "
+        >
+          <img style=" width: 80px;height: 80px" src="@/assets/imgs/zjthere.png" alt="" />
+          <div>
+            <div style=" height: 21px; font-size: 14px;font-weight: 400; color: #666666">
+              本年使用资金(万元）
+            </div>
+            <text style=" height: 28px; font-size: 30px;font-weight: 800; color: #333333">
+              {{ fundScreenDto?.bnsyzj }}
+            </text>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 上面区域 -->
     <div class="between">
       <div class="common-color background">
@@ -87,6 +218,8 @@ import tabButton from '../Home/components/tabButton.vue'
 import bottomTarg from '../Home/components/bottomTarg.vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { getScreenFunAmountDetail } from '@/api/fundManage/fundPayment-service'
+import { getLeadershipScreen } from '@/api/AssetEvaluation/leader-side'
+
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const tabList = [
   {
@@ -756,6 +889,7 @@ const { back } = useRouter()
 const onBack = () => {
   back()
 }
+let fundScreenDto = ref()
 onMounted(() => {
   getScreenFunAmountDetail().then((res) => {
     console.log(res)
@@ -784,6 +918,9 @@ onMounted(() => {
           break
       }
     }
+  })
+  getLeadershipScreen({}).then((res) => {
+    fundScreenDto.value = res.fundScreenDto
   })
 })
 let setValue = (value, arr) => {
@@ -878,6 +1015,41 @@ let setValue = (value, arr) => {
     border: 4px solid #ffffff;
     border-radius: 8px 8px 0px 0px;
     opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  height: 105px;
+  justify-content: space-between;
+}
+
+.round {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background: #ffffff;
+  border: 2px solid #3e73ec;
+  border-radius: 50%;
+  opacity: 1;
+
+  .round_top {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-family: DIN Medium, DIN Medium;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 12px;
+    color: #3e73ec;
+  }
+
+  .round_bom {
+    font-family: DIN Medium, DIN Medium;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #3e73ec;
   }
 }
 </style>
