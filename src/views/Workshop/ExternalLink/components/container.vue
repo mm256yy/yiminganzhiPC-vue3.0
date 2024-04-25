@@ -60,7 +60,7 @@
     <div class="con_bom">
       <Label>
         <template #title>
-          <img class="xm_img" src="../../../../assets/imgs/homes/xx.png" alt="" />
+          <img class="xm_img" src="../../../../assets/imgs/feedBack.png" alt="" />
         </template>
         <template #info>
           <view @click="handleClickItem(5)" class="right_slot">

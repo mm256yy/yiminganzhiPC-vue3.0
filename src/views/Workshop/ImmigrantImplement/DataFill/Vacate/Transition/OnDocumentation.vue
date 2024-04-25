@@ -50,7 +50,7 @@
 
       <ElRow>
         <ElCol :span="24">
-          <ElFormItem label="过渡安置协议：" required>
+          <ElFormItem label="过渡安置协议（盖章/签字）：" required>
             <div class="card-img-list">
               <ElUpload
                 action="/api/file/type"

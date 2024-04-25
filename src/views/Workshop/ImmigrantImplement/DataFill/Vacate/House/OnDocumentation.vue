@@ -18,7 +18,7 @@
     >
       <ElRow>
         <ElCol :span="24">
-          <ElFormItem label="房屋腾空确认单：" required>
+          <ElFormItem label="房屋腾空确认单（盖章/签字）：" required>
             <div class="card-img-list">
               <ElUpload
                 :list-type="'picture-card'"

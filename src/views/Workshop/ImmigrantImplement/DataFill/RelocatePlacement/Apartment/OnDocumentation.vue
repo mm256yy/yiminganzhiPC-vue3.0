@@ -19,7 +19,7 @@
       <ElRow>
         <ElCol :span="24">
           <div class="col-wrapper">
-            <div class="col-label-required"> 交房协议： </div>
+            <div class="col-label-required"> 交房协议（盖章/签字）： </div>
             <div class="card-img-list">
               <ElUpload
                 :list-type="'picture-card'"

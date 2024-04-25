@@ -145,7 +145,9 @@
             <div class="col-wrapper">
               <div class="col-label-required">
                 {{
-                  props.baseInfo?.houseAreaType === 'homestead' ? '择房确认单：' : '选房确认单：'
+                  props.baseInfo?.houseAreaType === 'homestead'
+                    ? '择房确认单（盖章/签字）：'
+                    : '选房确认单（盖章/签字）：'
                 }}
               </div>
               <div class="card-img-list">
