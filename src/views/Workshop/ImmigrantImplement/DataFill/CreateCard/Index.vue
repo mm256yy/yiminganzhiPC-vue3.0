@@ -195,7 +195,11 @@
             label-class-name="my-label"
             class-name="my-content"
           >
-            {{ form.address || '--' }}
+            {{
+              (baseInfo.areaCodeText || '') +
+              (baseInfo.townCodeText || '') +
+              (baseInfo.villageText || '')
+            }}
           </ElDescriptionsItem>
           <ElDescriptionsItem
             label="安置地址："

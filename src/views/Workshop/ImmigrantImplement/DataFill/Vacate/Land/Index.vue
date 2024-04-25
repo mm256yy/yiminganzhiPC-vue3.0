@@ -98,10 +98,12 @@
           :span="2"
         >
           {{
-            props.type == 'PeasantHousehold'
-              ? baseInfo.address
-              : props.type == 'LandNoMove'
+            props.type == 'LandNoMove'
               ? baseInfo.landNumbers
+              : props.type == 'PeasantHousehold'
+              ? (baseInfo.areaCodeText || '') +
+                (baseInfo.townCodeText || '') +
+                (baseInfo.villageText || '')
               : baseInfo.beforeAddress
           }}
         </el-descriptions-item>

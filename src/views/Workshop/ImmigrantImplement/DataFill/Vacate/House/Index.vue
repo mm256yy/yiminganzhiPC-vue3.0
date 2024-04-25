@@ -119,9 +119,9 @@
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="迁出地" :span="2">
           {{
-            props.type == 'PeasantHousehold'
-              ? baseInfo.address
-              : props.type == 'Village'
+            props.type == 'LandNoMove'
+              ? baseInfo.landNumbers
+              : props.type == 'PeasantHousehold'
               ? (baseInfo.areaCodeText || '') +
                 (baseInfo.townCodeText || '') +
                 (baseInfo.villageText || '')
