@@ -26,7 +26,7 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="幢号111"
+          label="幢号"
           :width="100"
           prop="houseNo"
           align="center"
