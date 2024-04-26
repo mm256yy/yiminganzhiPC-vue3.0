@@ -137,7 +137,11 @@
           <ElCol :span="24">
             <div class="col-wrapper">
               <div class="col-label-required">
-                {{ item.houseAreaType === 'homestead' ? '择址确认单：' : '选房确认单：' }}
+                {{
+                  item.houseAreaType === 'homestead'
+                    ? '择址确认单（签字/盖章）：'
+                    : '选房确认单（签字/盖章）：'
+                }}
               </div>
               <div class="card-img-list">
                 <ElUpload
@@ -476,7 +480,7 @@ watch(
 
     .col-label-required {
       display: inline-flex;
-      width: 120px;
+      width: 220px;
       height: 32px;
       padding: 0 12px 0 0;
       font-size: 14px;

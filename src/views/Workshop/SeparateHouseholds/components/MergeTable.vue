@@ -69,7 +69,7 @@
               />
             </ElSelect>
           </span>
-          <span>
+          <!-- <span>
             新户号:&nbsp;&nbsp;
             <ElInput
               v-model="form.doorn"
@@ -77,7 +77,7 @@
               style="width: 200px"
               maxlength="4"
             />
-          </span>
+          </span> -->
         </div>
       </div>
       <div style="color: red">说明：人口和房屋信息合并，附属物和零星林果木等信息累加。</div>
@@ -153,7 +153,7 @@ let options = ref()
 let form: any = reactive({
   value: '',
   valueFamliy: '',
-  doorn: '',
+  // doorn: '',
   selenctTable: [],
   options: [],
   gridData: [
@@ -321,12 +321,14 @@ let selectsum = () => {
       message: '请选择新户主',
       type: 'warning'
     })
-  } else if (switchs.value && !form.doorn) {
-    ElMessage({
-      message: '请选择新户号',
-      type: 'warning'
-    })
-  } else {
+  }
+  // else if (switchs.value && !form.doorn) {
+  //   ElMessage({
+  //     message: '请选择新户号',
+  //     type: 'warning'
+  //   })
+  // }
+  else {
     let params = {
       doorNos: [],
       type: '',
@@ -338,7 +340,7 @@ let selectsum = () => {
     params.doorNos = tableData.value.map((item) => item.doorNo)
     if (switchs.value) {
       params.type = '2'
-      params.doorNo = form.doorn
+      // params.doorNo = form.doorn
       params.householderId = form.valueFamliy
       params.villageCode = form.value[2]
       params.virutalVillageCode = form.value[3]
