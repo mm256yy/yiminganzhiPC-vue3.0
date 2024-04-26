@@ -34,7 +34,7 @@
             {{ row.houseAreaType === 'flat' ? '公寓房' : '宅基地' }}
           </template>
         </ElTableColumn>
-        <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center">
+        <ElTableColumn label="户型/套型(㎡)" prop="area" align="center" header-align="center">
           <template #default="{ row }">
             {{
               row.houseAreaType === 'flat'
@@ -42,7 +42,7 @@
                 : homesteadAreaSize
                     .filter((item) => item.id == row.area)
                     .map((item) => item.name)[0]
-            }}㎡
+            }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
@@ -100,13 +100,13 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="户型/套型"
+          label="户型/套型(㎡)"
           width="170"
           prop="area"
           align="center"
           header-align="center"
         >
-          <template #default="{ row }"> {{ row.area }}㎡ </template>
+          <template #default="{ row }"> {{ row.area }} </template>
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
