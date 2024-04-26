@@ -111,7 +111,7 @@
         <div @click="onChange(2)" class="permanent">
           <div v-for="item in houseList" :key="item.id" class="permanent_box">
             <div class="permanent_box_top">{{ item.name }}</div>
-            <div class="permanent_box_bom"> {{ houseScreenDto[item.num] }}<span> ㎡</span> </div>
+            <div class="permanent_box_bom"> {{ houseScreenDto[item.num] }}<span> 万㎡</span> </div>
           </div>
         </div>
         <div class="tip_box">
