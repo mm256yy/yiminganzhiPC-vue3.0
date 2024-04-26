@@ -93,7 +93,7 @@
         </ElCol>
         <ElCol :span="8">
           <ElFormItem label="所在位置" prop="locationType">
-            <ElSelect class="w-350px" v-model="form.locationType">
+            <ElSelect class="w-350px" v-model="form.locationType" @change="onChangeLocationType">
               <ElOption
                 v-for="item in dictObj[326]"
                 :key="item.value"
@@ -492,6 +492,7 @@ import { useAppStore } from '@/store/modules/app'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { addHouseApi, updateHouseApi } from '@/api/workshop/datafill/house-service'
 import { useValidator } from '@/hooks/web/useValidator'
+import { setlocationType } from '@/utils/index'
 
 interface PropsType {
   show: boolean
@@ -835,6 +836,11 @@ let onchange = (file, fileList) => {
       }
     }
     return
+  }
+}
+let onChangeLocationType = (e: any) => {
+  if (props.actionType === 'add') {
+    form.value.inundationRange = setlocationType(e)
   }
 }
 </script>

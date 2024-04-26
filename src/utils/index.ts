@@ -397,3 +397,12 @@ export const debounce = (() => {
     timer = setTimeout(callback, ms)
   }
 })()
+export function setlocationType(target: any) {
+  if (target == 'SubmergedArea') {
+    return '2'
+  } else if (target == 'InfluenceArea') {
+    return ''
+  } else {
+    return '3'
+  }
+}

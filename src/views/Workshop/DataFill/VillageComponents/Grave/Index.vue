@@ -213,9 +213,22 @@
               :placeholder="type == 'Landlord' ? '' : '请选择'"
               v-model="row.gravePosition"
               :disabled="type == 'Landlord'"
+              @change="(e) => onChangeLocationType(e, row)"
             >
               <ElOption
                 v-for="item in dictObj[326]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElSelect class="!w-350px" clearable v-model="row.inundationRange">
+              <ElOption
+                v-for="item in dictObj[346]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -291,6 +304,8 @@ import { WorkContentWrap } from '@/components/ContentWrap'
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 import { getPgExcelList } from '@/api/workshop/population/service'
 import dayjs from 'dayjs'
+import { setlocationType } from '@/utils/index'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
 
 const { currentRoute } = useRouter()
 const { type } = currentRoute.value.query as any
@@ -328,20 +343,7 @@ enum FileReportStatus {
   failure = 'Failure',
   importing = 'Importing'
 }
-// const defaultRow = {
-//   villageDoorNo: props.doorNo,
-//   villageId: props.householdId,
-//   registrantName: '',
-//   registrantDoorNo: '',
-//   registrantId: '',
-//   graveType: '',
-//   materials: '',
-//   graveYear: '',
-//   gravePosition: '',
-//   number: 0,
-//   remark: '',
-//   isAdd: true
-// }
+const defaultRow = { gravePosition: '' }
 const graveTypeChange = (val) => {
   options.value.forEach((item) => {
     if (item.name == val) {
@@ -398,7 +400,7 @@ const getList = () => {
 getList()
 
 const onAddRow = () => {
-  tableData.value.push({})
+  tableData.value.push(defaultRow)
 }
 
 const onDelRow = (row) => {
@@ -477,12 +479,31 @@ const uploadError = (error) => {
     console.log('导入报错信息:', err)
   }
 }
-
+let houst: any = ref([])
 onMounted(() => {
   list.value = states.map((item) => {
     return { value: `value:${item}`, label: `label:${item}` }
   })
+  getHouseListApi({ doorNo: props.doorNo }).then((res) => {
+    console.log(res.content)
+    houst.value = res.content
+    if (houst.value) {
+      let m: any = []
+      houst.value.forEach((item: any) => {
+        if (item.id) {
+          m.push(item.id)
+        }
+      })
+      m.sort()
+      console.log(m, houst.value)
+
+      defaultRow.gravePosition = houst.value.filter((bbq: any) => bbq.id == m[0])[0]?.locationType
+    }
+  })
 })
+let onChangeLocationType = (e, row) => {
+  row.inundationRange = setlocationType(e)
+}
 </script>
 <style lang="less" scoped>
 .view-upload {
@@ -500,6 +521,7 @@ onMounted(() => {
   box-shadow: 0px 1px 4px 0px rgba(202, 205, 215, 0.68);
   align-items: center;
 }
+
 .file-list {
   height: 210px;
   overflow-y: scroll;

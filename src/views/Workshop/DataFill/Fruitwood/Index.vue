@@ -114,6 +114,22 @@
             <ElInputNumber :min="0" v-model="scope.row.altitude" />
           </template>
         </ElTableColumn> -->
+        <ElTableColumn label="所在位置" prop="locationType" align="center" header-align="center">
+          <template #default="scope">
+            <ElSelect
+              class="w-350px"
+              v-model="scope.row.locationType"
+              @change="(val) => onChangeLocationType(val, scope.row)"
+            >
+              <ElOption
+                v-for="item in dictObj[326]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn>
         <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
           <template #default="scope">
             <ElSelect clearable v-model="scope.row.inundationRange" :disabled="!isEdit">
@@ -151,7 +167,7 @@
 
 <script setup lang="ts">
 import { WorkContentWrap } from '@/components/ContentWrap'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import {
   ElButton,
   ElInputNumber,
@@ -174,6 +190,9 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import RecordListDialog from '../components/RecordListDialog.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { useRouter } from 'vue-router'
+import { setlocationType } from '@/utils/index'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
+
 const router = useRouter()
 const isUpdateShow = router.currentRoute.value?.query?.type
 
@@ -216,7 +235,8 @@ const defaultRow = {
   number: 0,
   remark: '',
   isAdd: true,
-  altitude: 0
+  altitude: 0,
+  locationType: ''
 }
 const onDelRow = (row) => {
   ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
@@ -288,4 +308,26 @@ const onSave = () => {
       })
   }
 }
+let onChangeLocationType = (e, row) => {
+  row.inundationRange = setlocationType(e)
+}
+let houst: any = ref([])
+onMounted(() => {
+  getHouseListApi({ doorNo: props.doorNo }).then((res) => {
+    console.log(res.content)
+    houst.value = res.content
+    if (houst.value) {
+      let m: any = []
+      houst.value.forEach((item: any) => {
+        if (item.id) {
+          m.push(item.id)
+        }
+      })
+      m.sort()
+      console.log(m, houst.value)
+
+      defaultRow.locationType = houst.value.filter((bbq: any) => bbq.id == m[0])[0]?.locationType
+    }
+  })
+})
 </script>

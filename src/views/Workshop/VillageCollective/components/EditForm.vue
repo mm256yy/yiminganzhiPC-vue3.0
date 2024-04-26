@@ -39,7 +39,7 @@
       </ElFormItem>
 
       <ElFormItem label="所在位置" prop="locationType">
-        <ElSelect class="w-350px" v-model="form.locationType">
+        <ElSelect class="w-350px" v-model="form.locationType" @change="onChangeLocationType">
           <ElOption
             v-for="item in dictObj[326]"
             :key="item.value"
@@ -48,7 +48,16 @@
           />
         </ElSelect>
       </ElFormItem>
-
+      <ElFormItem label="淹没范围" prop="inundationRange">
+        <ElSelect class="w-350px" v-model="form.inundationRange">
+          <ElOption
+            v-for="item in dictObj[346]"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </ElSelect>
+      </ElFormItem>
       <ElFormItem label="村集体联系方式" prop="phone">
         <ElInput
           clearable
@@ -118,6 +127,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 // import type { DistrictNodeType } from '@/api/district/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
+import { setlocationType } from '@/utils/index'
 
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
@@ -269,6 +279,11 @@ const onVillageDialogClose = (flag?: boolean) => {
   villageDialog.value = false
   if (flag) {
     emit('updateDistrict')
+  }
+}
+let onChangeLocationType = (e: any) => {
+  if (props.actionType === 'add') {
+    form.value.inundationRange = setlocationType(e)
   }
 }
 </script>

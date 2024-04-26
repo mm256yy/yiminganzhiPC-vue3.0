@@ -76,7 +76,13 @@
         </ElTableColumn>
         <ElTableColumn label="所在位置" prop="gravePosition" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择" v-model="row.gravePosition">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择"
+              v-model="row.gravePosition"
+              @change="(e) => onChangeLocationType(e, row)"
+            >
               <ElOption
                 v-for="item in dictObj[326]"
                 :key="item.value"
@@ -160,6 +166,8 @@ import { getGraveListApi, saveGraveListApi } from '@/api/workshop/datafill/grave
 import { getLandlordListApi, immigrantGraveDelete } from '@/api/workshop/landlord/service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
+import { setlocationType } from '@/utils/index'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
 
 // import { useRouter } from 'vue-router'
 
@@ -183,7 +191,7 @@ const tableData = ref<any[]>([])
 const recordShow = ref(false)
 const villageList = ref<any[]>([])
 const loading = ref(false)
-
+let houst: any = ref([])
 const recordClose = () => {
   recordShow.value = false
 }
@@ -209,6 +217,7 @@ const defaultRow = {
   gravePosition: '',
   number: 0,
   remark: '',
+  locationType: '',
   isAdd: true
 }
 
@@ -267,6 +276,8 @@ const change = (e: any) => {
 }
 
 const onAddRow = () => {
+  console.log(defaultRow)
+
   tableData.value.push({ ...defaultRow })
 }
 
@@ -312,5 +323,24 @@ const onSave = () => {
 
 onMounted(() => {
   getVillageList()
+  getHouseListApi({ doorNo: props.doorNo }).then((res) => {
+    console.log(res.content)
+    houst.value = res.content
+    if (houst.value) {
+      let m: any = []
+      houst.value.forEach((item: any) => {
+        if (item.id) {
+          m.push(item.id)
+        }
+      })
+      m.sort()
+      console.log(m, houst.value)
+
+      defaultRow.gravePosition = houst.value.filter((bbq: any) => bbq.id == m[0])[0]?.locationType
+    }
+  })
 })
+let onChangeLocationType = (e, row) => {
+  row.inundationRange = setlocationType(e)
+}
 </script>
