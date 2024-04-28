@@ -86,7 +86,7 @@
             header-align="center"
           >
             <template #default="{ row }">
-              <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
+              <div v-if="row.isUpdate === '0'">{{ row.totalPrice.toFixed(2) }}</div>
               <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">{{
                 computedTotalPrice(row)
               }}</div>

@@ -131,10 +131,10 @@ const initData = () => {
  */
 const computedTotalPrice = (row: any) => {
   if (row.totalPrice) {
-    return Number(row.number) * Number(row.price)
+    return Number(row.number.toFixed(2)) * Number(row.price.toFixed(2))
   } else {
     if (row.number && row.price) {
-      return Number(row.number) * Number(row.price)
+      return Number(row.number.toFixed(2)) * Number(row.price.toFixed(2))
     } else {
       return 0
     }
@@ -158,7 +158,7 @@ const getSummaries = (row: any) => {
   sums = arr.reduce((totalPrice, currentItem) => {
     return totalPrice + computedTotalPrice(currentItem)
   }, 0)
-  return sums
+  return sums.toFixed(2)
 }
 
 // 关闭弹窗
