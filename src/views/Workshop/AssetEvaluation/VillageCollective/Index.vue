@@ -26,9 +26,9 @@
           <div class="text">
             共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 家村集体
             <span class="distance"></span>
-            已填报 <span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span> 家
+            已填报 <span class="num !text-[#30A952]">{{ headInfo.assessNumber }}</span> 家
             <span class="distance"></span>
-            未填报 <span class="num !text-[#FF3030]">{{ headInfo.unReportNum }}</span> 家
+            未填报 <span class="num !text-[#FF3030]">{{ headInfo.notAssessNumber }}</span> 家
           </div>
         </div>
         <ElSpace>
@@ -213,11 +213,13 @@ const { push } = useRouter()
 const exportDialog = ref(false)
 const inExportDialog = ref(false)
 const villageTree = ref<any[]>([])
-const headInfo = ref<LandlordHeadInfoType>({
+const headInfo = ref<any>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
-  unReportNum: 0
+  unReportNum: 0,
+  assessNumber: 0,
+  notAssessNumber: 0
 })
 const downloadIcon = useIcon({ icon: 'ant-design:cloud-download-outlined' })
 const importIcon = useIcon({ icon: 'ant-design:import-outlined' })
