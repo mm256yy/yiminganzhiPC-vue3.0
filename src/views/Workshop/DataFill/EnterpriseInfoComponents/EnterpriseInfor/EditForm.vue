@@ -179,8 +179,11 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="7" />
-        <ElCol :span="7" />
+        <ElCol :span="14">
+          <div style="color: red">
+            *注:修改“企业类别”会导致该户已存在的补偿卡数据重置，修改前请告知实施组长!
+          </div>
+        </ElCol>
       </ElRow>
 
       <ElRow justify="center">

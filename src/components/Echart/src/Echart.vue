@@ -58,6 +58,28 @@ const initChart = () => {
   if (unref(elRef) && props.options) {
     echartRef = echarts.init(unref(elRef) as HTMLElement)
     echartRef?.setOption(unref(optionsComputed))
+    echartRef.on('mouseover', (params: any) => {
+      console.log(params)
+
+      if (params.componentType === 'xAxis') {
+        let elementDiv: any = document.getElementById('showDom')
+        let elementStyle =
+          'position: absolute;z-index: 99999;color: #fff;font-size: 12px;padding: 7px;display: inline;border-radius: 4px;background-color: rgba(0,0,0,0.7);box-shadow: rgba(0, 0, 0, 0.3) 2px 2px 8px;'
+        elementDiv.style.cssText = elementStyle
+        elementDiv.innerHTML = params.value
+        var xx = params.event.event.clientX - 55
+        var yy = params.event.event.clientY - 55
+        elementDiv.style.top = yy + 'px'
+        elementDiv.style.left = xx + 'px'
+      }
+    })
+    echartRef.on('mouseout', (params) => {
+      if (params.componentType === 'xAxis') {
+        let elementDiv: any = document.getElementById('showDom')
+        let elementStyle = 'display: none'
+        elementDiv.style.cssText = elementStyle
+      }
+    })
   }
 }
 

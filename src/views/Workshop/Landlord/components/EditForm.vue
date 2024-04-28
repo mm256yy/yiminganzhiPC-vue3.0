@@ -100,7 +100,7 @@
       </ElFormItem>
 
       <ElFormItem label="所在位置" prop="locationType">
-        <ElSelect class="w-350px" v-model="form.locationType">
+        <ElSelect class="w-350px" v-model="form.locationType" @change="onChangeLocationType">
           <ElOption
             v-for="item in dictObj[326]"
             :key="item.value"
@@ -183,6 +183,8 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
+import { setlocationType } from '@/utils/index'
+
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
@@ -373,6 +375,11 @@ const onVillageDialogClose = (flag?: boolean) => {
   villageDialog.value = false
   if (flag) {
     emit('updateDistrict')
+  }
+}
+let onChangeLocationType = (e: any) => {
+  if (props.actionType === 'add') {
+    form.value.inundationRange = setlocationType(e)
   }
 }
 </script>

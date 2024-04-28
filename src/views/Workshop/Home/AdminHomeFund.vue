@@ -208,6 +208,7 @@
         <Echart style="padding-top: 20px" :options="taxationOption" :height="300" />
       </div>
     </div>
+    <div id="showDom" style="display: none"></div>
     <bottomTarg />
   </div>
 </template>
@@ -235,6 +236,29 @@ const tabList = [
 const tab = (index) => {
   console.log(index, '123123132')
 }
+let formatter = (value) => {
+  var ret = ''
+  var maxLength = 4
+  var valLength = value.length
+  var rowN = Math.ceil(valLength / maxLength)
+  if (rowN > 1) {
+    for (var i = 0; i < rowN; i++) {
+      if (i < 2) {
+        var temp = ''
+        var start = i * maxLength
+        var end = start + maxLength
+        temp = value.substring(start, end) + '\n'
+        ret += temp
+      } else {
+        ret += '...'
+      }
+    }
+    return ret
+  } else {
+    return value
+  }
+}
+
 //居民户视图
 const householdOption = ref({
   tooltip: {
@@ -287,6 +311,7 @@ const householdOption = ref({
       '安山村'
     ],
     axisLabel: {
+      formatter: formatter,
       color: '#6c706f',
       interval: 0,
       rotate: 45
@@ -399,6 +424,7 @@ const villageOption = ref({
       '安山村'
     ],
     axisLabel: {
+      formatter: formatter,
       color: '#6c706f',
       interval: 0,
       rotate: 45
@@ -505,6 +531,7 @@ const enterpriseOption = ref({
       '新昌县明盛纺织有限公司'
     ],
     axisLabel: {
+      formatter: formatter,
       color: '#6c706f',
       interval: 0,
       rotate: 45
@@ -617,6 +644,7 @@ const specialityOption = ref({
       '宗教设施'
     ],
     axisLabel: {
+      formatter: formatter,
       color: '#6c706f',
       interval: 0,
       rotate: 45
@@ -725,10 +753,11 @@ const otherOption = ref({
       '监督评估费',
       ''
     ],
+    triggerEvent: true,
     axisLabel: {
+      formatter: formatter,
       color: '#6c706f',
-      interval: 0,
-      rotate: 45
+      interval: 0
     }
   },
   yAxis: {
@@ -826,10 +855,10 @@ const taxationOption = ref({
   xAxis: {
     type: 'category',
     data: ['耕地占用费', '耕地开垦费', '森林植被恢复费', '养老保险缴费补贴'],
+    triggerEvent: true,
     axisLabel: {
-      color: '#6c706f',
-      interval: 0,
-      rotate: 45
+      formatter: formatter,
+      color: '#6c706f'
     }
   },
   yAxis: {
