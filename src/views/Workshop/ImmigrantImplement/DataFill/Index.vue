@@ -749,7 +749,7 @@ const getStatus = (data: any) => {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 1) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+      fillingStatus.value = data.houseSoarStatus // 腾空总状态   原来用这个 excessSoarStatus  这个是 房屋 土地 过度安置 都为打勾 才会excessSoarStatus为1
     } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.agreementStatus // 协议签订总状态
     } else if (tabCurrentId.value === 3) {
@@ -760,7 +760,7 @@ const getStatus = (data: any) => {
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
     }
-    if (data.excessSoarStatus === '1') {
+    if (data.houseSoarStatus === '1') {
       tabsListCopy[1].active = true // 腾空
     }
     if (data.agreementStatus === '1') {
