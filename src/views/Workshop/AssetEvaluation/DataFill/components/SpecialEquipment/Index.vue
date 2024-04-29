@@ -25,7 +25,7 @@
       <ElTable :data="tableData" style="width: 100%">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
-          label="设施编号"
+          label="设施（设备）编号"
           :width="150"
           prop="facilitiesCode"
           align="center"
@@ -36,7 +36,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="设施类别"
+          label="设施（设备）类别"
           :width="150"
           prop="facilitiesType"
           align="center"
@@ -55,7 +55,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="设施名称"
+          label="设施（设备）名称"
           :width="150"
           prop="facilitiesName"
           align="center"

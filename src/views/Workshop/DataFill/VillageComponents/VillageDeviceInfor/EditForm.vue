@@ -71,7 +71,7 @@
 
       <ElRow :gutter="30">
         <ElCol :span="8">
-          <ElFormItem label="设施（设备）编码" prop="facilitiesCode">
+          <ElFormItem label="设施（设备）编码" prop="facilitiesCode" v-if="actionType == 'edit'">
             <ElInput v-model="form.facilitiesCode" placeholder="请输入设施编码" class="!w-full" />
           </ElFormItem>
         </ElCol>
@@ -402,7 +402,7 @@ watch(
 const rules = reactive<FormRules>({
   facilitiesName: [required()],
   facilitiesType: [required()],
-  facilitiesCode: [required()],
+  // facilitiesCode: [required()],
   number: [required()],
   unit: [required()],
   locationType: [required()],

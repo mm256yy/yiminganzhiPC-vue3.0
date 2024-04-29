@@ -31,7 +31,7 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="迁前厂址1" prop="beforeAddress">
+            <ElFormItem label="迁前厂址" prop="beforeAddress">
               <ElInput v-model="form.beforeAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>

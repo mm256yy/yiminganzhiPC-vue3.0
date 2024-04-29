@@ -164,6 +164,21 @@ const schema = reactive<FormSchema[]>([
     }
   },
   {
+    field: 'villageCode',
+    label: '移民村',
+    colProps: { span: 12 },
+    component: 'TreeSelect',
+    componentProps: {
+      lazy: true,
+      multiple: true,
+      nodeKey: 'code',
+      load: loadDistrictNode,
+      props: defaultProps,
+      defaultExpandedKeys: districtTree,
+      style: { width: '100%', 'margin-right': '10px' }
+    }
+  },
+  {
     field: 'mapPic',
     label: '地图JSON文件',
     colProps: { span: 24 }

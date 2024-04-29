@@ -70,14 +70,15 @@
       </ElFormItem>
 
       <ElFormItem label="数量" prop="number">
-        <div v-if="actionType === 'edit'">{{ form.number }}</div>
+        <!-- <div v-if="actionType === 'edit'">{{ form.number }}</div>
         <ElInputNumber
           v-else
           :min="1"
           placeholder="请输入数量"
           v-model="form.number"
           class="!w-full"
-        />
+        /> -->
+        <div>1</div>
       </ElFormItem>
 
       <ElFormItem required label="处理方式" prop="handleWay">
@@ -158,7 +159,7 @@ const dictObj = computed(() => dictStore.getDictObj)
 const defaultValue: Omit<GraveDtoType, 'id'> = {
   relation: '',
   marital: '',
-  number: 0,
+  number: 1,
   graveType: '',
   settingRemark: '',
   settingGrave: '',
@@ -185,8 +186,8 @@ const rules = reactive<FormRules>({
   relation: [required()],
   handleWay: [required()],
   materials: [required()],
-  graveType: [required()],
-  number: [required()]
+  graveType: [required()]
+  // number: [required()]
 })
 
 const dictFmt = (value, index) => {
@@ -207,7 +208,7 @@ const onClose = (flag = false) => {
 
 const submit = async (data: GraveDtoType) => {
   const { id, doorNo, projectId, status } = props.baseInfo
-  data.number = Number(data.number)
+  data.number = 1
   const params = {
     projectId,
     status,
