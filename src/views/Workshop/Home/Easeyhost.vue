@@ -103,7 +103,7 @@ let optionclick = ref([
     img: zhkq
   },
   {
-    code: '0',
+    code: '9',
     name: '智慧安置',
     img: zhaz
   },
@@ -131,13 +131,17 @@ let optionclick = ref([
 let tokenStr = ref('')
 let reason = ref('')
 let searchContent = ref('')
-const goLink = async () => {
-  try {
-    const result = await getTokenApi()
-    tokenStr.value = result.token
-    let url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}` // 12.1 宗浩要求修改
-    window.location.href = url
-  } catch {}
+const goLink = async (e: any) => {
+  const result = await getTokenApi()
+  tokenStr.value = result.token
+  let url = ''
+  if (e == '9') {
+    url = `https://jingling-reservoir-test.jldt.top/dashboard/placement?token=${tokenStr.value}`
+  } else {
+    url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}` // 12.1 宗浩要求修改
+  }
+
+  window.location.href = url
 }
 const { push } = useRouter()
 const handleClickItem = (type: number) => {
@@ -152,8 +156,8 @@ const handleClickItem = (type: number) => {
   push({ name: pathMap[type] })
 }
 let optionClick = (e) => {
-  if (e.code == '0') {
-    goLink()
+  if (e.code == '0' || e.code == '9') {
+    goLink(e.code)
   } else {
     handleClickItem(e.code)
   }
@@ -246,6 +250,7 @@ let optionClick = (e) => {
   display: flex;
   width: 32%;
   height: 160px;
+  cursor: pointer;
   background: linear-gradient(180deg, #c9e0fe 0%, #fdfeff 50%);
   border: 1px solid;
   border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) 1 1;

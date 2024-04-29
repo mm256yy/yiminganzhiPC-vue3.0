@@ -373,7 +373,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入姓名'
+        placeholder: '请输入企业名称'
       }
     },
     table: {

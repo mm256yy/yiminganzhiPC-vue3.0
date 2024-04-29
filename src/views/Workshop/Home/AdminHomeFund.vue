@@ -1070,6 +1070,7 @@ const toCapitalPool = () => {
   width: 100%;
   height: 105px;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .round {
