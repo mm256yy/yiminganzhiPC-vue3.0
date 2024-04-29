@@ -31,7 +31,7 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="迁前厂址" prop="beforeAddress">
+            <ElFormItem label="迁前厂址1" prop="beforeAddress">
               <ElInput v-model="form.beforeAddress" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
@@ -46,12 +46,12 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="开户名" prop="bankAccount">
+            <ElFormItem label="开户名" prop="accountName">
               <ElInput v-model="form.accountName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="开户行" prop="bankAccount">
+            <ElFormItem label="开户行" prop="bankName">
               <ElInput v-model="form.bankName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
@@ -452,6 +452,9 @@ const { required } = useValidator()
 
 const rules = reactive<FormRules>({
   beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
+  bankAccount: [{ required: true, message: '请输入银行账号', trigger: 'blur' }],
   placementWay: [required()]
 })
 

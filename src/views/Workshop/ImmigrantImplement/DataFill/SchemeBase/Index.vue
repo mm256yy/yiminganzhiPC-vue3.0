@@ -382,7 +382,7 @@ const immigrantSettleSubmit = async (params: any) => {
   await getPeopleList()
 }
 const isShow = (row) => {
-  return row.populationNatureText != '增计人口' && row.populationNatureText
+  return row.populationNatureText != '增计人口'
 }
 </script>
 
