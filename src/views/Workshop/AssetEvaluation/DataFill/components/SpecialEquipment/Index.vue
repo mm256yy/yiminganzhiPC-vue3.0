@@ -32,7 +32,7 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput placeholder="请输入" v-model="scope.row.facilitiesCode" />
+            <ElInput placeholder="请输入" v-model="scope.row.facilitiesCode" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn

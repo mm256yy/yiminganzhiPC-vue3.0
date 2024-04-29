@@ -168,7 +168,7 @@
 
       <ElRow justify="center">
         <ElCol :span="7">
-          <ElFormItem label="企业类别" prop="industryType">
+          <ElFormItem label="企业类别" prop="type">
             <ElSelect clearable filterable v-model="form.type" class="!w-full">
               <ElOption
                 v-for="item in dictObj[379]"
@@ -634,7 +634,8 @@ const rules = reactive<FormRules>({
   registerType: [required()],
   taxLicenceNo: [required()],
   taxPeriodValidity: [required()],
-  taxLicenceCompany: [required()]
+  taxLicenceCompany: [required()],
+  type: [required()]
 })
 
 // 关闭弹窗

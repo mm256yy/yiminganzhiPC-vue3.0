@@ -41,7 +41,7 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="6">
-            <ElFormItem label="企业总人数" prop="peopleNumber">
+            <ElFormItem label="员工总数" prop="peopleNumber">
               <ElInput v-model="form.peopleNumber" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
