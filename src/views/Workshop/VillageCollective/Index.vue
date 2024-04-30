@@ -113,7 +113,7 @@
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
         <template #action="{ row }">
-          <TableEditColumn
+          <!-- <TableEditColumn
             :view-type="'link'"
             :icons="[
               {
@@ -125,8 +125,14 @@
             ]"
             :row="row"
             @edit="onEditRow(row)"
-            @delete="onDelRow"
-          />
+          /> -->
+          <view>
+            <span class="txt-btn" @click="onViewRow(row)">查看</span>
+            <span class="txt-btn" @click="onEditRow(row)">编辑</span>
+            <span class="txt-btn del" @click="onDelRow(row)" v-if="row.villageType != 'grave'"
+              >删除</span
+            >
+          </view>
         </template>
       </Table>
     </div>
@@ -156,6 +162,7 @@
 </template>
 
 <script lang="ts">
+import { ElButton } from 'element-plus'
 import { defineComponent } from 'vue'
 import { globalData } from '@/config/fill'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
@@ -663,7 +670,7 @@ const fillData = (row) => {
       householdId: row.id,
       doorNo: row.doorNo,
       type: 'villageInfoC',
-      villageType: 1
+      villageType: row.villageType
     }
   })
 }
@@ -741,6 +748,16 @@ const onDownloadTemplate = () => {
 
   &.status-suc {
     background-color: #0cc029;
+  }
+}
+.txt-btn {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #3e73ec;
+  cursor: pointer;
+
+  &.del {
+    color: #f56c6c;
   }
 }
 </style>

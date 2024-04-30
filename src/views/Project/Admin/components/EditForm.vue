@@ -87,6 +87,7 @@ const rules = {
 
 // const townCode = ref()
 const districtTree = ref<string[] | null>()
+const districtTrees = ref<string[] | null>()
 const defaultProps = {
   value: 'code',
   label: 'name'
@@ -94,7 +95,7 @@ const defaultProps = {
   //   return node && node.data && node.data.hasChild && node.level !== 3
   // },
   // isLeaf: (node) => {
-  //   return node.level === 3
+  //   return node.level == 3
   // }
 }
 
@@ -110,6 +111,22 @@ const loadDistrictNode = async (node: any, resolve: any) => {
     parentId = node.data.id
   }
   const childrenList = await getDistrictChildrenApi(parentId)
+  resolve(childrenList)
+}
+const loadDistrictNodes = async (node: any, resolve: any) => {
+  console.log(node, '测试123')
+  // if (node.level === 3) {
+  //   resolve([])
+  //   return
+  // }
+  let parentId
+  if (node && node.level == 0) {
+    parentId = 0
+  } else {
+    parentId = node.data.id
+  }
+  const childrenList = await getDistrictChildrenApi(parentId)
+  console.log(childrenList, '数据列表1')
   resolve(childrenList)
 }
 
@@ -172,9 +189,12 @@ const schema = reactive<FormSchema[]>([
       lazy: true,
       multiple: true,
       nodeKey: 'code',
-      load: loadDistrictNode,
+      load: loadDistrictNodes,
       props: defaultProps,
-      defaultExpandedKeys: districtTree,
+      defaultExpandedKeys: districtTrees,
+      // showCheckbox: true,
+      // checkStrictly: true,
+      // checkOnClickNode: true,
       style: { width: '100%', 'margin-right': '10px' }
     }
   },
@@ -255,12 +275,16 @@ const filePreview = (uploadFile: UploadFile) => {
 
 onMounted(async () => {
   const townCode = currentRow.value?.townCode ? currentRow.value.townCode.split(',') : []
+  const villageCode = currentRow.value?.villageCode ? currentRow.value.villageCode.split(',') : []
   districtTree.value = currentRow.value?.districtTree?.join(',').split(',') || []
+  districtTrees.value = currentRow.value?.villageCode?.split(',') || []
+  console.log(districtTree.value, districtTrees.value, '测试数据')
   mapPic.value = currentRow.value?.mapPic ? JSON.parse(currentRow.value.mapPic) : []
   mapJson.value = currentRow.value?.mapJson ? currentRow.value.mapJson : ''
   methods.setValues({
     ...currentRow.value,
-    townCode
+    townCode,
+    villageCode
   })
 })
 
@@ -280,6 +304,7 @@ const doSave = async () => {
   loading.value = true
   const project = (await methods.getFormData()) || {}
   project.townCode = project.townCode.join(',')
+  project.villageCode = project.villageCode.join(',')
   project.mapPic = JSON.stringify(mapPic.value)
   project.mapJson = mapJson.value ? convertCoordinates(JSON.parse(mapJson.value)) : ''
   if (currentRow.value && currentRow.value.id) {

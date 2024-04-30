@@ -67,7 +67,9 @@
           v-model="form.phone"
         />
       </ElFormItem>
-      <ElFormItem label="村集体属性：" prop="address">普通</ElFormItem>
+      <ElFormItem label="村集体属性：" prop="address">{{
+        form.villageType == 'asset' ? '普通集体资产' : form.villageType == 'grave' ? '坟墓' : '-'
+      }}</ElFormItem>
       <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
@@ -182,6 +184,7 @@ watch(
   (val) => {
     if (val) {
       // 处理行政区划
+      console.log(val, 'val测试')
       form.value = {
         ...val,
         parentCode: [val.areaCode, val.townCode, val.villageCode]

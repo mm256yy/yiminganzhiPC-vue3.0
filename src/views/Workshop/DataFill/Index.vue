@@ -583,12 +583,14 @@ onMounted(() => {
   } else if (type == 'IndividualB') {
     tabsType.value = IndividualBTabs
   } else if (type == 'villageInfoC') {
-    if (villageType == '1') {
-      tabsType.value = villageInfoCTabs.filter((item: any) => item.id !== '5')
-      console.log('普通')
-    } else if (villageType == '2') {
+    if (villageType == 'asset') {
+      tabsType.value = villageInfoCTabs.filter((item: any) => item.id != '5')
+      console.log(tabsType.value, '普通')
+    } else if (villageType == 'grave') {
       tabsType.value = villageInfoCTabs.filter((item: any) => item.id == '5')
-      console.log('坟墓')
+      console.log(tabsType.value, '坟墓')
+    } else {
+      tabsType.value = villageInfoCTabs
     }
   }
   surveyStatus.value = globalData.currentSurveyStatus
