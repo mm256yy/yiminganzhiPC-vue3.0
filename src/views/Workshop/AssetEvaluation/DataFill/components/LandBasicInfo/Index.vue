@@ -171,7 +171,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="评估单价(㎡)"
+          label="评估单价(元/㎡)"
           :width="180"
           prop="valuationPrice"
           align="center"
