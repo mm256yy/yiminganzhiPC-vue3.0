@@ -63,14 +63,19 @@ interface PropsType {
   doorNo: string
   immigrantSettle: any
   fromResettleConfirm?: boolean
+  nursingHomeText?: any
 }
 onMounted(() => {
   getSimulateImmigrantSettle()
 })
 // 查询安置信息
 const getSimulateImmigrantSettle = async () => {
-  const res = await getSimulateImmigrantSettleApi(props.doorNo)
-  nursingHome.value = res.nursingHome.toString()
+  if (!props.nursingHomeText) {
+    const res = await getSimulateImmigrantSettleApi(props.doorNo)
+    nursingHome.value = res.nursingHome.toString()
+  } else {
+    nursingHome.value = props.nursingHomeText.toString()
+  }
 }
 
 const emit = defineEmits(['submit'])

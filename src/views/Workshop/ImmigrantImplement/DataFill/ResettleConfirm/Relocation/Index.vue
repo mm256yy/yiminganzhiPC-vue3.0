@@ -94,12 +94,7 @@
         <div class="txt">
           该户选择{{
             houseType == 'concentrate'
-              ? houseTypeText[houseType] +
-                `（选择养老院:${
-                  nursingHomeList[416].filter(
-                    (item) => item.value == mockImmigrantSettle?.nursingHome
-                  )[0]?.label || '-'
-                }）`
+              ? houseTypeText[houseType] + `（选择养老院:${peopleList[0].nursingHomeText}）`
               : houseTypeText[houseType]
           }}
         </div>
@@ -176,6 +171,7 @@
             :baseInfo="props.baseInfo"
             :immigrantSettle="immigrantSettle"
             :doorNo="props.doorNo"
+            :nursingHomeText="peopleList[0].nursingHome"
             fromResettleConfirm
             @submit="onEditSubmit"
           />
@@ -225,11 +221,7 @@ ${baseInfo.showDoorNo} `
               ? '暂无数据'
               : houseType === HouseType.oneself
               ? '该户选择自谋职业'
-              : `该户选择集中供养（选择养老院:${
-                  nursingHomeList[416].filter(
-                    (item) => item.value == mockImmigrantSettle?.nursingHome
-                  )[0]?.label || '-'
-                }）`
+              : `该户选择集中供养（选择养老院:${peopleList[0].nursingHomeText}）`
           }}</div>
         </template>
       </el-table>
@@ -329,6 +321,7 @@ const getPeopleList = async () => {
     status: props.baseInfo.status
   })
   peopleList.value = res.content
+  console.log(peopleList.value, 'npc')
 }
 /**
  * 根据户主人口性质过滤安置类型
@@ -539,6 +532,7 @@ const onEditSubmit = async (params: any) => {
       immigrantSettle.value = res
     }
     ElMessage.success('保存成功！')
+    getPeopleList()
   }
 }
 let data = ref()
