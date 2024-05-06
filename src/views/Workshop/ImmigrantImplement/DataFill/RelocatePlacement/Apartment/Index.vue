@@ -12,7 +12,7 @@
           >
             购房测算
           </ElButton> -->
-          <ElButton type="primary" @click="onDocumentation"> 进度汇报 </ElButton>
+          <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
           <!-- <ElButton
             class="!bg-[#30A952] !border-[#30A952]"
             type="primary"

@@ -133,12 +133,12 @@ const loadDistrictNodes = async (node: any, resolve: any) => {
 const schema = reactive<FormSchema[]>([
   {
     field: 'name',
-    label: '项目名称',
+    label: '水库名称',
     component: 'Input'
   },
   {
     field: 'reservoirName',
-    label: '水库名称',
+    label: '项目名称',
     component: 'Input'
   },
   {

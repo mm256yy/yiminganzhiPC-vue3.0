@@ -138,7 +138,7 @@ const objectSpanMethod1 = ({ rowIndex, columnIndex }) => {
   if (columnIndex === 1) {
     if (rowIndex === 0) {
       return {
-        rowspan: 20,
+        rowspan: tableData1.pageSizeRef,
         colspan: 1
       }
     } else {

@@ -39,7 +39,7 @@
           placeholder="请输入权属单位名称"
         />
       </ElFormItem>
-      <ElFormItem label="所属区域" prop="parentCode">
+      <ElFormItem label="所属区域">
         <ElTreeSelect
           class="!w-350px"
           v-model="form.parentCode"
@@ -49,7 +49,7 @@
           :default-expanded-keys="[form.parentCode]"
         />
       </ElFormItem>
-      <ElFormItem label="地址" prop="address">
+      <ElFormItem label="地址">
         <ElInput v-model="form.address" class="!w-350px" placeholder="请输入地址" />
       </ElFormItem>
       <ElFormItem label="所在位置" prop="locationType">

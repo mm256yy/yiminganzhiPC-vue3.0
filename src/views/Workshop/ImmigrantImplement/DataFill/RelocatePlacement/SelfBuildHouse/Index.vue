@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
-          <ElButton type="primary" @click="onDocumentation"> 进度汇报 </ElButton>
+          <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
         </ElSpace>
       </div>
     </div>

@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between pb-12px">
         <div class="title"> 个体工商户账户信息 </div>
         <div>
-          <ElButton type="primary" @click="onDocumentation">进度汇报</ElButton>
+          <ElButton type="primary" @click="onDocumentation">进度上报</ElButton>
           <ElButton type="primary" @click="onPrint">打印报表</ElButton>
         </div>
       </div>

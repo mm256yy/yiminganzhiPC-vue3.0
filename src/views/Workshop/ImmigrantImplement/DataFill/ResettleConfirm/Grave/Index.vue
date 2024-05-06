@@ -7,7 +7,7 @@
         <ElSpace>
           <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <ElButton type="primary" @click="onFilling">填报完成</ElButton>
-          <ElButton type="primary" @click="onDocumentation">进度汇报</ElButton>
+          <ElButton type="primary" @click="onDocumentation">进度上报</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加</ElButton>
         </ElSpace>
       </div>

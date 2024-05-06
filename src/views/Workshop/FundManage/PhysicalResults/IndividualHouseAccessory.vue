@@ -170,7 +170,8 @@ const requestIndividualHouseAccessory = async () => {
     },
     {
       field: '1',
-      label: '行政村'
+      label: '行政村',
+      width: 120
     },
     {
       width: 200,

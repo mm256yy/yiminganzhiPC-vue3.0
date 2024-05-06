@@ -10,7 +10,7 @@
 
         <ElSpace v-else-if="isLandEmpty && isLandEmpty === '1'">
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
-          <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度汇报</ElButton>
+          <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
       </div>
     </div>
