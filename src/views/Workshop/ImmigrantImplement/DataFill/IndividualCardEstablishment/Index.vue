@@ -451,7 +451,7 @@ const form = ref<any>()
 const { required } = useValidator()
 
 const rules = reactive<FormRules>({
-  beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  beforeAddress: [{ required: true, message: '请输入迁前厂址', trigger: 'blur' }],
   accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
   bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
   bankAccount: [{ required: true, message: '请输入银行账号', trigger: 'blur' }],
@@ -547,6 +547,10 @@ const getSummaries = (row: any) => {
 
 // 归档
 const onDocumentation = () => {
+  if (!form.value.accountName || !form.value.bankName || !form.value.bankAccount) {
+    ElMessage.error('账户信息未填写完整')
+    return
+  }
   dialog.value = true
 }
 

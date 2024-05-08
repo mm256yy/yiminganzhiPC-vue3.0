@@ -13,7 +13,7 @@
         class="form"
         ref="formRef"
         :model="form"
-        label-width="100px"
+        label-width="80px"
         :label-position="'right'"
         :rules="rules"
       >
@@ -460,7 +460,10 @@ const { allSchemas } = useCrudSchemas(schema)
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
 const rules = reactive<FormRules>({
-  beforeAddress: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
+  beforeAddress: [{ required: true, message: '请输入迁前厂址', trigger: 'blur' }],
+  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
+  bankAccount: [{ required: true, message: '请输入银行账号', trigger: 'blur' }]
 })
 
 // 获取费用补偿情况列表
@@ -538,6 +541,10 @@ const getSummaries = (row: any) => {
 
 // 归档
 const onDocumentation = () => {
+  if (!form.value.accountName || !form.value.bankName || !form.value.bankAccount) {
+    ElMessage.error('账户信息未填写完整')
+    return
+  }
   dialog.value = true
 }
 

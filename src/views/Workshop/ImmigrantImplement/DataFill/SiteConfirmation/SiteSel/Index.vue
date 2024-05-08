@@ -36,18 +36,19 @@
         </ElTableColumn>
         <ElTableColumn label="户型/套型(㎡)" prop="area" align="center" header-align="center">
           <template #default="{ row }">
-            {{
+            <!-- {{
               row.houseAreaType === 'flat'
                 ? row.area
                 : homesteadAreaSize
                     .filter((item) => item.id == row.area)
                     .map((item) => item.name)[0]
-            }}
+            }} -->
+            {{ row.area }}
           </template>
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
           <template #default="{ row }">
-            <!-- <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.landNo">
               <ElOption
                 v-for="item in row.landNoOptions"
                 :key="item.id"
@@ -55,8 +56,8 @@
                 :value="item.name"
                 :disabled="item.isOccupy === '1'"
               />
-            </ElSelect> -->
-            <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable />
+            </ElSelect>
+            <!-- <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable /> -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="摇号顺序号" prop="lotteryOrder" align="center" header-align="center">
@@ -110,16 +111,16 @@
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
-            <!-- <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
               <ElOption
-                v-for="item in row.roomNoOptions.content"
+                v-for="item in row.roomNoOptions"
                 :key="item.id"
-                :label="item.showName"
-                :value="item.code"
-                :disabled="item.isOccupy === '1'"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled == true"
               />
-            </ElSelect> -->
-            <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable />
+            </ElSelect>
+            <!-- <ElSelectV2 v-model="row.roomNo" :options="row.roomNoOptions" clearable filterable /> -->
           </template>
         </ElTableColumn>
         <ElTableColumn
@@ -389,7 +390,10 @@ interface PropsType {
   doorNo: string
   baseInfo: any
 }
-
+// const options = ref<any>([
+//   { value: 'option1', label: '选项一' },
+//   { value: 'option2', label: '选项二' }
+// ])
 const props = defineProps<PropsType>()
 // const dictStore = useDictStoreWithOut()
 // const dictObj = computed(() => dictStore.getDictObj)
@@ -421,20 +425,22 @@ const getList = () => {
         item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
         item.carNoOptions = await getcarNoList(item.settleAddress)
         let { content } = await getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress)
-        console.log(
-          item.landNoOptions,
-          item.storeroomNoOptions,
-          item.carNoOptions,
-          item.roomNoOptions,
-          '测试数据'
-        )
+        // console.log(
+        //   item.landNoOptions,
+        //   item.storeroomNoOptions,
+        //   item.carNoOptions,
+        //   item.roomNoOptions,
+        //   '测试数据'
+        // )
         item.roomNoOptions = content.map((item) => {
           return {
+            id: item.id,
             label: item.showName,
             value: item.code,
             disabled: item.isOccupy === '1' ? true : false
           }
         })
+        // console.log(item.roomNoOptions, '测试数据房号')
       })
       console.log(arr, 'bbq')
 

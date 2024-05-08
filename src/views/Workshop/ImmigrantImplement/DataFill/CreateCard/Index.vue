@@ -12,13 +12,13 @@
         class="form"
         ref="formRef"
         :model="form"
-        label-width="70px"
+        label-width="80px"
         :label-position="'right'"
         :rules="rules"
       >
         <ElRow>
           <ElCol :span="6">
-            <ElFormItem label="开户名" prop="accountName">
+            <ElFormItem label="开户名111" prop="accountName">
               <ElInput v-model="form.accountName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>
@@ -514,7 +514,9 @@ let allSchemass = allSchemas.tableColumns.filter((item: any) => {
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
 const rules = reactive<FormRules>({
-  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }]
+  accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
+  bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
+  bankAccount: [{ required: true, message: '请输入银行账号', trigger: 'blur' }]
 })
 
 // 获取费用补偿情况列表
@@ -634,6 +636,10 @@ const getSummar = (param: any) => {
 }
 // 归档
 const onDocumentation = () => {
+  if (!form.value.accountName || !form.value.bankName || !form.value.bankAccount) {
+    ElMessage.error('账户信息未填写完整')
+    return
+  }
   dialog.value = true
 }
 
