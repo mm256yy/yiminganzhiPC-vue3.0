@@ -18,7 +18,7 @@
       >
         <ElRow>
           <ElCol :span="6">
-            <ElFormItem label="开户名111" prop="accountName">
+            <ElFormItem label="开户名" prop="accountName">
               <ElInput v-model="form.accountName" placeholder="请输入" />
             </ElFormItem>
           </ElCol>

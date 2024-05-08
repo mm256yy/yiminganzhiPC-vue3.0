@@ -151,6 +151,7 @@ import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
 import { MapFormItem } from '@/components/Map'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
 
 interface PropsType {
   show: any
@@ -177,6 +178,7 @@ const treeSelectDefaultProps = {
   value: 'code',
   label: 'name'
 }
+const flag = ref<any>(false)
 const btnLoading = ref(false)
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
@@ -190,8 +192,8 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
-  latitude: number
-  longitude: number
+  latitude: any
+  longitude: any
   address?: string
 } = reactive({
   latitude: 0,
@@ -210,6 +212,7 @@ watch(
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+      form.value.householderName ? (flag.value = true) : (flag.value = false)
     } else {
       form.value = defaultValue
     }
@@ -279,6 +282,23 @@ const doorTypeChange = (val) => {
       //     item2.registrantDoorNo = item.doorNo
       //   }
       // })
+      if (flag.value) {
+        getHouseListApi({
+          doorNo: item.doorNo,
+          status: 'review',
+          size: 50,
+          page: 0
+        }).then((res) => {
+          const houseList = res.content.reduce(function (prev, current) {
+            return prev.id < current.id ? prev : current
+          })
+          console.log(houseList, '房屋列表数据')
+          position.latitude = houseList.latitude
+          position.longitude = houseList.longitude
+          position.address = houseList.address
+          console.log(position.latitude, position.longitude, position.address, '地址')
+        })
+      }
     }
   })
 }

@@ -112,7 +112,7 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="绑定居民户" prop="householderName" align="center" header-align="center">
+      <ElFormItem label="绑定居民户111" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
           filterable
@@ -195,6 +195,7 @@ import { getDistrictTreeApi } from '@/api/district'
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 import { getLandlordListApi } from '@/api/workshop/landlord/service'
 import { MapFormItem } from '@/components/Map'
+import { getHouseListApi } from '@/api/workshop/datafill/house-service'
 
 interface PropsType {
   show: boolean
@@ -221,7 +222,7 @@ const treeSelectDefaultProps = {
   value: 'code',
   label: 'name'
 }
-
+const flag = ref<any>(false)
 const defaultValue: Omit<LandlordDtoType, 'id'> = {
   address: '',
   latitude: 0,
@@ -234,8 +235,8 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
 const position: {
-  latitude: number
-  longitude: number
+  latitude: any
+  longitude: any
   address?: string
 } = reactive({
   latitude: 0,
@@ -265,6 +266,8 @@ watch(
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
+      console.log(form.value.householderName, '进入了')
+      form.value.householderName ? (flag.value = true) : (flag.value = false)
     } else {
       form.value = defaultValue
     }
@@ -297,6 +300,7 @@ const onClose = (flag = false) => {
 }
 
 const doorTypeChange = (val) => {
+  console.log(form.value.householderName, '用户名')
   options.value.forEach((item) => {
     if (item.name == val) {
       form.value.householderDoorNo = item.doorNo.slice(2)
@@ -307,8 +311,26 @@ const doorTypeChange = (val) => {
       //     item2.registrantDoorNo = item.doorNo
       //   }
       // })
+      if (flag.value) {
+        getHouseListApi({
+          doorNo: item.doorNo,
+          status: 'review',
+          size: 50,
+          page: 0
+        }).then((res) => {
+          const houseList = res.content.reduce(function (prev, current) {
+            return prev.id < current.id ? prev : current
+          })
+          console.log(houseList, '房屋列表数据')
+          position.latitude = houseList.latitude
+          position.longitude = houseList.longitude
+          position.address = houseList.address
+          console.log(position.latitude, position.longitude, position.address, '地址')
+        })
+      }
     }
   })
+  console.log(val, '测试改变的数据')
 }
 
 const remoteMethod = (query: string) => {
