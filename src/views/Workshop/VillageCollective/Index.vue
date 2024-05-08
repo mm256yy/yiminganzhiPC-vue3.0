@@ -162,7 +162,6 @@
 </template>
 
 <script lang="ts">
-import { ElButton } from 'element-plus'
 import { defineComponent } from 'vue'
 import { globalData } from '@/config/fill'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
@@ -469,20 +468,20 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  // {
-  //   field: 'reportUserName',
-  //   label: '填报人',
-  //   search: {
-  //     show: false
-  //   }
-  // },
-  // {
-  //   field: 'reportStatus',
-  //   label: '填报状态',
-  //   search: {
-  //     show: false
-  //   }
-  // },
+  {
+    field: 'reportUserName',
+    label: '填报人',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'reportStatus',
+    label: '填报状态',
+    search: {
+      show: false
+    }
+  },
   {
     field: 'reportDate',
     label: '填报时间',
@@ -750,6 +749,7 @@ const onDownloadTemplate = () => {
     background-color: #0cc029;
   }
 }
+
 .txt-btn {
   margin-right: 8px;
   font-size: 14px;

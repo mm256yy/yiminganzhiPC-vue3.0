@@ -62,7 +62,7 @@
         <ElTableColumn label="项目名称" align="left" prop="name" header-align="center" />
         <ElTableColumn label="项目编码" prop="code" align="center" header-align="center" />
         <ElTableColumn
-          label="概算投资"
+          label="概算投资(元)"
           width="230"
           prop="gsInvest"
           align="center"
@@ -74,7 +74,7 @@
         </ElTableColumn>
         <ElTableColumn
           v-if="showAdjustedInvestment"
-          label="调估投资"
+          label="调估投资(元)"
           width="230"
           prop="guInvest"
           align="center"
@@ -86,7 +86,7 @@
         </ElTableColumn>
         <ElTableColumn
           v-if="showAdjustingInvestment"
-          label="调概投资"
+          label="调概投资(元)"
           width="230"
           prop="gaiInvest"
           align="center"

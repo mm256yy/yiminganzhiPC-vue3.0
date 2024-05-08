@@ -504,6 +504,7 @@ const onSubmit = () => {
 
 // 新增 搬迁安置信息
 const onEditResettle = () => {
+  getRelocationInfo()
   onEditOpen()
 }
 

@@ -141,7 +141,7 @@ watch(
         areaType.value = props.dataList.areaType
         settleAddress.value = val.settleAddress
       } else {
-        getSettleAddressList()
+        // getSettleAddressList()
         const { areaType: area, settleAddressCode, settleAddress: settleAddresss } = val
         areaType.value = area
         settleAddress.value = settleAddressCode ? settleAddressCode : val.settleAddress

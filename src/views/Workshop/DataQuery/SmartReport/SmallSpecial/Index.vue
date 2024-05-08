@@ -177,7 +177,7 @@ const resetSearch = () => {
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
-  const list = await screeningTree(projectId, 'village')
+  const list = await screeningTree(projectId, 'Village')
   villageTree.value = list || []
   return list || []
 }

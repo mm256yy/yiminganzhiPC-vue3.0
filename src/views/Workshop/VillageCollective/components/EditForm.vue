@@ -80,7 +80,9 @@
           />
         </ElSelect>
       </ElFormItem>
-
+      <div class="w-466px">
+        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+      </div>
       <!-- <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
       </div> -->
@@ -130,6 +132,7 @@ import type { LandlordDtoType } from '@/api/workshop/landlord/types'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { getDistrictTreeApi } from '@/api/district'
 import { setlocationType } from '@/utils/index'
+import { MapFormItem } from '@/components/Map'
 
 import VillageEditForm from '@/views/Workshop/Village/components/EditForm.vue'
 interface PropsType {
@@ -225,20 +228,20 @@ const onClose = (flag = false) => {
 }
 
 // 定位
-// const onChosePosition = (ps) => {
-//   position.latitude = ps.latitude
-//   position.longitude = ps.longitude
-//   position.address = ps.address
-// }
+const onChosePosition = (ps) => {
+  position.latitude = ps.latitude
+  position.longitude = ps.longitude
+  position.address = ps.address
+}
 
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
-      // if (!position.latitude || !position.longitude) {
-      //   ElMessage.error('请选择位置')
-      //   return
-      // }
+      if (!position.latitude || !position.longitude) {
+        ElMessage.error('请选择位置')
+        return
+      }
       btnLoading.value = true
       const data: any = {
         ...form.value,

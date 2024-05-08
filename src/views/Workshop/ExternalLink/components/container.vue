@@ -227,7 +227,9 @@ const requestNewsData = (type = '1') => {
         }
         return item
       })
-
+      if (newsList.value.length > 4) {
+        newsList.value.length = 4
+      }
       panelLoading.value = false
     },
     (err) => {
