@@ -387,6 +387,10 @@ export const VillageTabs = [
   {
     id: 3,
     name: '集体资产处置方法'
+  },
+  {
+    id: 4,
+    name: '村集体建卡'
   }
 ]
 

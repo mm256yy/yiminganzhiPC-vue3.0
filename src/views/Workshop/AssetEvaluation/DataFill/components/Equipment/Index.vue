@@ -199,9 +199,6 @@
       </ElTable>
       <ElDialog title="提示" :width="500" v-model="dialogVisible">
         <div class="title-hint"> 是否删除该条记录 </div>
-        <ElFormItem label="删除原因" prop="reason">
-          <ElInput v-model="deleteReason" placeholder="请输入删除原因" />
-        </ElFormItem>
         <template #footer>
           <ElButton @click="handleClose">取消</ElButton>
           <ElButton type="primary" :loading="btnLoading" @click="onDeleteSubmit">确认</ElButton>
@@ -327,11 +324,6 @@ const onDelRow = (row) => {
 }
 
 const onDeleteSubmit = async () => {
-  if (!deleteReason.value) {
-    ElMessage.error('删除原因不能为空')
-    return
-  }
-
   const params = {
     ...rowItem,
     deleteReason: deleteReason.value

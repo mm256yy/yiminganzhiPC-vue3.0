@@ -125,7 +125,9 @@ const initData = () => {
           ? res.filter(
               (item: any) =>
                 item.isUpdate == '1' &&
-                (item.phType.includes('Company') || item.phType == 'IndividualHousehold') &&
+                (item.phType.includes('Company') ||
+                  item.phType == 'IndividualHousehold' ||
+                  item.phType.includes('Village')) &&
                 item.type == '3'
             )
           : []

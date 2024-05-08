@@ -453,6 +453,13 @@
       />
       <!-- 集体资产处置方法 -->
       <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
+      <!-- 村集体建卡 -->
+      <VillageCard
+        :doorNo="doorNo"
+        :baseInfo="baseInfo"
+        @update-data="getLandlordInfo"
+        v-if="tabCurrentId === 4"
+      />
     </div>
     <div class="data-fill-body" v-if="type === 'LandNoMove'">
       <!-- 生产安置 -->
@@ -546,7 +553,7 @@ import HouseholdAgreementSign from './Agreement/HouseholdAgreementSign.vue' // �
 import EntRelocationAgreement from './Agreement/EntRelocationAgreement.vue' // 企业 -- 动迁协议
 import IndividualRelocationAgreement from './Agreement/IndividualRelocationAgreement.vue' // 个体户 -- 动迁协议
 import VillageRelocationAgreement from './Agreement/VillageRelocationAgreement.vue' // 村集体 -- 动迁协议
-
+import VillageCard from './Agreement/VillageCard.vue' // 村集体 -- 建卡
 import CreateCard from './CreateCard/Index.vue' // 居民户移民建卡
 import EntCardEstablishment from './EntCardEstablishment/Index.vue' // 企业建卡
 import IndividualCardEstablishment from './IndividualCardEstablishment/Index.vue' // 个体户建卡
@@ -768,6 +775,9 @@ const getStatus = (data: any) => {
     }
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[3].active = true // 集体资产处置方法
+    }
+    if (data.agreementStatus === '1') {
+      tabsListCopy[4].active = true // 移民建卡
     }
   } else if (type === 'LandNoMove' && nowbody == 'PeasantHousehold') {
     // 第一层 Tab
