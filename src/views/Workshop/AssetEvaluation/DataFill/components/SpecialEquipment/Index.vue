@@ -26,7 +26,7 @@
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
         <ElTableColumn
           label="设施（设备）编号"
-          :width="150"
+          :width="220"
           prop="facilitiesCode"
           align="center"
           header-align="center"

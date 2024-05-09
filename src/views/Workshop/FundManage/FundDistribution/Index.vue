@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElMessage, ElMessageBox } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -104,6 +104,7 @@ import {
 } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 const appStore = useAppStore()
+const pamaers = ref<any>()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
 const headInfo = ref<any>()
@@ -184,15 +185,17 @@ const selenceTable = (e: string, value: any) => {
 }
 const IssueClick = () => {
   let all = 0
-  let pamaers = tabalRef.value.selections.reduce((pre, item) => {
+  pamaers.value = tabalRef.value.selections.reduce((pre, item) => {
     pre.push({
       type: item.type,
       doorNo: item.doorNo,
-      status: '1'
+      status: '1',
+      villageType: item.villageType
     })
     all += item.totalPrice
     return pre
   }, [])
+  console.log(pamaers.value, '测试数据')
   if (all == 0) {
     ElMessageBox.confirm(`发放金额为0元，请重新选择`, '提示', {
       confirmButtonText: '确定',
@@ -204,16 +207,12 @@ const IssueClick = () => {
       })
     })
   } else {
-    ElMessageBox.confirm(
-      `本次发放共${pamaers.length}户居民户，共${all}元。请确认是否发放`,
-      '提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
-      }
-    )
+    ElMessageBox.confirm(`本次发放共${sum.value}户集体资产，共${all}元。请确认是否发放`, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消'
+    })
       .then(() => {
-        postGrant(pamaers).then(() => {
+        postGrant(pamaers.value).then(() => {
           ElMessage({
             type: 'success',
             message: '发放成功'
@@ -492,6 +491,17 @@ const onReset = () => {
 let setSearchParamss = () => {
   setSearchParams({ projectId: tableObject.params.projectId, type: tableObject.params.type })
 }
+const sum = computed(() => {
+  let uniqueArray = []
+  let map = new Map()
+  for (let item of pamaers.value) {
+    if (!map.has(item.doorNo)) {
+      map.set(item.doorNo, true)
+      uniqueArray.push(item)
+    }
+  }
+  return uniqueArray.length
+})
 </script>
 
 <style lang="less" scoped>
