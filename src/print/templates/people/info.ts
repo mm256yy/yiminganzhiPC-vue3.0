@@ -306,6 +306,8 @@ export const getPeopleInfoDefinition = (landlord: LandlordType, projectInfo: Pro
   if (!landlord) {
     return peopleInfoDefinition
   }
+  console.log(projectInfo, 'bbq')
+
   return {
     content: [
       getHead(landlord, projectInfo),

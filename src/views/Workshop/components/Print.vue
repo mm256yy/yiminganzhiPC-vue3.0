@@ -111,6 +111,8 @@ const projectInfo = computed(() => {
   const projects = appStore.getUserInfo?.projectUsers
   const currentProjectId = appStore.getCurrentProjectId
   const project = projects?.find((x) => x.projectId === currentProjectId)
+  console.log(project, 'bbq')
+
   return {
     name: project?.projectName || '',
     status: project?.status || ''

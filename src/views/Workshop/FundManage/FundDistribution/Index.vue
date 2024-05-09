@@ -492,7 +492,7 @@ let setSearchParamss = () => {
   setSearchParams({ projectId: tableObject.params.projectId, type: tableObject.params.type })
 }
 const sum = computed(() => {
-  let uniqueArray = []
+  let uniqueArray: any = []
   let map = new Map()
   for (let item of pamaers.value) {
     if (!map.has(item.doorNo)) {

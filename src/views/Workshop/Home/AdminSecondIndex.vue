@@ -269,7 +269,7 @@
           </div>
           <div v-else class="center gender-list">
             <div>总土地</div>
-            <div class="ground-txt">{{ totalLandNumber }}㎡</div>
+            <div class="ground-txt">{{ totalLandNumber?.toFixed(3) }}亩</div>
           </div>
           <div v-loading="analysisLoading">
             <Echart v-if="typeNumber != 4" :options="immigrationOption" :height="415" />

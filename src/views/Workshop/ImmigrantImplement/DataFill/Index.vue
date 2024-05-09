@@ -755,12 +755,14 @@ const getStatus = (data: any) => {
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId.value === 1) {
-      fillingStatus.value = data.houseSoarStatus // 腾空总状态   原来用这个 excessSoarStatus  这个是 房屋 土地 过度安置 都为打勾 才会excessSoarStatus为1
     } else if (tabCurrentId.value === 2) {
-      fillingStatus.value = data.agreementStatus // 协议签订总状态
+      fillingStatus.value = data.houseSoarStatus // 腾空总状态   原来用这个 excessSoarStatus  这个是 房屋 土地 过度安置 都为打勾 才会excessSoarStatus为1
     } else if (tabCurrentId.value === 3) {
+      fillingStatus.value = data.agreementStatus // 协议签订总状态
+    } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
+    } else if (tabCurrentId.value === 1) {
+      fillingStatus.value = data.cardStatus // 集体资产处置方法状态
     }
 
     // 第一层 Tab
@@ -776,7 +778,7 @@ const getStatus = (data: any) => {
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[4].active = true // 集体资产处置方法
     }
-    if (data.agreementStatus === '1') {
+    if (data.cardStatus === '1') {
       tabsListCopy[1].active = true // 移民建卡
     }
   } else if (type === 'LandNoMove' && nowbody == 'PeasantHousehold') {

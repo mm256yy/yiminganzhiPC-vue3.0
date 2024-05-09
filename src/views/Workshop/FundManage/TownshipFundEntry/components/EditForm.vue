@@ -23,10 +23,10 @@
       </ElFormItem>
 
       <ElFormItem v-if="isVillage" label="村集体" prop="villageText">
-        {{ form.villageText }}
+        {{ form.name }}
       </ElFormItem>
       <ElFormItem v-if="isVillage" label="村集体编号" prop="villageCode">
-        {{ form.villageCode }}
+        {{ form.showDoorNo }}
       </ElFormItem>
 
       <ElFormItem v-if="isOther" label="名称" prop="name"> {{ form.name }} </ElFormItem>

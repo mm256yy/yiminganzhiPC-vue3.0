@@ -111,7 +111,7 @@
             <ElInputNumber :min="0" v-model="scope.row.compensationAmount" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="新增原因"
           :width="180"
           prop="addReason"
@@ -121,7 +121,7 @@
           <template #default="{ row }">
             <ElInput placeholder="请输入" v-model="row.addReason" />
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn label="备注" :width="180" prop="remark" align="center" header-align="center">
           <template #default="scope">
             <ElInput placeholder="请输入" v-model="scope.row.remark" />

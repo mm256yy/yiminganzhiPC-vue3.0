@@ -6,7 +6,7 @@
         <div>
           <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
 
-          <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
+          <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
           <ElButton type="primary" @click="handleadd">增加</ElButton>
         </div>
       </div>

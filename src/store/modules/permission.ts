@@ -1,5 +1,10 @@
 import { defineStore } from 'pinia'
-import { baseConstantRouterMap, adminConstantRouterMap, workshopConstantRouterMap } from '@/router'
+import {
+  baseConstantRouterMap,
+  adminConstantRouterMap,
+  workshopConstantRouterMap,
+  leaderhomeWork
+} from '@/router'
 import { generateRoutesFn2, flatMultiLevelRoutes } from '@/utils/routerHelper'
 import { store } from '../index'
 import { cloneDeep } from 'lodash-es'
@@ -41,11 +46,20 @@ export const usePermissionStore = defineStore('permission', {
   actions: {
     generateRoutes(routers?: AppCustomRouteRecordRaw[] | string[]): Promise<unknown> {
       return new Promise<void>((resolve) => {
+        console.log(appStore.getCurrentProject)
+        const project = appStore.getUserInfo?.projectUsers.find(
+          (x: any) => x.projectId === appStore.currentProjectId
+        )
+        const role =
+          project && project.roles && project.roles.length ? project.roles[0].code : 'other'
         let routerMap =
           appStore.getIsSysAdmin ||
           appStore.getCurrentProject?.projectRole === ProjectRoleEnum.PROJECT_ADMIN
             ? adminConstantRouterMap
             : workshopConstantRouterMap
+        if (role == 'leaderworkbenches') {
+          routerMap[1].children = routerMap[1].children?.concat(leaderhomeWork)
+        }
         routerMap = routerMap.concat(generateRoutesFn2(routers as AppCustomRouteRecordRaw[]))
         // 增加一层过滤
         routerMap = routerMap.filter((item) => item.name && item.meta)

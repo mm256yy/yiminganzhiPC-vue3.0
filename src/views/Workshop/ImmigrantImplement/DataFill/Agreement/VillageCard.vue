@@ -152,16 +152,16 @@
     />
     <div
       style="
-        display: flex;
         position: fixed;
         left: -1000px;
+        display: flex;
         width: 340mm;
         padding: 10px 10px 0px 10px;
       "
       id="print"
     >
       <div style="width: 50%; padding-right: 10px">
-        <h1 style="font-size: 24px; text-align: center">移民协议补偿登记卡</h1>
+        <h1 style="font-size: 24px; text-align: center">村集体协议补偿登记卡</h1>
         <div
           style="
             display: flex;
@@ -170,15 +170,15 @@
             margin: 20px 0 20px 0;
           "
         >
-          <div style="width: 30%">
-            <span style="font-weight: bold">户主姓名:</span>
+          <div style="width: 50%">
+            <span style="font-weight: bold">村集体名称:</span>
             <span style="margin-left: 5px">{{ baseInfo.name }}</span>
           </div>
-          <div style="width: 30%">
-            <span style="font-weight: bold">户号:</span>
+          <div style="width: 50%">
+            <span style="font-weight: bold">村集体编号:</span>
             <span style="margin-left: 5px">{{ baseInfo.showDoorNo }}</span>
           </div>
-          <div style="width: 30%">
+          <div style="width: 50%">
             <span style="font-weight: bold">联系方式:</span>
             <span style="margin-left: 5px">{{ baseInfo.phone }}</span>
           </div>
@@ -259,7 +259,6 @@
             </template>
           </ElTableColumn>
         </ElTable>
-        <div style="padding: 5px; font-size: 8px">移民户主：</div>
       </div>
     </div>
   </WorkContentWrap>
@@ -806,6 +805,7 @@ onMounted(() => {
     padding: 0px;
   }
 }
+
 :deep(.el-descriptions) {
   --el-descriptions-table-border: 1px solid black;
 
