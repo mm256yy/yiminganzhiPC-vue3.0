@@ -3,12 +3,14 @@
     <div class="empty-head">
       <div class="title">房屋腾空办理情况</div>
       <div>
-        <ElSpace v-if="!isHouseEmpty">
-          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle">无须办理</ElButton>
-          <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
+        <ElSpace>
+          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle" v-if="!isHouseEmpty"
+            >无须办理</ElButton
+          >
+          <ElButton :icon="editIcon" type="primary" @click="onHandle" v-if="flag">办理</ElButton>
         </ElSpace>
 
-        <ElSpace v-else-if="isHouseEmpty && isHouseEmpty === '1'">
+        <ElSpace v-if="isHouseEmpty && isHouseEmpty === '1'">
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
@@ -263,6 +265,7 @@ const rules = reactive<FormRules>({
   houseEmptyDate: [required()],
   houseEmptyOpinion: [required()]
 })
+const flag = ref<boolean>(true)
 
 onMounted(() => {
   init()
@@ -275,7 +278,9 @@ const init = async () => {
   if (res) {
     form.value = {
       houseEmptyOpinion: res.houseEmptyOpinion,
-      houseEmptyDate: dayjs(res.houseEmptyDate).format('YYYY-MM-DD')
+      houseEmptyDate: dayjs(res.houseEmptyDate).format('YYYY-MM-DD'),
+      id: res.id,
+      uid: res.uid
     }
     isHouseEmpty.value = res.isHouseEmpty
     time.value = dayjs(res.houseEmptyDate).format('YYYY-MM-DD')
@@ -288,6 +293,7 @@ const onHandle = () => {
 
 const onNoHandle = () => {
   isHouseEmpty.value = '0'
+  flag.value = false
   handleSave()
 }
 
@@ -320,6 +326,7 @@ const handleSave = async (data?: any) => {
   if (data) {
     params.houseEmptyOpinion = data.houseEmptyOpinion
     params.houseEmptyDate = dayjs(data.houseEmptyDate)
+    ;(params.id = data.id), (params.uid = data.uid)
   }
   const res = await saveHouseVacateInfoApi(params)
   if (res) {

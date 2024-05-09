@@ -186,7 +186,7 @@
     </div>
     <!-- 资产评估 -->
     <div class="other" style="display: block">
-      <el-row>
+      <el-row v-if="type != 'LandNoMoveL'">
         <el-col :span="6">
           <div class="info-item">
             <div class="tit">房屋主体评估合计：</div>
@@ -231,19 +231,25 @@
             <div class="txt">{{ fmtStr(props.baseInfo.graveTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
-        <el-col :span="6" v-if="type != 'Landlord' && type != 'VillageInfoC'">
+        <el-col
+          :span="6"
+          v-if="type != 'Landlord' && type != 'VillageInfoC' && type != 'LandNoMoveL'"
+        >
           <div class="info-item">
             <div class="tit">设备设施评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.equipmentTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
-        <el-col :span="6" v-if="type != 'Landlord'">
+        <el-col :span="6" v-if="type != 'Landlord' && type != 'LandNoMoveL'">
           <div class="info-item">
             <div class="tit">基础设施评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.infrastructureTotalAmount, '（元）') }}</div>
           </div>
         </el-col>
-        <el-col :span="6" v-if="type != 'Landlord' && type != 'VillageInfoC'">
+        <el-col
+          :span="6"
+          v-if="type != 'Landlord' && type != 'VillageInfoC' && type != 'LandNoMoveL'"
+        >
           <div class="info-item">
             <div class="tit">其他评估合计：</div>
             <div class="txt">{{ fmtStr(props.baseInfo.otherTotalAmount, '（元）') }}</div>

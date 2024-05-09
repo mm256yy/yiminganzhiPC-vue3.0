@@ -188,6 +188,7 @@ const getNewsDict = async () => {
     name: dictName,
     projectId: appStore.getCurrentProjectId
   })
+  console.log(res, 'res是什么？')
   if (res && res.dictValList) {
     newsTypes.value = res.dictValList
     activeName2.value = newsTypes.value[0]?.value // 默认选中
@@ -261,7 +262,7 @@ const handleClickItem = (type: number) => {
   push({ name: pathMap[type] })
 }
 let checkNewsss = (row) => {
-  console.log(row)
+  console.log(row, '1111111111')
   push(`/Feedback/FeedbackDetail?id=${row.id}`)
 }
 onMounted(() => {

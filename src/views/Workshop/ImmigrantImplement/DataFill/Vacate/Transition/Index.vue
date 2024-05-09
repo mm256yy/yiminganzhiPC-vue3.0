@@ -232,7 +232,9 @@ const init = async () => {
       excessAddress: res.excessAddress || '',
       excessStartDate: timeStart,
       excessEndDate: timeEnd,
-      id: res.id
+      // id: res.id,
+      // uid: res.uid
+      ...res
     }
     isExcess.value = res.isExcess
     startTime.value = timeStart
@@ -281,6 +283,7 @@ const handleSave = async (data?: any) => {
     params.excessStartDate = data.excessStartDate ? dayjs(data.excessStartDate) : ''
     params.excessEndDate = data.excessEndDate ? dayjs(data.excessEndDate) : ''
     params.id = data.id
+    params.uid = data.uid
   }
   console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)

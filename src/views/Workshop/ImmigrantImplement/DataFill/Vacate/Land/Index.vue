@@ -3,12 +3,14 @@
     <div class="empty-head">
       <div class="title">土地腾让办理情况</div>
       <div>
-        <ElSpace v-if="!isLandEmpty">
-          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle">无须办理</ElButton>
-          <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
+        <ElSpace>
+          <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle" v-if="!isLandEmpty"
+            >无须办理</ElButton
+          >
+          <ElButton :icon="editIcon" type="primary" @click="onHandle" v-if="flag">办理</ElButton>
         </ElSpace>
 
-        <ElSpace v-else-if="isLandEmpty && isLandEmpty === '1'">
+        <ElSpace v-if="isLandEmpty && isLandEmpty === '1'">
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
@@ -217,7 +219,7 @@ const rules = reactive<FormRules>({
   landEmptyDate: [required()],
   landEmptyOpinion: [required()]
 })
-
+const flag = ref<boolean>(true)
 onMounted(() => {
   init()
   console.log(props.baseInfo, 'bbq')
@@ -231,7 +233,9 @@ const init = async () => {
   if (res) {
     form.value = {
       landEmptyOpinion: res.landEmptyOpinion,
-      landEmptyDate: dayjs(res.landEmptyDate).format('YYYY-MM-DD')
+      landEmptyDate: dayjs(res.landEmptyDate).format('YYYY-MM-DD'),
+      id: res.id,
+      uid: res.uid
     }
     isLandEmpty.value = res.isLandEmpty
     time.value = dayjs(res.landEmptyDate).format('YYYY-MM-DD')
@@ -243,6 +247,7 @@ const onHandle = () => {
 }
 
 const onNoHandle = () => {
+  flag.value = false
   isLandEmpty.value = '0'
   handleSave()
 }
@@ -276,6 +281,8 @@ const handleSave = async (data?: any) => {
   if (data) {
     params.landEmptyOpinion = data.landEmptyOpinion
     params.landEmptyDate = dayjs(data.landEmptyDate)
+    params.id = data.id
+    params.uid = data.uid
   }
   const res = await saveLandVacateInfoApi(params)
   if (res) {

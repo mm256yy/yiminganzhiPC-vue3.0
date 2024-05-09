@@ -112,7 +112,7 @@
         </ElSelect>
       </ElFormItem>
 
-      <ElFormItem label="绑定居民户111" prop="householderName" align="center" header-align="center">
+      <ElFormItem label="绑定居民户" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
           filterable

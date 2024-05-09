@@ -1,6 +1,20 @@
 <template>
   <div class="box-wrapper">
     <div class="search">
+      <!-- <div>123</div> -->
+      <!-- <div class="custom-dropdown">
+        <button class="dropdown-btn"
+          >请选择
+          <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+          <ul>
+            <li data-value="1">选项1</li>
+            <li data-value="2">选项2</li>
+            <li data-value="3">选项3</li>
+          </ul>
+        </div>
+      </div> -->
       <div class="search-input">
         <input v-model="searchTxt" type="span" placeholder="请输入户号、联系方式" />
       </div>
@@ -625,5 +639,53 @@ onMounted(() => {
       margin: 10px 10px 0 10px;
     }
   }
+}
+.custom-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-content li {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown-content li:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-btn:hover,
+.dropdown:focus .dropdown-btn {
+  background-color: #45a049;
+}
+
+.custom-dropdown:hover .dropdown-content {
+  display: block;
 }
 </style>

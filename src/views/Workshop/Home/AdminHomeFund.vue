@@ -148,7 +148,7 @@
         <div class="border_box">
           <div class="aliam-center">
             <div class="line"></div>
-            <div class="strong">居民户</div></div
+            <div class="strong">居民户123</div></div
           >
         </div>
 
@@ -327,7 +327,7 @@ const householdOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000, 1500],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -351,7 +351,7 @@ const householdOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100, 1800],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -440,7 +440,7 @@ const villageOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000, 1500],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -464,7 +464,7 @@ const villageOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100, 1800],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -547,7 +547,7 @@ const enterpriseOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -571,7 +571,7 @@ const enterpriseOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -660,7 +660,7 @@ const specialityOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000, 1500],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -684,7 +684,7 @@ const specialityOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100, 1800],
       type: 'bar',
-      barWidth: 18,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -770,7 +770,7 @@ const otherOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000, 1500],
       type: 'bar',
-      barWidth: 25,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -794,7 +794,7 @@ const otherOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100, 1800],
       type: 'bar',
-      barWidth: 25,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -871,7 +871,7 @@ const taxationOption = ref({
       name: '应付',
       data: [1400, 1800, 3000, 2000],
       type: 'bar',
-      barWidth: 60,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',
@@ -895,7 +895,7 @@ const taxationOption = ref({
       name: '已付',
       data: [1200, 1300, 2500, 2100],
       type: 'bar',
-      barWidth: 60,
+      barWidth: 9,
       // stack: 'all',
       color: {
         type: 'linear',

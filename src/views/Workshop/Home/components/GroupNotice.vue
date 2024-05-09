@@ -15,7 +15,12 @@
           <span class="time">发送时间</span>
         </div>
         <div class="list">
-          <div class="item-title" v-for="(item, index) in notifyList" :key="index">
+          <div
+            class="item-title"
+            v-for="(item, index) in notifyList"
+            :key="index"
+            @click="handleClick(item)"
+          >
             <div>
               <span class="item-index">{{ index + 1 }}</span>
               <span class="item-content">{{ item.title }}</span>
@@ -45,12 +50,22 @@
         </ElTable>
       </div>
     </div>
+    <ElDialog
+      :title="dialogTitle"
+      v-model="contentDialog"
+      :width="800"
+      @close="contentDialog = false"
+      alignCenter
+      appendToBody
+    >
+      <div v-html="content"></div>
+    </ElDialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, computed } from 'vue'
-import { ElTable, ElTableColumn } from 'element-plus'
+import { ElTable, ElTableColumn, ElDialog } from 'element-plus'
 import { getMessageFeedback, getNotify } from '@/api/home-service'
 import type { MessageDtoType } from '@/api/home-types'
 import dayjs from 'dayjs'
@@ -62,7 +77,9 @@ const messageList = ref<MessageDtoType[]>([])
 const notifyList = ref<any[]>([])
 
 const currentProjectId = appStore.currentProjectId
-
+const contentDialog = ref<boolean>(false)
+const content = ref<string>() // 文章内容
+const dialogTitle = ref<string>('')
 // 获取消息
 const getMessage = async () => {
   try {
@@ -117,6 +134,14 @@ const getNotifyList = async () => {
     console.log(error)
   }
 }
+
+// 查看详情
+const handleClick = (item: any) => {
+  content.value = item.content
+  dialogTitle.value = item.title
+  contentDialog.value = true
+}
+
 onMounted(() => {
   // getMessage()
   getNotifyList()
@@ -213,7 +238,6 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
     font-size: 14px;
-
     .item-index {
       width: 28px;
       height: 34px;

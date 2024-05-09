@@ -16,7 +16,12 @@
           <span class="time">发送时间</span>
         </div>
         <div class="list">
-          <div class="item-title" v-for="(item, index) in notifyList" :key="index">
+          <div
+            class="item-title"
+            v-for="(item, index) in notifyList"
+            :key="index"
+            @click="handleClick(item)"
+          >
             <div>
               <span class="item-index">{{ index + 1 }}</span>
               <span class="item-content">{{ item.title }}</span>
@@ -57,6 +62,16 @@
         </div>
       </div>
     </div>
+    <ElDialog
+      :title="dialogTitle"
+      v-model="contentDialog"
+      :width="800"
+      @close="contentDialog = false"
+      alignCenter
+      appendToBody
+    >
+      <div v-html="content"></div>
+    </ElDialog>
   </div>
 </template>
 
@@ -67,14 +82,16 @@ import type { MessageDtoType } from '@/api/home-types'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '@/store/modules/app'
-
+import { ElDialog } from 'element-plus'
 const appStore = useAppStore()
 const userInfo = computed(() => appStore.getUserInfo)
 const currentProjectId = appStore.currentProjectId
 const { push } = useRouter()
 const messageList = ref<MessageDtoType[]>([])
 const notifyList = ref<any[]>([])
-
+const contentDialog = ref<boolean>(false)
+const content = ref<string>() // 文章内容
+const dialogTitle = ref<string>('')
 const more = () => {
   push('/Feedback/FeedbackIndex')
 }
@@ -131,6 +148,13 @@ const getNotifyList = async () => {
   } catch (error) {
     console.log(error)
   }
+}
+
+// 查看详情
+const handleClick = (item: any) => {
+  content.value = item.content
+  dialogTitle.value = item.title
+  contentDialog.value = true
 }
 
 const handleItemClick = (item: MessageDtoType) => {
