@@ -45,6 +45,7 @@
       @close="onFormPupClose"
       :doorNo="currentDoorNo"
       :projectId="projectId"
+      :village="route.query.id"
     />
   </WorkContentWrap>
 </template>
@@ -62,8 +63,8 @@ import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/Migrate
 import HouseholdEdit from './components/HouseholdEdit.vue'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useTable } from '@/hooks/web/useTable'
-
-const titles = ['智能报表', '资金管理', '居民户', '资金使用情况']
+import { useRoute } from 'vue-router'
+let titles = ['智能报表', '资金管理', '居民户', '资金使用情况']
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
@@ -87,6 +88,7 @@ const tableLoading = ref<boolean>()
 let schemas = reactive<any>({
   columns: []
 })
+let route = useRoute()
 
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
@@ -179,7 +181,7 @@ const getTableDepends = (list: any) => {
     },
     {
       field: '2',
-      label: '户主姓名',
+      label: route.query.id == 'true' ? '村集体' : '户主姓名',
       ...commonTableItemSchema
     },
     {
@@ -303,7 +305,8 @@ const getSearchParams = () => {
   return {
     ...tableObject.params,
     size: tableObject.size,
-    page: tableObject.currentPage
+    page: tableObject.currentPage,
+    phType: route.query.id == 'true' ? 'Village' : null
   }
 }
 
@@ -322,8 +325,6 @@ const getTableList = async () => {
     getTableDepends(res.list.content)
   }
 }
-
-getTableList()
 
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
@@ -351,9 +352,13 @@ watch(
     }
   }
 )
-
 onMounted(() => {
   getVillageTree()
+  console.log(route.query.id, 111)
+  if (route.query.id == 'true') {
+    titles = ['智能报表', '资金管理', '村集体', '资金使用情况']
+  }
+  getTableList()
 })
 </script>
 

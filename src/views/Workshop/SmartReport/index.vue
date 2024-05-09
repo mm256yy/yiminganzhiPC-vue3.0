@@ -226,7 +226,8 @@ const listArray = ref([
         list: [
           {
             value: 'HouseholdFundDetail',
-            text: '资金发放明细'
+            text: '资金发放明细',
+            params: { id: false }
           }
         ]
       },
@@ -236,7 +237,8 @@ const listArray = ref([
         list: [
           {
             value: 'VillageHouseholdFundDetail',
-            text: '资金发放明细'
+            text: '资金发放明细',
+            params: { id: true }
           }
         ]
       },

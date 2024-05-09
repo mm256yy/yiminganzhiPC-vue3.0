@@ -71,6 +71,7 @@ interface PropsType {
   show: any
   doorNo?: string
   projectId?: number
+  village?: any
 }
 
 const props = defineProps<PropsType>()
@@ -92,7 +93,8 @@ const requestDetailApi = async () => {
   dialogLoading.value = true
   const params = {
     doorNo: props.doorNo,
-    projectId: props.projectId
+    projectId: props.projectId,
+    phType: props.village == 'true' ? 'Village' : null
   }
   try {
     const result = await getHouseholdDetail(params)

@@ -443,22 +443,22 @@
       </template>
 
       <!-- 腾空(村集体只有房屋腾空) -->
-      <house-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
+      <house-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 2" />
 
       <!-- 动迁协议 -->
       <village-relocation-agreement
         :doorNo="doorNo"
-        v-if="tabCurrentId === 2"
+        v-if="tabCurrentId === 3"
         @update-data="getLandlordInfo"
       />
       <!-- 集体资产处置方法 -->
-      <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 3" />
+      <collective-asset-disposal :doorNo="doorNo" v-if="tabCurrentId === 4" />
       <!-- 村集体建卡 -->
       <VillageCard
         :doorNo="doorNo"
         :baseInfo="baseInfo"
         @update-data="getLandlordInfo"
-        v-if="tabCurrentId === 4"
+        v-if="tabCurrentId === 1"
       />
     </div>
     <div class="data-fill-body" v-if="type === 'LandNoMove'">
@@ -768,16 +768,16 @@ const getStatus = (data: any) => {
       tabsListCopy[0].active = true // 资产评估
     }
     if (data.houseSoarStatus === '1') {
-      tabsListCopy[1].active = true // 腾空
+      tabsListCopy[2].active = true // 腾空
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[2].active = true // 协议签订
+      tabsListCopy[3].active = true // 协议签订
     }
     if (data.disposalMeasuresStatus === '1') {
-      tabsListCopy[3].active = true // 集体资产处置方法
+      tabsListCopy[4].active = true // 集体资产处置方法
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[4].active = true // 移民建卡
+      tabsListCopy[1].active = true // 移民建卡
     }
   } else if (type === 'LandNoMove' && nowbody == 'PeasantHousehold') {
     // 第一层 Tab

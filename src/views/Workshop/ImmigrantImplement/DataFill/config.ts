@@ -378,19 +378,19 @@ export const VillageTabs = [
   },
   {
     id: 1,
-    name: '腾空'
+    name: '村集体建卡'
   },
   {
     id: 2,
-    name: '动迁协议'
+    name: '腾空'
   },
   {
     id: 3,
-    name: '集体资产处置方法'
+    name: '动迁协议'
   },
   {
     id: 4,
-    name: '村集体建卡'
+    name: '集体资产处置方法'
   }
 ]
 
