@@ -34,6 +34,11 @@
               v-model="row.name"
               filterable
               :disabled="!isEdit"
+              @change="
+                (e) => {
+                  setList(e, row)
+                }
+              "
             >
               <ElOption
                 v-for="item in dictObj[250]"
@@ -191,7 +196,7 @@ import RecordListDialog from '../components/RecordListDialog.vue'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { useRouter } from 'vue-router'
 import { setlocationType } from '@/utils/index'
-import { getHouseListApi } from '@/api/workshop/datafill/house-service'
+import { getHouseListApi, getByName } from '@/api/workshop/datafill/house-service'
 
 const router = useRouter()
 const isUpdateShow = router.currentRoute.value?.query?.type
@@ -330,4 +335,14 @@ onMounted(() => {
     }
   })
 })
+let setList = (e, row: any) => {
+  console.log(e)
+  getByName(e).then((res) => {
+    console.log(res)
+    if (res) {
+      row.usageType = res.usageType
+      row.unit = res.unit
+    }
+  })
+}
 </script>

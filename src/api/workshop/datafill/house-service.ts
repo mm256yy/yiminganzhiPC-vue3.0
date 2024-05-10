@@ -76,3 +76,7 @@ export const getHouseByIdApi = (id: number): Promise<HouseDtoType> => {
 export const downHouseTemplateApi = (name: string): Promise<any> => {
   return request.get({ url: `/import_template/${name}` })
 }
+// 果木搜索?name=XX
+export const getByName = (name: string): Promise<any> => {
+  return request.get({ url: `/treeConfig/getByName?name=${name}` })
+}

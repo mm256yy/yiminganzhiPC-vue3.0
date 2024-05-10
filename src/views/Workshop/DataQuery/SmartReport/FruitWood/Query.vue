@@ -122,7 +122,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'villageName',
+    field: 'villageCodeText',
     label: '行政村',
     search: {
       show: false
