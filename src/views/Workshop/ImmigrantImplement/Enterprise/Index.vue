@@ -106,6 +106,7 @@ import { formatDate } from '@/utils/index'
 
 const appStore = useAppStore()
 const { push, currentRoute } = useRouter()
+const { search } = currentRoute.value.query as any // 从搜索入口取值
 const projectId = appStore.currentProjectId
 let valueForme = appStore.serchValue
 const dialog = ref(false) // 弹窗标识
@@ -119,6 +120,7 @@ const { setSearchParams } = methods
 
 tableObject.params = {
   projectId,
+  name: search,
   ...valueForme['企业信息']
 }
 

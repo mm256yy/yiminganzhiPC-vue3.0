@@ -104,13 +104,13 @@ import { useRouter } from 'vue-router'
 import type { LandlordDtoType, LandlordHeadInfoType } from '@/api/workshop/landlord/types'
 import { formatDate } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
-
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)
 
 const appStore = useAppStore()
 const { push, currentRoute } = useRouter()
+const { search } = currentRoute.value.query as any
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
 const villageTree = ref<any[]>([])
@@ -128,7 +128,8 @@ const { register, tableObject, methods } = useTable({
 const { setSearchParams } = methods
 
 tableObject.params = {
-  projectId
+  projectId,
+  name: search
 }
 
 setSearchParams({

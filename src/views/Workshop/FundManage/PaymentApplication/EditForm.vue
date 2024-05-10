@@ -128,7 +128,7 @@
               元
             </div>
             <div class="text">
-              审核笔数：
+              审核笔数111：
               <!-- actionType != 'add' ? parmasList.paymentObjectList.length :  -->
               <span class="num">{{
                 actionType != 'add' && targe && parmasLists.paymentObjectList
@@ -182,7 +182,7 @@
           />
           <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
           <ElTableColumn
-            label="合同名称"
+            label="合同名称123"
             prop="contractName"
             align="center"
             header-align="center"

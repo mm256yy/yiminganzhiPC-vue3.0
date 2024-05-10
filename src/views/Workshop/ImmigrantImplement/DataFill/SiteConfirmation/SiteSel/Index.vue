@@ -111,7 +111,13 @@
         </ElTableColumn>
         <ElTableColumn label="房号" width="140" prop="roomNo" align="center" header-align="center">
           <template #default="{ row }">
-            <ElSelect clearable filterable placeholder="请选择" v-model="row.roomNo">
+            <ElSelect
+              clearable
+              filterable
+              placeholder="请选择"
+              v-model="row.roomNo"
+              @change="onRoomNoChange"
+            >
               <ElOption
                 v-for="item in row.roomNoOptions"
                 :key="item.id"
@@ -300,12 +306,18 @@
         </ElTableColumn>
         <ElTableColumn
           label="幢号"
-          prop="houseNo"
+          prop="houseNoText"
           align="center"
           width="50"
           header-align="center"
         />
-        <ElTableColumn label="室号" prop="roomNo" align="center" width="70" header-align="center" />
+        <ElTableColumn
+          label="室号"
+          prop="roomNoText"
+          align="center"
+          width="70"
+          header-align="center"
+        />
         <ElTableColumn
           label="储藏室编号"
           prop="storeroomNo"
@@ -437,10 +449,11 @@ const getList = () => {
             id: item.id,
             label: item.showName,
             value: item.code,
-            disabled: item.isOccupy === '1' ? true : false
+            disabled: item.isOccupy === '1' ? true : false,
+            houseNo: item.parentCode
           }
         })
-        // console.log(item.roomNoOptions, '测试数据房号')
+        console.log(item.roomNoOptions, '测试数据房号')
       })
       console.log(arr, 'bbq')
 
@@ -452,7 +465,14 @@ const getList = () => {
     }
   })
 }
-
+const onRoomNoChange = (val) => {
+  tableData.value.forEach((item) => {
+    const matchingObjB = item.roomNoOptions.find((ite) => ite.value == val)
+    if (matchingObjB) {
+      item.houseNo = matchingObjB.houseNo
+    }
+  })
+}
 /**
  * 获取当前行安置区
  * @param data 当前行信息

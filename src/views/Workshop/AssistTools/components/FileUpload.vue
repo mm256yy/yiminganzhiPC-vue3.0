@@ -435,7 +435,7 @@ const onError = () => {
 
 const getSettleAddress = async (data: any) => {
   // 选择了公寓房的安置方式
-  if (data.houseAreaType === 'flat') {
+  if (data?.houseAreaType === 'flat') {
     let f = await resettleAreaFlat()
     const str = f.find((item) => item.code == data.settleAddress)?.name
     settleAddressText.value = str

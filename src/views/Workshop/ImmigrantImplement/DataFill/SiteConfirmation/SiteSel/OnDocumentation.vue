@@ -58,11 +58,12 @@
           </ElCol>
           <ElCol :span="6">
             <ElFormItem label="幢号-室号：">
-              {{
+              <!-- {{
                 item.roomNo
                   ? item.roomNoOptions.filter((ket: any) => ket.value == item.roomNo)[0]?.label
                   : ''
-              }}
+              }} -->
+              {{ item.houseRoomNoText }}
             </ElFormItem>
           </ElCol>
         </ElRow>

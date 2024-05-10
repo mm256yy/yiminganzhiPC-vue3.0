@@ -1,20 +1,18 @@
 <template>
   <div class="box-wrapper">
     <div class="search">
-      <!-- <div>123</div> -->
-      <!-- <div class="custom-dropdown">
-        <button class="dropdown-btn"
-          >请选择
-          <i class="fa fa-caret-down"></i>
-        </button>
+      <div class="custom-dropdown">
+        <div class="search-inputs">
+          <input v-model="typeTxt" type="span" placeholder="请选择类型" />
+        </div>
         <div class="dropdown-content">
           <ul>
-            <li data-value="1">选项1</li>
-            <li data-value="2">选项2</li>
-            <li data-value="3">选项3</li>
+            <li data-value="1" v-for="item in typeList" :key="item" @click="selectType(item)">{{
+              item.title
+            }}</li>
           </ul>
         </div>
-      </div> -->
+      </div>
       <div class="search-input">
         <input v-model="searchTxt" type="span" placeholder="请输入户号、联系方式" />
       </div>
@@ -95,7 +93,7 @@
       </div>
       <!--企业-->
       <div class="enter-item">
-        <div class="title-field">
+        <div class="title-field" @click="toTarget('EnterpriseImp')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_qsydw.png" />
           </div>
@@ -160,7 +158,7 @@
       </div>
       <!--个体户-->
       <div class="enter-item">
-        <div class="title-field">
+        <div class="title-field" @click="toTarget('IndividualImp')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_gth.png" />
           </div>
@@ -225,7 +223,7 @@
       </div>
       <!--村集体-->
       <div class="enter-item">
-        <div class="title-field">
+        <div class="title-field" @click="toTarget('VillageImp')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
           </div>
@@ -290,7 +288,7 @@
       </div>
       <!-- 只征地不搬迁 -->
       <div class="enter-item">
-        <div class="title-field">
+        <div class="title-field" @click="toTarget('LandNoMove')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
           </div>
@@ -369,11 +367,38 @@ const { push } = useRouter()
 const emit = defineEmits(['toLink', 'toParamsLink', 'loginIn'])
 const statisticsObj = ref<StatisticsDtoType>()
 const searchTxt = ref<string>('')
-
+const typeTxt = ref<string>('居民户')
+const typeName = ref<string>('PeasantHouseholdImp')
 const toLink = (name: string) => {
   emit('toLink', name)
 }
-
+const typeList = ref<any[]>([
+  {
+    name: 'PeasantHouseholdImp',
+    title: '居民户'
+  },
+  {
+    name: 'EnterpriseImp',
+    title: '企（事）业单位'
+  },
+  {
+    name: 'IndividualImp',
+    title: '个体工商户'
+  },
+  {
+    name: 'VillageImp',
+    title: '村集体'
+  },
+  {
+    name: 'LandNoMove',
+    title: '只征地不搬迁'
+  }
+])
+const selectType = (item: any) => {
+  console.log(item.name, '111111111')
+  typeTxt.value = item.title
+  typeName.value = item.name
+}
 const toLinkParams = (routeName: string, query = {}) => {
   // emit('toParamsLink', {
   //   name,
@@ -403,7 +428,10 @@ const getStatistics = async () => {
 }
 
 const toSearch = () => {
-  toTarget('PeasantHouseholdImp', {
+  // if (typeTxt.value=='PeasantHouseholdImp') {
+
+  // }
+  toTarget(typeName.value, {
     search: searchTxt.value
   })
 }
@@ -434,7 +462,7 @@ onMounted(() => {
     justify-content: center;
 
     .search-input {
-      width: 940px;
+      width: 840px;
       height: 46px;
       line-height: 46px;
       text-align: left;
@@ -460,7 +488,7 @@ onMounted(() => {
       overflow: hidden;
       cursor: pointer;
       background: linear-gradient(270deg, #ffb11a 0%, #ff9432 100%);
-      border-radius: 0 8px 8px 0;
+      border-radius: 0 3px 3px 0;
       justify-content: center;
       align-items: center;
 
@@ -644,7 +672,25 @@ onMounted(() => {
   position: relative;
   display: inline-block;
 }
+.search-inputs {
+  width: 100px;
+  height: 46px;
+  line-height: 46px;
+  text-align: left;
+  border-radius: 8px 0 0 8px;
 
+  input {
+    width: 120px;
+    height: 46px;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 46px;
+    color: rgba(19, 19, 19, 0.5);
+    border-bottom-left-radius: 8px;
+    border-top-left-radius: 8px;
+    outline: none;
+  }
+}
 .dropdown-content {
   display: none;
   position: absolute;
