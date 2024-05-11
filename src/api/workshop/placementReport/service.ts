@@ -29,6 +29,15 @@ export const getMoveHouseReportListApi = (params: any) => {
   })
 }
 
+/**
+ * 查询搬迁安置意愿报表-标题（动态）
+ */
+export const getMoveHouseReportListTitleApi = () => {
+  return request.get({
+    url: '/immigrantWillReport/findRemovalWillStatisticsTitle'
+  })
+}
+
 // 导出搬迁安置意愿报表
 export const exportMoveHouseReportApi = (params: any) => {
   return request.get({

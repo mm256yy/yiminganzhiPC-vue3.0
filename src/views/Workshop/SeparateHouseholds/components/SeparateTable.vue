@@ -55,11 +55,11 @@
             v-if="row.pid"
             v-model="row.doorNo"
             maxlength="4"
-            placeholder="填入户号"
+            placeholder="户号"
             type="textnumber"
-            :disabled="!row.pid"
+            :disabled="row.pid"
           >
-            <template #prepend>{{ row.noDoor }}</template>
+            <!-- <template #prepend>{{ row.noDoor }}</template> -->
           </el-input>
           <el-input
             v-else
@@ -489,14 +489,14 @@ let submit = () => {
   parent = list.reduce((pre: any, cur: any) => {
     let m: any = { oldHousehold: {}, newHouseholdList: [] }
     m.oldHousehold = {
-      householderId: cur.familyMembers.filter((item: any) => item.name === cur.name)[0].id,
+      householderId: cur.familyMembers.filter((item: any) => item.name === cur.name)[0]?.id,
       familyIds: valueKey(cur.familyMembers, cur.listBoy),
       doorNo: cur.doorNo,
       villageCode: cur.villageCode
     }
     cur.children.forEach((item: any) => {
       m.newHouseholdList.push({
-        householderId: item.familyMembers.filter((b: any) => b.name === item.name)[0].id,
+        householderId: item.familyMembers.filter((b: any) => b.name === item.name)[0]?.id,
         familyIds: valueKey(item.familyMembers, item.listBoy),
         doorNo: item.doorNo,
         villageCode: item.villageCode

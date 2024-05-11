@@ -3,13 +3,18 @@
     <div class="search">
       <div class="custom-dropdown">
         <div class="search-inputs">
-          <input v-model="typeTxt" type="span" placeholder="请选择类型" />
+          <input v-model="typeTxt" type="span" placeholder="请选择类型" style="color: black" />
         </div>
         <div class="dropdown-content">
           <ul>
-            <li data-value="1" v-for="item in typeList" :key="item" @click="selectType(item)">{{
-              item.title
-            }}</li>
+            <li
+              data-value="1"
+              v-for="item in typeList"
+              :key="item"
+              @click="selectType(item)"
+              style="color: black"
+              >{{ item.title }}</li
+            >
           </ul>
         </div>
       </div>

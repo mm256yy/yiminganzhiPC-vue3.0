@@ -115,7 +115,7 @@
               clearable
               filterable
               placeholder="请选择"
-              v-model="row.roomNo"
+              v-model="row.houseRoomNoText"
               @change="onRoomNoChange"
             >
               <ElOption
@@ -416,60 +416,59 @@ const dialog = ref<boolean>(false)
 const roomNoDialog = ref<boolean>(false)
 const emit = defineEmits(['updateData'])
 const currentRow = ref<any>({}) // 当前行数据
-
 // 获取列表数据
-const getList = () => {
-  getImmigrantChooseHouseApi(props.doorNo).then((res) => {
-    const arr: any = []
-    if (res && res?.content.length) {
-      res.content.map((item: any) => {
-        arr.push({
-          ...item,
-          landNoOptions: [],
-          storeroomNoOptions: [],
-          carNoOptions: [],
-          roomNoOptions: []
-        })
+const getList = async () => {
+  let res = await getImmigrantChooseHouseApi(props.doorNo)
+  const arr: any = []
+  if (res && res?.content.length) {
+    res.content.map((item: any) => {
+      arr.push({
+        ...item,
+        landNoOptions: [],
+        storeroomNoOptions: [],
+        carNoOptions: [],
+        roomNoOptions: []
       })
+    })
 
-      arr.map(async (item: any) => {
-        item.landNoOptions = await getlandNoList(item.settleAddress)
-        item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
-        item.carNoOptions = await getcarNoList(item.settleAddress)
-        let { content } = await getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress)
-        // console.log(
-        //   item.landNoOptions,
-        //   item.storeroomNoOptions,
-        //   item.carNoOptions,
-        //   item.roomNoOptions,
-        //   '测试数据'
-        // )
-        item.roomNoOptions = content.map((item) => {
-          return {
-            id: item.id,
-            label: item.showName,
-            value: item.code,
-            disabled: item.isOccupy === '1' ? true : false,
-            houseNo: item.parentCode
-          }
-        })
-        console.log(item.roomNoOptions, '测试数据房号')
+    arr.map(async (item: any) => {
+      item.landNoOptions = await getlandNoList(item.settleAddress)
+      item.storeroomNoOptions = await getStoreroomNoList(item.settleAddress)
+      item.carNoOptions = await getcarNoList(item.settleAddress)
+      let { content } = await getHouseConfigApi(props.baseInfo.projectId, 3, item.settleAddress)
+      // console.log(
+      //   item.landNoOptions,
+      //   item.storeroomNoOptions,
+      //   item.carNoOptions,
+      //   item.roomNoOptions,
+      //   '测试数据'
+      // )
+      item.roomNoOptions = content.map((item) => {
+        return {
+          id: item.id,
+          label: item.showName,
+          value: item.code,
+          disabled: item.isOccupy === '1' ? true : false,
+          houseNo: item.parentCode
+        }
       })
-      console.log(arr, 'bbq')
+      console.log(item.roomNoOptions, '测试数据房号')
+    })
+    console.log(arr, 'bbq')
 
-      tableData.value = arr
-      // setTimeout(() => {
-      //   tableData.value = [...arr]
-      //   console.log(tableData.value)
-      // }, 2000)
-    }
-  })
+    tableData.value = arr || []
+    // setTimeout(() => {
+    //   tableData.value = [...arr]
+    //   console.log(tableData.value)
+    // }, 2000)
+  }
 }
 const onRoomNoChange = (val) => {
   tableData.value.forEach((item) => {
     const matchingObjB = item.roomNoOptions.find((ite) => ite.value == val)
     if (matchingObjB) {
       item.houseNo = matchingObjB.houseNo
+      item.roomNo = matchingObjB.value
     }
   })
 }

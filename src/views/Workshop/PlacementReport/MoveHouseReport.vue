@@ -123,7 +123,8 @@ import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
   getMoveHouseReportListApi,
-  exportMoveHouseReportApi
+  exportMoveHouseReportApi,
+  getMoveHouseReportListTitleApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -143,6 +144,8 @@ let extraParams = reactive({
   name: undefined
 })
 const projectId = appStore.currentProjectId
+const title = ref<any>()
+
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
@@ -246,6 +249,12 @@ const getMoveHouseReportList = () => {
   })
 }
 
+const getMoveHouseReportListTitle = () => {
+  getMoveHouseReportListTitleApi().then((res) => {
+    title.value = res.title
+  })
+}
+
 const toPercent = (point) => Number(point * 100).toFixed(2) + '%'
 
 // 获取所属区域数据(行政村列表)
@@ -309,7 +318,7 @@ const getSummaries = (params: any) => {
 }
 
 getMoveHouseReportList()
-
+getMoveHouseReportListTitle()
 onMounted(() => {
   getVillageTree()
 })

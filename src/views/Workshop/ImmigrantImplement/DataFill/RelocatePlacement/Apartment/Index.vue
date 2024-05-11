@@ -38,10 +38,15 @@
           公寓房
         </ElTableColumn>
         <ElTableColumn label="户型/套型" prop="area" align="center" header-align="center" />
-        <ElTableColumn label="幢号-室号" prop="roomNo" align="center" header-align="center">
-          <template #default="{ row }">
+        <ElTableColumn
+          label="幢号-室号"
+          prop="houseRoomNoText"
+          align="center"
+          header-align="center"
+        >
+          <!-- <template #default="{ row }">
             {{ row.roomNo ? roomNoOptions.filter((ket) => ket.value == row.roomNo)[0]?.label : '' }}
-          </template>
+          </template> -->
         </ElTableColumn>
         <ElTableColumn label="储藏室编号" prop="storeroomNo" align="center" header-align="center" />
         <ElTableColumn label="车位编号" prop="carNo" align="center" header-align="center" />
