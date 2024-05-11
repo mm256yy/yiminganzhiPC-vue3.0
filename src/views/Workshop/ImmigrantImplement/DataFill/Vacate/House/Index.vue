@@ -123,7 +123,7 @@
           {{
             props.type == 'LandNoMove'
               ? baseInfo.landNumbers
-              : props.type == 'PeasantHousehold'
+              : props.type == 'PeasantHousehold' || props.type == 'Village'
               ? (baseInfo.areaCodeText || '') +
                 (baseInfo.townCodeText || '') +
                 (baseInfo.villageText || '')
