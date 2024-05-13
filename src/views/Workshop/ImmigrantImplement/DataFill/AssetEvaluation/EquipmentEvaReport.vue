@@ -1,7 +1,7 @@
 <template>
-  <WorkContentWrap>
-    <!-- 设施设备评估报告 -->
-    <ElRow v-if="devicePic.length">
+  <WorkContentWrap v-loading="loading">
+    <!-- 房屋附属物评估报告 -->
+    <!-- <ElRow v-if="houseEstimatePic.length">
       <ElCol :span="24">
         <div class="file-list">
           <ElUpload
@@ -14,12 +14,15 @@
             :list-type="'picture-card'"
             accept=".jpg,.jpeg,.png,.pdf"
             :multiple="true"
-            :file-list="devicePic"
+            :file-list="houseEstimatePic"
             :headers="headers"
             :on-success="uploadFileChange"
             :before-remove="beforeRemove"
             :on-remove="removeFile"
             :on-preview="imgPreview"
+            :class="{
+              reached_the_limit: true
+            }"
           />
         </div>
       </ElCol>
@@ -28,8 +31,15 @@
       资产评估还未完成，无法查看评估报告
     </div>
     <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
-      <img class="block w-full" :src="imgUrl" alt="Preview Image" />
-    </ElDialog>
+      <img
+        class="block w-full"
+        v-if="imgUrl.indexOf('pdf') == -1"
+        :src="imgUrl"
+        alt="Preview Image"
+      />
+      <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
+    </ElDialog> -->
+    <iframe id="inlineFrameExample" :src="pdfUrl"></iframe>
   </WorkContentWrap>
 </template>
 
@@ -38,11 +48,15 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { getDocumentationApi } from '@/api/immigrantImplement/assetEvaluation/service'
+import {
+  getDocumentationApi,
+  getexportReportPdfApi
+} from '@/api/immigrantImplement/assetEvaluation/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -53,7 +67,7 @@ interface FileItemType {
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
 
-const devicePic = ref<FileItemType[]>([]) // 设施设备评估报告
+const houseEstimatePic = ref<FileItemType[]>([]) // 房屋附属物评估报告
 const imgUrl = ref<string>('')
 const dialogVisible = ref(false)
 
@@ -63,12 +77,27 @@ const headers = {
 }
 
 // 初始化获取数据
-const initData = () => {
-  getDocumentationApi(props.doorNo).then((res: any) => {
-    if (res && res.devicePic) {
-      devicePic.value = JSON.parse(res.devicePic)
-    }
+let pdfUrl = ref()
+let loading = ref(false)
+const initData = async () => {
+  loading.value = true
+  let res = await getexportReportPdfApi({
+    doorNo: props.doorNo,
+    type:
+      props.baseInfo.type == 'Company'
+        ? 'exportHouseEvalCompany'
+        : props.baseInfo.type == 'IndividualHousehold'
+        ? 'exportHouseEvalIndividual'
+        : props.baseInfo.type == 'PeasantHousehold'
+        ? 'exportHouseEvalHousehold'
+        : props.baseInfo.type == 'Village'
+        ? 'exportHouseEvalVillage'
+        : 'exportHouseEvalHousehold',
+    pdfType: 3
   })
+  const blob = new Blob([res.data], { type: 'application/pdf' })
+  pdfUrl.value = window.URL.createObjectURL(blob)
+  loading.value = false
 }
 
 // 处理函数
@@ -84,7 +113,7 @@ const handleFileList = (fileList: UploadFiles) => {
         }
       })
   }
-  devicePic.value = list
+  houseEstimatePic.value = list
 }
 
 const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
@@ -136,6 +165,17 @@ onMounted(() => {
 
 .upload {
   .el-upload--picture-card {
+    display: none;
+  }
+}
+
+#inlineFrameExample {
+  width: 100%;
+  height: 700px;
+}
+
+.reached_the_limit {
+  :deep(.el-upload) {
     display: none;
   }
 }

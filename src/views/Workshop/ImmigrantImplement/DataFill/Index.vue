@@ -110,6 +110,7 @@
         <house-accessory-eva-report
           v-show="subTabCurrentId === TabIds[0]"
           :doorNo="doorNo"
+          :baseInfo="baseInfo"
           @update-data="getLandlordInfo"
         />
 
@@ -117,6 +118,7 @@
         <land-accessory-eva-report
           v-show="subTabCurrentId === TabIds[1]"
           :doorNo="doorNo"
+          :baseInfo="baseInfo"
           @update-data="getLandlordInfo"
         />
       </template>
@@ -310,6 +312,7 @@
           v-if="subTabCurrentId === TabIds[0]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 土地附着物评估报告 -->
@@ -317,10 +320,15 @@
           v-if="subTabCurrentId === TabIds[1]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 设施设备评估报告 -->
-        <equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId === TabIds[2]" />
+        <equipment-eva-report
+          :doorNo="doorNo"
+          v-if="subTabCurrentId === TabIds[2]"
+          :baseInfo="baseInfo"
+        />
       </template>
 
       <!-- 企业建卡 -->
@@ -369,6 +377,7 @@
           v-if="subTabCurrentId === TabIds[0]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 土地附着物评估报告 -->
@@ -376,10 +385,15 @@
           v-if="subTabCurrentId === TabIds[1]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 设施设备评估报告 -->
-        <equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId == TabIds[2]" />
+        <equipment-eva-report
+          :doorNo="doorNo"
+          v-if="subTabCurrentId == TabIds[2]"
+          :baseInfo="baseInfo"
+        />
       </template>
 
       <!-- 个体户建卡 -->
@@ -429,6 +443,7 @@
           v-if="subTabCurrentId === TabIds[0]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 土地附着物评估报告 -->
@@ -436,10 +451,15 @@
           v-if="subTabCurrentId === TabIds[1]"
           :doorNo="doorNo"
           @update-data="getLandlordInfo"
+          :baseInfo="baseInfo"
         />
 
         <!-- 农村小型专项设施评估报告 -->
-        <special-equipment-eva-report :doorNo="doorNo" v-if="subTabCurrentId === TabIds[2]" />
+        <special-equipment-eva-report
+          :doorNo="doorNo"
+          v-if="subTabCurrentId === TabIds[2]"
+          :baseInfo="baseInfo"
+        />
       </template>
 
       <!-- 腾空(村集体只有房屋腾空) -->

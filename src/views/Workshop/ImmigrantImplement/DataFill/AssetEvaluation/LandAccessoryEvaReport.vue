@@ -1,7 +1,7 @@
 <template>
-  <WorkContentWrap>
-    <!-- 土地附着物评估报告 -->
-    <ElRow v-if="landEstimatePic.length">
+  <WorkContentWrap v-loading="loading">
+    <!-- 房屋附属物评估报告 -->
+    <!-- <ElRow v-if="houseEstimatePic.length">
       <ElCol :span="24">
         <div class="file-list">
           <ElUpload
@@ -14,7 +14,7 @@
             :list-type="'picture-card'"
             accept=".jpg,.jpeg,.png,.pdf"
             :multiple="true"
-            :file-list="landEstimatePic"
+            :file-list="houseEstimatePic"
             :headers="headers"
             :on-success="uploadFileChange"
             :before-remove="beforeRemove"
@@ -38,7 +38,8 @@
         alt="Preview Image"
       />
       <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
-    </ElDialog>
+    </ElDialog> -->
+    <iframe id="inlineFrameExample" :src="pdfUrl"></iframe>
   </WorkContentWrap>
 </template>
 
@@ -47,11 +48,15 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { getDocumentationApi } from '@/api/immigrantImplement/assetEvaluation/service'
+import {
+  getDocumentationApi,
+  getexportReportPdfApi
+} from '@/api/immigrantImplement/assetEvaluation/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -62,7 +67,7 @@ interface FileItemType {
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
 
-const landEstimatePic = ref<FileItemType[]>([]) // 房屋附属物评估报告
+const houseEstimatePic = ref<FileItemType[]>([]) // 房屋附属物评估报告
 const imgUrl = ref<string>('')
 const dialogVisible = ref(false)
 
@@ -72,12 +77,27 @@ const headers = {
 }
 
 // 初始化获取数据
-const initData = () => {
-  getDocumentationApi(props.doorNo).then((res: any) => {
-    if (res && res.landEstimatePic) {
-      landEstimatePic.value = JSON.parse(res.landEstimatePic)
-    }
+let pdfUrl = ref()
+let loading = ref(false)
+const initData = async () => {
+  loading.value = true
+  let res = await getexportReportPdfApi({
+    doorNo: props.doorNo,
+    type:
+      props.baseInfo.type == 'Company'
+        ? 'exportHouseEvalCompany'
+        : props.baseInfo.type == 'IndividualHousehold'
+        ? 'exportHouseEvalIndividual'
+        : props.baseInfo.type == 'PeasantHousehold'
+        ? 'exportHouseEvalHousehold'
+        : props.baseInfo.type == 'Village'
+        ? 'exportHouseEvalVillage'
+        : 'exportHouseEvalHousehold',
+    pdfType: 2
   })
+  const blob = new Blob([res.data], { type: 'application/pdf' })
+  pdfUrl.value = window.URL.createObjectURL(blob)
+  loading.value = false
 }
 
 // 处理函数
@@ -93,7 +113,7 @@ const handleFileList = (fileList: UploadFiles) => {
         }
       })
   }
-  landEstimatePic.value = list
+  houseEstimatePic.value = list
 }
 
 const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {

@@ -1,7 +1,7 @@
 <template>
-  <WorkContentWrap>
+  <WorkContentWrap v-loading="loading">
     <!-- 房屋附属物评估报告 -->
-    <ElRow v-if="houseEstimatePic.length">
+    <!-- <ElRow v-if="houseEstimatePic.length">
       <ElCol :span="24">
         <div class="file-list">
           <ElUpload
@@ -38,7 +38,8 @@
         alt="Preview Image"
       />
       <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
-    </ElDialog>
+    </ElDialog> -->
+    <iframe id="inlineFrameExample" :src="pdfUrl"></iframe>
   </WorkContentWrap>
 </template>
 
@@ -47,11 +48,15 @@ import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { getDocumentationApi } from '@/api/immigrantImplement/assetEvaluation/service'
+import {
+  getDocumentationApi,
+  getexportReportPdfApi
+} from '@/api/immigrantImplement/assetEvaluation/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
 
 interface PropsType {
   doorNo: string
+  baseInfo: any
 }
 
 interface FileItemType {
@@ -72,12 +77,27 @@ const headers = {
 }
 
 // 初始化获取数据
-const initData = () => {
-  getDocumentationApi(props.doorNo).then((res: any) => {
-    if (res && res.houseEstimatePic) {
-      houseEstimatePic.value = JSON.parse(res.houseEstimatePic)
-    }
+let pdfUrl = ref()
+let loading = ref(false)
+const initData = async () => {
+  loading.value = true
+  let res = await getexportReportPdfApi({
+    doorNo: props.doorNo,
+    type:
+      props.baseInfo.type == 'Company'
+        ? 'exportHouseEvalCompany'
+        : props.baseInfo.type == 'IndividualHousehold'
+        ? 'exportHouseEvalIndividual'
+        : props.baseInfo.type == 'PeasantHousehold'
+        ? 'exportHouseEvalHousehold'
+        : props.baseInfo.type == 'Village'
+        ? 'exportHouseEvalVillage'
+        : 'exportHouseEvalHousehold',
+    pdfType: 1
   })
+  const blob = new Blob([res.data], { type: 'application/pdf' })
+  pdfUrl.value = window.URL.createObjectURL(blob)
+  loading.value = false
 }
 
 // 处理函数
