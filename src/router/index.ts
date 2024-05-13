@@ -367,6 +367,72 @@ export const leaderhomeWork: any = [
           icon: 'ant-design:home-outlined'
         }
       },
+      //
+      {
+        path: 'ProductionPlacement',
+        name: 'ProductionPlacement',
+        component: () => import('@/views/Workshop/PlacementConfirmation/ProductionPlacement.vue'),
+        meta: {
+          title: '安置意愿-安置确认-生产安置',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'RelocationResettlement',
+        name: 'RelocationResettlement',
+        component: () =>
+          import('@/views/Workshop/PlacementConfirmation/RelocationResettlement.vue'),
+        meta: {
+          title: '安置意愿-安置确认-搬迁安置',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'TombPlacement',
+        name: 'TombPlacement',
+        component: () => import('@/views/Workshop/PlacementConfirmation/TombPlacement.vue'),
+        meta: {
+          title: '安置意愿-安置确认-坟墓安置',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'HomesteadLand',
+        name: 'HomesteadLand',
+        component: () => import('@/views/Workshop/ChoosingHouseLocation/HomesteadLand.vue'),
+        meta: {
+          title: '安置意愿-选房择址-宅基地',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'Apartment',
+        name: 'Apartment',
+        component: () => import('@/views/Workshop/ChoosingHouseLocation/Apartment.vue'),
+        meta: {
+          title: '安置意愿-选房择址-公寓房',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'ProductionLand',
+        name: 'ProductionLand',
+        component: () => import('@/views/Workshop/ChoosingHouseLocation/ProductionLand.vue'),
+        meta: {
+          title: '安置意愿-选房择址-生产用地',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      {
+        path: 'Cemetery',
+        name: 'Cemetery',
+        component: () => import('@/views/Workshop/ChoosingHouseLocation/Cemetery.vue'),
+        meta: {
+          title: '安置意愿-选房择址-公墓',
+          icon: 'ant-design:home-outlined'
+        }
+      },
+      //
       {
         path: 'moveHouseReport',
         name: 'moveHouseReport',

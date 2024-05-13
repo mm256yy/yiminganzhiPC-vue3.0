@@ -294,18 +294,58 @@ const listArray = ref([
     conArray: [
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(9).png', import.meta.url).href,
-        name: '安置意愿',
+        name: '模拟安置',
         list: [
           {
             value: 'proHouseReport',
-            text: '生产安置意愿'
+            text: '生产安置'
           },
           {
             value: 'moveHouseReport',
-            text: '搬迁安置意愿'
+            text: '搬迁安置'
           }
         ]
       }
+      // {
+      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+      //   name: '安置确认',
+      //   list: [
+      //     {
+      //       value: 'ProductionPlacement',
+      //       text: '生产安置'
+      //     },
+      //     {
+      //       value: 'RelocationResettlement',
+      //       text: '搬迁安置'
+      //     },
+      //     {
+      //       value: 'TombPlacement',
+      //       text: '坟墓安置'
+      //     }
+      //   ]
+      // },
+      // {
+      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+      //   name: '选房择址',
+      //   list: [
+      //     {
+      //       value: 'HomesteadLand',
+      //       text: '宅基地'
+      //     },
+      //     {
+      //       value: 'Apartment',
+      //       text: '公寓房'
+      //     },
+      //     {
+      //       value: 'ProductionLand',
+      //       text: '生产用地'
+      //     },
+      //     {
+      //       value: 'Cemetery',
+      //       text: '公墓'
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -489,7 +529,6 @@ onBeforeUnmount(() => {
             font-weight: 400;
             line-height: 24px;
             color: #131313;
-            cursor: pointer;
           }
 
           .list_value {
