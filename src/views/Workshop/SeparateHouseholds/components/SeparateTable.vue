@@ -55,7 +55,7 @@
             v-if="row.pid"
             v-model="row.doorNo"
             maxlength="4"
-            placeholder="户号"
+            placeholder="*户号"
             type="textnumber"
             :disabled="row.pid"
           >

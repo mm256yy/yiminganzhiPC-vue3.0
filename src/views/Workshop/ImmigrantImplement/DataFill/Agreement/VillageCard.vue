@@ -294,7 +294,7 @@ import {
 } from '@/api/immigrantImplement/createCard/service'
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
-import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
+import OnDocumentation from '@/views/Workshop/ImmigrantImplement/DataFill/CompensationCard/OnDocumentation.vue' // 引入档案上传组件
 import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCard/ConfirmReward.vue' // 引入奖励费确认组件
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
