@@ -485,12 +485,7 @@
       <!-- 生产安置 -->
       <Produce :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 1" />
       <!-- 只征地不搬迁资产评估 -->
-      <AssetEvaluationZ
-        v-if="tabCurrentId === 0"
-        :type="type"
-        :doorNo="doorNo"
-        :baseInfo="baseInfo"
-      />
+      <AssetEvaluationZ v-if="tabCurrentId === 0" :doorNo="doorNo" :baseInfo="baseInfo" />
       <!-- 只征地不搬迁补偿卡 -->
       <CompensationCard v-if="tabCurrentId === 3" :doorNo="doorNo" :baseInfo="baseInfo" />
       <!-- 土地腾让 -->

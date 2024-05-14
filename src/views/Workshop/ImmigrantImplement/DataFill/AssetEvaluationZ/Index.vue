@@ -1,193 +1,157 @@
 <template>
-  <WorkContentWrap>
-    <!-- 只征地不搬迁 -- 资产评估 -->
-    <div class="table-wrap !py-12px !mt-0px">
-      <div class="center">
-        <div>镜岭水库青苗评估汇总表</div>
-      </div>
-      <div>
-        使用权人{{ householder }}，属坝址周边村只征地不搬迁农户及单位，青苗评估共有{{
-          lengths?.length
-        }}个地块，面积{{ areaNumber?.toFixed(2) }}㎡，株数{{ plantsNumber }}株，金额{{ price }}元。
-      </div>
-      <div>详见地块明细如下:</div>
-      <div class="table-wrap">
-        <Table
-          selection
-          :data="tableObject"
-          :columns="allSchemas.tableColumns"
-          row-key="id"
-          headerAlign="center"
-          align="center"
-          highlightCurrentRow
-        />
-      </div>
-      <div class="flex"> <span>评估单位： </span><span>评估人员：</span></div>
+  <WorkContentWrap v-loading="loading">
+    <!-- 房屋附属物评估报告 -->
+    <!-- <ElRow v-if="houseEstimatePic.length">
+      <ElCol :span="24">
+        <div class="file-list">
+          <ElUpload
+            action="/api/file/type"
+            :data="{
+              type: 'archives'
+            }"
+            :disabled="true"
+            :on-error="onError"
+            :list-type="'picture-card'"
+            accept=".jpg,.jpeg,.png,.pdf"
+            :multiple="true"
+            :file-list="houseEstimatePic"
+            :headers="headers"
+            :on-success="uploadFileChange"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile"
+            :on-preview="imgPreview"
+            :class="{
+              reached_the_limit: true
+            }"
+          />
+        </div>
+      </ElCol>
+    </ElRow>
+    <div class="table-wrap !py-12px !mt-0px no-data" v-else>
+      资产评估还未完成，无法查看评估报告
     </div>
-    <!-- <div v-else class="table-wrap !py-12px !mt-0px no-data"
-      >该户资产评估还未完成，无法查看评估报告!</div
-    > -->
+    <ElDialog title="查看图片" :width="920" v-model="dialogVisible">
+      <img
+        class="block w-full"
+        v-if="imgUrl.indexOf('pdf') == -1"
+        :src="imgUrl"
+        alt="Preview Image"
+      />
+      <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
+    </ElDialog> -->
+    <iframe id="inlineFrameExample" :src="pdfUrl"></iframe>
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, onMounted, toRaw, watch, nextTick } from 'vue'
+import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
+import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
-import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { Table } from '@/components/Table'
-import { findLandAppendantList } from '@/api/AssetEvaluation/gird-service'
+import {
+  getDocumentationApi,
+  getexportReportPdfApi
+} from '@/api/immigrantImplement/assetEvaluation/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
-const props = defineProps<PropsType>()
+
 interface PropsType {
   doorNo: string
   baseInfo: any
 }
-const tableObject = ref<any>()
-let data = reactive<any>([])
-let lengths = ref<any>()
-let areaNumber = ref<any>()
-let plantsNumber = ref<any>()
-let price = ref<any>()
-let householder = ref<any>()
-const appStore = useAppStore()
-const projectId = appStore.currentProjectId
-const schema = reactive<CrudSchema[]>([
-  // table字段 分割
-  {
-    field: 'index',
-    type: 'index',
-    label: '序号',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'rightHolder',
-    label: '使用权人',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'sheetNumber',
-    label: '图幅号',
-    width: 180,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'landNumber',
-    label: '编号',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'landName',
-    label: '地名',
-    width: 190,
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'householder',
-    label: '青苗户主',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'breed',
-    label: '品种',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'area',
-    label: '面积',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'number',
-    label: '株数',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'compensationAmount',
-    label: '金额',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'remark',
-    label: '备注',
-    search: {
-      show: false
-    }
-  }
-])
 
-const { allSchemas } = useCrudSchemas(schema)
-const requestList = async () => {
-  const list = await findLandAppendantList({
-    projectId,
-    status: 'implementation',
-    doorNo: props.doorNo
-  })
-  tableObject.value = list
+interface FileItemType {
+  name: string
+  url: string
 }
-watch(
-  () => tableObject.value,
-  (val) => {
-    data = toRaw(val)
-    lengths.value = [...new Map(data?.map((item) => [item.landNumber, item])).values()]
-    let arr = data?.filter((obj, index, self) => {
-      return self.findIndex((o) => o.landNumber == obj.landNumber) == index
-    })
-    areaNumber.value = arr?.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.shapeArea,
-      0
-    )
-    plantsNumber.value = data?.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.number,
-      0
-    )
-    price.value = data?.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.compensationAmount,
-      0
-    )
-    householder.value = data ? data[0].householder : '-'
-  },
-  {
-    immediate: true,
-    deep: true
+
+const props = defineProps<PropsType>()
+const appStore = useAppStore()
+
+const houseEstimatePic = ref<FileItemType[]>([]) // 房屋附属物评估报告
+const imgUrl = ref<string>('')
+const dialogVisible = ref(false)
+
+const headers = {
+  'Project-Id': appStore.getCurrentProjectId,
+  Authorization: appStore.getToken
+}
+
+// 初始化获取数据
+let pdfUrl = ref()
+let loading = ref(false)
+const initData = async () => {
+  loading.value = true
+  let res = await getexportReportPdfApi({
+    doorNo: props.doorNo,
+    type:
+      props.baseInfo.type == 'Company'
+        ? 'exportHouseEvalCompany'
+        : props.baseInfo.type == 'IndividualHousehold'
+        ? 'exportHouseEvalIndividual'
+        : props.baseInfo.type == 'PeasantHousehold'
+        ? 'exportHouseEvalHousehold'
+        : props.baseInfo.type == 'Village'
+        ? 'exportHouseEvalVillage'
+        : 'exportHouseEvalLand',
+    pdfType: 2
+  })
+  const blob = new Blob([res.data], { type: 'application/pdf' })
+  pdfUrl.value = window.URL.createObjectURL(blob)
+  loading.value = false
+}
+
+// 处理函数
+const handleFileList = (fileList: UploadFiles) => {
+  let list: FileItemType[] = []
+  if (fileList && fileList.length) {
+    list = fileList
+      .filter((fileItem) => fileItem.status === 'success')
+      .map((fileItem) => {
+        return {
+          name: fileItem.name,
+          url: (fileItem.response as any)?.data || fileItem.url
+        }
+      })
   }
-)
+  houseEstimatePic.value = list
+}
+
+const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+}
+
+// 文件移除
+const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList)
+}
+
+// 移除之前
+const beforeRemove = (uploadFile: UploadFile) => {
+  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
+    () => true,
+    () => false
+  )
+}
+
+// 预览
+const imgPreview = (uploadFile: UploadFile) => {
+  imgUrl.value = uploadFile.url!
+  dialogVisible.value = true
+}
+
+const onError = () => {
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+}
 
 onMounted(() => {
-  requestList()
+  initData()
 })
 </script>
 <style lang="less" scoped>
-.center {
+.file-list {
   display: flex;
-  font-size: 26px;
-  font-weight: bold;
-  color: #333;
-  justify-content: center;
-}
-
-.flex {
-  display: flex;
-  justify-content: space-between;
+  align-items: center;
+  margin: 16px;
 }
 
 .no-data {
@@ -197,5 +161,22 @@ onMounted(() => {
   width: 100%;
   height: 200px;
   font-size: 15px;
+}
+
+.upload {
+  .el-upload--picture-card {
+    display: none;
+  }
+}
+
+#inlineFrameExample {
+  width: 100%;
+  height: 700px;
+}
+
+.reached_the_limit {
+  :deep(.el-upload) {
+    display: none;
+  }
 }
 </style>

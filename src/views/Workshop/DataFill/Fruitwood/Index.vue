@@ -241,7 +241,8 @@ const defaultRow = {
   remark: '',
   isAdd: true,
   altitude: 0,
-  locationType: ''
+  locationType: '',
+  inundationRange: null
 }
 const onDelRow = (row) => {
   ElMessageBox.confirm('确认要删除该信息吗？', '警告', {
@@ -332,6 +333,10 @@ onMounted(() => {
       console.log(m, houst.value)
 
       defaultRow.locationType = houst.value.filter((bbq: any) => bbq.id == m[0])[0]?.locationType
+      defaultRow.inundationRange = houst.value.filter(
+        (bbq: any) => bbq.id == m[0]
+      )[0]?.inundationRange
+      console.log(defaultRow.locationType, houst.value, 'bbq')
     }
   })
 })

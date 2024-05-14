@@ -79,7 +79,7 @@
           </ElButton>
         </ElSpace>
       </div>
-      <ElTable :data="tableData" style="width: 100%">
+      <ElTable :data="tableData" style="width: 100%" row-key="id">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
 
         <ElTableColumn label="登记人" prop="registrantName" align="center" header-align="center">
@@ -343,7 +343,19 @@ enum FileReportStatus {
   failure = 'Failure',
   importing = 'Importing'
 }
-const defaultRow = { gravePosition: '' }
+const defaultRow = {
+  registrantName: null,
+  registrantDoorNo: null,
+  relation: null,
+  graveType: null,
+  number: null,
+  materials: null,
+  graveYear: null,
+  gravePosition: null,
+  inundationRange: null,
+  card: null,
+  phone: null
+}
 const graveTypeChange = (val) => {
   options.value.forEach((item) => {
     if (item.name == val) {
@@ -400,7 +412,7 @@ const getList = () => {
 getList()
 
 const onAddRow = () => {
-  tableData.value.push(defaultRow)
+  tableData.value.push({ ...defaultRow })
 }
 
 const onDelRow = (row) => {
@@ -503,6 +515,7 @@ onMounted(() => {
 })
 let onChangeLocationType = (e, row) => {
   row.inundationRange = setlocationType(e)
+  console.log(tableData)
 }
 </script>
 <style lang="less" scoped>
