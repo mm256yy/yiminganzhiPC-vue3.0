@@ -148,7 +148,7 @@
         <div class="border_box">
           <div class="aliam-center">
             <div class="line"></div>
-            <div class="strong">居民户123</div></div
+            <div class="strong">居民户</div></div
           >
         </div>
 

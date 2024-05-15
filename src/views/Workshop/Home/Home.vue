@@ -2,12 +2,12 @@
   <!-- 实物调查首页 -->
   <InvestigationHome v-if="role === RoleCodeType.investigator || role === RoleCodeType.reviewer" />
   <!-- 领导首页 -->
-  <LeaderHome
+  <Eseyhost
     v-else-if="
       role === (RoleCodeType.leaderworkbenches || role === RoleCodeType.supervision) && !esey
     "
   />
-  <Eseyhost v-else-if="esey" />
+  <LeaderHome v-else-if="esey" />
   <!--评估人员首页-->
   <EvaluationHome v-else-if="isEvaluation" />
   <!-- 实施人员首页 -->

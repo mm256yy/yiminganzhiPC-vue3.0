@@ -20,13 +20,29 @@
     <!-- 按实物变动 -->
     <ChangeIndex v-if="tabCurrentId === 0" />
     <!-- 按人口变动 -->
-    <Population v-if="tabCurrentId === 1" />
+    <Population
+      v-if="tabCurrentId === 1"
+      @setpamat="setpamat"
+      :pamst="valueForme['实物成果变更']?.id == 1 ? valueForme['实物成果变更'] : {}"
+    />
     <!-- 按房屋变动 -->
-    <House v-if="tabCurrentId === 2" />
+    <House
+      v-if="tabCurrentId === 2"
+      @setpamat="setpamat"
+      :pamst="valueForme['实物成果变更']?.id == 2 ? valueForme['实物成果变更'] : {}"
+    />
     <!-- 按附属物变动 -->
-    <Appendant v-if="tabCurrentId === 3" />
+    <Appendant
+      v-if="tabCurrentId === 3"
+      @setpamat="setpamat"
+      :pamst="valueForme['实物成果变更']?.id == 3 ? valueForme['实物成果变更'] : {}"
+    />
     <!-- 按零星果木变动 -->
-    <FruitTree v-if="tabCurrentId === 4" />
+    <FruitTree
+      v-if="tabCurrentId === 4"
+      @setpamat="setpamat"
+      :pamst="valueForme['实物成果变更']?.id == 4 ? valueForme['实物成果变更'] : {}"
+    />
   </div>
 </template>
 
@@ -39,6 +55,9 @@ import FruitTree from './DataFill/FruitTree.vue'
 import House from './DataFill/House.vue'
 import Population from './DataFill/Population.vue'
 import MigrateCrumb from '@/views/Workshop/AchievementsReport/components/MigrateCrumb.vue'
+import { useAppStore } from '@/store/modules/app'
+
+const appStore = useAppStore()
 
 const titles = ['智能报表', '实物成果', '实物成果', '实物成果变更']
 
@@ -81,10 +100,19 @@ const getRewardFeeList = () => {
     feeTableData.value = res
   })
 }
-
+let valueForme = ref()
 onMounted(() => {
   getRewardFeeList()
+  valueForme.value = appStore.getsercher
+  if (valueForme.value['实物成果变更']) {
+    tabCurrentId.value = valueForme.value['实物成果变更'].id
+  }
+  console.log(valueForme.value)
 })
+let setpamat = (e) => {
+  // console.log(e)
+  appStore.setsercher({ value: e, name: '实物成果变更' })
+}
 </script>
 <style lang="less" scoped>
 .data-fill-head {

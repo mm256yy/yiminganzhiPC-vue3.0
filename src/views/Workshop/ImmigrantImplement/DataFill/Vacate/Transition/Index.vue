@@ -10,7 +10,7 @@
           <ElButton :icon="editIcon" type="primary" @click="onHandle" v-if="flag">办理</ElButton>
         </ElSpace>
         <ElSpace v-if="isExcess && isExcess === '1'">
-          <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
+          <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
       </div>

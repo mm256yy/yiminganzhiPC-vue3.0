@@ -8,6 +8,7 @@
         :expand-field="'card'"
         @search="onSearch"
         @reset="resetSearch"
+        :valueForme="pamst"
       />
       <ElButton type="primary" @click="onExport">导出</ElButton>
     </div>
@@ -48,10 +49,14 @@ import {
 import type { OutcomeChangeDtoType } from '@/api/workshop/dataQuery/outcomeChange-types'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useRouter } from 'vue-router'
+interface PropsType {
+  pamst: any
+}
 
+const props = defineProps<PropsType>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
-const emit = defineEmits(['export'])
+const emit = defineEmits(['setpamat'])
 const { push } = useRouter()
 
 const tableData = ref<any[]>([])
@@ -72,6 +77,7 @@ const schema = reactive<CrudSchema[]>([
       component: 'TreeSelect',
       componentProps: {
         data: villageTree,
+        defaultExpandAll: true,
         nodeKey: 'code',
         props: {
           value: 'code',
@@ -168,6 +174,7 @@ const resetSearch = () => {
 
 // 查看采集人员
 const handleCollection = (row: any) => {
+  saveList()
   push({
     name: 'Collection',
     query: {
@@ -182,6 +189,7 @@ const handleCollection = (row: any) => {
 
 // 查看复核人员
 const handleReviewers = (row: any) => {
+  saveList()
   push({
     name: 'ReCheck',
     query: {
@@ -193,7 +201,9 @@ const handleReviewers = (row: any) => {
     }
   })
 }
-
+let saveList = () => {
+  emit('setpamat', { ...searchParams, id: 3 })
+}
 // 获取所属区域数据(行政村列表)
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'village')
@@ -221,6 +231,7 @@ const onExport = async () => {
 }
 
 onMounted(() => {
+  searchParams = props.pamst
   getVillageTree()
   getTableList()
 })

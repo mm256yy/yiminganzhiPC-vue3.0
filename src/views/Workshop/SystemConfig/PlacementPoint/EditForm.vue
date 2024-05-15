@@ -189,13 +189,13 @@ const headers = {
 const dictObj = computed(() => dictStore.getDictObj)
 // console.log('obj', dictObj.value[252])
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
       // 处理行政区划
 
-      form.value = { ...val }
-      console.log(JSON.parse(form.value.pic))
+      form.value = { ...props.row }
+      // console.log(JSON.parse(form.value.pic))
       relocateVerifyPic.value = form.value.pic ? JSON.parse(form.value.pic) : []
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude

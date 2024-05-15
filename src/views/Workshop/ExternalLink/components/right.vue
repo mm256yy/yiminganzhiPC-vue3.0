@@ -56,6 +56,7 @@
           <span class="text_a">本年计划资金(万元)</span>
           <span class="text_num">{{ fundScreenDto.bnjhzj }}</span>
         </div>
+        <div style="width: 1px; height: 40px; border: 1px solid #13131363"></div>
         <div class="center-txt" @click="toCapitalPool">
           <span>本年使用资金(万元)</span>
           <span class="text_num">{{ fundScreenDto.bnsyzj }}</span>
@@ -355,12 +356,15 @@ const toCapitalPool = () => {
 
     .management_foot {
       display: flex;
-      margin-top: 25px;
+      padding-top: 10px;
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
       color: #666666;
       align-items: center;
+      border-top: #13131363 1px solid;
+      margin-top: 10px;
+      justify-content: space-around;
 
       .text_a {
         margin-left: 60px;
@@ -382,7 +386,6 @@ const toCapitalPool = () => {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 190px;
       }
     }
   }

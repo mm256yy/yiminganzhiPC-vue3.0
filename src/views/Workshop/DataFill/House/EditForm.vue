@@ -692,6 +692,10 @@ const onSubmit = debounce((formEl) => {
     ElMessage.error('请填写房屋高程')
     return
   }
+  if (!position.latitude && !position.longitude) {
+    ElMessage.error('请选择地理位置')
+    return
+  }
   formEl?.validate((valid) => {
     if (valid) {
       const data: any = {

@@ -11,7 +11,7 @@
         </ElSpace>
 
         <ElSpace v-if="isLandEmpty && isLandEmpty === '1'">
-          <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印报表</ElButton>
+          <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
       </div>

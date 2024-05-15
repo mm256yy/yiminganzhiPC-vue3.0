@@ -5,7 +5,7 @@
         <div class="title">居民户账户信息</div>
         <div>
           <ElButton type="primary" @click="onDocumentation">进度上报</ElButton>
-          <ElButton type="primary" @click="onPrint">打印报表</ElButton>
+          <ElButton type="primary" @click="onPrint">打印</ElButton>
         </div>
       </div>
       <ElForm
