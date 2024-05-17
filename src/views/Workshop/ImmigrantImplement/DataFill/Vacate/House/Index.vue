@@ -7,7 +7,7 @@
           <ElButton :icon="notHandleIcon" type="default" @click="onNoHandle" v-if="!isHouseEmpty"
             >无须办理</ElButton
           >
-          <ElButton :icon="editIcon" type="primary" @click="onHandle" v-if="flag">办理</ElButton>
+          <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
         </ElSpace>
 
         <ElSpace v-if="isHouseEmpty && isHouseEmpty === '1'">

@@ -172,7 +172,7 @@
               <el-input-number v-model="item.num" :min="0" :max="100" />&nbsp;间
             </div>
             <div class="blue-row" @click="viewHousePicClick(item.id)">
-              <div class="blue-view">户型详细</div>
+              <div class="blue-view">户型详情</div>
             </div>
           </div>
         </div>

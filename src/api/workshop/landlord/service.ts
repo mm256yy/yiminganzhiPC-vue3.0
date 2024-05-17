@@ -21,6 +21,7 @@ export const getLandlordListApi = (
     params: {
       sort: ['createdDate,desc'],
       ...query,
+      villageCode: query.villageCodes,
       status: globalData.currentSurveyStatus
     }
   })

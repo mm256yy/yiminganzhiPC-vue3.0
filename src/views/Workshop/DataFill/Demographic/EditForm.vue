@@ -600,7 +600,8 @@ const rules = reactive<FormRules>({
   card: [{ validator: validateIdNo, trigger: 'blur' }, required('请输入正确的身份证号')],
   phone: [{ validator: checkTel, trigger: 'blur' }, required('请输入正确的手机号')],
   addReason: [{ required: true, message: '请输入新增原因', trigger: 'blur' }],
-  relation: [required()]
+  relation: [required()],
+  name: [required()]
 })
 
 // 关闭弹窗

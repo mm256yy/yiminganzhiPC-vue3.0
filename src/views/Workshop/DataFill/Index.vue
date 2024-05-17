@@ -334,6 +334,7 @@
       <VillageGrave
         :doorNo="doorNo"
         :householdId="householdId"
+        :villageCode="baseInfo.villageCode"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
         :surveyStatus="surveyStatus"
       />
@@ -511,14 +512,16 @@ const getHouseList = () => {
     size: 50,
     page: 0
   }).then((res) => {
-    const houseList = res.content.reduce(function (prev, current) {
-      return prev.id < current.id ? prev : current
-    })
-    console.log(houseList, '房屋列表数据')
-    longitude.value = houseList.longitude
-    latitude.value = houseList.latitude
-    address.value = houseList.address
-    console.log(longitude.value, latitude.value, houseList.address, '地址')
+    if (res.content.length > 0) {
+      const houseList = res.content.reduce(function (prev, current) {
+        return prev.id < current.id ? prev : current
+      })
+      console.log(houseList, '房屋列表数据')
+      longitude.value = houseList.longitude
+      latitude.value = houseList.latitude
+      address.value = houseList.address
+      console.log(longitude.value, latitude.value, houseList.address, '地址')
+    }
   })
 }
 watch(
@@ -588,6 +591,7 @@ onMounted(() => {
       console.log(tabsType.value, '普通')
     } else if (villageType == 'grave') {
       tabsType.value = villageInfoCTabs.filter((item: any) => item.id == '5')
+      reportTabCurrentId.value = 5
       console.log(tabsType.value, '坟墓')
     } else {
       tabsType.value = villageInfoCTabs

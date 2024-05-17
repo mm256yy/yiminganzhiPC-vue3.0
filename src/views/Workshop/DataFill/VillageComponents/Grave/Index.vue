@@ -66,6 +66,20 @@
               </div>
             </div>
           </ElPopover>
+          <ElInput v-model="sersoud" />
+          <ElButton type="primary" @click="getList">搜索</ElButton>
+          <ElButton
+            type="primary"
+            class="!bg-[#30A952] !border-[#30A952]"
+            @click="
+              () => {
+                sersoud = null
+                getList()
+              }
+            "
+          >
+            重置
+          </ElButton>
         </ElSpace>
         <ElSpace v-if="type != 'Landlord'">
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton>
@@ -139,6 +153,11 @@
                 :value="item.value"
               />
             </ElSelect>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="坟墓编号" prop="graveAutoNo" align="center" header-align="center">
+          <template #default="{ row }">
+            <ElInput placeholder="" v-model="row.graveAutoNo" disabled />
           </template>
         </ElTableColumn>
         <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
@@ -312,8 +331,9 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
+  villageCode: string
 }
-
+let sersoud = ref()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const loading = ref(false)
@@ -362,7 +382,7 @@ const graveTypeChange = (val) => {
       tableData.value.forEach((item2) => {
         if (item2.registrantName == item.name) {
           item2.registrantId = item.id
-          item2.registrantDoorNo = item.doorNo
+          item2.registrantDoorNo = item.showDoorNo
         }
       })
     }
@@ -384,7 +404,11 @@ const getExcelUploadList = async () => {
 const remoteMethod = (query: string) => {
   if (query) {
     loading.value = true
-    getLandlordListApi({ name: query, type: 'PeasantHousehold' }).then((res) => {
+    getLandlordListApi({
+      name: query,
+      type: 'PeasantHousehold',
+      villageCodes: props.villageCode
+    }).then((res) => {
       loading.value = false
       options.value = res.content
     })
@@ -402,7 +426,9 @@ const remoteMethod = (query: string) => {
 const getList = () => {
   const params = {
     villageDoorNo: props.doorNo,
-    villageId: +props.householdId
+    villageId: +props.householdId,
+    size: 9999,
+    registrantName: sersoud.value
   }
   getGraveListApi(params).then((res) => {
     tableData.value = res.content
@@ -435,22 +461,18 @@ const onDelRow = (row) => {
 }
 
 const onSave = () => {
-  if (
-    tableData.value.some((item) => {
-      return !item.registrantName
-    })
-  ) {
-    ElMessage.error('登记人不能为空')
-  } else {
-    tableData.value.forEach((item) => {
-      item.villageDoorNo = props.doorNo
-      item.villageId = props.householdId
-    })
-    saveGraveListApi(tableData.value).then(() => {
-      ElMessage.success('操作成功！')
-      getList()
-    })
-  }
+  tableData.value.forEach((item) => {
+    item.villageDoorNo = props.doorNo
+    item.villageId = props.householdId
+  })
+  let parmas = { immigrantGraveList: tableData.value, peasantHouseholdId: props.householdId }
+
+  console.log(parmas, '入参是什么？')
+
+  saveGraveListApi(parmas).then(() => {
+    ElMessage.success('操作成功！')
+    getList()
+  })
 }
 
 // 下载模板
