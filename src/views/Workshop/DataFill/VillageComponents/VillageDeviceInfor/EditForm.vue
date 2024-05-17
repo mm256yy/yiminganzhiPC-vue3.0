@@ -70,7 +70,7 @@
       </ElRow>
 
       <ElRow :gutter="30">
-        <ElCol :span="8">
+        <ElCol :span="9">
           <ElFormItem label="设施（设备）编码" prop="facilitiesCode" v-if="actionType == 'edit'">
             <ElInput
               v-model="form.facilitiesCode"

@@ -52,8 +52,8 @@
           </div>
           <div e-else></div>
         </template>
-        <template #arrangementStatus="{ row }">
-          <div v-if="row.arrangementStatus === '1'">
+        <template #agreementStatus="{ row }">
+          <div v-if="row.agreementStatus === '1'">
             <Icon icon="ep:check" color="#000000" />
           </div>
           <div e-else></div>
@@ -207,7 +207,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'arrangementStatus',
+    field: 'agreementStatus',
     label: '征地协议',
     search: {
       show: false
