@@ -61,7 +61,7 @@
       </ElTableColumn>
       <ElTableColumn label="确认状态" prop="price" align="center" header-align="center">
         <template #default="{ row }">
-          <div v-if="row.isVerify === '1' && row.unit">已确认</div>
+          <div v-if="row.isVerify === '1'">已确认</div>
           <div v-else-if="row.name == '奖励费小计'">——</div>
           <div v-else>未确认</div>
         </template>
