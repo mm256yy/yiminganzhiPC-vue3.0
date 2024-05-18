@@ -331,7 +331,7 @@ const { type } = currentRoute.value.query as any
 interface PropsType {
   householdId: string
   doorNo: string
-  villageCode: string
+  villageCode?: string
 }
 let sersoud = ref()
 const appStore = useAppStore()
