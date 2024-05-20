@@ -332,6 +332,8 @@ const handleSave = async (data?: any) => {
   if (res) {
     ElMessage.success('保存成功！')
     onDialogClose()
+    console.log(1, '11111')
+    init()
   }
 }
 

@@ -262,7 +262,7 @@
             </template>
           </ElTableColumn>
         </ElTable>
-        <div style="padding: 5px; font-size: 8px">移民户主：</div>
+        <!-- <div style="padding: 5px; font-size: 8px">移民户主：</div> -->
       </div>
     </div>
   </WorkContentWrap>

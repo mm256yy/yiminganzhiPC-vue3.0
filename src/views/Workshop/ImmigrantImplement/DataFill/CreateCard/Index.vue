@@ -231,7 +231,7 @@
         </ElDescriptions>
         <h2 style="margin: 20px; font-size: 18px; text-align: center">家庭基本情况</h2>
         <el-table
-          :data="tableObject.tableList.filter((item) => item.populationNature != '5')"
+          :data="tableObject.tableList"
           header-cell-class-name="table-headers"
           border
           style="width: 100%; font-size: 7px"
@@ -304,7 +304,7 @@
             </template>
           </ElTableColumn>
         </ElTable>
-        <div style="padding: 5px; font-size: 8px">移民户主：</div>
+        <!-- <div style="padding: 5px; font-size: 8px">移民户主：</div> -->
       </div>
     </div>
   </WorkContentWrap>

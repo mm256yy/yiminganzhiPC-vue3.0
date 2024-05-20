@@ -28,7 +28,6 @@
         :columns="allSchemas.tableColumns"
         :summary-method="getSummaries"
         show-summary
-        show-overflow-tooltip
         headerAlign="center"
         align="center"
         highlightCurrentRow
