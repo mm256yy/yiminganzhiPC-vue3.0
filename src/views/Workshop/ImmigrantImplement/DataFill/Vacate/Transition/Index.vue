@@ -105,7 +105,19 @@
           }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" :span="2" align="center">
-          过渡去向情况
+          <div
+            style="
+              position: relative;
+              left: -119px;
+              width: 100%;
+              height: 119%;
+              font-size: 20px;
+              /* align-items: center; */
+              line-height: 75px;
+              background: white;
+            "
+            >过渡去向情况</div
+          >
         </el-descriptions-item>
         <el-descriptions-item
           label-class-name="bbqs"
@@ -360,5 +372,12 @@ const onSubmit = (formEl: any) => {
 
 :deep(.bbqs) {
   background: #ffffff !important;
+}
+
+#anztable {
+  :deep(td) {
+    height: 100px;
+    border: 1px solid black;
+  }
 }
 </style>

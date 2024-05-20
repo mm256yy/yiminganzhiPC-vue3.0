@@ -254,29 +254,29 @@ const getDistrictTree = async () => {
 
 getDistrictTree()
 
-watch(
-  () => props.row,
-  (val) => {
-    if (val) {
-      // 处理行政区划
-      form.value = {
-        ...val,
-        parentCode: [val.areaCode, val.townCode, val.villageCode]
-      }
-      position.longitude = form.value.longitude
-      position.latitude = form.value.latitude
-      position.address = form.value.address
-      console.log(form.value.householderName, '进入了')
-      form.value.householderName ? (flag.value = true) : (flag.value = false)
-    } else {
-      form.value = defaultValue
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
+// watch(
+//   () => props.row,
+//   (val) => {
+//     if (val) {
+//       // 处理行政区划
+//       form.value = {
+//         ...val,
+//         parentCode: [val.areaCode, val.townCode, val.villageCode]
+//       }
+//       position.longitude = form.value.longitude
+//       position.latitude = form.value.latitude
+//       position.address = form.value.address
+//       console.log(form.value.householderName, '进入了')
+//       form.value.householderName ? (flag.value = true) : (flag.value = false)
+//     } else {
+//       form.value = defaultValue
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
 
 // 规则校验
 const rules = reactive<FormRules>({
@@ -303,7 +303,7 @@ const doorTypeChange = (val) => {
   console.log(form.value.householderName, '用户名')
   options.value.forEach((item) => {
     if (item.name == val) {
-      form.value.householderDoorNo = item.doorNo.slice(2)
+      form.value.householderDoorNo = item.showDoorNo
       // form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {
@@ -332,13 +332,14 @@ const doorTypeChange = (val) => {
   })
   console.log(val, '测试改变的数据')
 }
-
+let valsList: any = ref([])
 const remoteMethod = (query: string) => {
   if (query) {
     loading.value = true
     getLandlordListApi({ name: query, type: 'PeasantHousehold' }).then((res) => {
       loading.value = false
       options.value = res.content
+      valsList.value = res.content
     })
     // setTimeout(() => {
     //   loading.value = false
@@ -367,7 +368,12 @@ const onSubmit = debounce((formEl) => {
         return
       }
       // form.value.householderDoorNo = form.value.showHouseholderDoorNo
-      form.value.householderDoorNo = 'jl' + form.value.householderDoorNo
+      console.log(valsList.value)
+
+      form.value.householderDoorNo = valsList.value.filter(
+        (item) => item.showDoorNo == form.value.householderDoorNo
+      )[0].doorNo
+
       btnLoading.value = true
       const data: any = {
         ...form.value,
@@ -422,13 +428,17 @@ watch(
   () => props.show,
   (val) => {
     if (val) {
-      form.value.householderName = props.name
-      form.value.householderDoorNo = props.doorNo?.slice(2)
-      if (props.longitude && props.latitude) {
-        position.latitude = props.latitude
-        position.longitude = props.longitude
-        position.address = props.address
+      form.value = {
+        ...props.row,
+        parentCode: [props.row?.areaCode, props.row?.townCode, props.row?.villageCode]
       }
+      position.longitude = form.value.longitude
+      position.latitude = form.value.latitude
+      position.address = form.value.address
+      console.log(props, '进入了')
+      // form.value.householderName ? (flag.value = true) : (flag.value = false)
+      // form.value.householderName = props.name
+      form.value.householderDoorNo = form.value.showHouseholderDoorNo
     } else {
       form.value = defaultValue
     }

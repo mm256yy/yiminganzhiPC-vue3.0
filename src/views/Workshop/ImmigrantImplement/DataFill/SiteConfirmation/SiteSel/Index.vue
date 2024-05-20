@@ -269,7 +269,7 @@
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">
           <template #default="{ row }">
-            {{ row.landNo ? row.landNoOptions.filter((e) => row.landNo == e.name)[0].name : '-' }}
+            {{ row.landNo ? row.landNo : '-' }}
           </template>
         </ElTableColumn>
       </ElTable>
@@ -621,6 +621,8 @@ const close = (params: any[], type: string) => {
 let data = ref()
 let comdbe = () => {
   data.value = dayjs(new Date()).format('YYYY年MM月DD日')
+  console.log(tableData.value)
+
   debounce(() => {
     // ElMessage.error('待业主提供模板')
 
