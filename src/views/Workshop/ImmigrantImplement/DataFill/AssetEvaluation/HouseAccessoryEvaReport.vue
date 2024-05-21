@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -142,10 +142,20 @@ const imgPreview = (uploadFile: UploadFile) => {
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
+watch(
+  () => props.baseInfo.type,
+  (val) => {
+    if (val) {
+      initData()
+    }
+  },
+  { deep: true }
+)
+// onMounted(() => {
+//   console.log(props.baseInfo.type, 'bbq')
 
-onMounted(() => {
-  initData()
-})
+//   initData()
+// })
 </script>
 <style lang="less" scoped>
 .file-list {

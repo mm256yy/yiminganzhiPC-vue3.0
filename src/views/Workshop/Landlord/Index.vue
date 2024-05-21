@@ -700,7 +700,20 @@ const onBatchDelete = async () => {
 }
 
 const onExport = () => {
-  exportDialog.value = true
+  if (headInfo.value.unReportNum > 0) {
+    ElMessageBox.alert(
+      `数据报表中，存在${headInfo.value.unReportNum}户“未填报”的居民户，可在居民户列表核定并删除`,
+      '导出提示',
+      {
+        confirmButtonText: '确认',
+        callback: () => {
+          exportDialog.value = true
+        }
+      }
+    )
+  } else {
+    exportDialog.value = true
+  }
 }
 
 const onExportDialogClose = () => {

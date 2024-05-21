@@ -92,7 +92,7 @@
           {{ baseInfo.showDoorNo }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="户内人口">
-          {{ baseInfo.familyNum }}
+          {{ baseInfo.familyNum - baseInfo.addPopulationNum }}
         </el-descriptions-item>
         <el-descriptions-item label-class-name="bbqs" align="center" label="联系方式">
           {{ baseInfo.phone }}

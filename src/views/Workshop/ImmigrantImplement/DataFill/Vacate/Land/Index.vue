@@ -78,7 +78,7 @@
               ? '企业名称'
               : type == 'IndividualB'
               ? '个体户名称'
-              : type == 'PeasantHousehold'
+              : type == 'PeasantHousehold' || props.type == 'LandNoMove'
               ? '户主姓名'
               : '村集体名称'
           "
@@ -94,7 +94,7 @@
               ? '企业编码'
               : type == 'IndividualB'
               ? '个体户编码'
-              : type == 'PeasantHousehold'
+              : type == 'PeasantHousehold' || props.type == 'LandNoMove'
               ? '户号'
               : '村集体编码'
           "
@@ -107,7 +107,7 @@
           label="户内人口"
           v-if="props.type == 'PeasantHousehold'"
         >
-          {{ baseInfo.familyNum }}
+          {{ baseInfo.familyNum - baseInfo.addPopulationNum }}
         </el-descriptions-item>
         <el-descriptions-item
           label-class-name="bbqs"
@@ -156,7 +156,7 @@
               ? '企业意见'
               : type == 'IndividualB'
               ? '个体户意见'
-              : type == 'PeasantHousehold'
+              : type == 'PeasantHousehold' || props.type == 'LandNoMove'
               ? '移民户主意见'
               : '村集体意见'
           "
@@ -171,7 +171,7 @@
                     ? '企业盖章'
                     : type == 'IndividualB'
                     ? '个体户盖章'
-                    : type == 'PeasantHousehold'
+                    : type == 'PeasantHousehold' || props.type == 'LandNoMove'
                     ? '移民户主'
                     : '村集体盖章'
                 }}:</div

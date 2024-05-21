@@ -36,14 +36,14 @@
         </ElTableColumn>
         <ElTableColumn label="户型/套型(㎡)" prop="area" align="center" header-align="center">
           <template #default="{ row }">
-            <!-- {{
+            {{
               row.houseAreaType === 'flat'
                 ? row.area
                 : homesteadAreaSize
                     .filter((item) => item.id == row.area)
                     .map((item) => item.name)[0]
-            }} -->
-            {{ row.area }}
+            }}
+            <!-- {{ row.area }} -->
           </template>
         </ElTableColumn>
         <ElTableColumn label="地块编号" prop="landNo" align="center" header-align="center">

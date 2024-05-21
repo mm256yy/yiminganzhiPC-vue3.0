@@ -181,6 +181,7 @@
           v-if="subTabCurrentId === TabIds[2]"
           :doorNo="doorNo"
           :baseInfo="baseInfo"
+          :householdId="householdId"
           @update-data="getLandlordInfo"
         />
       </template>

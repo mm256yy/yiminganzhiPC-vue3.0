@@ -56,22 +56,15 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <ElFormItem label="所在位置" prop="locationType">
-            <ElSelect v-model="form.locationType">
-              <ElOption
-                v-for="item in dictObj[326]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+          <ElFormItem label="主管单位" prop="competentUnit">
+            <ElInput v-model="form.competentUnit" />
           </ElFormItem>
         </ElCol>
       </ElRow>
 
       <ElRow :gutter="30">
-        <ElCol :span="9">
-          <ElFormItem label="设施（设备）编码" prop="facilitiesCode" v-if="actionType == 'edit'">
+        <ElCol :span="8" v-if="actionType == 'edit'">
+          <ElFormItem label="设施（设备）编码" prop="facilitiesCode">
             <ElInput
               v-model="form.facilitiesCode"
               placeholder="请输入设施编码"
@@ -155,9 +148,17 @@
             <ElInputNumber :min="0" v-model="form.netBal" :precision="2" />
           </ElFormItem>
         </ElCol>
+
         <ElCol :span="8">
-          <ElFormItem label="主管单位" prop="competentUnit">
-            <ElInput v-model="form.competentUnit" />
+          <ElFormItem label="所在位置" prop="locationType">
+            <ElSelect v-model="form.locationType" @change="(val) => onChangeLocationType(val)">
+              <ElOption
+                v-for="item in dictObj[326]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
           </ElFormItem>
         </ElCol>
       </ElRow>
@@ -283,6 +284,7 @@ import {
   addFacilitiesListApi,
   updateFacilitiesApi
 } from '@/api/workshop/datafill/immigrantFacilities-service'
+import { setlocationType } from '@/utils/index'
 
 // import { standardFormatDate } from '@/utils/index'
 const { required } = useValidator()
@@ -597,6 +599,9 @@ const onSubmit = debounce((formEl) => {
 //   imgUrl.value = uploadFile.url!
 //   dialogVisible.value = true
 // }
+let onChangeLocationType = (e) => {
+  form.value.inundationRang = setlocationType(e)
+}
 </script>
 
 <style lang="less">

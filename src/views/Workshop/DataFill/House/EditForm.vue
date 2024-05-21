@@ -655,7 +655,8 @@ const rules = reactive<FormRules>({
   landType: [required()],
   inundationRange: [required()],
   locationType: [required()],
-  houseHeight: [required()]
+  houseHeight: [required()],
+  addReason: [required()]
 })
 
 // 关闭弹窗

@@ -138,6 +138,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 interface PropsType {
   doorNo: string
   baseInfo: any
+  householdId: any
 }
 const dictStore = useDictStoreWithOut()
 
@@ -176,7 +177,13 @@ const onDocumentation = () => {
 
 // 保存
 const onSave = () => {
-  saveGraveApi(tableData.value).then(() => {
+  // tableData.value.forEach((item) => {
+  //   item.villageDoorNo = props.doorNo
+  //   item.villageId = props.householdId
+  // })
+  let parmas = { immigrantGraveList: tableData.value, peasantHouseholdId: props.householdId }
+
+  saveGraveApi(parmas).then(() => {
     ElMessage.success('操作成功！')
     getList()
     emit('updateData')
