@@ -63,8 +63,8 @@
       </ElRow>
 
       <ElRow :gutter="30">
-        <ElCol :span="8" v-if="actionType == 'edit'">
-          <ElFormItem label="设施（设备）编码" prop="facilitiesCode">
+        <ElCol :span="9">
+          <ElFormItem label="设施（设备）编码" prop="facilitiesCode" v-if="actionType != 'add'">
             <ElInput
               v-model="form.facilitiesCode"
               placeholder="请输入设施编码"
