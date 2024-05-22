@@ -802,7 +802,7 @@ const getStatus = (data: any) => {
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
     }
-    if (data.productionArrangementAllStatus === '1') {
+    if (data.productionArrangementStatus === '1') {
       tabsListCopy[1].active = true // 安置确认
     }
     if (data.landSoarStatus === '1') {
