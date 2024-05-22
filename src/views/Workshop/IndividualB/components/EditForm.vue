@@ -115,6 +115,7 @@
       <ElFormItem label="绑定居民户" prop="householderName" align="center" header-align="center">
         <el-select
           v-model="form.householderName"
+          clearable
           filterable
           remote
           reserve-keyword
@@ -301,46 +302,51 @@ const onClose = (flag = false) => {
 
 const doorTypeChange = (val) => {
   console.log(form.value.householderName, '用户名')
-  options.value.forEach((item) => {
-    if (item.name == val) {
-      form.value.householderDoorNo = item.showDoorNo
-      // form.value.householderDoorNo = item.doorNo
-      // tableData.value.forEach((item2) => {
-      //   if (item2.registrantName == item.name) {
-      //     item2.registrantId = item.id
-      //     item2.registrantDoorNo = item.doorNo
-      //   }
-      // })
-      if (flag.value) {
-        getHouseListApi({
-          doorNo: item.doorNo,
-          status: 'review',
-          size: 50,
-          page: 0
-        }).then((res) => {
-          const houseList = res.content.reduce(function (prev, current) {
-            return prev.id < current.id ? prev : current
+  if (val) {
+    options.value.forEach((item) => {
+      if (item.name == val) {
+        form.value.householderDoorNo = item.showDoorNo
+        // form.value.householderDoorNo = item.doorNo
+        // tableData.value.forEach((item2) => {
+        //   if (item2.registrantName == item.name) {
+        //     item2.registrantId = item.id
+        //     item2.registrantDoorNo = item.doorNo
+        //   }
+        // })
+        if (flag.value) {
+          getHouseListApi({
+            doorNo: item.doorNo,
+            status: 'review',
+            size: 50,
+            page: 0
+          }).then((res) => {
+            const houseList = res.content.reduce(function (prev, current) {
+              return prev.id < current.id ? prev : current
+            })
+            console.log(houseList, '房屋列表数据')
+            position.latitude = houseList.latitude
+            position.longitude = houseList.longitude
+            position.address = houseList.address
+            console.log(position.latitude, position.longitude, position.address, '地址')
           })
-          console.log(houseList, '房屋列表数据')
-          position.latitude = houseList.latitude
-          position.longitude = houseList.longitude
-          position.address = houseList.address
-          console.log(position.latitude, position.longitude, position.address, '地址')
-        })
+        }
       }
-    }
-  })
+    })
+  } else {
+    form.value.householderDoorNo = null
+  }
+
   console.log(val, '测试改变的数据')
 }
 let valsList: any = ref([])
-const remoteMethod = (query: string) => {
+const remoteMethod = async (query: string) => {
   if (query) {
     loading.value = true
-    getLandlordListApi({ name: query, type: 'PeasantHousehold' }).then((res) => {
-      loading.value = false
-      options.value = res.content
-      valsList.value = res.content
-    })
+    let res = await getLandlordListApi({ name: query, type: 'PeasantHousehold' })
+    loading.value = false
+    options.value = res.content
+    valsList.value = res.content
+
     // setTimeout(() => {
     //   loading.value = false
     //   options.value = list.value.filter((item: any) => {
@@ -369,10 +375,14 @@ const onSubmit = debounce((formEl) => {
       }
       // form.value.householderDoorNo = form.value.showHouseholderDoorNo
       console.log(valsList.value)
-
-      form.value.householderDoorNo = valsList.value.filter(
-        (item) => item.showDoorNo == form.value.householderDoorNo
-      )[0].doorNo
+      let m = valsList.value.filter((item) => item.showDoorNo == form.value.householderDoorNo)
+      if (!m.length) {
+        form.value.householderDoorNo = null
+        form.value.showHouseholderDoorNo = null
+      } else {
+        form.value.householderDoorNo = m[0].doorNo
+        form.value.showHouseholderDoorNo = m[0].showDoorNo
+      }
 
       btnLoading.value = true
       const data: any = {
@@ -426,7 +436,7 @@ const onVillageDialogClose = (flag?: boolean) => {
 
 watch(
   () => props.show,
-  (val) => {
+  async (val) => {
     if (val) {
       form.value = {
         ...props.row,
@@ -438,7 +448,12 @@ watch(
       console.log(props, '进入了')
       // form.value.householderName ? (flag.value = true) : (flag.value = false)
       // form.value.householderName = props.name
-      form.value.householderDoorNo = form.value.showHouseholderDoorNo
+      if (!form.value.showHouseholderDoorNo) {
+        await remoteMethod(form.value.householderName)
+        doorTypeChange(form.value.householderName)
+      } else {
+        form.value.householderDoorNo = form.value.showHouseholderDoorNo
+      }
     } else {
       form.value = defaultValue
     }

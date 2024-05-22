@@ -253,7 +253,7 @@ const exportList = ref<exportListType[]>([
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 const outsideData = ref<any>([])
-const { register, tableObject, methods } = useTable({
+const { register, tableObject, methods }: any = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
@@ -285,7 +285,12 @@ const getLandlordHeadInfo = async () => {
 const checkIsOpenDialog = () => {
   if (type === 'individualCheck') {
     actionType.value = 'add'
-    tableObject.currentRow = null
+    tableObject.currentRow = {
+      householderName: name,
+      longitude,
+      latitude,
+      address
+    }
     dialog.value = true
   }
 }

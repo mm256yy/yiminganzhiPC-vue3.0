@@ -96,7 +96,13 @@
       <ElTable :data="tableData" style="width: 100%" row-key="id">
         <ElTableColumn label="序号" :width="60" type="index" align="center" header-align="center" />
 
-        <ElTableColumn label="登记人" prop="registrantName" align="center" header-align="center">
+        <ElTableColumn
+          label="登记人"
+          prop="registrantName"
+          width="100"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <el-select
               v-model="row.registrantName"
@@ -120,14 +126,14 @@
         <ElTableColumn
           label="户号"
           width="180"
-          prop="registrantDoorNo"
+          prop="registrantShowDoorNo"
           align="center"
           header-align="center"
         >
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
-              v-model="row.registrantDoorNo"
+              v-model="row.registrantShowDoorNo"
               disabled
             />
           </template>
@@ -136,6 +142,7 @@
           label="坟墓与登记人关系"
           prop="relation"
           align="center"
+          width="180"
           header-align="center"
         >
           <template #default="{ row }">
@@ -155,7 +162,13 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="坟墓编号" prop="graveAutoNo" align="center" header-align="center">
+        <ElTableColumn
+          label="坟墓编号"
+          prop="graveAutoNo"
+          align="center"
+          width="220"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput placeholder="" v-model="row.graveAutoNo" disabled />
           </template>
@@ -189,7 +202,13 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
+        <ElTableColumn
+          label="材料"
+          prop="materials"
+          width="140"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -224,7 +243,13 @@
             </ElInput>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所处位置" prop="gravePosition" align="center" header-align="center">
+        <ElTableColumn
+          label="所处位置"
+          prop="gravePosition"
+          width="150"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -243,9 +268,15 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
+        <ElTableColumn
+          label="淹没范围"
+          prop="inundationRange"
+          width="180"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
-            <ElSelect class="!w-350px" clearable v-model="row.inundationRange">
+            <ElSelect clearable v-model="row.inundationRange">
               <ElOption
                 v-for="item in dictObj[346]"
                 :key="item.value"
@@ -255,7 +286,13 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="身份证号" prop="card" align="center" header-align="center">
+        <ElTableColumn
+          label="身份证号"
+          prop="card"
+          width="180"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
@@ -264,7 +301,13 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="联系方式" prop="phone" align="center" header-align="center">
+        <ElTableColumn
+          label="联系方式"
+          prop="phone"
+          width="180"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
@@ -273,7 +316,7 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+        <ElTableColumn label="备注" prop="remark" width="180" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput
               :placeholder="type == 'Landlord' ? '' : '请输入'"
@@ -282,7 +325,7 @@
             />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="操作" prop="action">
+        <ElTableColumn label="操作" fixed="right" prop="action">
           <template #default="scope">
             <span @click="onDelRow(scope.row)" :style="{ color: 'red', cursor: 'pointer' }">
               删除
@@ -382,7 +425,8 @@ const graveTypeChange = (val) => {
       tableData.value.forEach((item2) => {
         if (item2.registrantName == item.name) {
           item2.registrantId = item.id
-          item2.registrantDoorNo = item.showDoorNo
+          item2.registrantDoorNo = item.doorNo
+          item2.registrantShowDoorNo = item.showDoorNo
         }
       })
     }
