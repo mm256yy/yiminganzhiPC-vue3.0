@@ -180,6 +180,7 @@ const selenceTable = (e: string, value: any) => {
   console.log(allSchemas)
   tabalRef.value.setColumns(allSchemas.tableColumns)
   tableObject.params.type = value
+  console.log(tableObject.params.type, '测试类型')
   getList()
   moneyList(tableObject.params)
 }
@@ -207,10 +208,24 @@ const IssueClick = () => {
       })
     })
   } else {
-    ElMessageBox.confirm(`本次发放共${sum.value}户集体资产，共${all}元。请确认是否发放`, '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消'
-    })
+    ElMessageBox.confirm(
+      `本次发放共${sum.value}户${
+        tableObject.params.type == 'PeasantHousehold'
+          ? '居民户'
+          : tableObject.params.type == 'Company'
+          ? '企（事）业单位'
+          : tableObject.params.type == 'IndividualHousehold'
+          ? '个体户'
+          : tableObject.params.type == 'Village'
+          ? '村集体'
+          : '使用权人'
+      }，共${all}元。请确认是否发放`,
+      '提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }
+    )
       .then(() => {
         postGrant(pamaers.value).then(() => {
           ElMessage({

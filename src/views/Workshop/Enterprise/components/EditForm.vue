@@ -228,7 +228,7 @@ watch(
   (val) => {
     if (val) {
       form.value.householderName = props.name
-      form.value.householderDoorNo = props.doorNo?.slice(2)
+      form.value.householderDoorNo = props.doorNo
       if (props.longitude && props.latitude) {
         position.latitude = props.latitude
         position.longitude = props.longitude
@@ -274,7 +274,7 @@ const doorTypeChange = (val) => {
   console.log(options.value, val, '测试数据下拉')
   options.value.forEach((item) => {
     if (item.name == val) {
-      form.value.householderDoorNo = item.doorNo.slice(2)
+      form.value.householderDoorNo = item.doorNo
       // form.value.householderDoorNo = item.doorNo
       // tableData.value.forEach((item2) => {
       //   if (item2.registrantName == item.name) {
