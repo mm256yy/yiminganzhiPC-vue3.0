@@ -136,7 +136,9 @@ const goLink = async (e: any) => {
   tokenStr.value = result.token
   let url = ''
   if (e == '9') {
-    url = `https://jingling-reservoir-test.jldt.top/dashboard/placement?token=${tokenStr.value}`
+    url = `https://jingling-reservoir-test.jldt.top/token?url=%2Fdashboard%2Fplacement&token=${tokenStr.value}`
+  } else if (e == '0') {
+    url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}`
   } else {
     url = `https://jingling-reservoir-test.jldt.top/token?token=${tokenStr.value}&value=${searchContent.value}&callback=${window.location.href}` // 12.1 宗浩要求修改
   }
