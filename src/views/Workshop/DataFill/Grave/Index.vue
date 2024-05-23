@@ -187,6 +187,7 @@ interface PropsType {
   name: string
   surveyStatus: SurveyStatusEnum
   classifyType?: string // 角色分类类型
+  showDoorNo?: any
 }
 
 const props = defineProps<PropsType>()
@@ -213,6 +214,7 @@ const defaultRow = {
   registrantId: props.householdId, // 登记人 ID
   registrantDoorNo: props.doorNo, // 登记人户号
   registrantName: props.name, // 登记人姓名
+  registrantShowDoorNo: props.showDoorNo,
   villageId: '', // 村集体 ID
   villageDoorNo: '', // 村集体户号
   relation: '',

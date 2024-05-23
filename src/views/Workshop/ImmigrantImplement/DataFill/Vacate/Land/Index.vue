@@ -107,7 +107,7 @@
           label="户内人口"
           v-if="props.type == 'PeasantHousehold'"
         >
-          {{ baseInfo.familyNum - baseInfo.addPopulationNum }}
+          {{ baseInfo.familyNum }}
         </el-descriptions-item>
         <el-descriptions-item
           label-class-name="bbqs"

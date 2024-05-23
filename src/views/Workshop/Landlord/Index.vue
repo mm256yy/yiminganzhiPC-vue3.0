@@ -732,7 +732,8 @@ const fillData = (row) => {
       name: row.name,
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Landlord'
+      type: 'Landlord',
+      showDoorNo: row.showDoorNo
     }
   })
 }

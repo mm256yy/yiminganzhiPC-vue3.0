@@ -139,6 +139,7 @@
       <Grave
         :name="name"
         :doorNo="doorNo"
+        :showDoorNo="showDoorNo"
         :householdId="householdId"
         :classifyType="classifyType"
         v-else-if="reportTabCurrentId === ReportTabIds[4]"
@@ -472,8 +473,8 @@ const titleMsg = (type: string) => {
   }
 }
 const { currentRoute, back } = useRouter()
-const { doorNo, householdId, type, name, classifyType, villageType } = currentRoute.value
-  .query as any
+const { doorNo, householdId, type, name, classifyType, villageType, showDoorNo } = currentRoute
+  .value.query as any
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const baseInfo = ref<any>({})
