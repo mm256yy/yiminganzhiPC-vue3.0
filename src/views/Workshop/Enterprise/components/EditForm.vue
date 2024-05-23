@@ -209,6 +209,7 @@ watch(
         ...val,
         parentCode: [val.areaCode, val.townCode, val.villageCode]
       }
+      console.log(form.value, '测试监听的数据')
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
@@ -227,6 +228,17 @@ watch(
   () => props.show,
   (val) => {
     if (val) {
+      // console.log(props.row, '表格编辑的数据')
+      // form.value = {
+      //   ...props.row,
+      //   parentCode: [props.row.areaCode, props.row.townCode, props.row.villageCode]
+      // }
+      // console.log(form.value, '测试监听的数据')
+      // position.longitude = form.value.longitude
+      // position.latitude = form.value.latitude
+      // position.address = form.value.address
+      // form.value.householderName ? (flag.value = true) : (flag.value = false)
+
       form.value.householderName = props.name
       form.value.householderDoorNo = props.doorNo
       if (props.longitude && props.latitude) {

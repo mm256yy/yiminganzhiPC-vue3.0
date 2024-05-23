@@ -513,8 +513,8 @@ let onchange = (file, fileList) => {
 }
 // 提交表单
 const onSubmit = debounce((formEl) => {
-  console.log(facilitiesPic.value, '上传的照片')
-  if (!facilitiesPic.value) {
+  console.log(facilitiesPic.value.length, '上传的照片123')
+  if (!facilitiesPic.value.length) {
     ElMessage.error('请上传设施（设备）照片')
     return
   }

@@ -217,8 +217,8 @@ const IssueClick = () => {
           : tableObject.params.type == 'IndividualHousehold'
           ? '个体户'
           : tableObject.params.type == 'Village'
-          ? '村集体'
-          : '使用权人'
+          ? '集体资产'
+          : '只征地不搬迁'
       }，共${all}元。请确认是否发放`,
       '提示',
       {

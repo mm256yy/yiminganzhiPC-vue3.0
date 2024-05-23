@@ -23,7 +23,7 @@
         <div class="tabs"> </div>
         <ElSpace>
           <ElButton type="primary" @click="addEnterprise" v-if="type == 'Landlord'">
-            添加企业123
+            添加企业
           </ElButton>
           <ElButton type="primary" @click="addIndividual" v-if="type == 'Landlord'">
             添加个体户

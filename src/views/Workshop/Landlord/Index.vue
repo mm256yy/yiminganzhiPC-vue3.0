@@ -731,7 +731,7 @@ const fillData = (row) => {
     query: {
       name: row.name,
       householdId: row.id,
-      doorNo: row.showDoorNo,
+      doorNo: row.doorNo,
       type: 'Landlord'
     }
   })
