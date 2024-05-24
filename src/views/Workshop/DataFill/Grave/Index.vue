@@ -25,6 +25,7 @@
           label="坟墓与登记人关系"
           prop="relation"
           align="center"
+          width="200"
           header-align="center"
         >
           <template #default="{ row }">
@@ -49,7 +50,13 @@
             <ElInput placeholder="" v-model="row.graveAutoNo" disabled />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
+        <ElTableColumn
+          label="穴位"
+          width="100"
+          prop="graveType"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.graveType">
               <ElOption
@@ -66,7 +73,13 @@
             <ElInputNumber :min="0" placeholder="请输入数量" v-model="row.number" />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="材料" prop="materials" align="center" header-align="center">
+        <ElTableColumn
+          label="材料"
+          prop="materials"
+          width="150"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect clearable filterable placeholder="请选择" v-model="row.materials">
               <ElOption
@@ -78,14 +91,26 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="立坟年份" prop="graveYear" align="center" header-align="center">
+        <ElTableColumn
+          label="立坟年份"
+          prop="graveYear"
+          width="150"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput v-model="row.graveYear" placeholder="请输入年份">
               <template #append>年</template>
             </ElInput>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="所在位置" prop="gravePosition" align="center" header-align="center">
+        <ElTableColumn
+          label="所在位置"
+          width="200"
+          prop="gravePosition"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect
               clearable
@@ -103,7 +128,13 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="淹没范围" prop="inundationRange" align="center" header-align="center">
+        <ElTableColumn
+          label="淹没范围"
+          width="100"
+          prop="inundationRange"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect clearable placeholder="请选择" v-model="row.inundationRange">
               <ElOption
@@ -133,7 +164,7 @@
             </ElSelect>
           </template>
         </ElTableColumn> -->
-        <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+        <ElTableColumn label="备注" width="100" prop="remark" align="center" header-align="center">
           <template #default="{ row }">
             <ElInput placeholder="请输入" v-model="row.remark" />
           </template>

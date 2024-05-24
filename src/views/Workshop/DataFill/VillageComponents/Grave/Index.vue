@@ -173,7 +173,13 @@
             <ElInput placeholder="" v-model="row.graveAutoNo" disabled />
           </template>
         </ElTableColumn>
-        <ElTableColumn label="穴位" prop="graveType" align="center" header-align="center">
+        <ElTableColumn
+          label="穴位"
+          prop="graveType"
+          width="100"
+          align="center"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElSelect
               clearable
