@@ -9,6 +9,12 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_address_house' }, handelurl)"
+          >
+            查看历史签字
+          </ElButton>
           <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
           <!-- <ElButton
@@ -396,8 +402,10 @@ import { useAppStore } from '@/store/modules/app'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
 import { htmlToPdf } from '@/utils/ptf'
-import { debounce } from '@/utils/index'
+import { debounce, openurl } from '@/utils/index'
 import { homesteadAreaSize } from '../../config'
+import { handelurl } from '@/api/immigrantImplement/common-service'
+
 interface PropsType {
   doorNo: string
   baseInfo: any

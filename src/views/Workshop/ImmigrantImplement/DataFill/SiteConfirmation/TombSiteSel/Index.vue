@@ -6,6 +6,12 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_address_grave' }, handelurl)"
+          >
+            查看历史签字
+          </ElButton>
           <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
           <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <!-- <ElButton
@@ -131,10 +137,12 @@ import {
   getGraveListApi,
   saveGraveApi
 } from '@/api/immigrantImplement/siteConfirmation/tombSiteSel-service'
-import { debounce } from '@/utils/index'
+import { debounce, openurl } from '@/utils/index'
 import dayjs from 'dayjs'
 import { htmlToPdf } from '@/utils/ptf'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { handelurl } from '@/api/immigrantImplement/common-service'
+
 interface PropsType {
   doorNo: string
   baseInfo: any

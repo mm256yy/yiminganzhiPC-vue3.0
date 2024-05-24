@@ -1,5 +1,5 @@
 import type { Plugin } from 'vue'
-
+import { ElMessage } from 'element-plus'
 /**
  *
  * @param component 需要注册的组件
@@ -404,5 +404,14 @@ export function setlocationType(target: any) {
     return ''
   } else {
     return '3'
+  }
+}
+export async function openurl(params: any, callback) {
+  const data = await callback(params)
+  console.log(data)
+  if (data.signFile) {
+    window.open(JSON.parse(data.signFile)[0].url)
+  } else {
+    ElMessage.error('暂无历史记录')
   }
 }

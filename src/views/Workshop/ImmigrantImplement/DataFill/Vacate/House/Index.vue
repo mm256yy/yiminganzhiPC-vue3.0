@@ -8,6 +8,12 @@
             >无须办理</ElButton
           >
           <ElButton :icon="editIcon" type="primary" @click="onHandle">办理</ElButton>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_empty_house' }, handelurl)"
+          >
+            查看历史签字
+          </ElButton>
         </ElSpace>
 
         <ElSpace v-if="isHouseEmpty && isHouseEmpty === '1'">
@@ -236,8 +242,10 @@ import {
   saveHouseVacateInfoApi,
   getHouseVacateInfoApi
 } from '@/api/immigrantImplement/vacate/house-service'
-import { debounce } from '@/utils/index'
+import { debounce, openurl } from '@/utils/index'
 import { htmlToPdf } from '@/utils/ptf'
+import { handelurl } from '@/api/immigrantImplement/common-service'
+
 interface PropsType {
   doorNo: string
   baseInfo: any

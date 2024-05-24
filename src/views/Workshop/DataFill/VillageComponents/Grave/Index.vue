@@ -166,7 +166,7 @@
           label="坟墓编号"
           prop="graveAutoNo"
           align="center"
-          width="220"
+          width="250"
           header-align="center"
         >
           <template #default="{ row }">

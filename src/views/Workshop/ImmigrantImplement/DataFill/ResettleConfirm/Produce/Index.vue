@@ -54,6 +54,14 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_placement_demographic' }, handelurl)"
+            style="margin-top: 17px"
+          >
+            查看历史签字
+          </ElButton>
+
           <ElButton type="primary" @click="comdbe" style="margin-top: 17px"> 打印 </ElButton>
 
           <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
@@ -195,8 +203,10 @@ import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { cloneDeep } from 'lodash-es'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
-import { debounce } from '@/utils/index'
+import { debounce, openurl } from '@/utils/index'
 import { htmlToPdf } from '@/utils/ptf'
+import { handelurl } from '@/api/immigrantImplement/common-service'
+
 const dictStore = useDictStoreWithOut()
 
 const dictObj = computed(() => dictStore.getDictObj)

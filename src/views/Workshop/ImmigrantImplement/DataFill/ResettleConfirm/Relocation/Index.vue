@@ -54,6 +54,13 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_placement_settleAddress' }, handelurl)"
+            style="margin-top: 17px"
+          >
+            查看历史签字
+          </ElButton>
           <ElButton type="primary" @click="comdbe" style="margin-top: 17px"> 打印 </ElButton>
           <ElButton type="primary" @click="onDocumentation" style="margin-top: 17px">
             进度上报
@@ -269,12 +276,13 @@ import FindSelf from '../../SchemeBase/components/FindSelf.vue'
 import CenterSupport from '../../SchemeBase/components/CenterSupport.vue'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { htmlToPdf } from '@/utils/ptf'
-import { debounce } from '@/utils/index'
+import { debounce, openurl } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import dayjs from 'dayjs'
 import { useAppStore } from '@/store/modules/app'
+import { handelurl } from '@/api/immigrantImplement/common-service'
 
 interface PropsType {
   doorNo: string

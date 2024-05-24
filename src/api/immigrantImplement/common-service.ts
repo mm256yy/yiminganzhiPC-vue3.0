@@ -152,3 +152,8 @@ export const getLandNoMoveApi = (
     }
   })
 }
+export const handelurl = (params: any) => {
+  return request.get({
+    url: `/confirmReport/findByDoorNo?doorNo=${params.doorNo}&type=${params.type}`
+  })
+}

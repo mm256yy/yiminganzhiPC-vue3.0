@@ -38,7 +38,13 @@
             </ElSelect>
           </template>
         </ElTableColumn>
-        <ElTableColumn label="坟墓编号" prop="graveAutoNo" align="center" header-align="center">
+        <ElTableColumn
+          label="坟墓编号"
+          prop="graveAutoNo"
+          align="center"
+          width="250"
+          header-align="center"
+        >
           <template #default="{ row }">
             <ElInput placeholder="" v-model="row.graveAutoNo" disabled />
           </template>

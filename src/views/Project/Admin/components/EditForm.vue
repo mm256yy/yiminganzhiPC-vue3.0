@@ -191,6 +191,7 @@ const schema = reactive<FormSchema[]>([
       nodeKey: 'code',
       load: loadDistrictNodes,
       props: defaultProps,
+      // defaultExpandAll: true,
       defaultExpandedKeys: districtTrees,
       // showCheckbox: true,
       // checkStrictly: true,
@@ -277,7 +278,7 @@ onMounted(async () => {
   const townCode = currentRow.value?.townCode ? currentRow.value.townCode.split(',') : []
   const villageCode = currentRow.value?.villageCode ? currentRow.value.villageCode.split(',') : []
   districtTree.value = currentRow.value?.districtTree?.join(',').split(',') || []
-  districtTrees.value = currentRow.value?.villageCode?.split(',') || []
+  districtTrees.value = currentRow.value?.districtVillageTree?.join(',').split(',') || []
   console.log(districtTree.value, districtTrees.value, '测试数据')
   mapPic.value = currentRow.value?.mapPic ? JSON.parse(currentRow.value.mapPic) : []
   mapJson.value = currentRow.value?.mapJson ? currentRow.value.mapJson : ''

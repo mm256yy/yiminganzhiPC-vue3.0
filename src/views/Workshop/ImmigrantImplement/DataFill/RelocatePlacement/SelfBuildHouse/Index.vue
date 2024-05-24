@@ -6,6 +6,13 @@
         <div> </div>
         <ElSpace>
           <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_empty_land' }, handelurl)"
+            style="margin-top: 17px"
+          >
+            查看历史签字
+          </ElButton>
         </ElSpace>
       </div>
     </div>
@@ -166,8 +173,9 @@ import { useAppStore } from '@/store/modules/app'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import { resettleArea } from '../../config'
 import { getImmigrantChooseHouseApi } from '@/api/immigrantImplement/siteConfirmation/siteSel-service'
+import { debounce, openurl } from '@/utils/index'
 import { htmlToPdf } from '@/utils/ptf'
-import { debounce } from '@/utils/index'
+import { handelurl } from '@/api/immigrantImplement/common-service'
 interface PropsType {
   doorNo: string
   baseInfo: any

@@ -17,6 +17,7 @@ export type ProjectDtoType = {
   mapPic: string
   mapJson: string
   villageCode: string
+  districtVillageTree: string[]
 }
 
 /**

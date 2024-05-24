@@ -5,6 +5,12 @@
       <div class="flex items-center justify-between pb-12px">
         <div> </div>
         <ElSpace>
+          <ElButton
+            type="primary"
+            @click="() => openurl({ doorNo, type: 'household_placement_grave' }, handelurl)"
+          >
+            查看历史签字
+          </ElButton>
           <ElButton type="primary" @click="comdbe"> 打印 </ElButton>
           <ElButton type="primary" @click="onFilling">填报完成</ElButton>
           <ElButton type="primary" @click="onDocumentation">进度上报</ElButton>
@@ -135,11 +141,12 @@ import {
   getGraveArrageListApi,
   delGraveArrageApi
 } from '@/api/immigrantImplement/resettleConfirm/grave-service'
-import { standardFormatDate, debounce } from '@/utils/index'
+import { standardFormatDate, debounce, openurl } from '@/utils/index'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import dayjs from 'dayjs'
 import { htmlToPdf } from '@/utils/ptf'
+import { handelurl } from '@/api/immigrantImplement/common-service'
 
 interface PropsType {
   doorNo: string
