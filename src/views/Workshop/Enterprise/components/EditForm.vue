@@ -200,51 +200,83 @@ const position: {
   longitude: 0
 })
 
+// watch(
+//   () => props.row,
+//   (val) => {
+//     if (val) {
+//       // 处理行政区划
+//       form.value = {
+//         ...val,
+//         parentCode: [val.areaCode, val.townCode, val.villageCode]
+//       }
+//       console.log(form.value, '测试监听的数据')
+//       position.longitude = form.value.longitude
+//       position.latitude = form.value.latitude
+//       position.address = form.value.address
+//       form.value.householderName ? (flag.value = true) : (flag.value = false)
+//     } else {
+//       form.value = defaultValue
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
+
+// watch(
+//   () => props.show,
+//   (val) => {
+//     if (val) {
+//       // console.log(props.row, '表格编辑的数据')
+//       // form.value = {
+//       //   ...props.row,
+//       //   parentCode: [props.row.areaCode, props.row.townCode, props.row.villageCode]
+//       // }
+//       // console.log(form.value, '测试监听的数据')
+//       // position.longitude = form.value.longitude
+//       // position.latitude = form.value.latitude
+//       // position.address = form.value.address
+//       // form.value.householderName ? (flag.value = true) : (flag.value = false)
+
+//       form.value.householderName = props.name
+//       form.value.householderDoorNo = props.doorNo
+//       if (props.longitude && props.latitude) {
+//         position.latitude = props.latitude
+//         position.longitude = props.longitude
+//         position.address = props.address
+//       }
+//     } else {
+//       form.value = defaultValue
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
 watch(
-  () => props.row,
-  (val) => {
+  () => props.show,
+  async (val) => {
     if (val) {
-      // 处理行政区划
       form.value = {
-        ...val,
-        parentCode: [val.areaCode, val.townCode, val.villageCode]
+        ...props.row,
+        parentCode: [props.row?.areaCode, props.row?.townCode, props.row?.villageCode]
       }
-      console.log(form.value, '测试监听的数据')
       position.longitude = form.value.longitude
       position.latitude = form.value.latitude
       position.address = form.value.address
-      form.value.householderName ? (flag.value = true) : (flag.value = false)
-    } else {
-      form.value = defaultValue
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
-
-watch(
-  () => props.show,
-  (val) => {
-    if (val) {
-      // console.log(props.row, '表格编辑的数据')
-      // form.value = {
-      //   ...props.row,
-      //   parentCode: [props.row.areaCode, props.row.townCode, props.row.villageCode]
-      // }
-      // console.log(form.value, '测试监听的数据')
-      // position.longitude = form.value.longitude
-      // position.latitude = form.value.latitude
-      // position.address = form.value.address
+      console.log(props, '进入了')
       // form.value.householderName ? (flag.value = true) : (flag.value = false)
-
-      form.value.householderName = props.name
-      form.value.householderDoorNo = props.doorNo
-      if (props.longitude && props.latitude) {
-        position.latitude = props.latitude
-        position.longitude = props.longitude
-        position.address = props.address
+      !form.value.householderName && !form.value.longitude && !form.value.latitude
+        ? (flag.value = true)
+        : (flag.value = false)
+      // form.value.householderName = props.name
+      if (!form.value.showHouseholderDoorNo) {
+        await remoteMethod(form.value.householderName)
+        doorTypeChange(form.value.householderName)
+      } else {
+        form.value.householderDoorNo = form.value.showHouseholderDoorNo
       }
     } else {
       form.value = defaultValue

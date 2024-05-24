@@ -278,11 +278,12 @@ interface PropsType {
   baseInfo: any
   immigrantSettle: any
   fromResettleConfirm?: boolean
+  dataList?: any
 }
 
 const emit = defineEmits(['submit'])
 const props = defineProps<PropsType>()
-const settleAddress = ref(1)
+const settleAddress = ref<any>(1)
 const areaSize = ref(apartmentAreaSize)
 const AreaDetailRef: any = ref(null)
 const areaDetailPup = ref(false)
@@ -332,9 +333,15 @@ watch(
   (val) => {
     if (val) {
       console.log(val, 'val')
-      const { typeOneNum, typeTwoNum, typeThreeNum, typeFourNum, settleAddressCode } = val
+      console.log(props.dataList, '测试数据', 'kks')
+      if (props.dataList) {
+        settleAddress.value = val.settleAddress
+      } else {
+        const { settleAddressCode, settleAddress: settleAddresss } = val
+        settleAddress.value = settleAddressCode ? settleAddressCode : val.settleAddress
+      }
+      const { typeOneNum, typeTwoNum, typeThreeNum, typeFourNum } = val
 
-      settleAddress.value = val.settleAddressCode
       areaSize.value = areaSize.value.map((item, index) => {
         if (index === 0) {
           item.num = typeOneNum

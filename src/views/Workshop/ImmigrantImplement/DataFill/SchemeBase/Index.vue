@@ -109,6 +109,7 @@
                 :immigrantSettle="immigrantSettle"
                 :doorNo="props.doorNo"
                 :baseInfo="props.baseInfo"
+                :dataList="dataList"
                 @submit="immigrantSettleSubmit"
               />
             </template>

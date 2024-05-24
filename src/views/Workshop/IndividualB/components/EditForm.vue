@@ -305,6 +305,7 @@ const doorTypeChange = (val) => {
   if (val) {
     options.value.forEach((item) => {
       if (item.name == val) {
+        console.log('进入')
         form.value.householderDoorNo = item.showDoorNo
         // form.value.householderDoorNo = item.doorNo
         // tableData.value.forEach((item2) => {
@@ -314,6 +315,8 @@ const doorTypeChange = (val) => {
         //   }
         // })
         if (flag.value) {
+          console.log('进入了')
+          console.log(position.latitude, position.longitude, position.address, '地理位置')
           getHouseListApi({
             doorNo: item.doorNo,
             status: 'review',
@@ -446,8 +449,11 @@ watch(
       position.latitude = form.value.latitude
       position.address = form.value.address
       console.log(props, '进入了')
-      // form.value.householderName ? (flag.value = true) : (flag.value = false)
+      !form.value.householderName && !form.value.longitude && !form.value.latitude
+        ? (flag.value = true)
+        : (flag.value = false)
       // form.value.householderName = props.name
+      console.log(form.value, '测试数据')
       if (!form.value.showHouseholderDoorNo) {
         await remoteMethod(form.value.householderName)
         doorTypeChange(form.value.householderName)
