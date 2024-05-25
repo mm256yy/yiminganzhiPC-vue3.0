@@ -228,3 +228,10 @@ export const batchDeleteApi = (data: any): Promise<any> => {
     data
   })
 }
+//获取删除信息
+export const getPeasantHouseHoldInfo = (params: any): Promise<any> => {
+  return request.get({
+    url: `/peasantHousehold/getPeasantHouseHoldInfo`,
+    params
+  })
+}

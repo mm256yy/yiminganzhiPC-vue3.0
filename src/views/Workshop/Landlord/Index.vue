@@ -25,13 +25,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton
-            v-if="globalData.currentSurveyStatus === SurveyStatusEnum.Survey"
-            :icon="deleteIcon"
-            type="primary"
-            @click="onBatchDelete"
-            >批量删除</ElButton
-          >
+          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton>
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
@@ -187,7 +181,8 @@ import {
   delLandlordByIdApi,
   getLandlordHeadApi,
   getLandlordSurveyByIdApi,
-  batchDeleteApi
+  batchDeleteApi,
+  getPeasantHouseHoldInfo
 } from '@/api/workshop/landlord/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
@@ -686,17 +681,48 @@ const onBatchDelete = async () => {
     ElMessage.error('请至少选中一条记录')
     return
   }
-
   const idList = tableRef.value.selections.map((item) => item.id)
-  tableObject.loading = true
-  try {
-    await batchDeleteApi(idList)
-    ElMessage.success('批量删除成功')
-    tableObject.loading = false
-    setSearchParams({ type: 'PeasantHousehold' })
-  } catch {
-    tableObject.loading = false
-  }
+
+  let m = await getPeasantHouseHoldInfo({
+    status: globalData.currentSurveyStatus,
+    doorNoList: idList
+  })
+  ElMessageBox.confirm(
+    `
+    <div style='text-align:center'>
+      <strong>选择${m.householdNum}居民户包含:</strong>
+      <div>人口信息: ${m.demographicNum} 人口信息</div>
+      <div>房屋信息: ${m.houseNum} 栋房屋信息</div>
+      <div>附属物信息: ${m.appendantNum} 项附属物信息</div>
+      <div>零星(林)果木信息: ${m.treeNum} 项零星果木信息</div>
+      <div>坟墓信息: ${m.graveNum} 条坟墓信息</div>
+      <strong>是否删除该居户信息</strong>
+    </div>
+  `,
+    '提示',
+    {
+      dangerouslyUseHTMLString: true,
+
+      cancelButtonText: '取消',
+      confirmButtonText: '确认'
+    }
+  )
+  // .then(() => {
+  //   delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
+  //     // getList()
+  //     setSearchParams({ type: 'PeasantHousehold' })
+  //   })
+  // })
+  // .catch(() => {})
+  // tableObject.loading = true
+  // try {
+  //   await batchDeleteApi(idList)
+  //   ElMessage.success('批量删除成功')
+  //   tableObject.loading = false
+  //   setSearchParams({ type: 'PeasantHousehold' })
+  // } catch {
+  //   tableObject.loading = false
+  // }
 }
 
 const onExport = () => {
