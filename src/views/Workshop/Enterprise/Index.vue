@@ -529,7 +529,7 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
+    Village: 'villageCodes', // 行政村 code
     NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]
@@ -566,10 +566,11 @@ const onSearch = (data) => {
       if (item) {
         params[getParamsKey(item.districtType)] = params.code
       }
-
-      params.type = 'Company'
-      setSearchParams({ ...params })
     })
+    params.type = 'Company'
+    console.log(params)
+
+    setSearchParams({ ...params })
   } else {
     params.type = 'Company'
 

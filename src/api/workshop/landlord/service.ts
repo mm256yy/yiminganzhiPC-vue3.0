@@ -235,3 +235,7 @@ export const getPeasantHouseHoldInfo = (params: any): Promise<any> => {
     params
   })
 }
+//批量删除
+export const batchDelete = (data: any): Promise<void> => {
+  return request.post({ url: `/peasantHousehold/batchDelete`, data })
+}

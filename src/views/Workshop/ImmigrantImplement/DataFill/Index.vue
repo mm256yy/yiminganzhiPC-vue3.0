@@ -436,7 +436,7 @@
     </div>
 
     <!-- 村集体 -->
-    <div class="data-fill-body" v-if="type === 'Village'">
+    <div class="data-fill-body" v-if="type === 'Village' && villageType != 'grave'">
       <!-- 资产评估 -->
       <template v-if="tabCurrentId === 0">
         <!-- 房屋附属物评估报告 -->
@@ -481,6 +481,9 @@
         @update-data="getLandlordInfo"
         v-if="tabCurrentId === 1"
       />
+    </div>
+    <div class="data-fill-body" v-if="type === 'Village' && villageType == 'grave'">
+      <Villagegrave :id="baseInfo.id" />
     </div>
     <div class="data-fill-body" v-if="type === 'LandNoMove'">
       <!-- 生产安置 -->
@@ -539,7 +542,8 @@ import {
   VillageSubTabs,
   LandNoMoveTabs,
   LandNoMoveTabss,
-  LandNoMoveSubTabs
+  LandNoMoveSubTabs,
+  VillageTabsgrave
 } from './config'
 import { HouseType } from './config'
 
@@ -549,7 +553,7 @@ import HouseholdInfo from './HouseholdInfo/Index.vue' // 居民户信息
 
 import PopulationCheck from './PopulationCheck/Index.vue' // 资格认定 -- 人口核定
 import HouseProperty from './HouseProperty/Index.vue' // 资格认定 -- 房屋产权
-
+import Villagegrave from './Villagegrave.vue' // 村集体坟墓
 import HouseAccessoryEvaReport from './AssetEvaluation/HouseAccessoryEvaReport.vue' // 资产评估 -- 房屋附属物评估报告
 import LandAccessoryEvaReport from './AssetEvaluation/LandAccessoryEvaReport.vue' // 资产评估 -- 土地附着物评估报告
 import EquipmentEvaReport from './AssetEvaluation/EquipmentEvaReport.vue' // 资产评估 -- 设施设备评估报告
@@ -636,7 +640,7 @@ const tabsList = ref<any>([])
 const subTabsList = ref<any>([])
 const tabCurrentId = ref<number>(0)
 const subTabCurrentId = ref<number>(TabIds[0])
-const { doorNo, householdId, type, nowbody } = currentRoute.value.query as any
+const { doorNo, householdId, type, nowbody, villageType } = currentRoute.value.query as any
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const fillingStatus = ref<string>('')
 
@@ -885,8 +889,13 @@ onMounted(() => {
     tabsList.value = IndividualTabs
     subTabsList.value = IndividualSubTabs
   } else if (type == 'Village') {
-    tabsList.value = VillageTabs
-    subTabsList.value = VillageSubTabs
+    if (villageType == 'grave') {
+      tabsList.value = VillageTabsgrave
+      subTabsList.value = []
+    } else {
+      tabsList.value = VillageTabs
+      subTabsList.value = VillageSubTabs
+    }
   } else if (nowbody == 'PeasantHousehold') {
     tabsList.value = LandNoMoveTabs
     subTabsList.value = LandNoMoveSubTabs

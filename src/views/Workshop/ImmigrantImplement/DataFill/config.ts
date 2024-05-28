@@ -370,6 +370,12 @@ export const IndividualSubTabs = [
   }
 ]
 
+export const VillageTabsgrave = [
+  {
+    id: 5,
+    name: '村集体坟墓择址'
+  }
+]
 // 村集体 第一层 tab
 export const VillageTabs = [
   {

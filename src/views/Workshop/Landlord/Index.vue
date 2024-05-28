@@ -182,7 +182,8 @@ import {
   getLandlordHeadApi,
   getLandlordSurveyByIdApi,
   batchDeleteApi,
-  getPeasantHouseHoldInfo
+  getPeasantHouseHoldInfo,
+  batchDelete
 } from '@/api/workshop/landlord/service'
 import { screeningTree, getVillageTreeApi } from '@/api/workshop/village/service'
 import { locationTypes, ReportStatusEnums } from '@/views/Workshop/components/config'
@@ -681,11 +682,11 @@ const onBatchDelete = async () => {
     ElMessage.error('请至少选中一条记录')
     return
   }
+  const doorNoList = tableRef.value.selections.map((item) => item.doorNo)
   const idList = tableRef.value.selections.map((item) => item.id)
-
   let m = await getPeasantHouseHoldInfo({
     status: globalData.currentSurveyStatus,
-    doorNoList: idList
+    doorNoList: doorNoList
   })
   ElMessageBox.confirm(
     `
@@ -707,13 +708,14 @@ const onBatchDelete = async () => {
       confirmButtonText: '确认'
     }
   )
-  // .then(() => {
-  //   delLandlordByIdApi(tableObject.currentRow?.id as number).then(() => {
-  //     // getList()
-  //     setSearchParams({ type: 'PeasantHousehold' })
-  //   })
-  // })
-  // .catch(() => {})
+    .then(() => {
+      batchDelete(idList).then(() => {
+        // getList()
+        ElMessage.success('批量删除成功')
+        setSearchParams({ type: 'PeasantHousehold' })
+      })
+    })
+    .catch(() => {})
   // tableObject.loading = true
   // try {
   //   await batchDeleteApi(idList)

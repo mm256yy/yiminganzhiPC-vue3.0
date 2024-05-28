@@ -142,6 +142,7 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
     // 与Search组件结合
     setSearchParams: (data: Recordable) => {
       // console.log(data)
+      console.log(data, tableObject.params)
 
       tableObject.currentPage = 1
       tableObject.params = Object.assign(tableObject.params, {
@@ -149,13 +150,14 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         page: tableObject.currentPage,
         ...data
       })
-      // console.log(tableObject.params)
 
       for (const i in tableObject.params) {
         if (!tableObject.params[i]) {
           delete tableObject.params[i]
         }
       }
+      console.log(tableObject.params)
+
       methods.getList()
     },
     // 删除数据

@@ -188,7 +188,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入村集体信息'
+        placeholder: '请输入村集体名称'
       }
     },
     table: {
@@ -420,7 +420,8 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'Village'
+      type: 'Village',
+      villageType: row.villageType
     }
   })
 }

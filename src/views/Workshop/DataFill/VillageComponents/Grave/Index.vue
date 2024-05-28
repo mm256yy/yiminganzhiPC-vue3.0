@@ -66,7 +66,7 @@
               </div>
             </div>
           </ElPopover>
-          <ElInput v-model="sersoud" />
+          <ElInput v-model="sersoud" placeholder="请输入登记人或户号" />
           <ElButton type="primary" @click="getList">搜索</ElButton>
           <ElButton
             type="primary"

@@ -124,7 +124,12 @@
           :loading="loading"
           @change="doorTypeChange"
         >
-          <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name" />
+          <el-option
+            v-for="item in options"
+            :key="item.id"
+            :label="item.name + item.showDoorNo"
+            :value="item.name"
+          />
         </el-select>
       </ElFormItem>
       <ElFormItem label="关联户号" prop="householderDoorNo" align="center" header-align="center">

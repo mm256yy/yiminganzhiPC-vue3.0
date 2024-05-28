@@ -92,3 +92,10 @@ export const saveBatchProductionLandFileApi = (
 export const saveBatchTombFileApi = (data: any): Promise<TableResponse<LandBasicInfoDtoType>> => {
   return request.post({ url: '/immigrantGrave/updateAddress', data })
 }
+/**
+ * 获取坟墓择址列表数据(纯集体)
+ * @param params 传参
+ */
+export const immigrantGraveApi = (params: any) => {
+  return request.get({ url: `/immigrantGrave`, params })
+}
