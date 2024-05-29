@@ -68,9 +68,11 @@
       <div class="flex items-center justify-between pb-12px">
         <div style="color: red">
           当前拆分房屋{{ house ? house : '-' }}幢（建筑面积{{
-            oldHouseValues ? oldHouseValues?.landArea : '-'
-          }}㎡，合法面积{{ oldHouseValues ? oldHouseValues?.landLegalArea : '-' }}㎡，不合法面积{{
-            oldHouseValues ? oldHouseValues?.landIllegalArea : '-'
+            oldHouseValues?.landArea ? oldHouseValues?.landArea : '-'
+          }}㎡，合法面积{{
+            oldHouseValues?.landLegalArea ? oldHouseValues?.landLegalArea : '-'
+          }}㎡，不合法面积{{
+            oldHouseValues?.landIllegalArea ? oldHouseValues?.landIllegalArea : '-'
           }}㎡）
         </div>
         <ElSpace>
@@ -148,7 +150,7 @@
     </div>
     <PropertyEditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
     <el-dialog title="房屋产权分户信息" v-model="dialogVisible" width="500">
-      <div style="margin-bottom: 10px; text-align: center">
+      <div style="margin-bottom: 10px; text-align: center; font-size: 20px">
         <span
           >是否对<span style="color: red">{{ houseName ? houseName : '-' }}</span
           >的<span style="color: red">{{ house ? house : '-' }}</span
@@ -179,7 +181,7 @@
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label-required">分权申请文件：</div>
+              <div>分权申请文件：</div>
               <div class="card-img-list">
                 <ElUpload
                   :list-type="'picture-card'"
@@ -634,6 +636,31 @@ const onEditFormClose = (flag: boolean) => {
 </script>
 
 <style lang="less" scoped>
+.col-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 16px 16px 0;
+
+  .col-label-required {
+    display: inline-flex;
+    width: 150px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
+
+    &::before {
+      margin-right: 4px;
+      color: #f56c6c;
+      content: '*';
+    }
+  }
+}
 .view-upload {
   display: flex;
   height: 32px;

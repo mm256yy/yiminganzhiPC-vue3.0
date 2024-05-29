@@ -29,6 +29,7 @@ const props = defineProps({
     .def('center'),
   showSearch: propTypes.bool.def(true),
   showFhHh: propTypes.bool.def(false),
+  showFf: propTypes.bool.def(false),
   showReset: propTypes.bool.def(true),
   // 是否显示伸缩
   expand: propTypes.bool.def(false),
@@ -40,7 +41,7 @@ const props = defineProps({
   valueForme: propTypes.object.def({})
 })
 
-const emit = defineEmits(['search', 'reset', 'fhhh'])
+const emit = defineEmits(['search', 'reset', 'fhhh', 'ff'])
 
 const visible = ref(props.defaultExpand)
 
@@ -79,6 +80,9 @@ const search = async () => {
 }
 const fhhh = () => {
   emit('fhhh')
+}
+const ff = () => {
+  emit('ff')
 }
 const reset = async () => {
   unref(elFormRef)?.resetFields()
@@ -123,7 +127,8 @@ watch(
           <Icon icon="ep:search" class="mr-5px" />
           {{ t('common.query') }}
         </ElButton>
-        <ElButton v-if="showFhHh" type="primary" @click="fhhh"> 合户/分户/房屋 </ElButton>
+        <ElButton v-if="showFhHh" type="primary" @click="fhhh"> 合户/分户/分房 </ElButton>
+        <ElButton v-if="showFf" type="primary" @click="ff">分房</ElButton>
         <ElButton v-if="showReset" @click="reset">
           <Icon icon="ep:refresh-right" class="mr-5px" />
           {{ t('common.reset') }}

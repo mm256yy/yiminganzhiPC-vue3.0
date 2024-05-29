@@ -9,10 +9,12 @@
         :schema="allSchemas.searchSchema"
         expand
         :showFhHh="getRole() == 'implementleader' || getRole() == 'tester'"
+        :showFf="getRole() == 'implementation'"
         :defaultExpand="false"
         :expand-field="'card'"
         @search="onSearch"
         @fhhh="toTargetNew"
+        @ff="toTargetNew"
         @reset="setSearchParams"
         :valueForme="valueForme['居民户信息']"
       />
