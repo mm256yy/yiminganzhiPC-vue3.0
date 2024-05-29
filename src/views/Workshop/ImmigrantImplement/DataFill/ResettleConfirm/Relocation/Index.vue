@@ -17,9 +17,7 @@
           </div>
           <div style="display: flex">
             <ElFormItem label="家庭总人数" prop="familyNum" v-if="familyTotal">
-              <div class="!w-100px"
-                >{{ form.familyNum - form.addPopulationNum }}&nbsp; <span>(人)</span></div
-              >
+              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农村移民" v-if="form.ruralMigrantNum">
               <div class="!w-100px">{{ form.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
@@ -45,7 +43,9 @@
               <div class="!w-100px">{{ form.otherPopulationNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="安置总人数" prop="familyNum" v-if="form.familyNum">
-              <div class="!w-100px">{{ form.familyNum }}&nbsp; <span>(人)</span></div>
+              <div class="!w-100px"
+                >{{ form.familyNum + form.addPopulationNum }}&nbsp; <span>(人)</span></div
+              >
             </ElFormItem>
           </div>
         </ElForm>
@@ -307,6 +307,7 @@ const form = ref<any>({})
 
 onMounted(async () => {
   form.value = props.baseInfo
+  console.log(form.value, '测试数据')
   await getMockData()
   await getRelocationInfo()
   await getPeopleList()
@@ -475,6 +476,7 @@ const onImportDataPre = async () => {
 
 // 导入数据
 const onImportData = async () => {
+  console.log(mockImmigrantSettle.value, '导入数据流')
   // 拿到模拟安置的配置
   const {
     houseAreaType,
@@ -484,7 +486,8 @@ const onImportData = async () => {
     typeFourNum,
     settleAddress,
     doorNo,
-    areaType
+    areaType,
+    nursingHome
   } = mockImmigrantSettle.value
   immigrantSettle.value = {
     houseAreaType,
@@ -494,7 +497,8 @@ const onImportData = async () => {
     typeFourNum,
     settleAddress,
     doorNo,
-    areaType
+    areaType,
+    nursingHome
   }
   houseType.value = houseAreaType
   onEditSubmit(immigrantSettle.value)

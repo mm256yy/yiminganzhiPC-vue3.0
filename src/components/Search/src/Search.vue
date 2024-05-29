@@ -123,7 +123,7 @@ watch(
           <Icon icon="ep:search" class="mr-5px" />
           {{ t('common.query') }}
         </ElButton>
-        <ElButton v-if="showFhHh" type="primary" @click="fhhh"> 合户/分户 </ElButton>
+        <ElButton v-if="showFhHh" type="primary" @click="fhhh"> 合户/分户/房屋 </ElButton>
         <ElButton v-if="showReset" @click="reset">
           <Icon icon="ep:refresh-right" class="mr-5px" />
           {{ t('common.reset') }}

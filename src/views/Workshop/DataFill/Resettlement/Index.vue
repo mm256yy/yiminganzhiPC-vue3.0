@@ -110,6 +110,7 @@
               <div class="radio-item">
                 <!-- <div>宅基地安置：</div> -->
                 <ElRadioGroup v-model="form.removalType" :disabled="!isEdit">
+                  1111
                   <ElRadio v-for="item in Homestead" :key="item.label" :label="item.value">{{
                     item.label
                   }}</ElRadio>
@@ -231,6 +232,7 @@ const getResettlementConfig = async () => {
   })
   if (res && res.content && res.content.length) {
     let map = {}
+    console.log(res.content, '数据')
     res.content.forEach((item) => {
       // 不存在这个key，给dest 数组创建了一个项，并携带子集，并给map 创建了一项
       if (!map[item.way]) {
@@ -281,12 +283,13 @@ const demographicList = async () => {
   const res = await getDemographicListApi(params)
   form.value.countryNum = res.content.filter((item: any) => item.censusType == 1).length
   form.value.unCountryNum = res.content.filter((item: any) => item.censusType != 1).length
+  form.value.familyNum = res.content.length
 }
 onMounted(async () => {
   await getResettlementConfig()
   await getResettlement()
   console.log(props.baseInfo, '主体信息数据')
-  form.value.familyNum = props.baseInfo.familyNum
+  // form.value.familyNum = props.baseInfo.familyNum
   await demographicList()
 })
 // 搬迁安置方式

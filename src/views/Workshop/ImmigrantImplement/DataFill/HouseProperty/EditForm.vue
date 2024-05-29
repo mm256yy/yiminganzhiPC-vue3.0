@@ -116,7 +116,13 @@
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="建筑面积(㎡)" prop="landArea">
-            <ElInput v-model="form.landArea" class="!w-full" type="number" placeholder="请输入">
+            <ElInput
+              v-model="form.landArea"
+              class="!w-full"
+              type="number"
+              placeholder="请输入"
+              disabled
+            >
               <template #append> ㎡ </template>
             </ElInput>
           </ElFormItem>

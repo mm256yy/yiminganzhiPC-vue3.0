@@ -145,6 +145,29 @@ export const postMerge = (data: any): Promise<any> => {
     data
   })
 }
+//产权分户-查询农户
+export const findHouseUser = (params?: any): Promise<any> => {
+  return request.get({
+    url: '/peasantHousehold/findHouseUser',
+    params
+  })
+}
+
+//产权分户-查询房屋
+export const findAll = (params?: any): Promise<any> => {
+  return request.get({
+    url: '/immigrant_house/findByDoorNo',
+    params
+  })
+}
+
+//产权分户-提交业务
+export const separate = (data?: any): Promise<any> => {
+  return request.post({
+    url: '/immigrant_house/separate',
+    data
+  })
+}
 
 // 导出报表
 export const exportReportApi = (params: any) => {

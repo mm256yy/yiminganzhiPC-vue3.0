@@ -32,7 +32,8 @@
   </div>
   <div class="data-fill-body">
     <SeparateTable v-if="tabCurrentId === 0" />
-    <MergeTable v-else />
+    <MergeTable v-else-if="tabCurrentId === 1" />
+    <Property v-else />
   </div>
 </template>
 
@@ -44,6 +45,7 @@ import { ElButton, ElBreadcrumb, ElBreadcrumbItem } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import SeparateTable from './components/SeparateTable.vue'
 import MergeTable from './components/MergeTable.vue'
+import Property from './components/Property.vue'
 import { useRouter } from 'vue-router'
 import { useIcon } from '@/hooks/web/useIcon'
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
@@ -58,6 +60,10 @@ const tabsList = [
   {
     id: 1,
     name: '合户'
+  },
+  {
+    id: 2,
+    name: '房屋产权分户'
   }
 ]
 const onBack = () => {
