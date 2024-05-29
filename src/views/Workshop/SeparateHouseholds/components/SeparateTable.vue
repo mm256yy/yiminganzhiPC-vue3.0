@@ -1,7 +1,49 @@
 <template>
   <WorkContentWrap>
     <div class="search-form-wrap">
-      <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" />
+      <ElForm
+        class="form"
+        ref="formRef"
+        :model="searchForm"
+        label-width="160px"
+        :label-position="'right'"
+      >
+        <ElRow>
+          <ElCol :span="8">
+            <ElFormItem label="选择房屋权属农户:" prop="blurry">
+              <!-- <ElInput v-model="searchForm.name" class="!w-250px" /> -->
+              <el-select
+                v-model="searchForm.blurry"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入户号/户主名称"
+                :remote-method="remoteMethod"
+                :loading="Loading"
+                style="width: 400px"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.id"
+                  :label="item.blurry"
+                  :value="item.name"
+                />
+              </el-select>
+            </ElFormItem>
+          </ElCol>
+
+          <ElCol :span="16">
+            <div>
+              <ElButton type="primary" @click="onSearch(searchForm)">
+                <Icon icon="ep:search" class="mr-5px" /> 查询
+              </ElButton>
+              <ElButton @click="setSearchParamss(searchForm)">
+                <Icon icon="ep:refresh-right" class="mr-5px" /> 重置
+              </ElButton>
+            </div>
+          </ElCol>
+        </ElRow>
+      </ElForm>
     </div>
 
     <div class="table-wrap">
@@ -21,7 +63,15 @@
           >
             分户日志
           </ElButton>
-          <ElButton type="primary" @click="submit"> 提交 </ElButton>
+          <ElButton
+            type="primary"
+            @click="submits"
+            :disabled="
+              tableObject.tableList.length == 0 || tableObject.tableList[0].children.length == 0
+            "
+          >
+            提交
+          </ElButton>
         </ElSpace>
       </div>
 
@@ -75,7 +125,7 @@
         <template #totalPrice="{ row }">
           <el-checkbox-group
             v-model="row.listBoy"
-            @change="(val) => handelchange(row, val, 'listBoy')"
+            @change="(val) => handelchange(row, val, 'listBoy', 'familyMembers')"
           >
             <el-checkbox
               v-for="i in row.familyMembers"
@@ -90,14 +140,72 @@
         <template #immigrantHouses="{ row }">
           <el-checkbox-group
             v-model="row.familyList"
-            @change="(val) => handelchange(row, val, 'familyList')"
+            @change="(val) => handelchange(row, val, 'familyList', 'immigrantHouses')"
           >
             <el-checkbox
               v-for="i in row.immigrantHouses"
+              style="width: 100%"
               :label="i.id"
               :key="i.id"
               :disabled="handelCheckboxKey(row, i)"
               @change="(val) => handelchanges(row, val, i, 'familyList', 'id')"
+            >
+              <div>
+                <el-tooltip
+                  class="box-item"
+                  effect="dark"
+                  :content="i.remark"
+                  placement="top-start"
+                >
+                  <div style="width: 100%">{{ i.remark }} </div>
+                </el-tooltip>
+              </div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </template>
+        <template #appendantHouseholdId="{ row }">
+          <el-checkbox-group
+            v-model="row.appendantHouseholdId"
+            @change="
+              (val) => handelchange(row, val, 'appendantHouseholdId', 'appendantHouseholdIdList')
+            "
+          >
+            <el-checkbox
+              v-for="i in row.appendantHouseholdIdList"
+              :label="i.id"
+              :key="i.id"
+              :disabled="handelCheckboxKey(row, i)"
+              @change="(val) => handelchanges(row, val, i, 'appendantHouseholdId', 'id')"
+              >{{ i.remark }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </template>
+        <template #treeHouseholdId="{ row }">
+          <el-checkbox-group
+            v-model="row.treeHouseholdId"
+            @change="(val) => handelchange(row, val, 'treeHouseholdId', 'treeHouseholdIdList')"
+          >
+            <el-checkbox
+              v-for="i in row.treeHouseholdIdList"
+              :label="i.id"
+              :key="i.id"
+              :disabled="handelCheckboxKey(row, i)"
+              @change="(val) => handelchanges(row, val, i, 'treeHouseholdId', 'id')"
+              >{{ i.remark }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </template>
+        <template #graveHouseholdId="{ row }">
+          <el-checkbox-group
+            v-model="row.graveHouseholdId"
+            @change="(val) => handelchange(row, val, 'graveHouseholdId', 'graveHouseholdIdList')"
+          >
+            <el-checkbox
+              v-for="i in row.graveHouseholdIdList"
+              :label="i.id"
+              :key="i.id"
+              :disabled="handelCheckboxKey(row, i)"
+              @change="(val) => handelchanges(row, val, i, 'graveHouseholdId', 'id')"
               >{{ i.remark }}
             </el-checkbox>
           </el-checkbox-group>
@@ -111,13 +219,28 @@
       </Table>
     </div>
     <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
+    <NewForm :show="newdialog" @close="close" @submit="submit" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElSelect, ElOption, ElInput, ElCheckboxGroup, ElCheckbox } from 'element-plus'
+import {
+  ElButton,
+  ElSelect,
+  ElOption,
+  ElInput,
+  ElCheckboxGroup,
+  ElCheckbox,
+  ElForm,
+  ElFormItem,
+  ElRow,
+  ElCol,
+  ElMessage,
+  ElTooltip
+} from 'element-plus'
+
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -126,7 +249,8 @@ import { useTable } from '@/hooks/web/useTable'
 import { getSeparateList, postSeparate } from '@/api/fundManage/fundPayment-service'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import EditForm from './EditForm.vue'
-
+import { findHouseUser } from '@/api/fundManage/fundPayment-service'
+import NewForm from './NewForm.vue'
 let dialog = ref(false)
 let EditFormid = ref()
 const appStore = useAppStore()
@@ -153,28 +277,61 @@ onMounted(() => {
   getdistrictTree()
   tableObject.loading = false
 })
-
+let options: any = ref([])
+let Loading = ref(false)
+const remoteMethod = async (query: string) => {
+  Loading.value = true
+  if (query) {
+    let res = await findHouseUser({ blurry: query, page: 0, size: 10 })
+    options.value = res.content
+    console.log(options.value, '农户数据')
+    Loading.value = false
+  } else {
+    options.value = []
+    Loading.value = false
+  }
+}
+let searchForm = reactive({
+  blurry: ''
+})
+let newdialog = ref(false)
 const schema = reactive<CrudSchema[]>([
-  {
-    field: 'blurry',
-    label: '输入待拆分农户',
-    search: {
-      show: true,
-      component: 'Input',
-      componentProps: {
-        placeholder: '可输入姓名 / 户号 '
-      }
-    },
-    table: {
-      show: false
-    },
-    detail: {
-      show: false
-    },
-    form: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'blurry',
+  //   label: '输入待拆分农户',
+  //   search: {
+  //     show: true,
+  //     component: 'Select',
+  //     componentProps: {
+  //       remoteMethod: async (query: string) => {
+  //         Loading.value = true
+  //         if (query) {
+  //           let res = await findHouseUser({ blurry: query, page: 0, size: 10 })
+  //           options.value = res.content
+  //           console.log(options.value, '农户数据')
+  //           Loading.value = false
+  //         } else {
+  //           options.value = []
+  //           Loading.value = false
+  //         }
+  //       },
+  //       options: options.value,
+  //       filterable: true,
+  //       remote: true,
+  //       reserveKeyword: true,
+  //       loading: Loading.value
+  //     }
+  //   },
+  //   table: {
+  //     show: false
+  //   },
+  //   detail: {
+  //     show: false
+  //   },
+  //   form: {
+  //     show: false
+  //   }
+  // },
 
   // table
   {
@@ -215,6 +372,27 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'immigrantHouses',
     label: '房屋归属',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'appendantHouseholdId',
+    label: '附属物归属',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'treeHouseholdId',
+    label: '零星林（果）木归属',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'graveHouseholdId',
+    label: '坟墓归属',
     search: {
       show: false
     }
@@ -290,30 +468,51 @@ const onSearch = (data) => {
     delete params.code
   }
   tableObject.params = { ...params, type: 'PeasantHousehold', projectId }
-  getList().then(() => {
-    tableObject.tableList.forEach((item: any) => {
-      item.listBoy = []
-      item.familyList = []
-      item.familyMembers.forEach((i: any) => {
-        item.listBoy.push(i.name)
+  if (tableObject.params.blurry) {
+    getList().then(() => {
+      tableObject.tableList.forEach((item: any) => {
+        item.listBoy = []
+        item.familyList = []
+        item.familyMembers.forEach((i: any) => {
+          item.listBoy.push(i.name)
+        })
+        item.immigrantHouses.forEach((i: any) => {
+          item.familyList.push(i.id)
+        })
+        item.appendantHouseholdIdList = [{ id: item.id, remark: '附属物' }]
+        item.treeHouseholdIdList = [{ id: item.id, remark: '零星林（果）木归属' }]
+        item.graveHouseholdIdList = [{ id: item.id, remark: '坟墓归属' }]
+        item.appendantHouseholdId = [item.id]
+        item.treeHouseholdId = [item.id]
+        item.graveHouseholdId = [item.id]
+        item.children = []
       })
-      item.immigrantHouses.forEach((i: any) => {
-        item.familyList.push(i.id)
-      })
+      console.log(tableObject.tableList)
     })
-    console.log(tableObject.tableList)
-  })
+  } else {
+    ElMessage({
+      message: '请选择用户',
+      type: 'warning'
+    })
+  }
 }
-let setSearchParamss = () => {
-  tableObject.params = { type: 'PeasantHousehold', projectId }
-  getList().then(() => {
-    tableObject.tableList.forEach((item: any) => {
-      item.listBoy = []
-      item.familyMembers.forEach((i: any) => {
-        item.listBoy.push(i.name)
-      })
-    })
-  })
+let setSearchParamss = (e) => {
+  e.blurry = ''
+  // tableObject.params = { type: 'PeasantHousehold', projectId }
+  // getList().then(() => {
+  //   tableObject.tableList.forEach((item: any) => {
+  //     item.listBoy = []
+  //     item.familyList = []
+
+  //     item.familyMembers.forEach((i: any) => {
+  //       item.listBoy.push(i.name)
+  //     })
+  //     item.immigrantHouses.forEach((i: any) => {
+  //       item.familyList.push(i.id)
+  //     })
+  //   })
+  // })
+  tableObject.tableList = []
 }
 let handleEdit = (row) => {
   tableObject.tableList.forEach((item: any) => {
@@ -331,8 +530,14 @@ let handleEdit = (row) => {
             pid: row.showDoorNo,
             familyMembers: row.familyMembers,
             immigrantHouses: row.immigrantHouses,
-            familyListL: [],
+            familyList: [],
             listBoy: [],
+            appendantHouseholdIdList: row.appendantHouseholdIdList,
+            treeHouseholdIdList: row.treeHouseholdIdList,
+            graveHouseholdIdList: row.graveHouseholdIdList,
+            appendantHouseholdId: [],
+            treeHouseholdId: [],
+            graveHouseholdId: [],
             noDoor: row.doorNo.slice(2, 5)
           })
         : (item.children = [
@@ -348,7 +553,13 @@ let handleEdit = (row) => {
               familyMembers: row.familyMembers,
               listBoy: [],
               immigrantHouses: row.immigrantHouses,
-              familyListL: [],
+              familyList: [],
+              appendantHouseholdIdList: row.appendantHouseholdIdList,
+              treeHouseholdIdList: row.treeHouseholdIdList,
+              graveHouseholdIdList: row.graveHouseholdIdList,
+              appendantHouseholdId: [],
+              treeHouseholdId: [],
+              graveHouseholdId: [],
               noDoor: row.doorNo.slice(2, 5)
             }
           ])
@@ -401,7 +612,7 @@ let handelselenceKey = (row: any, value) => {
 
   return nameList.indexOf(value.name) != -1 ? true : false
 }
-let handelchange = (row, val, key) => {
+let handelchange = (row, val, key, two) => {
   console.log(val)
 
   let nameList: any = []
@@ -422,7 +633,16 @@ let handelchange = (row, val, key) => {
     return pre
   }, [])
 
-  if (nameList.length > list[0].familyMembers.length && key == 'listBoy') {
+  console.log(nameList)
+
+  if (
+    nameList.length > list[0][two].length &&
+    (key == 'listBoy' ||
+      key == 'familyList' ||
+      key == 'appendantHouseholdId' ||
+      key == 'graveHouseholdId' ||
+      key == 'treeHouseholdId')
+  ) {
     if (row.pid) {
       tableObject.tableList.forEach((item: any) => {
         if (item.showDoorNo === row.pid) {
@@ -449,36 +669,37 @@ let handelchange = (row, val, key) => {
       })
     }
   }
-  if (nameList.length > list[0].immigrantHouses.length && key == 'familyList') {
-    if (row.pid) {
-      tableObject.tableList.forEach((item: any) => {
-        if (item.showDoorNo === row.pid) {
-          if (item[key].indexOf(val[val.length - 1]) != -1) {
-            item[key].splice(item[key].indexOf(val[val.length - 1]), 1)
-          } else {
-            item.children.forEach((res) => {
-              if (res[key].indexOf(val[val.length - 1]) != -1) {
-                res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
-              }
-            })
-          }
-        }
-      })
-    } else {
-      tableObject.tableList.forEach((item: any) => {
-        if (item.showDoorNo === row.showDoorNo) {
-          item.children.forEach((res) => {
-            if (res[key].indexOf(val[val.length - 1]) != -1) {
-              res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
-            }
-          })
-        }
-      })
-    }
-  }
+  // if (nameList.length > list[0].immigrantHouses.length && key == 'familyList') {
+  //   if (row.pid) {
+  //     tableObject.tableList.forEach((item: any) => {
+  //       if (item.showDoorNo === row.pid) {
+  //         if (item[key].indexOf(val[val.length - 1]) != -1) {
+  //           item[key].splice(item[key].indexOf(val[val.length - 1]), 1)
+  //         } else {
+  //           item.children.forEach((res) => {
+  //             if (res[key].indexOf(val[val.length - 1]) != -1) {
+  //               res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
+  //             }
+  //           })
+  //         }
+  //       }
+  //     })
+  //   } else {
+  //     tableObject.tableList.forEach((item: any) => {
+  //       if (item.showDoorNo === row.showDoorNo) {
+  //         item.children.forEach((res) => {
+  //           if (res[key].indexOf(val[val.length - 1]) != -1) {
+  //             res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
+  //           }
+  //         })
+  //       }
+  //     })
+  //   }
+  // }
+  console.log(tableObject.tableList)
 }
 let handelchanges = (row, val, i, key, name) => {
-  console.log(row, val, i)
+  // console.log(row, val, i)
   if (row.pid && !val) {
     tableObject.tableList.forEach((item: any) => {
       if (item.showDoorNo === row.pid) {
@@ -519,10 +740,13 @@ let handelCheckboxKey = (row, key) => {
 let handelSelectchange = (row, key) => {
   if (row.listBoy.indexOf(key) == -1) {
     row.listBoy.push(key)
-    handelchange(row, row.listBoy, 'listBoy')
+    handelchange(row, row.listBoy, 'listBoy', 'familyMembers')
   }
 }
-let submit = () => {
+let submits = () => {
+  newdialog.value = true
+}
+let submit = (e) => {
   let list: any = []
   let parent: any = []
   list = tableObject.tableList.filter((item) => item.children)
@@ -533,23 +757,36 @@ let submit = () => {
       householderId: cur.familyMembers.filter((item: any) => item.name === cur.name)[0]?.id,
       familyIds: valueKey(cur.familyMembers, cur.listBoy),
       doorNo: cur.doorNo,
-      villageCode: cur.villageCode
+      villageCode: cur.villageCode,
+      houseIds: Object.keys(cur.familyList).map((i) => {
+        return cur.familyList[i]
+      })
     }
     cur.children.forEach((item: any) => {
       m.newHouseholdList.push({
         householderId: item.familyMembers.filter((b: any) => b.name === item.name)[0]?.id,
         familyIds: valueKey(item.familyMembers, item.listBoy),
         doorNo: item.doorNo,
-        villageCode: item.villageCode
+        villageCode: item.villageCode,
+        appendantHouseholdId: item.appendantHouseholdId.length > 0 ? true : null,
+        treeHouseholdId: item.treeHouseholdId.length > 0 ? true : null,
+        graveHouseholdId: item.graveHouseholdId.length > 0 ? true : null,
+        houseIds: Object.keys(item.familyList).map((i) => {
+          return item.familyList[i]
+        })
       })
     })
     pre.push(m)
     return pre
   }, [])
-  console.log(parent)
+  console.log(parent, e)
+  parent[0] = { ...parent[0], ...e }
   postSeparate(parent).then((res: any) => {
-    console.log(res)
-    setSearchParams({ type: 'PeasantHousehold' })
+    if (res) {
+      ElMessage.success('操作成功！')
+
+      setSearchParams({ type: 'PeasantHousehold' })
+    }
   })
 }
 let valueKey = (arr, value) => {
@@ -563,6 +800,10 @@ const onEditFormClose = (flag: boolean) => {
   console.log(flag)
 
   dialog.value = false
+}
+const close = (flag: boolean) => {
+  console.log(flag)
+  newdialog.value = false
 }
 </script>
 
@@ -630,5 +871,8 @@ const onEditFormClose = (flag: boolean) => {
 
 .max-header {
   width: 1000px;
+}
+:deep(.el-checkbox__label) {
+  width: 100%;
 }
 </style>
