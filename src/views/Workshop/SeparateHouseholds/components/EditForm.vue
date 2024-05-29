@@ -26,12 +26,15 @@
       <template #operationDate="{ row }">
         {{ row.operationDate ? dayjs(row.operationDate).format('YYYY-MM-DD') : '' }}
       </template>
+      <template #fhReason="{ row }">
+        {{ row.fhReason ? dictObj[437].find((item) => item.value == row.fhReason).label : '' }}
+      </template>
     </Table>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, watch } from 'vue'
+import { reactive, ref, onMounted, watch, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
@@ -39,11 +42,14 @@ import { useTable } from '@/hooks/web/useTable'
 import dayjs from 'dayjs'
 import { getSeparateLog } from '@/api/fundManage/fundPayment-service'
 import { ElDialog } from 'element-plus'
-// import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 interface PropsType {
   show: boolean
   id: number
 }
+const dictStore = useDictStoreWithOut()
+
+const dictObj = computed(() => dictStore.getDictObj)
 const emit = defineEmits(['close', 'submit'])
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
@@ -108,6 +114,20 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'operationDate',
     label: '操作时间',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'fhReason',
+    label: '分户/合户原因',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'remark',
+    label: '备注',
     search: {
       show: false
     }

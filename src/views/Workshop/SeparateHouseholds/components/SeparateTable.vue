@@ -219,7 +219,12 @@
       </Table>
     </div>
     <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
-    <NewForm :show="newdialog" @close="close" @submit="submit" />
+    <NewForm
+      :show="newdialog"
+      :name="tableObject.tableList.length > 0 ? tableObject.tableList[0]?.name : ''"
+      @close="close"
+      @submit="submit"
+    />
   </WorkContentWrap>
 </template>
 
@@ -801,7 +806,7 @@ const onEditFormClose = (flag: boolean) => {
 
   dialog.value = false
 }
-const close = (flag: boolean) => {
+const close = (flag?: boolean) => {
   console.log(flag)
   newdialog.value = false
 }

@@ -10,7 +10,8 @@
     destroy-on-close
   >
     <div style="width: 100%; text-align: center; font-size: 18px">
-      是否对<sapn style="font-weight: 900">王鑫龙</sapn>进行分户
+      是否对<sapn style="font-weight: 900">{{ name }}</sapn
+      >进行分户
     </div>
     <ElForm
       class="policy-form"
@@ -88,6 +89,7 @@ import { debounce } from 'lodash-es'
 
 interface PropsType {
   show: boolean
+  name: any
 }
 const appStore = useAppStore()
 interface FileItemType {
@@ -157,6 +159,7 @@ const onSubmit = debounce((formEl) => {
       if (feedbackPic.value) {
         form.separateFile = JSON.stringify(feedbackPic.value)
       }
+      emit('close')
       emit('submit', form)
     } else {
       return false

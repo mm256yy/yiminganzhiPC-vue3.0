@@ -140,8 +140,8 @@
         </template>
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
-        <template #default="{ row }">
-          {{ row.contractAmount + '元' }}
+        <template #default="{ $index }">
+          {{ parmasList.paymentObjectList[$index]?.amount }}
         </template>
       </ElTableColumn>
     </ElTable>
