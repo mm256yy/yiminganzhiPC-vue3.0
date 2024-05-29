@@ -121,7 +121,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'reason',
+    field: 'houseSeparateReasonText',
     label: '分权原因',
     search: {
       show: false

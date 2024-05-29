@@ -1,8 +1,6 @@
 <template>
   <WorkContentWrap>
-    <div class="search-form-wrap">
-      <!-- <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParamss" /> -->
-    </div>
+    <div class="search-form-wrap"> </div>
     <div class="search-form-wrap">
       <ElForm
         class="form"
@@ -14,7 +12,6 @@
         <ElRow>
           <ElCol :span="8">
             <ElFormItem label="选择房屋权属农户:" prop="blurry">
-              <!-- <ElInput v-model="searchForm.name" class="!w-250px" /> -->
               <el-select
                 v-model="blurry"
                 filterable
@@ -43,6 +40,7 @@
                 v-model="house"
                 class="!w-full"
                 placeholder="请选择房屋"
+                @change="houseType"
               >
                 <ElOption
                   v-for="item in houseLists"
@@ -53,12 +51,12 @@
               </ElSelect>
             </ElFormItem>
           </ElCol>
-          <ElCol :span="16">
+          <ElCol :span="8">
             <div>
               <ElButton type="primary" @click="onSearch">
                 <Icon icon="ep:search" class="mr-5px" /> 查询
               </ElButton>
-              <ElButton @click="setSearchParamss">
+              <ElButton @click="setSearchParams">
                 <Icon icon="ep:refresh-right" class="mr-5px" /> 重置
               </ElButton>
             </div>
@@ -70,9 +68,9 @@
       <div class="flex items-center justify-between pb-12px">
         <div style="color: red">
           当前拆分房屋{{ house ? house : '-' }}幢（建筑面积{{
-            dataList ? dataList[0].landArea : '-'
-          }}㎡，合法面积{{ dataList ? dataList[0].landLegalArea : '-' }}㎡，不合法面积{{
-            dataList ? dataList[0].landIllegalArea : '-'
+            oldHouseValues ? oldHouseValues?.landArea : '-'
+          }}㎡，合法面积{{ oldHouseValues ? oldHouseValues?.landLegalArea : '-' }}㎡，不合法面积{{
+            oldHouseValues ? oldHouseValues?.landIllegalArea : '-'
           }}㎡）
         </div>
         <ElSpace>
@@ -93,7 +91,6 @@
 
       <Table
         ref="tabalRef"
-        :loading="tableObject.loading"
         :data="dataList"
         :columns="allSchemas.tableColumns"
         row-key="id"
@@ -101,27 +98,24 @@
         align="center"
         highlightCurrentRow
         defaultExpandAll
-        @register="register"
-        :row-style="handelStyle"
-        :cell-style="handelCellStyle"
       >
         <template #name="{ row }">
           <el-select
-            v-model="blurry"
+            v-model="row.name"
             filterable
             remote
             reserve-keyword
             placeholder="请输入户号/户主名称"
-            :remote-method="remoteMethod"
+            :remote-method="remoteMethodClone"
             :loading="loading"
             @change="doorNoChange"
             style="width: 220px"
             v-if="row.action == '删除'"
           >
             <el-option
-              v-for="item in options"
+              v-for="item in optionsClone"
               :key="item.id"
-              :label="item.blurry"
+              :label="item.blurryClone"
               :value="item.name"
             />
           </el-select>
@@ -144,18 +138,6 @@
             @change="addLegitimate(row)"
           />
         </template>
-        <template #totalPrice="{ row }">
-          <el-checkbox-group v-model="row.listBoy" @change="(val) => handelchange(row, val)">
-            <el-checkbox
-              v-for="i in row.familyMembers"
-              :label="i.name"
-              :key="i.id"
-              :disabled="handelCheckboxKey(row, i)"
-              @change="(val) => handelchanges(row, val, i)"
-              >{{ i.name }}
-            </el-checkbox>
-          </el-checkbox-group>
-        </template>
         <template #action="{ row }">
           <el-button v-if="!row.action" type="primary" @click="handleEdit(row)" link
             >增加</el-button
@@ -166,7 +148,13 @@
     </div>
     <PropertyEditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
     <el-dialog title="房屋产权分户信息" v-model="dialogVisible" width="500">
-      <div style="display: flex; margin-bottom: 10px"> 是否对**的*房屋进行分权 </div>
+      <div style="margin-bottom: 10px; text-align: center">
+        <span
+          >是否对<span style="color: red">{{ houseName ? houseName : '-' }}</span
+          >的<span style="color: red">{{ house ? house : '-' }}</span
+          >幢房屋进行分权</span
+        >
+      </div>
       <ElForm
         class="form"
         ref="formRef"
@@ -188,17 +176,58 @@
             />
           </ElSelect>
         </ElFormItem>
+        <ElRow>
+          <ElCol :span="24">
+            <div class="col-wrapper">
+              <div class="col-label-required">分权申请文件：</div>
+              <div class="card-img-list">
+                <ElUpload
+                  :list-type="'picture-card'"
+                  action="/api/file/type"
+                  :data="{
+                    type: 'archives'
+                  }"
+                  accept=".jpg,.png,jpeg,.pdf"
+                  :multiple="false"
+                  :file-list="relocateVerifyPic"
+                  :headers="headers"
+                  :on-error="onError"
+                  :on-success="uploadFileChange1"
+                  :before-remove="beforeRemove"
+                  :on-remove="removeFile1"
+                  :on-preview="imgPreview"
+                >
+                  <template #trigger>
+                    <div class="card-img-box">
+                      <img class="card-img" src="@/assets/imgs/house.png" alt="" />
+                      <div class="card-txt">点击上传</div>
+                    </div>
+                  </template>
+                </ElUpload>
+              </div>
+            </div>
+          </ElCol>
+        </ElRow>
       </ElForm>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
       </template>
+      <el-dialog title="查看图片" :width="920" v-model="dialogVisibles">
+        <img class="block w-full" :src="imgUrl" alt="Preview Image" />
+      </el-dialog>
     </el-dialog>
+    <div
+      class="flex items-center justify-between pb-12px"
+      style="color: red; margin-left: 20px"
+      v-if="role == RoleCodeType.implementation"
+      >房屋产权分户提醒：若要搜索本网格以外居民户，请联系实施组长调整网格划分</div
+    >
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed } from 'vue'
+import { reactive, ref, onMounted, computed, toRaw } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElButton,
@@ -211,7 +240,10 @@ import {
   ElForm,
   ElFormItem,
   ElRow,
-  ElCol
+  ElCol,
+  ElMessage,
+  ElUpload,
+  ElMessageBox
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -219,8 +251,6 @@ import { Table } from '@/components/Table'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import {
-  getSeparateList,
-  postSeparate,
   findHouseUser, //查询农户
   findAll, //查询房屋
   separate //提交业务
@@ -228,43 +258,102 @@ import {
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import PropertyEditForm from './PropertyEditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import type { UploadFile, UploadFiles } from 'element-plus'
+
 const searchForm = ref<any>({
   blurry: '',
   house: ''
 })
 const house = ref<any>()
 const blurry = ref<any>()
+const blurryClone = ref<any>()
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 let dialog = ref(false)
 let EditFormid = ref()
 const appStore = useAppStore()
-const projectId = appStore.currentProjectId
+const currentProjectId = appStore.currentProjectId
+const userInfo = computed(() => appStore.getUserInfo)
 let tabalRef = ref()
 const districtTree = ref<any[]>([])
 const dialogVisible = ref(false)
-const { register, tableObject, methods } = useTable({
-  getListApi: getSeparateList,
-  delListApi: getSeparateList
-})
-const { getList, setSearchParams } = methods
+const oldHouseValues = ref<any>({})
+// const { register, tableObject, methods } = useTable({
+//   getListApi: getSeparateList,
+//   delListApi: getSeparateList
+// })
+// const { getList, setSearchParams } = methods
 const form = ref<any>({
   reason: '',
   remark: ''
 })
-tableObject.params = {
-  projectId,
-  type: 'PeasantHousehold'
+// tableObject.params = {
+//   projectId,
+//   type: 'PeasantHousehold'
+// }
+interface FileItemType {
+  name: string
+  url: string
 }
 const houseLists = ref<any>()
 const loading = ref(false)
 const options = ref<any[]>([])
-const dataList = ref<any>()
+const optionsClone = ref<any[]>([])
+const dataList = ref<any[]>([])
 const hoseDate = ref<any>()
 const doorNoData = ref<any>()
 const houseId = ref<any>()
+const newHouseList = ref<any>()
+const dialogVisibles = ref<any>(false)
+const imgUrl = ref<string>('')
+const houseName = ref<any>()
+const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
+const headers = {
+  'Project-Id': appStore.getCurrentProjectId,
+  Authorization: appStore.getToken
+}
+const onError = () => {
+  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+}
+// 文件上传
+const uploadFileChange1 = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
+}
+// 移除之前
+const beforeRemove = (uploadFile: UploadFile) => {
+  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
+    () => true,
+    () => false
+  )
+}
+// 文件移除
+const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
+  handleFileList(fileList, 'relocateVerify')
+}
+// 预览
+const imgPreview = (uploadFile: UploadFile) => {
+  imgUrl.value = uploadFile.url!
+  dialogVisibles.value = true
+}
+// 处理函数
+const handleFileList = (fileList: UploadFiles, type: string) => {
+  let list: FileItemType[] = []
+  if (fileList && fileList.length) {
+    list = fileList
+      .filter((fileItem) => fileItem.status === 'success')
+      .map((fileItem) => {
+        return {
+          name: fileItem.name,
+          url: (fileItem.response as any)?.data || fileItem.url
+        }
+      })
+  }
+
+  if (type === 'relocateVerify') {
+    relocateVerifyPic.value = list
+  }
+}
 const add = () => {
-  // console.log(111111111111)
   dialogVisible.value = true
 }
 const onClose = () => {
@@ -274,13 +363,7 @@ const onSubmit = async () => {
   dialogVisible.value = false
   console.log(options.value, '旧数据')
   let parmas = {
-    newHouseList: [
-      {
-        doorNo: 'jl1084324',
-        landIllegalArea: 20,
-        landLegalArea: 20
-      }
-    ],
+    newHouseList: toRaw(newHouseList.value),
     oldHouse: {
       doorNo: doorNoData.value,
       id: houseId.value,
@@ -289,62 +372,45 @@ const onSubmit = async () => {
     },
     reason: form.value.reason,
     remark: form.value.remark,
-    fileUrl: 'XXXXX'
+    fileUrl: JSON.stringify(relocateVerifyPic.value || [])
   }
   console.log(parmas, '提交参数')
-  // await separate(parmas).then((res) => {
-  //   console.log('提交成功')
-  // })
+  await separate(parmas)
+    .then(() => {
+      ElMessage.success('房屋产权分户成功！')
+    })
+    .catch(() => {
+      ElMessage.error('房屋产权分户失败！')
+    })
 }
-const getdistrictTree = async () => {
-  const list = await getVillageTreeApi(projectId)
-  districtTree.value = list || []
-  return list || []
-}
+// const getdistrictTree = async () => {
+//   const list = await getVillageTreeApi(projectId)
+//   districtTree.value = list || []
+//   return list || []
+// }
 const addLegitimate = (row) => {
   console.log(row, '数据流')
   console.log(Number(row.landLegalArea) + Number(row.landIllegalArea), '合法数据')
   dataList.value[row.index].landArea = Number(row.landLegalArea) + Number(row.landIllegalArea)
   console.log(dataList.value, '表格数据')
-  let newHouseList = []
-  newHouseList = dataList.value.filter((item) => item.action == '删除')
-  console.log(newHouseList, '提交新房数据')
-  let arr = newHouseList.map((item: any) => {
+  let arr = toRaw(dataList.value).filter((item) => item.action == '删除')
+  console.log(arr, '提交新房数据')
+  newHouseList.value = arr.map((item: any) => {
     return {
-      doorNo: '1111',
+      doorNo: item.doorNo,
       landIllegalArea: item.landIllegalArea,
       landLegalArea: item.landLegalArea
     }
   })
-  console.log(arr, '数组')
+  console.log(newHouseList.value, '数组')
 }
-// const addIllegal = (row) => {
-//   console.log(row, '非合法数据')
-// }
-// const getHoseList = async () =>{
-//   const list = await findAll
-// }
-// const findHouseUserList = async () => {
-//   const list = await findHouseUser({ blurry: '塘步' })
-//   console.log(list, '农户列表')
-//   return list || []
-// }
-
-// const getHoseList = async () => {
-//   const list = await findAll({ doorNo: 'jl1084324', status: 'implementation' })
-//   console.log(list, '房屋列表')
-//   return list || []
-// }
-onMounted(() => {
-  getdistrictTree()
-  tableObject.loading = false
-})
 const doorTypeChange = (val) => {
   console.log(val, '测试数据下拉1')
+  houseName.value = val
   options.value.forEach((item) => {
     if (item.name == val) {
       doorNoData.value = item.doorNo
-      houseId.value = item.id
+      // houseId.value = item.id
       findAll({ doorNo: doorNoData.value, status: 'implementation' }).then((res) => {
         houseLists.value = res.content
         console.log(houseLists.value, '房子数据')
@@ -352,9 +418,17 @@ const doorTypeChange = (val) => {
     }
   })
 }
+const houseType = (val) => {
+  console.log(val, '选择的房子')
+  houseLists.value.forEach((item) => {
+    if (item.houseNo == val) {
+      houseId.value = item.id
+    }
+  })
+}
 const doorNoChange = (val) => {
   console.log(val, '测试数据下拉2')
-  options.value.forEach((item) => {
+  optionsClone.value.forEach((item) => {
     if (item.name == val) {
       let doorNo = item.doorNo
       // findAll({ doorNo: doorNo, status: 'implementation' }).then((res) => {
@@ -398,6 +472,64 @@ const remoteMethod = (query: string) => {
     options.value = []
   }
 }
+
+const remoteMethodClone = (query: string) => {
+  if (query) {
+    loading.value = true
+    findHouseUser({ blurry: query, page: 0, size: 10 }).then((res) => {
+      loading.value = false
+      optionsClone.value = res.content.map((item) => {
+        return {
+          id: item.id,
+          name: item.name,
+          doorNo: item.doorNo,
+          blurryClone:
+            item.doorNo +
+            ' ' +
+            item.name +
+            ' ' +
+            item.cityCodeText +
+            ' ' +
+            item.areaCodeText +
+            ' ' +
+            item.townCodeText +
+            ' ' +
+            item.villageText
+        }
+      })
+      console.log(optionsClone.value, '农户数据')
+    })
+  } else {
+    optionsClone.value = []
+  }
+}
+// 角色代码
+enum RoleCodeType {
+  implementation = 'implementation', // 移民实施
+  assessor = 'assessor', // 房屋评估
+  assessorland = 'assessorland', // 土地评估
+  other = 'other', // 其他 注意不是字典 用作区别 领导角色的,
+  implementleader = 'implementleader' //实施组长
+}
+const role = ref<RoleCodeType>(RoleCodeType.other)
+/**
+ * 判断角色
+ */
+const getRole = () => {
+  if (userInfo.value) {
+    const project = userInfo.value.projectUsers.find((x: any) => x.projectId === currentProjectId)
+    const role =
+      project && project.roles && project.roles.length
+        ? (project.roles[0].code as RoleCodeType)
+        : RoleCodeType.other
+    // 默认用户拥有一个角色 角色选择先不考虑
+    return role
+  }
+  return RoleCodeType.other
+}
+onMounted(() => {
+  role.value = getRole()
+})
 const schema = reactive<CrudSchema[]>([
   {
     width: 340,
@@ -452,11 +584,6 @@ const onSearch = () => {
   console.log(house.value, '测试房子')
   houseLists.value.forEach((item) => {
     if (item.houseNo == house.value) {
-      // return {
-      //   landArea: item.landArea,
-      //   landLegalArea: item.landLegalArea,
-      //   landIllegalArea: item.landIllegalArea
-      // }
       dataList.value = [
         {
           index: 0,
@@ -466,27 +593,26 @@ const onSearch = () => {
           landIllegalArea: item.landIllegalArea
         }
       ]
+      oldHouseValues.value = {
+        landArea: item.landArea,
+        landLegalArea: item.landLegalArea,
+        landIllegalArea: item.landIllegalArea
+      }
     }
   })
   console.log(hoseDate.value, 'bbq')
   console.log(dataList.value, '测试表数据')
 }
-let setSearchParamss = () => {
-  tableObject.params = { type: 'PeasantHousehold', projectId }
-  getList().then(() => {
-    tableObject.tableList.forEach((item: any) => {
-      item.listBoy = []
-      item.familyMembers.forEach((i: any) => {
-        item.listBoy.push(i.name)
-      })
-    })
-  })
+let setSearchParams = () => {
+  dataList.value = []
+  blurry.value = ''
+  house.value = ''
 }
 let handleEdit = (row) => {
   console.log(row, '新增row')
   dataList.value.push({
     index: dataList.value.length,
-    name: 1,
+    name: '',
     landArea: 0,
     landLegalArea: 0,
     landIllegalArea: 0,
@@ -496,148 +622,9 @@ let handleEdit = (row) => {
 }
 let handleDel = (row) => {
   console.log(row, '删除row')
-  dataList.value.splice(row.index, 1)
-}
-let handelStyle = ({ row }) => {
-  if (row.pid) {
-    return { background: '#e5e7eb' }
-  }
-}
-let handelCellStyle = ({ columnIndex }) => {
-  if (columnIndex == 4) {
-    return {
-      textAlign: 'left'
-    }
-  }
-}
-let handelchange = (row, val) => {
-  let nameList: any = []
-  let list: any = []
-  if (row.pid) {
-    list = tableObject.tableList.filter((item) => item.showDoorNo == row.pid)
-  } else {
-    list = [row]
-  }
-  nameList = list.reduce((pre: any, cur: any) => {
-    pre = pre.concat(cur.listBoy)
-    if (cur.children) {
-      pre = pre.concat(cur.children.map((i: any) => i.listBoy))
-    }
-    if (pre.some((items) => Array.isArray(items))) {
-      pre = pre.flat(Infinity)
-    }
-    return pre
-  }, [])
-
-  if (nameList.length > list[0].familyMembers.length) {
-    if (row.pid) {
-      tableObject.tableList.forEach((item: any) => {
-        if (item.showDoorNo === row.pid) {
-          if (item.listBoy.indexOf(val[val.length - 1]) != -1) {
-            item.listBoy.splice(item.listBoy.indexOf(val[val.length - 1]), 1)
-          } else {
-            item.children.forEach((res) => {
-              if (res.listBoy.indexOf(val[val.length - 1]) != -1) {
-                res.listBoy.splice(res.listBoy.indexOf(val[val.length - 1]), 1)
-              }
-            })
-          }
-        }
-      })
-    } else {
-      tableObject.tableList.forEach((item: any) => {
-        if (item.showDoorNo === row.showDoorNo) {
-          item.children.forEach((res) => {
-            if (res.listBoy.indexOf(val[val.length - 1]) != -1) {
-              res.listBoy.splice(res.listBoy.indexOf(val[val.length - 1]), 1)
-            }
-          })
-        }
-      })
-    }
-  }
-}
-let handelchanges = (row, val, i) => {
-  console.log(row, val, i)
-  if (row.pid && !val) {
-    tableObject.tableList.forEach((item: any) => {
-      if (item.showDoorNo === row.pid) {
-        item.children.forEach((res) => {
-          if (res.showDoorNo == row.showDoorNo) {
-            res.listBoy.push(i.name)
-          }
-        })
-      }
-    })
-  } else if (!val) {
-    tableObject.tableList.forEach((item: any) => {
-      if (item.showDoorNo === row.showDoorNo) {
-        item.listBoy.push(i.name)
-      }
-    })
-  }
-}
-let handelCheckboxKey = (row, key) => {
-  let list: any = []
-  let nameList: any = []
-  if (row.pid) {
-    list = tableObject.tableList.filter((item) => item.showDoorNo == row.pid)
-  } else {
-    list = [row]
-  }
-  list.forEach((item: any) => {
-    nameList.push(item.name)
-    if (item.children) {
-      item.children.forEach((i: any) => {
-        nameList.push(i.name)
-      })
-    }
-  })
-
-  return nameList.indexOf(key.name) != -1 ? true : false
-}
-let handelSelectchange = (row, key) => {
-  if (row.listBoy.indexOf(key) == -1) {
-    row.listBoy.push(key)
-    handelchange(row, row.listBoy)
-  }
-}
-let submit = () => {
-  let list: any = []
-  let parent: any = []
-  list = tableObject.tableList.filter((item) => item.children)
-  console.log(list)
-  parent = list.reduce((pre: any, cur: any) => {
-    let m: any = { oldHousehold: {}, newHouseholdList: [] }
-    m.oldHousehold = {
-      householderId: cur.familyMembers.filter((item: any) => item.name === cur.name)[0]?.id,
-      familyIds: valueKey(cur.familyMembers, cur.listBoy),
-      doorNo: cur.doorNo,
-      villageCode: cur.villageCode
-    }
-    cur.children.forEach((item: any) => {
-      m.newHouseholdList.push({
-        householderId: item.familyMembers.filter((b: any) => b.name === item.name)[0]?.id,
-        familyIds: valueKey(item.familyMembers, item.listBoy),
-        doorNo: item.doorNo,
-        villageCode: item.villageCode
-      })
-    })
-    pre.push(m)
-    return pre
-  }, [])
-  console.log(parent)
-  postSeparate(parent).then((res: any) => {
-    console.log(res)
-    setSearchParams({ type: 'PeasantHousehold' })
-  })
-}
-let valueKey = (arr, value) => {
-  let m = value.reduce((pre: any, cur: any) => {
-    pre.push(arr.filter((item: any) => item.name === cur)[0].id)
-    return pre
-  }, [])
-  return m
+  // dataList.value.splice(row.index, 1)
+  dataList.value.splice(dataList.value.indexOf(row), 1)
+  console.log(dataList.value, '表格数据')
 }
 const onEditFormClose = (flag: boolean) => {
   console.log(flag)
