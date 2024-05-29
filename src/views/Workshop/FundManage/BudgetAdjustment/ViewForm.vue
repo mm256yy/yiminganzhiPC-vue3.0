@@ -141,7 +141,7 @@
       </ElTableColumn>
       <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
         <template #default="{ row }">
-          {{ row.nodeDtoList[0].amount + '元' }}
+          {{ row.contractAmount + '元' }}
         </template>
       </ElTableColumn>
     </ElTable>

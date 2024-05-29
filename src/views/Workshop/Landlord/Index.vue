@@ -613,7 +613,7 @@ const getParamsKey = (key: string) => {
   const map = {
     Country: 'areaCode',
     Township: 'townCode',
-    Village: 'villageCode', // 行政村 code
+    Village: 'villageCodes', // 行政村 code
     NaturalVillage: 'virutalVillageCode' // 自然村 code
   }
   return map[key]

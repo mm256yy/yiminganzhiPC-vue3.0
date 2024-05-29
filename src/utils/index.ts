@@ -409,7 +409,7 @@ export function setlocationType(target: any) {
 export async function openurl(params: any, callback) {
   const data = await callback(params)
   console.log(data)
-  if (data.signFile) {
+  if (data) {
     window.open(JSON.parse(data.signFile)[0].url)
   } else {
     ElMessage.error('暂无历史记录')

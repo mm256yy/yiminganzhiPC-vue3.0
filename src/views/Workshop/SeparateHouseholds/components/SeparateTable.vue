@@ -73,14 +73,32 @@
           </el-input>
         </template>
         <template #totalPrice="{ row }">
-          <el-checkbox-group v-model="row.listBoy" @change="(val) => handelchange(row, val)">
+          <el-checkbox-group
+            v-model="row.listBoy"
+            @change="(val) => handelchange(row, val, 'listBoy')"
+          >
             <el-checkbox
               v-for="i in row.familyMembers"
               :label="i.name"
               :key="i.id"
               :disabled="handelCheckboxKey(row, i)"
-              @change="(val) => handelchanges(row, val, i)"
+              @change="(val) => handelchanges(row, val, i, 'listBoy', 'name')"
               >{{ i.name }}
+            </el-checkbox>
+          </el-checkbox-group>
+        </template>
+        <template #immigrantHouses="{ row }">
+          <el-checkbox-group
+            v-model="row.familyList"
+            @change="(val) => handelchange(row, val, 'familyList')"
+          >
+            <el-checkbox
+              v-for="i in row.immigrantHouses"
+              :label="i.id"
+              :key="i.id"
+              :disabled="handelCheckboxKey(row, i)"
+              @change="(val) => handelchanges(row, val, i, 'familyList', 'id')"
+              >{{ i.remark }}
             </el-checkbox>
           </el-checkbox-group>
         </template>
@@ -157,28 +175,6 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'code',
-    label: '所属区域',
-    search: {
-      show: true,
-      component: 'TreeSelect',
-      componentProps: {
-        data: districtTree,
-        nodeKey: 'code',
-        props: {
-          value: 'code',
-          label: 'name'
-        },
-        showCheckbox: true,
-        checkStrictly: true,
-        checkOnClickNode: true
-      }
-    },
-    table: {
-      show: false
-    }
-  },
 
   // table
   {
@@ -212,6 +208,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'totalPrice',
     label: '选择人口',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'immigrantHouses',
+    label: '房屋归属',
     search: {
       show: false
     }
@@ -290,10 +293,15 @@ const onSearch = (data) => {
   getList().then(() => {
     tableObject.tableList.forEach((item: any) => {
       item.listBoy = []
+      item.familyList = []
       item.familyMembers.forEach((i: any) => {
         item.listBoy.push(i.name)
       })
+      item.immigrantHouses.forEach((i: any) => {
+        item.familyList.push(i.id)
+      })
     })
+    console.log(tableObject.tableList)
   })
 }
 let setSearchParamss = () => {
@@ -322,6 +330,8 @@ let handleEdit = (row) => {
             action: '删除',
             pid: row.showDoorNo,
             familyMembers: row.familyMembers,
+            immigrantHouses: row.immigrantHouses,
+            familyListL: [],
             listBoy: [],
             noDoor: row.doorNo.slice(2, 5)
           })
@@ -337,6 +347,8 @@ let handleEdit = (row) => {
               pid: row.showDoorNo,
               familyMembers: row.familyMembers,
               listBoy: [],
+              immigrantHouses: row.immigrantHouses,
+              familyListL: [],
               noDoor: row.doorNo.slice(2, 5)
             }
           ])
@@ -389,7 +401,9 @@ let handelselenceKey = (row: any, value) => {
 
   return nameList.indexOf(value.name) != -1 ? true : false
 }
-let handelchange = (row, val) => {
+let handelchange = (row, val, key) => {
+  console.log(val)
+
   let nameList: any = []
   let list: any = []
   if (row.pid) {
@@ -398,9 +412,9 @@ let handelchange = (row, val) => {
     list = [row]
   }
   nameList = list.reduce((pre: any, cur: any) => {
-    pre = pre.concat(cur.listBoy)
+    pre = pre.concat(cur[key])
     if (cur.children) {
-      pre = pre.concat(cur.children.map((i: any) => i.listBoy))
+      pre = pre.concat(cur.children.map((i: any) => i[key]))
     }
     if (pre.some((items) => Array.isArray(items))) {
       pre = pre.flat(Infinity)
@@ -408,16 +422,16 @@ let handelchange = (row, val) => {
     return pre
   }, [])
 
-  if (nameList.length > list[0].familyMembers.length) {
+  if (nameList.length > list[0].familyMembers.length && key == 'listBoy') {
     if (row.pid) {
       tableObject.tableList.forEach((item: any) => {
         if (item.showDoorNo === row.pid) {
-          if (item.listBoy.indexOf(val[val.length - 1]) != -1) {
-            item.listBoy.splice(item.listBoy.indexOf(val[val.length - 1]), 1)
+          if (item[key].indexOf(val[val.length - 1]) != -1) {
+            item[key].splice(item[key].indexOf(val[val.length - 1]), 1)
           } else {
             item.children.forEach((res) => {
-              if (res.listBoy.indexOf(val[val.length - 1]) != -1) {
-                res.listBoy.splice(res.listBoy.indexOf(val[val.length - 1]), 1)
+              if (res[key].indexOf(val[val.length - 1]) != -1) {
+                res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
               }
             })
           }
@@ -427,8 +441,35 @@ let handelchange = (row, val) => {
       tableObject.tableList.forEach((item: any) => {
         if (item.showDoorNo === row.showDoorNo) {
           item.children.forEach((res) => {
-            if (res.listBoy.indexOf(val[val.length - 1]) != -1) {
-              res.listBoy.splice(res.listBoy.indexOf(val[val.length - 1]), 1)
+            if (res[key].indexOf(val[val.length - 1]) != -1) {
+              res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
+            }
+          })
+        }
+      })
+    }
+  }
+  if (nameList.length > list[0].immigrantHouses.length && key == 'familyList') {
+    if (row.pid) {
+      tableObject.tableList.forEach((item: any) => {
+        if (item.showDoorNo === row.pid) {
+          if (item[key].indexOf(val[val.length - 1]) != -1) {
+            item[key].splice(item[key].indexOf(val[val.length - 1]), 1)
+          } else {
+            item.children.forEach((res) => {
+              if (res[key].indexOf(val[val.length - 1]) != -1) {
+                res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
+              }
+            })
+          }
+        }
+      })
+    } else {
+      tableObject.tableList.forEach((item: any) => {
+        if (item.showDoorNo === row.showDoorNo) {
+          item.children.forEach((res) => {
+            if (res[key].indexOf(val[val.length - 1]) != -1) {
+              res[key].splice(res[key].indexOf(val[val.length - 1]), 1)
             }
           })
         }
@@ -436,14 +477,14 @@ let handelchange = (row, val) => {
     }
   }
 }
-let handelchanges = (row, val, i) => {
+let handelchanges = (row, val, i, key, name) => {
   console.log(row, val, i)
   if (row.pid && !val) {
     tableObject.tableList.forEach((item: any) => {
       if (item.showDoorNo === row.pid) {
         item.children.forEach((res) => {
           if (res.showDoorNo == row.showDoorNo) {
-            res.listBoy.push(i.name)
+            res[key].push(i[name])
           }
         })
       }
@@ -451,7 +492,7 @@ let handelchanges = (row, val, i) => {
   } else if (!val) {
     tableObject.tableList.forEach((item: any) => {
       if (item.showDoorNo === row.showDoorNo) {
-        item.listBoy.push(i.name)
+        item[key].push(i[name])
       }
     })
   }
@@ -478,7 +519,7 @@ let handelCheckboxKey = (row, key) => {
 let handelSelectchange = (row, key) => {
   if (row.listBoy.indexOf(key) == -1) {
     row.listBoy.push(key)
-    handelchange(row, row.listBoy)
+    handelchange(row, row.listBoy, 'listBoy')
   }
 }
 let submit = () => {
