@@ -439,16 +439,16 @@ export const LandNoMoveTabs = [
     name: '生产安置确认'
   },
   {
-    id: 2,
-    name: '土地腾让'
-  },
-  {
     id: 3,
     name: '补偿卡'
   },
   {
     id: 4,
     name: '征地协议'
+  },
+  {
+    id: 2,
+    name: '土地腾让'
   },
   {
     id: 5,
@@ -461,16 +461,16 @@ export const LandNoMoveTabss = [
     name: '资产评估'
   },
   {
-    id: 2,
-    name: '土地腾让'
-  },
-  {
     id: 3,
     name: '补偿卡'
   },
   {
     id: 4,
     name: '征地协议'
+  },
+  {
+    id: 2,
+    name: '土地腾让'
   }
 ]
 export const LandNoMoveSubTabs = [

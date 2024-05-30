@@ -197,11 +197,11 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         // 选项写法
         '/api': {
           // 本地开后台环境
-          // target:'http://ym.zdwp.local',
+          target:'http://ym.zdwp.local',
           // target: 'http://192.168.1.119:8880',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',
-          target: 'https://ym.zhym.net.cn',
+          // target: 'https://ym.zhym.net.cn',
           // 使用本地后台服务里，下面该值设置成 false
           changeOrigin: true
         }

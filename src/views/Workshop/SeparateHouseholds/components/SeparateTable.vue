@@ -218,10 +218,11 @@
         </template>
       </Table>
     </div>
-    <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
+    <EditForm :show="dialog" :id="EditFormid" :isfh="true" @close="onEditFormClose" />
     <NewForm
       :show="newdialog"
       :name="tableObject.tableList.length > 0 ? tableObject.tableList[0]?.name : ''"
+      :isfh="true"
       @close="close"
       @submit="submit"
     />

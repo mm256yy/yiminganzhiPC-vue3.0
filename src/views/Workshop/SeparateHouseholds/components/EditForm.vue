@@ -28,6 +28,15 @@
       </template>
       <template #fhReason="{ row }">
         {{ row.fhReason ? dictObj[437].find((item) => item.value == row.fhReason).label : '' }}
+        {{
+          isfh
+            ? row.fhReason
+              ? dictObj[437].find((item) => item.value == row.fhReason).label
+              : ''
+            : row.mergeReason
+            ? dictObj[437].find((item) => item.value == row.mergeReason).label
+            : ''
+        }}
       </template>
     </Table>
   </ElDialog>
@@ -46,6 +55,7 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 interface PropsType {
   show: boolean
   id: number
+  isfh: any
 }
 const dictStore = useDictStoreWithOut()
 

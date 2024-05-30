@@ -74,7 +74,7 @@
               </div>
             </ElCol>
             <ElCol :span="12">
-              <ElFormItem label="全家福照片：">
+              <ElFormItem label="全家福照片：" required>
                 <div class="card-img-list">
                   <ElUpload
                     action="/api/file/type"
@@ -396,8 +396,12 @@ const onSave = () => {
     ElMessage.error('请输入宅基地总面积')
     return
   }
+  if (!familyPic.value.length) {
+    ElMessage.error('请上传全家福照片')
+    return
+  }
   // if (!position.latitude || !position.longitude) {
-  //   ElMessage.error('请选择地理位置')
+  //   ElMessage.error('请选择地理位置')familyPic
   //   return
   // }
   updateHouseholdInfo(params).then(() => {

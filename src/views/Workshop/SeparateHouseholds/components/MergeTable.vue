@@ -16,7 +16,7 @@
             合户日志
           </ElButton>
           <ElButton type="primary" @click="select">选择</ElButton>
-          <ElButton type="primary" @click="selectsum">确认</ElButton>
+          <ElButton type="primary" @click="selectsums">确认</ElButton>
         </div>
       </div>
       <ElTable
@@ -113,7 +113,14 @@
         <template #familyMembers="{ row }"> {{ joninFamily(row.familyMembers) }}</template>
       </Table>
     </ElDialog>
-    <EditForm :show="dialog" :id="EditFormid" @close="onEditFormClose" />
+    <EditForm :show="dialog" :id="EditFormid" :isfh="false" @close="onEditFormClose" />
+    <NewForm
+      :show="newdialog"
+      :name="tableObject.tableList.length > 0 ? tableObject.tableList[0]?.name : ''"
+      :isfh="false"
+      @close="close"
+      @submit="selectsum"
+    />
   </WorkContentWrap>
 </template>
 
@@ -140,6 +147,7 @@ import { useAppStore } from '@/store/modules/app'
 import { Table } from '@/components/Table'
 import { getVillageTreeApi } from '@/api/workshop/village/service'
 import EditForm from './EditForm.vue'
+import NewForm from './NewForm.vue'
 
 let dialog = ref(false)
 let EditFormid = ref()
@@ -255,6 +263,10 @@ let switchChange = (val) => {
     switchs.value = false
   }
 }
+const close = (flag?: boolean) => {
+  console.log(flag)
+  newdialog.value = false
+}
 let select = () => {
   // tabalRef.value?.selections = tableData.value
   setSearchParams({ type: 'PeasantHousehold' })
@@ -305,7 +317,28 @@ let handleSelectionChange = (val) => {
   }
   form.selenctTable = val
 }
-let selectsum = () => {
+let newdialog = ref(false)
+let selectsums = () => {
+  if (form.selenctTable.length == 0 && !switchs.value) {
+    ElMessage({
+      message: '请选择户主',
+      type: 'warning'
+    })
+  } else if (switchs.value && !form.value) {
+    ElMessage({
+      message: '请选择自然村',
+      type: 'warning'
+    })
+  } else if (switchs.value && !form.valueFamliy) {
+    ElMessage({
+      message: '请选择新户主',
+      type: 'warning'
+    })
+  } else {
+    newdialog.value = true
+  }
+}
+let selectsum = (e) => {
   if (form.selenctTable.length == 0 && !switchs.value) {
     ElMessage({
       message: '请选择户主',
@@ -356,7 +389,7 @@ let selectsum = () => {
     }
 
     console.log(params)
-    postMerge(params).then((res) => {
+    postMerge({ ...params, ...e }).then((res) => {
       console.log(res)
       if (res) {
         ElMessage({
