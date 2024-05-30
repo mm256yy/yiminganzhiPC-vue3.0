@@ -86,6 +86,9 @@
         <template #filling="{ row }">
           <div class="filling-btn" @click="fillData(row)">数据填报</div>
         </template>
+        <template #type="{ row }">
+          {{ row.type == 'PeasantHousehold' ? '居民户' : '只征地不搬迁' }}
+        </template>
         <template #action="{ row }">
           <ElButton link type="primary" @click="onEditRow(row)">编辑</ElButton>
         </template>
@@ -320,6 +323,13 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'regionText',
     label: '所属区域',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'type',
+    label: '移民类型',
     search: {
       show: false
     }

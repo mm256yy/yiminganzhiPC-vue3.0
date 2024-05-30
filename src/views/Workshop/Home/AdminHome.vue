@@ -35,9 +35,12 @@
             <img class="img" src="@/assets/imgs/home/icon_jmh.png" />
           </div>
           <div class="enter-title">
-            <span class="title-txt">居民户</span>
+            <span class="title-txt">居民户/只征地不搬迁</span>
             <div class="flex">
               <span class="count-num"> {{ statisticsObj?.peasantCount }} </span>
+              <span class="count-unit"> 户 </span>
+              <span class="count-num"> / </span>
+              <span class="count-num"> {{ statisticsObj?.landNoMoveCount }} </span>
               <span class="count-unit"> 户 </span>
             </div>
           </div>
@@ -292,7 +295,7 @@
         </div>
       </div>
       <!-- 只征地不搬迁 -->
-      <div class="enter-item">
+      <!-- <div class="enter-item">
         <div class="title-field" @click="toTarget('LandNoMove')">
           <div class="enter-icon">
             <img class="img" src="@/assets/imgs/home/icon_village.png" />
@@ -339,7 +342,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="group">
@@ -518,7 +521,7 @@ onMounted(() => {
     justify-content: center;
 
     .enter-item {
-      width: 232px;
+      width: 362px;
       height: 163px;
       padding: 20px;
       margin-right: 60px;
