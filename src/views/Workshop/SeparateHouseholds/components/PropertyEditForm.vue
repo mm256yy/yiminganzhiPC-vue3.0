@@ -20,9 +20,7 @@
       @register="register"
       height="500"
     >
-      <template #operationType="{ row }">
-        {{ row.operationType == 1 ? '分户' : '合户' }}
-      </template>
+      <template #operationType> 房屋分权 </template>
       <template #operationDate="{ row }">
         {{ row.operationDate ? dayjs(row.operationDate).format('YYYY-MM-DD') : '' }}
       </template>

@@ -26,9 +26,17 @@
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">居民户列表</span>
 
           <div class="text">
-            （共 <span class="num">{{ headInfo.peasantHouseholdNum }}</span> 户
+            （共<span class="num">{{ headInfo.peasantHouseholdTotalNum }}</span> 户
             <span class="distance"></span>
-            <span class="num">{{ headInfo.demographicNum }}</span> 人）
+            <span class="num">{{ headInfo.demographicTotalNum }}</span> 人） （居民户
+            <span class="num">{{ headInfo.peasantHouseholdNum }}</span>
+            户
+            <span class="distance"></span>
+            <span class="num">{{ headInfo.demographicNum }}</span> 人） （只征地不搬迁
+            <span class="num">{{ headInfo?.peasantHouseholdLandNum }}</span>
+            户
+            <span class="distance"></span>
+            <span class="num">{{ headInfo?.demographicLandNum }}</span> 人）
             <!-- <span class="distance"></span>
             已完成<span class="num !text-[#30A952]">{{ headInfo.reportSucceedNum }}</span>
             <span class="distance"></span>
@@ -137,7 +145,11 @@ const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
   reportSucceedNum: 0,
-  unReportNum: 0
+  unReportNum: 0,
+  peasantHouseholdLandNum: 0,
+  demographicLandNum: 0,
+  peasantHouseholdTotalNum: 0,
+  demographicTotalNum: 0
 })
 
 const { register, tableObject, methods } = useTable({
@@ -149,13 +161,15 @@ const { getList, setSearchParams } = methods
 tableObject.params = {
   projectId,
   blurry: search,
-  ...valueForme['居民户信息']
+  ...valueForme['居民户信息'],
+  isMergeLand: 1
 }
 
 setSearchParams({
   type: 'PeasantHousehold',
   status: 'implementation',
-  warnStatus: currentRoute.value.query['warnStatus']
+  warnStatus: currentRoute.value.query['warnStatus'],
+  isMergeLand: 1
 })
 
 const getVillageTree = async () => {
@@ -179,7 +193,8 @@ const getLandlordHeadInfo = async () => {
   const info = await getLandlordHeadApi({
     type: 'PeasantHousehold',
     status: 'implementation',
-    warnStatus: currentRoute.value.query['warnStatus']
+    warnStatus: currentRoute.value.query['warnStatus'],
+    isMergeLand: 1
   })
   headInfo.value = info
 }
@@ -259,6 +274,33 @@ const schema = reactive<CrudSchema[]>([
           {
             label: '否',
             value: 'false'
+          }
+        ]
+      }
+    },
+    table: {
+      show: false
+    }
+  },
+  {
+    field: 'istype',
+    label: '类型',
+    search: {
+      show: true,
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: '全部',
+            value: '1'
+          },
+          {
+            label: '居民户',
+            value: '2'
+          },
+          {
+            label: '只征地不搬迁',
+            value: '3'
           }
         ]
       }
@@ -450,7 +492,7 @@ const maps = {
 const onSearch = (data) => {
   console.log('======================================')
   let searchData = JSON.parse(JSON.stringify(data))
-  console.log(searchData)
+  // console.log(searchData)
   // 处理参数
   let params = {
     ...searchData
@@ -480,14 +522,26 @@ const onSearch = (data) => {
         }
       }
     })
-    tableObject.params = params
-
-    params.type = 'PeasantHousehold'
-    setSearchParams({ ...params, status: 'implementation' })
-  } else {
-    params.type = 'PeasantHousehold'
-    setSearchParams({ ...params, status: 'implementation' })
   }
+  if (params.istype) {
+    if (params.istype == '1') {
+      params.type = 'PeasantHousehold'
+      params.isMergeLand = 1
+    } else if (params.istype == '2') {
+      params.type = 'PeasantHousehold'
+      delete params.istype
+      delete params.isMergeLand
+    } else {
+      params.type = 'LandNoMove'
+
+      delete params.istype
+      delete params.isMergeLand
+    }
+  }
+  tableObject.params = params
+  console.log(tableObject.params)
+
+  setSearchParams({ ...params, status: 'implementation' })
 }
 
 // 数据填报

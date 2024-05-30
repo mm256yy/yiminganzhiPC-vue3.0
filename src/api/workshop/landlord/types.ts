@@ -30,6 +30,10 @@ export interface LandlordHeadInfoType {
   peasantHouseholdNum: number
   reportSucceedNum: number
   unReportNum: number
+  peasantHouseholdLandNum?: any
+  demographicLandNum?: any
+  peasantHouseholdTotalNum?: any
+  demographicTotalNum?: any
 }
 
 export interface TemplateParamsType {
