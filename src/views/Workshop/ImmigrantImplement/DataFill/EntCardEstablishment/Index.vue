@@ -252,7 +252,7 @@
             <!-- {{ dictObj[422][form.placementWay] ? dictObj[422][form.placementWay].label : '' }} -->
             {{ dictObj[422][form.placementWay - 1]?.label || '' }}
           </ElDescriptionsItem>
-          <ElDescriptionsItem label="迁前厂址" label-class-name="my-label" class-name="my-content">
+          <ElDescriptionsItem label="迁前地址" label-class-name="my-label" class-name="my-content">
             {{ form.beforeAddress }}
           </ElDescriptionsItem>
           <ElDescriptionsItem
