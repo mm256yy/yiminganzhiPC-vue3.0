@@ -118,6 +118,7 @@ const requestCardReport = async () => {
     const result = await getCardReportApi(type)
     tableData.value = result
     tableLoading.value = false
+    console.log('测试就提交')
   } catch {
     tableLoading.value = false
   }
