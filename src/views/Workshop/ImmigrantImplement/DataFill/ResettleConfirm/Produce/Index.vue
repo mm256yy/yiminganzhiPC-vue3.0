@@ -2,6 +2,46 @@
   <WorkContentWrap>
     <!-- 安置确认 —— 生产安置 -->
     <div class="table-wrap !py-12px !mt-0px">
+      <el-table :data="tableData" style="width: 100%">
+        <el-table-column
+          label="序号"
+          align="center"
+          type="index"
+          header-align="center"
+          width="100"
+        />
+        <el-table-column prop="area" label="所在区域">
+          <template #default="scope">
+            {{ dictObj[326].filter((item) => item.value == scope.row.area)[0].label }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="inundationRange" label="淹没范围">
+          <template #default="scope">
+            {{ dictObj[346].filter((item) => item.value == scope.row.inundationRange)[0].label }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="sheetNumber" label="图幅号" />
+        <el-table-column prop="landNumber" label="地块编号" />
+        <el-table-column prop="landName" label="地名" />
+        <el-table-column prop="rightHolder" label="使用权人" />
+        <el-table-column prop="landNature" label="土地性质">
+          <template #default="scope">
+            {{ dictObj[222].filter((item) => item.value == scope.row.landNature)[0].label }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="landLevel" label="地类">
+          <template #default="scope">
+            {{ scope.row.landTypeText }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="shapeArea" label="面积(亩)" />
+        <el-table-column prop="shapeLeng" label="周长(米)" />
+        <el-table-column prop="remark" label="备注">
+          <template #default="scope">
+            {{ scope.row.remark != 'null' ? scope.row.remark : '-' }}
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="formBox mt-5">
         <ElForm
           :disabled="actionType === 'view'"
@@ -95,8 +135,23 @@
         highlightCurrentRow
         @register="register"
       >
+        <template #isProduction="{ row }">
+          <el-select
+            v-model="row.isProduction"
+            placeholder="请选择"
+            @change="isProductionType(row, $event)"
+            clearable
+          >
+            <el-option
+              v-for="item in isProductionList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </template>
         <template #settingWay="{ row }">
-          <el-select v-model="row.settingWay" placeholder="请选择" :key="row.id">
+          <el-select v-model="row.settingWay" placeholder="请选择" :key="row.id" :disabled="flag">
             <el-option
               v-for="item in filterWay(row)"
               :key="`${item.value}${row.id}`"
@@ -155,7 +210,7 @@
         <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
         <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
           <template #default="{ row }">
-            {{ filterWay(row).filter((item) => item.value === row.settingWay)[0].label }}
+            {{ filterWay(row).filter((item) => item.value === row.settingWay)[0]?.label }}
           </template>
         </el-table-column>
         <el-table-column label="备注" align="center" prop="settingRemark">
@@ -199,13 +254,17 @@ import {
 } from '@/api/immigrantImplement/resettleConfirm/produce-service'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { getSimulateDemographicApi } from '@/api/workshop/datafill/mockResettle-service'
+import {
+  getSimulateDemographicApi,
+  getlandEstimatecApi
+} from '@/api/workshop/datafill/mockResettle-service'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { cloneDeep } from 'lodash-es'
 import OnDocumentation from './OnDocumentation.vue' // 引入档案上传组件
 import { debounce, openurl } from '@/utils/index'
 import { htmlToPdf } from '@/utils/ptf'
 import { handelurl } from '@/api/immigrantImplement/common-service'
+const tableData: any = ref([])
 
 const dictStore = useDictStoreWithOut()
 
@@ -231,7 +290,25 @@ const { register, tableObject, methods } = useTable({
   getListApi: getProduceListApi
 })
 const { getList } = methods
-
+const isProductionList = ref([
+  {
+    label: '是',
+    value: '1'
+  },
+  {
+    label: '否',
+    value: '0'
+  }
+])
+const flag = ref<boolean>(false)
+const isProductionType = (rowData, event) => {
+  console.log(event, rowData, '选择的值是什么')
+  event == 0 ? (flag.value = true) : (flag.value = false)
+  // console.log(flag.value, '开关')
+  if (event == 0) {
+    rowData.settingWay = ''
+  }
+}
 // 根据户号来做筛选
 tableObject.params = {
   doorNo: props.doorNo,
@@ -289,6 +366,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'isProduction',
+    label: '是否生产安置',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'settingWay',
     label: '安置方式',
     search: {
@@ -303,12 +387,28 @@ const schema = reactive<CrudSchema[]>([
     }
   }
 ])
-
+const schemas = reactive<CrudSchema[]>([
+  {
+    width: 80,
+    type: 'index',
+    field: 'index',
+    label: '序号'
+  },
+  {
+    field: 'name',
+    label: '姓名',
+    search: {
+      show: false
+    }
+  }
+])
+const { allSchemass } = useCrudSchemas(schemas)
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
 
 onMounted(() => {
   getMockList()
+  getLandList()
 })
 const dictFmt = (value, index) => {
   if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
@@ -350,7 +450,15 @@ const getMockList = async () => {
     mockList.value = res.content
   }
 }
-
+//获取土地数据
+const getLandList = async () => {
+  const res = await getlandEstimatecApi({
+    doorNo: props.doorNo,
+    status: props.baseInfo.status
+  })
+  tableData.value = res
+  console.log(res, '测试数据')
+}
 // 导入
 const onImportDataPre = async () => {
   dialogVisible.value = true
@@ -358,6 +466,7 @@ const onImportDataPre = async () => {
 
 // 导入数据
 const onImportData = async () => {
+  console.log('进入了')
   // 拿到模拟安置的配置
   if (mockList.value && mockList.value.length) {
     // 模拟数据和当前数据做融合
@@ -394,8 +503,13 @@ const onSubmit = () => {
 
 const onSave = async () => {
   const item = tableObject.tableList.find((item) => !item.settingWay)
-  if (item) {
+  const isNotProduction = tableObject.tableList.filter((item) => !item.isProduction)
+  if (flag.value == false && item) {
     ElMessage.info('请选择安置方式')
+    return
+  }
+  if (isNotProduction) {
+    ElMessage.info('请选择是否生产安置')
     return
   }
   const params = tableObject.tableList.map((item) => {

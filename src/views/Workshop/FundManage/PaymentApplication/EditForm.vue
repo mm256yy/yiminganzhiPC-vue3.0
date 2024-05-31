@@ -128,7 +128,7 @@
               元
             </div>
             <div class="text">
-              审核笔数111：
+              审核笔数：
               <!-- actionType != 'add' ? parmasList.paymentObjectList.length :  -->
               <span class="num">{{
                 actionType != 'add' && targe && parmasLists.paymentObjectList

@@ -34,12 +34,30 @@
           <el-table-column prop="card" label="身份证" />
           <el-table-column prop="censusTypeText" label="户籍类别" />
           <el-table-column prop="populationNatureText" label="人口性质" />
+          <el-table-column prop="isProduction" label="是否生产安置">
+            <template #default="scope">
+              <el-select
+                v-model="scope.row.isProduction"
+                placeholder="请选择"
+                @change="isProductionType(scope.row, $event)"
+                clearable
+              >
+                <el-option
+                  v-for="item in isProductionList"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </template>
+          </el-table-column>
           <el-table-column prop="settingWay" label="安置方式">
             <template #default="scope">
               <el-select
                 v-model="scope.row.settingWay"
                 placeholder="请选择"
                 v-if="isShow(scope.row)"
+                :disabled="flag"
               >
                 <el-option
                   v-for="item in filterWay(scope.row)"
@@ -184,7 +202,6 @@ interface PropsType {
 
 const dataList = ref<any>()
 const props = defineProps<PropsType>()
-
 // 步骤条
 const stepArray = ref([
   {
@@ -198,6 +215,17 @@ const stepArray = ref([
     done: false
   }
 ])
+
+const isProductionList = ref([
+  {
+    label: '是',
+    value: '1'
+  },
+  {
+    label: '否',
+    value: '0'
+  }
+])
 // 步骤条选中
 const stepIndex = ref(1)
 
@@ -205,7 +233,15 @@ const stepIndex = ref(1)
 const tableData: any = ref([])
 const immigrantSettle = ref<any>()
 const houseType = ref<HouseType>(HouseType.homestead)
-
+const flag = ref<boolean>(false)
+const isProductionType = (rowData, event) => {
+  console.log(event, rowData, '选择的值是什么')
+  event == 0 ? (flag.value = true) : (flag.value = false)
+  // console.log(flag.value, '开关')
+  if (event == 0) {
+    rowData.settingWay = ''
+  }
+}
 watch(
   () => props.baseInfo,
   (val) => {
@@ -344,9 +380,15 @@ const stepClick = (id) => {
 const emit = defineEmits(['updateData'])
 const stepNext = async () => {
   // 校验数据
+  console.log(tableData.value, '测试提交数据')
   const notFillArray = tableData.value.filter((item) => !item.settingWay)
-  if (notFillArray && notFillArray.length) {
+  const isNotProduction = tableData.value.filter((item) => !item.isProduction)
+  if (flag.value == false && notFillArray && notFillArray.length) {
     ElMessage.info('请选择安置方式')
+    return
+  }
+  if (isNotProduction && isNotProduction.length) {
+    ElMessage.info('请选择是否生产安置')
     return
   }
   // const data = tableData.value.map((item) => {

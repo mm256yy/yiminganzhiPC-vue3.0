@@ -42,6 +42,21 @@ export const getSimulateDemographicApi = (params: any) => {
 }
 
 /**
+ * 获取土地数据
+ * @param params
+ * @returns 土地列表
+ */
+export const getlandEstimatecApi = (params: any) => {
+  return request.get({
+    url: '/landEstimate/findList',
+    params: {
+      ...params,
+      status: 'implementation'
+    }
+  })
+}
+
+/**
  * 获取生产安置
  */
 export const getSimulateImmigrantSettleApi = (doorNo: string) => {
