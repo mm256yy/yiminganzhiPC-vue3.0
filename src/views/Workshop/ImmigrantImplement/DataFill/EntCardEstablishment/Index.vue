@@ -210,6 +210,178 @@
       @close="close('rewardConfirm')"
       :id="2"
     />
+
+    <!-- pdf  -->
+    <div
+      style="
+        position: fixed;
+        left: -1000px;
+        display: flex;
+        width: 340mm;
+        padding: 10px 10px 0px 10px;
+      "
+      id="print"
+    >
+      <div style="width: 50%; padding-right: 10px">
+        <h1 style="font-size: 24px; text-align: center">企业协议补偿登记卡</h1>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin: 20px 0 20px 0;
+          "
+        >
+          <div style="width: 50%">
+            <span style="font-weight: bold">企业名称:</span>
+            <span style="margin-left: 5px">{{ baseInfo.name }}</span>
+          </div>
+          <div style="width: 50%">
+            <span style="font-weight: bold">企业编号:</span>
+            <span style="margin-left: 5px">{{ baseInfo.showDoorNo }}</span>
+          </div>
+          <div style="width: 50%">
+            <span style="font-weight: bold">联系方式:</span>
+            <span style="margin-left: 5px">{{ baseInfo.phone }}</span>
+          </div>
+        </div>
+
+        <h2 style="margin: 20px; font-size: 18px; text-align: center"> 企业账户信息</h2>
+        <ElDescriptions class="margin-top" :column="2" border>
+          <ElDescriptionsItem label="安置方式" label-class-name="my-label" class-name="my-content">
+            <!-- {{ dictObj[422][form.placementWay] ? dictObj[422][form.placementWay].label : '' }} -->
+            {{ dictObj[422][form.placementWay - 1]?.label || '' }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="迁前厂址" label-class-name="my-label" class-name="my-content">
+            {{ form.beforeAddress }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            v-if="form.placementWay == '2'"
+            label="安置厂址"
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ form.afterAddress }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="员工总数" label-class-name="my-label" class-name="my-content">
+            {{ form.peopleNumber }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="开户名" label-class-name="my-label" class-name="my-content">
+            {{ form.accountName }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="开户行" label-class-name="my-label" class-name="my-content">
+            {{ form.bankName }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="银行账户" label-class-name="my-label" class-name="my-content">
+            {{ form.bankAccount }}
+          </ElDescriptionsItem>
+        </ElDescriptions>
+
+        <h2 style="margin: 20px; font-size: 18px; text-align: center">工商、税务登记信息</h2>
+        <ElDescriptions class="margin-top mt-20px" :column="2" border>
+          <ElDescriptionsItem
+            label="营业执照编号"
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ formList?.licenceNo || '无' }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="税务登记编号"
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ formList?.taxLicenceNo || '无' }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="注册资金（万元）"
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ formList?.registeredAmount || '无' }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem
+            label="登记注册类型"
+            label-class-name="my-label"
+            class-name="my-content"
+          >
+            {{ formList?.registerTypeText || '无' }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="成立日期" label-class-name="my-label" class-name="my-content">
+            {{
+              formList?.establishDate
+                ? dayjs(formList?.establishDate).format('YYYY-MM-DD HH:mm:ss')
+                : '-'
+            }}
+          </ElDescriptionsItem>
+          <ElDescriptionsItem label="经营范围" label-class-name="my-label" class-name="my-content">
+            {{ formList?.natureBusiness || '无' }}
+          </ElDescriptionsItem>
+        </ElDescriptions>
+
+        <div style="display: flex; width: 100%; height: 55%; align-items: center">
+          <div style="padding-left: 20px">制发单位（盖章）：</div>
+        </div>
+      </div>
+      <div style="width: 50%; padding-left: 10px">
+        <ElTable
+          :data="feeTableData"
+          :span-method="objectSpanMethod"
+          style="width: 100%; font-size: 7px"
+          header-cell-class-name="table-headers"
+          show-summary
+          :summary-method="getSummar"
+          border
+          :row-style="{ height: '19px' }"
+        >
+          <ElTableColumn label="类型" align="center" prop="type" header-align="center">
+            <template #default="{ row }">
+              <b>{{ getTypeStr(row.type) }}</b>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="指标名称" prop="name" align="center" header-align="center" />
+          <ElTableColumn label="单位" width="60" prop="unit" align="center" header-align="center">
+            <template #default="{ row }">
+              {{ row.unit ? row.unit : '——' }}
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="数量" width="60" prop="number" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.number }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="补偿单价" prop="price" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.price }}
+              </div>
+              <div v-if="row.isUpdate !== '1'">——</div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="补偿金额" prop="totalPrice" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '0'">{{ row.totalPrice }}</div>
+              <div v-else-if="row.isUpdate === '1' && row.name !== '奖励费小计'">
+                {{ computedTotalPrice(row) }}
+              </div>
+              <div v-else-if="row.isUpdate === '1' && row.name === '奖励费小计'">
+                {{ getSummaries(row) }}
+              </div>
+            </template>
+          </ElTableColumn>
+          <ElTableColumn label="备注" prop="remark" align="center" header-align="center">
+            <template #default="{ row }">
+              <div v-if="row.isUpdate === '1' && row.isVerify === '1'">
+                {{ row.remark }}
+              </div>
+            </template>
+          </ElTableColumn>
+        </ElTable>
+      </div>
+    </div>
   </WorkContentWrap>
 </template>
 
@@ -228,7 +400,9 @@ import {
   ElInput,
   ElMessage,
   ElSelect,
-  ElOption
+  ElOption,
+  ElDescriptions,
+  ElDescriptionsItem
 } from 'element-plus'
 import { debounce } from 'lodash-es'
 import { Table } from '@/components/Table'
@@ -239,7 +413,8 @@ import { getDemographicListApi, delDemographicByIdApi } from '@/api/workshop/pop
 import {
   updatePeasantHouseholdInfo,
   getCompensationCardList,
-  getcompanyList
+  getcompanyList,
+  gettype
 } from '@/api/immigrantImplement/createCard/service'
 import dayjs from 'dayjs'
 import { WorkContentWrap } from '@/components/ContentWrap'
@@ -249,6 +424,9 @@ import ConfirmReward from '@/views/Workshop/ImmigrantImplement/DataFill/CreateCa
 import { onMounted, computed } from 'vue'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+
+import { htmlToPdf } from '@/utils/ptf'
+import { saveDocumentationApi } from '@/api/immigrantImplement/common-service'
 
 interface PropsType {
   doorNo: string
@@ -532,6 +710,43 @@ const getSummaries = (row: any) => {
   return sums
 }
 
+// 打印报表
+const onPrint = () => {
+  console.log('打印报表111')
+  htmlToPdf('#print', '移民协议补偿登记卡').then((res) => {
+    console.log('9999', res)
+
+    if (res) {
+      let file = dataURLtoFile(res, '移民协议补偿登记卡.pdf')
+      console.log(file)
+      let formdata = new FormData()
+      formdata.append('file', file)
+      formdata.append('type', 'archives')
+      gettype(formdata).then((ress) => {
+        console.log(ress)
+        submits({
+          doorNo: props.doorNo,
+          compensationCardPdf: JSON.stringify([{ url: ress, name: '移民协议补偿登记卡.pdf' }])
+        })
+      })
+    }
+  })
+}
+let dataURLtoFile = (dataurl, filename) => {
+  var arr = dataurl.split(','),
+    mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]),
+    n = bstr.length,
+    u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+  return new File([u8arr], filename, { type: mime })
+}
+const submits = (data: any) => {
+  saveDocumentationApi(data)
+}
+
 // 归档
 const onDocumentation = () => {
   if (!form.value.accountName || !form.value.bankName || !form.value.bankAccount) {
@@ -539,11 +754,6 @@ const onDocumentation = () => {
     return
   }
   dialog.value = true
-}
-
-// 打印报表
-const onPrint = () => {
-  console.log('打印报表')
 }
 
 // 奖励费确认
@@ -672,5 +882,23 @@ onMounted(() => {
 
 :deep(.fylist .el-table--border .el-table__inner-wrapper::after) {
   background: #fff;
+}
+
+:deep(.el-descriptions) {
+  --el-descriptions-table-border: 1px solid black;
+
+  .el-descriptions__body {
+    .el-descriptions__table {
+      // border-color: #171718;
+      tbody {
+        tr {
+          .my-label {
+            font-weight: bold;
+            background: none;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
