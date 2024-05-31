@@ -47,6 +47,22 @@
         <ElCol :span="12" />
       </ElRow>
 
+      <ElRow v-if="form.addReason == '3'">
+        <ElCol :span="12">
+          <ElFormItem label="人口添加原因" prop="checkRemark">
+            <ElSelect clearable filterable v-model="form.incrementAddReason" class="!w-full">
+              <ElOption
+                v-for="item in dictObj[436]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12" />
+      </ElRow>
+
       <ElRow>
         <ElCol :span="12">
           <ElFormItem label="备注" prop="checkRemark">
@@ -326,6 +342,7 @@ import {
   updateDemographicApi,
   getDictByName
 } from '@/api/workshop/population/service'
+import { cardReg } from '@/utils'
 
 interface PropsType {
   show: boolean
@@ -411,7 +428,19 @@ watch(
     deep: true
   }
 )
-
+watch(
+  () => form.value.card,
+  (val) => {
+    if (val && cardReg.test(val)) {
+      const genderCode = val.slice(-2, -1)
+      genderCode % 2 === 0 ? (form.value.sex = '2') : (form.value.sex = '1')
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
 const { required } = useValidator()
 const checkIdNum = (rule, value, callback) => {
   if (!value) {

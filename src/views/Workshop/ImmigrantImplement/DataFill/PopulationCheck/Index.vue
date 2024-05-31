@@ -204,6 +204,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'incrementAddReasonText',
+    label: '增计人口添加原因',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'deleteReasonText',
     label: '删除原因',
     search: {

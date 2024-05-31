@@ -137,6 +137,38 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
+          label="合法面积(㎡)"
+          :width="180"
+          prop="landLegalArea"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.landLegalArea"
+              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="不合法面积(㎡)"
+          :width="180"
+          prop="landIllegalArea"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.landIllegalArea"
+              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
           label="竣工年月"
           :width="180"
           prop="completedTime"
@@ -226,7 +258,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="成新率"
+          label="合法成新率"
           :width="180"
           prop="newnessRate"
           align="center"
@@ -242,7 +274,23 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="评估单价(元/㎡)"
+          label="不合法成新率"
+          :width="180"
+          prop="illegalNewnessRate"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.illegalNewnessRate"
+              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="合法评估单价(元/㎡)"
           :width="180"
           prop="valuationPrice"
           align="center"
@@ -253,6 +301,22 @@
               :min="0"
               @change="getModelValue(scope.row)"
               v-model="scope.row.valuationPrice"
+              :precision="2"
+            />
+          </template>
+        </ElTableColumn>
+        <ElTableColumn
+          label="不合法评估单价(元/㎡)"
+          :width="180"
+          prop="illegalValuationPrice"
+          align="center"
+          header-align="center"
+        >
+          <template #default="scope">
+            <ElInputNumber
+              :min="0"
+              @change="getModelValue(scope.row)"
+              v-model="scope.row.illegalValuationPrice"
               :precision="2"
             />
           </template>
@@ -306,7 +370,7 @@
             <ElInputNumber :min="0" v-model="scope.row.occupyArea" :precision="2" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="是否合法"
           :width="160"
           prop="houseType"
@@ -323,7 +387,7 @@
               />
             </ElSelect>
           </template>
-        </ElTableColumn>
+        </ElTableColumn> -->
         <ElTableColumn label="操作" prop="action" fixed="right">
           <template #default="scope">
             <span class="btn-txt" @click="onDelRow(scope.row)"> 删除 </span>
@@ -458,8 +522,11 @@ const onSave = () => {
 const getModelValue = (row: any) => {
   const totalPrice =
     Number(row.landArea) *
-    Number(row.valuationPrice) *
-    (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate))
+      Number(row.valuationPrice) *
+      (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate)) +
+    Number(row.landIllegalArea) *
+      Number(row.illegalValuationPrice) *
+      (Number(row.illegalNewnessRate) == 0 ? 1 : Number(row.illegalNewnessRate))
   row.valuationAmount = totalPrice
   row.compensationAmount = totalPrice
 }

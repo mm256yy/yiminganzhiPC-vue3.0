@@ -460,7 +460,7 @@ const { allSchemas } = useCrudSchemas(schema)
 const formRef = ref<FormInstance>()
 const form = ref<any>({ ...props.baseInfo })
 const rules = reactive<FormRules>({
-  beforeAddress: [{ required: true, message: '请输入迁前厂址', trigger: 'blur' }],
+  beforeAddress: [{ required: true, message: '请输入迁前地址', trigger: 'blur' }],
   accountName: [{ required: true, message: '请输入开户名', trigger: 'blur' }],
   bankName: [{ required: true, message: '请输入开户行', trigger: 'blur' }],
   bankAccount: [{ required: true, message: '请输入银行账号', trigger: 'blur' }]

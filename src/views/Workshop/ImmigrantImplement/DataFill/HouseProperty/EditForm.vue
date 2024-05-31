@@ -19,19 +19,55 @@
     >
       <ElRow>
         <ElCol :span="12">
-          <ElFormItem label="是否合法" prop="isCompliance">
-            <ElSelect clearable filterable v-model="form.isCompliance" class="!w-full">
-              <ElOption
-                v-for="item in dictObj[371]"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
+          <ElFormItem label="建筑面积(㎡)" prop="landArea">
+            {{ form.landArea }}
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
+          <ElFormItem label="合法面积(㎡)" prop="landLegalArea">
+            <ElInput
+              v-model="form.landLegalArea"
+              class="!w-full"
+              type="number"
+              placeholder="请输入"
+              @change="changeArea"
+            >
+              <template #append> ㎡ </template>
+            </ElInput>
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="不合法面积(㎡)" prop="landIllegalArea">
+            {{ form.landIllegalArea }}
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="12">
+          <ElFormItem label="房屋编号" prop="houseNo">
+            <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <ElCol :span="12">
+          <ElFormItem label="是否分权：" prop="separateFlag">
+            {{ form.separateFlag == '1' ? '是' : '否' }}
+          </ElFormItem>
+        </ElCol>
+        <!-- v-if="form.separateFlag == '1'" -->
+        <ElCol :span="12" v-if="form.separateFlag == '1'">
+          <ElFormItem label="分权原因：" prop="separateReason">
+            {{ dictObj[435].filter((item) => item.value == form.separateReason)[0]?.label }}
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
+      <ElRow>
+        <!-- v-if="form.separateFlag == '1'" -->
+        <ElCol :span="12" v-if="form.separateFlag == '1'">
+          <ElFormItem label="分权备注：" prop="separateRemark">
+            由{{ form.demographicIdName }}户，{{ form.houseNo }}幢房屋分权{{ form.separateRemark }}
+          </ElFormItem>
         </ElCol>
       </ElRow>
       <ElRow>
@@ -47,63 +83,10 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="12">
-          <ElFormItem label="房屋产权人" prop="demographicId">
-            <ElSelect class="!w-full" v-model="form.demographicId" clearable placeholder="请选择">
-              <ElOption
-                v-for="item in demographicList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
       </ElRow>
       <ElRow>
         <ElCol :span="12">
-          <ElFormItem label="共有人" prop="ownersSituation">
-            <ElSelect
-              v-model="form.ownersSituation"
-              class="!w-full"
-              multiple
-              filterable
-              remote
-              reserve-keyword
-              placeholder="请输入关键词搜素"
-              :remote-method="remoteMethod"
-              :loading="searchLoading"
-            >
-              <ElOption
-                v-for="item in landlordList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              />
-            </ElSelect>
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="其他共有人" prop="outdoorOwners">
-            <ElInput
-              v-model="form.outdoorOwners"
-              maxlength="200"
-              class="!w-full"
-              placeholder="请输入其他共有人"
-              :autosize="{ minRows: 2, maxRows: 7 }"
-              show-word-limit
-              type="textarea"
-            />
-          </ElFormItem>
-        </ElCol>
-      </ElRow>
-      <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="房屋编号" prop="houseNo">
-            <ElInput v-model="form.houseNo" class="!w-full" placeholder="请输入" />
-          </ElFormItem>
+          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
         </ElCol>
         <ElCol :span="12">
           <ElFormItem label="层数" prop="storeyNumber">
@@ -114,19 +97,6 @@
         </ElCol>
       </ElRow>
       <ElRow>
-        <ElCol :span="12">
-          <ElFormItem label="建筑面积(㎡)" prop="landArea">
-            <ElInput
-              v-model="form.landArea"
-              class="!w-full"
-              type="number"
-              placeholder="请输入"
-              disabled
-            >
-              <template #append> ㎡ </template>
-            </ElInput>
-          </ElFormItem>
-        </ElCol>
         <ElCol :span="12">
           <ElFormItem label="房屋结构" prop="constructionType">
             <ElSelect clearable filterable v-model="form.constructionType" class="!w-full">
@@ -300,7 +270,9 @@
 
       <ElRow>
         <ElCol :span="24">
-          <ElFormItem label="其他佐证材料">
+          <!-- <ElFormItem label="不合法建筑佐证材料"> -->
+          <div class="col-wrapper">
+            <div :class="{ 'col-label-required': flag }"> 不合法建筑佐证材料： </div>
             <div class="card-img-list">
               <ElUpload
                 :class="[actionType === 'view' ? 'upload' : '']"
@@ -329,7 +301,8 @@
                 </template>
               </ElUpload>
             </div>
-          </ElFormItem>
+          </div>
+          <!-- </ElFormItem> -->
         </ElCol>
       </ElRow>
       <ElRow>
@@ -468,7 +441,7 @@ const landlordList = ref<LandlordDtoType[]>([])
 const demographicList = ref<DemographicDtoType[]>([])
 const dialogVisible = ref<boolean>(false)
 const searchLoading = ref<boolean>(false)
-
+const flag = ref<boolean>(false)
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
@@ -480,6 +453,10 @@ const onChosePosition = (ps) => {
   position.latitude = ps.latitude
   position.longitude = ps.longitude
   position.address = ps.address
+}
+const changeArea = (val) => {
+  form.value.landIllegalArea = form.value.landArea - val
+  form.value.landIllegalArea > 0 ? (flag.value = true) : (flag.value = false)
 }
 watch(
   () => props.show,
@@ -644,6 +621,10 @@ const onSubmit = debounce((formEl) => {
         ElMessage.warning('请先定位位置！')
         return false
       }
+      if (!otherProofPic.value.length && flag.value) {
+        ElMessage.error('请上传不合法建筑佐证材料')
+        return
+      }
       const data: any = {
         ...form.value,
         ownersSituation: form.value.ownersSituation.toString(),
@@ -769,6 +750,31 @@ onMounted(() => {
 .upload {
   :deep(.el-upload) {
     display: none;
+  }
+}
+.col-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 16px 16px 0;
+
+  .col-label-required {
+    display: inline-flex;
+    width: 190px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
+
+    &::before {
+      margin-right: 4px;
+      color: #f56c6c;
+      content: '*';
+    }
   }
 }
 </style>

@@ -38,6 +38,11 @@
             {{ row.isCompliance == '1' ? '是' : '否' }}
           </div>
         </template>
+        <template #separateFlag="{ row }">
+          <div>
+            {{ row.separateFlag == '1' ? '是' : '否' }}
+          </div>
+        </template>
         <template #houseNature="{ row }">
           <div>
             {{
@@ -114,13 +119,13 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'isCompliance',
-    label: '是否合法',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'isCompliance',
+  //   label: '是否合法',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'constructionTypeText',
     label: '房屋结构',
@@ -139,6 +144,28 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'landArea',
     label: '建筑面积（㎡）',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'landLegalArea',
+    label: '合法面积（㎡）',
+    search: {
+      show: false
+    }
+  },
+  {
+    width: 150,
+    field: 'landIllegalArea',
+    label: '不合法面积（㎡）',
+    search: {
+      show: false
+    }
+  },
+  {
+    field: 'separateFlag',
+    label: '是否分权',
     search: {
       show: false
     }
@@ -166,20 +193,20 @@ const schema = reactive<CrudSchema[]>([
       show: false
     }
   },
-  {
-    field: 'demographicIdName',
-    label: '房屋产权人',
-    search: {
-      show: false
-    }
-  },
-  {
-    field: 'ownersSituationName',
-    label: '共有人情况',
-    search: {
-      show: false
-    }
-  },
+  // {
+  //   field: 'demographicIdName',
+  //   label: '房屋产权人',
+  //   search: {
+  //     show: false
+  //   }
+  // },
+  // {
+  //   field: 'ownersSituationName',
+  //   label: '共有人情况',
+  //   search: {
+  //     show: false
+  //   }
+  // },
   {
     field: 'action',
     label: '操作',
