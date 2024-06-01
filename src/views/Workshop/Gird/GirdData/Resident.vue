@@ -101,7 +101,7 @@
     <el-dialog title="阶段时间设置" v-model="dialogVisibleDate" width="500">
       <ElFormItem label="资格认定" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[0]"
+          v-model="dateTime[0].time"
           type="daterange"
           class="!w-full"
           startPlaceholder="请选择开始时间"
@@ -111,7 +111,7 @@
       </ElFormItem>
       <ElFormItem label="资产评估" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[1]"
+          v-model="dateTime[1].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -122,7 +122,7 @@
       </ElFormItem>
       <ElFormItem label="安置确认" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[2]"
+          v-model="dateTime[2].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -133,7 +133,7 @@
       </ElFormItem>
       <ElFormItem label="择址确认" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[3]"
+          v-model="dateTime[3].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -144,7 +144,7 @@
       </ElFormItem>
       <ElFormItem label="腾空过渡" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[4]"
+          v-model="dateTime[4].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -155,7 +155,7 @@
       </ElFormItem>
       <ElFormItem label="动迁协议" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[5]"
+          v-model="dateTime[5].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -166,7 +166,7 @@
       </ElFormItem>
       <ElFormItem label="搬迁安置" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[6]"
+          v-model="dateTime[6].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -177,7 +177,7 @@
       </ElFormItem>
       <ElFormItem label="生产安置" prop="dateTime">
         <ElDatePicker
-          v-model="dateTime[7]"
+          v-model="dateTime[7].time"
           type="daterange"
           class="!w-full"
           placeholder="请选择"
@@ -226,6 +226,7 @@ import { Search } from '@/components/Search'
 
 import { saveImplementationTimeApiList } from '@/api/systemConfig/implementationTime-service'
 import { ImplementationTimeDtoType } from '@/api/systemConfig/implementationTime-types'
+import { log } from 'console'
 
 const props = defineProps({
   roleInfo: { type: String, default: '' }
@@ -241,14 +242,7 @@ const dateTime = ref<any[]>([])
 const doorNo = ref<string>('')
 const reason = ref()
 const uploadLoading = ref(false)
-// 定义对象类型
-interface obj {
-  doorNo: string
-  type: string
-  startTime: string
-  endTime: string
-}
-const listArr = ref<any>()
+
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })
@@ -622,29 +616,39 @@ const onClose = () => {
   dialogVisible.value = false
 }
 const adjustDate = (row) => {
-  dialogVisibleDate.value = true
   dateTime.value = row.scheduleConfigs || []
   doorNo.value = row.doorNo
+
+  console.log(row.scheduleConfigs, toRaw(dateTime.value))
+
+  for (var a = 0; a < 8; a++) {
+    toRaw(dateTime.value)[a] = {
+      ...toRaw(dateTime.value)[a],
+      time: [toRaw(dateTime.value)[a]?.startTime || '', toRaw(dateTime.value)[a]?.endTime || '']
+    }
+  }
+
+  dialogVisibleDate.value = true
 }
 const onCloseDate = () => {
   dialogVisibleDate.value = false
 }
 const onSubmitDate = () => {
-  listArr.value = []
-  const arr = ['1', '1', '2', '2', '3', '3', '4', '4']
+  const arr = ['1', '2', '3', '4', '5', '6', '7', '8']
   for (var a = 0; a < arr.length; a++) {
-    listArr.value.push({
+    toRaw(dateTime.value)[a] = {
+      ...toRaw(dateTime.value)[a],
       doorNo: doorNo.value,
       type: arr[a],
-      startTime: toRaw(dateTime.value)[a]?.[0] || '',
-      endTime: toRaw(dateTime.value)[a]?.[1] || ''
-    })
+      startTime: toRaw(dateTime.value)[a].time?.[0] || '',
+      endTime: toRaw(dateTime.value)[a].time?.[1] || ''
+    }
   }
-  let data = listArr.value
-  saveImplementationTimeApiList(data)
+  saveImplementationTimeApiList(toRaw(dateTime.value))
     .then((res) => {
       if (res) {
         ElMessage.success('操作成功')
+        dialogVisibleDate.value = false
         onSearch({})
       }
     })

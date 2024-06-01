@@ -36,7 +36,7 @@ export const saveImplementationTimeApi = (
  */
 export const saveImplementationTimeApiList = (data: any) => {
   return request.post({
-    url: '/scheduleConfig/save',
+    url: '/scheduleConfig/saveAll',
     data
   })
 }
