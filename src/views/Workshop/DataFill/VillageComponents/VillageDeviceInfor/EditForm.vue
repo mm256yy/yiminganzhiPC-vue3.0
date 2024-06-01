@@ -361,42 +361,32 @@ watch(
 )
 
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
-    form.value = {
-      ...val
-    }
-    // if (val) {
-    //   // 处理表单数据
-    //   form.value = {
-    //     ...val
-    //   }
-    // } else {
-    //   form.value = { ...defaultValue }
-    //   cardFront.value = []
-    //   cardEnd.value = []
-    //   householdPic.value = []
-    //   otherPic.value = []
-    // }
-    try {
-      if (form.value.cardPic) {
-        const pics = JSON.parse(form.value.cardPic)
-        cardFront.value = pics.slice(0, 1)
-        cardEnd.value = pics.slice(1)
+    if (val) {
+      form.value = {
+        ...props.row
       }
+      try {
+        if (form.value.cardPic) {
+          const pics = JSON.parse(form.value.cardPic)
+          cardFront.value = pics.slice(0, 1)
+          cardEnd.value = pics.slice(1)
+        }
 
-      if (form.value.householdPic) {
-        householdPic.value = JSON.parse(form.value.householdPic)
-      }
+        if (form.value.householdPic) {
+          householdPic.value = JSON.parse(form.value.householdPic)
+        }
 
-      if (form.value.otherPic) {
-        otherPic.value = JSON.parse(form.value.otherPic)
+        if (form.value.otherPic) {
+          otherPic.value = JSON.parse(form.value.otherPic)
+        }
+        if (form.value.facilitiesPic) {
+          facilitiesPic.value = JSON.parse(form.value.facilitiesPic)
+        }
+      } catch (error) {
+        console.log(error)
       }
-      if (form.value.facilitiesPic) {
-        facilitiesPic.value = JSON.parse(form.value.facilitiesPic)
-      }
-    } catch (error) {
-      console.log(error)
     }
   },
   {

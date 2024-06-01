@@ -168,9 +168,10 @@ setSearchParams({
   type: 'PeasantHousehold',
   status: 'implementation',
   warnStatus: currentRoute.value.query['warnStatus'],
-  isMergeLand: currentRoute.value.query ? 1 : null
+  isMergeLand: currentRoute.value.query['warnStatus'] ? null : 1
 })
 let setSearchParamss = () => {
+  tableObject.params = {}
   setSearchParams({
     type: 'PeasantHousehold',
     status: 'implementation',
