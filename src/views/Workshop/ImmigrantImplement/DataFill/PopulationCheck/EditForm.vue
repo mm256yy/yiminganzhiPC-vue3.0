@@ -13,7 +13,7 @@
       class="form"
       ref="formRef"
       :model="form"
-      label-width="100px"
+      label-width="150px"
       :label-position="'right'"
       :rules="rules"
     >
@@ -49,7 +49,7 @@
 
       <ElRow v-if="form.addReason == '3'">
         <ElCol :span="12">
-          <ElFormItem label="人口添加原因" prop="checkRemark">
+          <ElFormItem label="增计人口添加原因" prop="incrementAddReason" required>
             <ElSelect clearable filterable v-model="form.incrementAddReason" class="!w-full">
               <ElOption
                 v-for="item in dictObj[436]"
@@ -85,21 +85,6 @@
             </ElFormItem>
           </ElCol>
           <ElCol :span="12">
-            <ElFormItem label="性别" prop="sex">
-              <ElSelect clearable filterable v-model="form.sex" class="!w-full">
-                <ElOption
-                  v-for="item in dictObj[292]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </ElSelect>
-            </ElFormItem>
-          </ElCol>
-        </ElRow>
-
-        <ElRow>
-          <ElCol :span="12">
             <ElFormItem label="身份证号" prop="card">
               <ElInput
                 clearable
@@ -109,6 +94,21 @@
                 v-model="form.card"
                 placeholder="请输入"
               />
+            </ElFormItem>
+          </ElCol>
+        </ElRow>
+
+        <ElRow>
+          <ElCol :span="12">
+            <ElFormItem label="性别" prop="sex">
+              <ElSelect clearable filterable v-model="form.sex" class="!w-full">
+                <ElOption
+                  v-for="item in dictObj[292]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </ElSelect>
             </ElFormItem>
           </ElCol>
           <ElCol :span="12">
@@ -473,7 +473,8 @@ const rules = reactive<FormRules>({
   marital: [required()],
   censusType: [required()],
   populationNature: [required()],
-  phone: [required()]
+  phone: [required()],
+  incrementAddReason: [required()]
 })
 
 // 关闭弹窗
