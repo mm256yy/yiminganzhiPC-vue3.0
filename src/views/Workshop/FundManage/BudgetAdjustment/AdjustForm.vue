@@ -16,12 +16,40 @@
       :label-position="'right'"
       :rules="rules"
     >
-      <ElFormItem label="概算科目调整" prop="type">
+      <!-- <ElFormItem label="概算科目调整" prop="type">
         <el-radio-group v-model="form.type">
           <el-radio label="2">概算内调为概算外</el-radio>
           <el-radio label="1">概算外调为概算内</el-radio>
         </el-radio-group>
+      </ElFormItem> -->
+
+      <ElFormItem label="概算科目:" required prop="type">
+        <el-radio-group class="ml-4" v-model="form.type">
+          <el-radio
+            v-for="item in dictObj[382]"
+            :label="item.value"
+            size="large"
+            :key="item.value"
+            >{{ item.label }}</el-radio
+          >
+        </el-radio-group>
       </ElFormItem>
+      <ElFormItem label="资金科目:" required prop="funSubjectId">
+        <ElTreeSelect
+          v-if="actionType !== 'view'"
+          class="!w-full"
+          v-model="form.funSubjectId"
+          :data="props.fundAccountList"
+          node-key="code"
+          :props="{ value: 'code', label: 'name' }"
+          showCheckbox
+          checkStrictly
+          checkOnClickNode
+          :default-checked-keys="[form.funSubjectId]"
+        />
+        <span v-else>{{ form.funSubjectIdText }}</span>
+      </ElFormItem>
+
       <ElFormItem label="调整说明" prop="gsRemark">
         <ElInput
           v-model="form.gsRemark"
@@ -51,9 +79,11 @@ import {
   ElButton,
   FormInstance,
   FormRules,
-  ElMessage
+  ElMessage,
+  ElTreeSelect
 } from 'element-plus'
-import { ref, reactive, nextTick, watch } from 'vue'
+import { ref, reactive, computed, nextTick, watch } from 'vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import { debounce } from 'lodash-es'
 import { useValidator } from '@/hooks/web/useValidator'
 import { useAppStore } from '@/store/modules/app'
@@ -64,7 +94,11 @@ interface PropsType {
   show: any
   landlordIds: number[]
   statusType: any
+  fundAccountList: any[]
 }
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+let fundAccountLists = ref([])
 
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
@@ -88,7 +122,8 @@ const rules = reactive<FormRules>({
   name: [required()],
   doorNo: [required()],
   parentCode: [required()],
-  type: [required()]
+  type: [required()],
+  funSubjectId: [required('资金科目不能为空')]
 })
 
 // 关闭弹窗
@@ -130,6 +165,7 @@ const submit = async (data: AdjustmentType) => {
   }
   onClose(true)
 }
+
 watch(
   () => props.landlordIds,
   () => {

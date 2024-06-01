@@ -71,6 +71,7 @@
       @close="onCloseAdjust"
       :landlordIds="landlordIds"
       :statusType="statusType"
+      :fundAccountList="fundAccountList"
     />
   </WorkContentWrap>
 </template>

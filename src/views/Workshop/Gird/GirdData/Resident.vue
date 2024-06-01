@@ -71,6 +71,7 @@
         </template>
         <template #filling="{ row }">
           <div class="filling-btn" @click="adjust(row)">调整网格</div>
+          <div class="filling-btn mt-10" @click="adjustDate(row)">调整节点时间</div>
         </template>
       </Table>
     </div>
@@ -96,12 +97,108 @@
         <ElButton type="primary" @click="onSubmit">确认</ElButton>
       </template>
     </el-dialog>
+
+    <el-dialog title="阶段时间设置" v-model="dialogVisibleDate" width="500">
+      <ElFormItem label="资格认定" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[0]"
+          type="daterange"
+          class="!w-full"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="资产评估" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[1]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="安置确认" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[2]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="择址确认" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[3]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="腾空过渡" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[4]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="动迁协议" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[5]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="搬迁安置" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[6]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+      <ElFormItem label="生产安置" prop="dateTime">
+        <ElDatePicker
+          v-model="dateTime[7]"
+          type="daterange"
+          class="!w-full"
+          placeholder="请选择"
+          startPlaceholder="请选择开始时间"
+          endPlaceholder="请选择结束时间"
+          valueFormat="YYYY-MM-DD"
+        />
+      </ElFormItem>
+
+      <template #footer>
+        <ElButton @click="onCloseDate">取消</ElButton>
+        <ElButton type="primary" @click="onSubmitDate">确认</ElButton>
+      </template>
+    </el-dialog>
+
     <GirdList :show="girdDialog" @close="onFormPupClose" />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, toRaw } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElDialog,
@@ -111,7 +208,8 @@ import {
   ElButton,
   ElSpace,
   ElMessage,
-  ElUpload
+  ElUpload,
+  ElDatePicker
 } from 'element-plus'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
@@ -125,6 +223,10 @@ import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import GirdList from './Girdlist.vue'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
+
+import { saveImplementationTimeApiList } from '@/api/systemConfig/implementationTime-service'
+import { ImplementationTimeDtoType } from '@/api/systemConfig/implementationTime-types'
+
 const props = defineProps({
   roleInfo: { type: String, default: '' }
 })
@@ -133,10 +235,20 @@ const projectId = appStore.currentProjectId
 const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 const dialogVisible = ref(false)
+const dialogVisibleDate = ref(false)
 const girdDialog = ref(false)
+const dateTime = ref<any[]>([])
+const doorNo = ref<string>('')
 const reason = ref()
 const uploadLoading = ref(false)
-
+// 定义对象类型
+interface obj {
+  doorNo: string
+  type: string
+  startTime: string
+  endTime: string
+}
+const listArr = ref<any>()
 const { register, tableObject, methods } = useTable({
   getListApi: getLandlordListApi
 })
@@ -144,8 +256,10 @@ const { getList, setSearchParams } = methods
 
 tableObject.params = {
   projectId,
-  status: 'implementation'
+  status: 'implementation',
+  isGrid: '1'
 }
+
 const girdList = () => {
   girdDialog.value = true
 }
@@ -153,11 +267,16 @@ const setAllocationStatus = (targ) => {
   setSearchParams({
     type: 'PeasantHousehold',
     status: SurveyStatusEnum.Implementation,
-    allocationStatus: targ == 1 ? 1 : targ == 0 ? null : targ == 2 ? '0' : null
+    allocationStatus: targ == 1 ? 1 : targ == 0 ? null : targ == 2 ? '0' : null,
+    isGrid: '1'
   })
 }
 defineExpose({ setAllocationStatus })
-setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+setSearchParams({
+  type: 'PeasantHousehold',
+  status: SurveyStatusEnum.Implementation,
+  isGrid: '1'
+})
 
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
@@ -170,7 +289,11 @@ const onReset = () => {
   tableObject.params = {
     projectId
   }
-  setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+  setSearchParams({
+    type: 'PeasantHousehold',
+    status: SurveyStatusEnum.Implementation,
+    isGrid: '1'
+  })
 }
 
 const getdistrictTree = async () => {
@@ -289,33 +412,40 @@ const schema = reactive<CrudSchema[]>([
     label: '序号',
     search: {
       show: false
-    }
+    },
+    fixed: 'left'
   },
   {
     field: 'name',
     label: '户主姓名',
+    width: 80,
     search: {
       show: false
-    }
+    },
+    fixed: 'left'
   },
   {
     field: 'showDoorNo',
     label: '户号',
-    width: 180,
+    width: 120,
     search: {
       show: false
-    }
+    },
+    fixed: 'left'
   },
   {
     field: 'regionText',
     label: '所属区域',
+    width: 180,
     search: {
       show: false
-    }
+    },
+    fixed: 'left'
   },
   {
     field: 'hasPropertyAccount',
     label: '财产户',
+    width: 80,
     search: {
       show: false
     }
@@ -323,6 +453,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'locationTypeText',
     label: '所在位置',
+    width: 150,
     search: {
       show: false
     }
@@ -330,6 +461,7 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'gridmanName',
     label: '网格员',
+    width: 150,
     search: {
       show: false
     }
@@ -337,6 +469,79 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'gridmanPhone',
     label: '网格员手机号',
+    width: 150,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'zgrdDateInterval',
+    label: '资格认定起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'zcpgDateInterval',
+    label: '资产评估起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'azqrDateInterval',
+    label: '安置确认起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'zzqrDateInterval',
+    label: '择址确认起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'tkgdDateInterval',
+    label: '腾空过渡起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'dqxyDateInterval',
+    label: '动迁协议起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'bqazDateInterval',
+    label: '搬迁安置起止时间',
+    width: 250,
+    search: {
+      show: false
+    },
+    showOverflowTooltip: false
+  },
+  {
+    field: 'scazDateInterval',
+    label: '生产安置起止时间',
+    width: 250,
     search: {
       show: false
     },
@@ -346,7 +551,7 @@ const schema = reactive<CrudSchema[]>([
     field: 'filling',
     label: '操作',
     fixed: 'right',
-    width: 115,
+    width: 130,
     search: {
       show: false
     },
@@ -391,13 +596,21 @@ const onSearch = (data) => {
       tableObject.params = {
         ...params
       }
-      setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+      setSearchParams({
+        type: 'PeasantHousehold',
+        status: SurveyStatusEnum.Implementation,
+        isGrid: '1'
+      })
     })
   } else {
     tableObject.params = {
       ...params
     }
-    setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+    setSearchParams({
+      type: 'PeasantHousehold',
+      status: SurveyStatusEnum.Implementation,
+      isGrid: '1'
+    })
   }
 }
 
@@ -407,6 +620,37 @@ const adjust = (row) => {
 }
 const onClose = () => {
   dialogVisible.value = false
+}
+const adjustDate = (row) => {
+  dialogVisibleDate.value = true
+  dateTime.value = row.scheduleConfigs || []
+  doorNo.value = row.doorNo
+}
+const onCloseDate = () => {
+  dialogVisibleDate.value = false
+}
+const onSubmitDate = () => {
+  listArr.value = []
+  const arr = ['1', '1', '2', '2', '3', '3', '4', '4']
+  for (var a = 0; a < arr.length; a++) {
+    listArr.value.push({
+      doorNo: doorNo.value,
+      type: arr[a],
+      startTime: toRaw(dateTime.value)[a]?.[0] || '',
+      endTime: toRaw(dateTime.value)[a]?.[1] || ''
+    })
+  }
+  let data = listArr.value
+  saveImplementationTimeApiList(data)
+    .then((res) => {
+      if (res) {
+        ElMessage.success('操作成功')
+        onSearch({})
+      }
+    })
+    .catch(() => {
+      ElMessage.success('操作失败')
+    })
 }
 const onSubmit = () => {
   const params: any = {
@@ -458,7 +702,11 @@ const uploadDone = () => {
     message: '正在导入，请等待批量导入结果',
     type: 'success'
   })
-  setSearchParams({ type: 'PeasantHousehold', status: SurveyStatusEnum.Implementation })
+  setSearchParams({
+    type: 'PeasantHousehold',
+    status: SurveyStatusEnum.Implementation,
+    isGrid: '1'
+  })
 }
 
 const uploadError = (error) => {
@@ -475,7 +723,8 @@ const uploadError = (error) => {
 <style lang="less" scoped>
 .filling-btn {
   display: flex;
-  width: 80px;
+  // width: 80px;
+  width: 100px;
   height: 28px;
   font-size: 14px;
   color: var(--el-color-primary);
@@ -503,5 +752,8 @@ const uploadError = (error) => {
   &.status-suc {
     background-color: #0cc029;
   }
+}
+.mt-10 {
+  margin-top: 10px;
 }
 </style>
