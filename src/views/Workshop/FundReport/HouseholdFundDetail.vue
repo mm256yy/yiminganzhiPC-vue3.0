@@ -233,22 +233,6 @@ const getTableDepends = (list: any) => {
       ]
     },
     {
-      field: '6',
-      label: '其他',
-      children: [
-        {
-          field: '9',
-          label: '应发',
-          ...commonTableItemSchema
-        },
-        {
-          field: '10',
-          label: '已发',
-          ...commonTableItemSchema
-        }
-      ]
-    },
-    {
       field: 'action',
       label: '操作',
       fixed: 'right',
@@ -264,6 +248,24 @@ const getTableDepends = (list: any) => {
       }
     }
   ]
+  // if (route.query.id != 'true') {
+  //   columns.splice(7, 0, {
+  //     field: '6',
+  //     label: '其他',
+  //     children: [
+  //       {
+  //         field: '9',
+  //         label: '应发',
+  //         ...commonTableItemSchema
+  //       },
+  //       {
+  //         field: '10',
+  //         label: '已发',
+  //         ...commonTableItemSchema
+  //       }
+  //     ]
+  //   })
+  // }
   let allData = useCrudSchemas(columns)
   schemas.columns = allData.allSchemas.tableColumns
   tableObject.tableList = list
@@ -355,9 +357,9 @@ watch(
 onMounted(() => {
   getVillageTree()
   console.log(route.query.id, 111)
-  if (route.query.id == 'true') {
-    titles = ['智能报表', '资金管理', '村集体', '资金使用情况']
-  }
+  // if (route.query.id == 'true') {
+  //   titles = ['智能报表', '资金管理', '村集体', '资金使用情况']
+  // }
   getTableList()
 })
 </script>

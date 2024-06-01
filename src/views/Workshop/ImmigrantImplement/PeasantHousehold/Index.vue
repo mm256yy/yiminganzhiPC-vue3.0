@@ -7,7 +7,6 @@
     <div class="search-form-wrap">
       <Search
         :schema="allSchemas.searchSchema"
-        expand
         :showFhHh="getRole() == 'implementleader' || getRole() == 'tester'"
         :showFf="getRole() == 'implementation'"
         :defaultExpand="false"
@@ -15,7 +14,7 @@
         @search="onSearch"
         @fhhh="toTargetNew"
         @ff="toTargetNew"
-        @reset="setSearchParams"
+        @reset="setSearchParamss"
         :valueForme="valueForme['居民户信息']"
       />
     </div>
@@ -169,9 +168,15 @@ setSearchParams({
   type: 'PeasantHousehold',
   status: 'implementation',
   warnStatus: currentRoute.value.query['warnStatus'],
-  isMergeLand: 1
+  isMergeLand: currentRoute.value.query ? 1 : null
 })
-
+let setSearchParamss = () => {
+  setSearchParams({
+    type: 'PeasantHousehold',
+    status: 'implementation',
+    isMergeLand: 1
+  })
+}
 const getVillageTree = async () => {
   const list = await screeningTree(projectId, 'PeasantHousehold')
   villageTree.value = list || []
@@ -377,6 +382,13 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
+    field: 'landUserTypeText',
+    label: '类别',
+    search: {
+      show: false
+    }
+  },
+  {
     field: 'schedule',
     label: '完成进度',
     width: 100,
@@ -531,12 +543,15 @@ const onSearch = (data) => {
       params.type = 'PeasantHousehold'
       delete params.istype
       delete params.isMergeLand
-    } else {
+    } else if (params.istype == '3') {
       params.type = 'LandNoMove'
 
       delete params.istype
       delete params.isMergeLand
     }
+  } else {
+    params.type = 'PeasantHousehold'
+    params.isMergeLand = 1
   }
   tableObject.params = params
   console.log(tableObject.params)
@@ -552,9 +567,10 @@ const fillData = (row) => {
     query: {
       householdId: row.id,
       doorNo: row.doorNo,
-      type: 'PeasantHousehold',
+      type: row.type,
       projectId: row.projectId,
-      uid: row.uid
+      uid: row.uid,
+      nowbody: row.landUserType
     }
   })
 }
