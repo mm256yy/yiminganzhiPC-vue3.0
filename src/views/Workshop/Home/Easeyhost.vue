@@ -68,6 +68,8 @@ import zjgl from '@/assets/imgs/zjgl.png'
 import jdgl from '@/assets/imgs/jdgl.png'
 import zhbb from '@/assets/imgs/zhbb.png'
 import dsjfx from '@/assets/imgs/dsjfx.png'
+import zcfg from '@/assets/imgs/zcfg.png'
+import xxfk from '@/assets/imgs/xxfk.png'
 import { useRouter } from 'vue-router'
 onMounted(() => {
   changeScale()
@@ -113,6 +115,11 @@ let optionclick = ref([
     img: zjgl
   },
   {
+    code: '12',
+    name: '政策法规',
+    img: zcfg
+  },
+  {
     code: '3',
     name: '进度管理',
     img: jdgl
@@ -126,6 +133,11 @@ let optionclick = ref([
     code: '1',
     name: '大数据分析',
     img: dsjfx
+  },
+  {
+    code: '11',
+    name: '信息反馈',
+    img: xxfk
   }
 ])
 let tokenStr = ref('')
@@ -153,7 +165,9 @@ const handleClickItem = (type: number) => {
     3: 'adminhomeprogress', //进度管理 //新闻管理
     4: 'Project', //新闻管理
     5: 'Feedback', //反馈管理
-    6: 'SmartReport' // 智慧报表
+    6: 'SmartReport', // 智慧报表
+    11: 'FeedbackIndex', // 信息反馈
+    12: 'FeedbackIndex' // 政策法规
   }
   push({ name: pathMap[type] })
 }
@@ -250,7 +264,8 @@ let optionClick = (e) => {
 
 .option_click {
   display: flex;
-  width: 32%;
+  //width: 32%;
+  width: 24%;
   height: 160px;
   cursor: pointer;
   background: linear-gradient(180deg, #c9e0fe 0%, #fdfeff 50%);

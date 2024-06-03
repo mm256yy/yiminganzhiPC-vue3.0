@@ -81,13 +81,33 @@
         </template>
       </Table>
     </div>
+
+    <addForm
+      :show="ffShow"
+      :row="tableObject.currentRow"
+      :contentMessage="contentMessage"
+      @close="onClose"
+    />
   </WorkContentWrap>
 </template>
 
 <script setup lang="ts">
+import addForm from './addForm.vue'
 import { reactive, ref, onMounted, computed } from 'vue'
 import { useAppStore } from '@/store/modules/app'
-import { ElButton, ElBreadcrumb, ElBreadcrumbItem, ElMessage, ElMessageBox } from 'element-plus'
+import {
+  ElButton,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElMessage,
+  ElMessageBox,
+  ElDialog,
+  ElFormItem,
+  ElForm,
+  ElUpload,
+  ElInput
+} from 'element-plus'
+import type { UploadFile, UploadFiles } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
 import { Table } from '@/components/Table'
@@ -107,6 +127,17 @@ const appStore = useAppStore()
 const pamaers = ref<any>()
 const projectId = appStore.currentProjectId
 let tabalRef = ref()
+
+const ffShow = ref<boolean>(false)
+const contentMessage = ref<string>()
+const form = ref<any>({})
+
+// 关闭弹窗
+const onClose = (flag = false) => {
+  form.value = {}
+  ffShow.value = false
+}
+
 const headInfo = ref<any>()
 const districtTree = ref<any[]>([])
 const lpList = ref<any[]>([])
@@ -208,6 +239,19 @@ const IssueClick = () => {
       })
     })
   } else {
+    ffShow.value = true
+    contentMessage.value = `本次发放共${sum.value}户${
+      tableObject.params.type == 'PeasantHousehold'
+        ? '居民户'
+        : tableObject.params.type == 'Company'
+        ? '企（事）业单位'
+        : tableObject.params.type == 'IndividualHousehold'
+        ? '个体户'
+        : tableObject.params.type == 'Village'
+        ? '集体资产'
+        : '只征地不搬迁'
+    }，共${all}元。请确认是否发放`
+    return
     ElMessageBox.confirm(
       `本次发放共${sum.value}户${
         tableObject.params.type == 'PeasantHousehold'
@@ -583,5 +627,39 @@ const sum = computed(() => {
 
 .max-header {
   width: 1000px;
+}
+</style>
+
+<style lang="less" scoped>
+.col-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 16px 16px 0;
+
+  .col-label-required {
+    display: inline-flex;
+    width: 150px;
+    height: 32px;
+    padding: 0 12px 0 0;
+    font-size: 14px;
+    line-height: 32px;
+    color: #606266;
+    box-sizing: border-box;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: 0 0 auto;
+
+    &::before {
+      margin-right: 4px;
+      color: #f56c6c;
+      content: '*';
+    }
+  }
+}
+
+.upload {
+  .el-upload--picture-card {
+    display: none;
+  }
 }
 </style>
