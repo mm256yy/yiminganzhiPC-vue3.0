@@ -199,6 +199,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
           // 本地开后台环境
           // target:'http://ym.zdwp.local',
           target: 'http://192.168.1.119:8880',
+          // target: 'http://192.168.1.118:8880',
           // 线上测试环境
           // target: 'https://r7r-ai.zdwp.net',
           // target: 'https://ym.zhym.net.cn',

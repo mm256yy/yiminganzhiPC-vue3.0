@@ -7,7 +7,7 @@
     <!-- 统计信息 -->
     <div class="fund-entry-wrap">
       <div class="item">
-        <div class="title">预付款</div>
+        <div class="title">暂存款 <br />（应付款）</div>
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="item">
-        <div class="title">支付款</div>
+        <div class="title">工作经费</div>
         <div class="content-wrapper">
           <div class="content">
             <div class="sub-title">入账金额</div>
@@ -403,6 +403,7 @@ onMounted(() => {
       background: rgba(59, 130, 246, 0.9);
       justify-content: center;
       align-items: center;
+      text-align: center;
     }
 
     .content-wrapper {

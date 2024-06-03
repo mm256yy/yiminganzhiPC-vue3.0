@@ -28,3 +28,15 @@ export const saveImplementationTimeApi = (
     data
   })
 }
+
+/**
+ * 新增/编辑时间配置 网格管理
+ * @param data 表单数据
+ * @returns
+ */
+export const saveImplementationTimeApiList = (data: any) => {
+  return request.post({
+    url: '/scheduleConfig/saveAll',
+    data
+  })
+}

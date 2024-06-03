@@ -414,6 +414,7 @@ let fundAccountLists = ref([])
 // console.log(dictObj.value, '111')
 
 const form = ref<any>({})
+
 const parmasLists = ref<any>({})
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
