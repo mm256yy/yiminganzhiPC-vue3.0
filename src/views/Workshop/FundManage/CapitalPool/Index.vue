@@ -30,6 +30,13 @@
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
+      <p class="mb-20"
+        >存在付款审核待办
+        <a @click="toLink('PaymentReview')" class="a-revert" href="javascript:void(0);">100</a>
+        项，概算审核
+        <a @click="toLink('BudgetReview')" class="a-revert" href="javascript:void(0);">99</a>
+        项</p
+      >
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
@@ -517,5 +524,11 @@ const getFundSubjectList = () => {
       }
     }
   }
+}
+.mb-20 {
+  margin-bottom: 20px;
+}
+.a-revert {
+  text-decoration: revert;
 }
 </style>

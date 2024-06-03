@@ -146,11 +146,30 @@
       </ElTableColumn>
     </ElTable>
 
+    <div class="title-2 mb-20">调整事项</div>
     <ElRow>
       <ElCol :span="24">
         <div class="col-wrap">
-          <div class="label">调整事项:</div>
-          <div class="content">{{ form.gsAdjustTxt }}</div>
+          <div class="label">概算科目:</div>
+          <div class="content">{{ form.typeTxt }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">调整后概算科目:</div>
+          <div class="content">{{ form.typeTxt }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">资金科目:</div>
+          <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">调整后资金科目:</div>
+          <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -235,6 +254,7 @@ interface PropsType {
   show: any
   row?: LandlordDtoType | null | undefined
   parmasList: any
+  fundAccountList: any
 }
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
@@ -266,21 +286,21 @@ watch(
     deep: true
   }
 )
-// const getTreeName = (list: any, code: any) => {
-//   for (let i = 0; i < list.length; i++) {
-//     let a = list[i]
-//     if (a.code == code) {
-//       return a.name
-//     } else {
-//       if (a.children && a.children.length > 0) {
-//         let res = getTreeName(a.children, code)
-//         if (res) {
-//           return res
-//         }
-//       }
-//     }
-//   }
-// }
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
 
 // onMounted(() => {
 //   getFundSubjectList()
@@ -298,7 +318,7 @@ const onClose = () => {
   margin-bottom: 15px;
 
   .label {
-    width: 100px;
+    width: 150px;
     margin-right: 10px;
   }
 }
@@ -428,5 +448,8 @@ const onClose = () => {
       }
     }
   }
+}
+.mb-20 {
+  margin-bottom: 20px;
 }
 </style>

@@ -62,6 +62,7 @@
       :row="tableObject.currentRow"
       @close="onCloseView"
       :parmasList="parmasList"
+      :fundAccountList="fundAccountList"
     />
 
     <!-- 概算调整 -->
@@ -356,6 +357,32 @@ const schema = reactive<CrudSchema[]>([
   {
     field: 'funSubjectId',
     label: '资金科目',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'typeTxt',
+    label: '调整后概算科目',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'funSubjectId',
+    label: '调整后资金科目',
     search: {
       show: false
     },
