@@ -13,6 +13,7 @@
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
+        <ElButton :icon="editIcon" type="primary" @click="placementSave">过渡完成</ElButton>
       </div>
     </div>
 
@@ -32,23 +33,23 @@
         </div>
         <div class="trans-item">
           <div class="tit">过渡落实情况</div>
-          <div class="txt"
-            >过渡安置已办理，过渡时间：{{ `${startTime || '-'} 至 ${endTime || '-'}` }}。</div
-          >
+          <div class="txt">过渡安置已办理。过渡中</div>
+          <div>第一批过渡时间 : {{ `${startTime || '-'} 至 ${endTime || '-'}` }}。</div>
+          <div>第二批过渡时间 : {{ `${startTime || '-'} 至 ${endTime || '-'}` }}。</div>
         </div>
       </div>
     </div>
 
-    <el-dialog title="过渡安置" v-model="dialogVisible" width="500" @close="onDialogClose">
+    <el-dialog title="过渡安置" v-model="dialogVisible" width="700" @close="onDialogClose">
       <ElForm
         class="form"
         ref="formRef"
         :model="form"
-        label-width="150px"
+        label-width="180px"
         :label-position="'right'"
         :rules="rules"
       >
-        <ElFormItem label="过渡安置地详址" prop="excessAddress">
+        <ElFormItem label="过渡安置地详址：" prop="excessAddress">
           <ElInput
             type="textarea"
             v-model="form.excessAddress"
@@ -56,22 +57,42 @@
             placeholder="请输入"
           />
         </ElFormItem>
-        <ElFormItem label="过渡开始日期" prop="excessStartDate">
-          <ElDatePicker
-            class="!w-full"
-            v-model="form.excessStartDate"
-            type="date"
-            placeholder="请选择日期"
-          />
-        </ElFormItem>
-        <ElFormItem label="过渡结束日期" prop="excessEndDate">
-          <ElDatePicker
-            class="!w-full"
-            v-model="form.excessEndDate"
-            type="date"
-            placeholder="请选择日期"
-          />
-        </ElFormItem>
+        <ElFormItem label="过渡安置人数（人）：" prop="excessAddress"> 123 </ElFormItem>
+        <ElFormItem label="补偿单价（元/人·月）：" prop="excessAddress"> 123 </ElFormItem>
+        <div style="display: flex; justify-content: space-between">
+          <div style="font-size: 22px">过渡安置费</div>
+          <ElButton type="primary" @click="add">新增</ElButton>
+        </div>
+        <div
+          style="border: 1px dashed #e1e4ea; margin-top: 5px"
+          v-for="item in arrList"
+          :key="item.id"
+        >
+          <div style="padding: 10px 2px">
+            <div>第{{ item.index }}批过渡安置费</div>
+            <ElFormItem label="过渡开始日期：" prop="excessStartDate">
+              <ElDatePicker
+                class="!w-full"
+                v-model="form.excessStartDate"
+                type="date"
+                placeholder="请选择日期"
+              />
+            </ElFormItem>
+            <ElFormItem label="过渡结束日期：" prop="excessEndDate">
+              <ElDatePicker
+                class="!w-full"
+                v-model="form.excessEndDate"
+                type="date"
+                placeholder="请选择日期"
+              />
+            </ElFormItem>
+            <ElFormItem label="补偿月数（个月）：" prop="excessAddress"> 123 </ElFormItem>
+            <ElFormItem label="补偿金额（元）：" prop="excessAddress"> 123 </ElFormItem>
+            <div style="display: flex; justify-content: center"
+              ><ElButton type="danger" @click="del(item.id)">删除</ElButton></div
+            >
+          </div>
+        </div>
       </ElForm>
       <template #footer>
         <ElButton @click="onDialogClose">取消</ElButton>
@@ -233,7 +254,10 @@ const flag = ref<boolean>(true)
 onMounted(() => {
   init()
 })
-
+const arrList = ref<any>([])
+const placementSave = () => {
+  console.log('过度完成')
+}
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
   console.log(res, 'res')
@@ -305,7 +329,16 @@ const handleSave = async (data?: any) => {
     init()
   }
 }
-
+const add = () => {
+  let i = 0
+  arrList.value.push({
+    id: Date.now(),
+    index: arrList.value.length + 1
+  })
+}
+const del = (id) => {
+  arrList.value = arrList.value.filter((item) => item.id !== id)
+}
 const onSubmit = (formEl: any) => {
   formEl?.validate((valid: any) => {
     if (valid) {

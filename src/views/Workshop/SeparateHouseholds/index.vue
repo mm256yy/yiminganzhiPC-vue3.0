@@ -11,7 +11,7 @@
       </ElButton>
       <ElBreadcrumb separator="/">
         <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
-        <ElBreadcrumbItem class="text-size-12px">分户合户</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">{{ title }}</ElBreadcrumbItem>
       </ElBreadcrumb>
     </div>
   </WorkContentWrap>
@@ -55,6 +55,7 @@ const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { back } = useRouter()
 const tabCurrentId = ref<number>()
 const vill = ref<any>()
+const title = ref<any>()
 // 角色代码
 enum RoleCodeType {
   implementation = 'implementation', // 移民实施
@@ -128,6 +129,7 @@ onMounted(() => {
         }
       ])
   role.value == 'implementation' ? (tabCurrentId.value = 2) : (tabCurrentId.value = 0)
+  role.value == 'implementation' ? (title.value = '分房') : (title.value = '分户合户分房')
 })
 </script>
 
