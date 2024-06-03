@@ -25,7 +25,7 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton>
+          <!-- <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton> -->
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>

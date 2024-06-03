@@ -57,9 +57,7 @@
           </div>
           <div style="display: flex">
             <ElFormItem label="家庭总人数" prop="familyNum" v-if="familyTotal">
-              <div class="!w-100px"
-                >{{ baseInfo.familyNum - baseInfo.addPopulationNum }}&nbsp; <span>(人)</span></div
-              >
+              <div class="!w-100px">{{ baseInfo.familyNum }}&nbsp; <span>(人)</span></div>
             </ElFormItem>
             <ElFormItem label="农村移民" v-if="baseInfo.ruralMigrantNum">
               <div class="!w-100px">{{ baseInfo.ruralMigrantNum }}&nbsp; <span>(人)</span></div>
@@ -190,10 +188,10 @@
         "
       >
         <div>
-          {{
-            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
-          }}</div
-        >
+          {{ `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText}` }}
+          <span style="text-decoration-line: underline"> {{ baseInfo.name }} </span>
+          户号 <span style="text-decoration-line: underline">{{ baseInfo.showDoorNo }}</span>
+        </div>
 
         <div>{{ data }}</div>
       </div>

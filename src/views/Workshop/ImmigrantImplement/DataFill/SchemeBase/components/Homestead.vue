@@ -4,7 +4,9 @@
       <div class="common-label">宅基地安置人数：</div>
       <div class="common-value">
         <div class="value-center">
-          <span v-if="baseInfo.familyNum">{{ baseInfo.familyNum }}人，</span>
+          <span v-if="baseInfo.familyNum || baseInfo.addPopulationNum"
+            >{{ baseInfo.familyNum + baseInfo.addPopulationNum }}人，</span
+          >
           <span v-if="baseInfo.ruralMigrantNum"
             >其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，</span
           >

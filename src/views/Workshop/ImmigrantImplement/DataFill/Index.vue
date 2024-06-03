@@ -810,13 +810,13 @@ const getStatus = (data: any) => {
       tabsListCopy[1].active = true // 安置确认
     }
     if (data.landSoarStatus === '1') {
-      tabsListCopy[2].active = true // 土地腾让
+      tabsListCopy[4].active = true // 土地腾让
     }
     if (data.cardStatus === '1') {
-      tabsListCopy[3].active = true // 补偿卡
+      tabsListCopy[2].active = true // 补偿卡
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[4].active = true // 征地协议
+      tabsListCopy[3].active = true // 征地协议
     }
     if (data.arrangementStatus === '1') {
       tabsListCopy[5].active = true // 生产安置办理
@@ -827,13 +827,13 @@ const getStatus = (data: any) => {
       tabsListCopy[0].active = true // 资产评估
     }
     if (data.landSoarStatus === '1') {
-      tabsListCopy[1].active = true // 土地腾让
+      tabsListCopy[3].active = true // 土地腾让
     }
     if (data.cardStatus === '1') {
-      tabsListCopy[2].active = true // 补偿卡
+      tabsListCopy[1].active = true // 补偿卡
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[3].active = true // 征地协议
+      tabsListCopy[2].active = true // 征地协议
     }
   }
 

@@ -247,10 +247,10 @@
         "
       >
         <div>
-          {{
-            `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText} ${baseInfo.name} 户号 ${baseInfo.showDoorNo} `
-          }}</div
-        >
+          {{ `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText}` }}
+          <span style="text-decoration-line: underline"> {{ baseInfo.name }} </span>
+          户号 <span style="text-decoration-line: underline">{{ baseInfo.showDoorNo }}</span>
+        </div>
 
         <div>{{ data }}</div>
       </div>
