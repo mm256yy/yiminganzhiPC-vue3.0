@@ -465,6 +465,7 @@ const onImportDataPre = async () => {
 // 导入数据
 const onImportData = async () => {
   console.log('进入了')
+  console.log(mockList.value, '模拟数据')
   // 拿到模拟安置的配置
   if (mockList.value && mockList.value.length) {
     // 模拟数据和当前数据做融合
@@ -473,6 +474,7 @@ const onImportData = async () => {
       if (current) {
         item.settingWay = current.settingWay
         item.settingRemark = current.settingRemark
+        item.isProduction = current.isProduction
       }
       return item
     })
