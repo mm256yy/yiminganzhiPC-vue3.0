@@ -2,50 +2,49 @@
   <WorkContentWrap>
     <ElBreadcrumb separator="/">
       <ElBreadcrumbItem class="text-size-12px">资金管理</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">资金池</ElBreadcrumbItem>
+      <ElBreadcrumbItem class="text-size-12px">法人资金池</ElBreadcrumbItem>
     </ElBreadcrumb>
 
     <!-- 统计信息 -->
     <div class="statistics-wrap">
-      <div class="item">
+      <div class="item is-cursor" @click="toLink('LegalEntry')">
         <div class="title">入账总金额(元)</div>
-        <div class="content">{{ accountData?.entryAmount }}</div>
+        <div class="content">{{ accountData?.income }}</div>
       </div>
       <div class="item center">
         <div class="item-1">
           <div class="title">出账总金额(元)</div>
-          <div class="content">{{ accountData?.outgoingAmount }}</div>
+          <div class="content">{{ accountData?.expendTotal }}</div>
         </div>
-        <!-- <div class="item-line"></div>
+        <div class="item-line"></div>
         <div class="item-2">
-          <div>拨付总额 <span class="red">800</span> 元</div>
-          <div>支付总额 <span class="red">300</span> 元</div>
-        </div> -->
+          <!-- <div>拨付总额 <span class="red">800</span> 元</div>
+          <div>支付总额 <span class="red">300</span> 元</div> -->
+          <div>
+            <a class="a-revert" @click="toLink('FundAllocation')" href="javascript:void(0);"
+              >拨付总额 {{ accountData?.receipt }}元</a
+            >
+          </div>
+          <div>
+            <a class="a-revert" @click="toLink('FundPayment ')" href="javascript:void(0);"
+              >支付总额 {{ accountData?.pay }}元</a
+            >
+          </div>
+        </div>
       </div>
       <div class="item">
         <div class="title">资金池余额(元)</div>
-        <div class="content">{{ accountData?.residueAmount }}</div>
+        <div class="content">{{ accountData?.balance }}</div>
       </div>
     </div>
 
     <!-- 搜素 -->
     <div class="search-form-wrap">
-      <p class="mb-20"
-        >存在付款审核待办
-        <a @click="toLink('PaymentReview')" class="a-revert" href="javascript:void(0);">{{
-          payData.payNum
-        }}</a>
-        项，概算审核
-        <a @click="toLink('BudgetReview')" class="a-revert" href="javascript:void(0);">{{
-          payData.estimateNum
-        }}</a>
-        项</p
-      >
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
     </div>
 
     <div class="table-wrap">
-      <div class="row">
+      <!-- <div class="row">
         <div class="col left">
           <div class="icon-box">
             <ElImage class="icon" :src="IconCapital" fit="cover" />
@@ -54,11 +53,25 @@
             <span class="green">共{{ tableObject.total }}</span> 笔
           </div>
         </div>
-        <!-- <div class="col right">
+        <div class="col right">
           <ElButton type="primary" @click="onExport">
             <Icon icon="fluent:arrow-export-up-24-regular" class="mr-5px" /> 导出
           </ElButton>
-        </div> -->
+        </div>
+      </div> -->
+
+      <div class="flex items-center justify-between pb-12px">
+        <div class="table-header-left">
+          <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金记录</span>
+
+          <div class="text">
+            合计金额： <span class="num">{{ sumAmount || 0 }}</span> 元
+          </div>
+        </div>
+        <ElSpace>
+          <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow"> 添加 </ElButton> -->
+          <!-- <ElButton :icon="importIcon" type="default" @click="onExport"> 导出 </ElButton> -->
+        </ElSpace>
       </div>
 
       <Table
@@ -79,7 +92,7 @@
         @register="register"
       >
         <template #typeTxt="{ row }">
-          <div>{{ row.type === '1' ? '入账' : '出账' }}</div>
+          <div>{{ row.type === 'income' ? '入账' : row.type === 'receipt' ? '拨付' : '支付' }}</div>
         </template>
         <template #recordTime="{ row }">
           <div>{{
@@ -122,9 +135,9 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 import { useTable } from '@/hooks/web/useTable'
 import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
 import {
-  getCapitalPoolListApi,
-  getCapitalPoolApi,
-  getpayApi
+  getCapitalPoolListApiLegal,
+  getCapitalPoolApiLegal,
+  getpoolSumAmountLegal
 } from '@/api/fundManage/capitalPool-service'
 // import EditForm from './EditForm.vue'
 import TypeFour from '@/views/Workshop/FundManage/PaymentApplication/EditForm.vue'
@@ -133,19 +146,23 @@ import dayjs from 'dayjs'
 import EditForm from './addForm.vue'
 import { getFundSubjectListApi } from '@/api/fundManage/common-service'
 import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplication-service'
+import { useAppStore } from '@/store/modules/app'
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
-const payData = ref<any[]>([])
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
+const sumAmount = ref<string>('')
 
 const { register, tableObject, methods } = useTable({
-  getListApi: getCapitalPoolListApi
+  getListApi: getCapitalPoolListApiLegal
 })
 
 const { getList, setSearchParams } = methods
 
 tableObject.params = {
-  status: 1
+  // status: 1
+  projectId
 }
 
 getList()
@@ -162,13 +179,16 @@ const onSearch = (data) => {
   }
 
   setSearchParams({ ...params })
+  sumAmountApi({ ...params })
 }
 
 const onReset = () => {
   tableObject.params = {
-    status: 1
+    projectId
+    // status: 1
   }
   setSearchParams({})
+  sumAmountApi({ projectId })
 }
 
 const schema = reactive<CrudSchema[]>([
@@ -182,11 +202,15 @@ const schema = reactive<CrudSchema[]>([
         options: [
           {
             label: '入账',
-            value: '1'
+            value: 'income'
           },
           {
-            label: '出账',
-            value: '2'
+            label: '拨付',
+            value: 'receipt'
+          },
+          {
+            label: '支付',
+            value: 'pay'
           }
         ]
       }
@@ -302,7 +326,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'amount',
+    field: 'amnt',
     label: '资金金额',
     search: {
       show: false
@@ -315,7 +339,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'recordTime',
+    field: 'record_time',
     label: '操作时间',
     search: {
       show: false
@@ -328,7 +352,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createdDate',
+    field: 'created_date',
     label: '创建时间',
     search: {
       show: false
@@ -341,7 +365,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'createdBy',
+    field: 'created_by',
     label: '操作人',
     search: {
       show: false
@@ -374,21 +398,17 @@ const { allSchemas } = useCrudSchemas(schema)
 let doorNo = ref()
 let parmasList = ref()
 const onViewRow = (row) => {
-  if (row.entryType === '1' || row.entryType === '2') {
-    const { id } = row
-    // 点击查看进入入账详情页面
-    toLink('FundEntryDetail', id)
-  } else if (row.entryType === '3') {
-    //资金发放
-    doorNo.value = { doorNo: row.doorNo, type: row.cardType }
-    dialog.value = true
-  } else if (row.entryType === '4') {
-    //财务发放
-    PaymentApplicationByIdDetailApi(row.doorNo, 1).then((res: any) => {
-      parmasList.value = res
-      console.log(res.funPaymentRequestFlowNodeList, '测试')
-      dialogs.value = true
-    })
+  console.log(row, row.type)
+
+  if (row.type == 'income') {
+    // 入账
+    toLink('LegalEntryIndex', row.id)
+  } else if (row.type == 'receipt') {
+    // 拨付
+    toLink('LegalPoolReceipt', row.id)
+  } else if (row.type == 'pay') {
+    // 支付
+    toLink('LegalPoolPay', row.id)
   }
 }
 
@@ -405,14 +425,22 @@ const onEditFormClose = (flag: boolean) => {
 // 导出
 // const onExport = () => {}
 
+const sumAmountApi = async (params) => {
+  try {
+    sumAmount.value = await getpoolSumAmountLegal({
+      ...params,
+      projectId
+      // type: '1'
+      // entryStatus: '1'
+    })
+  } catch (error) {}
+}
+
 onMounted(() => {
-  let params: CapitalPoolDtoType = {}
-  getCapitalPoolApi(params).then((res) => {
+  getCapitalPoolApiLegal().then((res) => {
     accountData.value = res
   })
-  getpayApi().then((res) => {
-    payData.value = res
-  })
+  sumAmountApi({})
   getFundSubjectList()
 })
 
@@ -454,7 +482,7 @@ const getFundSubjectList = () => {
     align-items: center;
     width: 360px;
     height: 112px;
-    cursor: pointer;
+
     background-color: #eef4ff;
 
     .title {
@@ -490,6 +518,10 @@ const getFundSubjectList = () => {
         }
       }
     }
+  }
+
+  .is-cursor {
+    cursor: pointer;
   }
 }
 
@@ -537,9 +569,7 @@ const getFundSubjectList = () => {
     }
   }
 }
-.mb-20 {
-  margin-bottom: 20px;
-}
+
 .a-revert {
   text-decoration: revert;
 }
