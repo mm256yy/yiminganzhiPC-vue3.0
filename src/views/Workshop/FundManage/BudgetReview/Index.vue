@@ -38,6 +38,9 @@
           <el-button type="primary" link @click="onViewRow(row)">查看</el-button>
           <ElButton type="primary" v-if="showButton" @click="onReviewRow(row)"> 审核 </ElButton>
         </template>
+        <template #newFunSubjectId="{ row }">
+          <div>{{ getTreeName(fundAccountList, row.newFunSubjectId) }}</div>
+        </template>
       </Table>
     </div>
 
@@ -48,6 +51,7 @@
       @close="onCloseReview"
       :parmasList="parmasList"
       :actionType="actionType"
+      :fundAccountList="fundAccountList"
     />
   </WorkContentWrap>
 </template>
@@ -203,7 +207,20 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'gsAdjustTxt',
+    field: 'funSubjectIdText',
+    label: '资金科目',
+    search: {
+      show: false
+    },
+    form: {
+      show: false
+    },
+    detail: {
+      show: false
+    }
+  },
+  {
+    field: 'newTypeTxt',
     label: '调整后概算科目',
     search: {
       show: false
@@ -216,8 +233,8 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'funSubjectIdText',
-    label: '资金科目',
+    field: 'newFunSubjectId',
+    label: '调整后资金科目',
     search: {
       show: false
     },
@@ -311,6 +328,22 @@ const schema = reactive<CrudSchema[]>([
 ])
 
 const { allSchemas } = useCrudSchemas(schema)
+
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
 
 tableObject.params = {
   projectId,

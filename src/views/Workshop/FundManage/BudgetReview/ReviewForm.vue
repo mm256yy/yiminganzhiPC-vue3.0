@@ -38,7 +38,7 @@
       </ElCol>
     </ElRow>
 
-    <ElRow>
+    <!-- <ElRow>
       <ElCol :span="12">
         <div class="col-wrap">
           <div class="label">概算科目:</div>
@@ -51,7 +51,7 @@
           <div class="content">{{ form.funSubjectIdText }}</div>
         </div>
       </ElCol>
-    </ElRow>
+    </ElRow> -->
 
     <ElRow>
       <ElCol :span="12">
@@ -146,10 +146,34 @@
     </ElTable>
 
     <ElRow>
-      <ElCol :span="24">
+      <!-- <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整事项:</div>
           <div class="content">{{ form.gsAdjustTxt }}</div>
+        </div>
+      </ElCol> -->
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">概算科目:</div>
+          <div class="content">{{ form.typeTxt }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">调整后概算科目:</div>
+          <div class="content">{{ form.newTypeTxt }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">资金科目:</div>
+          <div class="content">{{ form.funSubjectIdText }}</div>
+        </div>
+      </ElCol>
+      <ElCol :span="24">
+        <div class="col-wrap">
+          <div class="label">调整后资金科目:</div>
+          <div class="content">{{ getTreeName(fundAccountList, row.newFunSubjectId) }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -262,6 +286,7 @@ import { formatDate } from '@/utils/index'
 interface PropsType {
   actionType: 'add' | 'edit' | 'view'
   show: any
+  fundAccountList?: any
   row?: LandlordDtoType | null | undefined
   parmasList: any
 }
@@ -316,6 +341,22 @@ const onSubmit = async (status: string) => {
   // onClose()
 }
 
+const getTreeName = (list: any, code: any) => {
+  for (let i = 0; i < list.length; i++) {
+    let a = list[i]
+    if (a.code == code) {
+      return a.name
+    } else {
+      if (a.children && a.children.length > 0) {
+        let res = getTreeName(a.children, code)
+        if (res) {
+          return res
+        }
+      }
+    }
+  }
+}
+
 // 关闭弹窗
 const onClose = () => {
   emit('close')
@@ -329,7 +370,7 @@ const onClose = () => {
   margin-bottom: 15px;
 
   .label {
-    width: 100px;
+    width: 120px;
     margin-right: 10px;
   }
 }

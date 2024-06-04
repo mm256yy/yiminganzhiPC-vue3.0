@@ -87,6 +87,8 @@
       :row="tableObject.currentRow"
       :contentMessage="contentMessage"
       @close="onClose"
+      @getlist="getList"
+      :pamaers="pamaers"
     />
   </WorkContentWrap>
 </template>

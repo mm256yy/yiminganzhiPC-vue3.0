@@ -150,11 +150,11 @@ export const useTable = <T = any>(config?: UseTableConfig<T>) => {
         page: tableObject.currentPage,
         ...data
       }
-      // tableObject.params = Object.assign(tableObject.params, {
-      //   size: tableObject.size,
-      //   page: tableObject.currentPage,
-      //   ...data
-      // })
+      tableObject.params = Object.assign(tableObject.params, {
+        size: tableObject.size,
+        page: tableObject.currentPage,
+        ...data
+      })
 
       for (const i in tableObject.params) {
         if (!tableObject.params[i]) {
