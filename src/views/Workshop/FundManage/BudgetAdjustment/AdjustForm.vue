@@ -23,8 +23,13 @@
         </el-radio-group>
       </ElFormItem> -->
 
+<<<<<<< HEAD
       <ElFormItem label="概算科目:" required prop="type">
         <el-radio-group class="ml-4" v-model="form.type">
+=======
+      <ElFormItem label="概算科目:" required prop="newType">
+        <el-radio-group class="ml-4" v-model="form.newType">
+>>>>>>> feature/master_cxc
           <el-radio
             v-for="item in dictObj[382]"
             :label="item.value"
@@ -34,18 +39,30 @@
           >
         </el-radio-group>
       </ElFormItem>
+<<<<<<< HEAD
       <ElFormItem label="资金科目:" required prop="funSubjectId">
         <ElTreeSelect
           v-if="actionType !== 'view'"
           class="!w-full"
           v-model="form.funSubjectId"
+=======
+      <ElFormItem label="资金科目:" required prop="newFunSubjectId">
+        <ElTreeSelect
+          v-if="actionType !== 'view'"
+          class="!w-full"
+          v-model="form.newFunSubjectId"
+>>>>>>> feature/master_cxc
           :data="props.fundAccountList"
           node-key="code"
           :props="{ value: 'code', label: 'name' }"
           showCheckbox
           checkStrictly
           checkOnClickNode
+<<<<<<< HEAD
           :default-checked-keys="[form.funSubjectId]"
+=======
+          :default-checked-keys="[form.newFunSubjectId]"
+>>>>>>> feature/master_cxc
         />
         <span v-else>{{ form.funSubjectIdText }}</span>
       </ElFormItem>

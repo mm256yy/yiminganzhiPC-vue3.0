@@ -32,9 +32,19 @@
     <div class="search-form-wrap">
       <p class="mb-20"
         >存在付款审核待办
+<<<<<<< HEAD
         <a @click="toLink('PaymentReview')" class="a-revert" href="javascript:void(0);">100</a>
         项，概算审核
         <a @click="toLink('BudgetReview')" class="a-revert" href="javascript:void(0);">99</a>
+=======
+        <a @click="toLink('PaymentReview')" class="a-revert" href="javascript:void(0);">{{
+          payData.payNum
+        }}</a>
+        项，概算审核
+        <a @click="toLink('BudgetReview')" class="a-revert" href="javascript:void(0);">{{
+          payData.estimateNum
+        }}</a>
+>>>>>>> feature/master_cxc
         项</p
       >
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="onReset" />
@@ -117,7 +127,11 @@ import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
 // import { useAppStore } from '@/store/modules/app'
 import { useTable } from '@/hooks/web/useTable'
 import type { CapitalPoolDtoType, CapitalPoolAccount } from '@/api/fundManage/capitalPool-types'
-import { getCapitalPoolListApi, getCapitalPoolApi } from '@/api/fundManage/capitalPool-service'
+import {
+  getCapitalPoolListApi,
+  getCapitalPoolApi,
+  getpayApi
+} from '@/api/fundManage/capitalPool-service'
 // import EditForm from './EditForm.vue'
 import TypeFour from '@/views/Workshop/FundManage/PaymentApplication/EditForm.vue'
 import IconCapital from '@/assets/imgs/icon_capital.png'
@@ -128,6 +142,7 @@ import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplica
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
+const payData = ref<any[]>([])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getCapitalPoolListApi
@@ -400,6 +415,9 @@ onMounted(() => {
   let params: CapitalPoolDtoType = {}
   getCapitalPoolApi(params).then((res) => {
     accountData.value = res
+  })
+  getpayApi().then((res) => {
+    payData.value = res
   })
   getFundSubjectList()
 })

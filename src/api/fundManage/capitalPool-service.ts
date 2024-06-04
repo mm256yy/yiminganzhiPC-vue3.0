@@ -10,6 +10,11 @@ export const getCapitalPoolApi = (params?: CapitalPoolDtoType) => {
   return request.get({ url: `/funReceiptsRecord/capitalPoolSumAmount`, params })
 }
 
+// 获取 付款审核 概算审核
+export const getpayApi = () => {
+  return request.get({ url: `/funPaymentRequest/handlerInfo` })
+}
+
 /**
  * 获取资金池列表
  * @returns

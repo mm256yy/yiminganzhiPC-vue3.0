@@ -167,7 +167,11 @@ const handleClickItem = (type: number) => {
     5: 'Feedback', //反馈管理
     6: 'SmartReport', // 智慧报表
     11: 'FeedbackIndex', // 信息反馈
+<<<<<<< HEAD
     12: 'FeedbackIndex' // 政策法规
+=======
+    12: 'zcHome' // 政策法规
+>>>>>>> feature/master_cxc
   }
   push({ name: pathMap[type] })
 }

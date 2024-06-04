@@ -48,6 +48,9 @@
       <ElFormItem label="说明:">
         <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
+      <ElFormItem label="凭证编号:" required prop="receiptCode">
+        <ElInput type="text" v-model="form.receiptCode" />
+      </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 凭证： </div>
         <div class="card-img-list">
@@ -141,7 +144,8 @@ const form = ref<any>({
   payee: '',
   amount: 0,
   recordTime: '',
-  remark: ''
+  remark: '',
+  receiptCode: ''
 })
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
@@ -158,6 +162,7 @@ const rules = reactive<FormRules>({
   source: [required()],
   payee: [required()],
   amount: [required()],
+  receiptCode: [required()],
   recordTime: [required()]
 })
 

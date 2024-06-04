@@ -157,7 +157,11 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整后概算科目:</div>
+<<<<<<< HEAD
           <div class="content">{{ form.typeTxt }}</div>
+=======
+          <div class="content">{{ form.newTypeTxt }}</div>
+>>>>>>> feature/master_cxc
         </div>
       </ElCol>
       <ElCol :span="24">
@@ -169,7 +173,11 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整后资金科目:</div>
+<<<<<<< HEAD
           <div class="content">{{ getTreeName(fundAccountList, form.funSubjectId) }}</div>
+=======
+          <div class="content">{{ getTreeName(fundAccountList, form.newFunSubjectId) }}</div>
+>>>>>>> feature/master_cxc
         </div>
       </ElCol>
       <ElCol :span="24">

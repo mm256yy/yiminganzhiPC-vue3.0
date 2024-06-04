@@ -62,6 +62,11 @@
         </div>
 
         <div class="row">
+          <div class="label">凭证编号：</div>
+          <div class="value">{{ detail.receiptCode || '' }}</div>
+        </div>
+
+        <div class="row">
           <div class="label">凭证：</div>
           <div class="value">
             <div class="img-list" v-if="detail.receipt && detail.receipt.length">
