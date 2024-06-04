@@ -179,6 +179,44 @@
           </div>
         </el-col>
       </el-row>
+      <el-row>
+        <el-col :span="12" v-if="props.baseInfo.fhReasonText">
+          <div class="info-item">
+            <div class="tit">分户原因:</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.fhReasonText) }}</div>
+          </div>
+        </el-col>
+        <el-col :span="12" v-if="props.baseInfo.fhReasonText">
+          <div class="info-item">
+            <div class="tit">分户申请附件:</div>
+            <ElLink
+              class="txt"
+              v-for="(item, index) in setlist(props.baseInfo.separateFile)"
+              :key="index"
+              @click="downloadFile(index, props.baseInfo.separateFile)"
+              >{{ item }}
+            </ElLink>
+          </div>
+        </el-col>
+        <el-col :span="12" v-if="props.baseInfo.mergeReasonText">
+          <div class="info-item">
+            <div class="tit">合户原因:</div>
+            <div class="txt">{{ fmtStr(props.baseInfo.mergeReasonText) }}</div>
+          </div>
+        </el-col>
+        <el-col :span="12" v-if="props.baseInfo.mergeReasonText">
+          <div class="info-item">
+            <div class="tit">合户申请附件:</div>
+            <ElLink
+              class="txt"
+              v-for="(item, index) in setlist(props.baseInfo.mergeFile)"
+              :key="index"
+              @click="downloadFile(index, props.baseInfo.mergeFile)"
+              >{{ item }}
+            </ElLink>
+          </div>
+        </el-col>
+      </el-row>
     </div>
 
     <!-- 居民户 -- 安置确认 tab 页头部信息 -->
@@ -370,6 +408,17 @@ onMounted(() => {
     infoData.value = { icon: 'ic:round-holiday-village' }
   }
 })
+let setlist = (e) => {
+  if (e) {
+    return JSON.parse(e).reduce((a, b) => {
+      a.push(b.name)
+      return a
+    }, [])
+  }
+}
+let downloadFile = (a, e) => {
+  window.open(JSON.parse(e)[a].url)
+}
 </script>
 
 <style lang="less" scoped>

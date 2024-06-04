@@ -63,15 +63,7 @@
           >
             分户日志
           </ElButton>
-          <ElButton
-            type="primary"
-            @click="submits"
-            :disabled="
-              tableObject.tableList.length == 0 || tableObject.tableList[0].children.length == 0
-            "
-          >
-            提交
-          </ElButton>
+          <ElButton type="primary" @click="submits"> 提交 </ElButton>
         </ElSpace>
       </div>
 
@@ -750,6 +742,10 @@ let handelSelectchange = (row, key) => {
   }
 }
 let submits = () => {
+  if (tableObject.tableList.length == 0 || tableObject.tableList[0].children.length == 0) {
+    ElMessage.info('请选择分户用户')
+    return
+  }
   newdialog.value = true
 }
 let submit = (e) => {
@@ -791,7 +787,8 @@ let submit = (e) => {
     if (res) {
       ElMessage.success('操作成功！')
 
-      setSearchParams({ type: 'PeasantHousehold' })
+      // setSearchParams({ type: 'PeasantHousehold' })
+      tableObject.tableList = []
     }
   })
 }

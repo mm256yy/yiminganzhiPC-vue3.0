@@ -27,14 +27,13 @@
         {{ row.operationDate ? dayjs(row.operationDate).format('YYYY-MM-DD') : '' }}
       </template>
       <template #fhReason="{ row }">
-        {{ row.fhReason ? dictObj[437].find((item) => item.value == row.fhReason).label : '' }}
         {{
           isfh
             ? row.fhReason
               ? dictObj[437].find((item) => item.value == row.fhReason).label
               : ''
             : row.mergeReason
-            ? dictObj[437].find((item) => item.value == row.mergeReason).label
+            ? dictObj[438].find((item) => item.value == row.mergeReason).label
             : ''
         }}
       </template>
