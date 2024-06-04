@@ -112,7 +112,7 @@ const onClose = (flag = false) => {
     formRef.value?.resetFields()
   })
 }
-let form = reactive({ remark: '', reason: '', separateFile: '' })
+let form = reactive({ remark: '', reason: '', separateFile: null, mergeFile: null })
 let feedbackPic: any = ref([])
 const { required } = useValidator()
 
@@ -165,6 +165,9 @@ const onSubmit = debounce((formEl) => {
       console.log(form)
       if (feedbackPic.value) {
         form.separateFile = JSON.stringify(feedbackPic.value)
+        props.isfh
+          ? (form.separateFile = JSON.stringify(feedbackPic.value))
+          : (form.mergeFile = JSON.stringify(feedbackPic.value))
       }
       emit('close')
       emit('submit', form)

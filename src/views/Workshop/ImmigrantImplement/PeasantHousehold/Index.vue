@@ -172,6 +172,8 @@ setSearchParams({
 })
 let setSearchParamss = () => {
   tableObject.params = {}
+  appStore.setsercher({ value: tableObject.params, name: '居民户信息' })
+
   setSearchParams({
     type: 'PeasantHousehold',
     status: 'implementation',

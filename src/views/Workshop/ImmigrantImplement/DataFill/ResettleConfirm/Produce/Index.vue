@@ -149,7 +149,12 @@
           </el-select>
         </template>
         <template #settingWay="{ row }">
-          <el-select v-model="row.settingWay" placeholder="请选择" :key="row.id" :disabled="flag">
+          <el-select
+            v-model="row.settingWay"
+            placeholder="请选择"
+            :key="row.id"
+            :disabled="row.isProduction == '0'"
+          >
             <el-option
               v-for="item in filterWay(row)"
               :key="`${item.value}${row.id}`"
@@ -400,7 +405,6 @@ const schemas = reactive<CrudSchema[]>([
     }
   }
 ])
-const { allSchemass } = useCrudSchemas(schemas)
 const { allSchemas } = useCrudSchemas(schema)
 const dialogVisible = ref(false)
 
@@ -504,11 +508,13 @@ const onSubmit = () => {
 const onSave = async () => {
   const item = tableObject.tableList.find((item) => !item.settingWay)
   const isNotProduction = tableObject.tableList.filter((item) => !item.isProduction)
-  if (flag.value == false && item) {
+  if (item && item.isProduction == '1') {
     ElMessage.info('请选择安置方式')
     return
   }
-  if (isNotProduction) {
+  console.log(isNotProduction)
+
+  if (isNotProduction.length > 0) {
     ElMessage.info('请选择是否生产安置')
     return
   }
