@@ -401,7 +401,7 @@ const onViewRow = async (row: any) => {
 // 关闭审核弹窗
 const onCloseReview = () => {
   dialog.value = false
-  setSearchParams({ businessId: '2', status: '4' })
+  setSearchParams({ auditType: tabVal.value, businessId: '2', status: '4' })
 }
 
 onMounted(() => {
