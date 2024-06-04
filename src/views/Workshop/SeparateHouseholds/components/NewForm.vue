@@ -21,7 +21,7 @@
       label-width="140px"
       :rules="rules"
     >
-      <ElFormItem :label="isfh ? '分户原因：' : '合户原因'" prop="reason" required>
+      <ElFormItem :label="isfh ? '分户原因：' : '合户原因：'" prop="reason" required>
         <ElSelect v-model="form.reason" class="!w-full">
           <ElOption
             v-for="item in dictObj[isfh ? 437 : 438]"
@@ -51,6 +51,7 @@
           :on-success="uploadFileChange1"
           :before-remove="beforeRemove"
           :on-remove="removeFile1"
+          :on-preview="handlePreview"
         >
           <template #trigger>
             <el-button type="primary">点击上传</el-button>
@@ -116,7 +117,8 @@ let feedbackPic: any = ref([])
 const { required } = useValidator()
 
 const rules = reactive<FormRules>({
-  remark: [required()]
+  remark: [required()],
+  reason: [required()]
 })
 // 处理函数
 const handleFileList = (fileList: UploadFiles) => {
@@ -151,6 +153,10 @@ const beforeRemove = (uploadFile: UploadFile) => {
     () => true,
     () => false
   )
+}
+let handlePreview = (file) => {
+  console.log(file)
+  window.open(file.url)
 }
 // 提交表单
 const onSubmit = debounce((formEl) => {

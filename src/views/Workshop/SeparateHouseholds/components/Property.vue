@@ -21,7 +21,7 @@
                 :remote-method="remoteMethod"
                 :loading="loading"
                 @change="doorTypeChange"
-                style="width: 400px"
+                style="width: 500px"
               >
                 <el-option
                   v-for="item in options"
@@ -111,7 +111,7 @@
             :remote-method="remoteMethodClone"
             :loading="loading"
             @change="doorNoChange"
-            style="width: 220px"
+            style="width: 420px"
             v-if="row.action == '删除'"
           >
             <el-option
@@ -123,20 +123,22 @@
           </el-select>
         </template>
         <template #landLegalArea="{ row }">
-          <el-input
+          <el-input-number
             v-model="row.landLegalArea"
-            maxlength="4"
+            :min="0"
             placeholder="请输入面积"
-            type="textnumber"
+            :precision="2"
+            :step="0.01"
             @change="addLegitimate(row)"
           />
         </template>
         <template #landIllegalArea="{ row }">
-          <el-input
+          <el-input-number
             v-model="row.landIllegalArea"
-            maxlength="4"
+            :min="0"
             placeholder="请输入面积"
-            type="textnumber"
+            :precision="2"
+            :step="0.01"
             @change="addLegitimate(row)"
           />
         </template>
@@ -159,10 +161,11 @@
       </div>
       <ElForm
         class="form"
-        ref="formRef"
+        ref="formRefDialog"
         :model="form"
         label-width="120px"
         :label-position="'right'"
+        :rules="rules"
       >
         <ElFormItem label="分权备注" prop="remark" required>
           <ElInput v-model="form.remark" class="!w-350px" placeholder="请输入分权备注" />
@@ -178,38 +181,30 @@
             />
           </ElSelect>
         </ElFormItem>
-        <ElRow>
-          <ElCol :span="24">
-            <div class="col-wrapper">
-              <div>分权申请文件：</div>
-              <div class="card-img-list">
-                <ElUpload
-                  :list-type="'picture-card'"
-                  action="/api/file/type"
-                  :data="{
-                    type: 'archives'
-                  }"
-                  accept=".jpg,.png,jpeg,.pdf"
-                  :multiple="false"
-                  :file-list="relocateVerifyPic"
-                  :headers="headers"
-                  :on-error="onError"
-                  :on-success="uploadFileChange1"
-                  :before-remove="beforeRemove"
-                  :on-remove="removeFile1"
-                  :on-preview="imgPreview"
-                >
-                  <template #trigger>
-                    <div class="card-img-box">
-                      <img class="card-img" src="@/assets/imgs/house.png" alt="" />
-                      <div class="card-txt">点击上传</div>
-                    </div>
-                  </template>
-                </ElUpload>
-              </div>
-            </div>
-          </ElCol>
-        </ElRow>
+        <ElFormItem label="分权申请文件：">
+          <ElUpload
+            :file-list="relocateVerifyPic"
+            :data="{
+              type: 'image'
+            }"
+            accept=".dwg,.dws,.dxf,.png,.jpg,.jpeg,.pdf"
+            class="upload-demo"
+            action="/api/file/type"
+            multiple
+            :headers="{
+              'Project-Id': appStore.getCurrentProjectId,
+              Authorization: appStore.getToken
+            }"
+            :on-success="uploadFileChange1"
+            :before-remove="beforeRemove"
+            :on-remove="removeFile1"
+            :on-preview="imgPreview"
+          >
+            <template #trigger>
+              <el-button type="primary">点击上传</el-button>
+            </template>
+          </ElUpload>
+        </ElFormItem>
       </ElForm>
       <template #footer>
         <ElButton @click="onClose">取消</ElButton>
@@ -229,7 +224,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, computed, toRaw } from 'vue'
+import { reactive, ref, onMounted, computed, toRaw, nextTick } from 'vue'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElButton,
@@ -245,7 +240,9 @@ import {
   ElCol,
   ElMessage,
   ElUpload,
-  ElMessageBox
+  ElMessageBox,
+  ElInputNumber,
+  FormRules
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Search } from '@/components/Search'
@@ -261,6 +258,7 @@ import { getVillageTreeApi } from '@/api/workshop/village/service'
 import PropertyEditForm from './PropertyEditForm.vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import type { UploadFile, UploadFiles } from 'element-plus'
+import { useValidator } from '@/hooks/web/useValidator'
 
 const searchForm = ref<any>({
   blurry: '',
@@ -297,6 +295,13 @@ interface FileItemType {
   name: string
   url: string
 }
+const { required } = useValidator()
+
+const rules = reactive<FormRules>({
+  remark: [required()],
+  reason: [required()]
+})
+let formRefDialog = ref()
 const houseLists = ref<any>()
 const loading = ref(false)
 const options = ref<any[]>([])
@@ -334,8 +339,8 @@ const removeFile1 = (_file: UploadFile, fileList: UploadFiles) => {
 }
 // 预览
 const imgPreview = (uploadFile: UploadFile) => {
-  imgUrl.value = uploadFile.url!
-  dialogVisibles.value = true
+  console.log(uploadFile)
+  window.open(uploadFile.url)
 }
 // 处理函数
 const handleFileList = (fileList: UploadFiles, type: string) => {
@@ -360,30 +365,41 @@ const add = () => {
 }
 const onClose = () => {
   dialogVisible.value = false
+  nextTick(() => {
+    formRefDialog.value?.resetFields()
+  })
 }
 const onSubmit = async () => {
-  dialogVisible.value = false
-  console.log(options.value, '旧数据')
-  let parmas = {
-    newHouseList: toRaw(newHouseList.value),
-    oldHouse: {
-      doorNo: doorNoData.value,
-      id: houseId.value,
-      landIllegalArea: dataList.value[0].landIllegalArea,
-      landLegalArea: dataList.value[0].landLegalArea
-    },
-    reason: form.value.reason,
-    remark: form.value.remark,
-    fileUrl: JSON.stringify(relocateVerifyPic.value || [])
-  }
-  console.log(parmas, '提交参数')
-  await separate(parmas)
-    .then(() => {
-      ElMessage.success('房屋产权分户成功！')
-    })
-    .catch(() => {
-      ElMessage.error('房屋产权分户失败！')
-    })
+  formRefDialog.value?.validate(async (valid: any) => {
+    if (valid) {
+      dialogVisible.value = false
+      console.log(options.value, '旧数据')
+      let parmas = {
+        newHouseList: toRaw(newHouseList.value),
+        oldHouse: {
+          doorNo: doorNoData.value,
+          id: houseId.value,
+          landIllegalArea: dataList.value[0].landIllegalArea,
+          landLegalArea: dataList.value[0].landLegalArea
+        },
+        reason: form.value.reason,
+        remark: form.value.remark,
+        fileUrl: JSON.stringify(relocateVerifyPic.value || [])
+      }
+      console.log(parmas, '提交参数')
+      await separate(parmas)
+        .then(() => {
+          ElMessage.success('房屋产权分户成功！')
+          dataList.value = []
+          onClose()
+        })
+        .catch(() => {
+          ElMessage.error('房屋产权分户失败！')
+        })
+    } else {
+      return false
+    }
+  })
 }
 // const getdistrictTree = async () => {
 //   const list = await getVillageTreeApi(projectId)
@@ -406,12 +422,14 @@ const addLegitimate = (row) => {
   })
   console.log(newHouseList.value, '数组')
 }
+let showDoorNoData = ref('')
 const doorTypeChange = (val) => {
   console.log(val, '测试数据下拉1')
   houseName.value = val
   options.value.forEach((item) => {
     if (item.name == val) {
       doorNoData.value = item.doorNo
+      showDoorNoData.value = item.showDoorNo
       // houseId.value = item.id
       findAll({ doorNo: doorNoData.value, status: 'implementation' }).then((res) => {
         houseLists.value = res.content
@@ -454,8 +472,9 @@ const remoteMethod = (query: string) => {
           id: item.id,
           name: item.name,
           doorNo: item.doorNo,
+          showDoorNo: item.showDoorNo,
           blurry:
-            item.doorNo +
+            item.showDoorNo +
             ' ' +
             item.name +
             ' ' +
@@ -485,8 +504,9 @@ const remoteMethodClone = (query: string) => {
           id: item.id,
           name: item.name,
           doorNo: item.doorNo,
+          showDoorNo: item.showDoorNo,
           blurryClone:
-            item.doorNo +
+            item.showDoorNo +
             ' ' +
             item.name +
             ' ' +
@@ -589,7 +609,7 @@ const onSearch = () => {
       dataList.value = [
         {
           index: 0,
-          name: blurry.value + ' ' + doorNoData.value,
+          name: blurry.value + ' ' + showDoorNoData.value,
           landArea: item.landArea,
           landLegalArea: item.landLegalArea,
           landIllegalArea: item.landIllegalArea
@@ -609,6 +629,9 @@ let setSearchParams = () => {
   dataList.value = []
   blurry.value = ''
   house.value = ''
+  for (let i in oldHouseValues.value) {
+    oldHouseValues.value[i] = ''
+  }
 }
 let handleEdit = (row) => {
   console.log(row, '新增row')
