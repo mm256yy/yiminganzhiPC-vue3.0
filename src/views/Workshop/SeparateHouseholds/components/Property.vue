@@ -366,6 +366,7 @@ const add = () => {
 const onClose = () => {
   dialogVisible.value = false
   nextTick(() => {
+    relocateVerifyPic.value = []
     formRefDialog.value?.resetFields()
   })
 }
@@ -455,8 +456,6 @@ const doorNoChange = (val) => {
       //   // houseLists.value = res.content
       //   console.log(res.content, '房子数据')
       // })
-      console.log(dataList.value.length, '表数据长度')
-      console.log(doorNo, '户号是什么')
       dataList.value[dataList.value.length - 1].doorNo = doorNo
       console.log(dataList.value, '表数据')
     }
