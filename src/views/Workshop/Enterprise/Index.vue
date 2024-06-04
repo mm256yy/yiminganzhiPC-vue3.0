@@ -246,7 +246,7 @@ const exportList = ref<exportListType[]>([
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
 
-const { register, tableObject, methods } = useTable({
+const { register, tableObject, methods }: any = useTable({
   getListApi: getLandlordListApi,
   delListApi: delLandlordByIdApi
 })
@@ -276,7 +276,7 @@ const checkIsOpenDialog = () => {
   const result = sessionStorage.getItem('isDefaultOpen')
   if (result && result === '1') {
     actionType.value = 'add'
-    tableObject.currentRow = null
+    tableObject.currentRow = { householderName: name, doorNo, longitude, latitude, address }
     dialog.value = true
   }
 }
