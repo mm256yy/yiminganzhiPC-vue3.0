@@ -371,11 +371,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-<<<<<<< HEAD
-    field: 'typeTxt',
-=======
     field: 'newTypeTxt',
->>>>>>> feature/master_cxc
     label: '调整后概算科目',
     search: {
       show: false
@@ -388,11 +384,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-<<<<<<< HEAD
-    field: 'funSubjectId',
-=======
     field: 'newFunSubjectId',
->>>>>>> feature/master_cxc
     label: '调整后资金科目',
     search: {
       show: false
