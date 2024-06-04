@@ -77,11 +77,7 @@ import {
   ElInputNumber,
   ElDatePicker
 } from 'element-plus'
-<<<<<<< HEAD
-import { ref, reactive, watch, computed } from 'vue'
-=======
 import { ref, reactive, watch, computed, toRaw } from 'vue'
->>>>>>> feature/master_cxc
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -90,19 +86,13 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useValidator } from '@/hooks/web/useValidator'
 import dayjs from 'dayjs'
 
-<<<<<<< HEAD
-=======
 import { postGrant } from '@/api/fundManage/fundPayment-service'
 
->>>>>>> feature/master_cxc
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: any
-<<<<<<< HEAD
-=======
   pamaers?: any
->>>>>>> feature/master_cxc
   contentMessage: string
 }
 
