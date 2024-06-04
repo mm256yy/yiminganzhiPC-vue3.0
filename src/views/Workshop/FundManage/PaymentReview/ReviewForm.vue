@@ -163,10 +163,7 @@
           </template>
         </ElTableColumn>
       </ElTable>
-      <div class="col-wrapper" v-if="userInfo == 'financevoucher'">
-        <div class="col-label-required">凭证编号：</div>
-        <ElInput type="text" v-model="formAudit.receiptCode" />
-      </div>
+
       <div class="col-wrapper">
         <div> 申请凭证： </div>
         <div class="card-img-list">
@@ -210,6 +207,14 @@
             </div>
           </ElCol>
         </ElRow>
+        <div class="col-wrapper" v-if="actionType === 'view'">
+          <div class="col-label-required">财务凭证编号：</div>
+          <ElInput type="text" v-model="formAudit.financeReceiptCode" />
+        </div>
+        <div class="col-wrapper" v-if="actionType === 'edit'">
+          <div class="col-label-required">财务凭证编号：</div>
+          <ElInput type="text" v-model="formAudit.receiptCode" />
+        </div>
         <div class="col-wrapper">
           <div class="col-label-required"> 财务凭证： </div>
           <div class="card-img-list">

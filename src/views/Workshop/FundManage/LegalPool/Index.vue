@@ -94,14 +94,14 @@
         <template #typeTxt="{ row }">
           <div>{{ row.type === 'income' ? '入账' : row.type === 'receipt' ? '拨付' : '支付' }}</div>
         </template>
-        <template #recordTime="{ row }">
+        <template #record_time="{ row }">
           <div>{{
-            row.recordTime ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
+            row.record_time ? dayjs(row.recordTime).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
-        <template #createdDate="{ row }">
+        <template #created_date="{ row }">
           <div>{{
-            row.createdDate ? dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
+            row.created_date ? dayjs(row.createdDate).format('YYYY-MM-DD HH:mm:ss') : '-'
           }}</div>
         </template>
         <template #action="{ row }">
@@ -327,7 +327,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'amnt',
-    label: '资金金额',
+    label: '资金金额(元)',
     search: {
       show: false
     },

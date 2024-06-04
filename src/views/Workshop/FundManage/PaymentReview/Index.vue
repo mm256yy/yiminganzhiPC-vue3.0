@@ -537,7 +537,10 @@ const onSearch = (data) => {
 
   // 处理参数
   let params = {
-    ...searchData
+    ...searchData,
+    projectId,
+    auditType: tabVal.value,
+    businessId: 1
   }
   tableObject.params = {
     projectId,
