@@ -39,6 +39,9 @@
       <ElFormItem label="说明:">
         <ElInput type="text" v-model="form.remark" />
       </ElFormItem>
+      <ElFormItem label="凭证编号:" required prop="receiptCode">
+        <ElInput type="text" v-model="form.receiptCode" />
+      </ElFormItem>
       <div class="col-wrapper">
         <div class="col-label-required"> 凭证： </div>
         <div class="card-img-list">
@@ -140,6 +143,7 @@ const rules = reactive<FormRules>({
   name: [required()],
   source: [required()],
   amount: [required()],
+  receiptCode: [required()],
   recordTime: [required()]
 })
 

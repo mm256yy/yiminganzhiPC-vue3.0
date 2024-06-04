@@ -23,8 +23,8 @@
         </el-radio-group>
       </ElFormItem> -->
 
-      <ElFormItem label="概算科目:" required prop="type">
-        <el-radio-group class="ml-4" v-model="form.type">
+      <ElFormItem label="概算科目:" required prop="newType">
+        <el-radio-group class="ml-4" v-model="form.newType">
           <el-radio
             v-for="item in dictObj[382]"
             :label="item.value"
@@ -34,18 +34,18 @@
           >
         </el-radio-group>
       </ElFormItem>
-      <ElFormItem label="资金科目:" required prop="funSubjectId">
+      <ElFormItem label="资金科目:" required prop="newFunSubjectId">
         <ElTreeSelect
           v-if="actionType !== 'view'"
           class="!w-full"
-          v-model="form.funSubjectId"
+          v-model="form.newFunSubjectId"
           :data="props.fundAccountList"
           node-key="code"
           :props="{ value: 'code', label: 'name' }"
           showCheckbox
           checkStrictly
           checkOnClickNode
-          :default-checked-keys="[form.funSubjectId]"
+          :default-checked-keys="[form.newFunSubjectId]"
         />
         <span v-else>{{ form.funSubjectIdText }}</span>
       </ElFormItem>

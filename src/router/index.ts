@@ -123,6 +123,26 @@ export const workshopConstantRouterMap: AppRouteRecordRaw[] = [
         }
       },
       {
+        path: 'zcHome',
+        name: 'zcHome',
+        component: () => import('@/views/Workshop/Home/zcHome.vue'),
+        meta: {
+          title: '政策法规',
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
+        path: 'zcDetail',
+        name: 'zcDetail',
+        component: () => import('@/views/Workshop/Home/zcDetail.vue'),
+        meta: {
+          title: '政策法规详情',
+          icon: 'ant-design:home-outlined',
+          hidden: true
+        }
+      },
+      {
         path: 'adminhomeprogress',
         name: 'adminhomeprogress',
         component: () => import('@/views/Workshop/Home/AdminHomeProgress.vue'),

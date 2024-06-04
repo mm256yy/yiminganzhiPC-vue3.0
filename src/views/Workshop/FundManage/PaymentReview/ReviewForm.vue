@@ -164,6 +164,10 @@
         </ElTableColumn>
       </ElTable>
       <div class="col-wrapper">
+        <div class="col-label-required">凭证编号：</div>
+        <ElInput type="text" v-model="formAudit.receiptCode" />
+      </div>
+      <div class="col-wrapper">
         <div> 申请凭证： </div>
         <div class="card-img-list">
           <ElUpload
@@ -497,6 +501,10 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 
 const onSubmit = async (status: string) => {
+  if (!formAudit.value.receiptCode) {
+    ElMessage.error('请输入凭证编号')
+    return
+  }
   if (userInfo.value == 'financevoucher' && !formAudit.value.paymentTime) {
     ElMessage.error('请选择付款时间')
     return
