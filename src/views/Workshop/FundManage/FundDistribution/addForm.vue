@@ -77,7 +77,11 @@ import {
   ElInputNumber,
   ElDatePicker
 } from 'element-plus'
+<<<<<<< HEAD
 import { ref, reactive, watch, computed } from 'vue'
+=======
+import { ref, reactive, watch, computed, toRaw } from 'vue'
+>>>>>>> feature/master_cxc
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
@@ -86,10 +90,19 @@ import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useValidator } from '@/hooks/web/useValidator'
 import dayjs from 'dayjs'
 
+<<<<<<< HEAD
+=======
+import { postGrant } from '@/api/fundManage/fundPayment-service'
+
+>>>>>>> feature/master_cxc
 interface PropsType {
   show: boolean
   actionType: 'add' | 'edit' | 'view'
   row?: any
+<<<<<<< HEAD
+=======
+  pamaers?: any
+>>>>>>> feature/master_cxc
   contentMessage: string
 }
 
@@ -158,17 +171,22 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: any) => {
-  console.log(111, data)
-  return
+  const arr = []
+  props.pamaers.map((item) => {
+    arr.push({
+      ...item,
+      receiptCode: data.receiptCode,
+      receipt: data.receipt
+    })
+  })
 
-  if (props.actionType === 'add') {
-    data.projectId = appStore.getCurrentProjectId
-    data.entryType = '1' // 1普通入账 2法人入账
-    await addFundEntryApi(data)
-  } else {
-    await updateFundEntryApi(data)
-  }
-  ElMessage.success('操作成功！')
+  postGrant(arr).then(() => {
+    ElMessage({
+      type: 'success',
+      message: '发放成功'
+    })
+  })
+  emit('getlist')
   onClose(true)
 }
 

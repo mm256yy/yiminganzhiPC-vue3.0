@@ -163,7 +163,7 @@
           </template>
         </ElTableColumn>
       </ElTable>
-      <div class="col-wrapper">
+      <div class="col-wrapper" v-if="userInfo == 'financevoucher'">
         <div class="col-label-required">凭证编号：</div>
         <ElInput type="text" v-model="formAudit.receiptCode" />
       </div>
