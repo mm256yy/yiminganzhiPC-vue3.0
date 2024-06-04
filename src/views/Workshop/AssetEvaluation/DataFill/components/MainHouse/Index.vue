@@ -149,6 +149,7 @@
               @change="getModelValue(scope.row)"
               v-model="scope.row.landLegalArea"
               :precision="2"
+              disabled
             />
           </template>
         </ElTableColumn>
@@ -165,6 +166,7 @@
               @change="getModelValue(scope.row)"
               v-model="scope.row.landIllegalArea"
               :precision="2"
+              disabled
             />
           </template>
         </ElTableColumn>
