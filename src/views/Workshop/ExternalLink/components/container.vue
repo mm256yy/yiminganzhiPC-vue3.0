@@ -256,7 +256,7 @@ const handleClickItem = (type: number) => {
     2: 'adminhomefund', //资金管理
     3: 'adminhomeprogress', //进度管理 //新闻管理
     4: 'Project', //新闻管理
-    5: 'Feedback', //反馈管理
+    5: 'FeedbackIndexs', //反馈管理
     6: 'SmartReport' // 智慧报表
   }
   push({ name: pathMap[type] })
