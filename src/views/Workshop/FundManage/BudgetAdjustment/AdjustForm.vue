@@ -36,7 +36,6 @@
       </ElFormItem>
       <ElFormItem label="资金科目:" required prop="newFunSubjectId">
         <ElTreeSelect
-          v-if="actionType !== 'view'"
           class="!w-full"
           v-model="form.newFunSubjectId"
           :data="props.fundAccountList"
@@ -47,7 +46,6 @@
           checkOnClickNode
           :default-checked-keys="[form.newFunSubjectId]"
         />
-        <span v-else>{{ form.funSubjectIdText }}</span>
       </ElFormItem>
 
       <ElFormItem label="调整说明" prop="gsRemark">
@@ -123,7 +121,9 @@ const rules = reactive<FormRules>({
   doorNo: [required()],
   parentCode: [required()],
   type: [required()],
-  funSubjectId: [required('资金科目不能为空')]
+  funSubjectId: [required('资金科目不能为空')],
+  newType: [required()],
+  newFunSubjectId: [required()]
 })
 
 // 关闭弹窗
@@ -156,6 +156,9 @@ const submit = async (data: AdjustmentType) => {
     await updateAdjustmentApi({
       ...data,
       projectId
+    }).catch((e) => {
+      btnLoading.value = false
+      return Promise.reject(e)
     })
     btnLoading.value = false
     ElMessage.success('操作成功！')

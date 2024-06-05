@@ -23,7 +23,7 @@
     <div class="table-wrap">
       <div class="common-title">
         <div class="line"></div>
-        <div class="tit">入账详情</div>
+        <div class="tit">{{ type == 1 ? '资金预拨详情' : '入账详情' }}</div>
       </div>
       <div class="row-cont">
         <div class="row">
@@ -47,7 +47,7 @@
         </div>
 
         <div class="row">
-          <div class="label">入账时间：</div>
+          <div class="label">{{ type == 1 ? '付款时间：' : '入账时间：' }}</div>
           <div class="value">{{
             detail.recordTime ? dayjs(detail.recordTime).format('YYYY-MM-DD') : '-'
           }}</div>

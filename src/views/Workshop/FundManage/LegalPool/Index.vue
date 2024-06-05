@@ -14,20 +14,20 @@
       <div class="item center">
         <div class="item-1">
           <div class="title">出账总金额(元)</div>
-          <div class="content">{{ accountData?.expendTotal }}</div>
+          <div class="content">{{ Math.abs(accountData?.expendTotal) }}</div>
         </div>
         <div class="item-line"></div>
         <div class="item-2">
-          <!-- <div>拨付总额 <span class="red">800</span> 元</div>
+          <!-- <div>预拨总额 <span class="red">800</span> 元</div>
           <div>支付总额 <span class="red">300</span> 元</div> -->
           <div>
             <a class="a-revert" @click="toLink('FundAllocation')" href="javascript:void(0);"
-              >拨付总额 {{ accountData?.receipt }}元</a
+              >预拨总额 {{ Math.abs(accountData?.receipt) }}元</a
             >
           </div>
           <div>
             <a class="a-revert" @click="toLink('FundPayment ')" href="javascript:void(0);"
-              >支付总额 {{ accountData?.pay }}元</a
+              >支付总额 {{ Math.abs(accountData?.pay) }}元</a
             >
           </div>
         </div>
@@ -65,7 +65,7 @@
           <span style="margin: 0 10px; font-size: 14px; font-weight: 600">资金记录</span>
 
           <div class="text">
-            合计金额： <span class="num">{{ sumAmount || 0 }}</span> 元
+            共： <span class="num">{{ tableObject.total || 0 }}</span> 笔
           </div>
         </div>
         <ElSpace>
@@ -92,7 +92,10 @@
         @register="register"
       >
         <template #typeTxt="{ row }">
-          <div>{{ row.type === 'income' ? '入账' : row.type === 'receipt' ? '拨付' : '支付' }}</div>
+          <div>{{ row.type === 'income' ? '入账' : row.type === 'receipt' ? '预拨' : '支付' }}</div>
+        </template>
+        <template #amnt="{ row }">
+          <div>{{ Math.abs(row.amnt) }}</div>
         </template>
         <template #record_time="{ row }">
           <div>{{
@@ -149,7 +152,7 @@ import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplica
 import { useAppStore } from '@/store/modules/app'
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
-const accountData = ref<CapitalPoolAccount>()
+const accountData = ref<any>()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const sumAmount = ref<string>('')
@@ -205,7 +208,7 @@ const schema = reactive<CrudSchema[]>([
             value: 'income'
           },
           {
-            label: '拨付',
+            label: '预拨',
             value: 'receipt'
           },
           {
@@ -404,7 +407,7 @@ const onViewRow = (row) => {
     // 入账
     toLink('LegalEntryIndex', row.id)
   } else if (row.type == 'receipt') {
-    // 拨付
+    // 预拨
     toLink('LegalPoolReceipt', row.id)
   } else if (row.type == 'pay') {
     // 支付

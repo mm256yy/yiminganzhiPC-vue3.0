@@ -25,7 +25,19 @@
       <div class="itemBox">
         <div class="item" v-for="item in newsList" :key="item.id">
           <div class="title">{{ item.title }}</div>
-          <div v-html="item.content"></div>
+          <div
+            v-html="item.content"
+            style="
+              font-weight: 400;
+              font-size: 14px;
+              color: #666666;
+              word-break: break-all;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+            "
+          ></div>
           <div class="b">
             <div class="time">{{ item.releaseTime.replace(/-/g, '/') }}</div>
             <div class="more" @click="goLink('zcDetail', { id: item.id })">查看详情</div>
