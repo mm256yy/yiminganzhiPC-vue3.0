@@ -13,7 +13,7 @@
           <ElButton :icon="printIcon" type="primary" @click="onPrintTable">打印</ElButton>
           <ElButton :icon="archivesIcon" type="default" @click="onSortSave">进度上报</ElButton>
         </ElSpace>
-        <ElButton :icon="editIcon" type="primary" @click="placementSave">过渡完成</ElButton>
+        <ElButton type="primary" @click="placementSave">过渡完成</ElButton>
       </div>
     </div>
 
@@ -35,15 +35,16 @@
           <div class="tit">过渡落实情况</div>
           <div class="txt"
             >过渡安置已办理。{{
-              form.excessDateEndFlag == '0'
-                ? '过渡中'
-                : form.excessDateEndFlag == '1'
-                ? '过渡完成'
-                : '-'
+              form.isComplete == '0' ? '过渡中' : form.isComplete == '1' ? '过渡完成' : '-'
             }}</div
           >
-          <div>第一批过渡时间 : {{ `${startTime || '-'} 至 ${endTime || '-'}` }}。</div>
-          <div>第二批过渡时间 : {{ `${startTime || '-'} 至 ${endTime || '-'}` }}。</div>
+          <div v-for="item in form.immigrantExcessPayList" :key="item.id">
+            <div
+              >第{{ item.orderNum }}批过渡时间 :
+              {{ item.excessStartDate ? dayjs(item.excessStartDate).format('YYYY-MM-DD') : '' }} 至
+              {{ item.excessEndDate ? dayjs(item.excessEndDate).format('YYYY-MM-DD') : '' }}。</div
+            >
+          </div>
         </div>
       </div>
     </div>
@@ -65,13 +66,13 @@
             placeholder="请输入"
           />
         </ElFormItem>
-        <ElFormItem label="过渡安置人数（人）：" prop="excessAddress">
+        <ElFormItem label="过渡安置人数（人）：">
           {{ form.demographicNum }}
         </ElFormItem>
-        <ElFormItem label="补偿单价（元/人·月）：" prop="excessAddress">
+        <ElFormItem label="补偿单价（元/人·月）：">
           {{ form.compensationPrice }}
         </ElFormItem>
-        <ElFormItem label=" 过渡安置补偿金额(元)：" prop="excessAddress">
+        <ElFormItem label=" 过渡安置补偿金额(元)：">
           {{ form.totalCompensationAmount ? form.totalCompensationAmount : '-' }}
         </ElFormItem>
         <div style="display: flex; justify-content: space-between">
@@ -80,12 +81,12 @@
         </div>
         <div
           style="border: 1px dashed #e1e4ea; margin-top: 5px"
-          v-for="item in arrList"
-          :key="item.id"
+          v-for="(item, index) in arrList"
+          :key="index"
         >
           <div style="padding: 10px 2px">
-            <div>第{{ item.index + 1 }}批过渡安置费</div>
-            <ElFormItem label="过渡开始日期：" prop="excessStartDate">
+            <div>第{{ item.index + 1 || item.orderNum }}批过渡安置费</div>
+            <ElFormItem label="过渡开始日期：" prop="excessAddress">
               <ElDatePicker
                 class="!w-full"
                 v-model="item.excessStartDate"
@@ -94,7 +95,7 @@
                 @change="handleStartChange(item.index, $event)"
               />
             </ElFormItem>
-            <ElFormItem label="过渡结束日期：" prop="excessEndDate">
+            <ElFormItem label="过渡结束日期：">
               <ElDatePicker
                 class="!w-full"
                 v-model="item.excessEndDate"
@@ -103,14 +104,12 @@
                 @change="handleEndChange(item.index, $event)"
               />
             </ElFormItem>
-            <ElFormItem label="补偿月数（个月）：" prop="excessAddress">{{
-              item.monthNum
-            }}</ElFormItem>
-            <ElFormItem label="补偿金额（元）：" prop="excessAddress">
+            <ElFormItem label="补偿月数（个月）：">{{ item.monthNum }}</ElFormItem>
+            <ElFormItem label="补偿金额（元）：">
               {{ item.compensationAmount }}
             </ElFormItem>
             <div style="display: flex; justify-content: center"
-              ><ElButton type="danger" @click="del(item.id)">删除</ElButton></div
+              ><ElButton type="danger" @click="del(item.index, item.id)">删除</ElButton></div
             >
           </div>
         </div>
@@ -129,7 +128,7 @@
       <div>是否过渡完成?</div>
       <template #footer>
         <ElButton @click="onDialogConfirmClose">取消</ElButton>
-        <ElButton type="primary" @click="doSave(formRef)">确认</ElButton>
+        <ElButton type="primary" @click="doSave">确认</ElButton>
       </template>
     </el-dialog>
 
@@ -248,7 +247,8 @@ import { useIcon } from '@/hooks/web/useIcon'
 import OnDocumentation from './OnDocumentation.vue'
 import {
   getTransitionInfoApi,
-  saveTransitionInfoApi
+  saveTransitionInfoApi,
+  completeApi
 } from '@/api/immigrantImplement/vacate/transition-service'
 import { debounce } from '@/utils/index'
 import { htmlToPdf } from '@/utils/ptf'
@@ -256,6 +256,9 @@ interface PropsType {
   doorNo: string
   baseInfo: any
 }
+import { useAppStore } from '@/store/modules/app'
+const appStore = useAppStore()
+const projectId = appStore.currentProjectId
 
 const props = defineProps<PropsType>()
 const notHandleIcon = useIcon({ icon: 'ant-design:stop-outlined' })
@@ -269,8 +272,8 @@ const endTime = ref<string>('')
 
 const form = ref<any>({
   excessAddress: '',
-  excessStartDate: '',
-  excessEndDate: '',
+  // excessStartDate: '',
+  // excessEndDate: '',
   demographicNum: '',
   compensationPrice: '',
   totalCompensationAmount: '',
@@ -299,26 +302,34 @@ onMounted(() => {
   init()
 })
 const arrList = ref<any>([])
-const placementSave = () => {
+const arrLists = ref<any>([])
+const placementSave = async () => {
   console.log('过度完成')
+  const res = await completeApi(props.doorNo)
+  console.log(res, 'res')
+  if (res) {
+    ElMessage.success('过渡完成')
+    init()
+  }
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
   console.log(res, 'res')
   if (res) {
-    const timeStart = res.excessStartDate ? dayjs(res.excessStartDate).format('YYYY-MM-DD') : ''
-    const timeEnd = res.excessEndDate ? dayjs(res.excessEndDate).format('YYYY-MM-DD') : ''
+    // const timeStart = res.excessStartDate ? dayjs(res.excessStartDate).format('YYYY-MM-DD') : ''
+    // const timeEnd = res.excessEndDate ? dayjs(res.excessEndDate).format('YYYY-MM-DD') : ''
     form.value = {
       excessAddress: res.excessAddress || '',
-      excessStartDate: timeStart,
-      excessEndDate: timeEnd,
-      // id: res.id,
-      // uid: res.uid
+      // excessStartDate: timeStart,
+      // excessEndDate: timeEnd,
+      id: res.id,
+      uid: res.uid,
       ...res
     }
     isExcess.value = res.isExcess
-    startTime.value = timeStart
-    endTime.value = timeEnd
+    arrList.value = res.immigrantExcessPayList ? res.immigrantExcessPayList : []
+    // startTime.value = timeStart
+    // endTime.value = timeEnd
   }
 }
 
@@ -358,15 +369,22 @@ const onDialogConfirmClose = () => {
 const handleSave = async (data?: any) => {
   let params: any = {
     doorNo: props.doorNo,
-    isExcess: isExcess.value
+    isExcess: isExcess.value,
+    ...data
   }
-  if (data) {
-    params.excessAddress = data.excessAddress
-    params.excessStartDate = data.excessStartDate ? dayjs(data.excessStartDate) : ''
-    params.excessEndDate = data.excessEndDate ? dayjs(data.excessEndDate) : ''
-    params.id = data.id
-    params.uid = data.uid
-  }
+  console.log(params, props.doorNo, '传输的是什么')
+  // if (data) {
+  //   params.excessAddress = data.excessAddress
+  //   params.excessStartDate = data.excessStartDate ? dayjs(data.excessStartDate) : ''
+  //   params.excessEndDate = data.excessEndDate ? dayjs(data.excessEndDate) : ''
+  //   params.id = data.id
+  //   params.uid = data.uid
+  // }
+  params.doorNo = props.doorNo
+  params.isExcess = isExcess.value
+  params.projectId = projectId
+  params.status = 'implementation'
+  params.isComplete = '0'
   console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)
   if (res) {
@@ -378,54 +396,47 @@ const handleSave = async (data?: any) => {
 const add = () => {
   let i = 0
   arrList.value.push({
-    id: Date.now(),
+    // id: Date.now(),
     index: arrList.value.length,
     excessStartDate: '', //开始日期
     excessEndDate: '', //结束日期
-    monthNum: '', //补偿约束
-    compensationAmount: '' //补偿金额
+    monthNum: '', //补偿月数
+    compensationAmount: '', //补偿金额
+    orderNum: ''
   })
 }
-const del = (id) => {
-  arrList.value = arrList.value.filter((item) => item.id !== id)
+const del = (index, id) => {
+  console.log(index, '索引')
+  if (index) {
+    arrList.value = arrList.value.filter((item) => item.index !== index)
+  } else if (id) {
+    arrLists.value = JSON.parse(JSON.stringify(arrList.value))
+    arrList.value = arrList.value.filter((item) => item.id !== id)
+    arrLists.value.forEach((item) => {
+      if (id == item.id) {
+        item.isDelete = 1
+      }
+    })
+    console.log(arrLists.value, '数据2')
+    // arrList.value = arrList.value.filter((item) => item.isDelete !== 1)
+  }
+  // arrList.value = arrList.value.filter((item) => item.id !== id)
+  // arrList.value.splice(index, 1)
   form.value.totalCompensationAmount = arrList.value.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.compensationAmount
   }, 0)
 }
 const onSubmit = (formEl: any) => {
-  dialogConfirmVisible.value = true
-  // formEl?.validate((valid: any) => {
-  //   if (valid) {
-  //     const params = {
-  //       ...form.value
-  //     }
-  //     isExcess.value = '1'
-  //     startTime.value = params.excessStartDate
-  //       ? dayjs(params.excessStartDate).format('YYYY-MM-DD')
-  //       : ''
-  //     endTime.value = params.excessEndDate ? dayjs(params.excessEndDate).format('YYYY-MM-DD') : ''
-  //     handleSave(params)
-  //   }
-  // })
-  const params = {
-    ...form.value
-  }
-  isExcess.value = '1'
-  // startTime.value = params.excessStartDate ? dayjs(params.excessStartDate).format('YYYY-MM-DD') : ''
-  // endTime.value = params.excessEndDate ? dayjs(params.excessEndDate).format('YYYY-MM-DD') : ''
-  params.immigrantExcessPayList = arrList.value
-  params.immigrantExcessPayList.forEach((item) => {
-    item.excessStartDate = item.excessStartDate
-      ? dayjs(item.excessStartDate).format('YYYY-MM-DD')
-      : ''
-    item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate).format('YYYY-MM-DD') : ''
+  formEl?.validate((valid: any) => {
+    if (valid) {
+      console.log('校验通过')
+      dialogConfirmVisible.value = true
+    } else {
+      ElMessage.error('必填项未填写完整!')
+    }
   })
-  console.log(params, '提交数据')
-  handleSave(params)
 }
 const handleStartChange = (index, value) => {
-  console.log(index, '索引')
-  console.log(value, '开始的日期')
   let date = new Date(value)
   startMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(startMonth.value, '选中的月份')
@@ -436,12 +447,12 @@ const handleStartChange = (index, value) => {
     form.value.totalCompensationAmount = arrList.value.reduce((accumulator, currentValue) => {
       return accumulator + currentValue.compensationAmount
     }, 0)
+    arrList.value[index].orderNum = index + 1
   } else {
     arrList.value[index].monthNum = ''
   }
 }
 const handleEndChange = (index, value) => {
-  console.log(value, '结束的日期')
   let date = new Date(value)
   endMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(endMonth.value, '选中的月份')
@@ -452,18 +463,32 @@ const handleEndChange = (index, value) => {
     form.value.totalCompensationAmount = arrList.value.reduce((accumulator, currentValue) => {
       return accumulator + currentValue.compensationAmount
     }, 0)
+    arrList.value[index].orderNum = index + 1
   } else {
     arrList.value[index].monthNum = ''
   }
 }
-const compensationAmount = computed(() => {
-  if (!monthNum.value) {
-    return 0
-  } else {
-    return form.value.demographicNum * form.value.compensationPrice * monthNum.value
-  }
-})
 const doSave = () => {
+  console.log(arrLists.value, arrList.value, '测试数据')
+  if (arrLists.value.length > 0) {
+    form.value.immigrantExcessPayList = arrLists.value
+  } else {
+    console.log(arrLists.value, arrList.value, '测试数据111')
+
+    form.value.immigrantExcessPayList = arrList.value
+  }
+  const params = {
+    ...form.value
+  }
+  console.log(params, '1111')
+  isExcess.value = '1'
+  params.immigrantExcessPayList.forEach((item) => {
+    item.excessStartDate = item.excessStartDate ? dayjs(item.excessStartDate) : ''
+    item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
+  })
+  console.log(params, '提交数据')
+  // handleSave(params)
+  handleSave(params)
   console.log('确认过渡安置')
   dialogVisible.value = false
   dialogConfirmVisible.value = false

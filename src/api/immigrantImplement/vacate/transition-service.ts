@@ -23,3 +23,12 @@ export const saveTransitionInfoApi = (data: any): Promise<any> => {
     data
   })
 }
+// 更改过渡完成状态
+export const completeApi = (doorNo: string): Promise<any> => {
+  return request.get({
+    url: '/immigrantExcess/complete',
+    params: {
+      doorNo
+    }
+  })
+}
