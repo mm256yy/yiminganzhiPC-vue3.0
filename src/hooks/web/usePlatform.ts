@@ -47,6 +47,20 @@ export const usePlatform = () => {
       menus = await userMenuApi(appStore.getCurrentProjectId)
       const permissions = await getPermissionApi()
       appStore.setPermissions(permissions)
+
+      if (
+        projectUsers[0] &&
+        projectUsers[0].roles &&
+        projectUsers[0].roles.length > 0 &&
+        projectUsers[0].roles[0].code == 'leaderworkbenches'
+      ) {
+        menus.forEach((e) => {
+          console.log(e, 'bbq')
+          if (e.name == 'Feedback') {
+            e.meta.hidden = true
+          }
+        })
+      }
     }
 
     if (!dictStore.getIsSetDict) {
@@ -66,6 +80,7 @@ export const usePlatform = () => {
           }
         })
       })
+
       dictStore.setDictObj(dictObj)
       dictStore.setIsSetDict(true)
     }

@@ -7,9 +7,9 @@
           <span class="text-[#1C5DF1]"> {{ total() }}</span> （元）
         </div>
         <ElSpace>
-          <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
+          <!-- <ElButton type="primary" :icon="EscalationIcon" @click="onReportData">
             评估完成
-          </ElButton>
+          </ElButton> -->
           <!-- <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加行</ElButton> -->
           <ElButton
             :icon="saveIcon"

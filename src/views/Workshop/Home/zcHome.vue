@@ -1,12 +1,7 @@
 <template>
   <div class="index">
     <div class="topBox">
-      <ElButton
-        @click="onBack"
-        :icon="BackIcon"
-        type="default"
-        class="px-9px py-0px !h-28px mr-8px !text-12px"
-      >
+      <ElButton @click="onBack" type="default" class="px-9px py-0px !h-28px mr-8px !text-12px">
         返回
       </ElButton>
       <ElBreadcrumb separator="/">
@@ -30,7 +25,7 @@
       <div class="itemBox">
         <div class="item" v-for="item in newsList" :key="item.id">
           <div class="title">{{ item.title }}</div>
-
+          <div v-html="item.content"></div>
           <div class="b">
             <div class="time">{{ item.releaseTime.replace(/-/g, '/') }}</div>
             <div class="more" @click="goLink('zcDetail', { id: item.id })">查看详情</div>
