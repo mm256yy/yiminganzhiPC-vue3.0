@@ -92,7 +92,7 @@
                 v-model="item.excessStartDate"
                 type="date"
                 placeholder="请选择日期"
-                @change="handleStartChange(item.index, $event)"
+                @change="handleStartChange(index, $event)"
               />
             </ElFormItem>
             <ElFormItem label="过渡结束日期：">
@@ -101,7 +101,7 @@
                 v-model="item.excessEndDate"
                 type="date"
                 placeholder="请选择日期"
-                @change="handleEndChange(item.index, $event)"
+                @change="handleEndChange(index, $event)"
               />
             </ElFormItem>
             <ElFormItem label="补偿月数（个月）：">{{ item.monthNum }}</ElFormItem>
@@ -227,7 +227,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, computed, toRow } from 'vue'
 import {
   ElSpace,
   ElButton,
@@ -290,6 +290,7 @@ const endMonth = ref<any>()
 const monthNum = ref<any>()
 // const totalCompensationAmount = ref<any>()
 // const compensationAmount = ref<any>()
+const immigrantExcessPayListLength = ref<any>()
 const { required } = useValidator()
 
 const rules = reactive<FormRules>({
@@ -308,7 +309,8 @@ const placementSave = async () => {
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
-  console.log(res, 'res')
+  immigrantExcessPayListLength.value = res.immigrantExcessPayList.length
+  console.log(res, immigrantExcessPayListLength.value, 'res')
   if (res) {
     // const timeStart = res.excessStartDate ? dayjs(res.excessStartDate).format('YYYY-MM-DD') : ''
     // const timeEnd = res.excessEndDate ? dayjs(res.excessEndDate).format('YYYY-MM-DD') : ''
@@ -378,7 +380,11 @@ const handleSave = async (data?: any) => {
   params.isExcess = isExcess.value
   params.projectId = projectId
   params.status = 'implementation'
-  params.isComplete = '0'
+  console.log(toRow(params.immigrantExcessPayListLength), '长度')
+  params.isComplete =
+    toRow(params.immigrantExcessPayListLength).length > immigrantExcessPayListLength.value
+      ? '0'
+      : '1'
   console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)
   if (res) {
@@ -401,18 +407,21 @@ const add = () => {
 }
 const del = (index, id) => {
   console.log(index, '索引')
-  if (index) {
+  if (index >= 0) {
+    console.log(arrList.value, '前端數組數組')
     arrList.value = arrList.value.filter((item) => item.index !== index)
   } else if (id) {
-    arrLists.value = JSON.parse(JSON.stringify(arrList.value))
-    arrList.value = arrList.value.filter((item) => item.id !== id)
-    arrLists.value.forEach((item) => {
+    // arrLists.value = JSON.parse(JSON.stringify(arrList.value))
+    // arrList.value = arrList.value.filter((item) => item.id !== id)
+    arrList.value.forEach((item) => {
       if (id == item.id) {
         item.isDelete = 1
       }
     })
-    console.log(arrLists.value, '数据2')
+    console.log(arrList.value, '数据远程数据1')
     // arrList.value = arrList.value.filter((item) => item.isDelete !== 1)
+    arrList.value = arrList.value.filter((item) => item.id !== id)
+    console.log(arrList.value, '数据远程数据2')
   }
   // arrList.value = arrList.value.filter((item) => item.id !== id)
   // arrList.value.splice(index, 1)
@@ -426,13 +435,13 @@ const onSubmit = (formEl: any) => {
       console.log('校验通过')
       // dialogConfirmVisible.value = true
       console.log(arrLists.value, arrList.value, '测试数据')
-      if (arrLists.value.length > 0) {
-        form.value.immigrantExcessPayList = arrLists.value
-      } else {
-        console.log(arrLists.value, arrList.value, '测试数据111')
+      // if (arrLists.value.length > 0) {
+      //   form.value.immigrantExcessPayList = arrLists.value
+      // } else {
+      //   console.log(arrLists.value, arrList.value, '测试数据111')
 
-        form.value.immigrantExcessPayList = arrList.value
-      }
+      //   form.value.immigrantExcessPayList = arrList.value
+      // }
       const params = {
         ...form.value
       }
@@ -492,6 +501,7 @@ const doSave = async () => {
   if (res) {
     ElMessage.success('过渡完成')
     init()
+    dialogConfirmVisible.value = false
   }
 }
 </script>
