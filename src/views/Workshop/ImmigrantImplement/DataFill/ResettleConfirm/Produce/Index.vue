@@ -153,7 +153,7 @@
             v-model="row.settingWay"
             placeholder="请选择"
             :key="row.id"
-            :disabled="row.isProduction == '0'"
+            :disabled="row.isProduction == '0' || !row.isProduction ? true : false"
           >
             <el-option
               v-for="item in filterWay(row)"

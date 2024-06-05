@@ -57,7 +57,7 @@
                 v-model="scope.row.settingWay"
                 placeholder="请选择"
                 v-if="isShow(scope.row)"
-                :disabled="flag"
+                :disabled="scope.row.isProduction == '0' || !scope.row.isProduction ? true : false"
               >
                 <el-option
                   v-for="item in filterWay(scope.row)"
@@ -372,6 +372,10 @@ const stepClick = (id) => {
   // if (stepIndex.value == 1) {
   //   console.log(dataList.value, '点击成功')
   // }
+  if (id == 2) {
+    console.log(id, '选择的点')
+    console.log(tableData.value, '表格数据')
+  }
 }
 
 /**

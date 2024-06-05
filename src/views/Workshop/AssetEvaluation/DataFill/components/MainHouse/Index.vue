@@ -522,8 +522,20 @@ const onSave = () => {
 
 // 自动计算评估金额
 const getModelValue = (row: any) => {
+  // console.log(
+  //   Number(row.landLegalArea) *
+  //     Number(row.valuationPrice) *
+  //     (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate)),
+  //   '合法'
+  // )
+  // console.log(
+  //   Number(row.landIllegalArea) *
+  //     Number(row.illegalValuationPrice) *
+  //     (Number(row.illegalNewnessRate) == 0 ? 1 : Number(row.illegalNewnessRate)),
+  //   '不合法'
+  // )
   const totalPrice =
-    Number(row.landArea) *
+    Number(row.landLegalArea) *
       Number(row.valuationPrice) *
       (Number(row.newnessRate) == 0 ? 1 : Number(row.newnessRate)) +
     Number(row.landIllegalArea) *
