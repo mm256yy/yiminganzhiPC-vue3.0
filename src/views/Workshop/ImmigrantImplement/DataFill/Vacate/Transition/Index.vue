@@ -304,13 +304,7 @@ onMounted(() => {
 const arrList = ref<any>([])
 const arrLists = ref<any>([])
 const placementSave = async () => {
-  console.log('过度完成')
-  const res = await completeApi(props.doorNo)
-  console.log(res, 'res')
-  if (res) {
-    ElMessage.success('过渡完成')
-    init()
-  }
+  dialogConfirmVisible.value = true
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
@@ -430,7 +424,30 @@ const onSubmit = (formEl: any) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       console.log('校验通过')
-      dialogConfirmVisible.value = true
+      // dialogConfirmVisible.value = true
+      console.log(arrLists.value, arrList.value, '测试数据')
+      if (arrLists.value.length > 0) {
+        form.value.immigrantExcessPayList = arrLists.value
+      } else {
+        console.log(arrLists.value, arrList.value, '测试数据111')
+
+        form.value.immigrantExcessPayList = arrList.value
+      }
+      const params = {
+        ...form.value
+      }
+      console.log(params, '1111')
+      isExcess.value = '1'
+      params.immigrantExcessPayList.forEach((item) => {
+        item.excessStartDate = item.excessStartDate ? dayjs(item.excessStartDate) : ''
+        item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
+      })
+      console.log(params, '提交数据')
+      // handleSave(params)
+      handleSave(params)
+      console.log('确认过渡安置')
+      dialogVisible.value = false
+      // dialogConfirmVisible.value = false
     } else {
       ElMessage.error('必填项未填写完整!')
     }
@@ -468,30 +485,14 @@ const handleEndChange = (index, value) => {
     arrList.value[index].monthNum = ''
   }
 }
-const doSave = () => {
-  console.log(arrLists.value, arrList.value, '测试数据')
-  if (arrLists.value.length > 0) {
-    form.value.immigrantExcessPayList = arrLists.value
-  } else {
-    console.log(arrLists.value, arrList.value, '测试数据111')
-
-    form.value.immigrantExcessPayList = arrList.value
+const doSave = async () => {
+  console.log('过度完成')
+  const res = await completeApi(props.doorNo)
+  console.log(res, 'res')
+  if (res) {
+    ElMessage.success('过渡完成')
+    init()
   }
-  const params = {
-    ...form.value
-  }
-  console.log(params, '1111')
-  isExcess.value = '1'
-  params.immigrantExcessPayList.forEach((item) => {
-    item.excessStartDate = item.excessStartDate ? dayjs(item.excessStartDate) : ''
-    item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
-  })
-  console.log(params, '提交数据')
-  // handleSave(params)
-  handleSave(params)
-  console.log('确认过渡安置')
-  dialogVisible.value = false
-  dialogConfirmVisible.value = false
 }
 </script>
 
