@@ -506,7 +506,7 @@ const imgPreview = (uploadFile: UploadFile) => {
 }
 
 const onSubmit = async (status: string) => {
-  if (!formAudit.value.receiptCode) {
+  if (userInfo.value == 'financevoucher' && !formAudit.value.receiptCode) {
     ElMessage.error('请输入凭证编号')
     return
   }

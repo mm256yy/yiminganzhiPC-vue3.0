@@ -279,10 +279,31 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="8">
-          <MapFormItem :required="true" :positon="position" @change="onChosePosition"
-        /></ElCol>
+          <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
+        </ElCol>
       </ElRow>
-
+      <ElDivider border-style="dashed" v-if="type === 'Landlord' && actionType != 'add'" />
+      <ElRow :gutter="30" v-if="type === 'Landlord' && actionType != 'add'">
+        <ElCol :span="8">
+          <ElFormItem label="是否分权">
+            {{ form.separateFlag == '1' ? '是' : '否' }}
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="8" v-if="form.separateFlag == '1'">
+          <ElFormItem label="分权原因">
+            {{
+              form.separateReason
+                ? dictObj[435].find((item) => item.value == form.separateReason).label
+                : ''
+            }}
+          </ElFormItem>
+        </ElCol>
+        <ElCol :span="8" v-if="form.separateFlag == '1'">
+          <ElFormItem label="分权备注">
+            {{ form.separateRemark }}
+          </ElFormItem>
+        </ElCol>
+      </ElRow>
       <ElDivider border-style="dashed" />
       <!-- :class="[actionType === 'view' && housePic.length > 0 ? 'upload' : '']" -->
       <ElFormItem label="房屋照片" required>
