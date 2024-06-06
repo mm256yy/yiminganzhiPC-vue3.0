@@ -208,11 +208,11 @@
           </ElCol>
         </ElRow>
         <div class="col-wrapper" v-if="actionType === 'view'">
-          <div class="col-label-required">财务凭证编号：</div>
+          <div class="col-label-required">财务凭证编号:</div>
           <ElInput type="text" v-model="formAudit.financeReceiptCode" />
         </div>
         <div class="col-wrapper" v-if="actionType === 'edit'">
-          <div class="col-label-required">财务凭证编号：</div>
+          <div class="col-label-required">财务凭证编号:</div>
           <ElInput type="text" v-model="formAudit.receiptCode" />
         </div>
         <div class="col-wrapper">
@@ -565,7 +565,7 @@ onMounted(() => {
 
   .col-label-required {
     display: inline-flex;
-    width: 100px;
+    width: 120px;
     height: 32px;
     padding: 0 12px 0 0;
     font-size: 14px;

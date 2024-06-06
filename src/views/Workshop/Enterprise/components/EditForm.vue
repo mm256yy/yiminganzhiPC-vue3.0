@@ -62,6 +62,7 @@
         <el-select
           v-model="form.householderName"
           filterable
+          clearable
           remote
           reserve-keyword
           placeholder="请输入居民户姓名"
@@ -289,37 +290,42 @@ const onChosePosition = (ps) => {
 
 const doorTypeChange = (val) => {
   console.log(options.value, val, '测试数据下拉')
-  options.value.forEach((item) => {
-    if (item.name == val) {
-      form.value.householderDoorNo = item.doorNo
-      form.value.showHouseholderDoorNo = item.showDoorNo
+  if (val) {
+    options.value.forEach((item) => {
+      if (item.name == val) {
+        form.value.householderDoorNo = item.doorNo
+        form.value.showHouseholderDoorNo = item.showDoorNo
 
-      // form.value.householderDoorNo = item.doorNo
-      // tableData.value.forEach((item2) => {
-      //   if (item2.registrantName == item.name) {
-      //     item2.registrantId = item.id
-      //     item2.registrantDoorNo = item.doorNo
-      //   }
-      // })
-      if (flag.value) {
-        getHouseListApi({
-          doorNo: item.doorNo,
-          status: 'review',
-          size: 50,
-          page: 0
-        }).then((res) => {
-          const houseList = res.content.reduce(function (prev, current) {
-            return prev.id < current.id ? prev : current
+        // form.value.householderDoorNo = item.doorNo
+        // tableData.value.forEach((item2) => {
+        //   if (item2.registrantName == item.name) {
+        //     item2.registrantId = item.id
+        //     item2.registrantDoorNo = item.doorNo
+        //   }
+        // })
+        if (flag.value) {
+          getHouseListApi({
+            doorNo: item.doorNo,
+            status: 'review',
+            size: 50,
+            page: 0
+          }).then((res) => {
+            const houseList = res.content.reduce(function (prev, current) {
+              return prev.id < current.id ? prev : current
+            })
+            console.log(houseList, '房屋列表数据')
+            position.latitude = houseList.latitude
+            position.longitude = houseList.longitude
+            position.address = houseList.address
+            console.log(position.latitude, position.longitude, position.address, '地址')
           })
-          console.log(houseList, '房屋列表数据')
-          position.latitude = houseList.latitude
-          position.longitude = houseList.longitude
-          position.address = houseList.address
-          console.log(position.latitude, position.longitude, position.address, '地址')
-        })
+        }
       }
-    }
-  })
+    })
+  } else {
+    form.value.householderDoorNo = null
+    form.value.showHouseholderDoorNo = null
+  }
 }
 
 // 提交表单
