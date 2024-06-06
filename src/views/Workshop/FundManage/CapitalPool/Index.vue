@@ -54,11 +54,11 @@
             <span class="green">共{{ tableObject.total }}</span> 笔
           </div>
         </div>
-        <!-- <div class="col right">
+        <div class="col right">
           <ElButton type="primary" @click="onExport">
             <Icon icon="fluent:arrow-export-up-24-regular" class="mr-5px" /> 导出
           </ElButton>
-        </div> -->
+        </div>
       </div>
 
       <Table
@@ -113,7 +113,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElImage } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElImage, ElMessage } from 'element-plus'
 import { Search } from '@/components/Search'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { Table } from '@/components/Table'
@@ -136,7 +136,7 @@ import { PaymentApplicationByIdDetailApi } from '@/api/fundManage/paymentApplica
 const { push } = useRouter()
 const dialog = ref(false) // 弹窗标识
 const accountData = ref<CapitalPoolAccount>()
-const payData = ref<any[]>([])
+const payData = ref<any>([])
 
 const { register, tableObject, methods } = useTable({
   getListApi: getCapitalPoolListApi
@@ -403,7 +403,9 @@ const onEditFormClose = (flag: boolean) => {
   dialogs.value = false
 }
 // 导出
-// const onExport = () => {}
+const onExport = () => {
+  ElMessage.error('建设中')
+}
 
 onMounted(() => {
   let params: CapitalPoolDtoType = {}
