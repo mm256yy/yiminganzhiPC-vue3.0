@@ -8,8 +8,7 @@
           <ElButton type="primary" @click="onDocumentation"> 进度上报 </ElButton>
           <ElButton
             type="primary"
-            @click="() => openurl({ doorNo, type: 'household_empty_land' }, handelurl)"
-            style="margin-top: 17px"
+            @click="() => openurl({ doorNo, type: 'household_move_selfhouse' }, handelurl)"
           >
             查看历史签字
           </ElButton>
