@@ -508,10 +508,10 @@ const onSubmit = () => {
 const onSave = async () => {
   const item = tableObject.tableList.find((item) => !item.settingWay)
   const isNotProduction = tableObject.tableList.filter((item) => !item.isProduction)
-  if (item && item.isProduction == '1') {
-    ElMessage.info('请选择安置方式')
-    return
-  }
+  // if (item && item.isProduction == '1') {
+  //   ElMessage.info('请选择安置方式')
+  //   return
+  // }
   console.log(isNotProduction)
 
   if (isNotProduction.length > 0) {

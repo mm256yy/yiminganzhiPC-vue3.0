@@ -220,12 +220,14 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请上传过渡安置协议')
         return
       } else {
+        form.value.doorNo = props.doorNo
         let params: any = {
           ...form.value,
           excessVerifyPic: JSON.stringify(excessVerifyPic.value || []), // 交房协议
           excessAgreementPic: JSON.stringify(excessAgreementPic.value || []), // 购房测算表
           excessVerifyOtherPic: JSON.stringify(excessVerifyOtherPic.value || []) // 其他附件
         }
+        console.log(params, '提交的数据')
         submit(params)
       }
     } else {

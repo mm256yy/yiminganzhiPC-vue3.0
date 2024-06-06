@@ -387,10 +387,10 @@ const stepNext = async () => {
   console.log(tableData.value, '测试提交数据')
   const notFillArray = tableData.value.filter((item) => !item.settingWay)
   const isNotProduction = tableData.value.filter((item) => !item.isProduction)
-  if (flag.value == false && notFillArray && notFillArray.length) {
-    ElMessage.info('请选择安置方式')
-    return
-  }
+  // if (flag.value == false && notFillArray && notFillArray.length) {
+  //   ElMessage.info('请选择安置方式')
+  //   return
+  // }
   if (isNotProduction && isNotProduction.length) {
     ElMessage.info('请选择是否生产安置')
     return

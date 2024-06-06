@@ -227,7 +227,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, reactive, computed } from 'vue'
+import { onMounted, ref, reactive, computed, toRaw } from 'vue'
 import {
   ElSpace,
   ElButton,
@@ -291,6 +291,7 @@ const monthNum = ref<any>()
 // const totalCompensationAmount = ref<any>()
 // const compensationAmount = ref<any>()
 const immigrantExcessPayListLength = ref<any>()
+const targ = ref<any>(false)
 const { required } = useValidator()
 
 const rules = reactive<FormRules>({
@@ -303,14 +304,16 @@ onMounted(() => {
   init()
 })
 const arrList = ref<any>([])
-const arrLists = ref<any>([])
+const displayWithIsDeleteArrList = ref<any>([])
 const placementSave = async () => {
   dialogConfirmVisible.value = true
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
-  // immigrantExcessPayListLength.value = res.immigrantExcessPayList.length
-  // console.log(res, immigrantExcessPayListLength.value, 'res')
+  immigrantExcessPayListLength.value = res.immigrantExcessPayList
+    ? res.immigrantExcessPayList.length
+    : 0
+  console.log(res, immigrantExcessPayListLength.value, 'res')
   if (res) {
     // const timeStart = res.excessStartDate ? dayjs(res.excessStartDate).format('YYYY-MM-DD') : ''
     // const timeEnd = res.excessEndDate ? dayjs(res.excessEndDate).format('YYYY-MM-DD') : ''
@@ -324,6 +327,7 @@ const init = async () => {
     }
     isExcess.value = res.isExcess
     arrList.value = res.immigrantExcessPayList ? res.immigrantExcessPayList : []
+    // console.log()
     // startTime.value = timeStart
     // endTime.value = timeEnd
   }
@@ -380,15 +384,14 @@ const handleSave = async (data?: any) => {
   params.isExcess = isExcess.value
   params.projectId = projectId
   params.status = 'implementation'
-  // console.log(toRow(params.immigrantExcessPayListLength), '长度')
-  params.isComplete = '0'
-  // toRow(params.immigrantExcessPayListLength).length > immigrantExcessPayListLength.value
-  //   ? '0'
-  //   : '1'
+  console.log(toRaw(params.immigrantExcessPayList).length, '长度')
+  params.isComplete =
+    toRaw(params.immigrantExcessPayList).length > immigrantExcessPayListLength.value ? '0' : '1'
   console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)
   if (res) {
     ElMessage.success('保存成功！')
+    targ.value = false
     onDialogClose()
     init()
   }
@@ -396,35 +399,32 @@ const handleSave = async (data?: any) => {
 const add = () => {
   let i = 0
   arrList.value.push({
-    // id: Date.now(),
     index: arrList.value.length,
     excessStartDate: '', //开始日期
     excessEndDate: '', //结束日期
     monthNum: '', //补偿月数
     compensationAmount: '', //补偿金额
-    orderNum: ''
+    orderNum: '',
+    isDelete: 0
   })
 }
 const del = (index, id) => {
   console.log(index, '索引')
   if (index >= 0) {
-    console.log(arrList.value, '前端數組數組')
-    arrList.value = arrList.value.filter((item) => item.index !== index)
+    arrList.value[index].isDelete = 1
+    arrList.value = arrList.value.filter((item) => item.isDelete != 1)
+    console.log(arrList.value, '前端删除')
   } else if (id) {
-    // arrLists.value = JSON.parse(JSON.stringify(arrList.value))
-    // arrList.value = arrList.value.filter((item) => item.id !== id)
     arrList.value.forEach((item) => {
       if (id == item.id) {
         item.isDelete = 1
       }
     })
-    console.log(arrList.value, '数据远程数据1')
-    // arrList.value = arrList.value.filter((item) => item.isDelete !== 1)
-    arrList.value = arrList.value.filter((item) => item.id !== id)
-    console.log(arrList.value, '数据远程数据2')
+    displayWithIsDeleteArrList.value = arrList.value
+    arrList.value = arrList.value.filter((item) => item.isDelete != 1)
+    console.log(displayWithIsDeleteArrList.value, arrList.value, '后端数据删除')
+    targ.value = true
   }
-  // arrList.value = arrList.value.filter((item) => item.id !== id)
-  // arrList.value.splice(index, 1)
   form.value.totalCompensationAmount = arrList.value.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.compensationAmount
   }, 0)
@@ -432,31 +432,23 @@ const del = (index, id) => {
 const onSubmit = (formEl: any) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      console.log('校验通过')
-      // dialogConfirmVisible.value = true
-      console.log(arrLists.value, arrList.value, '测试数据')
-      // if (arrLists.value.length > 0) {
-      //   form.value.immigrantExcessPayList = arrLists.value
-      // } else {
-      //   console.log(arrLists.value, arrList.value, '测试数据111')
-
-      //   form.value.immigrantExcessPayList = arrList.value
-      // }
+      if (targ.value) {
+        form.value.immigrantExcessPayList = displayWithIsDeleteArrList.value
+      } else {
+        form.value.immigrantExcessPayList = arrList.value
+      }
+      // form.value.immigrantExcessPayList = arrList.value
       const params = {
         ...form.value
       }
-      console.log(params, '1111')
       isExcess.value = '1'
       params.immigrantExcessPayList.forEach((item) => {
         item.excessStartDate = item.excessStartDate ? dayjs(item.excessStartDate) : ''
         item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
       })
       console.log(params, '提交数据')
-      // handleSave(params)
       handleSave(params)
-      console.log('确认过渡安置')
       dialogVisible.value = false
-      // dialogConfirmVisible.value = false
     } else {
       ElMessage.error('必填项未填写完整!')
     }
