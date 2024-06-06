@@ -227,7 +227,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, reactive, computed, toRow } from 'vue'
+import { onMounted, ref, reactive, computed } from 'vue'
 import {
   ElSpace,
   ElButton,
@@ -309,8 +309,8 @@ const placementSave = async () => {
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
-  immigrantExcessPayListLength.value = res.immigrantExcessPayList.length
-  console.log(res, immigrantExcessPayListLength.value, 'res')
+  // immigrantExcessPayListLength.value = res.immigrantExcessPayList.length
+  // console.log(res, immigrantExcessPayListLength.value, 'res')
   if (res) {
     // const timeStart = res.excessStartDate ? dayjs(res.excessStartDate).format('YYYY-MM-DD') : ''
     // const timeEnd = res.excessEndDate ? dayjs(res.excessEndDate).format('YYYY-MM-DD') : ''
@@ -380,11 +380,11 @@ const handleSave = async (data?: any) => {
   params.isExcess = isExcess.value
   params.projectId = projectId
   params.status = 'implementation'
-  console.log(toRow(params.immigrantExcessPayListLength), '长度')
-  params.isComplete =
-    toRow(params.immigrantExcessPayListLength).length > immigrantExcessPayListLength.value
-      ? '0'
-      : '1'
+  // console.log(toRow(params.immigrantExcessPayListLength), '长度')
+  params.isComplete = '0'
+  // toRow(params.immigrantExcessPayListLength).length > immigrantExcessPayListLength.value
+  //   ? '0'
+  //   : '1'
   console.log(form.value, '11111111111')
   const res = await saveTransitionInfoApi(params)
   if (res) {

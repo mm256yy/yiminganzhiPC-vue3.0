@@ -66,7 +66,8 @@
         <!-- v-if="form.separateFlag == '1'" -->
         <ElCol :span="12" v-if="form.separateFlag == '1'">
           <ElFormItem label="分权备注：" prop="separateRemark">
-            由{{ form.demographicIdName }}户，{{ form.houseNo }}幢房屋分权{{ form.separateRemark }}
+            <!-- 由{{ form.demographicIdName }}户，{{ form.houseNo }}幢房屋分权 -->
+            {{ form.separateRemark }}
           </ElFormItem>
         </ElCol>
       </ElRow>
