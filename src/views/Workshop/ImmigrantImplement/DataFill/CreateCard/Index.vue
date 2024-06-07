@@ -155,13 +155,12 @@
       @close="close('rewardConfirm')"
       :id="1"
     />
-
     <div
       style="
-        position: fixed;
-        left: -1000px;
+        position: fixed; */
+         left: -1000px;
         display: flex;
-        width: 340mm;
+        /* width: 340mm; */
         padding: 10px 10px 0px 10px;
       "
       id="print"
