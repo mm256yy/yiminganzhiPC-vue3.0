@@ -760,4 +760,7 @@ const uploadError = (error) => {
 .mt-10 {
   margin-top: 10px;
 }
+:deep(.el-scrollbar__bar) {
+  text-align: center;
+}
 </style>

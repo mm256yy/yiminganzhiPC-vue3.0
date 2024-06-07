@@ -32,7 +32,7 @@ import { changeScale, init } from '../ExternalLink/rem'
 import Label from '../ExternalLink/components/label.vue'
 import Footer from '../ExternalLink/components/footer.vue'
 import { useRouter } from 'vue-router'
-import { ElButton } from 'element-plus'
+import { ElButton, ElMessage } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 
 const router = useRouter()
@@ -305,7 +305,7 @@ const listArray = ref([
             text: '搬迁安置'
           }
         ]
-      }
+      },
       // {
       //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
       //   name: '安置确认',
@@ -346,6 +346,46 @@ const listArray = ref([
       //     }
       //   ]
       // }
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+        name: '安置确认',
+        list: [
+          {
+            value: 'bbq',
+            text: '生产安置'
+          },
+          {
+            value: 'bbq',
+            text: '搬迁安置'
+          },
+          {
+            value: 'bbq',
+            text: '坟墓安置'
+          }
+        ]
+      },
+      {
+        url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+        name: '选房择址',
+        list: [
+          {
+            value: 'bbq',
+            text: '宅基地'
+          },
+          {
+            value: 'bbq',
+            text: '公寓房'
+          },
+          {
+            value: 'bbq',
+            text: '生产用地'
+          },
+          {
+            value: 'bbq',
+            text: '公墓'
+          }
+        ]
+      }
     ]
   },
   {
@@ -448,12 +488,15 @@ const onBack = () => {
 
 const goLink = (routerName: string, query: any) => {
   if (!routerName) return
-
+  if (routerName == 'bbq') {
+    ElMessage.info('建设中')
+  } else {
+    router.push({
+      name: routerName,
+      query: query
+    })
+  }
   // 修改跳转方式为本页跳转
-  router.push({
-    name: routerName,
-    query: query
-  })
 
   //window.open(linkObj.href, '_blank')
 }
