@@ -475,6 +475,7 @@ const handleEndChange = (index, value) => {
   endMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(endMonth.value, '选中的月份')
   if (startMonth.value && endMonth.value) {
+    console.log(endMonth.value, startMonth.value, '测试数据')
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1
     arrList.value[index].compensationAmount =
       form.value.demographicNum * form.value.compensationPrice * arrList.value[index].monthNum
