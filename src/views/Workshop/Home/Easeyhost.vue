@@ -72,11 +72,15 @@ import zcfg from '@/assets/imgs/zcfg.png'
 import xxfk from '@/assets/imgs/xxfk.png'
 import { useRouter } from 'vue-router'
 onMounted(() => {
+  console.log(1)
+
   changeScale()
   window.addEventListener('resize', changeScale)
 })
 const loading = ref(false)
 onBeforeUnmount(() => {
+  console.log(2)
+
   init()
   window.removeEventListener('resize', changeScale)
 })
@@ -182,7 +186,7 @@ let optionClick = (e) => {
 <style scoped lang="less">
 .bodyBack {
   display: flex;
-  height: 88vh;
+  height: 994px;
   background-image: url(@/assets/imgs/backpake.png);
   flex-direction: column;
 }

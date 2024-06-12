@@ -299,15 +299,19 @@ const onViewRow = (row: DemographicDtoType) => {
 
 // 填报完成
 const onFilling = () => {
-  saveFillingCompleteApi({
-    doorNo: props.doorNo,
-    populationStatus: '1'
-  }).then((res: any) => {
-    if (res) {
-      ElMessage.success('操作成功')
-      emit('updateData')
-    }
-  })
+  if (tableObject.tableList.filter((item) => !item.populationNature).length > 0) {
+    ElMessage.error('请选择人口性质')
+  } else {
+    saveFillingCompleteApi({
+      doorNo: props.doorNo,
+      populationStatus: '1'
+    }).then((res: any) => {
+      if (res) {
+        ElMessage.success('操作成功')
+        emit('updateData')
+      }
+    })
+  }
 }
 let tableRowClassName = (row: any) => {
   console.log(row.row, 'ssq')

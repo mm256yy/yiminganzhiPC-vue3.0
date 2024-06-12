@@ -1,9 +1,19 @@
 <template>
   <WorkContentWrap>
-    <ElBreadcrumb separator="/">
-      <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
-      <ElBreadcrumbItem class="text-size-12px">问题列表</ElBreadcrumbItem>
-    </ElBreadcrumb>
+    <div class="flex items-center">
+      <ElButton
+        @click="onBack"
+        :icon="BackIcon"
+        type="default"
+        class="px-9px py-0px !h-28px mr-8px !text-12px"
+      >
+        返回
+      </ElButton>
+      <ElBreadcrumb separator="/">
+        <ElBreadcrumbItem class="text-size-12px">基础设置</ElBreadcrumbItem>
+        <ElBreadcrumbItem class="text-size-12px">问题列表</ElBreadcrumbItem>
+      </ElBreadcrumb>
+    </div>
     <div class="search-form-wrap">
       <Search :schema="allSchemas.searchSchema" @search="onSearch" @reset="setSearchParams" />
     </div>
@@ -74,7 +84,8 @@ import dayjs from 'dayjs'
 import { useAppStore } from '@/store/modules/app'
 import {
   ElBreadcrumb,
-  ElBreadcrumbItem
+  ElBreadcrumbItem,
+  ElButton
   // ElTabs,
   // ElTabPane
 } from 'element-plus'
@@ -86,12 +97,14 @@ import { useTable } from '@/hooks/web/useTable'
 import { getFeedBackListApi } from '@/api/workshop/feedback/service'
 import { FeedbackStage, getStateLabel } from './config'
 import { useRouter } from 'vue-router'
+import { useIcon } from '@/hooks/web/useIcon'
 
-const { push } = useRouter()
+const { push, back } = useRouter()
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 // 处理结果 0未处理 1已完成 2未完成
 // const tabId = ref<'-1' | '0' | '1' | '2'>('-1')
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { register, tableObject, methods } = useTable({
   getListApi: getFeedBackListApi
@@ -108,7 +121,9 @@ tableObject.params = {
 }
 
 getList()
-
+const onBack = () => {
+  back()
+}
 // 1资格认定 2资产评估 3安置确认 4择址确认 5腾空过度 6动迁协议 7搬迁安置 8生产安置
 
 const schema = reactive<CrudSchema[]>([

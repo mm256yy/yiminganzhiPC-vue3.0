@@ -200,32 +200,112 @@
 
         <div>{{ data }}</div>
       </div>
-      <el-table
-        :data="tableObject.tableList"
-        style="width: 100%"
-        border
-        header-cell-class-name="table-headers"
-        cell-class-name="table-cellss"
-      >
-        <el-table-column prop="name" label="姓名" width="60" align="center" />
-        <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
-        <el-table-column prop="card" label="身份证号" width="140" align="center" />
-        <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
-        <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
-          <template #default="{ row }">
-            {{ filterWay(row).filter((item) => item.value === row.settingWay)[0]?.label }}
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" align="center" prop="settingRemark">
-          <template #default></template>
-        </el-table-column>
-      </el-table>
-      <div style="display: flex; justify-content: space-between; height: 50px">
-        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
-          >户主代表或收委托人(签名)：</div
-        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
-          联系移民干部(签名)：</div
+      <div v-if="tableObject.tableList.length < 9">
+        <el-table
+          :data="tableObject.tableList"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
         >
+          <el-table-column prop="name" label="姓名" width="60" align="center" />
+          <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
+          <el-table-column prop="card" label="身份证号" width="140" align="center" />
+          <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
+          <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
+            <template #default="{ row }">
+              {{ filterWay(row).filter((item) => item.value === row.settingWay)[0]?.label }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center" prop="settingRemark">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <el-table
+          :data="tableObject.tableList.slice(0, 9)"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+        >
+          <el-table-column prop="name" label="姓名" width="60" align="center" />
+          <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
+          <el-table-column prop="card" label="身份证号" width="140" align="center" />
+          <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
+          <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
+            <template #default="{ row }">
+              {{ filterWay(row).filter((item) => item.value === row.settingWay)[0]?.label }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center" prop="settingRemark">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
+        <h1 style="font-size: 24px; font-weight: bold; text-align: center; margin-top: 50px"
+          >生产安置</h1
+        >
+        <div
+          style="
+            display: flex;
+            margin: 20px 0 20px 0;
+            font-size: 18px;
+            justify-content: space-between;
+          "
+        >
+          <div>
+            {{ `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText}` }}
+            <span style="text-decoration-line: underline"> {{ baseInfo.name }} </span>
+            户号 <span style="text-decoration-line: underline">{{ baseInfo.showDoorNo }}</span>
+          </div>
+
+          <div>{{ data }}</div>
+        </div>
+        <el-table
+          :data="tableObject.tableList.slice(9)"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+        >
+          <el-table-column prop="name" label="姓名" width="60" align="center" />
+          <el-table-column prop="relationText" label="与户主关系" width="90" align="center" />
+          <el-table-column prop="card" label="身份证号" width="140" align="center" />
+          <el-table-column prop="populationNatureText" label="人口性质" width="80" align="center" />
+          <el-table-column prop="settingWay" label="安置类型" width="80" align="center">
+            <template #default="{ row }">
+              {{ filterWay(row).filter((item) => item.value === row.settingWay)[0]?.label }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center" prop="settingRemark">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
       </div>
     </div>
   </WorkContentWrap>
