@@ -269,7 +269,6 @@ let optionClick = (e) => {
   height: 160px;
   cursor: pointer;
   background: linear-gradient(180deg, #c9e0fe 0%, #fdfeff 50%);
-  border: 1px solid;
   border-image: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) 1 1;
   border-radius: 8px 8px 8px 8px;
   box-shadow: 0px 0px 12px 0px rgba(34, 57, 128, 0.69), inset 0px -2px 0px 0px #8c86f9;

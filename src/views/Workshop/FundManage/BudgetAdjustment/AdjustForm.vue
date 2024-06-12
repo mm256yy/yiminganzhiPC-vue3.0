@@ -38,7 +38,7 @@
         <ElTreeSelect
           class="!w-full"
           v-model="form.newFunSubjectId"
-          :data="props.fundAccountList"
+          :data="setfundAccountList"
           node-key="code"
           :props="{ value: 'code', label: 'name' }"
           showCheckbox
@@ -97,7 +97,18 @@ interface PropsType {
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 let fundAccountLists = ref([])
-
+const setfundAccountList = computed(() => {
+  return props.fundAccountList.map((item) => {
+    if (item.id == 244) {
+      return {
+        ...item,
+        disabled: form.value.newType == '1'
+      }
+    } else {
+      return { ...item }
+    }
+  })
+})
 const props = defineProps<PropsType>()
 const emit = defineEmits(['close', 'updateDistrict'])
 const { required } = useValidator()
