@@ -341,7 +341,7 @@
       />
 
       <!-- 腾空 -->
-      <template v-if="tabCurrentId === 2">
+      <template v-if="tabCurrentId === 3">
         <!-- 房屋腾空 -->
         <house-vacate
           :type="type"
@@ -362,7 +362,7 @@
       <!-- 动迁协议 -->
       <ent-relocation-agreement
         :doorNo="doorNo"
-        v-if="tabCurrentId === 3"
+        v-if="tabCurrentId === 2"
         @update-data="getLandlordInfo"
       />
       <!-- 相关手续 -->
@@ -406,7 +406,7 @@
       />
 
       <!-- 腾空 -->
-      <template v-if="tabCurrentId === 2">
+      <template v-if="tabCurrentId === 3">
         <!-- 房屋腾空 -->
         <house-vacate
           :type="type"
@@ -427,7 +427,7 @@
       <!-- 动迁协议 -->
       <individual-relocation-agreement
         :doorNo="doorNo"
-        v-if="tabCurrentId === 3"
+        v-if="tabCurrentId === 2"
         @update-data="getLandlordInfo"
       />
 
@@ -464,12 +464,12 @@
       </template>
 
       <!-- 腾空(村集体只有房屋腾空) -->
-      <house-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 2" />
+      <house-vacate :type="type" :doorNo="doorNo" :baseInfo="baseInfo" v-if="tabCurrentId === 3" />
 
       <!-- 动迁协议 -->
       <village-relocation-agreement
         :doorNo="doorNo"
-        v-if="tabCurrentId === 3"
+        v-if="tabCurrentId === 2"
         @update-data="getLandlordInfo"
       />
       <!-- 集体资产处置方法 -->
@@ -719,9 +719,9 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 1) {
       fillingStatus.value = data.cardStatus // 企业建卡总状态
-    } else if (tabCurrentId.value === 2) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
     } else if (tabCurrentId.value === 3) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.agreementStatus // 动迁协议总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.proceduresStatus // 相关手续总状态
@@ -735,10 +735,10 @@ const getStatus = (data: any) => {
       tabsListCopy[1].active = true // 企业建卡
     }
     if (data.excessSoarStatus === '1') {
-      tabsListCopy[2].active = true // 腾空
+      tabsListCopy[3].active = true // 腾空
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[3].active = true // 动迁协议
+      tabsListCopy[2].active = true // 动迁协议
     }
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true // 相关手续
@@ -748,9 +748,9 @@ const getStatus = (data: any) => {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
     } else if (tabCurrentId.value === 1) {
       fillingStatus.value = data.cardStatus // 个体户建卡总状态
-    } else if (tabCurrentId.value === 2) {
-      fillingStatus.value = data.excessSoarStatus // 腾空总状态
     } else if (tabCurrentId.value === 3) {
+      fillingStatus.value = data.excessSoarStatus // 腾空总状态
+    } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.agreementStatus // 动迁协议总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.proceduresStatus // 相关手续总状态
@@ -764,10 +764,10 @@ const getStatus = (data: any) => {
       tabsListCopy[1].active = true
     }
     if (data.excessSoarStatus === '1') {
-      tabsListCopy[2].active = true
+      tabsListCopy[3].active = true
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[3].active = true
+      tabsListCopy[2].active = true
     }
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true
@@ -775,9 +775,9 @@ const getStatus = (data: any) => {
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
       fillingStatus.value = data.estimateeStatus // 资产评估总状态
-    } else if (tabCurrentId.value === 2) {
-      fillingStatus.value = data.houseSoarStatus // 腾空总状态   原来用这个 excessSoarStatus  这个是 房屋 土地 过度安置 都为打勾 才会excessSoarStatus为1
     } else if (tabCurrentId.value === 3) {
+      fillingStatus.value = data.houseSoarStatus // 腾空总状态   原来用这个 excessSoarStatus  这个是 房屋 土地 过度安置 都为打勾 才会excessSoarStatus为1
+    } else if (tabCurrentId.value === 2) {
       fillingStatus.value = data.agreementStatus // 协议签订总状态
     } else if (tabCurrentId.value === 4) {
       fillingStatus.value = data.disposalMeasuresStatus // 集体资产处置方法状态
@@ -790,10 +790,10 @@ const getStatus = (data: any) => {
       tabsListCopy[0].active = true // 资产评估
     }
     if (data.houseSoarStatus === '1') {
-      tabsListCopy[2].active = true // 腾空
+      tabsListCopy[3].active = true // 腾空
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[3].active = true // 协议签订
+      tabsListCopy[2].active = true // 协议签订
     }
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[4].active = true // 集体资产处置方法

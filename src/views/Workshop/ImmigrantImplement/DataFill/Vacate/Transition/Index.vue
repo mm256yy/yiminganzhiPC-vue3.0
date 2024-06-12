@@ -38,7 +38,7 @@
               form.isComplete == '0' ? '过渡中' : form.isComplete == '1' ? '过渡完成' : '-'
             }}</div
           >
-          <div v-for="item in form.immigrantExcessPayList" :key="item.id">
+          <div v-for="(item, index) in immigrantExcessPay" :key="index">
             <div
               >第{{ item.orderNum }}批过渡时间 :
               {{ item.excessStartDate ? dayjs(item.excessStartDate).format('YYYY-MM-DD') : '' }} 至
@@ -269,7 +269,6 @@ const archivesIcon = useIcon({ icon: 'ant-design:container-outlined' })
 const isExcess = ref<null | '0' | '1'>(null) //0 无须办理 1确认办理 -1默认状态
 const startTime = ref<string>('')
 const endTime = ref<string>('')
-
 const form = ref<any>({
   excessAddress: '',
   // excessStartDate: '',
@@ -288,6 +287,7 @@ const trsArchivesPup = ref<boolean>(false)
 const startMonth = ref<any>()
 const endMonth = ref<any>()
 const monthNum = ref<any>()
+const immigrantExcessPay = ref<any>()
 // const totalCompensationAmount = ref<any>()
 // const compensationAmount = ref<any>()
 const immigrantExcessPayListLength = ref<any>()
@@ -310,8 +310,9 @@ const placementSave = async () => {
 }
 const init = async () => {
   const res = await getTransitionInfoApi(props.doorNo)
+  immigrantExcessPay.value = res.immigrantExcessPayList
   immigrantExcessPayListLength.value = res.immigrantExcessPayList
-    ? res.immigrantExcessPayList.length
+    ? res.immigrantExcessPayList.filter((item) => item.isDelete == 0).length
     : 0
   console.log(res, immigrantExcessPayListLength.value, 'res')
   if (res) {
@@ -327,6 +328,7 @@ const init = async () => {
     }
     isExcess.value = res.isExcess
     arrList.value = res.immigrantExcessPayList ? res.immigrantExcessPayList : []
+    displayWithIsDeleteArrList.value = res.immigrantExcessPayList ? res.immigrantExcessPayList : []
     // console.log()
     // startTime.value = timeStart
     // endTime.value = timeEnd
@@ -362,6 +364,7 @@ const onPrintTable = () => {
 
 const onDialogClose = () => {
   dialogVisible.value = false
+  init()
 }
 const onDialogConfirmClose = () => {
   dialogConfirmVisible.value = false
@@ -386,8 +389,9 @@ const handleSave = async (data?: any) => {
   params.status = 'implementation'
   console.log(toRaw(params.immigrantExcessPayList).length, '长度')
   params.isComplete =
-    toRaw(params.immigrantExcessPayList).length > immigrantExcessPayListLength.value ? '0' : '1'
+    toRaw(params.immigrantExcessPayList).length >= immigrantExcessPayListLength.value ? '0' : '1'
   console.log(form.value, '11111111111')
+  console.log(params, 'params')
   const res = await saveTransitionInfoApi(params)
   if (res) {
     ElMessage.success('保存成功！')
@@ -397,6 +401,12 @@ const handleSave = async (data?: any) => {
   }
 }
 const add = () => {
+  console.log(
+    arrList.value,
+    'arrList.value',
+    displayWithIsDeleteArrList.value,
+    'displayWithIsDeleteArrList.value'
+  )
   let i = 0
   arrList.value.push({
     index: arrList.value.length,
@@ -407,20 +417,31 @@ const add = () => {
     orderNum: '',
     isDelete: 0
   })
+  displayWithIsDeleteArrList.value = [...displayWithIsDeleteArrList.value, ...arrList.value]
+  // displayWithIsDeleteArrList.value.push({
+  //   index: displayWithIsDeleteArrList.value.length,
+  //   excessStartDate: '', //开始日期
+  //   excessEndDate: '', //结束日期
+  //   monthNum: '', //补偿月数
+  //   compensationAmount: '', //补偿金额
+  //   orderNum: '',
+  //   isDelete: 0
+  // })
 }
 const del = (index, id) => {
   console.log(index, '索引')
   if (index >= 0) {
     arrList.value[index].isDelete = 1
+    displayWithIsDeleteArrList.value[index].isDelete = 1
     arrList.value = arrList.value.filter((item) => item.isDelete != 1)
     console.log(arrList.value, '前端删除')
   } else if (id) {
-    arrList.value.forEach((item) => {
+    displayWithIsDeleteArrList.value.forEach((item) => {
       if (id == item.id) {
         item.isDelete = 1
       }
     })
-    displayWithIsDeleteArrList.value = arrList.value
+    // displayWithIsDeleteArrList.value = arrList.value
     arrList.value = arrList.value.filter((item) => item.isDelete != 1)
     console.log(displayWithIsDeleteArrList.value, arrList.value, '后端数据删除')
     targ.value = true
@@ -432,12 +453,12 @@ const del = (index, id) => {
 const onSubmit = (formEl: any) => {
   formEl?.validate((valid: any) => {
     if (valid) {
-      if (targ.value) {
-        form.value.immigrantExcessPayList = displayWithIsDeleteArrList.value
-      } else {
-        form.value.immigrantExcessPayList = arrList.value
-      }
-      // form.value.immigrantExcessPayList = arrList.value
+      // if (targ.value) {
+      //   form.value.immigrantExcessPayList = displayWithIsDeleteArrList.value
+      // } else {
+      //   form.value.immigrantExcessPayList = arrList.value
+      // }
+      form.value.immigrantExcessPayList = displayWithIsDeleteArrList.value
       const params = {
         ...form.value
       }
@@ -457,7 +478,11 @@ const onSubmit = (formEl: any) => {
 const handleStartChange = (index, value) => {
   let date = new Date(value)
   startMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
-  console.log(startMonth.value, '选中的月份')
+  console.log(startMonth.value, endMonth.value, '选中的月份')
+  if (!endMonth.value) {
+    let date1 = new Date(arrList.value[index].excessEndDate)
+    endMonth.value = date1.getMonth() + 1
+  }
   if (startMonth.value && endMonth.value) {
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1
     arrList.value[index].compensationAmount =
@@ -471,9 +496,14 @@ const handleStartChange = (index, value) => {
   }
 }
 const handleEndChange = (index, value) => {
+  console.log(arrList.value[index].excessStartDate, '开始时间')
   let date = new Date(value)
   endMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
-  console.log(endMonth.value, '选中的月份')
+  console.log(endMonth.value, startMonth.value, '选中的月份')
+  if (!startMonth.value) {
+    let date1 = new Date(arrList.value[index].excessStartDate)
+    startMonth.value = date1.getMonth() + 1
+  }
   if (startMonth.value && endMonth.value) {
     console.log(endMonth.value, startMonth.value, '测试数据')
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1

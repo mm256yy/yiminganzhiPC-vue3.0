@@ -240,11 +240,11 @@ export const EnterpriseTabs = [
   },
   {
     id: 2,
-    name: '腾空'
+    name: '动迁协议'
   },
   {
     id: 3,
-    name: '动迁协议'
+    name: '腾空'
   },
   {
     id: 4,
@@ -282,7 +282,7 @@ export const EnterpriseSubTabs = [
 
   // 腾空
   {
-    type: 2,
+    type: 3,
     name: '房屋腾空',
     id: TabIds[0],
     icon: 'material-symbols:emoji-transportation',
@@ -290,7 +290,7 @@ export const EnterpriseSubTabs = [
     key: 'houseSoarStatus'
   },
   {
-    type: 2,
+    type: 3,
     name: '土地腾让',
     id: TabIds[1],
     icon: 'mdi:land-fields',
@@ -311,11 +311,11 @@ export const IndividualTabs = [
   },
   {
     id: 2,
-    name: '腾空'
+    name: '动迁协议'
   },
   {
     id: 3,
-    name: '动迁协议'
+    name: '腾空'
   },
   {
     id: 4,
@@ -353,7 +353,7 @@ export const IndividualSubTabs = [
 
   // 腾空
   {
-    type: 2,
+    type: 3,
     name: '房屋腾空',
     id: TabIds[0],
     icon: 'material-symbols:emoji-transportation',
@@ -361,7 +361,7 @@ export const IndividualSubTabs = [
     key: 'houseSoarStatus'
   },
   {
-    type: 2,
+    type: 3,
     name: '土地腾让',
     id: TabIds[1],
     icon: 'mdi:land-fields',
@@ -388,11 +388,11 @@ export const VillageTabs = [
   },
   {
     id: 2,
-    name: '腾空'
+    name: '动迁协议'
   },
   {
     id: 3,
-    name: '动迁协议'
+    name: '腾空'
   },
   {
     id: 4,
