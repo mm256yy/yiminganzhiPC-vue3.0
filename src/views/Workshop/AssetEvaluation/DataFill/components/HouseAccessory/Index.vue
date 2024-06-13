@@ -84,6 +84,8 @@
           <template #default="scope">
             <ElInputNumber
               :min="0"
+              :max="1"
+              :step="0.01"
               @change="getModelValue(scope.row)"
               v-model="scope.row.discountRate"
               :precision="2"

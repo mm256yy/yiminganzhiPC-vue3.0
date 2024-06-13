@@ -141,6 +141,8 @@
           <template #default="{ row }">
             <ElInputNumber
               :min="0"
+              :max="1"
+              :step="0.01"
               @change="getModelValue(row)"
               v-model="row.newnessRate"
               :precision="2"

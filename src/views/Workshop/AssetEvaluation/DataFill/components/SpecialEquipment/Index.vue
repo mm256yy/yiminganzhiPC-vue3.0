@@ -106,10 +106,14 @@
           header-align="center"
         >
           <template #default="scope">
-            <ElInput
+            <ElInputNumber
+              :min="0"
+              :max="1"
+              :step="0.01"
               placeholder="请输入"
               @change="getValuationAmount(scope.row)"
               v-model="scope.row.newnessRate"
+              :precision="2"
             />
           </template>
         </ElTableColumn>
