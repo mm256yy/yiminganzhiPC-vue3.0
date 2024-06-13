@@ -29,6 +29,7 @@
       title="其他附件上传"
       @change="fileChange"
       :disabled="!isEdit"
+      @setloding="setloding"
     />
   </div>
 </template>
@@ -85,6 +86,9 @@ const isEdit = computed(() => {
 
 const fileChange = (list: FileItemType[]) => {
   otherPic.value = list
+}
+let setloding = (e) => {
+  loading.value = e
 }
 
 const onSave = () => {

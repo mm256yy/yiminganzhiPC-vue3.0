@@ -98,14 +98,11 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 let fundAccountLists = ref([])
 const setfundAccountList = computed(() => {
-  return props.fundAccountList.map((item) => {
-    if (item.id == 244) {
-      return {
-        ...item,
-        disabled: form.value.newType == '1'
-      }
+  return props.fundAccountList.filter((item) => {
+    if (form.value.newType == '1') {
+      return item.type == '1'
     } else {
-      return { ...item }
+      return item.type == '1' || item.type == '2'
     }
   })
 })

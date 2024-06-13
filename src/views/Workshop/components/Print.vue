@@ -320,7 +320,7 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
             const obj = {
               name: currentLandlord.name,
               id: currentLandlord.id,
-              doorNo: currentLandlord.doorNo,
+              showDoorNo: currentLandlord.showDoorNo,
               files: item
             }
             // item.map((pdfItem) => {

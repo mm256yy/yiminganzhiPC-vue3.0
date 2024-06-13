@@ -36,6 +36,7 @@
       </div>
       <Table
         selection
+        max-height="650"
         v-model:pageSize="tableObject.size"
         v-model:currentPage="tableObject.currentPage"
         :pagination="{

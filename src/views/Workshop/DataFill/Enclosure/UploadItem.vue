@@ -15,6 +15,7 @@
         :on-success="uploadFileChange"
         :on-error="onError"
         :before-remove="() => false"
+        :before-upload="beforeAvatarUpload"
       >
         <template #file="{ file }">
           <div class="flex items-center w-full">
@@ -87,7 +88,7 @@ const dialogVisible = ref<boolean>(false)
 const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 
 const props = defineProps<PropsType>()
-const emit = defineEmits(['change'])
+const emit = defineEmits(['change', 'setloding'])
 
 watch(
   () => props.fileList,
@@ -131,6 +132,7 @@ const handleFileList = (_file) => {
 
 const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+  emit('setloding', false)
 }
 
 // 文件上传
@@ -139,8 +141,13 @@ const onError = () => {
 // }
 const uploadFileChange = (_response: any, _file: UploadFile) => {
   handleFileList(_file)
+  emit('setloding', false)
 }
-
+//文件上传前
+let beforeAvatarUpload = () => {
+  emit('setloding', true)
+  return true
+}
 // 文件移除
 const removeFile = (file: any) => {
   fileListData.value = fileListData.value.filter((item) => {
