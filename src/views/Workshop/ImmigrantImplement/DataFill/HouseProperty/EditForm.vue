@@ -39,8 +39,8 @@
       </ElRow>
       <ElRow>
         <ElCol :span="12">
-          <ElFormItem label="不合法面积(㎡)1" prop="landIllegalArea">
-            {{ form.landIllegalArea.toFixed(2) }}
+          <ElFormItem label="不合法面积(㎡)" prop="landIllegalArea">
+            {{ form.landIllegalArea?.toFixed(2) }}
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
