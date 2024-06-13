@@ -30,7 +30,7 @@
               <div
                 >当前进度：&nbsp;<span>{{ (item.actual * 100).toFixed(2) }}%</span></div
               >
-              <div
+              <!-- <div
                 >开始时间：&nbsp;<span>{{
                   item.startTime ? dayjs(item.startTime).format('YYYY-MM-DD') : '--'
                 }}</span></div
@@ -39,7 +39,7 @@
                 >结束时间：&nbsp;<span>{{
                   item.endTime ? dayjs(item.endTime).format('YYYY-MM-DD') : '--'
                 }}</span></div
-              >
+              > -->
             </template>
           </ElPopover>
         </div>

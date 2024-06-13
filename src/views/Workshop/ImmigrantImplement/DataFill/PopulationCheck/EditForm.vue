@@ -169,7 +169,7 @@
         <ElRow>
           <ElCol :span="24">
             <div class="col-wrapper">
-              <div class="col-label">身份证照片</div>
+              <div :class="[isLessThan14YearsOld(form.card) ? 'col-label' : '']">身份证照片</div>
               <div class="card-img-list">
                 <ElUpload
                   :class="[cardFront.length > 0 || actionType === 'view' ? 'upload' : '']"
@@ -509,16 +509,50 @@ const submit = async (data: DemographicDtoType) => {
   ElMessage.success('操作成功！')
   onClose(true)
 }
+const isLessThan14YearsOld = (idNumber) => {
+  // 假设输入的idNumber是18位身份证号码
+  if (idNumber?.length !== 18 || !idNumber) {
+    // console.error('Invalid ID number length. Expected 18 digits.')
+    return false
+  }
 
+  // 提取出生日期部分（第7位到第14位）
+  let birthDateStr = idNumber.substring(6, 14)
+  let year = parseInt(birthDateStr.substring(0, 4), 10)
+  let month = parseInt(birthDateStr.substring(4, 6), 10) - 1 // 注意月份是从0开始的
+  let day = parseInt(birthDateStr.substring(6, 8), 10)
+
+  // 创建一个表示出生日期的Date对象
+  let birthDate = new Date(year, month, day)
+
+  // 获取当前日期
+  let today = new Date()
+
+  // 计算年龄（这里假设未过生日的情况下也按周岁加一）
+  let age = today.getFullYear() - birthDate.getFullYear()
+  let m = today.getMonth() - birthDate.getMonth()
+  if (m < 0 || (m === 0 && today.getDate() < day)) {
+    age--
+  }
+
+  // 判断是否小于14岁
+  return age >= 14
+}
 // 提交表单
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid: any) => {
     if (valid) {
       if (form.value.addReason !== '3') {
-        if (!cardFront.value || !cardFront.value.length) {
+        if (
+          (!cardFront.value || !cardFront.value.length) &&
+          isLessThan14YearsOld(form.value.card)
+        ) {
           ElMessage.warning('请上传身份证正面照片')
           return
-        } else if (!cardEnd.value || !cardEnd.value.length) {
+        } else if (
+          (!cardEnd.value || !cardEnd.value.length) &&
+          isLessThan14YearsOld(form.value.card)
+        ) {
           ElMessage.warning('请上传身份证背面照片')
           return
         } else if (!householdPic.value || !householdPic.value.length) {

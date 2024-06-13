@@ -34,7 +34,7 @@
           <el-table-column prop="card" label="身份证" />
           <el-table-column prop="censusTypeText" label="户籍类别" />
           <el-table-column prop="populationNatureText" label="人口性质" />
-          <el-table-column prop="isProduction" label="是否生产安置">
+          <el-table-column prop="isProduction" label="是否生产安置移民">
             <template #default="scope">
               <el-select
                 v-model="scope.row.isProduction"
