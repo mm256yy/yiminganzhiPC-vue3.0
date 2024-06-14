@@ -290,7 +290,7 @@ const listArray = ref([
   },
   {
     id: '3',
-    icon: new URL('../../../assets/imgs/smarts/c.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/az.png', import.meta.url).href,
     conArray: [
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(9).png', import.meta.url).href,
@@ -390,7 +390,7 @@ const listArray = ref([
   },
   {
     id: '4',
-    icon: new URL('../../../assets/imgs/smarts/d.png', import.meta.url).href,
+    icon: new URL('../../../assets/imgs/smarts/jd.png', import.meta.url).href,
     conArray: [
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(10).png', import.meta.url).href,
@@ -500,7 +500,6 @@ const goLink = (routerName: string, query: any) => {
 
   //window.open(linkObj.href, '_blank')
 }
-
 onMounted(() => {
   changeScale()
   window.addEventListener('resize', changeScale)
@@ -578,7 +577,6 @@ onBeforeUnmount(() => {
             display: flex;
             flex-wrap: wrap;
             width: 744px;
-
             .value {
               margin-right: 48px;
               margin-bottom: 6px;
@@ -587,6 +585,7 @@ onBeforeUnmount(() => {
               line-height: 26px;
               color: #131313;
               cursor: pointer;
+              background-color: #f2f6ff;
             }
           }
         }
