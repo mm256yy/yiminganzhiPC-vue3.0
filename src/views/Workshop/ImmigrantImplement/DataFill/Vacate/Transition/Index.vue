@@ -257,6 +257,7 @@ interface PropsType {
   baseInfo: any
 }
 import { useAppStore } from '@/store/modules/app'
+import { getHouseVacateInfoApi } from '@/api/immigrantImplement/vacate/house-service'
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 
@@ -292,6 +293,7 @@ const immigrantExcessPay = ref<any>()
 // const compensationAmount = ref<any>()
 const immigrantExcessPayListLength = ref<any>()
 const targ = ref<any>(false)
+const time = ref<any>()
 const { required } = useValidator()
 
 const rules = reactive<FormRules>({
@@ -300,8 +302,15 @@ const rules = reactive<FormRules>({
 })
 
 const flag = ref<boolean>(true)
+const inits = async () => {
+  const res = await getHouseVacateInfoApi(props.doorNo)
+  // .format('YYYY-MM-DD')
+  time.value = res.houseEmptyDate ? dayjs(res.houseEmptyDate) : ''
+  console.log(time.value, '测试腾空时间')
+}
 onMounted(() => {
   init()
+  inits()
 })
 const arrList = ref<any>([])
 const displayWithIsDeleteArrList = ref<any>([])
@@ -400,6 +409,28 @@ const handleSave = async (data?: any) => {
     init()
   }
 }
+const addMonthsToDate = (dateString, monthsToAdd) => {
+  // 将字符串转换为Date对象
+  let date = new Date(dateString)
+
+  // 设置新的月份，注意月份是从0开始的
+  let newMonth = (date.getMonth() + monthsToAdd) % 12
+  let newYear = date.getFullYear() + Math.floor((date.getMonth() + monthsToAdd) / 12)
+
+  // 如果newMonth为负数，表示需要回退一年并增加月份
+  if (newMonth < 0) {
+    newMonth += 12
+    newYear--
+  }
+
+  // 设置新的年份和月份
+  date.setFullYear(newYear, newMonth, date.getDate())
+
+  // 如果月份变更后日期不存在（例如2月30日），则会自动调整为该月的最后一天
+
+  // 将修改后的日期转换回ISO 8601格式的字符串
+  return date.toISOString().split('.')[0] + 'Z' // 去除毫秒部分
+}
 const add = () => {
   console.log(
     arrList.value,
@@ -410,14 +441,18 @@ const add = () => {
   let i = 0
   arrList.value.push({
     index: arrList.value.length,
-    excessStartDate: '', //开始日期
+    excessStartDate:
+      arrList.value.length == 0
+        ? time.value
+        : addMonthsToDate(arrList.value[arrList.value.length - 1].excessEndDate, 1), //开始日期
     excessEndDate: '', //结束日期
     monthNum: '', //补偿月数
     compensationAmount: '', //补偿金额
     orderNum: '',
     isDelete: 0
   })
-  displayWithIsDeleteArrList.value = [...displayWithIsDeleteArrList.value, ...arrList.value]
+  // displayWithIsDeleteArrList.value = [...displayWithIsDeleteArrList.value, ...arrList.value]
+  console.log(displayWithIsDeleteArrList.value, '数组')
   // displayWithIsDeleteArrList.value.push({
   //   index: displayWithIsDeleteArrList.value.length,
   //   excessStartDate: '', //开始日期
@@ -468,6 +503,7 @@ const onSubmit = (formEl: any) => {
         item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
       })
       console.log(params, '提交数据')
+      // return
       handleSave(params)
       dialogVisible.value = false
     } else {

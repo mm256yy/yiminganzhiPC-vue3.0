@@ -450,7 +450,7 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'isProduction',
-    label: '是否生产安置',
+    label: '是否生产安置移民',
     search: {
       show: false
     }

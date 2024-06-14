@@ -357,7 +357,7 @@ const schema = reactive<CrudSchema[]>([
           label: 'name'
         },
         showCheckbox: true,
-        checkStrictly: true,
+        checkStrictly: false,
         checkOnClickNode: true
       }
     },
