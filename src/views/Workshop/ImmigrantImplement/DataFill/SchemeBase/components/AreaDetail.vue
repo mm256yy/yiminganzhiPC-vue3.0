@@ -64,10 +64,21 @@
           </div>
         </div>
 
-        <div class="common-head"> 地图 </div>
-
-        <div class="map-cont">
+        <el-button-group>
+          <el-button text type="primary" @click="() => ((showpic = true), init())">
+            <div class="common-heads"> 地图 </div>
+          </el-button>
+          <el-button text type="primary" @click="() => (showpic = false)">
+            <div class="common-heads"> 规划图 </div>
+          </el-button>
+        </el-button-group>
+        <div class="map-cont" v-if="showpic">
           <div class="map" id="map"></div>
+        </div>
+        <div style="display: flex" v-else>
+          <div v-for="item in pic" :key="item.name" style="flex: 1">
+            <img :src="item.url" alt="" />
+          </div>
         </div>
       </div>
     </div>
@@ -76,6 +87,8 @@
 
 <script setup lang="ts">
 import { onMounted, ref, defineExpose } from 'vue'
+import { ElButtonGroup, ElButton } from 'element-plus'
+
 import AMapLoader from '@amap/amap-jsapi-loader'
 interface PropsType {
   placementPointInfo?: any
@@ -86,12 +99,14 @@ const AMap = ref<any>(null)
 let longitude = ''
 let latitude = ''
 const pointInfo = ref<any>({})
-
+let pic: any = ref([])
+let showpic = ref(true)
 const init = async () => {
   // marker
   pointInfo.value = { ...props.placementPointInfo }
   longitude = pointInfo.value.longitude
   latitude = pointInfo.value.latitude
+  pic.value = JSON.parse(pointInfo.value.pic)
   AMap.value = await AMapLoader.load({
     key: import.meta.env.VITE_MAP_AK, // 申请好的Web端开发者Key，首次调用 load 时必填
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
@@ -240,6 +255,17 @@ onMounted(() => {
   font-weight: 500;
   color: #171718;
   background: #ffffff;
+  flex-direction: row;
+  align-items: center;
+}
+.common-heads {
+  display: flex;
+  width: 100%;
+  height: 48px;
+  padding: 0 30px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #171718;
   flex-direction: row;
   align-items: center;
 }
