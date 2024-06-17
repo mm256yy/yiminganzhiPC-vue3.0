@@ -1,5 +1,8 @@
 <template>
   <WorkContentWrap v-loading="loading">
+    <ElButton type="primary" @click="onsetFeedback" style="float: right; margin: 20px 20px 20px 0px"
+      >查看实物成果</ElButton
+    >
     <!-- 房屋附属物评估报告 -->
     <!-- <ElRow v-if="houseEstimatePic.length">
       <ElCol :span="24">
@@ -40,20 +43,29 @@
       <iframe id="inlineFrameExample" v-else title="Inline Frame Example" :src="imgUrl"></iframe>
     </ElDialog> -->
     <iframe id="inlineFrameExample" :src="pdfUrl"></iframe>
+    <Print
+      :show="printDialog"
+      :landlordIds="[householdId]"
+      @close="onPrintDialogClose"
+      :baseInfo="baseInfo"
+    />
   </WorkContentWrap>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, watch } from 'vue'
-import { ElMessage, ElMessageBox, ElRow, ElCol, ElUpload, ElDialog } from 'element-plus'
-import type { UploadFile, UploadFiles } from 'element-plus'
+import { ElButton } from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 import {
   getDocumentationApi,
-  getexportReportPdfApi
+  getexportReportPdfApi,
+  getPrintDetailsApi
 } from '@/api/immigrantImplement/assetEvaluation/service'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import Print from '@/views/Workshop/DataFill/components/Print.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 interface PropsType {
   doorNo: string
   baseInfo: any
@@ -63,17 +75,21 @@ interface FileItemType {
   name: string
   url: string
 }
-
+const { currentRoute, back } = useRouter()
+const { householdId } = currentRoute.value.query as any
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
 
 const houseEstimatePic = ref<FileItemType[]>([]) // 房屋附属物评估报告
 const imgUrl = ref<string>('')
-const dialogVisible = ref(false)
+const printDialog = ref(false)
 
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken
+}
+const onPrintDialogClose = () => {
+  printDialog.value = false
 }
 
 // 初始化获取数据
@@ -101,46 +117,9 @@ const initData = async () => {
 }
 
 // 处理函数
-const handleFileList = (fileList: UploadFiles) => {
-  let list: FileItemType[] = []
-  if (fileList && fileList.length) {
-    list = fileList
-      .filter((fileItem) => fileItem.status === 'success')
-      .map((fileItem) => {
-        return {
-          name: fileItem.name,
-          url: (fileItem.response as any)?.data || fileItem.url
-        }
-      })
-  }
-  houseEstimatePic.value = list
-}
 
-const uploadFileChange = (_response: any, _file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList)
-}
-
-// 文件移除
-const removeFile = (_file: UploadFile, fileList: UploadFiles) => {
-  handleFileList(fileList)
-}
-
-// 移除之前
-const beforeRemove = (uploadFile: UploadFile) => {
-  return ElMessageBox.confirm(`确认移除文件 ${uploadFile.name} 吗?`).then(
-    () => true,
-    () => false
-  )
-}
-
-// 预览
-const imgPreview = (uploadFile: UploadFile) => {
-  imgUrl.value = uploadFile.url!
-  dialogVisible.value = true
-}
-
-const onError = () => {
-  ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
+let onsetFeedback = () => {
+  printDialog.value = true
 }
 watch(
   () => props.baseInfo.type,

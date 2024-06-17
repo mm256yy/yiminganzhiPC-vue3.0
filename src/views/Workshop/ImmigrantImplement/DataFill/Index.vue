@@ -483,7 +483,7 @@
       />
     </div>
     <div class="data-fill-body" v-if="type === 'Village' && villageType == 'grave'">
-      <Villagegrave :id="baseInfo.id" />
+      <Villagegrave :id="baseInfo.doorNo" />
     </div>
     <div class="data-fill-body" v-if="type === 'LandNoMove'">
       <!-- 生产安置 -->

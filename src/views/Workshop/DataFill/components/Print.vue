@@ -98,11 +98,11 @@ const projectInfo = computed(() => {
 
 const printType = computed(() => {
   let templateType = PrintType.print
-  if (type == 'Enterprise') {
+  if (type == 'Enterprise' || type == 'Company') {
     templateType = PrintType.printCompany
-  } else if (type == 'Landlord') {
+  } else if (type == 'Landlord' || type == 'PeasantHousehold') {
     templateType = PrintType.print
-  } else if (type == 'IndividualB') {
+  } else if (type == 'IndividualB' || type == 'IndividualHousehold') {
     templateType = PrintType.printIndividualHousehold
   } else {
     templateType = PrintType.village
@@ -193,7 +193,10 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
   return new Promise(async (resolve, reject) => {
     // 拿到最新的调查对象信息
     if (!landlords.value) {
-      const data = await getLandlordBatchApi([props.baseInfo.id]).catch(() => {
+      const data = await getLandlordBatchApi({
+        doorNo: props.baseInfo.doorNo,
+        status: 'review'
+      }).catch(() => {
         reject()
       })
       const { peasantHouseholdPushDtoList, immigrantGraveList } = data || {}
@@ -254,6 +257,7 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
               name: currentLandlord.name,
               id: currentLandlord.id,
               doorNo: currentLandlord.doorNo,
+              showDoorNo: currentLandlord.showDoorNo,
               files: item
             }
             // item.map((pdfItem) => {

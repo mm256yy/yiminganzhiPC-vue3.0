@@ -271,7 +271,7 @@ const getList = async () => {
       ...tableObject.params,
       page: pageNum.value - 1,
       size: pageSize.value,
-      villageId: props.id
+      villageDoorNo: props.id
     }
     const result = await immigrantGraveApi(params)
     tableData.value = result.content

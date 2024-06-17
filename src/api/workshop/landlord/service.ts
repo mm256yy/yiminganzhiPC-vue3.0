@@ -111,12 +111,10 @@ interface LandlordPrintResType {
   immigrantGraveList: GraveType[]
 }
 
-export const getLandlordBatchApi = (ids: number[] | string[]): Promise<LandlordPrintResType> => {
+export const getLandlordBatchApi = (params): Promise<LandlordPrintResType> => {
   return request.get({
     url: `/pad/printDetails`,
-    params: {
-      ids
-    }
+    params
   })
 }
 

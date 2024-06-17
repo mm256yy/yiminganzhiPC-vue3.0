@@ -93,35 +93,121 @@
 
         <div>{{ data }}</div>
       </div>
-      <el-table
-        :data="tableObject.tableList"
-        style="width: 100%"
-        border
-        header-cell-class-name="table-headers"
-        cell-class-name="table-cellss"
-      >
-        <el-table-column prop="relation" width="140" label="坟墓与登记人关系" align="center">
-          <template #default="{ row }">
-            {{ dictFmt(row.relation, 307) }}
-          </template>
-        </el-table-column>
-        <el-table-column width="60" prop="number" label="数量" align="center" />
-        <el-table-column prop="handleWayText" width="80" label="处理方式" align="center" />
-        <el-table-column prop="settingGrave" width="140" label="安置公墓/择址地址" align="center">
-          <template #default="{ row }">
-            {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" align="center">
-          <template #default></template>
-        </el-table-column>
-      </el-table>
-      <div style="display: flex; justify-content: space-between; height: 50px">
-        <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1"
-          >户主代表或收委托人(签名)：</div
-        ><div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
-          联系移民干部(签名)：</div
+      <div v-if="tableObject.tableList.length < 9">
+        <el-table
+          :data="tableObject.tableList"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
         >
+          <el-table-column prop="relation" width="140" label="坟墓与登记人关系" align="center">
+            <template #default="{ row }">
+              {{ dictFmt(row.relation, 307) }}
+            </template>
+          </el-table-column>
+          <el-table-column width="60" prop="number" label="数量" align="center" />
+          <el-table-column prop="handleWayText" width="80" label="处理方式" align="center" />
+          <el-table-column prop="settingGrave" width="140" label="安置公墓/择址地址" align="center">
+            <template #default="{ row }">
+              {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
+      </div>
+      <div v-else>
+        <el-table
+          :data="tableObject.tableList.slice(0, 9)"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+        >
+          <el-table-column prop="relation" width="140" label="坟墓与登记人关系" align="center">
+            <template #default="{ row }">
+              {{ dictFmt(row.relation, 307) }}
+            </template>
+          </el-table-column>
+          <el-table-column width="60" prop="number" label="数量" align="center" />
+          <el-table-column prop="handleWayText" width="80" label="处理方式" align="center" />
+          <el-table-column prop="settingGrave" width="140" label="安置公墓/择址地址" align="center">
+            <template #default="{ row }">
+              {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
+        <h1 style="font-size: 24px; font-weight: bold; text-align: center; margin-top: 50px"
+          >坟墓确认单</h1
+        >
+        <div
+          style="
+            display: flex;
+            margin: 20px 0 20px 0;
+            font-size: 18px;
+            justify-content: space-between;
+          "
+        >
+          <div>
+            {{ `${baseInfo.areaCodeText}${baseInfo.townCodeText}${baseInfo.villageText}` }}
+            <span style="text-decoration-line: underline"> {{ baseInfo.name }} </span>
+            户号 <span style="text-decoration-line: underline">{{ baseInfo.showDoorNo }}</span>
+          </div>
+
+          <div>{{ data }}</div>
+        </div>
+        <el-table
+          :data="tableObject.tableList.slice(9)"
+          style="width: 100%"
+          border
+          header-cell-class-name="table-headers"
+          cell-class-name="table-cellss"
+        >
+          <el-table-column prop="relation" width="140" label="坟墓与登记人关系" align="center">
+            <template #default="{ row }">
+              {{ dictFmt(row.relation, 307) }}
+            </template>
+          </el-table-column>
+          <el-table-column width="60" prop="number" label="数量" align="center" />
+          <el-table-column prop="handleWayText" width="80" label="处理方式" align="center" />
+          <el-table-column prop="settingGrave" width="140" label="安置公墓/择址地址" align="center">
+            <template #default="{ row }">
+              {{ row.handleWay === '1' ? row.settingAddress : dictFmt(row.settingGrave, 377) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" align="center">
+            <template #default></template>
+          </el-table-column>
+        </el-table>
+        <div style="display: flex; justify-content: space-between; height: 50px">
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            户主代表或收委托人(签名)：
+          </div>
+          <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
+            联系移民干部(签名)：
+          </div>
+        </div>
       </div>
     </div>
   </WorkContentWrap>
