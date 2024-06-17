@@ -13,7 +13,7 @@
         <div class="con_list">
           <div v-for="i in item.conArray" :key="i.url" class="list_li">
             <img class="img_icon" :src="i.url" alt="" />
-            <div class="list_name">{{ i.name }} </div>
+            <div class="list_name">{{ i.name }}</div>
             <div class="list_value">
               <div v-for="ite in i.list" @click="handleClick(ite)" :key="ite.text" class="value">
                 {{ ite.text }}</div
@@ -537,7 +537,7 @@ onBeforeUnmount(() => {
 
     .smart_border {
       width: 936px;
-      height: 480px;
+      // height: 480px;
       margin-top: 16px;
       background: #ffffff;
       border: 2px solid rgba(62, 115, 236, 0.7);
@@ -557,7 +557,6 @@ onBeforeUnmount(() => {
           width: 100%;
           padding: 10px 0 12px 0;
           border-bottom: 1px solid #ebebeb;
-
           .img_icon {
             width: 24px;
             height: 24px;
@@ -568,7 +567,7 @@ onBeforeUnmount(() => {
             width: 118px;
             font-size: 14px;
 
-            font-weight: 400;
+            font-weight: bold;
             line-height: 24px;
             color: #131313;
           }
@@ -586,6 +585,8 @@ onBeforeUnmount(() => {
               color: #131313;
               cursor: pointer;
               background-color: #f2f6ff;
+              padding: 4px 8px;
+              border-radius: 4px;
             }
           }
         }
