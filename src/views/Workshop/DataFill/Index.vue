@@ -534,9 +534,11 @@ watch(
 
 // 新增企业
 const addEnterprise = () => {
+  console.log(baseInfo.value)
+
   const query = {
     type: 'enterpriseCheck',
-    name,
+    name: baseInfo.value.name,
     doorNo,
     longitude: longitude.value,
     latitude: latitude.value,

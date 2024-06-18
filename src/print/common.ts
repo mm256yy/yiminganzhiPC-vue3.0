@@ -654,13 +654,22 @@ export const getTree = (landlord: LandlordType) => {
 // 坟墓
 export const getGrave = (landlord: LandlordType) => {
   const body: any[] = [
-    [{ text: '坟墓信息', bold: true, fontSize: 12, colSpan: 6, style: 'td' }, '', '', '', '', ''],
+    [
+      { text: '坟墓信息', bold: true, fontSize: 12, colSpan: 7, style: 'td' },
+      '',
+      '',
+      '',
+      '',
+      '',
+      ''
+    ],
     [
       { text: '序号', style: 'td' },
       { text: '穴位', style: 'td' },
       { text: '材料', style: 'td' },
       { text: '立墓年份', style: 'td' },
       { text: '数量（座）', style: 'td' },
+      { text: '坟墓与登记人关系', style: 'td' },
       { text: '备注', style: 'td' }
     ]
   ]
@@ -673,12 +682,14 @@ export const getGrave = (landlord: LandlordType) => {
         { text: item.materialsText || '', style: 'td' },
         { text: item.graveYear || '', style: 'td' },
         { text: item.number || '', style: 'td' },
+        { text: item.relationText || '', style: 'td' },
         { text: item.remark || '', style: 'td' }
       ])
     })
   } else {
     body.push([
-      { text: '无', colSpan: 6, style: 'td' },
+      { text: '无', colSpan: 7, style: 'td' },
+      { text: '', style: 'td' },
       { text: '', style: 'td' },
       { text: '', style: 'td' },
       { text: '', style: 'td' },
@@ -688,7 +699,7 @@ export const getGrave = (landlord: LandlordType) => {
   }
   return {
     table: {
-      widths: [20, 96, 96, 96, 96, 96],
+      widths: [20, 80, 80, 80, 80, 80, 80],
       headerRows: 2,
       body
     },

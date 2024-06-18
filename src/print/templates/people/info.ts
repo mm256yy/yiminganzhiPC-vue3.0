@@ -306,7 +306,7 @@ export const getPeopleInfoDefinition = (landlord: LandlordType, projectInfo: Pro
   if (!landlord) {
     return peopleInfoDefinition
   }
-  console.log(projectInfo, 'bbq')
+  console.log(landlord, 'bbq')
 
   return {
     content: [
@@ -316,7 +316,7 @@ export const getPeopleInfoDefinition = (landlord: LandlordType, projectInfo: Pro
       getHouseInfo(landlord),
       getFushuwu(landlord),
       getTree(landlord),
-      getGrave(landlord)
+      landlord.immigrantGraveList ? getGrave(landlord) : null
     ],
     footer: getFooter
   }
