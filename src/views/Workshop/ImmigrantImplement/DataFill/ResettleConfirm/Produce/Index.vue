@@ -200,9 +200,9 @@
 
         <div>{{ data }}</div>
       </div>
-      <div v-if="tableObject.tableList.length < 9">
+      <div v-if="tableObject.tableList.filter((item) => item.isProduction == '1').length < 9">
         <el-table
-          :data="tableObject.tableList"
+          :data="tableObject.tableList.filter((item) => item.isProduction == '1')"
           style="width: 100%"
           border
           header-cell-class-name="table-headers"
@@ -232,7 +232,7 @@
       </div>
       <div v-else>
         <el-table
-          :data="tableObject.tableList.slice(0, 9)"
+          :data="tableObject.tableList.filter((item) => item.isProduction == '1').slice(0, 9)"
           style="width: 100%"
           border
           header-cell-class-name="table-headers"
@@ -279,7 +279,7 @@
           <div>{{ data }}</div>
         </div>
         <el-table
-          :data="tableObject.tableList.slice(9)"
+          :data="tableObject.tableList.filter((item) => item.isProduction == '1').slice(9)"
           style="width: 100%"
           border
           header-cell-class-name="table-headers"

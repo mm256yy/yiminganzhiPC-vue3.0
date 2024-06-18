@@ -54,10 +54,10 @@ export const HouseholdTabs = [
     id: 4,
     name: '安置确认'
   },
-  {
-    id: 5,
-    name: '择址确认'
-  },
+  // {
+  //   id: 5,
+  //   name: '择址确认'
+  // },
   {
     id: 7,
     name: '移民建卡'
@@ -66,7 +66,10 @@ export const HouseholdTabs = [
     id: 6,
     name: '协议签订'
   },
-
+  {
+    id: 5,
+    name: '择址确认'
+  },
   {
     id: 8,
     name: '腾空过渡'
