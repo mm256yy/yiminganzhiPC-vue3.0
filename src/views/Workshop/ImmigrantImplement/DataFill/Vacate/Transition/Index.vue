@@ -398,7 +398,7 @@ const handleSave = async (data?: any) => {
   params.status = 'implementation'
   console.log(toRaw(params.immigrantExcessPayList).length, '长度')
   params.isComplete =
-    toRaw(params.immigrantExcessPayList).length >= immigrantExcessPayListLength.value ? '0' : '1'
+    toRaw(params.immigrantExcessPayList).length > immigrantExcessPayListLength.value ? '0' : '1'
   console.log(form.value, '11111111111')
   console.log(params, 'params')
   const res = await saveTransitionInfoApi(params)
