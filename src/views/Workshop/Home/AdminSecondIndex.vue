@@ -342,8 +342,10 @@ const getChartScreenLists = async () => {
   } catch {
     groundLoading.value = false
   }
-  perPersonMapTotal.value = list.perPersonMapTotal[0]?.areaTotal
+  perPersonMapTotal.value = list.perPersonMapTotal?.areaTotal
   perHouseholdTotal.value = list.perHouseholdTotal[0]?.areaTotal
+  console.log(perPersonMapTotal.value, perHouseholdTotal.value)
+
   aalls.value = zhiji.avgMoney
   fundOption.value.series[0].data = zhiji.data.reduce((pre, item) => {
     pre.push({ value: item.totalPrice, name: item.name })
