@@ -1,6 +1,7 @@
 import { layout } from '../../config'
 import { getBottom } from '../../common'
 import { LandlordType, ProjectType } from '@/types/print'
+import { filterViewDoorNo } from '@/utils'
 
 // 个体户配置模版
 export const selfemployedBaseDefinition = {
@@ -309,7 +310,7 @@ const getInfo = (landlord: LandlordType) => {
         { text: `村编码：${landlord.villageCode}` },
         { text: `联系方式：${landlord.phone || ''}`, style: 'td' }
       ],
-      [{ text: `个体工商户编码：${landlord.doorNo || ''}` }, { text: ``, style: 'td' }]
+      [{ text: `个体工商户编码：${filterViewDoorNo(landlord) || ''}` }, { text: ``, style: 'td' }]
     ]
   }
 }

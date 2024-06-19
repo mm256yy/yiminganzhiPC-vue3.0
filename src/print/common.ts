@@ -855,7 +855,7 @@ export const getCollectiveTableHead = (landlord: LandlordType, projectInfo: Proj
                 margin: [headMargin, 0, headMargin, 2]
               },
               {
-                text: `（${landlord.name || ''} ${landlord.doorNo || ''} 号）`,
+                text: `（${landlord.name || ''} ${filterViewDoorNo(landlord) || ''} 号）`,
                 alignment: 'center',
                 margin: [headMargin, 0, headMargin, 0]
               }
