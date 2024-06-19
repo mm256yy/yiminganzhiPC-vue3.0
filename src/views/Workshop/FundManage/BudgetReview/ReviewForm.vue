@@ -173,7 +173,7 @@
       <ElCol :span="24">
         <div class="col-wrap">
           <div class="label">调整后资金科目:</div>
-          <div class="content">{{ getTreeName(fundAccountList, row.newFunSubjectId) }}</div>
+          <div class="content">{{ getTreeName(fundAccountList, row?.newFunSubjectId) }}</div>
         </div>
       </ElCol>
       <ElCol :span="24">

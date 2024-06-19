@@ -76,7 +76,7 @@
 
         <div class="row">
           <div class="label">凭证编号:</div>
-          <div class="value">{{ detail.receiptCode }}</div>
+          <div class="value">{{ detail?.receiptCode }}</div>
         </div>
 
         <div class="row">
@@ -118,7 +118,7 @@ const { back, currentRoute } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const { query } = unref(currentRoute)
 const id: number = query.id ? +query.id : 0
-const detail = ref<Partial<FunPayType>>({})
+const detail = ref<any>({})
 const dialogVisible = ref<boolean>(false)
 const imgUrl = ref<string>('')
 

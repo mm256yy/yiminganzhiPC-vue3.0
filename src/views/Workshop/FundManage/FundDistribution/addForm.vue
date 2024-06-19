@@ -90,7 +90,7 @@ import { postGrant } from '@/api/fundManage/fundPayment-service'
 
 interface PropsType {
   show: boolean
-  actionType: 'add' | 'edit' | 'view'
+  actionType?: 'add' | 'edit' | 'view'
   row?: any
   pamaers?: any
   contentMessage: string
@@ -102,7 +102,7 @@ interface FileItemType {
 }
 
 const props = defineProps<PropsType>()
-const emit = defineEmits(['close', 'submit'])
+const emit = defineEmits(['close', 'submit', 'getlist'])
 const formRef = ref<FormInstance>()
 const appStore = useAppStore()
 const dictStore = useDictStoreWithOut()
@@ -161,7 +161,7 @@ const onClose = (flag = false) => {
 }
 
 const submit = async (data: any) => {
-  const arr = []
+  const arr: any = []
   props.pamaers.map((item) => {
     arr.push({
       ...item,
@@ -181,7 +181,7 @@ const submit = async (data: any) => {
 }
 
 // 提交表单
-const onSubmit = debounce((formEl, status: number) => {
+const onSubmit = debounce((formEl) => {
   if (!formEl) return
   formEl.validate((valid, fields) => {
     if (valid) {

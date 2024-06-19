@@ -175,42 +175,26 @@ const getTableDepends = (list: any) => {
       ...commonTableItemSchema
     },
     {
-      field: '1',
+      field: '2',
       label: '户号',
       ...commonTableItemSchema
     },
     {
-      field: '2',
+      field: '3',
       label: route.query.id == 'true' ? '村集体' : '户主姓名',
       ...commonTableItemSchema
     },
     {
-      field: '3',
+      field: '4',
       label: '补偿费',
       children: [
         {
-          field: '3',
+          field: '4',
           label: '应发',
           ...commonTableItemSchema
         },
-        {
-          field: '4',
-          label: '已发',
-          ...commonTableItemSchema
-        }
-      ]
-    },
-    {
-      field: '4',
-      label: '补助费',
-      children: [
         {
           field: '5',
-          label: '应发',
-          ...commonTableItemSchema
-        },
-        {
-          field: '6',
           label: '已发',
           ...commonTableItemSchema
         }
@@ -218,15 +202,31 @@ const getTableDepends = (list: any) => {
     },
     {
       field: '5',
-      label: '奖励费',
+      label: '补助费',
       children: [
         {
-          field: '7',
+          field: '6',
           label: '应发',
           ...commonTableItemSchema
         },
         {
+          field: '7',
+          label: '已发',
+          ...commonTableItemSchema
+        }
+      ]
+    },
+    {
+      field: '6',
+      label: '奖励费',
+      children: [
+        {
           field: '8',
+          label: '应发',
+          ...commonTableItemSchema
+        },
+        {
+          field: '9',
           label: '已发',
           ...commonTableItemSchema
         }

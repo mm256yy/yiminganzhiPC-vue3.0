@@ -44,6 +44,7 @@ import { ref, onMounted } from 'vue'
 import { listDictDetailApi } from '@/api/sys/index'
 import { useAppStore } from '@/store/modules/app'
 import { detail } from '@/api/home'
+import { useIcon } from '@/hooks/web/useIcon'
 
 const router = useRouter()
 const route = useRoute()
@@ -53,6 +54,7 @@ const pageNum = ref(0)
 const totalNum = ref(0)
 const img = ref('')
 const newsDetail = ref<any>([])
+const BackIcon = useIcon({ icon: 'iconoir:undo' })
 
 const { back, push } = useRouter()
 const onBack = () => {
@@ -61,6 +63,8 @@ const onBack = () => {
 
 // 新闻详情
 const requestNewsData = (type = '1') => {
+  console.log(type)
+
   detail(route.query.id).then(
     (res: any) => {
       console.log(1111, res)

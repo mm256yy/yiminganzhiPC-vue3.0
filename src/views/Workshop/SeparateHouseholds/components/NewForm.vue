@@ -112,7 +112,7 @@ const onClose = (flag = false) => {
     formRef.value?.resetFields()
   })
 }
-let form = reactive({ remark: '', reason: '', separateFile: null, mergeFile: null })
+let form: any = reactive({ remark: '', reason: '', separateFile: null, mergeFile: null })
 let feedbackPic: any = ref([])
 const { required } = useValidator()
 

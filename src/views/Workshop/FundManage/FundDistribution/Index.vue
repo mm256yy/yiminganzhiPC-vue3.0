@@ -131,11 +131,13 @@ const projectId = appStore.currentProjectId
 let tabalRef = ref()
 
 const ffShow = ref<boolean>(false)
-const contentMessage = ref<string>()
+const contentMessage = ref<any>()
 const form = ref<any>({})
 
 // 关闭弹窗
 const onClose = (flag = false) => {
+  console.log(flag)
+
   form.value = {}
   ffShow.value = false
 }

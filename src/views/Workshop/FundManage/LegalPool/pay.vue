@@ -124,7 +124,7 @@ onMounted(() => {
   }
   console.log(111, id)
 
-  getfunPay(id).then((res) => {
+  getfunPay(id).then((res: any) => {
     if (res) {
       if (res.receipt) {
         res.receipt = JSON.parse(res.receipt as string)

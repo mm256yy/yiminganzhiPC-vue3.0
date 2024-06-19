@@ -126,7 +126,7 @@ onMounted(() => {
   }
   console.log(111, id)
 
-  getfunReceiptsRecord(id).then((res) => {
+  getfunReceiptsRecord(id).then((res: any) => {
     if (res) {
       if (res.receipt) {
         res.receipt = JSON.parse(res.receipt as string)

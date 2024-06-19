@@ -61,8 +61,8 @@
               }
             ]"
             :row="row"
-            :edit="showOperate(row)"
-            :delete="showOperate(row)"
+            :edit="true"
+            :delete="true"
             @delete="onDelRow"
             @edit="onEditRow"
           />
@@ -110,12 +110,6 @@ const addIcon = useIcon({ icon: 'ant-design:plus-outlined' })
 const actionType = ref<'view' | 'add' | 'edit'>('add')
 const dialog = ref<boolean>(false)
 const sumAmount = ref<string>('')
-
-// 是否展示操作删除按钮
-const showOperate = (row: any) => {
-  // return row?.status === 0 || row?.entryType === '1'
-  return true
-}
 
 const { register, tableObject, methods } = useTable({
   getListApi: getLegalFundEntryListApi,
