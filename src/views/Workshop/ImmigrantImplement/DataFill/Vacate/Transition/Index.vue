@@ -502,8 +502,20 @@ const onSubmit = (formEl: any) => {
       params.immigrantExcessPayList.forEach((item) => {
         item.excessStartDate = item.excessStartDate ? dayjs(item.excessStartDate) : ''
         item.excessEndDate = item.excessEndDate ? dayjs(item.excessEndDate) : ''
+        // if (new Date(item.excessStartDate) > new Date(item.excessEndDate)) {
+        //   ElMessage.error('开始日期不得大于结束日期')
+        //   return false
+        // }
+        console.log(item.excessStartDate, item.excessEndDate, '日期数据')
       })
       console.log(params, '提交数据')
+      let targ = params.immigrantExcessPayList.every(
+        (item) => new Date(item.excessStartDate) < new Date(item.excessEndDate)
+      )
+      if (!targ) {
+        ElMessage.error('开始日期不得大于结束日期')
+        return
+      }
       // return
       handleSave(params)
       dialogVisible.value = false
@@ -517,8 +529,8 @@ const handleStartChange = (index, value) => {
   startMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(startMonth.value, endMonth.value, '选中的月份')
   // if (!endMonth.value) {
-    let date1 = new Date(arrList.value[index].excessEndDate)
-    endMonth.value = date1.getMonth() + 1
+  let date1 = new Date(arrList.value[index].excessEndDate)
+  endMonth.value = date1.getMonth() + 1
   // }
   if (startMonth.value && endMonth.value) {
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1
@@ -538,8 +550,8 @@ const handleEndChange = (index, value) => {
   endMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(endMonth.value, startMonth.value, '选中的月份')
   // if (!startMonth.value) {
-    let date1 = new Date(arrList.value[index].excessStartDate)
-    startMonth.value = date1.getMonth() + 1
+  let date1 = new Date(arrList.value[index].excessStartDate)
+  startMonth.value = date1.getMonth() + 1
   // }
   if (startMonth.value && endMonth.value) {
     console.log(endMonth.value, startMonth.value, '测试数据')

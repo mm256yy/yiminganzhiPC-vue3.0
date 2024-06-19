@@ -307,7 +307,8 @@ onMounted(() => {
 
 const checktab = (index, item) => {
   currentCheckTabIndex.value = item.name
-  type.value = index + 1
+  console.log(index)
+  type.value = item.type
   getVillageScheduleList()
   parmas.value.type = type.value
   getScheduleRankList(parmas.value)
