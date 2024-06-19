@@ -30,6 +30,22 @@
         <div>{{ row.grantStatus == '1' ? '已放款' : '未放款' }}</div>
       </template>
     </Table>
+    <ElForm :model="receiptList">
+      <ElFormItem label="凭证编号:"> {{ receiptList.receiptCode }}</ElFormItem>
+      <ElFormItem label="凭证文件:">
+        <ElImage
+          v-for="i in receiptList.receipt"
+          :key="i"
+          style="width: 100px; height: 100px"
+          :src="i"
+          :zoom-rate="1.2"
+          :max-scale="7"
+          :min-scale="0.2"
+          :preview-src-list="receiptList.receipt"
+          :initial-index="4"
+          fit="cover"
+      /></ElFormItem>
+    </ElForm>
   </ElDialog>
 </template>
 
@@ -43,12 +59,10 @@ import dayjs from 'dayjs'
 import {
   getFindByDoorNo,
   deleteFunPayApi,
-  getLpListApi,
-  getFunPaySumAmountApi
+  getFindReceiptByDoorNo
 } from '@/api/fundManage/fundPayment-service'
-import { ElDialog } from 'element-plus'
+import { ElDialog, ElForm, ElFormItem, ElImage } from 'element-plus'
 // import { useDictStoreWithOut } from '@/store/modules/dict'
-import { getVillageTreeApi } from '@/api/workshop/village/service'
 interface PropsType {
   show: boolean
   id: string
@@ -71,37 +85,27 @@ const { getList } = methods
 tableObject.params = {
   projectId
 }
-
+let receiptList: any = ref({ receiptCode: '', receipt: [] })
 getList()
 let getFindByDoorNoAsync = async () => {
   const data: any = await getFindByDoorNo({ doorNo: props.id })
   console.log(data, 'bbq')
   dataForm.value = data
-}
-const getHeadInfo = async () => {
-  const info = await getFunPaySumAmountApi()
-  headInfo.value = info
-}
-
-const getLpListHandle = async () => {
-  const res: any = await getLpListApi()
-  if (res && res.length) {
-    lpList.value = res
+  let dataList: any = await getFindReceiptByDoorNo({ doorNo: props.id })
+  receiptList.value.receiptCode = dataList.receiptCode
+  receiptList.value.receipt = []
+  if (JSON.parse(dataList.receipt).length > 0) {
+    receiptList.value.receipt = JSON.parse(dataList.receipt).reduce((pre, item) => {
+      pre.push(item.url)
+      return pre
+    }, [])
   }
 }
-const getdistrictTree = async () => {
-  const list = await getVillageTreeApi(projectId)
-  districtTree.value = list || []
-  return list || []
-}
+
 const onClose = (flag = false) => {
   emit('close', flag)
 }
-onMounted(() => {
-  getHeadInfo()
-  getLpListHandle()
-  getdistrictTree()
-})
+
 watch(
   () => props.id,
   () => {

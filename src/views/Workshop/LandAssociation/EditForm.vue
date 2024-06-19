@@ -114,6 +114,7 @@ const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 let options: any = ref([])
 let onClose = () => {
+  formRef.value.resetFields()
   emit('close')
 }
 let form: any = ref({})
@@ -144,6 +145,7 @@ const getdistrictTree = async () => {
   districtTree.value = list || []
   return list || []
 }
+let treeRef = ref()
 let onSubmit = () => {
   console.log(form.value)
   if (!formRef.value) return
@@ -159,7 +161,7 @@ let postRelateUsers = async (e) => {
   let data = await postRelateUser(e)
   emit('getField', data)
 }
-let treeRef = ref()
+let codelist = {}
 let callback = () => {
   if (!form.value.chek) {
     postRelateUsers({
@@ -168,6 +170,10 @@ let callback = () => {
       projectId
     })
   } else {
+    districtTree.value.forEach((item) => {
+      if (item.code == form.value.code) {
+      }
+    })
     postRelateUsers({
       rightHolder: form.value.peasantHouseholdIdTwo,
       ids: props.id.join(','),
@@ -176,12 +182,14 @@ let callback = () => {
     })
   }
 }
-let nodeclick = (node, treeNode) => {
-  console.log(node, treeNode)
+
+let nodeclick = (node) => {
+  console.log(node)
   form.value[getParamsKey(node.districtType)] = node.code
   if (getParamsKey(node.districtType) == 'areaCode') {
     form.value.cityCode = node.parentCode
   }
+  console.log(form.value)
 }
 const getParamsKey = (key: string) => {
   const map = {

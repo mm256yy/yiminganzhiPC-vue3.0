@@ -80,6 +80,13 @@ export const getFindByDoorNo = (params?: any): Promise<TableResponse<FunPayType>
     params
   })
 }
+//资金发放情况 查看 凭证
+export const getFindReceiptByDoorNo = (params?: any): Promise<TableResponse<FunPayType>> => {
+  return request.get({
+    url: '/funReceiptsRecord/findReceiptByDoorNo',
+    params
+  })
+}
 //企业房屋
 export const getEnterpriseAppendant = (params?: any): Promise<TableResponse<FunPayType>> => {
   return request.get({
