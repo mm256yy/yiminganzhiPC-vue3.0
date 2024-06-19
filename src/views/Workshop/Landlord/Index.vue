@@ -215,7 +215,7 @@ const villageTree = ref<any[]>([])
 const districtTree = ref<any[]>([])
 const tableRef = ref()
 
-const landlordIds = ref<number[]>([])
+const landlordIds = ref<any[]>([])
 const headInfo = ref<LandlordHeadInfoType>({
   demographicNum: 0,
   peasantHouseholdNum: 0,
@@ -665,7 +665,7 @@ const onPrint = async () => {
   if (res && res.length) {
     outsideData.value = res.map((item) => item.name)
 
-    landlordIds.value = res.map((item) => item.id)
+    landlordIds.value = res.map((item) => item.doorNo)
     printDialog.value = true
   } else {
     ElMessage.warning('请选择需要打印的居民户')

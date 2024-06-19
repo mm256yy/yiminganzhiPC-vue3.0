@@ -260,9 +260,11 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
   return new Promise(async (resolve, reject) => {
     // 拿到最新的调查对象信息
     if (!landlords.value) {
-      const data = await getLandlordBatchApi(props.landlordIds).catch(() => {
-        reject()
-      })
+      const data = await getLandlordBatchApi({ doorNo: props.landlordIds, status: 'review' }).catch(
+        () => {
+          reject()
+        }
+      )
       const { peasantHouseholdPushDtoList, immigrantGraveList } = data || {}
       if (peasantHouseholdPushDtoList) {
         const realLandlords = handleLandlordWithPrint(
