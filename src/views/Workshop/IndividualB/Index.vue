@@ -602,7 +602,7 @@ const onReset = () => {
 const onPrint = async () => {
   const res = await getSelections()
   if (res && res.length) {
-    landlordIds.value = res.map((item) => item.id)
+    landlordIds.value = res.map((item) => item.doorNo)
     printDialog.value = true
     outsideData.value = res.map((item) => item.name)
   } else {

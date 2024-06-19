@@ -251,7 +251,7 @@ const headInfo = ref<LandlordHeadInfoType>({
   unReportNum: 0
 })
 const outsideData = ref<any>([])
-const landlordIds = ref<number[]>([])
+const landlordIds = ref<any[]>([])
 const printDialog = ref(false)
 const surveyDialog = ref(false)
 const surveyInfo = ref<SurveyInfoType | null>(null)
@@ -306,7 +306,7 @@ const onPrint = async () => {
   console.log(res)
 
   if (res && res.length) {
-    landlordIds.value = res.map((item) => item.id)
+    landlordIds.value = res.map((item) => item.doorNo)
     printDialog.value = true
     outsideData.value = res.map((item) => item.name)
   } else {
