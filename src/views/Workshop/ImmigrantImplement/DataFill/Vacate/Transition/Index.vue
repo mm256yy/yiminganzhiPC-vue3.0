@@ -452,6 +452,7 @@ const add = () => {
     isDelete: 0
   })
   // displayWithIsDeleteArrList.value = [...displayWithIsDeleteArrList.value, ...arrList.value]
+  displayWithIsDeleteArrList.value = arrList.value
   console.log(displayWithIsDeleteArrList.value, '数组')
   // displayWithIsDeleteArrList.value.push({
   //   index: displayWithIsDeleteArrList.value.length,
@@ -515,10 +516,10 @@ const handleStartChange = (index, value) => {
   let date = new Date(value)
   startMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(startMonth.value, endMonth.value, '选中的月份')
-  if (!endMonth.value) {
+  // if (!endMonth.value) {
     let date1 = new Date(arrList.value[index].excessEndDate)
     endMonth.value = date1.getMonth() + 1
-  }
+  // }
   if (startMonth.value && endMonth.value) {
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1
     arrList.value[index].compensationAmount =
@@ -536,10 +537,10 @@ const handleEndChange = (index, value) => {
   let date = new Date(value)
   endMonth.value = date.getMonth() + 1 // getMonth() 返回的月份是从0开始的，所以需要+1
   console.log(endMonth.value, startMonth.value, '选中的月份')
-  if (!startMonth.value) {
+  // if (!startMonth.value) {
     let date1 = new Date(arrList.value[index].excessStartDate)
     startMonth.value = date1.getMonth() + 1
-  }
+  // }
   if (startMonth.value && endMonth.value) {
     console.log(endMonth.value, startMonth.value, '测试数据')
     arrList.value[index].monthNum = endMonth.value - startMonth.value + 1
