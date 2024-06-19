@@ -310,7 +310,7 @@ export const getPeopleInfoDefinition = (landlord: LandlordType, projectInfo: Pro
 
   return {
     content: [
-      getHead(landlord, projectInfo),
+      // getHead(landlord, projectInfo),
       getPeopleTableHead(landlord, projectInfo),
       getPopulation(landlord),
       getHouseInfo(landlord),

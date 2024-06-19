@@ -325,7 +325,9 @@ export const getPeopleTableHead = (landlord: LandlordType, projectInfo: ProjectT
             style: 'td'
           },
           {
-            text: `调查时间：${landlord.reportDateText}`,
+            // text: `调查时间：${landlord.reportDateText}`,
+            text: `调查时间：`,
+
             border: [false, false, false, true],
             alignment: 'left',
             style: 'td'
