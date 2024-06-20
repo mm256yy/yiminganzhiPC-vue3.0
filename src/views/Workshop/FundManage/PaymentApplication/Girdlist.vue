@@ -101,7 +101,13 @@
           align="center"
           header-align="center"
         />
-        <ElTableColumn label="支付节点" prop="paymentNode" align="center" header-align="center">
+        <ElTableColumn
+          label="支付节点"
+          prop="paymentNode"
+          align="center"
+          header-align="center"
+          width="400"
+        >
           <template #default="{ row }">
             <ElCheckboxGroup
               v-model:model-value="check"
@@ -111,15 +117,35 @@
                 }
               "
             >
-              <ElCheckbox v-for="item in row.nodeDtoList" :label="item.id" :key="item.id">{{
-                formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
-              }}</ElCheckbox>
+              <ElCheckbox
+                v-for="item in row.nodeDtoList"
+                :label="item.id"
+                :key="item.id"
+                :disabled="item.payStatus == '2'"
+                >{{
+                  formatDate(item.paymentDate) +
+                  ' ' +
+                  '金额:' +
+                  item.amount +
+                  '元' +
+                  `,已支付金额 :` +
+                  (item.payedAmount || 0) +
+                  '元'
+                }}</ElCheckbox
+              >
             </ElCheckboxGroup>
           </template>
         </ElTableColumn>
+
         <ElTableColumn label="申请金额" align="center" header-align="center">
           <template #default="{ row }">
-            <ElInputNumber class="!w-200px" style="width: 50px" v-model="row.amount" />
+            <ElInputNumber
+              v-for="item in row.nodeDtoList"
+              :key="item.id"
+              v-model="item.amounts"
+              :disabled="item.payStatus == '2'"
+              :max="item.amount - (item.payedAmount || 0)"
+            />
           </template>
         </ElTableColumn>
       </ElTable>
@@ -176,13 +202,16 @@ const onClose = (flag: boolean) => {
 }
 const addSubmit = (flag: boolean) => {
   tableObj.value = tableData.value.reduce((pre, item) => {
-    let nevArr = item.nodeDtoList.filter((res) => check.value.indexOf(res.id) != -1)
+    let nevArr = item.nodeDtoList.filter(
+      (res) => check.value.indexOf(res.id) != -1 && res.amounts > 0
+    )
 
     if (nevArr.length > 0) {
       pre.push({ ...item, nodeDtoList: nevArr })
     }
     return pre
   }, [])
+
   console.log(tableObj.value)
 
   emit('objlist', tableDatas.value)

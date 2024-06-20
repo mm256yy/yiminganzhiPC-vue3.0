@@ -58,7 +58,6 @@
           :data="districtTree"
           placeholder="请选择所属区域"
           nodeKey="code"
-          @node-click="nodeclick"
           :props="{
             value: 'code',
             label: 'name'
@@ -147,10 +146,14 @@ const getdistrictTree = async () => {
 }
 let treeRef = ref()
 let onSubmit = () => {
-  console.log(form.value)
   if (!formRef.value) return
   formRef.value.validate((valid, fields) => {
     if (valid) {
+      // getParentsById(districtTree.value, form.value.code)
+      // console.log(form.value)
+
+      // console.log(getParentsById(districtTree.value, form.value.code))
+      form.value = { ...form.value, ...getParentsById(districtTree.value, form.value.code) }
       callback()
     } else {
       console.log('error submit!', fields)
@@ -184,12 +187,12 @@ let callback = () => {
 }
 
 let nodeclick = (node) => {
-  console.log(node)
-  form.value[getParamsKey(node.districtType)] = node.code
+  let m: any = {}
+  m[getParamsKey(node.districtType)] = node.code
   if (getParamsKey(node.districtType) == 'areaCode') {
-    form.value.cityCode = node.parentCode
+    m.cityCode = node.parentCode
   }
-  console.log(form.value)
+  return m
 }
 const getParamsKey = (key: string) => {
   const map = {
@@ -218,4 +221,21 @@ watch(
     }
   }
 )
+
+function getParentsById(list, code) {
+  for (let i in list) {
+    if (list[i].code === code) {
+      //查询到就返回该数组对象
+      return nodeclick(list[i])
+    }
+
+    if (list[i].children) {
+      let node = getParentsById(list[i].children, code)
+      if (node !== undefined) {
+        //查询到把父节点连起来
+        return { ...node, ...nodeclick(list[i]) }
+      }
+    }
+  }
+}
 </script>

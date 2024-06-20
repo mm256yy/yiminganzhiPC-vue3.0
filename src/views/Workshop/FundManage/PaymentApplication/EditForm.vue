@@ -78,38 +78,6 @@
           <el-radio label="2" size="large">预拨</el-radio>
         </el-radio-group>
       </ElFormItem>
-      <!-- <ElFormItem label="申请总金额:" v-if="form.paymentType == 1">{{ form.amount }}</ElFormItem> -->
-      <!-- <div class="table-wrap">
-        <div class="flex items-center justify-between pb-12px" v-if="actionType != 'add'">
-          <div class="table-header-left">
-            <span style="margin: 0 10px; font-size: 14px; font-weight: 600">{{
-              form.paymentType == 2 ? '付款居民名单' : '付款专业项目名单'
-            }}</span>
-
-            <div class="text">
-              申请总金额:
-              <span class="num">{{ parmasList.amount }}</span> 元
-            </div>
-            <div class="text">
-              审核笔数：
-              <span class="num">{{
-                parmasList.professionalContractList ? parmasList.professionalContractList.length : 0
-              }}</span>
-              笔
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <!-- <ElFormItem label="收款方:" v-if="form.payType == 2 && form.paymentType != 1" prop="payee">
-        <ElSelect class="w-350px" v-model="form.payee">
-          <ElOption
-            v-for="item in dictObj[396]"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </ElSelect>
-      </ElFormItem> -->
       <ElFormItem label="付款对象:" v-if="actionType != 'view'">
         <ElButton type="primary" @click="girdList">选择付款对象</ElButton>
       </ElFormItem>
@@ -182,7 +150,7 @@
           />
           <ElTableColumn label="专项名称" align="center" prop="projectName" header-align="center" />
           <ElTableColumn
-            label="合同名称123"
+            label="合同名称"
             prop="contractName"
             align="center"
             header-align="center"
@@ -210,20 +178,33 @@
             prop="nodeDtoList"
             align="center"
             header-align="center"
-            width="200"
+            width="400"
           >
             <template #default="{ row }">
               <div v-for="(item, index) in row.nodeDtoList" :key="index">{{
-                formatDate(item.paymentDate) + ' ' + '金额:' + item.amount + '元'
+                formatDate(item.paymentDate) +
+                ' ' +
+                '金额:' +
+                item.amount +
+                '元' +
+                `,已支付金额 :` +
+                (item.payedAmount || 0) +
+                '元'
               }}</div>
             </template>
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
-            <template #default="{ row, $index }">
-              <!-- <div v-for="(item, index) in row.nodeDtoList" :key="index">{{ item.amount }}</div> -->
-
-              <div v-if="actionType == 'add'">{{ row.amount }}</div>
-              <div v-else> {{ parmasLists.paymentObjectList[$index]?.amount }} </div>
+            <template #default="{ row }">
+              <div v-if="actionType == 'add'">
+                <div v-for="(item, index) in row.nodeDtoList" :key="index">
+                  {{ item.amounts }}元
+                </div>
+              </div>
+              <div v-else>
+                <div v-for="(item, index) in row.nodeDtoList" :key="index">
+                  {{ item.applyAmount }}元
+                </div></div
+              >
             </template>
           </ElTableColumn>
         </ElTable>
@@ -420,23 +401,14 @@ const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 const targe = ref<boolean>(true)
-// const relocateOtherPic = ref<FileItemType[]>([]) // 其他附件列表
-// const fundAccountList = ref<any[]>([]) // 资金科目
-// 获取资金科目选项列表
-// const getFundSubjectList = () => {
-//   getFundSubjectListApi().then((res: any) => {
-//     if (res) {
-//       fundAccountList.value = res.content
-//     }
-//   })
-// }
+
 watch(
   () => props.row,
   (val) => {
     if (val) {
       // 处理行政区划
       form.value = { ...(val as {}) }
-      console.log(form.value, 'bbq')
+      console.log(form.value, 'bbq', targe)
       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : []
       fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
         if (item.name != '概算外费用') {
@@ -464,6 +436,9 @@ watch(
   (val) => {
     if (val) {
       parmasLists.value = { ...(val as {}) }
+      if (props.actionType != 'add') {
+        targe.value = true
+      }
       console.log(val, 'bbq')
     }
   },
@@ -540,7 +515,12 @@ const tableArr = (val: any) => {
     tableData.value = val
     console.log(tableData.value, '专业项目数据')
     num.value = tableData.value.length
-    amoutPrice.value = tableData.value.reduce((c, item) => c + (item.amount * 1 || 0), 0)
+    amoutPrice.value = tableData.value.reduce((c, item) => {
+      item.nodeDtoList.forEach((e) => {
+        c += e.amounts
+      })
+      return c
+    }, 0)
     console.log(num.value, amoutPrice.value, '计算专业项目的数据')
   }
 }
@@ -608,12 +588,14 @@ const onSubmit = debounce((formEl, status?: number) => {
             item.nodeDtoList.forEach((res) => {
               pre.push({
                 contractId: item.id,
-                amount: item.amount,
-                nodeIds: res.id
+                amount: res.amounts,
+                nodeIds: res.id,
+                payedAmount: res.payedAmount
               })
             })
             return pre
           }, [])
+          console.log(m)
 
           let dataInfo = {}
           m.forEach((item) => {
@@ -622,14 +604,23 @@ const onSubmit = debounce((formEl, status?: number) => {
               dataInfo[contractId] = {
                 contractId,
                 amount,
-                nodeIds: []
+                nodeIds: [],
+                paymentObjectJsonDtoList: []
               }
             }
             dataInfo[contractId].nodeIds.push(item.nodeIds)
+            dataInfo[contractId].paymentObjectJsonDtoList.push(item)
           })
           params.paymentObjectList = Object.values(dataInfo) // list 转换成功的数据
           params.paymentObjectList.forEach((item) => {
             item.nodeIds = item.nodeIds.join(',')
+            item.paymentObjectJsonDtoList = item.paymentObjectJsonDtoList.map((item) => {
+              return {
+                nodeId: item.nodeIds,
+                payedAmount: item.payedAmount || 0,
+                applyAmount: item.amount
+              }
+            })
           })
           console.log(params.paymentObjectList, 'bbq')
         } else {
@@ -641,6 +632,8 @@ const onSubmit = debounce((formEl, status?: number) => {
             }
           })
         }
+        console.log(params)
+
         submit(params, status)
       }
     } else {

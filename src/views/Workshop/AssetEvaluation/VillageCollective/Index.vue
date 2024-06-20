@@ -80,8 +80,8 @@
               </div>
             </div>
           </ElPopover>
-          <ElButton type="primary" @click="onExport" :icon="downloadIcon"> 批量导出 </ElButton>
-          <ElButton type="primary" @click="onImport" :icon="importIcon"> 导入模板 </ElButton>
+          <ElButton type="primary" @click="onExport" :icon="downloadIcon"> 下载模板 </ElButton>
+          <ElButton type="primary" @click="onImport" :icon="importIcon"> 批量导入 </ElButton>
         </ElSpace>
       </div>
       <Table
