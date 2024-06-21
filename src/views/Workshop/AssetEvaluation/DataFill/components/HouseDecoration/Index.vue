@@ -467,9 +467,17 @@ const getModelValue = (row: any) => {
     }
   })
   if (row.isBuyItNow == '1') {
+    console.log(tableDataF.value)
+
     tableDataF.value.map((item: any) => {
       if (item.houseNo == row.houseNo) {
         row.number = item.landArea
+        if (item.houseTypeCategory == '1') {
+          row.price = 300
+        }
+        if (item.houseTypeCategory == '3') {
+          row.price = 100
+        }
       }
     })
     row.unit = 'm²'
