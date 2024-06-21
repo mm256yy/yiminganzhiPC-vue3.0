@@ -31,7 +31,6 @@
         class="flex-col flex-1"
         :data="tableData"
         border
-        show-summary
         :summary-method="getSummaries"
         style="width: 100%; max-height: 480px"
         height="480"
@@ -39,15 +38,15 @@
         <el-table-column label="序号" type="index" align="center" width="80" />
         <el-table-column prop="villageCodeText" label="行政村" align="center" />
         <el-table-column prop="name" label="户主姓名" align="center" />
-        <el-table-column prop="familyNumber" label="户号" align="center" />
-        <el-table-column prop="countAgriculture" label="坟墓与登记人关系" align="center" />
-        <el-table-column prop="countRetirement" label="穴位" align="center" />
-        <el-table-column prop="countSelfEmployee" label="数量" align="center" />
-        <el-table-column prop="countSelfEmployee" label="处理方式" align="center" />
-        <el-table-column prop="countSelfEmployee" label="安置公墓/择址地址" align="center" />
-        <el-table-column prop="countSelfEmployee" label="确认状态" align="center" />
+        <el-table-column prop="showDoorNo" label="户号" align="center" />
+        <el-table-column prop="relationText" label="坟墓与登记人关系" align="center" />
+        <el-table-column prop="graveTypeText" label="穴位" align="center" />
+        <el-table-column prop="number" label="数量" align="center" />
+        <el-table-column prop="handleWayText" label="处理方式" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column prop="graveArrangementStatus" label="确认状态" align="center" />
       </el-table>
-      <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p>
+      <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
           v-model:current-page="pageNum"
@@ -64,6 +63,8 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import {
   ElButton,
   ElTable,
@@ -79,8 +80,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
-  getProHouseReportListApi,
-  exportProHouseReportApi
+  getImmigrantGraveStatisticsApi,
+  exportProHouseGraveReportApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -100,6 +101,8 @@ let extraParams = reactive({
   doorNo: undefined,
   name: undefined
 })
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
@@ -125,7 +128,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -160,11 +163,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'handleWay',
     label: '处理方式',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Select',
+      componentProps: {
+        options: dictObj.value[238]
+      }
     },
     table: {
       show: false
@@ -177,11 +183,17 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'graveArrangementStatus',
     label: '确认状态',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Select',
+      componentProps: {
+        options: [
+          { label: '已完成', value: 1 },
+          { label: '未完成', value: 0 }
+        ]
+      }
     },
     table: {
       show: false
@@ -210,7 +222,7 @@ const getProHouseReportList = () => {
     projectId
   }
   tableLoading.value = true
-  getProHouseReportListApi(params).then(
+  getImmigrantGraveStatisticsApi(params).then(
     (res) => {
       tableData.value = res.reports.content
       totalNum.value = res.reports.total
@@ -308,7 +320,7 @@ const onExport = async () => {
     ...extraParams,
     projectId
   }
-  const res = await exportProHouseReportApi(params)
+  const res = await exportProHouseGraveReportApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]

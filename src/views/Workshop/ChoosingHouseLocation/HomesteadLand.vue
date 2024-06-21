@@ -31,7 +31,6 @@
         class="flex-col flex-1"
         :data="tableData"
         border
-        show-summary
         :summary-method="getSummaries"
         style="width: 100%; max-height: 480px"
         height="480"
@@ -39,13 +38,14 @@
         <el-table-column label="序号" type="index" align="center" width="80" />
         <el-table-column prop="villageCodeText" label="行政村" align="center" />
         <el-table-column prop="name" label="户主" align="center" />
-        <el-table-column prop="familyNumber" label="户号" align="center" />
-        <el-table-column prop="countAgriculture" label="安置点" align="center" />
-        <el-table-column prop="countRetirement" label="户型" align="center" />
-        <el-table-column prop="countSelfEmployee" label="地块编号" align="center" />
-        <el-table-column prop="countSelfEmployee" label="确认状态" align="center" />
+        <el-table-column prop="showDoorNo" label="户号" align="center" />
+        <el-table-column prop="settleAddressText" label="安置点" align="center" />
+        <el-table-column prop="area" label="户型" align="center" />
+        <el-table-column prop="landNo" label="地块编号" align="center" />
+        <!-- 不详 -->
+        <el-table-column prop="productionArrangementStatus" label="确认状态" align="center" />
       </el-table>
-      <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p>
+      <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
           v-model:current-page="pageNum"
@@ -77,8 +77,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
-  getProHouseReportListApi,
-  exportProHouseReportApi
+  getSiteHomesteadStatisticsListApi,
+  exportSiteHomesteadStatisticsApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -158,7 +158,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'settleAddressText',
     label: '安置点',
     search: {
       show: true,
@@ -175,11 +175,17 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'productionArrangementStatus',
     label: '确认状态',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Select',
+      componentProps: {
+        options: [
+          { label: '已完成', value: 1 },
+          { label: '未完成', value: 0 }
+        ]
+      }
     },
     table: {
       show: false
@@ -208,10 +214,10 @@ const getProHouseReportList = () => {
     projectId
   }
   tableLoading.value = true
-  getProHouseReportListApi(params).then(
+  getSiteHomesteadStatisticsListApi(params).then(
     (res) => {
-      tableData.value = res.reports.content
-      totalNum.value = res.reports.total
+      tableData.value = res.content
+      totalNum.value = res.total
       percent.value = toPercent(res.percent)
       totalCountObj.value = res.total
       tableLoading.value = false
@@ -306,7 +312,7 @@ const onExport = async () => {
     ...extraParams,
     projectId
   }
-  const res = await exportProHouseReportApi(params)
+  const res = await exportSiteHomesteadStatisticsApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]

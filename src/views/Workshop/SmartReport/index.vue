@@ -306,60 +306,20 @@ const listArray = ref([
           }
         ]
       },
-      // {
-      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
-      //   name: '安置确认',
-      //   list: [
-      //     {
-      //       value: 'ProductionPlacement',
-      //       text: '生产安置'
-      //     },
-      //     {
-      //       value: 'RelocationResettlement',
-      //       text: '搬迁安置'
-      //     },
-      //     {
-      //       value: 'TombPlacement',
-      //       text: '坟墓安置'
-      //     }
-      //   ]
-      // },
-      // {
-      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
-      //   name: '选房择址',
-      //   list: [
-      //     {
-      //       value: 'HomesteadLand',
-      //       text: '宅基地'
-      //     },
-      //     {
-      //       value: 'Apartment',
-      //       text: '公寓房'
-      //     },
-      //     {
-      //       value: 'ProductionLand',
-      //       text: '生产用地'
-      //     },
-      //     {
-      //       value: 'Cemetery',
-      //       text: '公墓'
-      //     }
-      //   ]
-      // }
       {
         url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
         name: '安置确认',
         list: [
           {
-            value: 'bbq',
+            value: 'ProductionPlacement',
             text: '生产安置'
           },
           {
-            value: 'bbq',
+            value: 'RelocationResettlement',
             text: '搬迁安置'
           },
           {
-            value: 'bbq',
+            value: 'TombPlacement',
             text: '坟墓安置'
           }
         ]
@@ -369,23 +329,63 @@ const listArray = ref([
         name: '选房择址',
         list: [
           {
-            value: 'bbq',
+            value: 'HomesteadLand',
             text: '宅基地'
           },
           {
-            value: 'bbq',
+            value: 'Apartment',
             text: '公寓房'
           },
           {
-            value: 'bbq',
+            value: 'ProductionLand',
             text: '生产用地'
           },
           {
-            value: 'bbq',
+            value: 'Cemetery',
             text: '公墓'
           }
         ]
       }
+      // {
+      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+      //   name: '安置确认',
+      //   list: [
+      //     {
+      //       value: 'bbq',
+      //       text: '生产安置'
+      //     },
+      //     {
+      //       value: 'bbq',
+      //       text: '搬迁安置'
+      //     },
+      //     {
+      //       value: 'bbq',
+      //       text: '坟墓安置'
+      //     }
+      //   ]
+      // },
+      // {
+      //   url: new URL('../../../assets/imgs/smarts/icon_SmartReports(7).png', import.meta.url).href,
+      //   name: '选房择址',
+      //   list: [
+      //     {
+      //       value: 'bbq',
+      //       text: '宅基地'
+      //     },
+      //     {
+      //       value: 'bbq',
+      //       text: '公寓房'
+      //     },
+      //     {
+      //       value: 'bbq',
+      //       text: '生产用地'
+      //     },
+      //     {
+      //       value: 'bbq',
+      //       text: '公墓'
+      //     }
+      //   ]
+      // }
     ]
   },
   {

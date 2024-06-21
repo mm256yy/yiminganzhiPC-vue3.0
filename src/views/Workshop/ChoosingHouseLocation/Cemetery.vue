@@ -31,7 +31,6 @@
         class="flex-col flex-1"
         :data="tableData"
         border
-        show-summary
         :summary-method="getSummaries"
         style="width: 100%; max-height: 480px"
         height="480"
@@ -39,16 +38,16 @@
         <el-table-column label="序号" type="index" align="center" width="80" />
         <el-table-column prop="villageCodeText" label="行政村" align="center" />
         <el-table-column prop="name" label="户主姓名" align="center" />
-        <el-table-column prop="doorNo" label="户号" align="center" />
-        <el-table-column prop="familyNumber" label="坟墓与登记" align="center" />
-        <el-table-column prop="countAgriculture" label="穴位" align="center" />
-        <el-table-column prop="countRetirement" label="数量" align="center" />
-        <el-table-column prop="countSelfEmployee" label="安置公墓/择址地址" align="center" />
-        <el-table-column prop="countSelfEmployee" label="坟墓编号" align="center" />
-        <el-table-column prop="countSelfEmployee" label="备注" align="center" />
-        <el-table-column prop="countSelfEmployee" label="确认状态" align="center" />
+        <el-table-column prop="showDoorNo" label="户号" align="center" />
+        <el-table-column prop="relationText" label="坟墓与登记" align="center" />
+        <el-table-column prop="graveTypeText" label="穴位" align="center" />
+        <el-table-column prop="number" label="数量" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column prop="graveNo" label="坟墓编号" align="center" />
+        <el-table-column prop="remark" label="备注" align="center" />
+        <el-table-column prop="graveArrangementStatus" label="确认状态" align="center" />
       </el-table>
-      <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p>
+      <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
           v-model:current-page="pageNum"
@@ -80,8 +79,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
-  getProHouseReportListApi,
-  exportProHouseReportApi
+  getImmigrantGraveStatisticsApi,
+  exportImmigrantGraveSiteExportApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -126,7 +125,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -161,7 +160,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'name',
+    field: 'settingGrave',
     label: '安置公墓',
     search: {
       show: true,
@@ -194,7 +193,7 @@ const getProHouseReportList = () => {
     projectId
   }
   tableLoading.value = true
-  getProHouseReportListApi(params).then(
+  getImmigrantGraveStatisticsApi(params).then(
     (res) => {
       tableData.value = res.reports.content
       totalNum.value = res.reports.total
@@ -292,7 +291,7 @@ const onExport = async () => {
     ...extraParams,
     projectId
   }
-  const res = await exportProHouseReportApi(params)
+  const res = await exportImmigrantGraveSiteExportApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]

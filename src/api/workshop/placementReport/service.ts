@@ -1,7 +1,7 @@
 import request from '@/config/axios'
 
 /**
- * 查询生产安置意愿报表
+ * 查询安置确认生产安置意愿报表
  */
 export const getProHouseReportListApi = (params: any) => {
   return request.get({
@@ -10,7 +10,7 @@ export const getProHouseReportListApi = (params: any) => {
   })
 }
 
-// 导出生产安置意愿报表
+// 导出安置确认生产安置意愿报表
 export const exportProHouseReportApi = (params: any) => {
   return request.get({
     url: `/immigrantWillReport/productWillExport`,
@@ -20,7 +20,25 @@ export const exportProHouseReportApi = (params: any) => {
 }
 
 /**
- * 查询搬迁安置意愿报表
+ * 查询模拟安置生产安置意愿报表
+ */
+export const getProHouseSimulateReportListApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/productWillSimulateStatistics',
+    params
+  })
+}
+
+// 导出模拟安置生产安置意愿报表
+export const exportProHouseSimulateReportApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/productWillSimulateExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+/**
+ * 查询安置确认搬迁安置意愿报表
  */
 export const getMoveHouseReportListApi = (params: any) => {
   return request.get({
@@ -30,11 +48,93 @@ export const getMoveHouseReportListApi = (params: any) => {
 }
 
 /**
- * 查询搬迁安置意愿报表-标题（动态）
+ * 查询安置确认搬迁安置意愿报表-标题（动态）
  */
 export const getMoveHouseReportListTitleApi = () => {
   return request.get({
     url: '/immigrantWillReport/findRemovalWillStatisticsTitle'
+  })
+}
+
+/**
+ * 查询选房择址宅基地表
+ */
+export const getSiteHomesteadStatisticsListApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/siteHomesteadStatistics',
+    params
+  })
+}
+
+// 导出选房择址宅基地表
+export const exportSiteHomesteadStatisticsApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/siteHomesteadExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+/**
+ * 查询选房择址公寓房表
+ */
+export const getSiteHouseStatisticsApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/siteHouseStatistics',
+    params
+  })
+}
+
+// 导出选房择址公寓房表
+export const exportSiteHouseStatisticsApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/siteHouseExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+/**
+ * 查询选房择址生产用地表
+ */
+export const getProductLandStatisticsApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/productLandStatistics',
+    params
+  })
+}
+
+// 导出选房择址生产用地表
+export const exportProductLandExportApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/productLandExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+/**
+ * 查询选房择址坟墓表
+ */
+export const getImmigrantGraveStatisticsApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/immigrantGraveStatistics',
+    params
+  })
+}
+
+// 导出选房择址坟墓表
+export const exportImmigrantGraveSiteExportApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/immigrantGraveSiteExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+
+// 导出安置确认坟墓安置
+export const exportProHouseGraveReportApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/immigrantGraveExport`,
+    params,
+    responseType: 'blob'
   })
 }
 

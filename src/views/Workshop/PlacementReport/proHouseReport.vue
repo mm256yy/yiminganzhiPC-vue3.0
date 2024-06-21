@@ -75,8 +75,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
-  getProHouseReportListApi,
-  exportProHouseReportApi
+  getProHouseSimulateReportListApi,
+  exportProHouseSimulateReportApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -121,7 +121,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: '户号',
     search: {
       show: true,
@@ -172,7 +172,7 @@ const getProHouseReportList = () => {
     projectId
   }
   tableLoading.value = true
-  getProHouseReportListApi(params).then(
+  getProHouseSimulateReportListApi(params).then(
     (res) => {
       tableData.value = res.reports.content
       totalNum.value = res.reports.total
@@ -270,7 +270,7 @@ const onExport = async () => {
     ...extraParams,
     projectId
   }
-  const res = await exportProHouseReportApi(params)
+  const res = await exportProHouseSimulateReportApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]
