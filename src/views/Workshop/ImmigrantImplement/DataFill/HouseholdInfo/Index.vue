@@ -35,7 +35,7 @@
             </ElCol>
             <ElCol :span="12">
               <!-- <MapFormItem :required="false" :positon="position" @change="onChosePosition" /> -->
-              <ElFormItem label="宅基地总面积(㎡)：" label-width="150px" required>
+              <ElFormItem label="合法占地面积(㎡)：" label-width="150px" required>
                 <ElInput v-model="position.homesteadArea" placeholder="请输入" />
               </ElFormItem>
             </ElCol>

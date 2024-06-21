@@ -43,7 +43,7 @@
         <el-table-column prop="area" label="户型" align="center" />
         <el-table-column prop="landNo" label="地块编号" align="center" />
         <!-- 不详 -->
-        <el-table-column prop="productionArrangementStatus" label="确认状态" align="center" />
+        <el-table-column prop="chooseHouseStatus" label="确认状态" align="center" />
       </el-table>
       <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
@@ -82,7 +82,9 @@ import {
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
+import { resettleAreas } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
 
+const resettleAreaLists = ref<any[]>([])
 const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)
@@ -158,11 +160,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settleAddressText',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Select',
+      componentProps: {
+        options: resettleAreaLists
+      }
     },
     table: {
       show: false
@@ -175,15 +180,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'productionArrangementStatus',
+    field: 'chooseHouseStatus',
     label: '确认状态',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
         options: [
-          { label: '已完成', value: 1 },
-          { label: '未完成', value: 0 }
+          { label: '已完成', value: '1' },
+          { label: '未完成', value: '0' }
         ]
       }
     },
@@ -198,6 +203,16 @@ const schema = reactive<CrudSchema[]>([
     }
   }
 ])
+const getSettleAddress = async () => {
+  let m = await resettleAreas() //安置点全量数据
+  resettleAreaLists.value = m.map((item: any) => {
+    return {
+      label: item.name,
+      value: item.code
+    }
+  })
+  console.log(resettleAreaLists.value, 'bba')
+}
 const { allSchemas } = useCrudSchemas(schema)
 const tableData = ref([])
 //百分比
@@ -331,6 +346,7 @@ const onExport = async () => {
 
 onMounted(() => {
   getVillageTree()
+  getSettleAddress()
 })
 </script>
 

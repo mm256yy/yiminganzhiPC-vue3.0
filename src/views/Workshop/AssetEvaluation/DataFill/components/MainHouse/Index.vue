@@ -67,7 +67,7 @@
             <ElInput placeholder="请输入" v-model="scope.row.situated" />
           </template>
         </ElTableColumn>
-        <ElTableColumn
+        <!-- <ElTableColumn
           label="房屋类别"
           :width="160"
           prop="houseType"
@@ -78,6 +78,24 @@
             <ElSelect clearable placeholder="请选择" v-model="row.houseType">
               <ElOption
                 v-for="item in dictObj[266]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </template>
+        </ElTableColumn> -->
+        <ElTableColumn
+          label="用途类型"
+          :width="160"
+          prop="houseTypeCategory"
+          align="center"
+          header-align="center"
+        >
+          <template #default="{ row }">
+            <ElSelect clearable placeholder="请选择" v-model="row.houseTypeCategory">
+              <ElOption
+                v-for="item in dictObj[439]"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -198,7 +216,7 @@
           </template>
         </ElTableColumn>
         <ElTableColumn
-          label="宅基地面积(㎡)"
+          label="合法占地面积(㎡)"
           :width="180"
           prop="homesteadArea"
           align="center"

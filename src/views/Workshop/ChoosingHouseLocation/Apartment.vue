@@ -45,7 +45,7 @@
         <el-table-column prop="storeroomNo" label="储藏室编号" align="center" />
         <el-table-column prop="carNo" label="车位编号" align="center" />
         <!-- productionArrangementStatus 生产安置状态 relocateArrangementStatus搬迁安置状态 -->
-        <el-table-column prop="relocateArrangementStatus" label="确认状态" align="center" />
+        <el-table-column prop="chooseHouseStatus" label="确认状态" align="center" />
       </el-table>
       <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
@@ -84,6 +84,7 @@ import {
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
+import { resettleAreas } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
 
 const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
@@ -100,6 +101,7 @@ let extraParams = reactive({
   doorNo: undefined,
   name: undefined
 })
+const resettleAreaLists = ref<any[]>([])
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
@@ -160,11 +162,14 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'settleAddressText',
+    field: 'settleAddress',
     label: '安置点',
     search: {
       show: true,
-      component: 'Input'
+      component: 'Select',
+      componentProps: {
+        options: resettleAreaLists
+      }
     },
     table: {
       show: false
@@ -177,15 +182,15 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'relocateArrangementStatus',
+    field: 'chooseHouseStatus',
     label: '确认状态',
     search: {
       show: true,
       component: 'Select',
       componentProps: {
         options: [
-          { label: '已完成', value: 1 },
-          { label: '未完成', value: 0 }
+          { label: '已完成', value: '1' },
+          { label: '未完成', value: '0' }
         ]
       }
     },
@@ -238,7 +243,16 @@ const handleCurrentChange = (val: number) => {
   pageNum.value = val
   getProHouseReportList()
 }
-
+const getSettleAddress = async () => {
+  let m = await resettleAreas() //安置点全量数据
+  resettleAreaLists.value = m.map((item: any) => {
+    return {
+      label: item.name,
+      value: item.code
+    }
+  })
+  console.log(resettleAreaLists.value, 'bba')
+}
 const getSummaries = (params: any) => {
   const { columns } = params
   const sums: string[] = []
@@ -333,6 +347,7 @@ const onExport = async () => {
 
 onMounted(() => {
   getVillageTree()
+  getSettleAddress()
 })
 </script>
 

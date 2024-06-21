@@ -190,8 +190,8 @@ const schema = reactive<CrudSchema[]>([
       component: 'Select',
       componentProps: {
         options: [
-          { label: '已完成', value: 1 },
-          { label: '未完成', value: 0 }
+          { label: '已完成', value: '1' },
+          { label: '未完成', value: '0' }
         ]
       }
     },
