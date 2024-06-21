@@ -63,6 +63,7 @@
       <!-- 房屋装修评估 -->
       <house-decoration
         v-show="tabCurrentId === TabIds[1]"
+        :show="tabCurrentId === TabIds[1]"
         :doorNo="doorNo"
         :householdId="Number(householdId)"
         :projectId="Number(projectId)"

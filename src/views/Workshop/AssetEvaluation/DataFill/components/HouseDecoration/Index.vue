@@ -233,7 +233,7 @@
   </WorkContentWrap>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted, reactive } from 'vue'
+import { ref, computed, onMounted, reactive, watch } from 'vue'
 import { useDictStoreWithOut } from '@/store/modules/dict'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -264,6 +264,7 @@ interface PropsType {
   projectId: number
   uid: string
   baseInfo: any
+  show: any
 }
 
 const props = defineProps<PropsType>()
@@ -493,6 +494,15 @@ const getModelValue = (row: any) => {
 onMounted(() => {
   getList()
 })
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      getList()
+    }
+  },
+  { deep: true }
+)
 </script>
 <style lang="less" scoped>
 .btn-txt {
