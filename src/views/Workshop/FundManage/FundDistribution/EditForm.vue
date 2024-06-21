@@ -33,18 +33,21 @@
     <ElForm :model="receiptList">
       <ElFormItem label="凭证编号:"> {{ receiptList.receiptCode }}</ElFormItem>
       <ElFormItem label="凭证文件:">
-        <ElImage
-          v-for="i in receiptList.receipt"
-          :key="i"
-          style="width: 100px; height: 100px"
-          :src="i"
-          :zoom-rate="1.2"
-          :max-scale="7"
-          :min-scale="0.2"
-          :preview-src-list="receiptList.receipt"
-          :initial-index="4"
-          fit="cover"
-      /></ElFormItem>
+        <div style="display: flex; justify-content: flex-start">
+          <ElImage
+            v-for="i in receiptList.receipt"
+            :key="i"
+            style="width: 100px; height: 100px; margin-right: 10px"
+            :src="i"
+            :zoom-rate="1.2"
+            :max-scale="7"
+            :min-scale="0.2"
+            :preview-src-list="receiptList.receipt"
+            :initial-index="4"
+            fit="cover"
+          />
+        </div>
+      </ElFormItem>
     </ElForm>
   </ElDialog>
 </template>

@@ -610,7 +610,7 @@ const onSubmit = debounce((formEl, status?: number) => {
             item.nodeDtoList.forEach((res) => {
               pre.push({
                 contractId: item.id,
-                amount: res.amounts,
+                amount: props.actionType == 'edit' ? res.applyAmount : res.amounts,
                 nodeIds: res.id,
                 payedAmount: res.payedAmount
               })
