@@ -301,16 +301,19 @@ watch(
     if (props.show) {
       check.value = props.selence
       getdistrictTree()
+      let params: any = { code: code.value, keywords: search.value }
+      ppsList(params)
     }
     tableDatas.value = []
     console.log('Tbb', tableDatas.value)
+    check.value = []
   },
   { deep: true, immediate: true }
 )
-onMounted(() => {
-  let params: any = { code: code.value, keywords: search.value }
-  ppsList(params)
-})
+// onMounted(() => {
+//   let params: any = { code: code.value, keywords: search.value }
+//   ppsList(params)
+// })
 </script>
 
 <style lang="less">

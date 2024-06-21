@@ -53,6 +53,7 @@
           showCheckbox
           checkStrictly
           checkOnClickNode
+          default-expand-all
           :default-checked-keys="[form.funSubjectId]"
         />
         <span v-else>{{ form.funSubjectIdText }}</span>
@@ -402,13 +403,57 @@ const dialogVisible = ref<boolean>(false)
 const relocateVerifyPic = ref<FileItemType[]>([]) // 搬迁安置确认单文件列表
 const targe = ref<boolean>(true)
 
+// watch(
+//   () => props.row,
+//   (val) => {
+//     if (val) {
+//       // 处理行政区划
+//       form.value = { ...(val as {}) }
+//       console.log(form.value, 'bbq', targe)
+//       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : []
+//       fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
+//         if (item.name != '概算外费用') {
+//           pre.push(item)
+//         }
+//         return pre
+//       }, [])
+//       // if (props.actionType === 'edit') {{
+//       //   form.value.nodeDtoList=
+//       // }
+//       // }
+
+//       // position.longitude = form.value.longitude
+//       // position.latitude = form.value.latitude
+//       // position.address = form.value.address
+//     }
+//   },
+//   {
+//     immediate: true,
+//     deep: true
+//   }
+// )
+// watch(
+//   () => props.parmasList,
+//   (val) => {
+//     if (val) {
+//       parmasLists.value = { ...(val as {}) }
+//       if (props.actionType != 'add') {
+//         targe.value = true
+//       }
+//       console.log(val, 'bbq')
+//     }
+//   },
+//   { deep: true }
+// )
 watch(
-  () => props.row,
+  () => props.show,
   (val) => {
     if (val) {
-      // 处理行政区划
-      form.value = { ...(val as {}) }
-      console.log(form.value, 'bbq', targe)
+      parmasLists.value = { ...(props.parmasList as {}) }
+      if (props.actionType != 'add') {
+        targe.value = true
+      }
+      form.value = { ...(props.parmasList as {}) }
       relocateVerifyPic.value = form.value?.receipt ? JSON.parse(form.value?.receipt) : []
       fundAccountLists.value = props.fundAccountList.reduce((pre, item) => {
         if (item.name != '概算外费用') {
@@ -416,30 +461,7 @@ watch(
         }
         return pre
       }, [])
-      // if (props.actionType === 'edit') {{
-      //   form.value.nodeDtoList=
-      // }
-      // }
-
-      // position.longitude = form.value.longitude
-      // position.latitude = form.value.latitude
-      // position.address = form.value.address
-    }
-  },
-  {
-    immediate: true,
-    deep: true
-  }
-)
-watch(
-  () => props.parmasList,
-  (val) => {
-    if (val) {
-      parmasLists.value = { ...(val as {}) }
-      if (props.actionType != 'add') {
-        targe.value = true
-      }
-      console.log(val, 'bbq')
+      console.log(form.value, 'bbq')
     }
   },
   { deep: true }

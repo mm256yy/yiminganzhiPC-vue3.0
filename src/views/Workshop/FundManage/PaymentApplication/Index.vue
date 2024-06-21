@@ -112,7 +112,7 @@ const projectId = appStore.currentProjectId
 const vill = ref<any>()
 const fundAccountList = ref<any[]>([]) // 资金科目
 const otherList = ref<any>({})
-const parmasList = ref<any[]>([])
+const parmasList: any = ref<any[]>([])
 // 获取资金科目选项列表
 const getFundSubjectList = () => {
   getFundSubjectListApi().then((res: any) => {
@@ -197,17 +197,14 @@ const onDelRow = async (row: any, multiple: boolean) => {
 
 const onAddRow = () => {
   actionType.value = 'add'
-  tableObject.currentRow = {}
+  parmasList.value = {}
 
   vill.value.refresh()
   dialog.value = true
 }
 
-const onEditRow = (row: any) => {
-  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res
-    console.log(res.funPaymentRequestFlowNodeList, '测试')
-  })
+const onEditRow = async (row: any) => {
+  parmasList.value = await PaymentApplicationByIdDetailApi(row.id, 1)
   tableObject.currentRow = {
     ...row
   }
@@ -215,12 +212,8 @@ const onEditRow = (row: any) => {
   tableObject.currentRow = row
   dialog.value = true
 }
-const onViewRow = (row: any) => {
-  PaymentApplicationByIdDetailApi(row.id, 1).then((res: any) => {
-    parmasList.value = res
-    console.log(res.funPaymentRequestFlowNodeList, '测试')
-    tableObject.currentRow = res
-  })
+const onViewRow = async (row: any) => {
+  parmasList.value = await PaymentApplicationByIdDetailApi(row.id, 1)
   actionType.value = 'view'
   // tableObject.currentRow = {
   //   ...row
