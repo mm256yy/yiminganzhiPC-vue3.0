@@ -4,9 +4,10 @@
       <div class="common-label">宅基地安置人数：</div>
       <div class="common-value">
         <div class="value-center">
-          <span v-if="baseInfo.familyNum || baseInfo.addPopulationNum"
+          <!-- <span v-if="baseInfo.familyNum || baseInfo.addPopulationNum"
             >{{ baseInfo.familyNum + baseInfo.addPopulationNum }}人，</span
-          >
+          > -->
+          <span>{{ demographicListLength }}人，</span>
           <span v-if="baseInfo.ruralMigrantNum"
             >其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，</span
           >
@@ -97,7 +98,7 @@ import {
   getPlacementPointListApi,
   getPlacementPointByIdApi
 } from '@/api/systemConfig/placementPoint-service'
-
+import { getDemographicListApi } from '@/api/workshop/population/service'
 import type { PlacementPointDtoType } from '@/api/systemConfig/placementPoint-types'
 import { toNumber } from 'lodash-es'
 
@@ -117,6 +118,7 @@ const AreaDetailRef: any = ref(null)
 const areaType = ref('1')
 const appStore = useAppStore()
 const settleAddressList = ref<PlacementPointDtoType[]>([])
+const demographicListLength = ref<any>()
 
 const getSettleAddressList = async () => {
   const params = {
@@ -129,7 +131,23 @@ const getSettleAddressList = async () => {
   try {
     const result = await getPlacementPointListApi(params)
     settleAddressList.value = result.content
-    console.log(settleAddressList.value, '测试数据')
+    console.log(settleAddressList.value, '测试数据111')
+  } catch {}
+}
+const getDemographicList = async () => {
+  const params = {
+    isContainDelete: 1,
+    doorNo: props.doorNo,
+    status: 'implementation',
+    size: 50,
+    page: 0
+  }
+  try {
+    const demographicList = await getDemographicListApi(params)
+    demographicListLength.value = demographicList.content.filter(
+      (item) => item.isOrganMember == '1'
+    ).length
+    console.log(demographicListLength.value, '测试数据222')
   } catch {}
 }
 
@@ -197,6 +215,7 @@ const submitResettle = async () => {
 
 onMounted(() => {
   getSettleAddressList()
+  getDemographicList()
 })
 </script>
 

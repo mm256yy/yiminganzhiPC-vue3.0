@@ -44,7 +44,18 @@
             </ElSelect>
           </ElFormItem>
         </ElCol>
-        <ElCol :span="12" />
+        <ElCol :span="12">
+          <ElFormItem label="村集体组织人口" prop="isOrganMember ">
+            <ElSelect clearable filterable v-model="form.isOrganMember" class="!w-full">
+              <ElOption
+                v-for="item in isOrganMemberList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
+          </ElFormItem>
+        </ElCol>
       </ElRow>
 
       <ElRow v-if="form.addReason == '3'">
@@ -385,7 +396,16 @@ const householdPic = ref<FileItemType[]>([])
 const otherPic = ref<FileItemType[]>([])
 const imgUrl = ref<string>('')
 const dialogVisible = ref<boolean>(false)
-
+const isOrganMemberList = ref<any>([
+  {
+    label: '是',
+    value: '1'
+  },
+  {
+    label: '否',
+    value: '0'
+  }
+])
 const headers = {
   'Project-Id': appStore.getCurrentProjectId,
   Authorization: appStore.getToken

@@ -1,5 +1,5 @@
 import { LandlordType, PrintType, ProjectType } from '@/types/print'
-import { logo } from './config'
+import { logo, imageLoad } from './config'
 import {
   getPeopleHouseDefinition,
   getPeopleInfoDefinition,
@@ -217,7 +217,9 @@ class PrintCore {
           const images: any = {}
           if (imgs && imgs.length) {
             imgs.forEach((url, dex) => {
-              images[`img_${dex}`] = url
+              if (imageLoad(url)) {
+                images[`img_${dex}`] = url
+              }
             })
           }
           const definition = getPeopleHouseDefinition(landlord, projectInfo)

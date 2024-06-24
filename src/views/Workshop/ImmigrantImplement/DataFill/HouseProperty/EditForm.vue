@@ -626,6 +626,10 @@ const onSubmit = debounce((formEl) => {
         ElMessage.error('请上传不合法建筑佐证材料')
         return
       }
+      if (form.value.landIllegalArea < 0) {
+        ElMessage.error('不合法面积不能为负数')
+        return false
+      }
       const data: any = {
         ...form.value,
         ownersSituation: form.value.ownersSituation.toString(),
@@ -753,6 +757,7 @@ onMounted(() => {
     display: none;
   }
 }
+
 .col-wrapper {
   display: flex;
   align-items: center;

@@ -1,5 +1,5 @@
 import { LandlordType, ProjectType, MainType } from '@/types/print'
-import { imgHeight, layout } from './config'
+import { imgHeight, layout, imageLoad } from './config'
 import { SurveyStatusEnum } from '@/views/Workshop/components/config'
 import { filterViewDoorNo } from '@/utils'
 
@@ -715,14 +715,23 @@ export const getHousePic = (landlord: LandlordType) => {
   const body: any[] = [[{ text: '房屋示意图', bold: true, fontSize: 12, style: 'td' }]]
   if (images && images.length) {
     images.forEach((_img, dex) => {
-      body.push([
-        {
-          image: `img_${dex}`,
-          fit: [540, imgHeight]
-        }
-      ])
+      if (imageLoad(_img)) {
+        body.push([
+          {
+            image: `img_${dex}`,
+            fit: [540, imgHeight]
+          }
+        ])
+      }
     })
   } else {
+    body.push([
+      {
+        text: '无'
+      }
+    ])
+  }
+  if (body.length == 1) {
     body.push([
       {
         text: '无'

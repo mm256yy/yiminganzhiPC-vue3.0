@@ -694,13 +694,13 @@ const getStatus = (data: any) => {
       tabsListCopy[4].active = true // 安置确认
     }
     if (data.chooseStatus === '1') {
-      tabsListCopy[5].active = true // 择址确认
+      tabsListCopy[7].active = true // 择址确认
     }
     if (data.agreementStatus === '1') {
-      tabsListCopy[7].active = true // 移民建卡
+      tabsListCopy[6].active = true // 协议签订
     }
     if (data.cardStatus === '1') {
-      tabsListCopy[6].active = true // 协议签订
+      tabsListCopy[5].active = true // 移民建卡
     }
     if (data.excessSoarStatus === '1') {
       tabsListCopy[8].active = true // 腾空过渡
