@@ -81,7 +81,7 @@
         </ElSelect>
       </ElFormItem>
       <div class="w-466px">
-        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+        <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
       </div>
       <!-- <div class="w-466px">
         <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
