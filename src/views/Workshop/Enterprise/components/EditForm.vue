@@ -112,7 +112,7 @@
         </ElSelect>
       </ElFormItem>
       <div class="w-466px">
-        <MapFormItem :required="false" :positon="position" @change="onChosePosition" />
+        <MapFormItem :required="true" :positon="position" @change="onChosePosition" />
       </div>
     </ElForm>
 
@@ -332,6 +332,10 @@ const doorTypeChange = (val) => {
 const onSubmit = debounce((formEl) => {
   formEl?.validate((valid) => {
     if (valid) {
+      if (!position.latitude || !position.longitude) {
+        ElMessage.error('请选择位置')
+        return
+      }
       btnLoading.value = true
       const data: any = {
         ...form.value,
