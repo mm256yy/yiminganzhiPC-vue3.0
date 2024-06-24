@@ -146,7 +146,7 @@ export const getPeopleHouseDefinition = (landlord: LandlordType, projectInfo: Pr
   }
   return {
     content: [
-      getHead(landlord, projectInfo),
+      // getHead(landlord, projectInfo),
       getPeopleTableHead(landlord, projectInfo),
       getHousePic(landlord)
     ],

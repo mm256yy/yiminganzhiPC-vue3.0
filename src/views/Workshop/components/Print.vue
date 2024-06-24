@@ -259,6 +259,7 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
   const { templateId, returndataType } = options || {}
   return new Promise(async (resolve, reject) => {
     // 拿到最新的调查对象信息
+    landlords.value = null
     if (!landlords.value) {
       const data = await getLandlordBatchApi({ doorNo: props.landlordIds, status: 'review' }).catch(
         () => {
