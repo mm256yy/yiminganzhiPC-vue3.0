@@ -757,6 +757,7 @@ onMounted(() => {
     display: none;
   }
 }
+
 .col-wrapper {
   display: flex;
   align-items: center;
