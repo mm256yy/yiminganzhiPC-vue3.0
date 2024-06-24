@@ -67,9 +67,11 @@
           v-model="form.phone"
         />
       </ElFormItem>
+
       <ElFormItem label="村集体属性：" prop="address">{{
         form.villageType == 'asset' ? '普通集体资产' : form.villageType == 'grave' ? '坟墓' : '-'
       }}</ElFormItem>
+
       <ElFormItem label="淹没范围" prop="inundationRange" v-if="false">
         <ElSelect class="!w-350px" clearable v-model="form.inundationRange">
           <ElOption
@@ -161,9 +163,15 @@ const defaultValue: Omit<LandlordDtoType, 'id'> = {
   longitude: 0,
   name: '',
   parentCode: [],
-  locationType: 'SubmergedArea'
+  locationType: 'SubmergedArea',
+  villageType: ''
 }
 const form = ref<Omit<LandlordDtoType, 'id'>>(defaultValue)
+
+if (props.actionType === 'add') {
+  form.value.villageType = 'asset'
+}
+
 const position: {
   latitude: number
   longitude: number

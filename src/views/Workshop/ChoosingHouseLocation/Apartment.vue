@@ -168,7 +168,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: resettleAreaLists
+        options: resettleAreaLists.value
       }
     },
     table: {
@@ -343,7 +343,6 @@ const onExport = async () => {
   elink.click()
   document.body.removeChild(elink)
   URL.revokeObjectURL(elink.href)
-  console.log('1111111111111111111111')
 }
 
 onMounted(() => {
