@@ -83,7 +83,7 @@ import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
 import { resettleAreas } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
 
-const resettleAreaLists = ref<any[]>([])
+const resettleAreaLists = ref<any>([])
 const { back } = useRouter()
 const BackIcon = useIcon({ icon: 'iconoir:undo' })
 const pageSize = ref(10)

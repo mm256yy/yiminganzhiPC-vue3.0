@@ -101,7 +101,7 @@ let extraParams = reactive({
   doorNo: undefined,
   name: undefined
 })
-const resettleAreaLists = ref<any[]>([])
+const resettleAreaLists = ref<any>([])
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
