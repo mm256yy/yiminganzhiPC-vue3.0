@@ -60,7 +60,7 @@
               clearable
               placeholder="请选择"
               v-model="row.isBuyItNow"
-              @change="getModelValue(row)"
+              @change="getModelValue(row, 'isBuyItNow')"
             >
               <ElOption
                 v-for="item in fixedPriceOptions"
@@ -444,8 +444,9 @@ const onSave = () => {
 }
 
 // 自动计算评估金额
-const getModelValue = (row: any) => {
+const getModelValue = (row: any, flat = 'no') => {
   console.log(row, 'row')
+
   cfNoList.value.forEach((item: any) => {
     if (item.houseNo == row.houseNo) {
       fixedPriceOptions.value = [
@@ -486,6 +487,9 @@ const getModelValue = (row: any) => {
     row.valuationAmount = totalPrice
     row.compensationAmount = totalPrice
   } else {
+    if ((flat = 'isBuyItNow')) {
+      row.price = '0'
+    }
     const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)
     row.valuationAmount = totalPrice
     row.compensationAmount = totalPrice
