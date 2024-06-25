@@ -701,7 +701,7 @@ export const getGrave = (landlord: LandlordType) => {
   }
   return {
     table: {
-      widths: [20, 80, 80, 80, 80, 80, 80],
+      widths: [20, 80, 80, 80, 80, 80, 70],
       headerRows: 2,
       body
     },

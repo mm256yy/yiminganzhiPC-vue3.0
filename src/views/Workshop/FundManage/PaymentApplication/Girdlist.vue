@@ -118,16 +118,20 @@
               "
             >
               <div style="height: 40px" v-for="item in row.nodeDtoList" :key="item.id">
-                <ElCheckbox :label="item.id" :disabled="item.payStatus == '2'">{{
-                  formatDate(item.paymentDate) +
-                  ' ' +
-                  '金额:' +
-                  item.amount +
-                  '元' +
-                  `,已支付金额 :` +
-                  (item.payedAmount || 0) +
-                  '元'
-                }}</ElCheckbox>
+                <ElCheckbox
+                  :label="item.id"
+                  :disabled="item.payStatus == '2' || item.amount == item.payedAmount"
+                  >{{
+                    formatDate(item.paymentDate) +
+                    ' ' +
+                    '金额:' +
+                    item.amount +
+                    '元' +
+                    `,已支付金额 :` +
+                    (item.payedAmount || 0) +
+                    '元'
+                  }}</ElCheckbox
+                >
                 <div style="color: red; height: 20px; font-size: 12px" v-if="item.payStatus == '2'">
                   *（该节点存在审批中申请，无法再次提交申请）
                 </div>
@@ -141,7 +145,7 @@
             <div style="height: 40px" v-for="item in row.nodeDtoList" :key="item.id">
               <ElInputNumber
                 v-model="item.amounts"
-                :disabled="item.payStatus == '2'"
+                :disabled="item.payStatus == '2' || item.amount == item.payedAmount"
                 :max="item.amount - (item.payedAmount || 0)"
               />
             </div>

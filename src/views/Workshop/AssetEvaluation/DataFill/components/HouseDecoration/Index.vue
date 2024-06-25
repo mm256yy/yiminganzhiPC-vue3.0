@@ -487,7 +487,7 @@ const getModelValue = (row: any, flat = 'no') => {
     row.valuationAmount = totalPrice
     row.compensationAmount = totalPrice
   } else {
-    if ((flat = 'isBuyItNow')) {
+    if (flat == 'isBuyItNow') {
       row.price = '0'
     }
     const totalPrice = Number(row.number) * Number(row.price) * Number(row.discountRate)

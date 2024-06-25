@@ -223,7 +223,7 @@
         </el-table>
         <div style="display: flex; justify-content: space-between; height: 50px">
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
-            户主代表或收委托人(签名)：
+            户主代表或授委托人(签名)：
           </div>
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
             联系移民干部(签名)：
@@ -253,7 +253,7 @@
         </el-table>
         <div style="display: flex; justify-content: space-between; height: 50px">
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
-            户主代表或收委托人(签名)：
+            户主代表或授委托人(签名)：
           </div>
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
             联系移民干部(签名)：
@@ -300,7 +300,7 @@
         </el-table>
         <div style="display: flex; justify-content: space-between; height: 50px">
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
-            户主代表或收委托人(签名)：
+            户主代表或授委托人(签名)：
           </div>
           <div style="line-height: 50px; border: 1px solid black; border-top: 0px; flex: 1">
             联系移民干部(签名)：
