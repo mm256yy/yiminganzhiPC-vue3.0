@@ -1,7 +1,7 @@
 <template>
   <div class="homestead-wrap">
     <div class="common-form-item">
-      <div class="common-label">宅基地安置人数：</div>
+      <div class="common-label">村集体组织成员人数：</div>
       <div class="common-value">
         <div class="value-center">
           <!-- <span v-if="baseInfo.familyNum || baseInfo.addPopulationNum"

@@ -45,7 +45,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="村集体组织人口" prop="isOrganMember ">
+          <ElFormItem label="村集体组织人口" prop="isOrganMember">
             <ElSelect clearable filterable v-model="form.isOrganMember" class="!w-full">
               <ElOption
                 v-for="item in isOrganMemberList"
@@ -385,7 +385,8 @@ const defaultValue: Omit<DemographicDtoType, 'id'> = {
   marital: '', // 婚姻状况
   censusType: '', // 户籍册类别
   populationNature: '', // 人口性质
-  checkRemark: '' // 备注
+  checkRemark: '', // 备注
+  isOrganMember: ''
 }
 const form = ref<Omit<DemographicDtoType, 'id'>>(defaultValue)
 const occupationOptions = ref<any>([]) // 职业选项
@@ -494,7 +495,8 @@ const rules = reactive<FormRules>({
   censusType: [required()],
   populationNature: [required()],
   phone: [required()],
-  incrementAddReason: [required()]
+  incrementAddReason: [required()],
+  isOrganMember: [required()]
 })
 
 // 关闭弹窗
