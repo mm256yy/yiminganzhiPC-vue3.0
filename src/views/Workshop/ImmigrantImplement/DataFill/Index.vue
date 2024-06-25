@@ -36,6 +36,13 @@
               icon="gg:check-o"
               :color="tabCurrentId === item.id ? '#fff' : '#3e73ec'"
             />
+
+            <img
+              v-if="item.activeNew"
+              class="ml-2px img-16"
+              src="../../../../assets/imgs/icon_g.png"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -63,6 +70,13 @@
             <Icon :icon="item.icon" color="#3E73EC" />
             <div class="tit">{{ item.name }}</div>
             <Icon v-if="item.active" class="active-icon" icon="gg:check-o" color="#3e73ec" />
+
+            <img
+              v-if="item.activeNew"
+              class="ml-2px img-16"
+              src="../../../../assets/imgs/icon_g.png"
+              alt=""
+            />
           </div>
         </div>
       </div>
@@ -527,7 +541,7 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage } from 'element-plus'
+import { ElBreadcrumb, ElBreadcrumbItem, ElButton, ElMessage, ElIcon } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
 import { useIcon } from '@/hooks/web/useIcon'
 import {
@@ -683,36 +697,68 @@ const getStatus = (data: any) => {
     // 第一层 Tab
     if (data.householdPicStatus === '1') {
       tabsListCopy[0].active = true // 居民户信息
+    } else if (data.householdPicStatus === '2') {
+      tabsListCopy[0].activeNew = true // 居民户信息
     }
+
     if (data.qualificationStatus === '1') {
       tabsListCopy[1].active = true // 资格认定
+    } else if (data.qualificationStatus === '2') {
+      tabsListCopy[1].activeNew = true // 资格认定
     }
+
     if (data.estimateeStatus === '1') {
       tabsListCopy[2].active = true // 资产评估
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[2].activeNew = true // 资产评估
     }
+
     if (data.arrangementStatus === '1') {
       tabsListCopy[4].active = true // 安置确认
+    } else if (data.arrangementStatus === '2') {
+      tabsListCopy[4].activeNew = true // 安置确认
     }
+
     if (data.chooseStatus === '1') {
       tabsListCopy[7].active = true // 择址确认
+    } else if (data.chooseStatus === '2') {
+      tabsListCopy[7].activeNew = true // 择址确认
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[6].active = true // 协议签订
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[6].activeNew = true // 协议签订
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[5].active = true // 移民建卡
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[5].activeNew = true // 移民建卡
     }
+
     if (data.excessSoarStatus === '1') {
       tabsListCopy[8].active = true // 腾空过渡
+    } else if (data.excessSoarStatus === '2') {
+      tabsListCopy[8].activeNew = true // 腾空过渡
     }
+
     if (data.relocateArrangementAllStatus === '1') {
       tabsListCopy[9].active = true // 搬迁安置
+    } else if (data.relocateArrangementAllStatus === '2') {
+      tabsListCopy[9].activeNew = true // 搬迁安置
     }
+
     if (data.productionArrangementAllStatus === '1') {
       tabsListCopy[10].active = true // 生产安置
+    } else if (data.productionArrangementAllStatus === '2') {
+      tabsListCopy[10].activeNew = true // 生产安置
     }
+
     if (data.proceduresStatus === '1') {
       tabsListCopy[11].active = true // 相关手续
+    } else if (data.proceduresStatus === '2') {
+      tabsListCopy[11].activeNew = true // 相关手续
     }
   } else if (type === 'Enterprise') {
     if (tabCurrentId.value === 0) {
@@ -730,18 +776,32 @@ const getStatus = (data: any) => {
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[0].activeNew = true // 资产评估
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[1].active = true // 企业建卡
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[1].activeNew = true // 企业建卡
     }
+
     if (data.excessSoarStatus === '1') {
       tabsListCopy[3].active = true // 腾空
+    } else if (data.excessSoarStatus === '2') {
+      tabsListCopy[3].activeNew = true // 腾空
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[2].active = true // 动迁协议
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[2].activeNew = true // 动迁协议
     }
+
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true // 相关手续
+    } else if (data.proceduresStatus === '2') {
+      tabsListCopy[4].activeNew = true // 相关手续
     }
   } else if (type === 'IndividualB') {
     if (tabCurrentId.value === 0) {
@@ -759,18 +819,32 @@ const getStatus = (data: any) => {
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[0].activeNew = true
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[1].active = true
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[1].activeNew = true
     }
+
     if (data.excessSoarStatus === '1') {
       tabsListCopy[3].active = true
+    } else if (data.excessSoarStatus === '2') {
+      tabsListCopy[3].activeNew = true
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[2].active = true
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[2].activeNew = true
     }
+
     if (data.proceduresStatus === '1') {
       tabsListCopy[4].active = true
+    } else if (data.proceduresStatus === '2') {
+      tabsListCopy[4].activeNew = true
     }
   } else if (type === 'Village') {
     if (tabCurrentId.value === 0) {
@@ -788,52 +862,94 @@ const getStatus = (data: any) => {
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[0].activeNew = true // 资产评估
     }
+
     if (data.houseSoarStatus === '1') {
       tabsListCopy[3].active = true // 腾空
+    } else if (data.houseSoarStatus === '2') {
+      tabsListCopy[3].activeNew = true // 腾空
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[2].active = true // 协议签订
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[2].activeNew = true // 协议签订
     }
+
     if (data.disposalMeasuresStatus === '1') {
       tabsListCopy[4].active = true // 集体资产处置方法
+    } else if (data.disposalMeasuresStatus === '2') {
+      tabsListCopy[4].activeNew = true // 集体资产处置方法
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[1].active = true // 移民建卡
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[1].activeNew = true // 移民建卡
     }
   } else if (type === 'LandNoMove' && nowbody == 'PeasantHousehold') {
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[0].activeNew = true // 资产评估
     }
+
     if (data.productionArrangementStatus === '1') {
       tabsListCopy[1].active = true // 安置确认
+    } else if (data.productionArrangementStatus === '2') {
+      tabsListCopy[1].activeNew = true // 安置确认
     }
+
     if (data.landSoarStatus === '1') {
       tabsListCopy[4].active = true // 土地腾让
+    } else if (data.landSoarStatus === '2') {
+      tabsListCopy[4].activeNew = true // 土地腾让
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[2].active = true // 补偿卡
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[2].activeNew = true // 补偿卡
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[3].active = true // 征地协议
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[3].activeNew = true // 征地协议
     }
+
     if (data.arrangementStatus === '1') {
       tabsListCopy[5].active = true // 生产安置办理
+    } else if (data.arrangementStatus === '2') {
+      tabsListCopy[5].activeNew = true // 生产安置办理
     }
   } else if (type === 'LandNoMove' && nowbody == 'Other') {
     // 第一层 Tab
     if (data.estimateeStatus === '1') {
       tabsListCopy[0].active = true // 资产评估
+    } else if (data.estimateeStatus === '2') {
+      tabsListCopy[0].activeNew = true // 资产评估
     }
+
     if (data.landSoarStatus === '1') {
       tabsListCopy[3].active = true // 土地腾让
+    } else if (data.landSoarStatus === '2') {
+      tabsListCopy[3].activeNew = true // 土地腾让
     }
+
     if (data.cardStatus === '1') {
       tabsListCopy[1].active = true // 补偿卡
+    } else if (data.cardStatus === '2') {
+      tabsListCopy[1].activeNew = true // 补偿卡
     }
+
     if (data.agreementStatus === '1') {
       tabsListCopy[2].active = true // 征地协议
+    } else if (data.agreementStatus === '2') {
+      tabsListCopy[2].activeNew = true // 征地协议
     }
   }
 
@@ -1108,5 +1224,10 @@ const onFeedbackClose = () => {
   padding: 12px 16px 16px;
   background: #ffffff;
   border-radius: 4px;
+}
+
+.img-16 {
+  width: 16px;
+  height: 16px;
 }
 </style>

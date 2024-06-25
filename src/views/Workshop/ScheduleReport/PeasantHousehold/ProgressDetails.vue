@@ -43,6 +43,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.populationStatus == '2'"> - </div>
                 <div e-else></div>
               </template>
             </el-table-column>
@@ -54,6 +55,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.propertyStatus == '2'"> - </div>
                 <div e-else></div> </template
             ></el-table-column>
           </el-table-column>
@@ -66,6 +68,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.appendageStatus == '2'"> - </div>
                 <div e-else></div>
               </template>
             </el-table-column>
@@ -77,6 +80,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.landStatus == '2'"> - </div>
                 <div v-else></div>
                 <div e-else></div>
               </template>
@@ -92,6 +96,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.productionArrangementStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -104,6 +109,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.relocateArrangementStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -116,6 +122,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.graveArrangementStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -130,6 +137,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.landUseStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -141,6 +149,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.chooseHouseStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -152,6 +161,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.chooseGraveStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -164,6 +174,7 @@
                 icon="ep:check"
                 color="#000"
               />
+              <div v-else-if="row.cardStatus == '2'"> - </div>
               <div v-else></div>
             </template>
           </el-table-column>
@@ -176,6 +187,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.houseSoarStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -187,6 +199,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.landSoarStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -198,6 +211,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.excessStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -210,6 +224,7 @@
                 icon="ep:check"
                 color="#000"
               />
+              <div v-else-if="row.agreementStatus == '2'"> - </div>
               <div v-else></div>
             </template>
           </el-table-column>
@@ -224,6 +239,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.buildOneselfStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -236,6 +252,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.flatsStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -252,6 +269,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.centralizedSupportStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -263,6 +281,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.selfSeekingStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -282,6 +301,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.aricutureArrangementStatus == '2'"> - </div>
                 <div v-else></div> </template
             ></el-table-column>
 
@@ -293,6 +313,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.retirementStatus == '2'"> - </div>
                 <div v-else></div> </template
             ></el-table-column>
             <el-table-column
@@ -308,6 +329,7 @@
                   icon="ep:check"
                   color="#000"
                 />
+                <div v-else-if="row.selfEmploymentStatus == '2'"> - </div>
                 <div v-else></div>
               </template>
             </el-table-column>
@@ -320,6 +342,7 @@
                 icon="ep:check"
                 color="#000"
               />
+              <div v-else-if="row.proceduresStatus == '2'"> - </div>
               <div v-else></div>
             </template>
           </el-table-column>

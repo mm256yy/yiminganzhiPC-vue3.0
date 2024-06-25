@@ -291,7 +291,7 @@ const checkIsOpenDialog = () => {
       latitude,
       address
     }
-    dialog.value = true
+    // dialog.value = true
   }
 }
 

@@ -834,9 +834,10 @@ const careerOption = ref({
         pre += item.value
         return pre
       }, 0)
-      console.log(m, singleData)
+      // singleData[0].value = 0
+      console.log(11111, m, singleData)
 
-      return name + ' | ' + ((singleData[0].value / m) * 100).toFixed(2) + '%'
+      return name + ' | ' + ((singleData[0].value / m) * 100 || 0).toFixed(2) + '%'
     }
   },
   tooltip: {

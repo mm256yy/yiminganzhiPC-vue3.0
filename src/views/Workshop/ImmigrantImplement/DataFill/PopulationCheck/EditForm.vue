@@ -45,7 +45,7 @@
           </ElFormItem>
         </ElCol>
         <ElCol :span="12">
-          <ElFormItem label="村集体组织人口" prop="isOrganMember">
+          <ElFormItem label="村集体组织人口" prop="isOrganMember ">
             <ElSelect clearable filterable v-model="form.isOrganMember" class="!w-full">
               <ElOption
                 v-for="item in isOrganMemberList"
