@@ -291,13 +291,15 @@ const checkIsOpenDialog = () => {
       latitude,
       address
     }
-    // dialog.value = true
+
+    if (sessionStorage.getItem('isDefaultOpen') === '1') {
+      dialog.value = true
+    }
   }
 }
 
-checkIsOpenDialog()
-
 onMounted(() => {
+  checkIsOpenDialog()
   getVillageTree()
   getLandlordHeadInfo()
 })

@@ -91,9 +91,9 @@
 
             <div class="text">
               申请总金额:
-              <span class="num">{{
-                actionType != 'add' && targe ? parmasLists.amount : amoutPrice
-              }}</span>
+              <span class="num">
+                {{ actionType != 'add' && targe ? parmasLists.amount : amoutPrice }}
+              </span>
               元
             </div>
             <div class="text">
@@ -196,14 +196,14 @@
           </ElTableColumn>
           <ElTableColumn label="申请金额" prop="amount" align="center" header-align="center">
             <template #default="{ row }">
-              <div v-if="actionType == 'add'">
+              <div v-if="actionType != 'add' && targe">
                 <div v-for="(item, index) in row.nodeDtoList" :key="index">
-                  {{ item.amounts }}元
+                  {{ item.applyAmount }}元
                 </div>
               </div>
               <div v-else>
                 <div v-for="(item, index) in row.nodeDtoList" :key="index">
-                  {{ item.applyAmount }}元
+                  {{ item.amounts }}元
                 </div></div
               >
             </template>
@@ -523,24 +523,27 @@ const onFormPupClose = (flag: boolean) => {
 }
 const objListArr = (list: any) => {
   //其他
-  if (form.value.paymentType == 2) {
+  if (form.value.paymentType == '2') {
     console.log(list, '测试用的')
     otherData.value = toRaw(list)
     num.value = otherData.value.length
+    targe.value = false
     amoutPrice.value = otherData.value.reduce((c, item) => c + item.amount * 1, 0)
     console.log(num.value, amoutPrice.value, '计算其他的数据')
   }
 }
 const tableArr = (val: any) => {
   //专业项目
-  if (form.value.paymentType == 1) {
+  if (form.value.paymentType == '1') {
     tableData.value = val
-    console.log(tableData.value, '专业项目数据')
+    targe.value = false
+    console.log(tableData.value, '专业项目数据', props.actionType)
     num.value = tableData.value.length
     amoutPrice.value = tableData.value.reduce((c, item) => {
       item.nodeDtoList.forEach((e) => {
         c += e.amounts
       })
+
       return c
     }, 0)
     console.log(num.value, amoutPrice.value, '计算专业项目的数据')
@@ -592,7 +595,7 @@ const onSubmit = debounce((formEl, status?: number) => {
           receipt: JSON.stringify(relocateVerifyPic.value || []), // 申请凭证
           payType: form.value.payType || '1' // 默认支付
         }
-        console.log(tableData.value, '提交测试')
+        console.log(tableData.value, '提交测试', form.value.paymentType)
         if (form.value.paymentType == 1) {
           if (props.actionType == 'edit') {
             parmasLists.value.professionalContractList.forEach((item, index) => {
@@ -602,15 +605,20 @@ const onSubmit = debounce((formEl, status?: number) => {
               }
             })
           }
+
           let m = toRaw(
-            props.actionType == 'edit'
+            // props.actionType == 'edit'
+            //   ? parmasLists.value.professionalContractList
+            //   : tableData.value
+            props.actionType != 'add' && targe.value
               ? parmasLists.value.professionalContractList
               : tableData.value
           ).reduce((pre, item) => {
             item.nodeDtoList.forEach((res) => {
               pre.push({
                 contractId: item.id,
-                amount: props.actionType == 'edit' ? res.applyAmount : res.amounts,
+                amount: props.actionType != 'add' && targe.value ? res.applyAmount : res.amounts,
+
                 nodeIds: res.id,
                 payedAmount: res.payedAmount
               })
