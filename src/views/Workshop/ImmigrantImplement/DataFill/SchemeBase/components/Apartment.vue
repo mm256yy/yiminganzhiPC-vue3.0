@@ -1,10 +1,10 @@
 <template>
   <div class="apartment-wrap">
     <div class="common-form-item">
-      <div class="common-label flex-center">公寓房安置人数：</div>
+      <!-- <div class="common-label flex-center">公寓房安置人数：</div> -->
       <div class="common-value">
         <div class="value-center">
-          <span v-if="baseInfo.familyNum">{{ baseInfo.familyNum }}人，</span>
+          <span v-if="baseInfo.familyNum">公寓房安置人数：{{ baseInfo.familyNum }}人，</span>
           <span v-if="baseInfo.ruralMigrantNum"
             >其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，</span
           >
