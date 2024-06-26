@@ -1,13 +1,13 @@
 <template>
   <div class="homestead-wrap">
     <div class="common-form-item">
-      <div class="common-label">村集体组织成员人数：</div>
+      <!-- <div class="common-label">村集体组织成员人数：</div> -->
       <div class="common-value">
         <div class="value-center">
           <!-- <span v-if="baseInfo.familyNum || baseInfo.addPopulationNum"
             >{{ baseInfo.familyNum + baseInfo.addPopulationNum }}人，</span
           > -->
-          <span>{{ demographicListLength }}人，</span>
+          <span>村集体组织成员人数：{{ demographicListLength }}人，</span>
           <span v-if="baseInfo.ruralMigrantNum"
             >其中该户农村移民 ：{{ baseInfo.ruralMigrantNum }} 人，</span
           >
