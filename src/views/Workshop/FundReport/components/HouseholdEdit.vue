@@ -45,7 +45,7 @@
           </ElTable>
         </div>
       </ElCol>
-      <ElCol :span="12">
+      <ElCol :span="12" v-if="props.village != 'true'">
         <div class="segment-label">其他</div>
         <div>
           <ElTable :data="tableData4" style="width: 100%" height="250">
