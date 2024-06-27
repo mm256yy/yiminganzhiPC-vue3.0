@@ -40,7 +40,7 @@
         <el-table-column prop="name" label="户主" align="center" />
         <el-table-column prop="showDoorNo" label="户号" align="center" />
         <el-table-column prop="settleAddressText" label="安置点" align="center" />
-        <el-table-column prop="area" label="户型" align="center" />
+        <el-table-column prop="area" label="户型（m²）" align="center" />
         <el-table-column prop="landNo" label="地块编号" align="center" />
         <!-- 不详 -->
         <el-table-column prop="chooseHouseStatus" label="确认状态" align="center" />
@@ -166,7 +166,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: resettleAreaLists.value
+        options: resettleAreaLists
       }
     },
     table: {

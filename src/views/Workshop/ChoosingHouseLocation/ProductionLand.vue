@@ -165,7 +165,7 @@ const schema = reactive<CrudSchema[]>([
       show: true,
       component: 'Select',
       componentProps: {
-        options: resettleAreaLists.value
+        options: resettleAreaLists
       }
     },
     table: {
