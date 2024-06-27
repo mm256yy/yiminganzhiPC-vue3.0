@@ -245,6 +245,9 @@ const handleCurrentChange = (val: number) => {
 }
 const getSettleAddress = async () => {
   let m = await resettleAreas() //安置点全量数据
+  m = m.filter((item: any) => {
+    return item.type == '2'
+  })
   resettleAreaLists.value = m.map((item: any) => {
     return {
       label: item.name,

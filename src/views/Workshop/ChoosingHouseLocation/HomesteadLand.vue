@@ -205,6 +205,10 @@ const schema = reactive<CrudSchema[]>([
 ])
 const getSettleAddress = async () => {
   let m = await resettleAreas() //安置点全量数据
+  m = m.filter((item: any) => {
+    return item.type == '1'
+  })
+  console.log(m, '数据')
   resettleAreaLists.value = m.map((item: any) => {
     return {
       label: item.name,

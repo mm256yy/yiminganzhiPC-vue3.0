@@ -311,6 +311,9 @@ const onReset = () => {
 }
 const getSettleAddress = async () => {
   let m = await resettleAreas() //安置点全量数据
+  m = m.filter((item: any) => {
+    return item.isProductionLand == '1'
+  })
   resettleAreaLists.value = m.map((item: any) => {
     return {
       label: item.name,
