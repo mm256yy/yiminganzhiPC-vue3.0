@@ -121,6 +121,7 @@
       :templateType="PrintType.printCompany"
       @close="onPrintDialogClose"
       :outsideData="outsideData"
+      :titleStatus="globalData.currentSurveyStatus"
     />
 
     <Export

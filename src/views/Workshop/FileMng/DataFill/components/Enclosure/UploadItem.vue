@@ -15,35 +15,49 @@
         :on-success="uploadFileChange"
         :on-error="onError"
         :before-remove="() => false"
-        :on-progress="() => emit('progress', true)"
+        :on-progress="
+          (event:any) => {
+            loadProgress = parseInt(event.percent)
+            emit('progress', true)
+          }
+        "
       >
         <template #file="{ file }">
-          <div class="flex items-center w-full">
-            <div class="img-box" @click="imgPreview(file)">
-              <img :src="file.url" alt="" />
-            </div>
-            <div class="flex-1">
-              <ElInput
-                v-if="file.edit"
-                v-model="file.name"
-                clearable
-                placeholder="修改附件名称"
-                @blur="file.edit = false"
-              />
-              <div v-else class="flex items-center justify-between">
-                <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
-                <ElTooltip placement="top" content="修改附件名称">
-                  <Icon
-                    icon="uil:edit-alt"
-                    color="var(--el-color-primary)"
-                    @click="file.edit = true"
-                  />
-                </ElTooltip>
+          <div>
+            <div class="flex items-center w-full">
+              <div class="img-box" @click="imgPreview(file)">
+                <img :src="file.url" alt="" />
+              </div>
+              <div class="flex-1">
+                <ElInput
+                  v-if="file.edit"
+                  v-model="file.name"
+                  clearable
+                  placeholder="修改附件名称"
+                  @blur="file.edit = false"
+                />
+                <div v-else class="flex items-center justify-between">
+                  <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
+                  <ElTooltip placement="top" content="修改附件名称">
+                    <Icon
+                      icon="uil:edit-alt"
+                      color="var(--el-color-primary)"
+                      @click="file.edit = true"
+                    />
+                  </ElTooltip>
+                </div>
+              </div>
+              <div class="upload-delete" @click="removeFile(file)">
+                <Icon icon="ph:x" :size="14" />
               </div>
             </div>
-            <div class="upload-delete" @click="removeFile(file)">
-              <Icon icon="ph:x" :size="14" />
-            </div>
+            <ElProgress
+              v-if="file.status != 'success'"
+              :text-inside="true"
+              :percentage="loadProgress"
+            >
+              <span></span
+            ></ElProgress>
           </div>
         </template>
         <template #trigger>
@@ -62,7 +76,15 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue'
-import { ElUpload, ElDialog, ElInput, ElButton, ElTooltip, ElMessage } from 'element-plus'
+import {
+  ElUpload,
+  ElDialog,
+  ElInput,
+  ElButton,
+  ElTooltip,
+  ElMessage,
+  ElProgress
+} from 'element-plus'
 import { useAppStore } from '@/store/modules/app'
 // UploadFiles
 import type { UploadFile } from 'element-plus'
@@ -158,6 +180,7 @@ const imgPreview = (uploadFile: UploadFile) => {
   imgUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
+let loadProgress = ref()
 </script>
 
 <style lang="less">

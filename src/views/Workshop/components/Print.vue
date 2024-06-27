@@ -83,6 +83,7 @@ interface PropsType {
   landlordIds: number[]
   outsideData: any[]
   templateType: PrintType
+  titleStatus?: any
 }
 
 interface PrintListType {
@@ -261,11 +262,12 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
     // 拿到最新的调查对象信息
     landlords.value = null
     if (!landlords.value) {
-      const data = await getLandlordBatchApi({ doorNo: props.landlordIds, status: 'review' }).catch(
-        () => {
-          reject()
-        }
-      )
+      const data = await getLandlordBatchApi({
+        doorNo: props.landlordIds,
+        status: props.titleStatus
+      }).catch(() => {
+        reject()
+      })
       const { peasantHouseholdPushDtoList, immigrantGraveList } = data || {}
       if (peasantHouseholdPushDtoList) {
         const realLandlords = handleLandlordWithPrint(

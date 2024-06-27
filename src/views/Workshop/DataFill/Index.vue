@@ -354,6 +354,7 @@
       :landlordIds="[householdId]"
       @close="onPrintDialogClose"
       :baseInfo="baseInfo"
+      :titleStatus="globalData.currentSurveyStatus"
     />
 
     <ElDialog

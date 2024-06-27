@@ -67,6 +67,7 @@ interface PropsType {
   show: boolean
   landlordIds: number[]
   baseInfo: any
+  titleStatus?: any
 }
 
 interface PrintListType {
@@ -196,7 +197,7 @@ const generatorPdf = (options?: { templateId?: number; returndataType?: string }
     if (!landlords.value) {
       const data = await getLandlordBatchApi({
         doorNo: props.baseInfo.doorNo,
-        status: 'review'
+        status: props.titleStatus
       }).catch(() => {
         reject()
       })

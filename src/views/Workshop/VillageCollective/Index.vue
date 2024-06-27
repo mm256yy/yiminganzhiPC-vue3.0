@@ -150,6 +150,7 @@
       :templateType="PrintType.village"
       @close="onPrintDialogClose"
       :outsideData="outsideData"
+      :titleStatus="globalData.currentSurveyStatus"
     />
     <Export
       :show="exportDialog"

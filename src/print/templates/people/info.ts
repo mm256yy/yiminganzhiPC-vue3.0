@@ -316,7 +316,7 @@ export const getPeopleInfoDefinition = (landlord: LandlordType, projectInfo: Pro
       getHouseInfo(landlord),
       getFushuwu(landlord),
       getTree(landlord),
-      landlord.immigrantGraveList.length > 0 ? getGrave(landlord) : null
+      landlord.immigrantGraveList?.length > 0 ? getGrave(landlord) : null
     ],
     footer: getFooter
   }

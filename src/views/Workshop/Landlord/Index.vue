@@ -25,7 +25,9 @@
           </div>
         </div>
         <ElSpace>
-          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete">批量删除</ElButton>
+          <ElButton :icon="deleteIcon" type="primary" @click="onBatchDelete" v-if="permissions"
+            >批量删除</ElButton
+          >
           <ElButton type="primary" @click="onExport">数据导出</ElButton>
           <ElButton :icon="addIcon" type="primary" @click="onAddRow">添加居民户</ElButton>
           <ElButton :icon="printIcon" type="default" @click="onPrint">打印表格</ElButton>
@@ -124,6 +126,7 @@
       :landlordIds="landlordIds"
       :outsideData="outsideData"
       @close="onPrintDialogClose"
+      :titleStatus="globalData.currentSurveyStatus"
     />
     <Export
       :show="exportDialog"
@@ -197,6 +200,20 @@ import type {
 import { filterViewDoorNos, formatDate } from '@/utils/index'
 import { PrintType } from '@/types/print'
 import { useDictStoreWithOut } from '@/store/modules/dict'
+import { useAppStoreWithOut } from '@/store/modules/app'
+
+const { getPermissions } = useAppStoreWithOut()
+const permissions = computed(() => {
+  let m = false
+  console.log(getPermissions, 'bbq')
+
+  for (let i of getPermissions) {
+    if (i == 'ant-design:user-delete') {
+      m = true
+    }
+  }
+  return m
+})
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
 const router = useRouter()
@@ -306,6 +323,7 @@ onMounted(() => {
   getVillageTree()
   getdistrictTree()
   getLandlordHeadInfo()
+  console.log(permissions, 'bbq')
 })
 
 const schema = reactive<CrudSchema[]>([
