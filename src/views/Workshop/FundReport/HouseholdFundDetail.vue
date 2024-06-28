@@ -31,7 +31,7 @@
         headerAlign="center"
         align="center"
         highlightCurrentRow
-        height="600"
+        max-height="600"
       >
         <template #action="{ row }">
           <ElButton size="small" type="primary" link @click="handleClickItem(row)">
@@ -64,7 +64,7 @@ import HouseholdEdit from './components/HouseholdEdit.vue'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useTable } from '@/hooks/web/useTable'
 import { useRoute } from 'vue-router'
-let titles = ['智能报表', '资金管理', '居民户', '资金使用情况']
+let titles = ref(['智能报表', '资金管理', '居民户', '资金使用情况'])
 const appStore = useAppStore()
 const projectId = appStore.currentProjectId
 const dialog = ref(false) // 弹窗标识
@@ -357,9 +357,9 @@ watch(
 onMounted(() => {
   getVillageTree()
   console.log(route.query.id, 111)
-  // if (route.query.id == 'true') {
-  //   titles = ['智能报表', '资金管理', '村集体', '资金使用情况']
-  // }
+  if (route.query.id == 'true') {
+    titles.value = ['智能报表', '资金管理', '村集体', '资金使用情况']
+  }
   getTableList()
 })
 </script>
