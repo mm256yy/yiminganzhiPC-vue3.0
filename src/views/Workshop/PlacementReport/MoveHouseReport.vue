@@ -264,40 +264,44 @@ const getSummaries = (params: any) => {
       8: totalCountObj.value.hasOwnProperty('flat_6_90') ? totalCountObj.value.flat_6_90 : 0,
       9: totalCountObj.value.hasOwnProperty('flat_6_110') ? totalCountObj.value.flat_6_110 : 0,
       10: totalCountObj.value.hasOwnProperty('flat_6_130') ? totalCountObj.value.flat_6_130 : 0,
-      11: totalCountObj.value.hasOwnProperty('homestead_2_1')
+      11: totalCountObj.value.hasOwnProperty('flat_47_70') ? totalCountObj.value.flat_47_70 : 0,
+      12: totalCountObj.value.hasOwnProperty('flat_47_90') ? totalCountObj.value.flat_47_90 : 0,
+      13: totalCountObj.value.hasOwnProperty('flat_47_110') ? totalCountObj.value.flat_47_110 : 0,
+      14: totalCountObj.value.hasOwnProperty('flat_47_130') ? totalCountObj.value.flat_47_130 : 0,
+      15: totalCountObj.value.hasOwnProperty('homestead_2_1')
         ? totalCountObj.value.homestead_2_1
         : 0,
-      12: totalCountObj.value.hasOwnProperty('homestead_2_2')
+      16: totalCountObj.value.hasOwnProperty('homestead_2_2')
         ? totalCountObj.value.homestead_2_2
         : 0,
-      13: totalCountObj.value.hasOwnProperty('homestead_2_3')
+      17: totalCountObj.value.hasOwnProperty('homestead_2_3')
         ? totalCountObj.value.homestead_2_3
         : 0,
-      14: totalCountObj.value.hasOwnProperty('homestead_2_4')
+      18: totalCountObj.value.hasOwnProperty('homestead_2_4')
         ? totalCountObj.value.homestead_2_4
         : 0,
-      15: totalCountObj.value.hasOwnProperty('homestead_2_5')
+      19: totalCountObj.value.hasOwnProperty('homestead_2_5')
         ? totalCountObj.value.homestead_2_5
         : 0,
-      16: totalCountObj.value.hasOwnProperty('homestead_2_6')
+      20: totalCountObj.value.hasOwnProperty('homestead_2_6')
         ? totalCountObj.value.homestead_2_6
         : 0,
-      17: totalCountObj.value.hasOwnProperty('homestead_3_1')
+      21: totalCountObj.value.hasOwnProperty('homestead_3_1')
         ? totalCountObj.value.homestead_3_1
         : 0,
-      18: totalCountObj.value.hasOwnProperty('homestead_3_2')
+      22: totalCountObj.value.hasOwnProperty('homestead_3_2')
         ? totalCountObj.value.homestead_3_2
         : 0,
-      19: totalCountObj.value.hasOwnProperty('homestead_3_3')
+      23: totalCountObj.value.hasOwnProperty('homestead_3_3')
         ? totalCountObj.value.homestead_3_3
         : 0,
-      20: totalCountObj.value.hasOwnProperty('homestead_3_4')
+      24: totalCountObj.value.hasOwnProperty('homestead_3_4')
         ? totalCountObj.value.homestead_3_4
         : 0,
-      21: totalCountObj.value.hasOwnProperty('homestead_3_5')
+      25: totalCountObj.value.hasOwnProperty('homestead_3_5')
         ? totalCountObj.value.homestead_3_5
         : 0,
-      22: totalCountObj.value.hasOwnProperty('homestead_3_6')
+      26: totalCountObj.value.hasOwnProperty('homestead_3_6')
         ? totalCountObj.value.homestead_3_6
         : 0,
       // 23: totalCountObj.value.homesteadDP1AreaCount,
@@ -307,8 +311,8 @@ const getSummaries = (params: any) => {
       // 27: totalCountObj.value.homesteadDP4AreaCount,
       // 28: totalCountObj.value.homesteadDP5AreaCount,
       // 29: totalCountObj.value.homesteadDP6AreaCount,
-      23: totalCountObj.value.hasOwnProperty('oneselfCount') ? totalCountObj.value.oneselfCount : 0,
-      24: totalCountObj.value.hasOwnProperty('concentrateCount')
+      27: totalCountObj.value.hasOwnProperty('oneselfCount') ? totalCountObj.value.oneselfCount : 0,
+      28: totalCountObj.value.hasOwnProperty('concentrateCount')
         ? totalCountObj.value.concentrateCount
         : 0
     }
