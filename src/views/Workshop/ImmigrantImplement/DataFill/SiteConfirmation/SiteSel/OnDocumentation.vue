@@ -35,7 +35,13 @@
             <ElFormItem label="择址顺序号："> {{ item.placeOrder }} </ElFormItem>
           </ElCol>
           <ElCol :span="5">
-            <ElFormItem label="户型："> {{ item.area }} </ElFormItem>
+            <ElFormItem label="户型：">
+              {{
+                homesteadAreaSize
+                  .filter((items) => items.id == item.area)
+                  .map((itemx) => itemx.name)[0]
+              }}
+            </ElFormItem>
           </ElCol>
           <ElCol :span="4">
             <ElFormItem label="地块编号："> {{ item.landNo }} </ElFormItem>
@@ -243,6 +249,8 @@ import { saveDocumentationApi } from '@/api/immigrantImplement/siteConfirmation/
 import type { SiteType } from '@/api/immigrantImplement/siteConfirmation/siteSel-types'
 import { getPlacementPointListApi } from '@/api/systemConfig/placementPoint-service'
 import { resettleArea, resettleAreaFlat } from '@/views/Workshop/ImmigrantImplement/DataFill/config'
+import { homesteadAreaSize } from '../../config'
+
 interface PropsType {
   show: boolean
   doorNo: string
