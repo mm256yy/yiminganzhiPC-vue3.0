@@ -116,12 +116,12 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'doorNo',
-    label: '户号',
+    label: route.query.id == 'true' ? '村集体编号' : '户号',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户号'
+        placeholder: route.query.id == 'true' ? '请输入村集体编号' : '请输入户号'
       }
     },
     table: {
@@ -130,12 +130,12 @@ const schema = reactive<CrudSchema[]>([
   },
   {
     field: 'name',
-    label: '户主姓名',
+    label: route.query.id == 'true' ? '村集体名称' : '户主姓名',
     search: {
       show: true,
       component: 'Input',
       componentProps: {
-        placeholder: '请输入户主姓名'
+        placeholder: route.query.id == 'true' ? '请输入村集体名称' : '请输入户主姓名'
       }
     },
     table: {
@@ -176,12 +176,12 @@ const getTableDepends = (list: any) => {
     },
     {
       field: '2',
-      label: '户号',
+      label: route.query.id == 'true' ? '村集体编号' : '户号',
       ...commonTableItemSchema
     },
     {
       field: '3',
-      label: route.query.id == 'true' ? '村集体' : '户主姓名',
+      label: route.query.id == 'true' ? '村集体名称' : '户主姓名',
       ...commonTableItemSchema
     },
     {

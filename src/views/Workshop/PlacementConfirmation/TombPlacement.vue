@@ -43,7 +43,15 @@
         <el-table-column prop="graveTypeText" label="穴位" align="center" />
         <el-table-column prop="number" label="数量" align="center" />
         <el-table-column prop="handleWayText" label="处理方式" align="center" />
-        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center">
+          <template #default="scope">
+            {{
+              scope.row.handleWay == '1'
+                ? scope.row.settingGrave
+                : dictFmt(scope.row.settingGrave, 377)
+            }}</template
+          >
+        </el-table-column>
         <el-table-column prop="graveArrangementStatus" label="确认状态" align="center" />
       </el-table>
       <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
@@ -103,6 +111,12 @@ let extraParams = reactive({
 })
 const dictStore = useDictStoreWithOut()
 const dictObj = computed(() => dictStore.getDictObj)
+const dictFmt = (value, index) => {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
+    const item = dictObj.value[index].find((item: any) => item?.value === value)
+    return item ? item.label : value
+  }
+}
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {

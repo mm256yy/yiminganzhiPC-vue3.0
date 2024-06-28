@@ -31,7 +31,7 @@
         <el-table-column
           :label="item.fieldName"
           align="center"
-          width="80"
+          width="100"
           v-for="(item, index) in title"
           :key="index"
           :prop="item.fieldValue"
@@ -58,6 +58,11 @@
           </template>
         </el-table-column>
       </el-table>
+      <div class="borderCard">
+        <div class="borderCard-title">合计（户）</div>
+        <div class="borderCard-content1">公寓房（户）：12</div>
+        <div class="borderCard-content2">宅基地（户）：13</div>
+      </div>
       <p class="w-[120px] text-center text-[14px] mt-[10px]">已选占比:{{ percent }}</p>
       <div class="py-[10px] bg-[#fff]">
         <el-pagination
@@ -360,4 +365,29 @@ const onReset = () => {
 }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.borderCard {
+  width: 100%;
+  height: 40px;
+  font-size: 14px;
+  background-color: #f5f7fa;
+  display: flex;
+  .borderCard-title {
+    width: 357px;
+    line-height: 40px;
+    text-align: center;
+    border-right: 1px solid #ebeef5;
+  }
+  .borderCard-content1 {
+    width: 50%;
+    line-height: 40px;
+    text-align: center;
+    border-right: 1px solid #ebeef5;
+  }
+  .borderCard-content2 {
+    width: 50%;
+    line-height: 40px;
+    text-align: center;
+  }
+}
+</style>

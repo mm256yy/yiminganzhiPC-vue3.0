@@ -31,7 +31,7 @@
         <el-table-column
           :label="item.fieldName"
           align="center"
-          width="80"
+          width="100"
           v-for="(item, index) in title"
           :key="index"
           :prop="item.fieldValue"
@@ -58,18 +58,23 @@
           </template>
         </el-table-column>
       </el-table>
-      <p class="w-[120px] text-center text-[14px] mt-[10px]">已选占比:{{ percent }}</p>
-      <div class="py-[10px] bg-[#fff]">
-        <el-pagination
-          v-model:current-page="pageNum"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 30, 40]"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalNum"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+      <div class="borderCard">
+        <div class="borderCard-title">合计（户）</div>
+        <div class="borderCard-content1">公寓房（户）：12</div>
+        <div class="borderCard-content2">宅基地（户）：13</div>
       </div>
+    </div>
+    <p class="w-[120px] text-center text-[14px] mt-[10px]">已选占比:{{ percent }}</p>
+    <div class="py-[10px] bg-[#fff]">
+      <el-pagination
+        v-model:current-page="pageNum"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30, 40]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="totalNum"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </WorkContentWrap>
 </template>
@@ -239,7 +244,7 @@ const getSummaries = (params: any) => {
   const sums: string[] = []
   columns.forEach((column, index) => {
     if (index === 1) {
-      sums[index] = '合计'
+      sums[index] = '合计(套/宗)'
       return
     }
     if (index < 3) {
@@ -259,40 +264,44 @@ const getSummaries = (params: any) => {
       8: totalCountObj.value.hasOwnProperty('flat_6_90') ? totalCountObj.value.flat_6_90 : 0,
       9: totalCountObj.value.hasOwnProperty('flat_6_110') ? totalCountObj.value.flat_6_110 : 0,
       10: totalCountObj.value.hasOwnProperty('flat_6_130') ? totalCountObj.value.flat_6_130 : 0,
-      11: totalCountObj.value.hasOwnProperty('homestead_2_1')
+      11: totalCountObj.value.hasOwnProperty('flat_47_70') ? totalCountObj.value.flat_47_70 : 0,
+      12: totalCountObj.value.hasOwnProperty('flat_47_90') ? totalCountObj.value.flat_47_90 : 0,
+      13: totalCountObj.value.hasOwnProperty('flat_47_110') ? totalCountObj.value.flat_47_110 : 0,
+      14: totalCountObj.value.hasOwnProperty('flat_47_130') ? totalCountObj.value.flat_47_130 : 0,
+      15: totalCountObj.value.hasOwnProperty('homestead_2_1')
         ? totalCountObj.value.homestead_2_1
         : 0,
-      12: totalCountObj.value.hasOwnProperty('homestead_2_2')
+      16: totalCountObj.value.hasOwnProperty('homestead_2_2')
         ? totalCountObj.value.homestead_2_2
         : 0,
-      13: totalCountObj.value.hasOwnProperty('homestead_2_3')
+      17: totalCountObj.value.hasOwnProperty('homestead_2_3')
         ? totalCountObj.value.homestead_2_3
         : 0,
-      14: totalCountObj.value.hasOwnProperty('homestead_2_4')
+      18: totalCountObj.value.hasOwnProperty('homestead_2_4')
         ? totalCountObj.value.homestead_2_4
         : 0,
-      15: totalCountObj.value.hasOwnProperty('homestead_2_5')
+      19: totalCountObj.value.hasOwnProperty('homestead_2_5')
         ? totalCountObj.value.homestead_2_5
         : 0,
-      16: totalCountObj.value.hasOwnProperty('homestead_2_6')
+      20: totalCountObj.value.hasOwnProperty('homestead_2_6')
         ? totalCountObj.value.homestead_2_6
         : 0,
-      17: totalCountObj.value.hasOwnProperty('homestead_3_1')
+      21: totalCountObj.value.hasOwnProperty('homestead_3_1')
         ? totalCountObj.value.homestead_3_1
         : 0,
-      18: totalCountObj.value.hasOwnProperty('homestead_3_2')
+      22: totalCountObj.value.hasOwnProperty('homestead_3_2')
         ? totalCountObj.value.homestead_3_2
         : 0,
-      19: totalCountObj.value.hasOwnProperty('homestead_3_3')
+      23: totalCountObj.value.hasOwnProperty('homestead_3_3')
         ? totalCountObj.value.homestead_3_3
         : 0,
-      20: totalCountObj.value.hasOwnProperty('homestead_3_4')
+      24: totalCountObj.value.hasOwnProperty('homestead_3_4')
         ? totalCountObj.value.homestead_3_4
         : 0,
-      21: totalCountObj.value.hasOwnProperty('homestead_3_5')
+      25: totalCountObj.value.hasOwnProperty('homestead_3_5')
         ? totalCountObj.value.homestead_3_5
         : 0,
-      22: totalCountObj.value.hasOwnProperty('homestead_3_6')
+      26: totalCountObj.value.hasOwnProperty('homestead_3_6')
         ? totalCountObj.value.homestead_3_6
         : 0,
       // 23: totalCountObj.value.homesteadDP1AreaCount,
@@ -302,8 +311,8 @@ const getSummaries = (params: any) => {
       // 27: totalCountObj.value.homesteadDP4AreaCount,
       // 28: totalCountObj.value.homesteadDP5AreaCount,
       // 29: totalCountObj.value.homesteadDP6AreaCount,
-      23: totalCountObj.value.hasOwnProperty('oneselfCount') ? totalCountObj.value.oneselfCount : 0,
-      24: totalCountObj.value.hasOwnProperty('concentrateCount')
+      27: totalCountObj.value.hasOwnProperty('oneselfCount') ? totalCountObj.value.oneselfCount : 0,
+      28: totalCountObj.value.hasOwnProperty('concentrateCount')
         ? totalCountObj.value.concentrateCount
         : 0
     }
@@ -360,4 +369,29 @@ const onReset = () => {
 }
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.borderCard {
+  width: 100%;
+  height: 40px;
+  font-size: 14px;
+  background-color: #f5f7fa;
+  display: flex;
+  .borderCard-title {
+    width: 357px;
+    line-height: 40px;
+    text-align: center;
+    border-right: 1px solid #ebeef5;
+  }
+  .borderCard-content1 {
+    width: 50%;
+    line-height: 40px;
+    text-align: center;
+    border-right: 1px solid #ebeef5;
+  }
+  .borderCard-content2 {
+    width: 50%;
+    line-height: 40px;
+    text-align: center;
+  }
+}
+</style>

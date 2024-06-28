@@ -39,10 +39,18 @@
         <el-table-column prop="villageCodeText" label="行政村" align="center" />
         <el-table-column prop="name" label="户主姓名" align="center" />
         <el-table-column prop="showDoorNo" label="户号" align="center" />
-        <el-table-column prop="relationText" label="坟墓与登记" align="center" />
+        <el-table-column prop="relationText" label="坟墓与登记人关系" align="center" />
         <el-table-column prop="graveTypeText" label="穴位" align="center" />
         <el-table-column prop="number" label="数量" align="center" />
-        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center" />
+        <el-table-column prop="settingGrave" label="安置公墓/择址地址" align="center">
+          <template #default="scope">
+            {{
+              scope.row.handleWay == '1'
+                ? scope.row.settingGrave
+                : dictFmt(scope.row.settingGrave, 377)
+            }}</template
+          >
+        </el-table-column>
         <el-table-column prop="graveNo" label="坟墓编号" align="center" />
         <el-table-column prop="remark" label="备注" align="center" />
         <el-table-column prop="graveArrangementStatus" label="确认状态" align="center" />
@@ -73,9 +81,10 @@ import {
   ElPagination
 } from 'element-plus'
 import { WorkContentWrap } from '@/components/ContentWrap'
+import { useDictStoreWithOut } from '@/store/modules/dict'
 import { Search } from '@/components/Search'
 import { CrudSchema, useCrudSchemas } from '@/hooks/web/useCrudSchemas'
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
@@ -100,6 +109,14 @@ let extraParams = reactive({
   doorNo: undefined,
   name: undefined
 })
+const dictStore = useDictStoreWithOut()
+const dictObj = computed(() => dictStore.getDictObj)
+const dictFmt = (value, index) => {
+  if (value && dictObj.value[index] && dictObj.value[index].length > 0) {
+    const item = dictObj.value[index].find((item: any) => item?.value === value)
+    return item ? item.label : value
+  }
+}
 const schema = reactive<CrudSchema[]>([
   // 搜索字段定义
   {
