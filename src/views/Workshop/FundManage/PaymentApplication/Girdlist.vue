@@ -303,6 +303,8 @@ watch(
     if (props.show) {
       check.value = props.selence
       getdistrictTree()
+      code.value = ''
+      search.value = ''
       let params: any = { code: code.value, keywords: search.value }
       ppsList(params)
     }

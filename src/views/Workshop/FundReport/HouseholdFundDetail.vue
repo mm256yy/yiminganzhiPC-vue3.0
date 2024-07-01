@@ -14,7 +14,7 @@
     <div class="line"></div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 资金使用报表 </div>
+        <div class="table-left-title"> 资金使用报表22 </div>
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <Table
@@ -115,7 +115,7 @@ const schema = reactive<CrudSchema[]>([
     }
   },
   {
-    field: 'doorNo',
+    field: 'showDoorNo',
     label: route.query.id == 'true' ? '村集体编号' : '户号',
     search: {
       show: true,
