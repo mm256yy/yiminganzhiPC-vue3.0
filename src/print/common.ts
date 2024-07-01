@@ -715,14 +715,12 @@ export const getHousePic = (landlord: LandlordType) => {
   const body: any[] = [[{ text: '房屋示意图', bold: true, fontSize: 12, style: 'td' }]]
   if (images && images.length) {
     images.forEach((_img, dex) => {
-      if (imageLoad(_img)) {
-        body.push([
-          {
-            image: `img_${dex}`,
-            fit: [540, imgHeight]
-          }
-        ])
-      }
+      body.push([
+        {
+          image: `img_${dex}`,
+          fit: [540, imgHeight]
+        }
+      ])
     })
   } else {
     body.push([

@@ -217,9 +217,7 @@ class PrintCore {
           const images: any = {}
           if (imgs && imgs.length) {
             imgs.forEach((url, dex) => {
-              if (imageLoad(url)) {
-                images[`img_${dex}`] = url
-              }
+              images[`img_${dex}`] = url
             })
           }
           const definition = getPeopleHouseDefinition(landlord, projectInfo)
