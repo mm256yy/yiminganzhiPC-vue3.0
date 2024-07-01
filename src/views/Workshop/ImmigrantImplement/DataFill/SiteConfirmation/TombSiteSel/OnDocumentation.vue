@@ -110,7 +110,7 @@ import {
   ElMessage,
   ElMessageBox
 } from 'element-plus'
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch } from 'vue'
 import { debounce } from 'lodash-es'
 import type { UploadFile, UploadFiles } from 'element-plus'
 
@@ -258,9 +258,18 @@ const onError = () => {
   ElMessage.error('上传失败,请上传5M以内的图片或者重新上传')
 }
 
-onMounted(() => {
-  initData()
-})
+// onMounted(() => {
+//   initData()
+// })
+watch(
+  () => props.show,
+  (val) => {
+    if (val) {
+      initData()
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <style lang="less" scoped>
