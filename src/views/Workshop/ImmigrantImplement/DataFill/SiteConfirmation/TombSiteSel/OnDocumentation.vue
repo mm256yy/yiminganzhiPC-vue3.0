@@ -192,6 +192,8 @@ const onSubmit = debounce((formEl) => {
       }
       const data: any = {
         ...form.value,
+        doorNo: props.doorNo,
+
         graveChoosePic: JSON.stringify(graveChoosePic.value || []),
         graveChooseOtherPic: JSON.stringify(graveChooseOtherPic.value || [])
       }
