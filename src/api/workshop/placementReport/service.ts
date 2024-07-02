@@ -46,7 +46,14 @@ export const getMoveHouseReportListApi = (params: any) => {
     params
   })
 }
-
+/**
+ * 查询安置确认搬迁安置意愿报表总计 计算统计
+ */
+export const getRemovalWillTotalStatisticsApi = () => {
+  return request.get({
+    url: '/immigrantWillReport/removalWillTotalStatistics'
+  })
+}
 /**
  * 查询安置确认搬迁安置意愿报表-标题（动态）
  */

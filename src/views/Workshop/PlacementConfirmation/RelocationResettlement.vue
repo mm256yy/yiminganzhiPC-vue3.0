@@ -60,8 +60,10 @@
       </el-table>
       <div class="borderCard">
         <div class="borderCard-title">合计（户）</div>
-        <div class="borderCard-content1">公寓房（户）：12</div>
-        <div class="borderCard-content2">宅基地（户）：13</div>
+        <div class="borderCard-content1">公寓房（户）：{{ sumTotal?.flatUserNum }}</div>
+        <div class="borderCard-content2">宅基地（户）：{{ sumTotal?.homesteadUserNum }}</div>
+        <div class="borderCard-content2">自谋出路（户）：{{ sumTotal?.oneselfUserNum }}</div>
+        <div class="borderCard-content2">集中供养（户）：{{ sumTotal?.concentrateUserNum }}</div>
       </div>
     </div>
     <p class="w-[120px] text-center text-[14px] mt-[10px]">已选占比:{{ percent }}</p>
@@ -97,7 +99,8 @@ import { useRouter } from 'vue-router'
 import {
   getMoveHouseReportListApi,
   exportMoveHouseReportApi,
-  getMoveHouseReportListTitleApi
+  getMoveHouseReportListTitleApi,
+  getRemovalWillTotalStatisticsApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -182,6 +185,7 @@ const schema = reactive<CrudSchema[]>([
 const { allSchemas } = useCrudSchemas(schema)
 const tableData = ref<any>([])
 const percent = ref() //已选占比
+const sumTotal = ref() //合计总数
 
 // 数据导出
 const onExport = async () => {
@@ -215,10 +219,17 @@ const getMoveHouseReportList = () => {
   tableLoading.value = true
   getMoveHouseReportListApi(params).then((res) => {
     tableData.value = res.reports.content
-    percent.value = toPercent(res.percent)
+    // percent.value = toPercent(res.percent)
     totalNum.value = res.reports.total
-    totalCountObj.value = res.total
+    // totalCountObj.value = res.total
     tableLoading.value = false
+  })
+}
+const getRemovalWillTotalStatistics = () => {
+  getRemovalWillTotalStatisticsApi().then((res) => {
+    percent.value = toPercent(res.percent)
+    totalCountObj.value = res.total
+    sumTotal.value = res.userTotal
   })
 }
 
@@ -326,6 +337,7 @@ getMoveHouseReportList()
 onMounted(() => {
   getVillageTree()
   getMoveHouseReportListTitle()
+  getRemovalWillTotalStatistics()
 })
 
 const onBack = () => {
