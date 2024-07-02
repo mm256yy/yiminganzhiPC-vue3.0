@@ -122,7 +122,7 @@
               filterable
               placeholder="请选择"
               v-model="row.houseRoomNoText"
-              @change="onRoomNoChange"
+              @change="onRoomNoChange(row, $event)"
             >
               <ElOption
                 v-for="item in row.roomNoOptions"
@@ -471,12 +471,13 @@ const getList = async () => {
     // }, 2000)
   }
 }
-const onRoomNoChange = (val) => {
+const onRoomNoChange = (val, event) => {
   tableData.value.forEach((item) => {
-    const matchingObjB = item.roomNoOptions.find((ite) => ite.value == val)
+    const matchingObjB = item.roomNoOptions.find((ite) => ite.value == event)
+    console.log(matchingObjB, '测试数据')
     if (matchingObjB) {
-      item.houseNo = matchingObjB.houseNo
-      item.roomNo = matchingObjB.value
+      val.houseNo = matchingObjB.houseNo
+      val.roomNo = matchingObjB.value
     }
   })
 }
