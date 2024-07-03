@@ -53,7 +53,7 @@
         </el-table-column>
         <el-table-column prop="graveNo" label="坟墓编号" align="center" />
         <el-table-column prop="remark" label="备注" align="center" />
-        <el-table-column prop="graveArrangementStatus" label="确认状态" align="center" />
+        <el-table-column prop="chooseGraveStatus" label="确认状态" align="center" />
       </el-table>
       <!-- <p class="mt-[5px]">已选占比:&nbsp;{{ percent }}</p> -->
       <div class="py-[10px] bg-[#fff]">
