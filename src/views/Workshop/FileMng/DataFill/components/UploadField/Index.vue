@@ -51,6 +51,9 @@
                     :before-remove="beforeRemove"
                     :on-remove="removeFile"
                     :on-preview="imgPreview"
+                    :on-progress="(event:any) => {
+            loadProgress = parseInt(event.percent)
+          }"
                   >
                     <template #trigger>
                       <div class="card-img-box">
@@ -61,33 +64,43 @@
                       </div>
                     </template>
                     <template #file="{ file }">
-                      <div class="flex items-center w-full">
-                        <div class="img-box" @click="imgPreview(file)">
-                          <img :src="file.url" alt="" />
-                        </div>
-                        <div class="flex-1">
-                          <ElInput
-                            v-if="file.edit"
-                            v-model="file.name"
-                            clearable
-                            placeholder="修改附件名称"
-                            @blur="file.edit = false"
-                          />
-                          <div v-else class="flex items-center justify-between">
-                            <div class="w-234px" style="word-wrap: break-word">{{ file.name }}</div>
-                            <ElTooltip placement="top" content="修改附件名称">
-                              <Icon
-                                icon="uil:edit-alt"
-                                color="var(--el-color-primary)"
-                                @click="file.edit = true"
-                              />
-                            </ElTooltip>
+                      <div>
+                        <div class="flex items-center w-full">
+                          <div class="img-box" @click="imgPreview(file)">
+                            <img :src="file.url" alt="" />
+                          </div>
+                          <div class="flex-1">
+                            <ElInput
+                              v-if="file.edit"
+                              v-model="file.name"
+                              clearable
+                              placeholder="修改附件名称"
+                              @blur="file.edit = false"
+                            />
+                            <div v-else class="flex items-center justify-between">
+                              <div class="w-234px" style="word-wrap: break-word">{{
+                                file.name
+                              }}</div>
+                              <ElTooltip placement="top" content="修改附件名称">
+                                <Icon
+                                  icon="uil:edit-alt"
+                                  color="var(--el-color-primary)"
+                                  @click="file.edit = true"
+                                />
+                              </ElTooltip>
+                            </div>
+                          </div>
+                          <div class="upload-delete" @click="removeFiles(file)">
+                            <Icon icon="ph:x" :size="14" />
                           </div>
                         </div>
-                        <div class="upload-delete" @click="removeFiles(file)">
-                          <Icon icon="ph:x" :size="14" />
-                        </div>
-                      </div>
+                        <ElProgress
+                          v-if="file.status != 'success'"
+                          :text-inside="true"
+                          :percentage="loadProgress"
+                        >
+                          <span> </span> </ElProgress
+                      ></div>
                     </template>
                   </ElUpload>
                 </div>
@@ -118,7 +131,8 @@ import {
   UploadFile,
   UploadFiles,
   ElInput,
-  ElTooltip
+  ElTooltip,
+  ElProgress
 } from 'element-plus'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useAppStore } from '@/store/modules/app'
@@ -135,7 +149,7 @@ interface FileItemType {
   name: string
   url: string
 }
-
+let loadProgress: any = ref()
 const props = defineProps<PropsType>()
 const appStore = useAppStore()
 const rules = ref()

@@ -390,9 +390,9 @@ const onPrint = async () => {
   actionType.value = 'batchPrint'
   const res = await generatorPdf({
     returndataType: 'blob'
-  }).catch(() => {
+  }).catch((error) => {
     printLoading.value = false
-    ElMessage.error('生成pdf失败')
+    ElMessage.error(error)
   })
   console.log('打印参数', res)
   if (res && res.length) {

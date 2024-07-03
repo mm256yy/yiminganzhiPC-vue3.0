@@ -10,6 +10,7 @@ import {
   getSelfemployedInfoDefinition,
   getCollectiveInfoDefinition
 } from './templates'
+import { ElMessage } from 'element-plus'
 
 interface PDFItemType {
   name: string
@@ -221,9 +222,9 @@ class PrintCore {
             })
           }
           const definition = getPeopleHouseDefinition(landlord, projectInfo)
-          const dataUrl = await this.getPdfData({ images, ...definition }).catch(() => {
-            reject('生成居民户房屋示意图pdf失败')
-            console.error('生成居民户房屋示意图pdf失败')
+          const dataUrl = await this.getPdfData({ images, ...definition }).catch((error) => {
+            reject(`${landlord.name}${landlord.doorNo}生成居民户房屋示意图pdf失败`)
+            console.error('生成居民户房屋示意图pdf失败', error)
             return
           })
           if (dataUrl) {
@@ -497,6 +498,7 @@ class PrintCore {
           })
           .catch((err) => {
             console.error(err, '-errr')
+            ElMessage.error({ duration: 0, message: err, showClose: true })
             reject([])
           })
       } catch (error) {
