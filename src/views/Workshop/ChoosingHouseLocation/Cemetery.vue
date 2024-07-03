@@ -207,6 +207,7 @@ const getProHouseReportList = () => {
     ...extraParams,
     page: pageNum.value - 1,
     size: pageSize.value,
+    handleWay: 2,
     projectId
   }
   tableLoading.value = true
@@ -333,6 +334,7 @@ const onReset = () => {
 const onExport = async () => {
   const params = {
     ...extraParams,
+    handleWay: 2,
     projectId
   }
   const res = await exportImmigrantGraveSiteExportApi(params)
