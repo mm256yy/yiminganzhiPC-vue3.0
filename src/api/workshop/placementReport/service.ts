@@ -38,11 +38,20 @@ export const exportProHouseSimulateReportApi = (params: any) => {
   })
 }
 /**
- * 查询安置确认搬迁安置意愿报表
+ * 查询安置确认-搬迁安置意愿报表
  */
 export const getMoveHouseReportListApi = (params: any) => {
   return request.get({
     url: '/immigrantWillReport/removalWillStatistics',
+    params
+  })
+}
+/**
+ * 查询模拟安置-搬迁安置意愿报表
+ */
+export const getSimulateMoveHouseReportListApi = (params: any) => {
+  return request.get({
+    url: '/immigrantWillReport/removalSimulateStatistics',
     params
   })
 }
@@ -52,6 +61,14 @@ export const getMoveHouseReportListApi = (params: any) => {
 export const getRemovalWillTotalStatisticsApi = () => {
   return request.get({
     url: '/immigrantWillReport/removalWillTotalStatistics'
+  })
+}
+/**
+ * 查询模拟安置-搬迁安置意愿报表总计 计算统计
+ */
+export const getSimulateRemovalWillTotalStatisticsApi = () => {
+  return request.get({
+    url: '/immigrantWillReport/removalSimulateTotalStatistics'
   })
 }
 /**
@@ -145,10 +162,18 @@ export const exportProHouseGraveReportApi = (params: any) => {
   })
 }
 
-// 导出搬迁安置意愿报表
+// 导出安置确认-搬迁安置意愿报表
 export const exportMoveHouseReportApi = (params: any) => {
   return request.get({
     url: `/immigrantWillReport/removalWillExport`,
+    params,
+    responseType: 'blob'
+  })
+}
+// 导出模拟安置搬迁安置意愿报表
+export const exporSimulatetMoveHouseReportApi = (params: any) => {
+  return request.get({
+    url: `/immigrantWillReport/removalWillSimulateExport`,
     params,
     responseType: 'blob'
   })

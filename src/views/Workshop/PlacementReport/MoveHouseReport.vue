@@ -16,7 +16,7 @@
     </div>
     <div class="table-wrap">
       <div class="flex items-center justify-between pb-12px">
-        <div class="table-left-title"> 搬迁安置意愿报表 </div>
+        <div class="table-left-title"> 搬迁安置意愿报表</div>
         <ElButton type="primary" @click="onExport"> 数据导出 </ElButton>
       </div>
       <el-table
@@ -97,10 +97,10 @@ import { reactive, ref, onMounted } from 'vue'
 import { useIcon } from '@/hooks/web/useIcon'
 import { useRouter } from 'vue-router'
 import {
-  getMoveHouseReportListApi,
-  exportMoveHouseReportApi,
+  getSimulateMoveHouseReportListApi,
+  exporSimulatetMoveHouseReportApi,
   getMoveHouseReportListTitleApi,
-  getRemovalWillTotalStatisticsApi
+  getSimulateRemovalWillTotalStatisticsApi
 } from '@/api/workshop/placementReport/service'
 import { screeningTree } from '@/api/workshop/village/service'
 import { useAppStore } from '@/store/modules/app'
@@ -192,7 +192,7 @@ const onExport = async () => {
   const params = {
     ...extraParams
   }
-  const res = await exportMoveHouseReportApi(params)
+  const res = await exporSimulatetMoveHouseReportApi(params)
   let filename = res.headers
   filename = filename['content-disposition']
   filename = filename.split(';')[1].split('filename=')[1]
@@ -217,7 +217,7 @@ const getMoveHouseReportList = () => {
     projectId
   }
   tableLoading.value = true
-  getMoveHouseReportListApi(params).then((res) => {
+  getSimulateMoveHouseReportListApi(params).then((res) => {
     tableData.value = res.reports.content
     // percent.value = toPercent(res.percent)
     totalNum.value = res.reports.total
@@ -226,7 +226,7 @@ const getMoveHouseReportList = () => {
   })
 }
 const getRemovalWillTotalStatistics = () => {
-  getRemovalWillTotalStatisticsApi().then((res) => {
+  getSimulateRemovalWillTotalStatisticsApi().then((res) => {
     percent.value = toPercent(res.percent)
     totalCountObj.value = res.total
     sumTotal.value = res.userTotal
