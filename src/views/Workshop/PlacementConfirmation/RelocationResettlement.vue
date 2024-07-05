@@ -226,7 +226,10 @@ const getMoveHouseReportList = () => {
   })
 }
 const getRemovalWillTotalStatistics = () => {
-  getRemovalWillTotalStatisticsApi().then((res) => {
+  const params = {
+    ...extraParams
+  }
+  getRemovalWillTotalStatisticsApi(params).then((res) => {
     percent.value = toPercent(res.percent)
     totalCountObj.value = res.total
     sumTotal.value = res.userTotal
@@ -369,6 +372,7 @@ const onSearch = (data) => {
   }
 
   getMoveHouseReportList()
+  getRemovalWillTotalStatistics()
 }
 
 const onReset = () => {

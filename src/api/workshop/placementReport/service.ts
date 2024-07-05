@@ -58,17 +58,19 @@ export const getSimulateMoveHouseReportListApi = (params: any) => {
 /**
  * 查询安置确认搬迁安置意愿报表总计 计算统计
  */
-export const getRemovalWillTotalStatisticsApi = () => {
+export const getRemovalWillTotalStatisticsApi = (params: any) => {
   return request.get({
-    url: '/immigrantWillReport/removalWillTotalStatistics'
+    url: '/immigrantWillReport/removalWillTotalStatistics',
+    params
   })
 }
 /**
  * 查询模拟安置-搬迁安置意愿报表总计 计算统计
  */
-export const getSimulateRemovalWillTotalStatisticsApi = () => {
+export const getSimulateRemovalWillTotalStatisticsApi = (params: any) => {
   return request.get({
-    url: '/immigrantWillReport/removalSimulateTotalStatistics'
+    url: '/immigrantWillReport/removalSimulateTotalStatistics',
+    params
   })
 }
 /**
