@@ -409,7 +409,8 @@ const getSearchParams = () => {
   return {
     ...tableObject.params,
     size: tableObject.size,
-    page: tableObject.currentPage
+    page: tableObject.currentPage,
+    phType: 'LandNoMove'
   }
 }
 

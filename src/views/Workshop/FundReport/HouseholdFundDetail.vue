@@ -308,7 +308,7 @@ const getSearchParams = () => {
     ...tableObject.params,
     size: tableObject.size,
     page: tableObject.currentPage,
-    phType: route.query.id == 'true' ? 'Village' : null
+    phType: route.query.id == 'true' ? 'Village' : 'PeasantHousehold'
   }
 }
 

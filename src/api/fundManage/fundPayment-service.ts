@@ -281,7 +281,7 @@ export const getFundDetailLandNoMoveList = (params: any) => {
 //土地关联导出
 export const exportFundDetailLandNoMoveList = (params: any) => {
   return request.get({
-    url: `/fundsForms/landNoMoveCardDownload`,
+    url: `/fundsForms/cardDownload`,
     params,
     responseType: 'blob'
   })

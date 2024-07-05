@@ -230,7 +230,7 @@ const onReset = () => {
 // 数据导出
 const onExport = async () => {
   const params = {
-    type: '1',
+    phType: 'Company',
     ...tableObject.params
   }
   const res = await exportFundIndividualApi(params)

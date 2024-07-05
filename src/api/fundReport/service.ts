@@ -49,7 +49,7 @@ export const getHouseholdDetail = (query: any) => {
  */
 export const exportFundHouseholdApi = (params: any) => {
   return request.get({
-    url: '/fundsForms/peasantHouseholdCardDownload',
+    url: '/fundsForms/cardDownload',
     params,
     responseType: 'blob'
   })
@@ -97,7 +97,7 @@ export const getCardReportApi = (params: any) => {
  */
 export const exportFundIndividualApi = (params: any) => {
   return request.get({
-    url: '/immigrantCompensationCardReport/feeStatisticsDownload',
+    url: '/fundsForms/cardDownload',
     params,
     responseType: 'blob'
   })
