@@ -41,7 +41,7 @@
         }}</span>
       </div>
       <ElSpace>
-        <ElButton type="primary" @click="printReport"> 打印报表 </ElButton>
+        <ElButton type="primary" @click="printReport" :loading="loadings"> 打印报表 </ElButton>
         <ElButton type="primary" @click="onDocumentation"> 档案上传 </ElButton>
         <div
           v-if="props.role === 'assessor'"
@@ -352,8 +352,10 @@ const onDocumentation = () => {
 }
 
 // 打印报表
+let loadings = ref(false)
 const printReport = async () => {
   // inExportDialog.value = true
+  loadings.value = true
   console.log('打印数据')
   if (props.type == 'Landlord') {
     parmas.value = {
@@ -383,6 +385,7 @@ const printReport = async () => {
   }
   console.log(props.type, '传递的type')
   const res = await getExportReportApi(parmas.value)
+  loadings.value = false
   getRes(res)
 }
 

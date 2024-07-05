@@ -62,7 +62,7 @@ const onClose = () => {
 
 const onDownLoad = async () => {
   console.log(props.serse, checkList.value, '1111')
-
+  downloadLoading.value = true
   if (props.flag != 1) {
     const res = await getExportApi({
       peasantHouseholdType: props.type,
@@ -77,6 +77,7 @@ const onDownLoad = async () => {
     })
     getRes(res)
   }
+  downloadLoading.value = false
 }
 
 const getRes = (res: any) => {
